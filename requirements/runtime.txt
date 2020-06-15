@@ -1,0 +1,12 @@
+matplotlib
+mmcv>=0.3.1
+numpy
+# need older pillow until torchvision is fixed
+Pillow<=6.2.2
+six
+terminaltables
+sklearn
+faiss-gpu==1.6.1
+tensorboard
+future
+tqdm
