@@ -23,13 +23,13 @@ fi
 # train
 python -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT \
     tools/train.py \
-    configs/linear_classifier/${DATASET}/r50_multihead.py \
+    configs/linear_classification/${DATASET}/r50_multihead.py \
     --pretrained ${CHECKPOINT::(-4)}_extracted.pth \
     --work_dir ${WORK_DIR_EVAL} --seed 0 --launcher="pytorch" ${PY_ARGS}
 
 # test
 python -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT \
     tools/test.py \
-    configs/linear_classifier/${DATASET}/r50_multihead.py \
+    configs/linear_classification/${DATASET}/r50_multihead.py \
     ${WORK_DIR_EVAL}/latest.pth \
     --work_dir ${WORK_DIR_EVAL} --launcher="pytorch"

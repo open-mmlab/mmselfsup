@@ -36,7 +36,7 @@ srun -p ${PARTITION} \
     --kill-on-bad-exit=1 \
     ${SRUN_ARGS} \
     python -u tools/train.py \
-        configs/linear_classifier/${DATASET}/r50_multihead.py \
+        configs/linear_classification/${DATASET}/r50_multihead.py \
         --pretrained ${CHECKPOINT::(-4)}_extracted.pth \
         --work_dir ${WORK_DIR_EVAL} --seed 0 --launcher="slurm" ${PY_ARGS}
 
@@ -51,6 +51,6 @@ srun -p ${PARTITION} \
     --kill-on-bad-exit=1 \
     ${SRUN_ARGS} \
     python -u tools/test.py \
-        configs/linear_classifier/${DATASET}/r50_multihead.py \
+        configs/linear_classification/${DATASET}/r50_multihead.py \
         ${WORK_DIR_EVAL}/latest.pth \
         --work_dir ${WORK_DIR_EVAL} --launcher="slurm"
