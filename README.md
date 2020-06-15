@@ -54,30 +54,30 @@ For existing methods in this repo, you only need to modify config files to adjus
 | PASCAL VOC07+12 Object Detection | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)                      |                                                 |
 | COCO17 Object Detection          | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)                      |                                                 |
 
-
-## License
-
-This project is released under the [Apache 2.0 license](LICENSE).
-
-## Changelog
+## Change Log
 
 v0.1.0 was released in 15/06/2020.
 Please refer to [CHANGELOG.md](docs/CHANGELOG.md) for details and release history.
-
-## Benchmark and model zoo
 
 ## Installation
 
 Please refer to [INSTALL.md](docs/INSTALL.md) for installation and dataset preparation.
 
-
 ## Get Started
 
 Please see [GETTING_STARTED.md](docs/GETTING_STARTED.md) for the basic usage of OpenSelfSup.
 
+## Benchmark and Model Zoo
+
+Please refer to [MODEL_ZOO.md](docs/MODEL_ZOO.md) for for a comprehensive set of pre-trained models and benchmarks.
+
 ## Contributing
 
-We appreciate all contributions to improve MMDetection. Please refer to [CONTRIBUTING.md](.github/CONTRIBUTING.md) for the contributing guideline.
+We appreciate all contributions to improve OpenSelfSup. Please refer to [CONTRIBUTING.md](docs/CONTRIBUTING.md) for the contributing guideline.
+
+## License
+
+This project is released under the [Apache 2.0 license](LICENSE).
 
 ## Citation
 
