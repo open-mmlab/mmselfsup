@@ -12,9 +12,3 @@ from .moco import MOCO
 from .registry import (BACKBONES, MODELS, NECKS, MEMORIES, HEADS, LOSSES)
 from .rotation_pred import RotationPred
 from .simclr import SimCLR
-
-#__all__ = [
-#    'BACKBONES', 'NECKS', 'ROI_EXTRACTORS', 'SHARED_HEADS', 'HEADS', 'LOSSES',
-#    'DETECTORS', 'CLASSIFIERS', 'build_backbone', 'build_neck', 'build_roi_extractor',
-#    'build_shared_head', 'build_head', 'build_loss', 'build_detector', 'build_detector'
-#]
