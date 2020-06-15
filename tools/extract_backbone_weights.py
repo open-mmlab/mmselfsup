@@ -23,8 +23,6 @@ def main():
         if key.startswith('backbone'):
             output_dict['state_dict'][key[9:]] = value
             has_backbone = True
-        #elif key.startswith('encoder_q.0'):
-        #    output_dict['state_dict'][key[12:]] = value
     if not has_backbone:
         raise Exception("Cannot find a backbone module in the checkpoint.")
     torch.save(output_dict, args.save_path)

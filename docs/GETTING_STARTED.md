@@ -99,6 +99,12 @@ Augments:
 - Please report the mean of 5 trials in your offical paper, according to MoCo.
 - DeepCluster that uses Sobel layer is not supported by detectron2.
 
+### Count number of parameters
+
+```shell
+python tools/count_parameters.py ${CONFIG_FILE}
+```
+
 ### Publish a model
 
 1. Extract the backbone weights as mentioned before. You don't have to extract it again if you've already done it in the benchmark step.
