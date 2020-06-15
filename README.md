@@ -58,7 +58,7 @@ For existing methods in this repo, you only need to modify config files to adjus
 
 Please refer to [CHANGELOG.md](docs/CHANGELOG.md) for details and release history.
 
-[2020-06-15] `OpenSelfSup` v0.1 is released.
+[2020-06-16] `OpenSelfSup` v0.1.0 is released.
 
 ## Installation
 
@@ -71,10 +71,6 @@ Please see [GETTING_STARTED.md](docs/GETTING_STARTED.md) for the basic usage of 
 ## Benchmark and Model Zoo
 
 Please refer to [MODEL_ZOO.md](docs/MODEL_ZOO.md) for for a comprehensive set of pre-trained models and benchmarks.
-
-## Contributing
-
-We appreciate all contributions to improve OpenSelfSup. Please refer to [CONTRIBUTING.md](docs/CONTRIBUTING.md) for the contributing guideline.
 
 ## License
 
