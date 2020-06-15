@@ -5,7 +5,7 @@
 
 The master branch works with **PyTorch 1.1** or higher.
 
-OpenSelfSup is an open source unsupervised representation learning toolbox based on PyTorch.
+`OpenSelfSup` is an open source unsupervised representation learning toolbox based on PyTorch.
 
 ### What does this repo do?
 
@@ -32,9 +32,9 @@ Below is the relations among Unsupervised Learning, Self-Supervised Learning and
 
 - **Flexibility & Extensibility**
 
-OpenSelfSup follows a similar code architecture of MMDetection while is even more flexible than MMDetection, since OpenSelfSup integrates various self-supervised tasks including classification, joint clustering and feature learning, contrastive learning, tasks with a memory bank, etc.
+`OpenSelfSup` follows a similar code architecture of MMDetection while is even more flexible than MMDetection, since OpenSelfSup integrates various self-supervised tasks including classification, joint clustering and feature learning, contrastive learning, tasks with a memory bank, etc.
 
-For existing methods in this repo, you only need to modify config files to adjust hyper-parameters. It is also simple to design your own methods, please refer to [GETTING_STARTED](docs/GETTING_STARTED.md).
+For existing methods in this repo, you only need to modify config files to adjust hyper-parameters. It is also simple to design your own methods, please refer to [GETTING_STARTED.md](docs/GETTING_STARTED.md).
 
 - **Efficiency**
 
@@ -56,8 +56,9 @@ For existing methods in this repo, you only need to modify config files to adjus
 
 ## Change Log
 
-v0.1.0 was released in 15/06/2020.
 Please refer to [CHANGELOG.md](docs/CHANGELOG.md) for details and release history.
+
+[2020-06-15] `OpenSelfSup` v0.1 is released.
 
 ## Installation
 
@@ -94,14 +95,11 @@ If you use this toolbox or benchmark in your research, please cite this project.
 
 ## Acknowledgement
 
-1. This repo borrows the architecture design and part of the code from [MMDetection](https://github.com/open-mmlab/mmdetection).
-
-2. The implementation of MoCo and the detection benchmark borrow the code from [moco](https://github.com/facebookresearch/moco).
-
-3. The SVM benchmark borrows the code from [
+- This repo borrows the architecture design and part of the code from [MMDetection](https://github.com/open-mmlab/mmdetection).
+- The implementation of MoCo and the detection benchmark borrow the code from [moco](https://github.com/facebookresearch/moco).
+- The SVM benchmark borrows the code from [
 fair_self_supervision_benchmark](https://github.com/facebookresearch/fair_self_supervision_benchmark).
-
-4. `openselfsup/third_party/clustering.py` is borrowed from [deepcluster](https://github.com/facebookresearch/deepcluster/blob/master/clustering.py).
+- `openselfsup/third_party/clustering.py` is borrowed from [deepcluster](https://github.com/facebookresearch/deepcluster/blob/master/clustering.py).
 
 ## Contact
 
