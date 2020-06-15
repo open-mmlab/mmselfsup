@@ -84,15 +84,15 @@ Augments:
     - `WEIGHT_FILE`: the output backbone weights file, e.g., `odc_v1.pth`.
     
 2. Next, run detection. For more details to setup the environments for detection, please refer [here](benchmarks/detection/README.md).
-```shell
-conda activate detectron2
-cd benchmarks/detection
-python convert-pretrain-to-detectron2.py ${WEIGHT_FILE} ${OUTPUT_FILE} # must use .pkl as the output extension.
-bash run.sh ${DET_CFG} ${OUTPUT_FILE}
-```
-Arguments:
-- `DET_CFG`: the detectron2 config file, usually we use `configs/pascal_voc_R_50_C4_24k_moco.yaml`.
-- `OUTPUT_FILE`: converted backbone weights file, e.g., `odc_v1.pkl`.
+    ```shell
+    conda activate detectron2
+    cd benchmarks/detection
+    python convert-pretrain-to-detectron2.py ${WEIGHT_FILE} ${OUTPUT_FILE} # must use .pkl as the output extension.
+    bash run.sh ${DET_CFG} ${OUTPUT_FILE}
+    ```
+    Arguments:
+    - `DET_CFG`: the detectron2 config file, usually we use `configs/pascal_voc_R_50_C4_24k_moco.yaml`.
+    - `OUTPUT_FILE`: converted backbone weights file, e.g., `odc_v1.pkl`.
 
 **Note**:
 - This benchmark must use 8 GPUs as the default setting from MoCo.
@@ -136,7 +136,7 @@ python tools/publish_model.py ${WEIGHT_FILE}
     
 You may refer to existing modules under respective folders.
 
-#### Features may facilitate your implementation
+#### Features that may facilitate your implementation
 
 * Decoupled data source and dataset.
 
