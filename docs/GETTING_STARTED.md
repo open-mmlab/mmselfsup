@@ -8,20 +8,24 @@ For installation instructions, please see [INSTALL.md](INSTALL.md).
 **Note**: The default learning rate in config files is for 8 GPUs (except for those under `configs/linear_classification` that use 1 GPU). If using differnt number GPUs, the total batch size will change in proportion, you have to scale the learning rate following `new_lr = old_lr * new_ngpus / old_ngpus`. We recommend to use `tools/dist_train.sh` even with 1 gpu, since some methods do not support non-distributed training.
 
 ### Train with single/multiple GPUs
+
 ```shell
-# checkpoints and logs are saved in the same sub-directory as the config file under `work_dirs/` by default.
+# 
 bash tools/dist_train.sh ${CONFIG_FILE} ${GPU_NUM} [optional arguments]
 ```
+Optional arguments are:
+- `--resume_from ${CHECKPOINT_FILE}`: Resume from a previous checkpoint file.
+- `--pretrained ${PRETRAIN_WEIGHTS}`: Load pretrained weights for the backbone.
 
 An example:
 ```shell
 bash tools/dist_train.sh configs/selfsup/odc/r50_v1.py 8
 ```
+**Note**: During training, checkpoints and logs are saved in the same folder structure as the config file under `work_dirs/`. Custom work directory is not recommended since evaluation scripts infer work directories from the config's file name. If you want to save your weights somewhere else, please use symlink, for example:
 
-Optional arguments are:
-- `--work_dir ${WORK_DIR}`: Override the default working directory.
-- `--resume_from ${CHECKPOINT_FILE}`: Resume from a previous checkpoint file.
-- `--pretrained ${PRETRAIN_WEIGHTS}`: Load pretrained weights for the backbone.
+```shell
+ln -s /DATA/xhzhan/openselfsup_workdirs ${OPENSELFSUP}/work_dirs
+```
 
 Alternatively, if you run OpenSelfSup on a cluster managed with [slurm](https://slurm.schedmd.com/):
 ```shell
