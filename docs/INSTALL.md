@@ -101,7 +101,7 @@ OpenSelfSup
 │   │   |   ├── val_labeled.txt
 │   │   ├── train
 │   │   ├── val
-│   ├── places
+│   ├── places205
 │   │   ├── meta
 │   │   |   ├── train.txt
 │   │   |   ├── train_labeled.txt
@@ -125,8 +125,8 @@ cd OpenSelfSup
 pip install -v -e .
 
 bash tools/prepare_data/prepare_voc07_cls.sh $YOUR_DATA_ROOT
-ln -s $IMAGENET_ROOT data
-ln -s $PLACES_ROOT data
+ln -s $IMAGENET_ROOT data/imagenet
+ln -s $PLACES_ROOT data/places205
 ```
 
 ### Using multiple OpenSelfSup versions
