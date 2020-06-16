@@ -94,7 +94,7 @@ Augments:
 
 ```shell
 bash benchmarks/dist_test_semi.sh ${CONFIG_FILE} ${WEIGHT_FILE} [optional arguments]
-``
+```
 Arguments:
 - `CONFIG_FILE`: Use config files under "configs/classification/imagenet_*percent/"
 - `WEIGHT_FILE`: The extracted backbone weights extracted aforementioned.
