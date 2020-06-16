@@ -4,7 +4,7 @@ set -x
 
 PARTITION=$1
 CFG=$2
-GPUS=${3:-8}
+GPUS=$3
 PY_ARGS=${@:4}
 JOB_NAME="openselfsup"
 GPUS_PER_NODE=${GPUS_PER_NODE:-8}

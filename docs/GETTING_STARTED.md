@@ -11,7 +11,7 @@ For installation instructions, please see [INSTALL.md](INSTALL.md).
 
 ```shell
 # 
-bash tools/dist_train.sh ${CONFIG_FILE} ${GPU_NUM} [optional arguments]
+bash tools/dist_train.sh ${CONFIG_FILE} ${GPUS} [optional arguments]
 ```
 Optional arguments are:
 - `--resume_from ${CHECKPOINT_FILE}`: Resume from a previous checkpoint file.
@@ -21,7 +21,7 @@ An example:
 ```shell
 bash tools/dist_train.sh configs/selfsup/odc/r50_v1.py 8
 ```
-**Note**: During training, checkpoints and logs are saved in the same folder structure as the config file under `work_dirs/`. Custom work directory is not recommended since evaluation scripts infer work directories from the config's file name. If you want to save your weights somewhere else, please use symlink, for example:
+**Note**: During training, checkpoints and logs are saved in the same folder structure as the config file under `work_dirs/`. Custom work directory is not recommended since evaluation scripts infer work directories from the config file name. If you want to save your weights somewhere else, please use symlink, for example:
 
 ```shell
 ln -s /DATA/xhzhan/openselfsup_workdirs ${OPENSELFSUP}/work_dirs
@@ -29,12 +29,12 @@ ln -s /DATA/xhzhan/openselfsup_workdirs ${OPENSELFSUP}/work_dirs
 
 Alternatively, if you run OpenSelfSup on a cluster managed with [slurm](https://slurm.schedmd.com/):
 ```shell
-SRUN_ARGS="${SRUN_ARGS}" bash tools/srun_train.sh ${PARTITION} ${CONFIG_FILE} ${GPU_NUM} [optional arguments]
+SRUN_ARGS="${SRUN_ARGS}" bash tools/srun_train.sh ${PARTITION} ${CONFIG_FILE} ${GPUS} [optional arguments]
 ```
 
 An example:
 ```shell
-SRUN_ARGS="-w xx.xx.xx.xx" bash tools/srun_train.sh Dummy configs/selfsup/odc/r50_v1.py 8
+SRUN_ARGS="-w xx.xx.xx.xx" bash tools/srun_train.sh Dummy configs/selfsup/odc/r50_v1.py 8 --resume_from work_dirs/selfsup/odc/r50_v1/epoch_100.pth
 ```
 
 ### Launch multiple jobs on a single machine
@@ -61,51 +61,59 @@ We provide several standard benchmarks to evaluate representation learning.
 ### VOC07 Linear SVM & Low-shot Linear SVM
 
 ```shell
-bash benchmarks/dist_test_svm.sh ${CONFIG_FILE} ${EPOCH} ${FEAT_LIST} ${GPU_NUM}
+# test by epoch
+bash benchmarks/dist_test_svm.sh ${CONFIG_FILE} ${EPOCH} ${FEAT_LIST} ${GPUS}
+# test pretrained model
+bash benchmarks/dist_test_svm.sh ${CONFIG_FILE} ${PRETRAIN} ${FEAT_LIST} ${GPUS}
+# test random init
+bash benchmarks/dist_test_svm.sh ${CONFIG_FILE} "random" ${FEAT_LIST} ${GPUS}
 ```
 Augments:
-- `${FEAT_LIST}` is a string to specify features from layer1 to layer5 to evaluate; e.g., if you want to evaluate layer5 only, then `FEAT_LIST` is `feat5`, if you want to evaluate all features, then then `FEAT_LIST` is `feat1 feat2 feat3 feat4 feat5` (separated by space).
-- `$GPU_NUM` is the number of GPUs to extract features.
+- `${FEAT_LIST}` is a string to specify features from layer1 to layer5 to evaluate; e.g., if you want to evaluate layer5 only, then `FEAT_LIST` is `feat5`, if you want to evaluate all features, then then `FEAT_LIST` is `feat1 feat2 feat3 feat4 feat5` (separated by space). If left empty, the default `FEAT_LIST` is `feat5`.
+- `$GPUS` is the number of GPUs to extract features.
 
 ### ImageNet / Places205 Linear Classification
 
+**First**, extract backbone weights:
 ```shell
-bash benchmarks/dist_test_cls.sh ${CONFIG_FILE} ${EPOCH} ${DATASET} [optional arguments]
+python tools/extract_backbone_weights.py ${CHECKPOINT} ${WEIGHT_FILE}
+```
+Arguments:
+- `CHECKPOINTS`: the checkpoint file of a selfsup method named as `epoch_*.pth`.
+- `WEIGHT_FILE`: the output backbone weights file, e.g., `pretrains/moco_v1_epoch200.pth`.
+
+**Next**, train and test linear classification:
+```shell
+bash benchmarks/dist_test_linear.sh ${CONFIG_FILE} ${WEIGHT_FILE} [optional arguments]
 ```
 Augments:
-- `${DATASET}` in `['imagenet', 'places205']`.
+- `CONFIG_FILE`: Use config files under "configs/linear_classification/". Note that if you want to test DeepCluster that has a sobel layer before the backbone, you have to use the config file named `*_sobel.py`, e.g., `configs/linear_classification/imagenet/r50_multihead_sobel.py`.
 - Optional arguments include `--resume_from ${CHECKPOINT_FILE}` that resume from a previous checkpoint file.
 
 ### ImageNet Semi-Supervised Classification
 
 ```shell
-bash benchmarks/dist_test_semi.sh ${CONFIG_FILE} ${EPOCH} ${PERCENT} [optional arguments]
+bash benchmarks/dist_test_semi.sh ${CONFIG_FILE} ${WEIGHT_FILE} [optional arguments]
 ``
 Arguments:
-- `${PERCENT}` in `[1, 10]`.
-- Other arguments are the same as in ImageNet / Places205 Linear Classification.
+- `CONFIG_FILE`: Use config files under "configs/classification/imagenet_*percent/"
+- `WEIGHT_FILE`: The extracted backbone weights extracted aforementioned.
+- Optional arguments: The same as aforementioned.
 
 ### VOC07+12 / COCO17 Object Detection
 
-1. First, extract backbone weights:
+For more details to setup the environments for detection, please refer [here](benchmarks/detection/README.md).
 
-    ```shell
-    python tools/extract_backbone_weights.py ${CHECKPOINT} ${WEIGHT_FILE}
-    ```
-    Arguments:
-    - `CHECKPOINTS`: the checkpoint file of a selfsup method named as `epoch_*.pth`.
-    - `WEIGHT_FILE`: the output backbone weights file, e.g., `odc_v1.pth`.
-    
-2. Next, run detection. For more details to setup the environments for detection, please refer [here](benchmarks/detection/README.md).
-    ```shell
-    conda activate detectron2
-    cd benchmarks/detection
-    python convert-pretrain-to-detectron2.py ${WEIGHT_FILE} ${OUTPUT_FILE} # must use .pkl as the output extension.
-    bash run.sh ${DET_CFG} ${OUTPUT_FILE}
-    ```
-    Arguments:
-    - `DET_CFG`: the detectron2 config file, usually we use `configs/pascal_voc_R_50_C4_24k_moco.yaml`.
-    - `OUTPUT_FILE`: converted backbone weights file, e.g., `odc_v1.pkl`.
+```shell
+conda activate detectron2
+cd benchmarks/detection
+python convert-pretrain-to-detectron2.py ${WEIGHT_FILE} ${OUTPUT_FILE} # must use .pkl as the output extension.
+bash run.sh ${DET_CFG} ${OUTPUT_FILE}
+```
+Arguments:
+- `WEIGHT_FILE`: The extracted backbone weights extracted aforementioned.
+- `OUTPUT_FILE`: Converted backbone weights file, e.g., `odc_v1.pkl`.
+- `DET_CFG`: The detectron2 config file, usually we use `configs/pascal_voc_R_50_C4_24k_moco.yaml`.
 
 **Note**:
 - This benchmark must use 8 GPUs as the default setting from MoCo.
@@ -120,17 +128,13 @@ python tools/count_parameters.py ${CONFIG_FILE}
 
 ### Publish a model
 
-1. Extract the backbone weights as mentioned before. You don't have to extract it again if you've already done it in the benchmark step.
-
-```shell
-python tools/extract_backbone_weights.py ${CHECKPOINT} ${WEIGHT_FILE}
-```
-
-2. Compute the hash of the weight file and append the hash id to the filename.
+Compute the hash of the weight file and append the hash id to the filename. The output file is the input file name with a hash suffix.
 
 ```shell
 python tools/publish_model.py ${WEIGHT_FILE}
 ```
+Arguments:
+-`WEIGHT_FILE`: The extracted backbone weights extracted aforementioned.
 
 ## How-to
 
@@ -146,12 +150,12 @@ python tools/publish_model.py ${WEIGHT_FILE}
 
     1. Create a dataset file under `openselfsup/datasets/` (better using existing ones);
     2. Create a model file under `openselfsup/models/`. The model typically contains:
-      i) backbone (required): images to deep features from differet depth of layers.
+      i) backbone (required): images to deep features from differet depth of layers. Your model must contain a `self.backbone` module, otherwise the backbone weights cannot be extracted.
       ii) neck (optional): deep features to compact feature vectors.
       iii) head (optional): define loss functions.
       iv) memory_bank (optional): define memory banks.
     3. Create a config file under `configs/` and setup the configs;
-    4. Create a hook file under `openselfsup/hooks/` if your method requires additional operations before run, every several iterations, every several epoch, or after run.
+    4. [Optional] Create a hook file under `openselfsup/hooks/` if your method requires additional operations before run, every several iterations, every several epoch, or after run.
     
 You may refer to existing modules under respective folders.
 
@@ -167,14 +171,16 @@ data = dict(
                data_source=dict(type='ImageNet', list_file='xx', root='xx'),
                pipeline=train_pipeline),
     val=dict(...),
+    ...
 )
 ```
 
 * Configure data augmentations in the config file.
 
-The augmentations are the same as `torchvision.transforms`. `torchvision.transforms.RandomAppy` corresponds to `RandomAppliedTrans`. `Lighting` and `GaussianBlur` is additionally implemented.
+The augmentations are the same as `torchvision.transforms` except that `torchvision.transforms.RandomAppy` corresponds to `RandomAppliedTrans`. `Lighting` and `GaussianBlur` is additionally implemented.
 
 ```python
+img_norm_cfg = dict(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 train_pipeline = [
     dict(type='RandomResizedCrop', size=224),
     dict(type='RandomAppliedTrans',
@@ -191,6 +197,8 @@ train_pipeline = [
 You may specify optimization paramters including lr, momentum and weight_decay for a certain group of paramters in the config file with `paramwise_options`. `paramwise_options` is a dict whose key is regular expressions and value is options. Options include 6 fields: lr, lr_mult, momentum, momentum_mult, weight_decay, weight_decay_mult.
 
 ```python
+# this config sets all normalization layers with weight_decay_mult=0.1,
+# and the head with `lr_mult=10, momentum=0`.
 paramwise_options = {
     '(bn|gn)(\d+)?.(weight|bias)': dict(weight_decay_mult=0.1),
     '\Ahead.': dict(lr_mult=10, momentum=0)}
@@ -205,7 +213,7 @@ The hooks will be called in order. For hook design, please refer to [odc_hook.py
 
 ```python
 custom_hooks = [
-    dict(type='DeepClusterHook', **kwargs1),
-    dict(type='ODCHook', **kwargs2),
+    dict(type='DeepClusterHook', ...),
+    dict(type='ODCHook', ...),
 ]
 ```

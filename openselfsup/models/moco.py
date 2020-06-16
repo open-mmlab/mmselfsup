@@ -167,7 +167,7 @@ class MOCO(nn.Module):
         elif mode == 'test':
             return self.forward_test(img, **kwargs)
         elif mode == 'extract':
-            return self.encoder_q[0](img)
+            return self.backbone(img)
         else:
             raise Exception("No such mode: {}".format(mode))
 

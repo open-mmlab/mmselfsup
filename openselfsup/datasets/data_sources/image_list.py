@@ -8,7 +8,7 @@ from .utils import McLoader
 @DATASOURCES.register_module
 class ImageList(object):
 
-    def __init__(self, root, list_file, memcached, mclient_path):
+    def __init__(self, root, list_file, memcached=False, mclient_path=None):
         with open(list_file, 'r') as f:
             lines = f.readlines()
         self.has_labels = len(lines[0].split()) == 2
