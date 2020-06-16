@@ -72,6 +72,15 @@ Augments:
 - `${DATASET}` in `['imagenet', 'places205']`.
 - Optional arguments include `--resume_from ${CHECKPOINT_FILE}` that resume from a previous checkpoint file.
 
+### ImageNet Semi-Supervised Classification
+
+```shell
+bash benchmarks/dist_test_semi.sh ${CONFIG_FILE} ${EPOCH} ${PERCENT} [optional arguments]
+``
+Arguments:
+- `${PERCENT}` in `[1, 10]`.
+- Other arguments are the same as in ImageNet / Places205 Linear Classification.
+
 ### VOC07+12 / COCO17 Object Detection
 
 1. First, extract backbone weights:

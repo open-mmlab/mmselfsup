@@ -24,7 +24,7 @@ Below is the relations among Unsupervised Learning, Self-Supervised Learning and
 | [Rotation-Pred](https://arxiv.org/abs/1803.07728)                                                                                                     |     ✓    |
 | [DeepCluster](https://arxiv.org/abs/1807.05520)                                                                                                       |     ✓    |
 | [ODC](http://openaccess.thecvf.com/content_CVPR_2020/papers/Zhan_Online_Deep_Clustering_for_Unsupervised_Representation_Learning_CVPR_2020_paper.pdf) |     [34m~\~S    |
-| [NIPD](https://arxiv.org/abs/1805.01978)                                                                                                              |     ✓    |
+| [NPID](https://arxiv.org/abs/1805.01978)                                                                                                              |     ✓    |
 | [MoCo](https://arxiv.org/abs/1911.05722)                                                                                                              |     ✓    |
 | [MoCo v2](https://arxiv.org/abs/2003.04297)                                                                                                           |     ✓    |
 | [SimCLR](https://arxiv.org/abs/2002.05709)                                                                                                            |     ✓    |

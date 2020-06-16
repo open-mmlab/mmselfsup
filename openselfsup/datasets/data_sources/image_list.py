@@ -11,7 +11,13 @@ class ImageList(object):
     def __init__(self, root, list_file, memcached, mclient_path):
         with open(list_file, 'r') as f:
             lines = f.readlines()
-        self.fns = [os.path.join(root, l.strip()) for l in lines]
+        self.has_labels = len(lines[0].split()) == 2
+        if self.has_labels:
+            self.fns, self.labels = zip(*[l.strip().split() for l in lines])
+            self.labels = [int(l) for l in self.labels]
+        else:
+            self.fns = [l.strip() for l in lines]
+        self.fns = [os.path.join(root, fn) for fn in self.fns]
         self.memcached = memcached
         self.mclient_path = mclient_path
         self.initialized = False
@@ -33,4 +39,5 @@ class ImageList(object):
         else:
             img = Image.open(self.fns[idx])
         img = img.convert('RGB')
-        return img
+        target = self.labels[idx] if self.has_labels else None
+        return img, target
