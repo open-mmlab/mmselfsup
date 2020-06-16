@@ -78,7 +78,7 @@ bash tools/prepare_data/prepare_voc07_cls.sh $YOUR_DATA_ROOT
 
 #### Prepare ImageNet and Places205
 
-Taking ImageNet for example,y ou need to 1) download ImageNet; 2) create list files under $IAMGENET/meta/, `train.txt` contains an image file name in each line, `train_labeled.txt` contains `filename[space]label\n` in each line; 3) create a symlink under `$OPENSELFSUP/data/`.
+Taking ImageNet for example,y ou need to 1) download ImageNet; 2) create list files under $IAMGENET/meta/, `train.txt` contains an image file name in each line, `train_labeled.txt` contains `filename[space]label\n` in each line; `train_labeled_*percent.txt` are for semi-supervised evaluation, and can be downloaded [here](https://drive.google.com/drive/folders/1wYkJU_1qRHEt1LPVjBiG6ddUFV-t9hVJ?usp=sharing). 3) create a symlink under `$OPENSELFSUP/data/`.
 
 At last, the folder looks like:
 
@@ -93,8 +93,10 @@ OpenSelfSup
 │   │   ├── VOC2012
 │   ├── imagenet
 │   │   ├── meta
-│   │   |   ├── train.txt ("filename\n" in each line)
-│   │   |   ├── train_labeled.txt ("filename[space]label\n" in each line)
+│   │   |   ├── train.txt (for self-sup training, "filename\n" in each line)
+│   │   |   ├── train_labeled.txt (for evaluation, "filename[space]label\n" in each line)
+│   │   |   ├── train_labeled_1percent.txt (for evaluation)
+│   │   |   ├── train_labeled_10percent.txt (for evaluation)
 │   │   |   ├── val.txt
 │   │   |   ├── val_labeled.txt
 │   │   ├── train
@@ -111,7 +113,7 @@ OpenSelfSup
 
 ### A from-scratch setup script
 
-Here is a full script for setting up openselfsup with conda and link the dataset path.
+Here is a full script for setting up openselfsup with conda and link the dataset path. The script does not download ImageNet and Places datasets, you have to prepare them on your own.
 
 ```shell
 conda create -n open-mmlab python=3.7 -y
