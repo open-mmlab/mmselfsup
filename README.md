@@ -23,7 +23,7 @@ Below is the relations among Unsupervised Learning, Self-Supervised Learning and
 | [Relative-Loc](https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Doersch_Unsupervised_Visual_Representation_ICCV_2015_paper.pdf)      | progress |
 | [Rotation-Pred](https://arxiv.org/abs/1803.07728)                                                                                                     |     ✓    |
 | [DeepCluster](https://arxiv.org/abs/1807.05520)                                                                                                       |     ✓    |
-| [ODC](http://openaccess.thecvf.com/content_CVPR_2020/papers/Zhan_Online_Deep_Clustering_for_Unsupervised_Representation_Learning_CVPR_2020_paper.pdf) |     [34m~\~S    |
+| [ODC](http://openaccess.thecvf.com/content_CVPR_2020/papers/Zhan_Online_Deep_Clustering_for_Unsupervised_Representation_Learning_CVPR_2020_paper.pdf)       |     ✓    |
 | [NIPD](https://arxiv.org/abs/1805.01978)                                                                                                              |     ✓    |
 | [MoCo](https://arxiv.org/abs/1911.05722)                                                                                                              |     ✓    |
 | [MoCo v2](https://arxiv.org/abs/2003.04297)                                                                                                           |     ✓    |
