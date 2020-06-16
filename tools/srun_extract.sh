@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
-
 set -x
 
 PARTITION=$1
 CFG=$2
-CHECKPOINT=$3
-GPUS=${4:-8}
-PY_ARGS=${@:5}
+GPUS=$3
+PY_ARGS=${@:4} # "--checkpoint $CHECKPOINT --pretrained $PRETRAINED"
 JOB_NAME="openselfsup"
 GPUS_PER_NODE=${GPUS_PER_NODE:-8}
 CPUS_PER_TASK=${CPUS_PER_TASK:-5}
@@ -23,5 +21,5 @@ srun -p ${PARTITION} \
     --kill-on-bad-exit=1 \
     ${SRUN_ARGS} \
     python -u tools/extract.py $CFG \
-        --layer-ind "0,1,2,3,4" --checkpoint $CHECKPOINT \
-        --work_dir $WORK_DIR --launcher="slurm" ${PY_ARGS}
+        --layer-ind "0,1,2,3,4" --work_dir $WORK_DIR \
+        --launcher="slurm" ${PY_ARGS}

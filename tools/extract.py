@@ -53,6 +53,9 @@ def parse_args():
     parser.add_argument('config', help='test config file path')
     parser.add_argument('--checkpoint', default=None, help='checkpoint file')
     parser.add_argument(
+        '--pretrained', default='random',
+        help='pretrained model file, exclusive to --checkpoint')
+    parser.add_argument(
         '--dataset-config',
         default='benchmarks/extract_info/voc07.py',
         help='extract dataset config file path')
@@ -89,9 +92,9 @@ def main():
     layer_ind = [int(idx) for idx in args.layer_ind.split(',')]
     cfg.model.backbone.out_indices = layer_ind
 
-    if args.checkpoint is None:
-        assert cfg.model.pretrained is not None, \
-            "Must have pretrain if no checkpoint is given."
+    # checkpoint and pretrained are exclusive
+    assert cfg.model.pretrained == "random" or args.checkpoint is None, \
+        "Checkpoint and pretrained are exclusive."
 
     # check memcached package exists
     if importlib.util.find_spec('mc') is None:
@@ -106,6 +109,8 @@ def main():
         distributed = True
         init_dist(args.launcher, **cfg.dist_params)
 
+    # create work_dir
+    mmcv.mkdir_or_exist(osp.abspath(cfg.work_dir))
     # logger
     timestamp = time.strftime('%Y%m%d_%H%M%S', time.localtime())
     log_file = osp.join(cfg.work_dir, 'extract_{}.log'.format(timestamp))
@@ -124,7 +129,15 @@ def main():
     # build the model and load checkpoint
     model = build_model(cfg.model)
     if args.checkpoint is not None:
+        logger.info("Use checkpoint: {} to extract features".format(
+            args.checkpoint))
         load_checkpoint(model, args.checkpoint, map_location='cpu')
+    elif args.pretrained != "random":
+        logger.info('Use pretrained model: {} to extract features'.format(
+            args.pretrained))
+    else:
+        logger.info('No checkpoint or pretrained is give, use random init.')
+        
     if not distributed:
         model = MMDataParallel(model, device_ids=[0])
     else:

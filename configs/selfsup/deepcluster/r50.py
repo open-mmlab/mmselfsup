@@ -85,4 +85,4 @@ optimizer = dict(
 lr_config = dict(policy='step', step=[400])
 checkpoint_config = dict(interval=10)
 # runtime settings
-total_epochs = 480
+total_epochs = 200

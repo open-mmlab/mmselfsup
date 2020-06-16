@@ -8,8 +8,8 @@ CFG=$2
 PRETRAIN=$3
 PY_ARGS=${@:4}
 JOB_NAME="openselfsup"
-GPUS=8 # in the standard setting, GPUS=8
-GPUS_PER_NODE=${GPUS_PER_NODE:-8}
+GPUS=1 # in the standard setting, GPUS=1
+GPUS_PER_NODE=${GPUS_PER_NODE:-1}
 CPUS_PER_TASK=${CPUS_PER_TASK:-5}
 SRUN_ARGS=${SRUN_ARGS:-""}
 

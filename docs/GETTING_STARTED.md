@@ -86,7 +86,7 @@ Arguments:
 1. First, extract backbone weights:
 
     ```shell
-    python tools/extract_backbone_weights.py ${CHECKPOINT} --save-path ${WEIGHT_FILE}
+    python tools/extract_backbone_weights.py ${CHECKPOINT} ${WEIGHT_FILE}
     ```
     Arguments:
     - `CHECKPOINTS`: the checkpoint file of a selfsup method named as `epoch_*.pth`.
@@ -119,7 +119,7 @@ python tools/count_parameters.py ${CONFIG_FILE}
 1. Extract the backbone weights as mentioned before. You don't have to extract it again if you've already done it in the benchmark step.
 
 ```shell
-python tools/extract_backbone_weights.py ${CHECKPOINT} --save-path ${WEIGHT_FILE}
+python tools/extract_backbone_weights.py ${CHECKPOINT} ${WEIGHT_FILE}
 ```
 
 2. Compute the hash of the weight file and append the hash id to the filename.

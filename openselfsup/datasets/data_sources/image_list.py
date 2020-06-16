@@ -39,5 +39,8 @@ class ImageList(object):
         else:
             img = Image.open(self.fns[idx])
         img = img.convert('RGB')
-        target = self.labels[idx] if self.has_labels else None
-        return img, target
+        if self.has_labels:
+            target = self.labels[idx]
+            return img, target
+        else:
+            return img

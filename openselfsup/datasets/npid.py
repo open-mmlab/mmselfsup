@@ -11,7 +11,7 @@ class NPIDDataset(BaseDataset):
         super(NPIDDataset, self).__init__(data_source, pipeline)
 
     def __getitem__(self, idx):
-        img, _ = self.data_source.get_sample(idx)
+        img = self.data_source.get_sample(idx)
         img = self.pipeline(img)
         return dict(img=img, idx=idx)
 

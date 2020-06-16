@@ -13,7 +13,7 @@ class DeepClusterDataset(BaseDataset):
         self.labels = [-1 for _ in range(self.data_source.get_length())]
 
     def __getitem__(self, idx):
-        img, _ = self.data_source.get_sample(idx)
+        img = self.data_source.get_sample(idx)
         label = self.labels[idx]
         img = self.pipeline(img)
         return dict(img=img, pseudo_label=label, idx=idx)

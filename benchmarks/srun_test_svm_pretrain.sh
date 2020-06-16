@@ -4,10 +4,15 @@ set -x
 
 PARTITION=$1
 CFG=$2
-PRETRAIN=$3
-FEAT_LIST=$4
+PRETRAIN=$3 # pretrained model or "random" (random init)
+FEAT_LIST=$4 # e.g.: "feat5", "feat4 feat5". If leave empty, the default is "feat5"
 GPUS=${5:-8}
 WORK_DIR=$(echo ${CFG%.*} | sed -e "s/configs/work_dirs/g")/
+
+if [ ! -f $PRETRAIN ] and [ "$PRETRAIN" != "random" ]; then
+    echo "ERROR: PRETRAIN should be a file or a string \"random\", got: $PRETRAIN"
+    exit
+fi
 
 bash tools/srun_extract.sh $PARTITION $CFG $GPUS --pretrained $PRETRAIN
 

@@ -25,7 +25,7 @@ class RotationPredDataset(BaseDataset):
         super(RotationPredDataset, self).__init__(data_source, pipeline)
 
     def __getitem__(self, idx):
-        img, _ = self.data_source.get_sample(idx)
+        img = self.data_source.get_sample(idx)
         img = self.pipeline(img)
         img = torch.stack(rotate(img), dim=0)
         rotation_labels = torch.LongTensor([0, 1, 2, 3])
