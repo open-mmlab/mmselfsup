@@ -27,13 +27,13 @@ fi
 # train
 python -m torch.distributed.launch --nproc_per_node=$GPUS \
     tools/train.py \
-    configs/semisup_classification/imagenet_${PERCENT}percent/r50.py \
+    configs/classification/imagenet_${PERCENT}percent/r50.py \
     --pretrained ${CHECKPOINT::(-4)}_extracted.pth \
     --work_dir ${WORK_DIR_EVAL} --seed 0 --launcher="pytorch" ${PY_ARGS}
 
 # test
 python -m torch.distributed.launch --nproc_per_node=$GPUS \
     tools/test.py \
-    configs/semisup_classification/imagenet_${PERCENT}percent/r50.py \
+    configs/classification/imagenet_${PERCENT}percent/r50.py \
     ${WORK_DIR_EVAL}/latest.pth \
     --work_dir ${WORK_DIR_EVAL} --launcher="pytorch"
