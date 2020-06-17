@@ -42,6 +42,8 @@ class LinearNeck(nn.Module):
 
 @NECKS.register_module
 class NonLinearNeckV0(nn.Module):
+    '''The non-linear neck in ODC
+    '''
 
     def __init__(self,
                  in_channels,
@@ -83,7 +85,7 @@ class NonLinearNeckV0(nn.Module):
 
 @NECKS.register_module
 class NonLinearNeckV1(nn.Module):
-    '''Simple non-linear neck: fc-relu-fc
+    '''The non-linear neck in MoCO v2: fc-relu-fc
     '''
     def __init__(self,
                  in_channels,
@@ -123,7 +125,7 @@ class NonLinearNeckV1(nn.Module):
 
 @NECKS.register_module
 class NonLinearNeckSimCLR(nn.Module):
-    '''SimCLR non-linear head.
+    '''SimCLR non-linear neck.
     Structure: fc(no_bias)-bn(has_bias)-[relu-fc(no_bias)-bn(no_bias)].
         The substructures in [] can be repeated. For the SimCLR default setting,
         the repeat time is 1.
@@ -135,6 +137,9 @@ class NonLinearNeckSimCLR(nn.Module):
         expanded to 4D with shape: (N,C,1,1). I am not sure if this workaround
         has no bugs. See the pull request here:
         https://github.com/pytorch/pytorch/pull/29626
+
+    Arguments:
+        num_layers (int): number of fc layers, it is 2 in the SimCLR default setting.
     '''
 
     def __init__(self,
