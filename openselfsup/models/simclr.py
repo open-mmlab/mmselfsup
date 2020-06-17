@@ -6,7 +6,6 @@ from openselfsup.utils import print_log
 from . import builder
 from .registry import MODELS
 from .utils import GatherLayer
-import pdb
 
 
 @MODELS.register_module
@@ -58,10 +57,10 @@ class SimCLR(nn.Module):
         s = torch.matmul(z, z.permute(1, 0))  # (2N)x(2N)
         mask, pos_ind, neg_mask = self._create_buffer(N)
         # remove diagonal, (2N)x(2N-1)
-        s = torch.masked_select(s, mask).reshape(s.size(0), -1)
+        s = torch.masked_select(s, mask == 1).reshape(s.size(0), -1)
         positive = s[pos_ind].unsqueeze(1)  # (2N)x1
         # select negative, (2N)x(2N-2)
-        negative = torch.masked_select(s, neg_mask).reshape(s.size(0), -1)
+        negative = torch.masked_select(s, neg_mask == 1).reshape(s.size(0), -1)
         losses = self.head(positive, negative)
         return losses
 

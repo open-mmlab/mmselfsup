@@ -8,6 +8,11 @@ FEAT_LIST=$3 # e.g.: "feat5", "feat4 feat5". If leave empty, the default is "fea
 GPUS=${4:-8}
 WORK_DIR=$(echo ${CFG%.*} | sed -e "s/configs/work_dirs/g")/
 
+if [ "$CFG" == "" ] || [ "$EPOCH" == "" ]; then
+    echo "ERROR: Missing arguments."
+    exit
+fi
+
 if [ ! -f $WORK_DIR/epoch_${EPOCH}.pth ]; then
     echo "ERROR: File not exist: $WORK_DIR/epoch_${EPOCH}.pth"
     exit

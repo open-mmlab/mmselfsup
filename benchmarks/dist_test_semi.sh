@@ -8,6 +8,11 @@ PRETRAIN=$2
 PY_ARGS=${@:3}
 GPUS=8 # in the standard setting, GPUS=8
 
+if [ "$CFG" == "" ] || [ "$PRETRAIN" == "" ]; then
+    echo "ERROR: Missing arguments."
+    exit
+fi
+
 WORK_DIR="$(echo ${CFG%.*} | sed -e "s/configs/work_dirs/g")/$(echo $PRETRAIN | rev | cut -d/ -f 1 | rev)"
 
 # train

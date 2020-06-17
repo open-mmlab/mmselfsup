@@ -8,7 +8,12 @@ FEAT_LIST=$3 # e.g.: "feat5", "feat4 feat5". If leave empty, the default is "fea
 GPUS=${4:-8}
 WORK_DIR=$(echo ${CFG%.*} | sed -e "s/configs/work_dirs/g")/
 
-if [ ! -f $PRETRAIN ] and [ "$PRETRAIN" != "random" ]; then
+if [ "$CFG" == "" ] || [ "$PRETRAIN" == "" ]; then
+    echo "ERROR: Missing arguments."
+    exit
+fi
+
+if [ ! -f $PRETRAIN ] && [ "$PRETRAIN" != "random" ]; then
     echo "ERROR: PRETRAIN should be a file or a string \"random\", got: $PRETRAIN"
     exit
 fi
