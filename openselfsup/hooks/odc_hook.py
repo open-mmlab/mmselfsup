@@ -45,7 +45,7 @@ class ODCHook(Hook):
 
     def after_train_epoch(self, runner):
         # save cluster
-        if self.every_n_epochs(10) and runner.rank == 0:
+        if self.every_n_epochs(runner, 10) and runner.rank == 0:
             new_labels = runner.model.module.memory_bank.label_bank
             if new_labels.is_cuda:
                 new_labels = new_labels.cpu()
