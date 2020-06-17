@@ -93,7 +93,7 @@ def main():
     cfg.model.backbone.out_indices = layer_ind
 
     # checkpoint and pretrained are exclusive
-    assert cfg.model.pretrained == "random" or args.checkpoint is None, \
+    assert args.pretrained == "random" or args.checkpoint is None, \
         "Checkpoint and pretrained are exclusive."
 
     # check memcached package exists
@@ -125,6 +125,11 @@ def main():
         workers_per_gpu=dataset_cfg.data.workers_per_gpu,
         dist=distributed,
         shuffle=False)
+
+    # specify pretrained model
+    if args.pretrained != 'random':
+        assert isinstance(args.pretrained, str)
+        cfg.model.pretrained = args.pretrained
 
     # build the model and load checkpoint
     model = build_model(cfg.model)
