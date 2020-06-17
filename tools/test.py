@@ -11,7 +11,8 @@ from mmcv.runner import get_dist_info, init_dist, load_checkpoint
 
 from openselfsup.datasets import build_dataloader, build_dataset
 from openselfsup.models import build_model
-from openselfsup.utils import get_root_logger, dist_forward_collect, nondist_forward_collect
+from openselfsup.utils import (get_root_logger, dist_forward_collect, 
+                               nondist_forward_collect, traverse_replace)
 
 
 def single_gpu_test(model, data_loader):
@@ -71,9 +72,7 @@ def main():
 
     # check memcached package exists
     if importlib.util.find_spec('mc') is None:
-        for field in ['train', 'val', 'test']:
-            if hasattr(cfg.data, field):
-                getattr(cfg.data, field).data_source.memcached = False
+        traverse_replace(cfg, 'memcached', False)
 
     # init distributed env first, since logger depends on the dist info.
     if args.launcher == 'none':
