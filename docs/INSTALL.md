@@ -78,7 +78,7 @@ bash tools/prepare_data/prepare_voc07_cls.sh $YOUR_DATA_ROOT
 
 #### Prepare ImageNet and Places205
 
-Taking ImageNet for example,y ou need to 1) download ImageNet; 2) create list files under $IAMGENET/meta/, `train.txt` contains an image file name in each line, `train_labeled.txt` contains `filename[space]label\n` in each line; `train_labeled_*percent.txt` are for semi-supervised evaluation, and can be downloaded [here](https://drive.google.com/drive/folders/1wYkJU_1qRHEt1LPVjBiG6ddUFV-t9hVJ?usp=sharing). 3) create a symlink under `$OPENSELFSUP/data/`.
+Taking ImageNet for example, you need to 1) download ImageNet; 2) create list files under $IMAGENET/meta/, `train.txt` contains an image file name in each line, `train_labeled.txt` contains `filename[space]label\n` in each line; `train_labeled_*percent.txt` are for semi-supervised evaluation, and can be downloaded [here](https://drive.google.com/drive/folders/1wYkJU_1qRHEt1LPVjBiG6ddUFV-t9hVJ?usp=sharing). 3) create a symlink under `$OPENSELFSUP/data/`.
 
 At last, the folder looks like:
 
