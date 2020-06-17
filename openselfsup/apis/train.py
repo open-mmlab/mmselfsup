@@ -72,7 +72,6 @@ def batch_processor(model, data, train_mode):
     Returns:
         dict: A dict containing losses and log vars.
     """
-    assert model.training, "Must be in training mode."
     losses = model(**data)
     loss, log_vars = parse_losses(losses)
 

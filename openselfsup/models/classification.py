@@ -14,7 +14,6 @@ class Classification(nn.Module):
 
     def __init__(self,
                  backbone,
-                 frozen_backbone=False,
                  with_sobel=False,
                  head=None,
                  pretrained=None):
@@ -23,10 +22,6 @@ class Classification(nn.Module):
         if with_sobel:
             self.sobel_layer = Sobel()
         self.backbone = builder.build_backbone(backbone)
-        if frozen_backbone:
-            self.backbone.eval()
-            for param in self.backbone.parameters():
-                param.requires_grad = False
         if head is not None:
             self.head = builder.build_head(head)
         self.init_weights(pretrained=pretrained)
