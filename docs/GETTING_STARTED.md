@@ -94,7 +94,7 @@ Augments:
 
 ```shell
 bash benchmarks/dist_test_semi.sh ${CONFIG_FILE} ${WEIGHT_FILE} [optional arguments]
-``
+```
 Arguments:
 - `CONFIG_FILE`: Use config files under "configs/classification/imagenet_*percent/"
 - `WEIGHT_FILE`: The extracted backbone weights extracted aforementioned.
@@ -102,10 +102,10 @@ Arguments:
 
 ### VOC07+12 / COCO17 Object Detection
 
-For more details to setup the environments for detection, please refer [here](benchmarks/detection/README.md).
+For more details to setup the environments for detection, please refer [here](https://github.com/open-mmlab/OpenSelfSup/blob/master/benchmarks/detection/README.md).
 
 ```shell
-conda activate detectron2
+conda activate detectron2 # use detectron2 environment here, otherwise use open-mmlab environment
 cd benchmarks/detection
 python convert-pretrain-to-detectron2.py ${WEIGHT_FILE} ${OUTPUT_FILE} # must use .pkl as the output extension.
 bash run.sh ${DET_CFG} ${OUTPUT_FILE}
