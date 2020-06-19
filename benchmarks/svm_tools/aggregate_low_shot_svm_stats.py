@@ -32,16 +32,16 @@ logger = logging.getLogger(__name__)
 
 def save_stats(output_dir, stat, output):
     out_file = os.path.join(output_dir, 'test_ap_{}.npy'.format(stat))
-    logger.info('Saving {} to: {} {}'.format(stat, out_file, output.shape))
+    #logger.info('Saving {} to: {} {}'.format(stat, out_file, output.shape))
     np.save(out_file, output)
 
 
 def aggregate_stats(opts):
     k_values = [int(val) for val in opts.k_values.split(",")]
     sample_inds = [int(val) for val in opts.sample_inds.split(",")]
-    logger.info(
-        'Aggregating stats for k-values: {} and sample_inds: {}'.format(
-            k_values, sample_inds))
+    #logger.info(
+    #    'Aggregating stats for k-values: {} and sample_inds: {}'.format(
+    #        k_values, sample_inds))
 
     output_mean, output_max, output_min, output_std = [], [], [], []
     for k_idx in range(len(k_values)):
@@ -95,7 +95,7 @@ def aggregate_stats(opts):
             round(argmax_max[idx], 2),
             round(argmax_std[idx], 2),
         ))
-    logger.info('All done!!')
+    #logger.info('All done!!')
 
 
 def main():
@@ -120,7 +120,7 @@ def main():
         sys.exit(1)
 
     opts = parser.parse_args()
-    logger.info(opts)
+    #logger.info(opts)
     aggregate_stats(opts)
 
 

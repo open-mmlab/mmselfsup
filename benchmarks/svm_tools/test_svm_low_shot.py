@@ -70,14 +70,14 @@ def save_json_predictions(opts, cost, sample_idx, k_low, features, cls_list,
                                'test_{}_json_preds.json'.format(suffix))
     with open(output_file, 'w') as fp:
         json.dump(json_predictions, fp)
-    logger.info('Saved json predictions to: {}'.format(output_file))
+    #logger.info('Saved json predictions to: {}'.format(output_file))
 
 
 def test_svm_low_shot(opts):
     k_values = [int(val) for val in opts.k_values.split(",")]
     sample_inds = [int(val) for val in opts.sample_inds.split(",")]
-    logger.info('Testing svm for k-values: {} and sample_inds: {}'.format(
-        k_values, sample_inds))
+    #logger.info('Testing svm for k-values: {} and sample_inds: {}'.format(
+    #    k_values, sample_inds))
 
     img_ids, cls_names = [], []
     if opts.generate_json:
@@ -94,7 +94,7 @@ def test_svm_low_shot(opts):
 
     # parse the cost values for training the SVM on
     costs_list = svm_helper.parse_cost_list(opts.costs_list)
-    logger.info('Testing SVM for costs: {}'.format(costs_list))
+    #logger.info('Testing SVM for costs: {}'.format(costs_list))
 
     # classes for which SVM testing should be done
     num_classes, cls_list = svm_helper.get_low_shot_svm_classes(
@@ -119,9 +119,9 @@ def test_svm_low_shot(opts):
                 cost = costs_list[cost_idx]
                 local_cost_ap = np.zeros((num_classes, 1))
                 for cls in cls_list:
-                    logger.info(
-                        'Test sample/k_value/cost/cls: {}/{}/{}/{}'.format(
-                            sample_idx + 1, k_low, cost, cls))
+                    #logger.info(
+                    #    'Test sample/k_value/cost/cls: {}/{}/{}/{}'.format(
+                    #        sample_idx + 1, k_low, cost, cls))
                     model_file = svm_helper.get_low_shot_output_file(
                         opts, cls, cost, suffix)
                     with open(model_file, 'rb') as fopen:
@@ -143,15 +143,15 @@ def test_svm_low_shot(opts):
             save_data = sample_ap_matrices[inds][k_idx]
             save_data = save_data.reshape((1, -1))
             np.save(out_k_sample_file, save_data)
-            logger.info('Saved sample test k_idx AP to file: {} {}'.format(
-                out_k_sample_file, save_data.shape))
+            #logger.info('Saved sample test k_idx AP to file: {} {}'.format(
+            #    out_k_sample_file, save_data.shape))
             if opts.generate_json:
                 argmax_cls = np.argmax(save_data, axis=1)
                 chosen_cost = costs_list[argmax_cls[0]]
-                logger.info('chosen cost: {}'.format(chosen_cost))
+                #logger.info('chosen cost: {}'.format(chosen_cost))
                 save_json_predictions(opts, chosen_cost, sample_idx, k_low,
                                       features, cls_list, cls_names, img_ids)
-    logger.info('All done!!')
+    #logger.info('All done!!')
 
 
 def main():
@@ -204,7 +204,7 @@ def main():
         sys.exit(1)
 
     opts = parser.parse_args()
-    logger.info(opts)
+    #logger.info(opts)
     test_svm_low_shot(opts)
 
 

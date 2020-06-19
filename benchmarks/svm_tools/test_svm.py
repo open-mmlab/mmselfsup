@@ -44,17 +44,17 @@ def get_chosen_costs(opts, num_classes):
                 np.load(ap_out_file, encoding='latin1')[0])
     argmax_cls = np.argmax(train_ap_matrix, axis=1)
     chosen_cost = [costs_list[idx] for idx in argmax_cls]
-    logger.info('chosen_cost: {}'.format(chosen_cost))
+    #logger.info('chosen_cost: {}'.format(chosen_cost))
     np.save(
         os.path.join(opts.output_path, 'crossval_ap.npy'),
         np.array(train_ap_matrix))
     np.save(
         os.path.join(opts.output_path, 'chosen_cost.npy'),
         np.array(chosen_cost))
-    logger.info('saved crossval_ap AP to file: {}'.format(
-        os.path.join(opts.output_path, 'crossval_ap.npy')))
-    logger.info('saved chosen costs to file: {}'.format(
-        os.path.join(opts.output_path, 'chosen_cost.npy')))
+    #logger.info('saved crossval_ap AP to file: {}'.format(
+    #    os.path.join(opts.output_path, 'crossval_ap.npy')))
+    #logger.info('saved chosen costs to file: {}'.format(
+    #    os.path.join(opts.output_path, 'chosen_cost.npy')))
     return np.array(chosen_cost)
 
 
@@ -78,7 +78,7 @@ def test_svm(opts):
     # normalize the features: N x 9216 (example shape)
     features = svm_helper.normalize_features(features)
     num_classes = targets.shape[1]
-    logger.info('Num classes: {}'.format(num_classes))
+    #logger.info('Num classes: {}'.format(num_classes))
 
     # get the chosen cost that maximizes the cross-validation AP per class
     costs_list = get_chosen_costs(opts, num_classes)
@@ -86,7 +86,7 @@ def test_svm(opts):
     ap_matrix = np.zeros((num_classes, 1))
     for cls in range(num_classes):
         cost = costs_list[cls]
-        logger.info('Testing model for cls: {} cost: {}'.format(cls, cost))
+        #logger.info('Testing model for cls: {} cost: {}'.format(cls, cost))
         model_file = os.path.join(
             opts.output_path,
             'cls' + str(cls) + '_cost' + str(cost) + '.pickle')
@@ -122,11 +122,11 @@ def test_svm(opts):
         output_file = os.path.join(opts.output_path, 'json_preds.json')
         with open(output_file, 'w') as fp:
             json.dump(json_predictions, fp)
-        logger.info('Saved json predictions to: {}'.format(output_file))
+        #logger.info('Saved json predictions to: {}'.format(output_file))
     logger.info('Mean AP: {}'.format(np.mean(ap_matrix, axis=0)))
     np.save(os.path.join(opts.output_path, 'test_ap.npy'), np.array(ap_matrix))
-    logger.info('saved test AP to file: {}'.format(
-        os.path.join(opts.output_path, 'test_ap.npy')))
+    #logger.info('saved test AP to file: {}'.format(
+    #    os.path.join(opts.output_path, 'test_ap.npy')))
 
 
 def main():
@@ -166,7 +166,7 @@ def main():
         sys.exit(1)
 
     opts = parser.parse_args()
-    logger.info(opts)
+    #logger.info(opts)
     test_svm(opts)
 
 

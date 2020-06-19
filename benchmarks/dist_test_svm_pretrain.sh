@@ -18,7 +18,10 @@ if [ ! -f $PRETRAIN ] && [ "$PRETRAIN" != "random" ]; then
     exit
 fi
 
-bash tools/dist_extract.sh $CFG $GPUS --pretrained $PRETRAIN
+mkdir -p $WORK_DIR/logs
+echo "Testing pretrain: $PRETRAIN" 2>&1 | tee -a $WORK_DIR/logs/eval_svm.log
+
+bash tools/dist_extract.sh $CFG $GPUS $WORK_DIR --pretrained $PRETRAIN
 
 bash benchmarks/svm_tools/eval_svm_full.sh $WORK_DIR $FEAT_LIST
 

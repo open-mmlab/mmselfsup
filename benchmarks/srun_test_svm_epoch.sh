@@ -14,7 +14,10 @@ if [ ! -f $WORK_DIR/epoch_${EPOCH}.pth ]; then
     exit
 fi
 
-bash tools/srun_extract.sh $PARTITION $CFG $GPUS --checkpoint $WORK_DIR/epoch_${EPOCH}.pth
+mkdir -p $WORK_DIR/logs
+echo "Testing checkpoint: $WORK_DIR/epoch_${EPOCH}.pth" 2>&1 | tee -a $WORK_DIR/logs/eval_svm.log
+
+bash tools/srun_extract.sh $PARTITION $CFG $GPUS $WORK_DIR --checkpoint $WORK_DIR/epoch_${EPOCH}.pth
 
 srun -p $PARTITION bash benchmarks/svm_tools/eval_svm_full.sh $WORK_DIR $FEAT_LIST
 

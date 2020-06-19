@@ -15,9 +15,8 @@ else
     shots="1 2 4 8 16 32 64 96"
 fi
 
-mkdir $WORK_DIR/logs
 for feat in $FEAT_LIST; do
-    echo "For feature: $feat" 2>&1 | tee -a $WORK_DIR/logs/eval_svm_lowshot.log
+    echo "For feature: $feat" 2>&1 | tee -a $WORK_DIR/logs/eval_svm.log
     # train lowshot svm
     if $TRAIN_SVM_LOWSHOT_FLAG; then
         rm -rf $WORK_DIR/svm_lowshot
@@ -56,7 +55,7 @@ for feat in $FEAT_LIST; do
         python benchmarks/svm_tools/aggregate_low_shot_svm_stats.py \
             --output_path $WORK_DIR/svm_lowshot/voc07_${feat} \
             --k_values "${shots// /,}" \
-            --sample_inds "0,1,2,3,4" 2>&1 | tee -a $WORK_DIR/logs/eval_svm_lowshot.log
+            --sample_inds "0,1,2,3,4" 2>&1 | tee -a $WORK_DIR/logs/eval_svm.log
     fi
 
 done

@@ -8,7 +8,6 @@ DATA="data/VOCdevkit/VOC2007/SVMLabels"
 # config svm
 costs="1.0,10.0,100.0"
 
-mkdir $WORK_DIR/logs
 for feat in $FEAT_LIST; do
     echo "For feature: $feat" 2>&1 | tee -a $WORK_DIR/logs/eval_svm.log
     # train svm
