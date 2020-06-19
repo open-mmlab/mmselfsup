@@ -10,7 +10,6 @@ For installation instructions, please see [INSTALL.md](INSTALL.md).
 ### Train with single/multiple GPUs
 
 ```shell
-# 
 bash tools/dist_train.sh ${CONFIG_FILE} ${GPUS} [optional arguments]
 ```
 Optional arguments are:
@@ -19,6 +18,7 @@ Optional arguments are:
 
 An example:
 ```shell
+# checkpoints and logs saved in WORK_DIR=work_dirs/selfsup/odc/r50_v1/
 bash tools/dist_train.sh configs/selfsup/odc/r50_v1.py 8
 ```
 **Note**: During training, checkpoints and logs are saved in the same folder structure as the config file under `work_dirs/`. Custom work directory is not recommended since evaluation scripts infer work directories from the config file name. If you want to save your weights somewhere else, please use symlink, for example:
@@ -62,15 +62,21 @@ We provide several standard benchmarks to evaluate representation learning.
 
 ```shell
 # test by epoch
-bash benchmarks/dist_test_svm.sh ${CONFIG_FILE} ${EPOCH} ${FEAT_LIST} ${GPUS}
+bash benchmarks/dist_test_svm_epoch.sh ${CONFIG_FILE} ${EPOCH} ${FEAT_LIST} ${GPUS}
 # test pretrained model
-bash benchmarks/dist_test_svm.sh ${CONFIG_FILE} ${PRETRAIN} ${FEAT_LIST} ${GPUS}
+bash benchmarks/dist_test_svm_pretrain.sh ${CONFIG_FILE} ${PRETRAIN} ${FEAT_LIST} ${GPUS}
 # test random init
-bash benchmarks/dist_test_svm.sh ${CONFIG_FILE} "random" ${FEAT_LIST} ${GPUS}
+bash benchmarks/dist_test_svm_pretrain.sh ${CONFIG_FILE} "random" ${FEAT_LIST} ${GPUS}
 ```
 Augments:
-- `${FEAT_LIST}` is a string to specify features from layer1 to layer5 to evaluate; e.g., if you want to evaluate layer5 only, then `FEAT_LIST` is `feat5`, if you want to evaluate all features, then then `FEAT_LIST` is `feat1 feat2 feat3 feat4 feat5` (separated by space). If left empty, the default `FEAT_LIST` is `feat5`.
+- `${FEAT_LIST}` is a string to specify features from layer1 to layer5 to evaluate; e.g., if you want to evaluate layer5 only, then `FEAT_LIST` is `"feat5"`, if you want to evaluate all features, then then `FEAT_LIST` is `"feat1 feat2 feat3 feat4 feat5"` (separated by space). If left empty, the default `FEAT_LIST` is `"feat5"`.
 - `$GPUS` is the number of GPUs to extract features.
+
+Working directories:
+The features, logs and intermediate files generated are saved in `$SVM_WORK_DIR/` as follows:
+- `dist_test_svm_epoch.sh`: `SVM_WORK_DIR=$WORK_DIR/` (The same as that mentioned in `Train with single/multiple GPUs` above.) Hence, the files will be overridden to save space when evaluating with a new `$EPOCH`.
+- `dist_test_svm_pretrain.sh`: `SVM_WORK_DIR=$WORK_DIR/$PRETRAIN_NAME/`, e.g., if `PRETRAIN=pretrains/odc_v1.pth`, then `PRETRAIN_NAME=odc_v1.pth`; if `PRETRAIN=random`, then `PRETRAIN_NAME=random`.
+The evaluation records are saved in `$SVM_WORK_DIR/logs/eval_svm.log`
 
 ### ImageNet / Places205 Linear Classification
 
@@ -90,6 +96,9 @@ Augments:
 - `CONFIG_FILE`: Use config files under "configs/linear_classification/". Note that if you want to test DeepCluster that has a sobel layer before the backbone, you have to use the config file named `*_sobel.py`, e.g., `configs/linear_classification/imagenet/r50_multihead_sobel.py`.
 - Optional arguments include `--resume_from ${CHECKPOINT_FILE}` that resume from a previous checkpoint file.
 
+Working directories:
+Where are the checkpoints and logs? E.g., if you use `configs/linear_classification/imagenet/r50_multihead.py` to evaluate `pretrains/moco_v1_epoch200.pth`, then the working directories for this evalution is `work_dirs/linear_classification/imagenet/r50_multihead/moco_v1_epoch200.pth/`.
+
 ### ImageNet Semi-Supervised Classification
 
 ```shell
@@ -99,6 +108,8 @@ Arguments:
 - `CONFIG_FILE`: Use config files under "configs/classification/imagenet_*percent/"
 - `WEIGHT_FILE`: The extracted backbone weights extracted aforementioned.
 - Optional arguments: The same as aforementioned.
+
+Working directories: The same as in "ImageNet / Places205 Linear Classification".
 
 ### VOC07+12 / COCO17 Object Detection
 
