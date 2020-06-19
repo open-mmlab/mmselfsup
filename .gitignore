@@ -103,7 +103,7 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-mmdet/version.py
+openselfsup/version.py
 data
 .vscode
 .idea
