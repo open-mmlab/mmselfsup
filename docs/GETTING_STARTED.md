@@ -69,7 +69,7 @@ bash benchmarks/dist_test_svm_pretrain.sh ${CONFIG_FILE} ${PRETRAIN} ${FEAT_LIST
 bash benchmarks/dist_test_svm_pretrain.sh ${CONFIG_FILE} "random" ${FEAT_LIST} ${GPUS}
 ```
 Augments:
-- `${FEAT_LIST}` is a string to specify features from layer1 to layer5 to evaluate; e.g., if you want to evaluate layer5 only, then `FEAT_LIST` is `feat5`, if you want to evaluate all features, then then `FEAT_LIST` is `feat1 feat2 feat3 feat4 feat5` (separated by space). If left empty, the default `FEAT_LIST` is `feat5`.
+- `${FEAT_LIST}` is a string to specify features from layer1 to layer5 to evaluate; e.g., if you want to evaluate layer5 only, then `FEAT_LIST` is `"feat5"`, if you want to evaluate all features, then then `FEAT_LIST` is `"feat1 feat2 feat3 feat4 feat5"` (separated by space). If left empty, the default `FEAT_LIST` is `"feat5"`.
 - `$GPUS` is the number of GPUs to extract features.
 
 Working directories:
@@ -109,7 +109,7 @@ Arguments:
 - `WEIGHT_FILE`: The extracted backbone weights extracted aforementioned.
 - Optional arguments: The same as aforementioned.
 
-Working directories: The same as in `ImageNet / Places205 Linear Classification`.
+Working directories: The same as in "ImageNet / Places205 Linear Classification".
 
 ### VOC07+12 / COCO17 Object Detection
 
