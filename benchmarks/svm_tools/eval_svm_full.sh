@@ -1,4 +1,7 @@
 #!/bin/bash
+set -x
+set -e
+
 WORK_DIR=$1
 FEAT_LIST=${2:-"feat5"} # "feat1 feat2 feat3 feat4 feat5"
 TRAIN_SVM_FLAG=true

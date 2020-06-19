@@ -19,6 +19,6 @@ echo "Testing pretrain: $PRETRAIN" 2>&1 | tee -a $WORK_DIR/logs/eval_svm.log
 
 bash tools/srun_extract.sh $PARTITION $CFG $GPUS $WORK_DIR --pretrained $PRETRAIN
 
-srun -p $PARTITION bash benchmarks/svm_tools/eval_svm_full.sh $WORK_DIR $FEAT_LIST
+srun -p $PARTITION bash benchmarks/svm_tools/eval_svm_full.sh $WORK_DIR "$FEAT_LIST"
 
-srun -p $PARTITION bash benchmarks/svm_tools/eval_svm_lowshot.sh $WORK_DIR $FEAT_LIST
+srun -p $PARTITION bash benchmarks/svm_tools/eval_svm_lowshot.sh $WORK_DIR "$FEAT_LIST"

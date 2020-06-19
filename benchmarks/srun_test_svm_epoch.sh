@@ -19,6 +19,6 @@ echo "Testing checkpoint: $WORK_DIR/epoch_${EPOCH}.pth" 2>&1 | tee -a $WORK_DIR/
 
 bash tools/srun_extract.sh $PARTITION $CFG $GPUS $WORK_DIR --checkpoint $WORK_DIR/epoch_${EPOCH}.pth
 
-srun -p $PARTITION bash benchmarks/svm_tools/eval_svm_full.sh $WORK_DIR $FEAT_LIST
+srun -p $PARTITION bash benchmarks/svm_tools/eval_svm_full.sh $WORK_DIR "$FEAT_LIST"
 
-srun -p $PARTITION bash benchmarks/svm_tools/eval_svm_lowshot.sh $WORK_DIR $FEAT_LIST
+srun -p $PARTITION bash benchmarks/svm_tools/eval_svm_lowshot.sh $WORK_DIR "$FEAT_LIST"
