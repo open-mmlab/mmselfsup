@@ -46,8 +46,8 @@ For existing methods in this repo, you only need to modify config files to adjus
 
 | Benchmarks                       | Setting                                                                                                                                                                     | Remarks                                      |
 |----------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------|
-| ImageNet Linear Classification (S) | [goyal2019scaling](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) | Evaluate different layers.             |
-| ImageNet Linear Classification (M) | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf) | Evaluate the last layer after global pooling. |
+| ImageNet Linear Classification (Multi) | [goyal2019scaling](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) | Evaluate different layers.             |
+| ImageNet Linear Classification (Last) | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf) | Evaluate the last layer after global pooling. |
 | Places205 Linear Classification  | [goyal2019scaling](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) | Evaluate different layers.             |
 | ImageNet Semi-Sup Classification |
 | PASCAL VOC07 SVM                 | [goyal2019scaling](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) | Costs="1.0,10.0,100.0" to save evaluation time w/o change of results. |
