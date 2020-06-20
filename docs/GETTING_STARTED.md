@@ -134,6 +134,8 @@ Arguments:
 - Please report the mean of 5 trials in your offical paper, according to MoCo.
 - DeepCluster that uses Sobel layer is not supported by detectron2.
 
+## Tools and Tips
+
 ### Count number of parameters
 
 ```shell
