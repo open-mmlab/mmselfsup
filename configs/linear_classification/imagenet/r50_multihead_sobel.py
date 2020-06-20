@@ -22,7 +22,7 @@ model = dict(
 # dataset settings
 data_source_cfg = dict(
     type='ImageNet',
-    memcached=False,
+    memcached=True,
     mclient_path='/mnt/lustre/share/memcached_client')
 data_train_list = 'data/imagenet/meta/train_labeled.txt'
 data_train_root = 'data/imagenet/train'

@@ -60,8 +60,8 @@ def load_input_data(data_file, targets_file):
     features = np.array(np.load(data_file,
                                 encoding='latin1')).astype(np.float64)
     assert features.shape[0] == targets.shape[0], "Mismatched #images"
-    logger.info('Loaded features: {} and targets: {}'.format(
-        features.shape, targets.shape))
+    #logger.info('Loaded features: {} and targets: {}'.format(
+    #    features.shape, targets.shape))
     return features, targets
 
 
@@ -139,8 +139,8 @@ def get_low_shot_svm_classes(targets, dataset):
         cls_list = list(set(targets[:, 0].tolist()))
     else:
         logger.info('Dataset not recognized. Abort!')
-    logger.info('Testing SVM for classes: {}'.format(cls_list))
-    logger.info('Num classes: {}'.format(num_classes))
+    #logger.info('Testing SVM for classes: {}'.format(cls_list))
+    #logger.info('Num classes: {}'.format(num_classes))
     return num_classes, cls_list
 
 
