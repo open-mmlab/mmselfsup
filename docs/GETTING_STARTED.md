@@ -15,6 +15,7 @@ bash tools/dist_train.sh ${CONFIG_FILE} ${GPUS} [optional arguments]
 Optional arguments are:
 - `--resume_from ${CHECKPOINT_FILE}`: Resume from a previous checkpoint file.
 - `--pretrained ${PRETRAIN_WEIGHTS}`: Load pretrained weights for the backbone.
+- `--deterministic`: Switch on "deterministic" mode which slows down training but the results are reproducible.
 
 An example:
 ```shell
@@ -56,7 +57,7 @@ GPUS_PER_NODE=4 bash tools/srun_train.sh ${PARTITION} ${CONFIG_FILE} 4 --port 29
 
 ## Benchmarks
 
-We provide several standard benchmarks to evaluate representation learning.
+We provide several standard benchmarks to evaluate representation learning. The config files or scripts for evaluation mentioned below are NOT recommended to be changed if you want to use this repo in your publications. We hope that all methods are under a fair comparison.
 
 ### VOC07 Linear SVM & Low-shot Linear SVM
 
@@ -94,7 +95,9 @@ bash benchmarks/dist_test_linear.sh ${CONFIG_FILE} ${WEIGHT_FILE} [optional argu
 ```
 Augments:
 - `CONFIG_FILE`: Use config files under "configs/linear_classification/". Note that if you want to test DeepCluster that has a sobel layer before the backbone, you have to use the config file named `*_sobel.py`, e.g., `configs/linear_classification/imagenet/r50_multihead_sobel.py`.
-- Optional arguments include `--resume_from ${CHECKPOINT_FILE}` that resume from a previous checkpoint file.
+- Optional arguments include:
+    - `--resume_from ${CHECKPOINT_FILE}`: Resume from a previous checkpoint file.
+    - `--deterministic`: Switch on "deterministic" mode which slows down training but the results are reproducible.
 
 Working directories:
 Where are the checkpoints and logs? E.g., if you use `configs/linear_classification/imagenet/r50_multihead.py` to evaluate `pretrains/moco_v1_epoch200.pth`, then the working directories for this evalution is `work_dirs/linear_classification/imagenet/r50_multihead/moco_v1_epoch200.pth/`.
@@ -146,6 +149,10 @@ python tools/publish_model.py ${WEIGHT_FILE}
 ```
 Arguments:
 -`WEIGHT_FILE`: The extracted backbone weights extracted aforementioned.
+
+### Reproducibility
+
+If you want to make your performance exactly reproducible, please switch on `--deterministic` to train the final model to be published. Note that this flag will switch off `torch.backends.cudnn.benchmark` and slow down the training speed.
 
 ## How-to
 
