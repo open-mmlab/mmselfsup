@@ -101,15 +101,7 @@ Where are the checkpoints and logs? E.g., if you use `configs/linear_classificat
 
 ### ImageNet Semi-Supervised Classification
 
-```shell
-bash benchmarks/dist_test_semi.sh ${CONFIG_FILE} ${WEIGHT_FILE} [optional arguments]
-```
-Arguments:
-- `CONFIG_FILE`: Use config files under "configs/classification/imagenet_*percent/"
-- `WEIGHT_FILE`: The extracted backbone weights extracted aforementioned.
-- Optional arguments: The same as aforementioned.
-
-Working directories: The same as in "ImageNet / Places205 Linear Classification".
+Coming soon
 
 ### VOC07+12 / COCO17 Object Detection
 

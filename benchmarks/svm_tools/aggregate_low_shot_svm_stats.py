@@ -56,7 +56,6 @@ def aggregate_stats(opts):
                 k_val_output.append(np.load(filepath, encoding='latin1'))
             else:
                 logger.info('file does not exist: {}'.format(filepath))
-        # import pdb; pdb.set_trace()
         k_val_output = np.concatenate(k_val_output, axis=0)
         k_low_max = np.max(
             k_val_output, axis=0).reshape(-1, k_val_output.shape[1])
