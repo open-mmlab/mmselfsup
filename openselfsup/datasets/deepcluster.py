@@ -14,6 +14,10 @@ class DeepClusterDataset(BaseDataset):
 
     def __getitem__(self, idx):
         img = self.data_source.get_sample(idx)
+        assert isinstance(img, Image.Image), \
+            'The output from the data source must be an Image, got: {}. \
+            Please ensure that the list file does not contain labels.'.format(
+            type(img))
         label = self.labels[idx]
         img = self.pipeline(img)
         return dict(img=img, pseudo_label=label, idx=idx)

@@ -12,6 +12,10 @@ class NPIDDataset(BaseDataset):
 
     def __getitem__(self, idx):
         img = self.data_source.get_sample(idx)
+        assert isinstance(img, Image.Image), \
+            'The output from the data source must be an Image, got: {}. \
+            Please ensure that the list file does not contain labels.'.format(
+            type(img))
         img = self.pipeline(img)
         return dict(img=img, idx=idx)
 
