@@ -78,7 +78,7 @@ bash tools/prepare_data/prepare_voc07_cls.sh $YOUR_DATA_ROOT
 
 #### Prepare ImageNet and Places205
 
-Taking ImageNet for example, you need to 1) download ImageNet; 2) create list files under $IMAGENET/meta/, `train.txt` contains an image file name in each line, `train_labeled.txt` contains `filename[space]label\n` in each line; `train_labeled_*percent.txt` are for semi-supervised evaluation, and can be downloaded [here](https://drive.google.com/drive/folders/1wYkJU_1qRHEt1LPVjBiG6ddUFV-t9hVJ?usp=sharing). 3) create a symlink under `$OPENSELFSUP/data/`.
+Taking ImageNet for example, you need to 1) download ImageNet; 2) create the following list files or download [here](https://drive.google.com/drive/folders/1wYkJU_1qRHEt1LPVjBiG6ddUFV-t9hVJ?usp=sharing) under $IMAGENET/meta/: `train.txt` and `val.txt` contains an image file name in each line, `train_labeled.txt` and `val_labeled.txt` contains `filename[space]label\n` in each line; `train_labeled_*percent.txt` are the down-sampled lists for semi-supervised evaluation. 3) create a symlink under `$OPENSELFSUP/data/`.
 
 At last, the folder looks like:
 
@@ -94,11 +94,11 @@ OpenSelfSup
 │   ├── imagenet
 │   │   ├── meta
 │   │   |   ├── train.txt (for self-sup training, "filename\n" in each line)
-│   │   |   ├── train_labeled.txt (for evaluation, "filename[space]label\n" in each line)
-│   │   |   ├── train_labeled_1percent.txt (for evaluation)
-│   │   |   ├── train_labeled_10percent.txt (for evaluation)
+│   │   |   ├── train_labeled.txt (for linear evaluation, "filename[space]label\n" in each line)
+│   │   |   ├── train_labeled_1percent.txt (for semi-supervised evaluation)
+│   │   |   ├── train_labeled_10percent.txt (for semi-supervised evaluation)
 │   │   |   ├── val.txt
-│   │   |   ├── val_labeled.txt
+│   │   |   ├── val_labeled.txt (for evaluation)
 │   │   ├── train
 │   │   ├── val
 │   ├── places205
