@@ -1,3 +1,4 @@
+from PIL import Image
 from .registry import DATASETS
 from .base import BaseDataset
 
