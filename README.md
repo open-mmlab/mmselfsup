@@ -1,6 +1,9 @@
 
 # OpenSelfSup
 
+**News**
+OpenSelfSup now supports [BYOL](https://arxiv.org/pdf/2006.07733.pdf)!
+
 ## Introduction
 
 The master branch works with **PyTorch 1.1** or higher.
@@ -16,19 +19,10 @@ Below is the relations among Unsupervised Learning, Self-Supervised Learning and
 ### Major features
 
 - **All methods in one repository**
-  
-|                                                                                                                                                       |  Support |
-|-------------------------------------------------------------------------------------------------------------------------------------------------------|:--------:|
-| [ImageNet](https://link.springer.com/article/10.1007/s11263-015-0816-y?sa_campaign=email/event/articleAuthor/onlineFirst#)                            |     ✓    |
-| [Relative-Loc](https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Doersch_Unsupervised_Visual_Representation_ICCV_2015_paper.pdf)      | progress |
-| [Rotation-Pred](https://arxiv.org/abs/1803.07728)                                                                                                     |     ✓    |
-| [DeepCluster](https://arxiv.org/abs/1807.05520)                                                                                                       |     ✓    |
-| [ODC](http://openaccess.thecvf.com/content_CVPR_2020/papers/Zhan_Online_Deep_Clustering_for_Unsupervised_Representation_Learning_CVPR_2020_paper.pdf)       |     ✓    |
-| [NPID](https://arxiv.org/abs/1805.01978)                                                                                                              |     ✓    |
-| [MoCo](https://arxiv.org/abs/1911.05722)                                                                                                              |     ✓    |
-| [MoCo v2](https://arxiv.org/abs/2003.04297)                                                                                                           |     ✓    |
-| [SimCLR](https://arxiv.org/abs/2002.05709)                                                                                                            |     ✓    |
-| [PIRL](http://openaccess.thecvf.com/content_CVPR_2020/papers/Misra_Self-Supervised_Learning_of_Pretext-Invariant_Representations_CVPR_2020_paper.pdf) | progress |
+
+* For comprehensive comparison in all benchmarks, refer to [MODEL_ZOO.md](docs/MODEL_ZOO.md).
+
+<table><thead><tr><th>Method</th><th>VOC07 SVM (best layer)</th><th>ImageNet (best layer)</th></tr></thead><tbody><tr><td><a href="https://github.com/pytorch/vision/blob/master/torchvision/models/resnet.py" target="_blank" rel="noopener noreferrer">ImageNet</a></td><td>87.17</td><td>76.17</td></tr><tr><td>Random</td><td>30.22</td><td>13.70</td></tr><tr><td><a href="https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Doersch_Unsupervised_Visual_Representation_ICCV_2015_paper.pdf" target="_blank" rel="noopener noreferrer">Relative-Loc</a></td><td></td><td></td></tr><tr><td><a href="https://arxiv.org/abs/1803.07728" target="_blank" rel="noopener noreferrer">Rotation-Pred</a></td><td>67.38</td><td>54.99</td></tr><tr><td><a href="https://arxiv.org/abs/1807.05520" target="_blank" rel="noopener noreferrer">DeepCluster</a></td><td>74.26</td><td></td></tr><tr><td><a href="https://arxiv.org/abs/1805.01978" target="_blank" rel="noopener noreferrer">NPID</a></td><td>74.50</td><td>56.61</td></tr><tr><td><a href="http://openaccess.thecvf.com/content_CVPR_2020/papers/Zhan_Online_Deep_Clustering_for_Unsupervised_Representation_Learning_CVPR_2020_paper.pdf" target="_blank" rel="noopener noreferrer">ODC</a></td><td>78.42</td><td>57.6</td></tr><tr><td><a href="https://arxiv.org/abs/1911.05722" target="_blank" rel="noopener noreferrer">MoCo</a></td><td>79.18</td><td>60.60</td></tr><tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>84.05</td><td>66.72</td></tr><tr><td><a href="https://arxiv.org/abs/2002.05709" target="_blank" rel="noopener noreferrer">SimCLR</a></td><td>78.95</td><td></td></tr><tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td></td><td></td></tr></tbody></table>
 
 - **Flexibility & Extensibility**
 

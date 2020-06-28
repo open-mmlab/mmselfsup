@@ -1,21 +1,25 @@
 _base_ = '../../base.py'
 # model settings
 model = dict(
-    type='SimCLR',
+    type='MOCO',
     pretrained=None,
+    queue_len=65536,
+    feat_dim=128,
+    momentum=0.999,
     backbone=dict(
         type='ResNet',
         depth=50,
         in_channels=3,
         out_indices=[4],  # 0: conv-1, x: stage-x
-        norm_cfg=dict(type='SyncBN')),
+        norm_cfg=dict(type='BN')),
     neck=dict(
-        type='NonLinearNeckV1', # simple fc-relu-fc neck
+        type='NonLinearNeckSimCLR', # SimCLR non-linear neck
         in_channels=2048,
         hid_channels=2048,
         out_channels=128,
+        num_layers=2,
         with_avg_pool=True),
-    head=dict(type='ContrastiveHead', temperature=0.1))
+    head=dict(type='ContrastiveHead', temperature=0.2))
 # dataset settings
 data_source_cfg = dict(
     type='ImageNet',
@@ -26,17 +30,16 @@ data_train_root = 'data/imagenet/train'
 dataset_type = 'ContrastiveDataset'
 img_norm_cfg = dict(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 train_pipeline = [
-    dict(type='RandomResizedCrop', size=224),
-    dict(type='RandomHorizontalFlip'),
+    dict(type='RandomResizedCrop', size=224, scale=(0.2, 1.)),
     dict(
         type='RandomAppliedTrans',
         transforms=[
             dict(
                 type='ColorJitter',
-                brightness=0.8,
-                contrast=0.8,
-                saturation=0.8,
-                hue=0.2)
+                brightness=0.4,
+                contrast=0.4,
+                saturation=0.4,
+                hue=0.4)
         ],
         p=0.8),
     dict(type='RandomGrayscale', p=0.2),
@@ -50,12 +53,14 @@ train_pipeline = [
                 kernel_size=23)
         ],
         p=0.5),
+    dict(type='RandomHorizontalFlip'),
     dict(type='ToTensor'),
     dict(type='Normalize', **img_norm_cfg),
 ]
 data = dict(
-    imgs_per_gpu=32,  # total 32*8
+    imgs_per_gpu=32,  # total 32*8=256
     workers_per_gpu=4,
+    drop_last=True,
     train=dict(
         type=dataset_type,
         data_source=dict(
@@ -63,15 +68,9 @@ data = dict(
             **data_source_cfg),
         pipeline=train_pipeline))
 # optimizer
-optimizer = dict(type='LARS', lr=0.3, weight_decay=0.000001, momentum=0.9)
+optimizer = dict(type='SGD', lr=0.03, weight_decay=0.0001, momentum=0.9)
 # learning policy
-lr_config = dict(
-    policy='CosineAnealing',
-    min_lr=0.,
-    warmup='linear',
-    warmup_iters=10,
-    warmup_ratio=0.01,
-    warmup_by_epoch=True)
+lr_config = dict(policy='CosineAnealing', min_lr=0.)
 checkpoint_config = dict(interval=10)
 # runtime settings
 total_epochs = 200

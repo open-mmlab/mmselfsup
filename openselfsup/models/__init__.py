@@ -1,5 +1,6 @@
 from .backbones import *  # noqa: F401,F403
 from .builder import (build_backbone, build_model, build_head, build_loss)
+from .byol import BYOL
 from .heads import *
 from .classification import Classification
 from .deepcluster import DeepCluster

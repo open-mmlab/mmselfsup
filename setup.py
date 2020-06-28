@@ -12,7 +12,7 @@ def readme():
 
 
 MAJOR = 0
-MINOR = 1
+MINOR = 2
 PATCH = 0
 SUFFIX = ''
 if PATCH != '':

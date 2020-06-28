@@ -1,7 +1,7 @@
-""" Layer-wise adaptive rate scaling for SGD in PyTorch! """
 import torch
 from torch.optim.optimizer import Optimizer, required
 from torch.optim import *
+from .larc import LARC
 
 
 class LARS(Optimizer):
@@ -14,15 +14,17 @@ class LARS(Optimizer):
         momentum (float, optional): momentum factor (default: 0) ("m")
         weight_decay (float, optional): weight decay (L2 penalty) (default: 0)
             ("\beta")
+        dampening (float, optional): dampening for momentum (default: 0)
         eta (float, optional): LARS coefficient
-        max_epoch: maximum training epoch to determine polynomial LR decay.
+        nesterov (bool, optional): enables Nesterov momentum (default: False)
 
     Based on Algorithm 1 of the following paper by You, Gitman, and Ginsburg.
     Large Batch Training of Convolutional Networks:
         https://arxiv.org/abs/1708.03888
 
     Example:
-        >>> optimizer = LARS(model.parameters(), lr=0.1, eta=1e-3)
+        >>> optimizer = LARS(model.parameters(), lr=0.1, momentum=0.9,
+        >>>                  weight_decay=1e-4, eta=1e-3)
         >>> optimizer.zero_grad()
         >>> loss_fn(model(input), target).backward()
         >>> optimizer.step()
@@ -31,9 +33,11 @@ class LARS(Optimizer):
     def __init__(self,
                  params,
                  lr=required,
-                 momentum=.9,
-                 weight_decay=.0005,
-                 eta=0.001):
+                 momentum=0,
+                 dampening=0,
+                 weight_decay=0,
+                 eta=0.001,
+                 nesterov=False):
         if lr is not required and lr < 0.0:
             raise ValueError("Invalid learning rate: {}".format(lr))
         if momentum < 0.0:
@@ -45,51 +49,69 @@ class LARS(Optimizer):
             raise ValueError("Invalid LARS coefficient value: {}".format(eta))
 
         defaults = dict(
-            lr=lr, momentum=momentum, weight_decay=weight_decay, eta=eta)
+            lr=lr, momentum=momentum, dampening=dampening,
+            weight_decay=weight_decay, nesterov=nesterov, eta=eta)
+        if nesterov and (momentum <= 0 or dampening != 0):
+            raise ValueError("Nesterov momentum requires a momentum and zero dampening")
+
         super(LARS, self).__init__(params, defaults)
 
+    def __setstate__(self, state):
+        super(LARS, self).__setstate__(state)
+        for group in self.param_groups:
+            group.setdefault('nesterov', False)
+
+    @torch.no_grad()
     def step(self, closure=None):
         """Performs a single optimization step.
 
         Arguments:
             closure (callable, optional): A closure that reevaluates the model
                 and returns the loss.
-            epoch: current epoch to calculate polynomial LR decay schedule.
-                   if None, uses self.epoch and increments it.
         """
         loss = None
         if closure is not None:
-            loss = closure()
+            with torch.enable_grad():
+                loss = closure()
 
         for group in self.param_groups:
             weight_decay = group['weight_decay']
             momentum = group['momentum']
+            dampening = group['dampening']
             eta = group['eta']
+            nesterov = group['nesterov']
             lr = group['lr']
+            lars_exclude = group.get('lars_exclude', False)
 
             for p in group['params']:
                 if p.grad is None:
                     continue
 
-                param_state = self.state[p]
-                d_p = p.grad.data
+                d_p = p.grad
 
-                weight_norm = torch.norm(p.data)
-                grad_norm = torch.norm(d_p)
-
-                # Compute local learning rate for this layer
-                local_lr = eta * weight_norm / \
-                    (grad_norm + weight_decay * weight_norm)
-
-                # Update the momentum term
-                actual_lr = local_lr * lr
-
-                if 'momentum_buffer' not in param_state:
-                    buf = param_state['momentum_buffer'] = \
-                            torch.zeros_like(p.data)
+                if lars_exclude:
+                    local_lr = 1.
                 else:
-                    buf = param_state['momentum_buffer']
-                buf.mul_(momentum).add_(actual_lr, d_p + weight_decay * p.data)
-                p.data.add_(-buf)
+                    weight_norm = torch.norm(p).item()
+                    grad_norm = torch.norm(d_p).item()
+                    # Compute local learning rate for this layer
+                    local_lr = eta * weight_norm / \
+                        (grad_norm + weight_decay * weight_norm)
+
+                actual_lr = local_lr * lr
+                d_p = d_p.add(p, alpha=weight_decay).mul(actual_lr)
+                if momentum != 0:
+                    param_state = self.state[p]
+                    if 'momentum_buffer' not in param_state:
+                        buf = param_state['momentum_buffer'] = \
+                                torch.clone(d_p).detach()
+                    else:
+                        buf = param_state['momentum_buffer']
+                        buf.mul_(momentum).add_(d_p, alpha=1 - dampening)
+                    if nesterov:
+                        d_p = d_p.add(buf, alpha=momentum)
+                    else:
+                        d_p = buf
+                p.add_(-d_p)
 
         return loss

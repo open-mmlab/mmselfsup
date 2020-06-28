@@ -7,8 +7,27 @@ from .registry import NECKS
 from .utils import build_norm_layer
 
 
+def _init_weights(module, init_linear='normal'):
+    assert init_linear in ['normal', 'kaiming'], \
+        "Undefined init_linear: {}".format(init_linear)
+    for m in module.modules():
+        if isinstance(m, nn.Linear):
+            if init_linear == 'normal':
+                normal_init(m, std=0.01)
+            else:
+                kaiming_init(m, mode='fan_in', nonlinearity='relu')
+        elif isinstance(m,
+                        (nn.BatchNorm2d, nn.GroupNorm, nn.SyncBatchNorm)):
+            if m.weight is not None:
+                nn.init.constant_(m.weight, 1)
+            if m.bias is not None:
+                nn.init.constant_(m.bias, 0)
+
+
 @NECKS.register_module
 class LinearNeck(nn.Module):
+    '''Linear neck: fc only
+    '''
 
     def __init__(self, in_channels, out_channels, with_avg_pool=True):
         super(LinearNeck, self).__init__()
@@ -18,31 +37,19 @@ class LinearNeck(nn.Module):
         self.fc = nn.Linear(in_channels, out_channels)
 
     def init_weights(self, init_linear='normal'):
-        assert init_linear in ['normal', 'kaiming'], \
-            "Undefined init_linear: {}".format(init_linear)
-        for m in self.modules():
-            if isinstance(m, nn.Linear):
-                if init_linear == 'normal':
-                    normal_init(m, std=0.01)
-                else:
-                    kaiming_init(m, mode='fan_in', nonlinearity='relu')
-            elif isinstance(m,
-                            (nn.BatchNorm2d, nn.GroupNorm, nn.SyncBatchNorm)):
-                if m.weight is not None:
-                    nn.init.constant_(m.weight, 1)
-                if m.bias is not None:
-                    nn.init.constant_(m.bias, 0)
+        _init_weights(self, init_linear)
 
     def forward(self, x):
         assert len(x) == 1
+        x = x[0]
         if self.with_avg_pool:
-            x = self.avgpool(x[0])
+            x = self.avgpool(x)
         return [self.fc(x.view(x.size(0), -1))]
 
 
 @NECKS.register_module
 class NonLinearNeckV0(nn.Module):
-    '''The non-linear neck in ODC
+    '''The non-linear neck in ODC, fc-bn-relu-dropout-fc-relu
     '''
 
     def __init__(self,
@@ -61,25 +68,13 @@ class NonLinearNeckV0(nn.Module):
             nn.Linear(hid_channels, out_channels), nn.ReLU(inplace=True))
 
     def init_weights(self, init_linear='normal'):
-        assert init_linear in ['normal', 'kaiming'], \
-            "Undefined init_linear: {}".format(init_linear)
-        for m in self.modules():
-            if isinstance(m, nn.Linear):
-                if init_linear == 'normal':
-                    normal_init(m, std=0.01)
-                else:
-                    kaiming_init(m, mode='fan_in', nonlinearity='relu')
-            elif isinstance(m,
-                            (nn.BatchNorm1d, nn.BatchNorm2d, nn.GroupNorm, nn.SyncBatchNorm)):
-                if m.weight is not None:
-                    nn.init.constant_(m.weight, 1)
-                if m.bias is not None:
-                    nn.init.constant_(m.bias, 0)
+        _init_weights(self, init_linear)
 
     def forward(self, x):
         assert len(x) == 1
+        x = x[0]
         if self.with_avg_pool:
-            x = self.avgpool(x[0])
+            x = self.avgpool(x)
         return [self.mlp(x.view(x.size(0), -1))]
 
 
@@ -101,25 +96,43 @@ class NonLinearNeckV1(nn.Module):
             nn.Linear(hid_channels, out_channels))
 
     def init_weights(self, init_linear='normal'):
-        assert init_linear in ['normal', 'kaiming'], \
-            "Undefined init_linear: {}".format(init_linear)
-        for m in self.modules():
-            if isinstance(m, nn.Linear):
-                if init_linear == 'normal':
-                    normal_init(m, std=0.01)
-                else:
-                    kaiming_init(m, mode='fan_in', nonlinearity='relu')
-            elif isinstance(m,
-                            (nn.BatchNorm2d, nn.GroupNorm, nn.SyncBatchNorm)):
-                if m.weight is not None:
-                    nn.init.constant_(m.weight, 1)
-                if m.bias is not None:
-                    nn.init.constant_(m.bias, 0)
+        _init_weights(self, init_linear)
 
     def forward(self, x):
         assert len(x) == 1
+        x = x[0]
         if self.with_avg_pool:
-            x = self.avgpool(x[0])
+            x = self.avgpool(x)
+        return [self.mlp(x.view(x.size(0), -1))]
+
+
+@NECKS.register_module
+class NonLinearNeckV2(nn.Module):
+    '''The non-linear neck in byol: fc-bn-relu-fc
+    '''
+    def __init__(self,
+                 in_channels,
+                 hid_channels,
+                 out_channels,
+                 with_avg_pool=True):
+        super(NonLinearNeckV2, self).__init__()
+        self.with_avg_pool = with_avg_pool
+        if with_avg_pool:
+            self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
+        self.mlp = nn.Sequential(
+            nn.Linear(in_channels, hid_channels),
+            nn.BatchNorm1d(hid_channels),
+            nn.ReLU(inplace=True),
+            nn.Linear(hid_channels, out_channels))
+
+    def init_weights(self, init_linear='normal'):
+        _init_weights(self, init_linear)
+
+    def forward(self, x):
+        assert len(x) == 1, "Got: {}".format(len(x))
+        x = x[0]
+        if self.with_avg_pool:
+            x = self.avgpool(x)
         return [self.mlp(x.view(x.size(0), -1))]
 
 
@@ -178,20 +191,7 @@ class NonLinearNeckSimCLR(nn.Module):
             self.bn_names.append("bn{}".format(i))
 
     def init_weights(self, init_linear='normal'):
-        assert init_linear in ['normal', 'kaiming'], \
-            "Undefined init_linear: {}".format(init_linear)
-        for m in self.modules():
-            if isinstance(m, nn.Linear):
-                if init_linear == 'normal':
-                    normal_init(m, std=0.01)
-                else:
-                    kaiming_init(m, mode='fan_in', nonlinearity='relu')
-            elif isinstance(m,
-                            (nn.BatchNorm2d, nn.GroupNorm, nn.SyncBatchNorm)):
-                if m.weight is not None:
-                    nn.init.constant_(m.weight, 1)
-                if m.bias is not None:
-                    nn.init.constant_(m.bias, 0)
+        _init_weights(self, init_linear)
 
     def _forward_syncbn(self, module, x):
         assert x.dim() == 2
@@ -203,8 +203,9 @@ class NonLinearNeckSimCLR(nn.Module):
 
     def forward(self, x):
         assert len(x) == 1
+        x = x[0]
         if self.with_avg_pool:
-            x = self.avgpool(x[0])
+            x = self.avgpool(x)
         x = x.view(x.size(0), -1)
         x = self.fc0(x)
         x = self._forward_syncbn(self.bn0, x)

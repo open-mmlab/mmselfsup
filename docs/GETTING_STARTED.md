@@ -5,7 +5,7 @@ For installation instructions, please see [INSTALL.md](INSTALL.md).
 
 ## Train existing methods
 
-**Note**: The default learning rate in config files is for 8 GPUs (except for those under `configs/linear_classification` that use 1 GPU). If using differnt number GPUs, the total batch size will change in proportion, you have to scale the learning rate following `new_lr = old_lr * new_ngpus / old_ngpus`. We recommend to use `tools/dist_train.sh` even with 1 gpu, since some methods do not support non-distributed training.
+**Note**: The default learning rate in config files is for 8 GPUs (except for those under `configs/benchmarks/linear_classification` that use 1 GPU). If using differnt number GPUs, the total batch size will change in proportion, you have to scale the learning rate following `new_lr = old_lr * new_ngpus / old_ngpus`. We recommend to use `tools/dist_train.sh` even with 1 gpu, since some methods do not support non-distributed training.
 
 ### Train with single/multiple GPUs
 
@@ -55,6 +55,14 @@ GPUS_PER_NODE=4 bash tools/srun_train.sh ${PARTITION} ${CONFIG_FILE} 4 --port 29
 GPUS_PER_NODE=4 bash tools/srun_train.sh ${PARTITION} ${CONFIG_FILE} 4 --port 29501
 ```
 
+### What if I do not have so many GPUs?
+
+Assuming that you only have 1 GPU that can contain 64 images in a batch, while you expect the batch size to be 256, you may add the following line into your config file. It performs network update every 4 iterations. In this way, the equivalent batch size is 256. Of course, it is about 4x slower than using 4 GPUs. Note that the workaround is not applicable for methods like SimCLR which require intra-batch communication.
+
+```python
+optimizer_config = dict(update_interval=4)
+```
+
 ## Benchmarks
 
 We provide several standard benchmarks to evaluate representation learning. The config files or scripts for evaluation mentioned below are NOT recommended to be changed if you want to use this repo in your publications. We hope that all methods are under a fair comparison.
@@ -70,6 +78,7 @@ bash benchmarks/dist_test_svm_pretrain.sh ${CONFIG_FILE} ${PRETRAIN} ${FEAT_LIST
 bash benchmarks/dist_test_svm_pretrain.sh ${CONFIG_FILE} "random" ${FEAT_LIST} ${GPUS}
 ```
 Augments:
+- `${CONFIG_FILE}` the config file of the self-supervised experiment.
 - `${FEAT_LIST}` is a string to specify features from layer1 to layer5 to evaluate; e.g., if you want to evaluate layer5 only, then `FEAT_LIST` is `"feat5"`, if you want to evaluate all features, then then `FEAT_LIST` is `"feat1 feat2 feat3 feat4 feat5"` (separated by space). If left empty, the default `FEAT_LIST` is `"feat5"`.
 - `$GPUS` is the number of GPUs to extract features.
 
@@ -91,20 +100,33 @@ Arguments:
 
 **Next**, train and test linear classification:
 ```shell
-bash benchmarks/dist_test_linear.sh ${CONFIG_FILE} ${WEIGHT_FILE} [optional arguments]
+# train
+bash benchmarks/dist_train_linear.sh ${CONFIG_FILE} ${WEIGHT_FILE} [optional arguments]
+# test (unnecessary if have validation in training)
+bash tools/dist_test.sh ${CONFIG_FILE} ${GPUS} ${CHECKPOINT}
 ```
 Augments:
-- `CONFIG_FILE`: Use config files under "configs/linear_classification/". Note that if you want to test DeepCluster that has a sobel layer before the backbone, you have to use the config file named `*_sobel.py`, e.g., `configs/linear_classification/imagenet/r50_multihead_sobel.py`.
+- `CONFIG_FILE`: Use config files under "configs/benchmarks/linear_classification/". Note that if you want to test DeepCluster that has a sobel layer before the backbone, you have to use the config file named `*_sobel.py`, e.g., `configs/benchmarks/linear_classification/imagenet/r50_multihead_sobel.py`.
 - Optional arguments include:
     - `--resume_from ${CHECKPOINT_FILE}`: Resume from a previous checkpoint file.
     - `--deterministic`: Switch on "deterministic" mode which slows down training but the results are reproducible.
 
 Working directories:
-Where are the checkpoints and logs? E.g., if you use `configs/linear_classification/imagenet/r50_multihead.py` to evaluate `pretrains/moco_v1_epoch200.pth`, then the working directories for this evalution is `work_dirs/linear_classification/imagenet/r50_multihead/moco_v1_epoch200.pth/`.
+Where are the checkpoints and logs? E.g., if you use `configs/benchmarks/linear_classification/imagenet/r50_multihead.py` to evaluate `pretrains/moco_v1_epoch200.pth`, then the working directories for this evalution is `work_dirs/benchmarks/linear_classification/imagenet/r50_multihead/moco_v1_epoch200.pth/`.
 
 ### ImageNet Semi-Supervised Classification
 
-Coming soon
+```shell
+# train
+bash benchmarks/dist_train_linear.sh ${CONFIG_FILE} ${WEIGHT_FILE} [optional arguments]
+# test (unnecessary if have validation in training)
+bash tools/dist_test.sh ${CONFIG_FILE} ${GPUS} ${CHECKPOINT}
+```
+Augments:
+- `CONFIG_FILE`: Use config files under "configs/benchmarks/semi_classification/". Note that if you want to test DeepCluster that has a sobel layer before the backbone, you have to use the config file named `*_sobel.py`, e.g., `configs/benchmarks/semi_classification/imagenet_1percent/r50_sobel.py`.
+- Optional arguments include:
+    - `--resume_from ${CHECKPOINT_FILE}`: Resume from a previous checkpoint file.
+    - `--deterministic`: Switch on "deterministic" mode which slows down training but the results are reproducible.
 
 ### VOC07+12 / COCO17 Object Detection
 
@@ -206,7 +228,7 @@ train_pipeline = [
 
 * Parameter-wise optimization parameters.
 
-You may specify optimization paramters including lr, momentum and weight_decay for a certain group of paramters in the config file with `paramwise_options`. `paramwise_options` is a dict whose key is regular expressions and value is options. Options include 6 fields: lr, lr_mult, momentum, momentum_mult, weight_decay, weight_decay_mult.
+You may specify optimization paramters including lr, momentum and weight_decay for a certain group of paramters in the config file with `paramwise_options`. `paramwise_options` is a dict whose key is regular expressions and value is options. Options include 6 fields: lr, lr_mult, momentum, momentum_mult, weight_decay, weight_decay_mult, lars_exclude (only works with LARS optimizer).
 
 ```python
 # this config sets all normalization layers with weight_decay_mult=0.1,

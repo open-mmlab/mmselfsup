@@ -35,9 +35,9 @@ class ClassificationDataset(BaseDataset):
         for k in topk:
             correct_k = correct[:k].view(-1).float().sum(0).item()
             acc = correct_k * 100.0 / num
-            eval_res["{}_acc@{}".format(keyword, k)] = acc
+            eval_res["{}_top{}".format(keyword, k)] = acc
             if logger is not None and logger != 'silent':
                 print_log(
-                    "{}_acc@{}: {:.03f}".format(keyword, k, acc),
+                    "{}_top{}: {:.03f}".format(keyword, k, acc),
                     logger=logger)
         return eval_res

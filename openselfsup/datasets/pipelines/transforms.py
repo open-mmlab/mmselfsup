@@ -90,3 +90,19 @@ class GaussianBlur(object):
     def __repr__(self):
         repr_str = self.__class__.__name__
         return repr_str
+
+
+@PIPELINES.register_module
+class Solarization(object):
+
+    def __init__(self, threshold=128):
+        self.threshold = threshold
+
+    def __call__(self, img):
+        img = np.array(img)
+        img = np.where(img < self.threshold, img, 255 -img)
+        return Image.fromarray(img.astype(np.uint8))
+
+    def __repr__(self):
+        repr_str = self.__class__.__name__
+        return repr_str

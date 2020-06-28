@@ -1,11 +1,13 @@
-_base_ = '../../base.py'
+_base_ = '../../../base.py'
 # model settings
 model = dict(
     type='Classification',
     pretrained=None,
+    with_sobel=True,
     backbone=dict(
         type='ResNet',
         depth=50,
+        in_channels=2,
         out_indices=[4],  # 0: conv-1, x: stage-x
         norm_cfg=dict(type='SyncBN')),
     head=dict(
@@ -35,7 +37,7 @@ test_pipeline = [
     dict(type='Normalize', **img_norm_cfg),
 ]
 data = dict(
-    imgs_per_gpu=32,  # total 256
+    imgs_per_gpu=64,  # total 256
     workers_per_gpu=2,
     train=dict(
         type=dataset_type,
@@ -48,11 +50,28 @@ data = dict(
         data_source=dict(
             list_file=data_test_list, root=data_test_root, **data_source_cfg),
         pipeline=test_pipeline))
+# additional hooks
+custom_hooks = [
+    dict(
+        type='ValidateHook',
+        dataset=data['val'],
+        initial=False,
+        interval=20,
+        imgs_per_gpu=32,
+        workers_per_gpu=2,
+        eval_param=dict(topk=(1, 5)))
+]
 # optimizer
 optimizer = dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0005,
-                 paramwise_options={'\Ahead.': dict(lr_mult=100)})
+                 paramwise_options={'\Ahead.': dict(lr_mult=1)})
 # learning policy
 lr_config = dict(policy='step', step=[12, 16], gamma=0.2)
-checkpoint_config = dict(interval=2)
+checkpoint_config = dict(interval=20)
+log_config = dict(
+    interval=10,
+    hooks=[
+        dict(type='TextLoggerHook'),
+        dict(type='TensorboardLoggerHook')
+    ])
 # runtime settings
 total_epochs = 20

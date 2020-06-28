@@ -3,9 +3,9 @@
 set -e
 set -x
 
-CFG=$1 # use cfgs under "configs/linear_classification/"
+CFG=$1 # use cfgs under "configs/benchmarks/linear_classification/"
 PRETRAIN=$2
-PY_ARGS=${@:3}
+PY_ARGS=${@:3} # --resume_from --deterministic
 GPUS=1 # in the standard setting, GPUS=1
 PORT=${PORT:-29500}
 
@@ -22,10 +22,3 @@ python -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT \
     $CFG \
     --pretrained $PRETRAIN \
     --work_dir $WORK_DIR --seed 0 --launcher="pytorch" ${PY_ARGS}
-
-# test
-python -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT \
-    tools/test.py \
-    $CFG \
-    $WORK_DIR/latest.pth \
-    --work_dir $WORK_DIR --launcher="pytorch"

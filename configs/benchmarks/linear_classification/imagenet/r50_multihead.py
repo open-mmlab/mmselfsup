@@ -1,4 +1,4 @@
-_base_ = '../../base.py'
+_base_ = '../../../base.py'
 # model settings
 model = dict(
     type='Classification',
@@ -51,7 +51,7 @@ test_pipeline = [
 ]
 data = dict(
     imgs_per_gpu=256,  # total 256
-    workers_per_gpu=8,
+    workers_per_gpu=5,
     train=dict(
         type=dataset_type,
         data_source=dict(

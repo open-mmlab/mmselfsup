@@ -3,11 +3,11 @@ _base_ = '../../base.py'
 model = dict(
     type='Classification',
     pretrained=None,
-    with_sobel=True,
+    with_sobel=False,
     backbone=dict(
         type='ResNet',
         depth=50,
-        in_channels=2,
+        in_channels=3,
         out_indices=[0, 1, 2, 3, 4],  # 0: conv-1, x: stage-x
         norm_cfg=dict(type='BN'),
         frozen_stages=4),
@@ -51,7 +51,7 @@ test_pipeline = [
 ]
 data = dict(
     imgs_per_gpu=256,  # total 256
-    workers_per_gpu=8,
+    workers_per_gpu=5,
     train=dict(
         type=dataset_type,
         data_source=dict(

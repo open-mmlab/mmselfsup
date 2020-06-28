@@ -74,6 +74,8 @@ def parse_args():
         default='none',
         help='job launcher')
     parser.add_argument('--local_rank', type=int, default=0)
+    parser.add_argument('--port', type=int, default=29500,
+        help='port only works when launcher=="slurm"')
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
         os.environ['LOCAL_RANK'] = str(args.local_rank)
@@ -107,6 +109,8 @@ def main():
         distributed = False
     else:
         distributed = True
+        if args.launcher == 'slurm':
+            cfg.dist_params['port'] = args.port
         init_dist(args.launcher, **cfg.dist_params)
 
     # create work_dir
