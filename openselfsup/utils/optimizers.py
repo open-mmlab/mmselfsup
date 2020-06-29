@@ -1,7 +1,6 @@
 import torch
 from torch.optim.optimizer import Optimizer, required
 from torch.optim import *
-from .larc import LARC
 
 
 class LARS(Optimizer):
