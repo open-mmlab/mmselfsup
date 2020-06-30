@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from distutils.version import StrictVersion
+from packaging import version
 from mmcv.cnn import kaiming_init, normal_init
 
 from .registry import NECKS
@@ -166,7 +166,7 @@ class NonLinearNeckSimCLR(nn.Module):
         if with_avg_pool:
             self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
 
-        if StrictVersion(torch.__version__) < StrictVersion("1.4.0"):
+        if version.parse(torch.__version__) < version.parse("1.4.0"):
             self.expand_for_syncbn = True
         else:
             self.expand_for_syncbn = False
