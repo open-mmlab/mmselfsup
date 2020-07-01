@@ -53,6 +53,7 @@ For existing methods in this repo, you only need to modify config files to adjus
 
 Please refer to [CHANGELOG.md](docs/CHANGELOG.md) for details and release history.
 
+[2020-06-26] `OpenSelfSup` v0.2.0 is released.
 [2020-06-16] `OpenSelfSup` v0.1.0 is released.
 
 ## Installation
