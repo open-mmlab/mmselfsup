@@ -85,7 +85,7 @@ Augments:
 Working directories:
 The features, logs and intermediate files generated are saved in `$SVM_WORK_DIR/` as follows:
 - `dist_test_svm_epoch.sh`: `SVM_WORK_DIR=$WORK_DIR/` (The same as that mentioned in `Train with single/multiple GPUs` above.) Hence, the files will be overridden to save space when evaluating with a new `$EPOCH`.
-- `dist_test_svm_pretrain.sh`: `SVM_WORK_DIR=$WORK_DIR/$PRETRAIN_NAME/`, e.g., if `PRETRAIN=pretrains/odc_v1.pth`, then `PRETRAIN_NAME=odc_v1.pth`; if `PRETRAIN=random`, then `PRETRAIN_NAME=random`.
+- `dist_test_svm_pretrain.sh`: `SVM_WORK_DIR=$WORK_DIR/$PRETRAIN_NAME/`, e.g., if `PRETRAIN=pretrains/odc_r50_v1-5af5dd0c.pth`, then `PRETRAIN_NAME=odc_r50_v1-5af5dd0c.pth`; if `PRETRAIN=random`, then `PRETRAIN_NAME=random`.
 The evaluation records are saved in `$SVM_WORK_DIR/logs/eval_svm.log`
 
 ### ImageNet / Places205 Linear Classification
@@ -96,7 +96,7 @@ python tools/extract_backbone_weights.py ${CHECKPOINT} ${WEIGHT_FILE}
 ```
 Arguments:
 - `CHECKPOINTS`: the checkpoint file of a selfsup method named as `epoch_*.pth`.
-- `WEIGHT_FILE`: the output backbone weights file, e.g., `pretrains/moco_v1_epoch200.pth`.
+- `WEIGHT_FILE`: the output backbone weights file, e.g., `pretrains/moco_r50_v1-4ad89b5c.pth`.
 
 **Next**, train and test linear classification:
 ```shell
@@ -112,7 +112,7 @@ Augments:
     - `--deterministic`: Switch on "deterministic" mode which slows down training but the results are reproducible.
 
 Working directories:
-Where are the checkpoints and logs? E.g., if you use `configs/benchmarks/linear_classification/imagenet/r50_multihead.py` to evaluate `pretrains/moco_v1_epoch200.pth`, then the working directories for this evalution is `work_dirs/benchmarks/linear_classification/imagenet/r50_multihead/moco_v1_epoch200.pth/`.
+Where are the checkpoints and logs? E.g., if you use `configs/benchmarks/linear_classification/imagenet/r50_multihead.py` to evaluate `pretrains/moco_r50_v1-4ad89b5c.pth`, then the working directories for this evalution is `work_dirs/benchmarks/linear_classification/imagenet/r50_multihead/moco_r50_v1-4ad89b5c.pth/`.
 
 ### ImageNet Semi-Supervised Classification
 
