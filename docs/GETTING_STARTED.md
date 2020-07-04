@@ -1,4 +1,4 @@
-# Getting Started
+se# Getting Started
 
 This page provides basic tutorials about the usage of OpenSelfSup.
 For installation instructions, please see [INSTALL.md](INSTALL.md).
@@ -118,7 +118,7 @@ Where are the checkpoints and logs? E.g., if you use `configs/benchmarks/linear_
 
 ```shell
 # train
-bash benchmarks/dist_train_linear.sh ${CONFIG_FILE} ${WEIGHT_FILE} [optional arguments]
+bash benchmarks/dist_train_semi.sh ${CONFIG_FILE} ${WEIGHT_FILE} [optional arguments]
 # test (unnecessary if have validation in training)
 bash tools/dist_test.sh ${CONFIG_FILE} ${GPUS} ${CHECKPOINT}
 ```
