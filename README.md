@@ -20,15 +20,14 @@ Below is the relations among Unsupervised Learning, Self-Supervised Learning and
 
 - **All methods in one repository**
 
-* For comprehensive comparison in all benchmarks, refer to [MODEL_ZOO.md](docs/MODEL_ZOO.md).
-
-<table><thead><tr><th>Method</th><th>VOC07 SVM (best layer)</th><th>ImageNet (best layer)</th></tr></thead><tbody><tr><td><a href="https://github.com/pytorch/vision/blob/master/torchvision/models/resnet.py" target="_blank" rel="noopener noreferrer">ImageNet</a></td><td>87.17</td><td>76.17</td></tr><tr><td>Random</td><td>30.22</td><td>13.70</td></tr><tr><td><a href="https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Doersch_Unsupervised_Visual_Representation_ICCV_2015_paper.pdf" target="_blank" rel="noopener noreferrer">Relative-Loc</a></td><td></td><td></td></tr><tr><td><a href="https://arxiv.org/abs/1803.07728" target="_blank" rel="noopener noreferrer">Rotation-Pred</a></td><td>67.38</td><td>54.99</td></tr><tr><td><a href="https://arxiv.org/abs/1807.05520" target="_blank" rel="noopener noreferrer">DeepCluster</a></td><td>74.26</td><td></td></tr><tr><td><a href="https://arxiv.org/abs/1805.01978" target="_blank" rel="noopener noreferrer">NPID</a></td><td>74.50</td><td>56.61</td></tr><tr><td><a href="http://openaccess.thecvf.com/content_CVPR_2020/papers/Zhan_Online_Deep_Clustering_for_Unsupervised_Representation_Learning_CVPR_2020_paper.pdf" target="_blank" rel="noopener noreferrer">ODC</a></td><td>78.42</td><td>57.6</td></tr><tr><td><a href="https://arxiv.org/abs/1911.05722" target="_blank" rel="noopener noreferrer">MoCo</a></td><td>79.18</td><td>60.60</td></tr><tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>84.05</td><td>66.72</td></tr><tr><td><a href="https://arxiv.org/abs/2002.05709" target="_blank" rel="noopener noreferrer">SimCLR</a></td><td>78.95</td><td></td></tr><tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td></td><td></td></tr></tbody></table>
+  <em>For comprehensive comparison in all benchmarks, refer to [MODEL_ZOO.md](docs/MODEL_ZOO.md).</em>
+  <table><thead><tr><th>Method</th><th>VOC07 SVM (best layer)</th><th>ImageNet (best layer)</th></tr></thead><tbody><tr><td><a href="https://github.com/pytorch/vision/blob/master/torchvision/models/resnet.py" target="_blank" rel="noopener noreferrer">ImageNet</a></td><td>87.17</td><td>76.17</td></tr><tr><td>Random</td><td>30.22</td><td>13.70</td></tr><tr><td><a href="https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Doersch_Unsupervised_Visual_Representation_ICCV_2015_paper.pdf" target="_blank" rel="noopener noreferrer">Relative-Loc</a></td><td></td><td></td></tr><tr><td><a href="https://arxiv.org/abs/1803.07728" target="_blank" rel="noopener noreferrer">Rotation-Pred</a></td><td>67.38</td><td>54.99</td></tr><tr><td><a href="https://arxiv.org/abs/1807.05520" target="_blank" rel="noopener noreferrer">DeepCluster</a></td><td>74.26</td><td></td></tr><tr><td><a href="https://arxiv.org/abs/1805.01978" target="_blank" rel="noopener noreferrer">NPID</a></td><td>74.50</td><td>56.61</td></tr><tr><td><a href="http://openaccess.thecvf.com/content_CVPR_2020/papers/Zhan_Online_Deep_Clustering_for_Unsupervised_Representation_Learning_CVPR_2020_paper.pdf" target="_blank" rel="noopener noreferrer">ODC</a></td><td>78.42</td><td>57.6</td></tr><tr><td><a href="https://arxiv.org/abs/1911.05722" target="_blank" rel="noopener noreferrer">MoCo</a></td><td>79.18</td><td>60.60</td></tr><tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>84.05</td><td>66.72</td></tr><tr><td><a href="https://arxiv.org/abs/2002.05709" target="_blank" rel="noopener noreferrer">SimCLR</a></td><td>78.95</td><td></td></tr><tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td></td><td></td></tr></tbody></table>
 
 - **Flexibility & Extensibility**
 
-`OpenSelfSup` follows a similar code architecture of MMDetection while is even more flexible than MMDetection, since OpenSelfSup integrates various self-supervised tasks including classification, joint clustering and feature learning, contrastive learning, tasks with a memory bank, etc.
+  `OpenSelfSup` follows a similar code architecture of MMDetection while is even more flexible than MMDetection, since OpenSelfSup integrates various self-supervised tasks including classification, joint clustering and feature learning, contrastive learning, tasks with a memory bank, etc.
 
-For existing methods in this repo, you only need to modify config files to adjust hyper-parameters. It is also simple to design your own methods, please refer to [GETTING_STARTED.md](docs/GETTING_STARTED.md).
+  For existing methods in this repo, you only need to modify config files to adjust hyper-parameters. It is also simple to design your own methods, please refer to [GETTING_STARTED.md](docs/GETTING_STARTED.md).
 
 - **Efficiency**
 
@@ -38,20 +37,22 @@ For existing methods in this repo, you only need to modify config files to adjus
 
   We standardize the benchmarks including logistic regression, SVM / Low-shot SVM from linearly probed features, semi-supervised classification, and object detection. Below are the setting of these benchmarks.
 
-| Benchmarks                       | Setting                                                                                                                                                                     | Remarks                                      |
-|----------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------|
-| ImageNet Linear Classification (Multi) | [goyal2019scaling](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) | Evaluate different layers.             |
-| ImageNet Linear Classification (Last) | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf) | Evaluate the last layer after global pooling. |
-| Places205 Linear Classification  | [goyal2019scaling](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) | Evaluate different layers.             |
-| ImageNet Semi-Sup Classification |
-| PASCAL VOC07 SVM                 | [goyal2019scaling](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) | Costs="1.0,10.0,100.0" to save evaluation time w/o change of results. |
-| PASCAL VOC07 Low-shot SVM        | [goyal2019scaling](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) | Costs="1.0,10.0,100.0" to save evaluation time w/o change of results. |
-| PASCAL VOC07+12 Object Detection | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)                      |                                                 |
-| COCO17 Object Detection          | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)                      |                                                 |
+  | Benchmarks                       | Setting                                                                                                                                                                     | Remarks                                      |
+  |----------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------|
+  | ImageNet Linear Classification (Multi) | [goyal2019scaling](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) | Evaluate different layers.             |
+  | ImageNet Linear Classification (Last) | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf) | Evaluate the last layer after global pooling. |
+  | Places205 Linear Classification  | [goyal2019scaling](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) | Evaluate different layers.             |
+  | ImageNet Semi-Sup Classification |
+  | PASCAL VOC07 SVM                 | [goyal2019scaling](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) | Costs="1.0,10.0,100.0" to save evaluation time w/o change of results. |
+  | PASCAL VOC07 Low-shot SVM        | [goyal2019scaling](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) | Costs="1.0,10.0,100.0" to save evaluation time w/o change of results. |
+  | PASCAL VOC07+12 Object Detection | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)                      |                                                 |
+  | COCO17 Object Detection          | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)                      |                                                 |
 
 ## Change Log
 
 Please refer to [CHANGELOG.md](docs/CHANGELOG.md) for details and release history.
+
+[2020-06-26] `OpenSelfSup` v0.2.0 is released with benchmark results and support of new features.
 
 [2020-06-16] `OpenSelfSup` v0.1.0 is released.
 
@@ -94,4 +95,4 @@ fair_self_supervision_benchmark](https://github.com/facebookresearch/fair_self_s
 
 ## Contact
 
-This repo is currently maintained by Xiaohang Zhan ([@XiaohangZhan](http://github.com/XiaohangZhan)).
+This repo is currently maintained by Xiaohang Zhan ([@XiaohangZhan](http://github.com/XiaohangZhan)) and Jiahao Xie ([@Jiahao000](https://github.com/Jiahao000)).
