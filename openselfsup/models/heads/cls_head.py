@@ -25,13 +25,13 @@ class ClsHead(nn.Module):
             self.avg_pool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc_cls = nn.Linear(in_channels, num_classes)
 
-    def init_weights(self, init_linear='normal', std=0.01):
+    def init_weights(self, init_linear='normal', std=0.01, bias=0.):
         assert init_linear in ['normal', 'kaiming'], \
             "Undefined init_linear: {}".format(init_linear)
         for m in self.modules():
             if isinstance(m, nn.Linear):
                 if init_linear == 'normal':
-                    normal_init(m, std=std)
+                    normal_init(m, std=std, bias=bias)
                 else:
                     kaiming_init(m, mode='fan_in', nonlinearity='relu')
             elif isinstance(m,
