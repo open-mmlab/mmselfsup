@@ -9,9 +9,16 @@ model = dict(
         in_channels=3,
         out_indices=[4],  # 0: conv-1, x: stage-x
         norm_cfg=dict(type='BN')),
+    neck=dict(
+        type='RelativeLocNeck',
+        in_channels=2048,
+        out_channels=4096,
+        with_avg_pool=True),
     head=dict(
-        type='NonLinearClsHead', with_avg_pool=True,
-        in_channels=2048, hid_channels=4096, num_classes=8))
+        type='ClsHead',
+        with_avg_pool=False,
+        in_channels=4096,
+        num_classes=8))
 # dataset settings
 data_source_cfg = dict(
     type='ImageNet',
@@ -33,8 +40,8 @@ test_pipeline = [
     dict(type='CenterCrop', size=255),
 ]
 data = dict(
-    imgs_per_gpu=256,  # 256 x 4 = 1024
-    workers_per_gpu=8,
+    imgs_per_gpu=64,  # 64 x 8 = 512
+    workers_per_gpu=2,
     train=dict(
         type=dataset_type,
         data_source=dict(
@@ -48,7 +55,7 @@ data = dict(
         pipeline=test_pipeline))
 # optimizer
 optimizer = dict(
-    type='SGD', lr=0.4, momentum=0.9, weight_decay=0.0001,
+    type='SGD', lr=0.2, momentum=0.9, weight_decay=0.0001,
     nesterov=False,
     paramwise_options={'\Ahead.': dict(weight_decay=0.0005)})
 # learning policy
@@ -57,7 +64,7 @@ lr_config = dict(
     step=[30, 50],
     warmup='linear',
     warmup_iters=5,  # 5 ep
-    warmup_ratio=0.25,
+    warmup_ratio=0.1,
     warmup_by_epoch=True)
 checkpoint_config = dict(interval=10)
 # runtime settings

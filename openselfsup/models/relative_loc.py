@@ -10,9 +10,11 @@ from .registry import MODELS
 @MODELS.register_module
 class RelativeLoc(nn.Module):
 
-    def __init__(self, backbone, head=None, pretrained=None):
+    def __init__(self, backbone, neck=None, head=None, pretrained=None):
         super(RelativeLoc, self).__init__()
         self.backbone = builder.build_backbone(backbone)
+        if neck is not None:
+            self.neck = builder.build_neck(neck)
         if head is not None:
             self.head = builder.build_head(head)
         self.init_weights(pretrained=pretrained)
@@ -21,7 +23,8 @@ class RelativeLoc(nn.Module):
         if pretrained is not None:
             print_log('load model from: {}'.format(pretrained), logger='root')
         self.backbone.init_weights(pretrained=pretrained)
-        self.head.init_weights()
+        self.neck.init_weights(init_linear='normal')
+        self.head.init_weights(init_linear='normal', std=0.005)
 
     def forward_backbone(self, img):
         """Forward backbone
@@ -36,7 +39,8 @@ class RelativeLoc(nn.Module):
         img1, img2 = torch.chunk(img, 2, dim=1)
         x1 = self.forward_backbone(img1)  # tuple
         x2 = self.forward_backbone(img2)  # tuple
-        x = torch.cat((x1[0], x2[0]), dim=1)  # tensor
+        x = (torch.cat((x1[0], x2[0]), dim=1),)
+        x = self.neck(x)
         outs = self.head(x)
         loss_inputs = (outs, patch_label)
         losses = self.head.loss(*loss_inputs)
@@ -46,10 +50,11 @@ class RelativeLoc(nn.Module):
         img1, img2 = torch.chunk(img, 2, dim=1)
         x1 = self.forward_backbone(img1)  # tuple
         x2 = self.forward_backbone(img2)  # tuple
-        x = torch.cat((x1[0], x2[0]), dim=1)  # tensor
+        x = (torch.cat((x1[0], x2[0]), dim=1),)
+        x = self.neck(x)
         outs = self.head(x)
         keys = ['head{}'.format(i) for i in range(len(outs))]
-        out_tensors = [out.cpu() for out in outs]  # NxC
+        out_tensors = [out.cpu() for out in outs]
         return dict(zip(keys, out_tensors))
 
     def forward(self, img, patch_label=None, mode='train', **kwargs):

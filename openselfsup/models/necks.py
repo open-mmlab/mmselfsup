@@ -7,17 +7,17 @@ from .registry import NECKS
 from .utils import build_norm_layer
 
 
-def _init_weights(module, init_linear='normal'):
+def _init_weights(module, init_linear='normal', std=0.01, bias=0.):
     assert init_linear in ['normal', 'kaiming'], \
         "Undefined init_linear: {}".format(init_linear)
     for m in module.modules():
         if isinstance(m, nn.Linear):
             if init_linear == 'normal':
-                normal_init(m, std=0.01)
+                normal_init(m, std=std, bias=bias)
             else:
                 kaiming_init(m, mode='fan_in', nonlinearity='relu')
-        elif isinstance(m,
-                        (nn.BatchNorm2d, nn.GroupNorm, nn.SyncBatchNorm)):
+        elif isinstance(m, (nn.BatchNorm1d, nn.BatchNorm2d,
+                            nn.GroupNorm, nn.SyncBatchNorm)):
             if m.weight is not None:
                 nn.init.constant_(m.weight, 1)
             if m.bias is not None:
@@ -45,6 +45,65 @@ class LinearNeck(nn.Module):
         if self.with_avg_pool:
             x = self.avgpool(x)
         return [self.fc(x.view(x.size(0), -1))]
+
+
+@NECKS.register_module
+class RelativeLocNeck(nn.Module):
+    '''Relative patch location neck: fc-bn-relu-dropout
+    '''
+
+    def __init__(self,
+                 in_channels,
+                 out_channels,
+                 sync_bn=False,
+                 with_avg_pool=True):
+        super(RelativeLocNeck, self).__init__()
+        self.with_avg_pool = with_avg_pool
+        if with_avg_pool:
+            self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
+
+        if version.parse(torch.__version__) < version.parse("1.4.0"):
+            self.expand_for_syncbn = True
+        else:
+            self.expand_for_syncbn = False
+
+        self.fc = nn.Linear(in_channels * 2, out_channels)
+        if sync_bn:
+            _, self.bn = build_norm_layer(
+                dict(type='SyncBN', momentum=0.003),
+                out_channels)
+        else:
+            self.bn = nn.BatchNorm1d(
+                out_channels, momentum=0.003)
+        self.relu = nn.ReLU(inplace=True)
+        self.drop = nn.Dropout()
+        self.sync_bn = sync_bn
+
+    def init_weights(self, init_linear='normal'):
+        _init_weights(self, init_linear, std=0.005, bias=0.1)
+
+    def _forward_syncbn(self, module, x):
+        assert x.dim() == 2
+        if self.expand_for_syncbn:
+            x = module(x.unsqueeze(-1).unsqueeze(-1)).squeeze(-1).squeeze(-1)
+        else:
+            x = module(x)
+        return x
+
+    def forward(self, x):
+        assert len(x) == 1
+        x = x[0]
+        if self.with_avg_pool:
+            x = self.avgpool(x)
+        x = x.view(x.size(0), -1)
+        x = self.fc(x)
+        if self.sync_bn:
+            x = self._forward_syncbn(self.bn, x)
+        else:
+            x = self.bn(x)
+        x = self.relu(x)
+        x = self.drop(x)
+        return [x]
 
 
 @NECKS.register_module
