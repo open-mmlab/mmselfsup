@@ -39,6 +39,10 @@ test_pipeline = [
     dict(type='Resize', size=292),
     dict(type='CenterCrop', size=255),
 ]
+format_pipeline = [
+    dict(type='ToTensor'),
+    dict(type='Normalize', **img_norm_cfg),
+]
 data = dict(
     imgs_per_gpu=64,  # 64 x 8 = 512
     workers_per_gpu=2,
@@ -47,17 +51,21 @@ data = dict(
         data_source=dict(
             list_file=data_train_list, root=data_train_root,
             **data_source_cfg),
-        pipeline=train_pipeline),
+        pipeline=train_pipeline,
+        format_pipeline=format_pipeline),
     val=dict(
         type=dataset_type,
         data_source=dict(
             list_file=data_test_list, root=data_test_root, **data_source_cfg),
-        pipeline=test_pipeline))
+        pipeline=test_pipeline,
+        format_pipeline=format_pipeline))
 # optimizer
 optimizer = dict(
     type='SGD', lr=0.2, momentum=0.9, weight_decay=0.0001,
     nesterov=False,
-    paramwise_options={'\Ahead.': dict(weight_decay=0.0005)})
+    paramwise_options={
+        '\Aneck.': dict(weight_decay=0.0005),
+        '\Ahead.': dict(weight_decay=0.0005)})
 # learning policy
 lr_config = dict(
     policy='step',
