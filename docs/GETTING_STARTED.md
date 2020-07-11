@@ -1,4 +1,4 @@
-se# Getting Started
+# Getting Started
 
 This page provides basic tutorials about the usage of OpenSelfSup.
 For installation instructions, please see [INSTALL.md](INSTALL.md).
@@ -243,7 +243,7 @@ optimizer_cfg = dict(type='SGD', lr=0.01, momentum=0.9,
 
 * Configure custom hooks in the config file.
 
-The hooks will be called in order. For hook design, please refer to [odc_hook.py](openselfsup/hooks/odc_hook.py) as an example.
+The hooks will be called in order. For hook design, please refer to [odc_hook.py](https://github.com/open-mmlab/OpenSelfSup/blob/master/openselfsup/hooks/odc_hook.py) as an example.
 
 ```python
 custom_hooks = [
