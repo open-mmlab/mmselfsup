@@ -164,7 +164,7 @@ Compute the hash of the weight file and append the hash id to the filename. The 
 python tools/publish_model.py ${WEIGHT_FILE}
 ```
 Arguments:
--`WEIGHT_FILE`: The extracted backbone weights extracted aforementioned.
+- `WEIGHT_FILE`: The extracted backbone weights extracted aforementioned.
 
 ### Reproducibility
 
