@@ -50,7 +50,7 @@ test_pipeline = [
     dict(type='Normalize', **img_norm_cfg),
 ]
 data = dict(
-    imgs_per_gpu=256,  # total 256
+    imgs_per_gpu=32,  # total 32x8=256
     workers_per_gpu=5,
     train=dict(
         type=dataset_type,
