@@ -5,8 +5,8 @@ set -x
 
 CFG=$1 # use cfgs under "configs/benchmarks/linear_classification/"
 PRETRAIN=$2
-PY_ARGS=${@:3} # --resume_from --deterministic
-GPUS=1 # in the standard setting, GPUS=1
+GPUS=$3 # in MoCo, GPUS=8
+PY_ARGS=${@:4} # --resume_from --deterministic
 PORT=${PORT:-29500}
 
 if [ "$CFG" == "" ] || [ "$PRETRAIN" == "" ]; then

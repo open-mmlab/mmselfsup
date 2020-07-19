@@ -101,12 +101,13 @@ Arguments:
 **Next**, train and test linear classification:
 ```shell
 # train
-bash benchmarks/dist_train_linear.sh ${CONFIG_FILE} ${WEIGHT_FILE} [optional arguments]
+bash benchmarks/dist_train_linear.sh ${CONFIG_FILE} ${WEIGHT_FILE} ${GPUS} [optional arguments]
 # test (unnecessary if have validation in training)
 bash tools/dist_test.sh ${CONFIG_FILE} ${GPUS} ${CHECKPOINT}
 ```
 Augments:
 - `CONFIG_FILE`: Use config files under "configs/benchmarks/linear_classification/". Note that if you want to test DeepCluster that has a sobel layer before the backbone, you have to use the config file named `*_sobel.py`, e.g., `configs/benchmarks/linear_classification/imagenet/r50_multihead_sobel.py`.
+- `GPUS`: `8` for MoCo and `1` for other methods.
 - Optional arguments include:
     - `--resume_from ${CHECKPOINT_FILE}`: Resume from a previous checkpoint file.
     - `--deterministic`: Switch on "deterministic" mode which slows down training but the results are reproducible.
