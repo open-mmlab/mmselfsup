@@ -8,8 +8,8 @@ CFG=$2
 PRETRAIN=$3
 PY_ARGS=${@:4}
 JOB_NAME="openselfsup"
-GPUS=1 # in the standard setting, GPUS=1
-GPUS_PER_NODE=${GPUS_PER_NODE:-1}
+GPUS=8 # When changing GPUS, please also change imgs_per_batch in the config file accordingly to ensure the total batch size is 256.
+GPUS_PER_NODE=${GPUS_PER_NODE:-8}
 CPUS_PER_TASK=${CPUS_PER_TASK:-5}
 SRUN_ARGS=${SRUN_ARGS:-""}
 

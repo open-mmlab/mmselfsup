@@ -6,7 +6,7 @@ set -x
 CFG=$1 # use cfgs under "configs/benchmarks/linear_classification/"
 PRETRAIN=$2
 PY_ARGS=${@:3} # --resume_from --deterministic
-GPUS=1 # in the standard setting, GPUS=1
+GPUS=8 # When changing GPUS, please also change imgs_per_batch in the config file accordingly to ensure the total batch size is 256.
 PORT=${PORT:-29500}
 
 if [ "$CFG" == "" ] || [ "$PRETRAIN" == "" ]; then
