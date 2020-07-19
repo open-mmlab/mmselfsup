@@ -5,8 +5,7 @@ For installation instructions, please see [INSTALL.md](INSTALL.md).
 
 ## Train existing methods
 
-**Note**: The default learning rate in config files is for 8 GPUs.
-If using differnt number GPUs, the total batch size will change in proportion, you have to scale the learning rate following `new_lr = old_lr * new_ngpus / old_ngpus`. We recommend to use `tools/dist_train.sh` even with 1 gpu, since some methods do not support non-distributed training.
+**Note**: The default learning rate in config files is for 8 GPUs. If using differnt number GPUs, the total batch size will change in proportion, you have to scale the learning rate following `new_lr = old_lr * new_ngpus / old_ngpus`. We recommend to use `tools/dist_train.sh` even with 1 gpu, since some methods do not support non-distributed training.
 
 ### Train with single/multiple GPUs
 
