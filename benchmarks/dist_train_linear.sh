@@ -5,8 +5,8 @@ set -x
 
 CFG=$1 # use cfgs under "configs/benchmarks/linear_classification/"
 PRETRAIN=$2
-GPUS=$3 # in MoCo, GPUS=8
-PY_ARGS=${@:4} # --resume_from --deterministic
+PY_ARGS=${@:3} # --resume_from --deterministic
+GPUS=8 # When changing GPUS, please also change imgs_per_batch in the config file accordingly to ensure the total batch size is 256.
 PORT=${PORT:-29500}
 
 if [ "$CFG" == "" ] || [ "$PRETRAIN" == "" ]; then
