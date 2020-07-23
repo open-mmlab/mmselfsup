@@ -86,7 +86,7 @@ optimizer = dict(type='LARS', lr=0.2, weight_decay=0.0000015, momentum=0.9,
                     'bias': dict(weight_decay=0., lars_exclude=True)})
 # learning policy
 lr_config = dict(
-    policy='CosineAnealing',
+    policy='CosineAnnealing',
     min_lr=0.,
     warmup='linear',
     warmup_iters=2,
