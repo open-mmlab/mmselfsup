@@ -17,7 +17,7 @@ model = dict(
         in_indices=[0, 1, 2, 3, 4],
         with_last_layer_unpool=False,
         backbone='resnet50',
-        norm_cfg=dict(type='BN', momentum=0.1, affine=False),
+        norm_cfg=dict(type='SyncBN', momentum=0.1, affine=False),
         num_classes=205))
 # dataset settings
 data_source_cfg = dict(
