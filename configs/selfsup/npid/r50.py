@@ -2,6 +2,7 @@ _base_ = '../../base.py'
 # model settings
 model = dict(
     type='NPID',
+    neg_num=65536,
     pretrained=None,
     backbone=dict(
         type='ResNet',
