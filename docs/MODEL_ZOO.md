@@ -108,7 +108,7 @@
 ### ImageNet Linear Classification
 
 **Note**
-* Config: `configs/benchmarks/linear_classification/imagenet/r50_multihead.py` for ImageNet (Multi) and `configs/benchmarks/linear_classification/imagenet/r50_moco.py` for ImageNet (Last).
+* Config: `configs/benchmarks/linear_classification/imagenet/r50_multihead.py` for ImageNet (Multi) and `configs/benchmarks/linear_classification/imagenet/r50_last.py` for ImageNet (Last).
 * For DeepCluster, use the corresponding one with `_sobel`.
 * ImageNet (Multi) evaluates features in around 9k dimensions from different layers. Top-1 result of the last epoch is reported.
 * ImageNet (Last) evaluates the last feature after global average pooling, e.g., 2048 dimensions for resnet50. The best top-1 result among all epochs is reported.
