@@ -18,7 +18,7 @@ model = dict(
         out_channels=256,
         with_avg_pool=True),
     head=dict(type='LatentPredictHead',
-              size_average=True,
+              size_average=False,
               predictor=dict(type='NonLinearNeckV2',
                              in_channels=256, hid_channels=4096,
                              out_channels=256, with_avg_pool=False)))
