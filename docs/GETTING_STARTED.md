@@ -86,7 +86,10 @@ Working directories:
 The features, logs and intermediate files generated are saved in `$SVM_WORK_DIR/` as follows:
 - `dist_test_svm_epoch.sh`: `SVM_WORK_DIR=$WORK_DIR/` (The same as that mentioned in `Train with single/multiple GPUs` above.) Hence, the files will be overridden to save space when evaluating with a new `$EPOCH`.
 - `dist_test_svm_pretrain.sh`: `SVM_WORK_DIR=$WORK_DIR/$PRETRAIN_NAME/`, e.g., if `PRETRAIN=pretrains/odc_r50_v1-5af5dd0c.pth`, then `PRETRAIN_NAME=odc_r50_v1-5af5dd0c.pth`; if `PRETRAIN=random`, then `PRETRAIN_NAME=random`.
-The evaluation records are saved in `$SVM_WORK_DIR/logs/eval_svm.log`
+
+Notes:
+- The evaluation records are saved in `$SVM_WORK_DIR/logs/eval_svm.log`
+- Linear SVM takes 5 min, low-shot linear SVM takes about 1 hour with 32 CPU cores. If you want to save time, you may delete or comment the low-shot SVM testing command (the last line in the scripts).
 
 ### ImageNet / Places205 Linear Classification
 
