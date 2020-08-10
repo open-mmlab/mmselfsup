@@ -144,3 +144,7 @@ Or run the following command in the terminal of corresponding folder to temporal
 ```shell
 export PYTHONPATH=`pwd`:$PYTHONPATH
 ```
+
+## Common Issues
+
+1. The training hangs / deadlocks in some intermediate iteration. See this [issue](https://github.com/open-mmlab/OpenSelfSup/issues/6).

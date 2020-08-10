@@ -17,7 +17,7 @@ model = dict(
         in_indices=[0, 1, 2, 3, 4],
         with_last_layer_unpool=False,
         backbone='resnet50',
-        norm_cfg=dict(type='BN', momentum=0.1, affine=False),
+        norm_cfg=dict(type='SyncBN', momentum=0.1, affine=False),
         num_classes=1000))
 # dataset settings
 data_source_cfg = dict(
@@ -50,7 +50,7 @@ test_pipeline = [
     dict(type='Normalize', **img_norm_cfg),
 ]
 data = dict(
-    imgs_per_gpu=256,  # total 256
+    imgs_per_gpu=32,  # total 32x8=256
     workers_per_gpu=5,
     train=dict(
         type=dataset_type,

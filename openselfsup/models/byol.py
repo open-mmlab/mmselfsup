@@ -59,16 +59,17 @@ class BYOL(nn.Module):
             "Input must have 5 dims, got: {}".format(img.dim())
         img_v1 = img[:, 0, ...].contiguous()
         img_v2 = img[:, 1, ...].contiguous()
-        img_cat1 = torch.cat([img_v1, img_v2], dim=0)
-        img_cat2 = torch.cat([img_v2, img_v1], dim=0)
         # compute query features
-        proj_online = self.online_net(img_cat1)[0]
+        proj_online_v1 = self.online_net(img_v1)[0]
+        proj_online_v2 = self.online_net(img_v2)[0]
         with torch.no_grad():
-            proj_target = self.target_net(img_cat2)[0].clone().detach()
+            proj_target_v1 = self.target_net(img_v1)[0].clone().detach()
+            proj_target_v2 = self.target_net(img_v2)[0].clone().detach()
 
-        losses = self.head(proj_online, proj_target)
+        loss = self.head(proj_online_v1, proj_target_v2)['loss'] + \
+               self.head(proj_online_v2, proj_target_v1)['loss']
         self._momentum_update()
-        return losses
+        return dict(loss=loss)
 
     def forward_test(self, img, **kwargs):
         pass

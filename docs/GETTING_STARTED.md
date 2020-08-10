@@ -70,12 +70,10 @@ We provide several standard benchmarks to evaluate representation learning. The 
 ### VOC07 Linear SVM & Low-shot Linear SVM
 
 ```shell
-# test by epoch
+# test by epoch (only applicable to experiments trained with OpenSelfSup)
 bash benchmarks/dist_test_svm_epoch.sh ${CONFIG_FILE} ${EPOCH} ${FEAT_LIST} ${GPUS}
-# test pretrained model
+# test a pretrained model (applicable to any pre-trained models)
 bash benchmarks/dist_test_svm_pretrain.sh ${CONFIG_FILE} ${PRETRAIN} ${FEAT_LIST} ${GPUS}
-# test random init
-bash benchmarks/dist_test_svm_pretrain.sh ${CONFIG_FILE} "random" ${FEAT_LIST} ${GPUS}
 ```
 Augments:
 - `${CONFIG_FILE}` the config file of the self-supervised experiment.
@@ -86,7 +84,11 @@ Working directories:
 The features, logs and intermediate files generated are saved in `$SVM_WORK_DIR/` as follows:
 - `dist_test_svm_epoch.sh`: `SVM_WORK_DIR=$WORK_DIR/` (The same as that mentioned in `Train with single/multiple GPUs` above.) Hence, the files will be overridden to save space when evaluating with a new `$EPOCH`.
 - `dist_test_svm_pretrain.sh`: `SVM_WORK_DIR=$WORK_DIR/$PRETRAIN_NAME/`, e.g., if `PRETRAIN=pretrains/odc_r50_v1-5af5dd0c.pth`, then `PRETRAIN_NAME=odc_r50_v1-5af5dd0c.pth`; if `PRETRAIN=random`, then `PRETRAIN_NAME=random`.
-The evaluation records are saved in `$SVM_WORK_DIR/logs/eval_svm.log`
+
+Notes:
+- The evaluation records are saved in `$SVM_WORK_DIR/logs/eval_svm.log`.
+- When using `benchmarks/dist_test_svm_epoch.sh`, DO NOT launch multiple tests of the same experiment with different epochs, since they share the same working directory.
+- Linear SVM takes 5 min, low-shot linear SVM takes about 1 hour with 32 CPU cores. If you want to save time, you may delete or comment the low-shot SVM testing command (the last line in the scripts).
 
 ### ImageNet / Places205 Linear Classification
 

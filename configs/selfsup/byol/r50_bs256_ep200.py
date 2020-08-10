@@ -18,6 +18,7 @@ model = dict(
         out_channels=256,
         with_avg_pool=True),
     head=dict(type='LatentPredictHead',
+              size_average=True,
               predictor=dict(type='NonLinearNeckV2',
                              in_channels=256, hid_channels=4096,
                              out_channels=256, with_avg_pool=False)))
@@ -86,7 +87,7 @@ optimizer = dict(type='LARS', lr=0.2, weight_decay=0.0000015, momentum=0.9,
                     'bias': dict(weight_decay=0., lars_exclude=True)})
 # learning policy
 lr_config = dict(
-    policy='CosineAnealing',
+    policy='CosineAnnealing',
     min_lr=0.,
     warmup='linear',
     warmup_iters=2,
