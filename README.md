@@ -72,19 +72,6 @@ Please refer to [MODEL_ZOO.md](docs/MODEL_ZOO.md) for for a comprehensive set of
 
 This project is released under the [Apache 2.0 license](LICENSE).
 
-## Citation
-
-If you use this toolbox or benchmark in your research, please cite this project.
-
-```
-@article{openselfsup,
-  title   = {{OpenSelfSup}: Open MMLab Self-Supervised Learning Toolbox and Benchmark},
-  author  = {Xiaohang Zhan, Jiahao Xie, Ziwei Liu, Dahua Lin, Chen Change Loy},
-  howpublished = {\url{https://github.com/open-mmlab/openselfsup}},
-  year = {2020}
-}
-```
-
 ## Acknowledgement
 
 - This repo borrows the architecture design and part of the code from [MMDetection](https://github.com/open-mmlab/mmdetection).
