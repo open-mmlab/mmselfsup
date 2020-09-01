@@ -46,7 +46,7 @@ test_pipeline = [
 ]
 data = dict(
     imgs_per_gpu=32,  # total 32x8=256
-    workers_per_gpu=5,
+    workers_per_gpu=4,
     train=dict(
         type=dataset_type,
         data_source=dict(
@@ -65,7 +65,7 @@ custom_hooks = [
         dataset=data['val'],
         initial=True,
         interval=10,
-        imgs_per_gpu=128,
+        imgs_per_gpu=32,
         workers_per_gpu=4,
         eval_param=dict(topk=(1, )))
 ]
@@ -78,7 +78,7 @@ optimizer = dict(
     paramwise_options=dict(norm_decay_mult=0.),
     nesterov=True)
 # learning policy
-lr_config = dict(policy='step', step=[30, 60, 90])
+lr_config = dict(policy='step', step=[7, 14, 21])
 checkpoint_config = dict(interval=10)
 # runtime settings
-total_epochs = 100
+total_epochs = 28
