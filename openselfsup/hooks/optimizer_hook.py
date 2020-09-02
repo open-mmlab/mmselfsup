@@ -2,6 +2,7 @@ from mmcv.runner import OptimizerHook
 
 
 class DistOptimizerHook(OptimizerHook):
+    """Optimizer hook for distributed training."""
 
     def __init__(self, update_interval=1, grad_clip=None, coalesce=True, bucket_size_mb=-1):
         self.grad_clip = grad_clip

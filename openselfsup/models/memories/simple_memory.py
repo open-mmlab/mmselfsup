@@ -9,6 +9,13 @@ from ..registry import MEMORIES
 
 @MEMORIES.register_module
 class SimpleMemory(nn.Module):
+    """Simple memory bank for NPID.
+
+    Args:
+        length (int): Number of features stored in the memory bank.
+        feat_dim (int): Dimension of stored features.
+        momentum (float): Momentum coefficient for updating features.
+    """
 
     def __init__(self, length, feat_dim, momentum, **kwargs):
         super(SimpleMemory, self).__init__()
@@ -20,6 +27,12 @@ class SimpleMemory(nn.Module):
         self.multinomial.cuda()
 
     def update(self, ind, feature):
+        """Update features in memory bank.
+
+        Args:
+            ind (Tensor): Indices for the batch of features.
+            feature (Tensor): Batch of features.
+        """
         feature_norm = nn.functional.normalize(feature)
         ind, feature_norm = self._gather(ind, feature_norm)
         feature_old = self.feature_bank[ind, ...]
@@ -28,7 +41,17 @@ class SimpleMemory(nn.Module):
         feature_new_norm = nn.functional.normalize(feature_new)
         self.feature_bank[ind, ...] = feature_new_norm
 
-    def _gather(self, ind, feature):  # gather ind and feature
+    def _gather(self, ind, feature):
+        """Gather indices and features.
+
+        Args:
+            ind (Tensor): Indices for the batch of features.
+            feature (Tensor): Batch of features.
+
+        Returns:
+            Tensor: Gathered indices.
+            Tensor: Gathered features.
+        """
         ind_gathered = [
             torch.ones_like(ind).cuda() for _ in range(self.num_replicas)
         ]

@@ -7,8 +7,8 @@ from .. import builder
 
 @HEADS.register_module
 class LatentPredictHead(nn.Module):
-    '''Head for contrastive learning.
-    '''
+    """Head for contrastive learning.
+    """
 
     def __init__(self, predictor, size_average=True):
         super(LatentPredictHead, self).__init__()
@@ -19,11 +19,15 @@ class LatentPredictHead(nn.Module):
         self.predictor.init_weights(init_linear=init_linear)
 
     def forward(self, input, target):
-        '''
+        """Forward head.
+
         Args:
             input (Tensor): NxC input features.
             target (Tensor): NxC target features.
-        '''
+
+        Returns:
+            dict[str, Tensor]: A dictionary of loss components.
+        """
         pred = self.predictor([input])[0]
         pred_norm = nn.functional.normalize(pred, dim=1)
         target_norm = nn.functional.normalize(target, dim=1)
@@ -35,8 +39,8 @@ class LatentPredictHead(nn.Module):
 
 @HEADS.register_module
 class LatentClsHead(nn.Module):
-    '''Head for contrastive learning.
-    '''
+    """Head for contrastive learning.
+    """
 
     def __init__(self, predictor):
         super(LatentClsHead, self).__init__()
@@ -48,11 +52,15 @@ class LatentClsHead(nn.Module):
         normal_init(self.predictor, std=0.01)
 
     def forward(self, input, target):
-        '''
+        """Forward head.
+
         Args:
             input (Tensor): NxC input features.
             target (Tensor): NxC target features.
-        '''
+
+        Returns:
+            dict[str, Tensor]: A dictionary of loss components.
+        """
         pred = self.predictor(input)
         with torch.no_grad():
             label = torch.argmax(self.predictor(target), dim=1).detach()

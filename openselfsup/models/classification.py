@@ -11,6 +11,14 @@ from .utils import Sobel
 
 @MODELS.register_module
 class Classification(nn.Module):
+    """Simple image classification.
+
+    Args:
+        backbone (nn.Module): Module of backbone ConvNet.
+        with_sobel (bool): Whether to apply a Sobel filter on images. Default: False.
+        head (nn.Module): Module of loss functions.
+        pretrained (str, optional): Path to pre-trained weights. Default: None.
+    """
 
     def __init__(self,
                  backbone,
@@ -27,16 +35,26 @@ class Classification(nn.Module):
         self.init_weights(pretrained=pretrained)
 
     def init_weights(self, pretrained=None):
+        """Initialize the weights of model.
+
+        Args:
+            pretrained (str, optional): Path to pre-trained weights.
+                Default: None.
+        """
         if pretrained is not None:
             print_log('load model from: {}'.format(pretrained), logger='root')
         self.backbone.init_weights(pretrained=pretrained)
         self.head.init_weights()
 
     def forward_backbone(self, img):
-        """Forward backbone
+        """Forward backbone.
+
+        Args:
+            img (Tensor): Input images of shape (N, C, H, W).
+                Typically these should be mean centered and std scaled.
 
         Returns:
-            x (tuple): backbone outputs
+            tuple[Tensor]: backbone outputs.
         """
         if self.with_sobel:
             img = self.sobel_layer(img)
@@ -44,6 +62,17 @@ class Classification(nn.Module):
         return x
 
     def forward_train(self, img, gt_label, **kwargs):
+        """Forward computation during training.
+
+        Args:
+            img (Tensor): Input images of shape (N, C, H, W).
+                Typically these should be mean centered and std scaled.
+            gt_label (Tensor): Ground-truth labels.
+            kwargs: Any keyword arguments to be used to forward.
+
+        Returns:
+            dict[str, Tensor]: A dictionary of loss components.
+        """
         x = self.forward_backbone(img)
         outs = self.head(x)
         loss_inputs = (outs, gt_label)

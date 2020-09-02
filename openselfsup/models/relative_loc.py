@@ -9,6 +9,17 @@ from .registry import MODELS
 
 @MODELS.register_module
 class RelativeLoc(nn.Module):
+    """Relative patch location.
+
+    Implementation of "Unsupervised Visual Representation Learning
+    by Context Prediction (https://arxiv.org/abs/1505.05192)".
+
+    Args:
+        backbone (nn.Module): Module of backbone ConvNet.
+        neck (nn.Module): Module of deep features to compact feature vectors.
+        head (nn.Module): Module of loss functions.
+        pretrained (str, optional): Path to pre-trained weights. Default: None.
+    """
 
     def __init__(self, backbone, neck=None, head=None, pretrained=None):
         super(RelativeLoc, self).__init__()
@@ -20,6 +31,12 @@ class RelativeLoc(nn.Module):
         self.init_weights(pretrained=pretrained)
 
     def init_weights(self, pretrained=None):
+        """Initialize the weights of model.
+
+        Args:
+            pretrained (str, optional): Path to pre-trained weights.
+                Default: None.
+        """
         if pretrained is not None:
             print_log('load model from: {}'.format(pretrained), logger='root')
         self.backbone.init_weights(pretrained=pretrained)
@@ -27,15 +44,30 @@ class RelativeLoc(nn.Module):
         self.head.init_weights(init_linear='normal', std=0.005)
 
     def forward_backbone(self, img):
-        """Forward backbone
+        """Forward backbone.
+
+        Args:
+            img (Tensor): Input images of shape (N, C, H, W).
+                Typically these should be mean centered and std scaled.
 
         Returns:
-            x (tuple): backbone outputs
+            tuple[Tensor]: backbone outputs.
         """
         x = self.backbone(img)
         return x
 
     def forward_train(self, img, patch_label, **kwargs):
+        """Forward computation during training.
+
+        Args:
+            img (Tensor): Input images of shape (N, C, H, W).
+                Typically these should be mean centered and std scaled.
+            patch_label (Tensor): Labels for the relative patch locations.
+            kwargs: Any keyword arguments to be used to forward.
+
+        Returns:
+            dict[str, Tensor]: A dictionary of loss components.
+        """
         img1, img2 = torch.chunk(img, 2, dim=1)
         x1 = self.forward_backbone(img1)  # tuple
         x2 = self.forward_backbone(img2)  # tuple
@@ -58,12 +90,12 @@ class RelativeLoc(nn.Module):
         return dict(zip(keys, out_tensors))
 
     def forward(self, img, patch_label=None, mode='train', **kwargs):
-        if mode != "extract" and img.dim() == 5:
-            assert patch_label.dim() == 2
+        if mode != "extract" and img.dim() == 5:  # Nx8x(2C)xHxW
+            assert patch_label.dim() == 2  # Nx8
             img = img.view(
                 img.size(0) * img.size(1), img.size(2), img.size(3),
-                img.size(4))
-            patch_label = torch.flatten(patch_label)
+                img.size(4))  # (8N)x(2C)xHxW
+            patch_label = torch.flatten(patch_label)  # (8N)
         if mode == 'train':
             return self.forward_train(img, patch_label, **kwargs)
         elif mode == 'test':

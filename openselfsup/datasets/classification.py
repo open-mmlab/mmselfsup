@@ -8,7 +8,7 @@ from .base import BaseDataset
 
 @DATASETS.register_module
 class ClassificationDataset(BaseDataset):
-    """Dataset for classification
+    """Dataset for classification.
     """
 
     def __init__(self, data_source, pipeline):
@@ -20,8 +20,6 @@ class ClassificationDataset(BaseDataset):
         return dict(img=img, gt_label=target)
 
     def evaluate(self, scores, keyword, logger=None, topk=(1, 5)):
-        '''results: Tensor (NxC)
-        '''
         eval_res = {}
 
         target = torch.LongTensor(self.data_source.labels)

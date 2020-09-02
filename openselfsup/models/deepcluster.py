@@ -12,6 +12,18 @@ from .utils import Sobel
 
 @MODELS.register_module
 class DeepCluster(nn.Module):
+    """DeepCluster.
+
+    Implementation of "Deep Clustering for Unsupervised Learning
+    of Visual Features (https://arxiv.org/abs/1807.05520)".
+
+    Args:
+        backbone (nn.Module): Module of backbone ConvNet.
+        with_sobel (bool): Whether to apply a Sobel filter on images. Default: False.
+        neck (nn.Module): Module of deep features to compact feature vectors.
+        head (nn.Module): Module of loss functions.
+        pretrained (str, optional): Path to pre-trained weights. Default: None.
+    """
 
     def __init__(self,
                  backbone,
@@ -36,6 +48,12 @@ class DeepCluster(nn.Module):
         self.loss_weight /= self.loss_weight.sum()
 
     def init_weights(self, pretrained=None):
+        """Initialize the weights of model.
+
+        Args:
+            pretrained (str, optional): Path to pre-trained weights.
+                Default: None.
+        """
         if pretrained is not None:
             print_log('load model from: {}'.format(pretrained), logger='root')
         self.backbone.init_weights(pretrained=pretrained)
@@ -43,10 +61,14 @@ class DeepCluster(nn.Module):
         self.head.init_weights(init_linear='normal')
 
     def forward_backbone(self, img):
-        """Forward backbone
-    
+        """Forward backbone.
+
+        Args:
+            img (Tensor): Input images of shape (N, C, H, W).
+                Typically these should be mean centered and std scaled.
+
         Returns:
-            x (tuple): backbone outputs
+            tuple[Tensor]: backbone outputs.
         """
         if self.with_sobel:
             img = self.sobel_layer(img)
@@ -54,6 +76,17 @@ class DeepCluster(nn.Module):
         return x
 
     def forward_train(self, img, pseudo_label, **kwargs):
+        """Forward computation during training.
+
+        Args:
+            img (Tensor): Input images of shape (N, C, H, W).
+                Typically these should be mean centered and std scaled.
+            pseudo_label (Tensor): Label assignments.
+            kwargs: Any keyword arguments to be used to forward.
+
+        Returns:
+            dict[str, Tensor]: A dictionary of loss components.
+        """
         x = self.forward_backbone(img)
         assert len(x) == 1
         feature = self.neck(x)
@@ -80,6 +113,14 @@ class DeepCluster(nn.Module):
             raise Exception("No such mode: {}".format(mode))
 
     def set_reweight(self, labels, reweight_pow=0.5):
+        """Loss re-weighting.
+
+        Re-weighting the loss according to the number of samples in each class.
+
+        Args:
+            labels (numpy.ndarray): Label assignments.
+            reweight_pow (float): The power of re-weighting. Default: 0.5.
+        """
         hist = np.bincount(
             labels, minlength=self.num_classes).astype(np.float32)
         inv_hist = (1. / (hist + 1e-10))**reweight_pow

@@ -10,6 +10,20 @@ from .utils import Sobel
 
 @MODELS.register_module
 class ODC(nn.Module):
+    """ODC.
+
+    Official implementation of
+    "Online Deep Clustering for Unsupervised Representation Learning
+    (https://arxiv.org/abs/2006.10645)".
+
+    Args:
+        backbone (nn.Module): Module of backbone ConvNet.
+        with_sobel (bool): Whether to apply a Sobel filter on images. Default: False.
+        neck (nn.Module): Module of deep features to compact feature vectors.
+        head (nn.Module): Module of loss functions.
+        memory_bank (nn.Module): Module of memory banks.
+        pretrained (str, optional): Path to pre-trained weights. Default: None.
+    """
 
     def __init__(self,
                  backbone,
@@ -37,6 +51,12 @@ class ODC(nn.Module):
         self.loss_weight /= self.loss_weight.sum()
 
     def init_weights(self, pretrained=None):
+        """Initialize the weights of model.
+
+        Args:
+            pretrained (str, optional): Path to pre-trained weights.
+                Default: None.
+        """
         if pretrained is not None:
             print_log('load model from: {}'.format(pretrained), logger='root')
         self.backbone.init_weights(pretrained=pretrained)
@@ -44,10 +64,14 @@ class ODC(nn.Module):
         self.head.init_weights(init_linear='normal')
 
     def forward_backbone(self, img):
-        """Forward backbone
-    
+        """Forward backbone.
+
+        Args:
+            img (Tensor): Input images of shape (N, C, H, W).
+                Typically these should be mean centered and std scaled.
+
         Returns:
-            x (tuple): backbone outputs
+            tuple[Tensor]: backbone outputs.
         """
         if self.with_sobel:
             img = self.sobel_layer(img)
@@ -55,6 +79,17 @@ class ODC(nn.Module):
         return x
 
     def forward_train(self, img, idx, **kwargs):
+        """Forward computation during training.
+
+        Args:
+            img (Tensor): Input images of shape (N, C, H, W).
+                Typically these should be mean centered and std scaled.
+            idx (Tensor): Index corresponding to each image.
+            kwargs: Any keyword arguments to be used to forward.
+
+        Returns:
+            dict[str, Tensor]: A dictionary of loss components.
+        """
         # forward & backward
         x = self.forward_backbone(img)
         feature = self.neck(x)
@@ -90,6 +125,14 @@ class ODC(nn.Module):
             raise Exception("No such mode: {}".format(mode))
 
     def set_reweight(self, labels=None, reweight_pow=0.5):
+        """Loss re-weighting.
+
+        Re-weighting the loss according to the number of samples in each class.
+
+        Args:
+            labels (numpy.ndarray): Label assignments. Default: None.
+            reweight_pow (float): The power of re-weighting. Default: 0.5.
+        """
         if labels is None:
             if self.memory_bank.label_bank.is_cuda:
                 labels = self.memory_bank.label_bank.cpu().numpy()

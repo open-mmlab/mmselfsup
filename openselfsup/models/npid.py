@@ -9,13 +9,21 @@ from .registry import MODELS
 
 @MODELS.register_module
 class NPID(nn.Module):
-    '''Model of "Unsupervised Feature Learning via Non-parametric
-       Instance Discrimination".
-    Arguments:
-        neg_num (int): number of negative samples for each image
-        ensure_neg (bool): if False, there is a small probability
-            that negative samples contain positive ones.
-    '''
+    """NPID.
+
+    Implementation of "Unsupervised Feature Learning via Non-parametric
+    Instance Discrimination (https://arxiv.org/abs/1805.01978)".
+
+    Args:
+        backbone (nn.Module): Module of backbone ConvNet.
+        neck (nn.Module): Module of deep features to compact feature vectors.
+        head (nn.Module): Module of loss functions.
+        memory_bank (nn.Module): Module of memory banks.
+        neg_num (int): Number of negative samples for each image. Default: 65536.
+        ensure_neg (bool): If False, there is a small probability
+            that negative samples contain positive ones. Default: False.
+        pretrained (str, optional): Path to pre-trained weights. Default: None.
+    """
 
     def __init__(self,
                  backbone,
@@ -36,21 +44,42 @@ class NPID(nn.Module):
         self.ensure_neg = ensure_neg
 
     def init_weights(self, pretrained=None):
+        """Initialize the weights of model.
+
+        Args:
+            pretrained (str, optional): Path to pre-trained weights.
+                Default: None.
+        """
         if pretrained is not None:
             print_log('load model from: {}'.format(pretrained), logger='root')
         self.backbone.init_weights(pretrained=pretrained)
         self.neck.init_weights(init_linear='kaiming')
 
     def forward_backbone(self, img):
-        """Forward backbone
+        """Forward backbone.
+
+        Args:
+            img (Tensor): Input images of shape (N, C, H, W).
+                Typically these should be mean centered and std scaled.
 
         Returns:
-            x (tuple): backbone outputs
+            tuple[Tensor]: backbone outputs.
         """
         x = self.backbone(img)
         return x
 
     def forward_train(self, img, idx, **kwargs):
+        """Forward computation during training.
+
+        Args:
+            img (Tensor): Input images of shape (N, C, H, W).
+                Typically these should be mean centered and std scaled.
+            idx (Tensor): Index corresponding to each image.
+            kwargs: Any keyword arguments to be used to forward.
+
+        Returns:
+            dict[str, Tensor]: A dictionary of loss components.
+        """
         x = self.forward_backbone(img)
         idx = idx.cuda()
         feature = self.neck(x)[0]

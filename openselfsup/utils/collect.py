@@ -7,7 +7,7 @@ from .gather import gather_tensors_batch
 
 
 def nondist_forward_collect(func, data_loader, length):
-    '''Forward and collect network outputs.
+    """Forward and collect network outputs.
 
     This function performs forward propagation and collects outputs.
     It can be used to collect results, features, losses, etc.
@@ -19,7 +19,7 @@ def nondist_forward_collect(func, data_loader, length):
 
     Returns:
         results_all (dict(np.ndarray)): The concatenated outputs.
-    '''
+    """
     results = []
     prog_bar = mmcv.ProgressBar(len(data_loader))
     for i, data in enumerate(data_loader):
@@ -37,7 +37,7 @@ def nondist_forward_collect(func, data_loader, length):
 
 
 def dist_forward_collect(func, data_loader, rank, length, ret_rank=-1):
-    '''Forward and collect network outputs in a distributed manner.
+    """Forward and collect network outputs in a distributed manner.
 
     This function performs forward propagation and collects outputs.
     It can be used to collect results, features, losses, etc.
@@ -52,7 +52,7 @@ def dist_forward_collect(func, data_loader, rank, length, ret_rank=-1):
 
     Returns:
         results_all (dict(np.ndarray)): The concatenated outputs.
-    '''
+    """
     results = []
     if rank == 0:
         prog_bar = mmcv.ProgressBar(len(data_loader))

@@ -9,8 +9,19 @@ from .registry import MODELS
 
 @MODELS.register_module
 class BYOL(nn.Module):
-    '''BYOL unofficial implementation. Paper: https://arxiv.org/abs/2006.07733
-    '''
+    """BYOL.
+
+    Implementation of "Bootstrap Your Own Latent: A New Approach to
+    Self-Supervised Learning (https://arxiv.org/abs/2006.07733)".
+
+    Args:
+        backbone (nn.Module): Module of backbone ConvNet.
+        neck (nn.Module): Module of deep features to compact feature vectors.
+        head (nn.Module): Module of loss functions.
+        pretrained (str, optional): Path to pre-trained weights. Default: None.
+        base_momentum (float): The base momentum coefficient for the target network.
+            Default: 0.996.
+    """
 
     def __init__(self,
                  backbone,
@@ -34,6 +45,12 @@ class BYOL(nn.Module):
         self.momentum = base_momentum
 
     def init_weights(self, pretrained=None):
+        """Initialize the weights of model.
+
+        Args:
+            pretrained (str, optional): Path to pre-trained weights.
+                Default: None.
+        """
         if pretrained is not None:
             print_log('load model from: {}'.format(pretrained), logger='root')
         self.online_net[0].init_weights(pretrained=pretrained) # backbone
@@ -46,15 +63,22 @@ class BYOL(nn.Module):
 
     @torch.no_grad()
     def _momentum_update(self):
-        """
-        Momentum update of the target network.
-        """
+        """Momentum update of the target network."""
         for param_ol, param_tgt in zip(self.online_net.parameters(),
                                        self.target_net.parameters()):
             param_tgt.data = param_tgt.data * self.momentum + \
                              param_ol.data * (1. - self.momentum)
 
     def forward_train(self, img, **kwargs):
+        """Forward computation during training.
+
+        Args:
+            img (Tensor): Input of two concatenated images of shape (N, 2, C, H, W).
+                Typically these should be mean centered and std scaled.
+
+        Returns:
+            dict[str, Tensor]: A dictionary of loss components.
+        """
         assert img.dim() == 5, \
             "Input must have 5 dims, got: {}".format(img.dim())
         img_v1 = img[:, 0, ...].contiguous()

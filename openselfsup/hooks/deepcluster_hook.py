@@ -13,6 +13,21 @@ from .extractor import Extractor
 
 @HOOKS.register_module
 class DeepClusterHook(Hook):
+    """Hook for DeepCluster.
+
+    Args:
+        extractor (dict): Config dict for feature extraction.
+        clustering (dict): Config dict that specifies the clustering algorithm.
+        unif_sampling (bool): Whether to apply uniform sampling.
+        reweight (bool): Whether to apply loss re-weighting.
+        reweight_pow (float): The power of re-weighting.
+        init_memory (bool): Whether to initialize memory banks for ODC.
+            Default: False.
+        initial (bool): Whether to call the hook initially. Default: True.
+        interval (int): Frequency of epochs to call the hook. Default: 1.
+        dist_mode (bool): Use distributed training or not. Default: True.
+        data_loaders (DataLoader): A PyTorch dataloader. Default: None.
+    """
 
     def __init__(
             self,

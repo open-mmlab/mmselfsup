@@ -1,8 +1,8 @@
-'''
+"""
 SimCLR provides list files for semi-supervised benchmarks:
 https://github.com/google-research/simclr/tree/master/imagenet_subsets/
 This script convert the list files into the required format in OpenSelfSup.
-'''
+"""
 import argparse
 
 parser = argparse.ArgumentParser(

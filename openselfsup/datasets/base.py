@@ -12,7 +12,13 @@ from .builder import build_datasource
 
 
 class BaseDataset(Dataset, metaclass=ABCMeta):
-    """Base Dataset
+    """Base dataset.
+
+    Args:
+        data_source (dict): Data source defined in
+            `openselfsup.datasets.data_sources`.
+        pipeline (list[dict]): A list of dict, where each element represents
+            an operation defined in `oenselfsup.datasets.pipelines`.
     """
 
     def __init__(self, data_source, pipeline):

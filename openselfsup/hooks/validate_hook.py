@@ -9,6 +9,18 @@ from .registry import HOOKS
 
 @HOOKS.register_module
 class ValidateHook(Hook):
+    """Validation hook.
+
+    Args:
+        dataset (Dataset | dict): A PyTorch dataset or dict that indicates
+            the dataset.
+        dist_mode (bool): Use distributed evaluation or not. Default: True.
+        initial (bool): Whether to evaluate before the training starts.
+            Default: True.
+        interval (int): Evaluation interval (by epochs). Default: 1.
+        **eval_kwargs: Evaluation arguments fed into the evaluate function of
+            the dataset.
+    """
 
     def __init__(self,
                  dataset,

@@ -6,7 +6,8 @@ from .base import BaseDataset
 
 @DATASETS.register_module
 class ContrastiveDataset(BaseDataset):
-    """Dataset for rotation prediction 
+    """Dataset for contrastive learning methods that forward
+        two views of the image at a time (MoCo, SimCLR).
     """
 
     def __init__(self, data_source, pipeline):

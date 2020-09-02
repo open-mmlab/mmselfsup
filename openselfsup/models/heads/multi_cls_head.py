@@ -9,6 +9,7 @@ from ..utils import build_norm_layer, MultiPooling
 class MultiClsHead(nn.Module):
     """Multiple classifier heads.
     """
+
     FEAT_CHANNELS = {'resnet50': [64, 256, 512, 1024, 2048]}
     FEAT_LAST_UNPOOL = {'resnet50': 2048 * 7 * 7}
 

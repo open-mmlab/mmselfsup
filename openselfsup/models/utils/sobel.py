@@ -3,6 +3,7 @@ import torch.nn as nn
 
 
 class Sobel(nn.Module):
+    """Sobel layer."""
 
     def __init__(self):
         super(Sobel, self).__init__()
