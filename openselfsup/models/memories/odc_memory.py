@@ -28,7 +28,7 @@ class ODCMemory(nn.Module):
         if self.rank == 0:
             self.feature_bank = torch.zeros((length, feat_dim),
                                             dtype=torch.float32)
-        self.label_bank = torch.zeros((length,), dtype=torch.long)
+        self.label_bank = torch.zeros((length, ), dtype=torch.long)
         self.centroids = torch.zeros((num_classes, feat_dim),
                                      dtype=torch.float32).cuda()
         self.kmeans = KMeans(n_clusters=2, random_state=0, max_iter=20)
@@ -109,9 +109,9 @@ class ODCMemory(nn.Module):
         if self.rank == 0:
             feature_old = self.feature_bank[ind, ...].cuda()
             feature_new = (1 - self.momentum) * feature_old + \
-                          self.momentum * feature_norm
+                self.momentum * feature_norm
             feature_norm = feature_new / (
-                    feature_new.norm(dim=1).view(-1, 1) + 1e-10)
+                feature_new.norm(dim=1).view(-1, 1) + 1e-10)
             self.feature_bank[ind, ...] = feature_norm.cpu()
         dist.barrier()
         dist.broadcast(feature_norm, 0)
@@ -121,8 +121,8 @@ class ODCMemory(nn.Module):
         newlabel = similarity_to_centroids.argmax(dim=0)  # cuda tensor
         newlabel_cpu = newlabel.cpu()
         change_ratio = (newlabel_cpu !=
-                        self.label_bank[ind]).sum().float().cuda() \
-                       / float(newlabel_cpu.shape[0])
+            self.label_bank[ind]).sum().float().cuda() \
+            / float(newlabel_cpu.shape[0])
         self.label_bank[ind] = newlabel_cpu.clone()  # copy to cpu
         return change_ratio
 
@@ -152,7 +152,7 @@ class ODCMemory(nn.Module):
                             1, 0)).argmax(dim=0)
                     target = inclusion[target_ind]
                 else:
-                    target = torch.zeros((ind.shape[0],),
+                    target = torch.zeros((ind.shape[0], ),
                                          dtype=torch.int64).cuda()
                 dist.all_reduce(target)
                 self.label_bank[ind] = torch.from_numpy(target.cpu().numpy())
@@ -170,7 +170,7 @@ class ODCMemory(nn.Module):
             else:
                 center = self._compute_centroids_ind(cinds)
                 self.centroids[
-                torch.LongTensor(cinds).cuda(), :] = center.cuda()
+                    torch.LongTensor(cinds).cuda(), :] = center.cuda()
         dist.broadcast(self.centroids, 0)
 
     def _partition_max_cluster(self, max_cluster):
@@ -218,9 +218,9 @@ class ODCMemory(nn.Module):
             dist.all_reduce(size2)
             if self.rank != 0:
                 sub_cluster1_ind_tensor = torch.zeros(
-                    (size1,), dtype=torch.int64).cuda()
+                    (size1, ), dtype=torch.int64).cuda()
                 sub_cluster2_ind_tensor = torch.zeros(
-                    (size2,), dtype=torch.int64).cuda()
+                    (size2, ), dtype=torch.int64).cuda()
             dist.broadcast(sub_cluster1_ind_tensor, 0)
             dist.broadcast(sub_cluster2_ind_tensor, 0)
             if self.rank != 0:
