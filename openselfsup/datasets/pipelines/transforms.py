@@ -17,10 +17,12 @@ for m in inspect.getmembers(_transforms, inspect.isclass):
 
 @PIPELINES.register_module
 class RandomAppliedTrans(object):
-    '''Randomly applied transformations.
+    """Randomly applied transformations.
+
     Args:
-        transforms (List[Dict]): List of transformations in dictionaries.
-    '''
+        transforms (list[dict]): List of transformations in dictionaries.
+        p (float): Probability.
+    """
 
     def __init__(self, transforms, p=0.5):
         t = [build_from_cfg(t, PIPELINES) for t in transforms]
@@ -37,7 +39,8 @@ class RandomAppliedTrans(object):
 # custom transforms
 @PIPELINES.register_module
 class Lighting(object):
-    """Lighting noise(AlexNet - style PCA - based noise)"""
+    """Lighting noise(AlexNet - style PCA - based noise)."""
+
     _IMAGENET_PCA = {
         'eigval':
         torch.Tensor([0.2175, 0.0188, 0.0045]),
@@ -75,6 +78,7 @@ class Lighting(object):
 
 @PIPELINES.register_module
 class GaussianBlur(object):
+    """Gaussian blur augmentation in SimCLR https://arxiv.org/abs/2002.05709."""
 
     def __init__(self, sigma_min, sigma_max, kernel_size):
         self.sigma_min = sigma_min
@@ -94,6 +98,7 @@ class GaussianBlur(object):
 
 @PIPELINES.register_module
 class Solarization(object):
+    """Solarization augmentation in BYOL https://arxiv.org/abs/2006.07733."""
 
     def __init__(self, threshold=128):
         self.threshold = threshold

@@ -3,9 +3,7 @@ import torch.nn as nn
 
 
 class Scale(nn.Module):
-    """
-    A learnable scale parameter
-    """
+    """A learnable scale parameter."""
 
     def __init__(self, scale=1.0):
         super(Scale, self).__init__()

@@ -11,6 +11,15 @@ from ..registry import MEMORIES
 
 @MEMORIES.register_module
 class ODCMemory(nn.Module):
+    """Memory modules for ODC.
+
+    Args:
+        length (int): Number of features stored in samples memory.
+        feat_dim (int): Dimension of stored features.
+        momentum (float): Momentum coefficient for updating features.
+        num_classes (int): Number of clusters.
+        min_cluster (int): Minimal cluster size.
+    """
 
     def __init__(self, length, feat_dim, momentum, num_classes, min_cluster,
                  **kwargs):
@@ -31,6 +40,7 @@ class ODCMemory(nn.Module):
         self.debug = kwargs.get('debug', False)
 
     def init_memory(self, feature, label):
+        """Initialize memory modules."""
         self.initialized = True
         self.label_bank.copy_(torch.from_numpy(label).long())
         # make sure no empty clusters
@@ -43,7 +53,7 @@ class ODCMemory(nn.Module):
         dist.broadcast(self.centroids, 0)
 
     def _compute_centroids_ind(self, cinds):
-        '''compute a few centroids'''
+        """Compute a few centroids."""
         assert self.rank == 0
         num = len(cinds)
         centroids = torch.zeros((num, self.feat_dim), dtype=torch.float32)
@@ -53,7 +63,7 @@ class ODCMemory(nn.Module):
         return centroids
 
     def _compute_centroids(self):
-        '''compute all non-empty centroids'''
+        """Compute all non-empty centroids."""
         assert self.rank == 0
         l = self.label_bank.numpy()
         argl = np.argsort(l)
@@ -68,11 +78,12 @@ class ODCMemory(nn.Module):
             centroids[i, :] = self.feature_bank[argl[st:ed], :].mean(dim=0)
         return centroids
 
-    def _gather(self, ind, feature):  # gather ind and feature
-        #if not hasattr(self, 'ind_gathered'):
+    def _gather(self, ind, feature):
+        """Gather indices and features."""
+        # if not hasattr(self, 'ind_gathered'):
         #    self.ind_gathered = [torch.ones_like(ind).cuda()
         #                         for _ in range(self.num_replicas)]
-        #if not hasattr(self, 'feature_gathered'):
+        # if not hasattr(self, 'feature_gathered'):
         #    self.feature_gathered = [torch.ones_like(feature).cuda()
         #                             for _ in range(self.num_replicas)]
         ind_gathered = [
@@ -87,7 +98,8 @@ class ODCMemory(nn.Module):
         feature_gathered = torch.cat(feature_gathered, dim=0)
         return ind_gathered, feature_gathered
 
-    def update_samples_memory(self, ind, feature):  # ind, feature: cuda tensor
+    def update_samples_memory(self, ind, feature):
+        """Update samples memory."""
         assert self.initialized
         feature_norm = feature / (feature.norm(dim=1).view(-1, 1) + 1e-10
                                   )  # normalize
@@ -115,6 +127,7 @@ class ODCMemory(nn.Module):
         return change_ratio
 
     def deal_with_small_clusters(self):
+        """Deal with small clusters."""
         # check empty class
         hist = np.bincount(self.label_bank.numpy(), minlength=self.num_classes)
         small_clusters = np.where(hist < self.min_cluster)[0].tolist()
@@ -147,6 +160,7 @@ class ODCMemory(nn.Module):
         self._redirect_empty_clusters(small_clusters)
 
     def update_centroids_memory(self, cinds=None):
+        """Update centroids memory."""
         if self.rank == 0:
             if self.debug:
                 print("updating centroids ...")
@@ -160,6 +174,7 @@ class ODCMemory(nn.Module):
         dist.broadcast(self.centroids, 0)
 
     def _partition_max_cluster(self, max_cluster):
+        """Partition the largest cluster into two sub-clusters."""
         assert self.rank == 0
         max_cluster_inds = np.where(self.label_bank == max_cluster)[0]
 
@@ -180,6 +195,7 @@ class ODCMemory(nn.Module):
         return sub_cluster1_ind, sub_cluster2_ind
 
     def _redirect_empty_clusters(self, empty_clusters):
+        """Re-direct empty clusters."""
         for e in empty_clusters:
             assert (self.label_bank != e).all().item(), \
                 "Cluster #{} is not an empty cluster.".format(e)

@@ -6,9 +6,14 @@ from .base import BaseDataset
 
 
 def rotate(img):
-    '''
-    img: Tensor(CHW)
-    '''
+    """Rotate input image with 0, 90, 180, and 270 degrees.
+
+    Args:
+        img (Tensor): input image of shape (C, H, W).
+
+    Returns:
+        list[Tensor]: A list of four rotated images.
+    """
     return [
         img,
         torch.flip(img.transpose(1, 2), [1]),
@@ -19,7 +24,7 @@ def rotate(img):
 
 @DATASETS.register_module
 class RotationPredDataset(BaseDataset):
-    """Dataset for rotation prediction 
+    """Dataset for rotation prediction.
     """
 
     def __init__(self, data_source, pipeline):

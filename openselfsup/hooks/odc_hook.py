@@ -8,6 +8,18 @@ from .registry import HOOKS
 
 @HOOKS.register_module
 class ODCHook(Hook):
+    """Hook for ODC.
+
+    Args:
+        centroids_update_interval (int): Frequency of iterations
+            to update centroids.
+        deal_with_small_clusters_interval (int): Frequency of iterations
+            to deal with small clusters.
+        evaluate_interval (int): Frequency of iterations to evaluate clusters.
+        reweight (bool): Whether to perform loss re-weighting.
+        reweight_pow (float): The power of re-weighting.
+        dist_mode (bool): Use distributed training or not. Default: True.
+    """
 
     def __init__(self,
                  centroids_update_interval,
