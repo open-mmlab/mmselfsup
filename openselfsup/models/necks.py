@@ -256,8 +256,11 @@ class NonLinearNeckSimCLR(nn.Module):
                  out_channels,
                  num_layers=2,
                  sync_bn=True,
+                 with_last_bn=True,
                  with_avg_pool=True):
         super(NonLinearNeckSimCLR, self).__init__()
+        self.sync_bn = sync_bn
+        self.with_last_bn = with_last_bn
         self.with_avg_pool = with_avg_pool
         if with_avg_pool:
             self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
@@ -283,17 +286,19 @@ class NonLinearNeckSimCLR(nn.Module):
             self.add_module(
                 "fc{}".format(i),
                 nn.Linear(hid_channels, this_channels, bias=False))
-            if sync_bn:
-                self.add_module(
-                    "bn{}".format(i),
-                    build_norm_layer(dict(type='SyncBN'), this_channels)[1])
-            else:
-                self.add_module(
-                    "bn{}".format(i),
-                    nn.BatchNorm1d(this_channels))
             self.fc_names.append("fc{}".format(i))
-            self.bn_names.append("bn{}".format(i))
-        self.sync_bn = sync_bn
+            if i != num_layers - 1 or self.with_last_bn:
+                if sync_bn:
+                    self.add_module(
+                        "bn{}".format(i),
+                        build_norm_layer(dict(type='SyncBN'), this_channels)[1])
+                else:
+                    self.add_module(
+                        "bn{}".format(i),
+                        nn.BatchNorm1d(this_channels))
+                self.bn_names.append("bn{}".format(i))
+            else:
+                self.bn_names.append(None)
 
     def init_weights(self, init_linear='normal'):
         _init_weights(self, init_linear)
@@ -319,13 +324,14 @@ class NonLinearNeckSimCLR(nn.Module):
             x = self.bn0(x)
         for fc_name, bn_name in zip(self.fc_names, self.bn_names):
             fc = getattr(self, fc_name)
-            bn = getattr(self, bn_name)
             x = self.relu(x)
             x = fc(x)
-            if self.sync_bn:
-                x = self._forward_syncbn(bn, x)
-            else:
-                x = bn(x)
+            if bn_name is not None:
+                bn = getattr(self, bn_name)
+                if self.sync_bn:
+                    x = self._forward_syncbn(bn, x)
+                else:
+                    x = bn(x)
         return [x]
 
 
