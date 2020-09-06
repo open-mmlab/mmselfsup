@@ -26,8 +26,8 @@ def _init_weights(module, init_linear='normal', std=0.01, bias=0.):
 
 @NECKS.register_module
 class LinearNeck(nn.Module):
-    '''Linear neck: fc only
-    '''
+    """Linear neck: fc only.
+    """
 
     def __init__(self, in_channels, out_channels, with_avg_pool=True):
         super(LinearNeck, self).__init__()
@@ -49,8 +49,8 @@ class LinearNeck(nn.Module):
 
 @NECKS.register_module
 class RelativeLocNeck(nn.Module):
-    '''Relative patch location neck: fc-bn-relu-dropout
-    '''
+    """Relative patch location neck: fc-bn-relu-dropout.
+    """
 
     def __init__(self,
                  in_channels,
@@ -108,8 +108,8 @@ class RelativeLocNeck(nn.Module):
 
 @NECKS.register_module
 class NonLinearNeckV0(nn.Module):
-    '''The non-linear neck in ODC, fc-bn-relu-dropout-fc-relu
-    '''
+    """The non-linear neck in ODC, fc-bn-relu-dropout-fc-relu.
+    """
 
     def __init__(self,
                  in_channels,
@@ -172,8 +172,9 @@ class NonLinearNeckV0(nn.Module):
 
 @NECKS.register_module
 class NonLinearNeckV1(nn.Module):
-    '''The non-linear neck in MoCO v2: fc-relu-fc
-    '''
+    """The non-linear neck in MoCo v2: fc-relu-fc.
+    """
+
     def __init__(self,
                  in_channels,
                  hid_channels,
@@ -200,8 +201,9 @@ class NonLinearNeckV1(nn.Module):
 
 @NECKS.register_module
 class NonLinearNeckV2(nn.Module):
-    '''The non-linear neck in byol: fc-bn-relu-fc
-    '''
+    """The non-linear neck in byol: fc-bn-relu-fc.
+    """
+
     def __init__(self,
                  in_channels,
                  hid_channels,
@@ -230,30 +232,35 @@ class NonLinearNeckV2(nn.Module):
 
 @NECKS.register_module
 class NonLinearNeckSimCLR(nn.Module):
-    '''SimCLR non-linear neck.
+    """SimCLR non-linear neck.
+
     Structure: fc(no_bias)-bn(has_bias)-[relu-fc(no_bias)-bn(no_bias)].
         The substructures in [] can be repeated. For the SimCLR default setting,
         the repeat time is 1.
     However, PyTorch does not support to specify (weight=True, bias=False).
         It only support \"affine\" including the weight and bias. Hence, the
         second BatchNorm has bias in this implementation. This is different from
-        the offical implementation of SimCLR.
+        the official implementation of SimCLR.
     Since SyncBatchNorm in pytorch<1.4.0 does not support 2D input, the input is
-        expanded to 4D with shape: (N,C,1,1). I am not sure if this workaround
+        expanded to 4D with shape: (N,C,1,1). Not sure if this workaround
         has no bugs. See the pull request here:
-        https://github.com/pytorch/pytorch/pull/29626
+        https://github.com/pytorch/pytorch/pull/29626.
 
-    Arguments:
-        num_layers (int): number of fc layers, it is 2 in the SimCLR default setting.
-    '''
+    Args:
+        num_layers (int): Number of fc layers, it is 2 in the SimCLR default setting.
+    """
 
     def __init__(self,
                  in_channels,
                  hid_channels,
                  out_channels,
                  num_layers=2,
+                 sync_bn=True,
+                 with_last_bn=True,
                  with_avg_pool=True):
         super(NonLinearNeckSimCLR, self).__init__()
+        self.sync_bn = sync_bn
+        self.with_last_bn = with_last_bn
         self.with_avg_pool = with_avg_pool
         if with_avg_pool:
             self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
@@ -265,8 +272,11 @@ class NonLinearNeckSimCLR(nn.Module):
 
         self.relu = nn.ReLU(inplace=True)
         self.fc0 = nn.Linear(in_channels, hid_channels, bias=False)
-        _, self.bn0 = build_norm_layer(
-            dict(type='SyncBN'), hid_channels)
+        if sync_bn:
+            _, self.bn0 = build_norm_layer(
+                dict(type='SyncBN'), hid_channels)
+        else:
+            self.bn0 = nn.BatchNorm1d(hid_channels)
 
         self.fc_names = []
         self.bn_names = []
@@ -276,11 +286,19 @@ class NonLinearNeckSimCLR(nn.Module):
             self.add_module(
                 "fc{}".format(i),
                 nn.Linear(hid_channels, this_channels, bias=False))
-            self.add_module(
-                "bn{}".format(i),
-                build_norm_layer(dict(type='SyncBN'), this_channels)[1])
             self.fc_names.append("fc{}".format(i))
-            self.bn_names.append("bn{}".format(i))
+            if i != num_layers - 1 or self.with_last_bn:
+                if sync_bn:
+                    self.add_module(
+                        "bn{}".format(i),
+                        build_norm_layer(dict(type='SyncBN'), this_channels)[1])
+                else:
+                    self.add_module(
+                        "bn{}".format(i),
+                        nn.BatchNorm1d(this_channels))
+                self.bn_names.append("bn{}".format(i))
+            else:
+                self.bn_names.append(None)
 
     def init_weights(self, init_linear='normal'):
         _init_weights(self, init_linear)
@@ -300,18 +318,27 @@ class NonLinearNeckSimCLR(nn.Module):
             x = self.avgpool(x)
         x = x.view(x.size(0), -1)
         x = self.fc0(x)
-        x = self._forward_syncbn(self.bn0, x)
+        if self.sync_bn:
+            x = self._forward_syncbn(self.bn0, x)
+        else:
+            x = self.bn0(x)
         for fc_name, bn_name in zip(self.fc_names, self.bn_names):
             fc = getattr(self, fc_name)
-            bn = getattr(self, bn_name)
             x = self.relu(x)
             x = fc(x)
-            x = self._forward_syncbn(bn, x)
+            if bn_name is not None:
+                bn = getattr(self, bn_name)
+                if self.sync_bn:
+                    x = self._forward_syncbn(bn, x)
+                else:
+                    x = bn(x)
         return [x]
 
 
 @NECKS.register_module
 class AvgPoolNeck(nn.Module):
+    """Average pooling neck.
+    """
 
     def __init__(self):
         super(AvgPoolNeck, self).__init__()

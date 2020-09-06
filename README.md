@@ -20,8 +20,8 @@ Below is the relations among Unsupervised Learning, Self-Supervised Learning and
 
 - **All methods in one repository**
 
-  <em>For comprehensive comparison in all benchmarks, refer to [MODEL_ZOO.md](docs/MODEL_ZOO.md).</em>
-  <table><thead><tr><th>Method</th><th>VOC07 SVM (best layer)</th><th>ImageNet (best layer)</th></tr></thead><tbody><tr><td><a href="https://github.com/pytorch/vision/blob/master/torchvision/models/resnet.py" target="_blank" rel="noopener noreferrer">ImageNet</a></td><td>87.17</td><td>76.17</td></tr><tr><td>Random</td><td>30.22</td><td>13.70</td></tr><tr><td><a href="https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Doersch_Unsupervised_Visual_Representation_ICCV_2015_paper.pdf" target="_blank" rel="noopener noreferrer">Relative-Loc</a></td><td>65.06</td><td>49.31</td></tr><tr><td><a href="https://arxiv.org/abs/1803.07728" target="_blank" rel="noopener noreferrer">Rotation-Pred</a></td><td>67.38</td><td>54.99</td></tr><tr><td><a href="https://arxiv.org/abs/1807.05520" target="_blank" rel="noopener noreferrer">DeepCluster</a></td><td>74.26</td><td>57.71</td></tr><tr><td><a href="https://arxiv.org/abs/1805.01978" target="_blank" rel="noopener noreferrer">NPID</a></td><td>74.50</td><td>56.61</td></tr><tr><td><a href="http://openaccess.thecvf.com/content_CVPR_2020/papers/Zhan_Online_Deep_Clustering_for_Unsupervised_Representation_Learning_CVPR_2020_paper.pdf" target="_blank" rel="noopener noreferrer">ODC</a></td><td>78.42</td><td>57.70</td></tr><tr><td><a href="https://arxiv.org/abs/1911.05722" target="_blank" rel="noopener noreferrer">MoCo</a></td><td>79.18</td><td>60.60</td></tr><tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>84.05</td><td>66.72</td></tr><tr><td><a href="https://arxiv.org/abs/2002.05709" target="_blank" rel="noopener noreferrer">SimCLR</a></td><td>78.95</td><td>61.57</td></tr><tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td></td><td></td></tr></tbody></table>
+  <em>For comprehensive comparison in all benchmarks, refer to [MODEL_ZOO.md](docs/MODEL_ZOO.md). Most of the selfsup pretraining methods are under the `batch_size=256, epochs=200` setting.</em>
+  <table><thead><tr><th>Method</th><th>VOC07 SVM (best layer)</th><th>ImageNet (best layer)</th></tr></thead><tbody><tr><td><a href="https://github.com/pytorch/vision/blob/master/torchvision/models/resnet.py" target="_blank" rel="noopener noreferrer">ImageNet</a></td><td>87.17</td><td>76.17</td></tr><tr><td>Random</td><td>30.54</td><td>16.21</td></tr><tr><td><a href="https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Doersch_Unsupervised_Visual_Representation_ICCV_2015_paper.pdf" target="_blank" rel="noopener noreferrer">Relative-Loc</a></td><td>64.78</td><td>49.31</td></tr><tr><td><a href="https://arxiv.org/abs/1803.07728" target="_blank" rel="noopener noreferrer">Rotation-Pred</a></td><td>67.38</td><td>54.99</td></tr><tr><td><a href="https://arxiv.org/abs/1807.05520" target="_blank" rel="noopener noreferrer">DeepCluster</a></td><td>74.26</td><td>57.71</td></tr><tr><td><a href="https://arxiv.org/abs/1805.01978" target="_blank" rel="noopener noreferrer">NPID</a></td><td>74.50</td><td>56.61</td></tr><tr><td><a href="http://openaccess.thecvf.com/content_CVPR_2020/papers/Zhan_Online_Deep_Clustering_for_Unsupervised_Representation_Learning_CVPR_2020_paper.pdf" target="_blank" rel="noopener noreferrer">ODC</a></td><td>78.42</td><td>57.70</td></tr><tr><td><a href="https://arxiv.org/abs/1911.05722" target="_blank" rel="noopener noreferrer">MoCo</a></td><td>79.18</td><td>60.60</td></tr><tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>84.05</td><td>66.72</td></tr><tr><td><a href="https://arxiv.org/abs/2002.05709" target="_blank" rel="noopener noreferrer">SimCLR</a></td><td>78.95</td><td>61.57</td></tr><tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL (bs4096)</a></td><td>85.10</td><td>69.14</td></tr></tbody></table>
 
 - **Flexibility & Extensibility**
 
@@ -71,19 +71,6 @@ Please refer to [MODEL_ZOO.md](docs/MODEL_ZOO.md) for for a comprehensive set of
 ## License
 
 This project is released under the [Apache 2.0 license](LICENSE).
-
-## Citation
-
-If you use this toolbox or benchmark in your research, please cite this project.
-
-```
-@article{openselfsup,
-  title   = {{OpenSelfSup}: Open MMLab Self-Supervised Learning Toolbox and Benchmark},
-  author  = {Xiaohang Zhan, Jiahao Xie, Ziwei Liu, Dahua Lin, Chen Change Loy},
-  howpublished = {\url{https://github.com/open-mmlab/openselfsup}},
-  year = {2020}
-}
-```
 
 ## Acknowledgement
 

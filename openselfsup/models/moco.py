@@ -9,10 +9,24 @@ from .registry import MODELS
 
 @MODELS.register_module
 class MOCO(nn.Module):
-    '''MOCO.
+    """MOCO.
+
+    Implementation of "Momentum Contrast for Unsupervised Visual
+    Representation Learning (https://arxiv.org/abs/1911.05722)".
     Part of the code is borrowed from:
-        "https://github.com/facebookresearch/moco/blob/master/moco/builder.py".
-    '''
+    "https://github.com/facebookresearch/moco/blob/master/moco/builder.py".
+
+    Args:
+        backbone (nn.Module): Module of backbone ConvNet.
+        neck (nn.Module): Module of deep features to compact feature vectors.
+        head (nn.Module): Module of loss functions.
+        pretrained (str, optional): Path to pre-trained weights. Default: None.
+        queue_len (int): Number of negative keys maintained in the queue.
+            Default: 65536.
+        feat_dim (int): Dimension of compact feature vectors. Default: 128.
+        momentum (float): Momentum coefficient for the momentum-updated encoder.
+            Default: 0.999.
+    """
 
     def __init__(self,
                  backbone,
@@ -43,6 +57,12 @@ class MOCO(nn.Module):
         self.register_buffer("queue_ptr", torch.zeros(1, dtype=torch.long))
 
     def init_weights(self, pretrained=None):
+        """Initialize the weights of model.
+
+        Args:
+            pretrained (str, optional): Path to pre-trained weights.
+                Default: None.
+        """
         if pretrained is not None:
             print_log('load model from: {}'.format(pretrained), logger='root')
         self.encoder_q[0].init_weights(pretrained=pretrained)
@@ -53,9 +73,7 @@ class MOCO(nn.Module):
 
     @torch.no_grad()
     def _momentum_update_key_encoder(self):
-        """
-        Momentum update of the key encoder
-        """
+        """Momentum update of the key encoder."""
         for param_q, param_k in zip(self.encoder_q.parameters(),
                                     self.encoder_k.parameters()):
             param_k.data = param_k.data * self.momentum + \
@@ -63,6 +81,7 @@ class MOCO(nn.Module):
 
     @torch.no_grad()
     def _dequeue_and_enqueue(self, keys):
+        """Update queue."""
         # gather keys before updating queue
         keys = concat_all_gather(keys)
 
@@ -79,8 +98,8 @@ class MOCO(nn.Module):
 
     @torch.no_grad()
     def _batch_shuffle_ddp(self, x):
-        """
-        Batch shuffle, for making use of BatchNorm.
+        """Batch shuffle, for making use of BatchNorm.
+
         *** Only support DistributedDataParallel (DDP) model. ***
         """
         # gather from all gpus
@@ -107,8 +126,8 @@ class MOCO(nn.Module):
 
     @torch.no_grad()
     def _batch_unshuffle_ddp(self, x, idx_unshuffle):
-        """
-        Undo batch shuffle.
+        """Undo batch shuffle.
+
         *** Only support DistributedDataParallel (DDP) model. ***
         """
         # gather from all gpus
@@ -125,6 +144,15 @@ class MOCO(nn.Module):
         return x_gather[idx_this]
 
     def forward_train(self, img, **kwargs):
+        """Forward computation during training.
+
+        Args:
+            img (Tensor): Input of two concatenated images of shape (N, 2, C, H, W).
+                Typically these should be mean centered and std scaled.
+
+        Returns:
+            dict[str, Tensor]: A dictionary of loss components.
+        """
         assert img.dim() == 5, \
             "Input must have 5 dims, got: {}".format(img.dim())
         im_q = img[:, 0, ...].contiguous()
@@ -175,8 +203,8 @@ class MOCO(nn.Module):
 # utils
 @torch.no_grad()
 def concat_all_gather(tensor):
-    """
-    Performs all_gather operation on the provided tensors.
+    """Performs all_gather operation on the provided tensors.
+
     *** Warning ***: torch.distributed.all_gather has no gradient.
     """
     tensors_gather = [

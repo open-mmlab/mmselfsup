@@ -1,4 +1,4 @@
-_base_ = '../../base.py'
+_base_ = '../../../base.py'
 # model settings
 model = dict(
     type='Classification',
@@ -31,16 +31,11 @@ data_test_root = 'data/places205/val'
 dataset_type = 'ClassificationDataset'
 img_norm_cfg = dict(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 train_pipeline = [
-    dict(type='RandomResizedCrop', size=224),
+    dict(type='Resize', size=256),
+    dict(type='CenterCrop', size=256),
+    dict(type='RandomCrop', size=224),
     dict(type='RandomHorizontalFlip'),
-    dict(
-        type='ColorJitter',
-        brightness=0.4,
-        contrast=0.4,
-        saturation=0.4,
-        hue=0.),
     dict(type='ToTensor'),
-    dict(type='Lighting'),
     dict(type='Normalize', **img_norm_cfg),
 ]
 test_pipeline = [
@@ -51,7 +46,7 @@ test_pipeline = [
 ]
 data = dict(
     imgs_per_gpu=32,  # total 32x8=256
-    workers_per_gpu=5,
+    workers_per_gpu=4,
     train=dict(
         type=dataset_type,
         data_source=dict(
@@ -70,7 +65,7 @@ custom_hooks = [
         dataset=data['val'],
         initial=True,
         interval=10,
-        imgs_per_gpu=128,
+        imgs_per_gpu=32,
         workers_per_gpu=4,
         eval_param=dict(topk=(1, )))
 ]
@@ -83,7 +78,7 @@ optimizer = dict(
     paramwise_options=dict(norm_decay_mult=0.),
     nesterov=True)
 # learning policy
-lr_config = dict(policy='step', step=[30, 60, 90])
+lr_config = dict(policy='step', step=[7, 14, 21])
 checkpoint_config = dict(interval=10)
 # runtime settings
-total_epochs = 90
+total_epochs = 28

@@ -3,8 +3,8 @@ import torch.distributed as dist
 
 
 class GatherLayer(torch.autograd.Function):
-    '''Gather tensors from all process, supporting backward propagation.
-    '''
+    """Gather tensors from all process, supporting backward propagation.
+    """
 
     @staticmethod
     def forward(ctx, input):

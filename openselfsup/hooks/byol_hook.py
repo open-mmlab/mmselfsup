@@ -6,12 +6,16 @@ from .registry import HOOKS
 
 @HOOKS.register_module
 class BYOLHook(Hook):
-    '''Hook in BYOL
+    """Hook for BYOL.
 
-    This hook including momentum adjustment in BYOL following:
+    This hook includes momentum adjustment in BYOL following:
         m = 1 - ( 1- m_0) * (cos(pi * k / K) + 1) / 2,
         k: current step, K: total steps.
-    '''
+
+    Args:
+        end_momentum (float): The final momentum coefficient
+            for the target network. Default: 1.
+    """
 
     def __init__(self, end_momentum=1., **kwargs):
         self.end_momentum = end_momentum

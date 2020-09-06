@@ -3,9 +3,13 @@ import numpy as np
 
 
 class AliasMethod(object):
-    '''
-        From: https://hips.seas.harvard.edu/blog/2013/03/03/the-alias-method-efficient-sampling-with-many-discrete-outcomes/
-    '''
+    """The alias method for sampling.
+
+    From: https://hips.seas.harvard.edu/blog/2013/03/03/the-alias-method-efficient-sampling-with-many-discrete-outcomes/
+
+    Args:
+        probs (Tensor): Sampling probabilities.
+    """
 
     def __init__(self, probs):
 
@@ -49,9 +53,14 @@ class AliasMethod(object):
         self.alias = self.alias.cuda()
 
     def draw(self, N):
-        '''
-            Draw N samples from multinomial
-        '''
+        """Draw N samples from multinomial.
+
+        Args:
+            N (int): Number of samples.
+
+        Returns:
+            Tensor: Samples.
+        """
         K = self.alias.size(0)
 
         kk = torch.zeros(

@@ -2,8 +2,8 @@ import torch.nn as nn
 
 
 class MultiPooling(nn.Module):
-    """Pooling layers for features from multiple depth.
-    """
+    """Pooling layers for features from multiple depth."""
+
     POOL_PARAMS = {
         'resnet50': [
             dict(kernel_size=10, stride=10, padding=4),

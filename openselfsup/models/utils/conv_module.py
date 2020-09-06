@@ -13,15 +13,15 @@ conv_cfg = {
 
 
 def build_conv_layer(cfg, *args, **kwargs):
-    """ Build convolution layer
+    """Build convolution layer.
 
     Args:
-        cfg (None or dict): cfg should contain:
-            type (str): identify conv layer type.
-            layer args: args needed to instantiate a conv layer.
+        cfg (None or dict): Cfg should contain:
+            type (str): Identify conv layer type.
+            layer args: Args needed to instantiate a conv layer.
 
     Returns:
-        layer (nn.Module): created conv layer
+        nn.Module: Created conv layer.
     """
     if cfg is None:
         cfg_ = dict(type='Conv')

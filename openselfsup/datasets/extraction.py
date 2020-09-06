@@ -4,7 +4,7 @@ from .base import BaseDataset
 
 @DATASETS.register_module
 class ExtractDataset(BaseDataset):
-    """Dataset for feature extraction
+    """Dataset for feature extraction.
     """
 
     def __init__(self, data_source, pipeline):

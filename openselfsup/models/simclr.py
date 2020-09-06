@@ -10,6 +10,17 @@ from .utils import GatherLayer
 
 @MODELS.register_module
 class SimCLR(nn.Module):
+    """SimCLR.
+
+    Implementation of "A Simple Framework for Contrastive Learning
+    of Visual Representations (https://arxiv.org/abs/2002.05709)".
+
+    Args:
+        backbone (nn.Module): Module of backbone ConvNet.
+        neck (nn.Module): Module of deep features to compact feature vectors.
+        head (nn.Module): Module of loss functions.
+        pretrained (str, optional): Path to pre-trained weights. Default: None.
+    """
 
     def __init__(self, backbone, neck=None, head=None, pretrained=None):
         super(SimCLR, self).__init__()
@@ -29,21 +40,40 @@ class SimCLR(nn.Module):
         return mask, pos_ind, neg_mask
 
     def init_weights(self, pretrained=None):
+        """Initialize the weights of model.
+
+        Args:
+            pretrained (str, optional): Path to pre-trained weights.
+                Default: None.
+        """
         if pretrained is not None:
             print_log('load model from: {}'.format(pretrained), logger='root')
         self.backbone.init_weights(pretrained=pretrained)
         self.neck.init_weights(init_linear='kaiming')
 
     def forward_backbone(self, img):
-        """Forward backbone
+        """Forward backbone.
+
+        Args:
+            img (Tensor): Input images of shape (N, C, H, W).
+                Typically these should be mean centered and std scaled.
 
         Returns:
-            x (tuple): backbone outputs
+            tuple[Tensor]: backbone outputs.
         """
         x = self.backbone(img)
         return x
 
     def forward_train(self, img, **kwargs):
+        """Forward computation during training.
+
+        Args:
+            img (Tensor): Input of two concatenated images of shape (N, 2, C, H, W).
+                Typically these should be mean centered and std scaled.
+
+        Returns:
+            dict[str, Tensor]: A dictionary of loss components.
+        """
         assert img.dim() == 5, \
             "Input must have 5 dims, got: {}".format(img.dim())
         img = img.reshape(

@@ -10,8 +10,16 @@ from .base import BaseDataset
 
 
 def image_to_patches(img):
-    split_per_side = 3
-    patch_jitter = 21
+    """Crop split_per_side x split_per_side patches from input image.
+
+    Args:
+        img (PIL Image): input image.
+
+    Returns:
+        list[PIL Image]: A list of cropped patches.
+    """
+    split_per_side = 3  # split of patches per image side
+    patch_jitter = 21  # jitter of each patch from each grid
     h, w = img.size
     h_grid = h // split_per_side
     w_grid = w // split_per_side
@@ -29,7 +37,7 @@ def image_to_patches(img):
 
 @DATASETS.register_module
 class RelativeLocDataset(BaseDataset):
-    """Dataset for relative patch location
+    """Dataset for relative patch location.
     """
 
     def __init__(self, data_source, pipeline, format_pipeline):
@@ -47,7 +55,9 @@ class RelativeLocDataset(BaseDataset):
         patches = image_to_patches(img)
         patches = [self.format_pipeline(p) for p in patches]
         perms = []
+        # create a list of patch pairs
         [perms.append(torch.cat((patches[i], patches[4]), dim=0)) for i in range(9) if i != 4]
+        # create corresponding labels for patch pairs
         patch_labels = torch.LongTensor([0, 1, 2, 3, 4, 5, 6, 7])
         return dict(img=torch.stack(perms), patch_label=patch_labels)  # 8(2C)HW, 8
 

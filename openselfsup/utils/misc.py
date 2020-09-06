@@ -25,8 +25,8 @@ def multi_apply(func, *args, **kwargs):
 
 
 def unmap(data, count, inds, fill=0):
-    """ Unmap a subset of item (data) back to the original set of items (of
-    size count) """
+    """Unmap a subset of item (data) back to the original set of items (of
+    size count)."""
     if data.dim() == 1:
         ret = data.new_full((count, ), fill)
         ret[inds] = data

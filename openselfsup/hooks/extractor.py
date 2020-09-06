@@ -5,6 +5,17 @@ from openselfsup.utils import nondist_forward_collect, dist_forward_collect
 
 
 class Extractor(object):
+    """Feature extractor.
+
+    Args:
+        dataset (Dataset | dict): A PyTorch dataset or dict that indicates
+            the dataset.
+        imgs_per_gpu (int): Number of images on each GPU, i.e., batch size of
+            each GPU.
+        workers_per_gpu (int): How many subprocesses to use for data loading
+            for each GPU.
+        dist_mode (bool): Use distributed extraction or not. Default: False.
+    """
 
     def __init__(self,
                  dataset,
