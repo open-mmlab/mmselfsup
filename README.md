@@ -2,7 +2,8 @@
 # OpenSelfSup
 
 **News**
-OpenSelfSup now supports [BYOL](https://arxiv.org/pdf/2006.07733.pdf)!
+* A bug of MoCo v2 has been fixed and now the results are reproducible.
+* OpenSelfSup now supports [BYOL](https://arxiv.org/pdf/2006.07733.pdf)!
 
 ## Introduction
 
@@ -30,7 +31,7 @@ Below is the relations among Unsupervised Learning, Self-Supervised Learning and
 <tr><td><a href="https://arxiv.org/abs/1805.01978" target="_blank" rel="noopener noreferrer">NPID</a></td><td>74.50</td><td>56.61</td></tr>
 <tr><td><a href="http://openaccess.thecvf.com/content_CVPR_2020/papers/Zhan_Online_Deep_Clustering_for_Unsupervised_Representation_Learning_CVPR_2020_paper.pdf" target="_blank" rel="noopener noreferrer">ODC</a></td><td>78.42</td><td>57.70</td></tr>
 <tr><td><a href="https://arxiv.org/abs/1911.05722" target="_blank" rel="noopener noreferrer">MoCo</a></td><td>79.18</td><td>60.60</td></tr>
-<tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>84.05</td><td>66.72</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>84.26</td><td>67.69</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2002.05709" target="_blank" rel="noopener noreferrer">SimCLR</a></td><td>78.95</td><td>61.57</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL (bs4096)</a></td><td>85.10</td><td>69.14</td></tr>
 </tbody></table>
