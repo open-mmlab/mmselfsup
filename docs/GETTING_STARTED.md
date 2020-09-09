@@ -72,7 +72,7 @@ optimizer_config = dict(use_fp16=use_fp16)
 ```
 An example:
 ```python
-bash tools/ tools/dist_train.sh configs/selfsup/moco/r50_v1_fp16.py 8
+bash tools/dist_train.sh configs/selfsup/moco/r50_v1_fp16.py 8
 ```
 
 
