@@ -250,7 +250,7 @@ def _non_dist_train(model,
     ]
 
     if 'use_fp16' in cfg and cfg.use_fp16 == True:
-        raise NotImplementedError('apex do not support non_dist_trian!')
+        raise NotImplementedError('apex do not support non_dist_train!')
     # put model on gpus
     model = MMDataParallel(model, device_ids=range(cfg.gpus)).cuda()
 
