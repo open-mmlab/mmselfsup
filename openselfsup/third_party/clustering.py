@@ -3,7 +3,10 @@
 
 import time
 import numpy as np
-import faiss
+try:
+    import faiss
+except:
+    print('faiss is not installed!')
 import torch
 
 __all__ = ['Kmeans', 'PIC']

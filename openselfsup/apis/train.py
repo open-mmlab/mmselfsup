@@ -11,7 +11,13 @@ from mmcv.runner import DistSamplerSeedHook, Runner, obj_from_dict
 from openselfsup.datasets import build_dataloader
 from openselfsup.hooks import build_hook, DistOptimizerHook
 from openselfsup.utils import get_root_logger, optimizers, print_log
-
+try:
+    import apex
+    from apex.parallel.LARC import LARC
+    from apex.parallel import DistributedDataParallel as DDP
+except:
+    print('apex is not installed')
+from IPython import embed
 
 def set_random_seed(seed, deterministic=False):
     """Set random seed.
@@ -180,6 +186,11 @@ def _dist_train(model, dataset, cfg, logger=None, timestamp=None, meta=None):
             seed=cfg.seed,
             drop_last=getattr(cfg.data, 'drop_last', False)) for ds in dataset
     ]
+    optimizer = build_optimizer(model, cfg.optimizer)
+    if 'use_fp16' in cfg and cfg.use_fp16 == True:
+        model, optimizer = apex.amp.initialize(model.cuda(), optimizer, opt_level="O1")
+        print_log('**** Initializing mixed precision done. ****')
+
     # put model on gpus
     model = MMDistributedDataParallel(
         model.cuda(),
@@ -187,7 +198,6 @@ def _dist_train(model, dataset, cfg, logger=None, timestamp=None, meta=None):
         broadcast_buffers=False)
 
     # build runner
-    optimizer = build_optimizer(model, cfg.optimizer)
     runner = Runner(
         model,
         batch_processor,
