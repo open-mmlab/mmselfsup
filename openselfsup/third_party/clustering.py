@@ -3,10 +3,7 @@
 
 import time
 import numpy as np
-try:
-    import faiss
-except:
-    pass
+import faiss
 import torch
 
 __all__ = ['Kmeans', 'PIC']
