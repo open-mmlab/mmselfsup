@@ -51,6 +51,13 @@ e. Install.
 pip install -v -e .  # or "python setup.py develop"
 ```
 
+f. Install Apex (optional), following the [official instructions](https://github.com/NVIDIA/apex), e.g.
+```shell
+git clone https://github.com/NVIDIA/apex
+cd apex
+pip install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" ./
+```
+
 Note:
 
 1. The git commit id will be written to the version number with step d, e.g. 0.6.0+2e7045c. The version will also be saved in trained models.

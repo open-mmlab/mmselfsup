@@ -63,6 +63,19 @@ Assuming that you only have 1 GPU that can contain 64 images in a batch, while y
 optimizer_config = dict(update_interval=4)
 ```
 
+### Mixed Precision Training (Optional)
+We use [Apex](https://github.com/NVIDIA/apex) to implement Mixed Precision Training. 
+If you want to use Mixed Precision Training, you can add below in the config file.
+```python
+use_fp16 = True
+optimizer_config = dict(use_fp16=use_fp16)
+```
+An example:
+```python
+bash tools/dist_train.sh configs/selfsup/moco/r50_v1_fp16.py 8
+```
+
+
 ## Benchmarks
 
 We provide several standard benchmarks to evaluate representation learning. The config files or scripts for evaluation mentioned below are NOT recommended to be changed if you want to use this repo in your publications. We hope that all methods are under a fair comparison.
