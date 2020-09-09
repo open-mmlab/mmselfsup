@@ -6,7 +6,7 @@ import numpy as np
 try:
     import faiss
 except:
-    print('faiss is not installed!')
+    pass
 import torch
 
 __all__ = ['Kmeans', 'PIC']
