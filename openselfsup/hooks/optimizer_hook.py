@@ -3,7 +3,6 @@ try:
     import apex
 except:
     print('apex is not installed')
-from IPython import embed
 
 class DistOptimizerHook(OptimizerHook):
     """Optimizer hook for distributed training."""

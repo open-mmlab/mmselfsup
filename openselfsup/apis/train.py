@@ -13,11 +13,8 @@ from openselfsup.hooks import build_hook, DistOptimizerHook
 from openselfsup.utils import get_root_logger, optimizers, print_log
 try:
     import apex
-    from apex.parallel.LARC import LARC
-    from apex.parallel import DistributedDataParallel as DDP
 except:
     print('apex is not installed')
-from IPython import embed
 
 def set_random_seed(seed, deterministic=False):
     """Set random seed.
