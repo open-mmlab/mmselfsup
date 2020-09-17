@@ -36,7 +36,7 @@
 <tr><td></td><td>selfsup/npid/r50_ensure_neg.py</td><td>ensure_neg=True</td><td>feat5</td><td>75.70</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td><a href="http://openaccess.thecvf.com/content_CVPR_2020/papers/Zhan_Online_Deep_Clustering_for_Unsupervised_Representation_Learning_CVPR_2020_paper.pdf" target="_blank" rel="noopener noreferrer">ODC</a></td><td>selfsup/odc/r50_v1.py</td><td>default</td><td>feat5</td><td>78.42</td><td>32.42</td><td>40.27</td><td>49.95</td><td>59.96</td><td>65.71</td><td>69.99</td><td>73.64</td><td>75.13</td></tr>
 <tr><td><a href="https://arxiv.org/abs/1911.05722" target="_blank" rel="noopener noreferrer">MoCo</a></td><td>selfsup/moco/r50_v1.py</td><td>default</td><td>feat5</td><td>79.18</td><td>30.03</td><td>37.73</td><td>47.64</td><td>58.78</td><td>66.0</td><td>70.6</td><td>74.6</td><td>76.07</td></tr>
-<tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>feat5</td><td>84.26</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>feat5</td><td>84.26</td><td>43.0</td><td>52.48</td><td>63.43</td><td>71.74</td><td>76.35</td><td>78.9</td><td>81.31</td><td>82.45</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2002.05709" target="_blank" rel="noopener noreferrer">SimCLR</a></td><td>selfsup/simclr/r50_bs256_ep200.py</td><td>default</td><td>feat5</td><td>78.95</td><td>32.45</td><td>40.76</td><td>50.4</td><td>59.01</td><td>65.45</td><td>70.13</td><td>73.58</td><td>75.35</td></tr>
 <tr><td></td><td>selfsup/simclr/r50_bs256_ep200_mocov2_neck.py</td><td>-&gt; MoCo v2 neck</td><td>feat5</td><td>77.65</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs4096_ep200.py</td><td>default</td><td>feat5</td><td>85.10</td><td>44.48</td><td>52.09</td><td>62.88</td><td>70.87</td><td>76.18</td><td>79.45</td><td>81.88</td><td>83.08</td></tr>
@@ -83,7 +83,7 @@
 <tr><td><a href="https://arxiv.org/abs/1805.01978" target="_blank" rel="noopener noreferrer">NPID</a></td><td>selfsup/npid/r50.py</td><td>default</td><td>20.53</td><td>34.03</td><td>40.48</td><td>47.13</td><td>47.73</td></tr>
 <tr><td><a href="https://openaccess.thecvf.com/content_CVPR_2020/papers/Zhan_Online_Deep_Clustering_for_Unsupervised_Representation_Learning_CVPR_2020_paper.pdf" target="_blank" rel="noopener noreferrer">ODC</a></td><td>selfsup/odc/r50_v1.py</td><td>default</td><td>20.94</td><td>34.78</td><td>41.19</td><td>47.45</td><td>49.18</td></tr>
 <tr><td><a href="https://arxiv.org/abs/1911.05722" target="_blank" rel="noopener noreferrer">MoCo</a></td><td>selfsup/moco/r50_v1.py</td><td>default</td><td>21.13</td><td>35.19</td><td>42.40</td><td>48.78</td><td>50.70</td></tr>
-<tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>20.86</td><td>35.63</td><td>42.57</td><td>49.93</td><td>52.05</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>21.88</td><td>35.75</td><td>43.65</td><td>49.99</td><td>52.57</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2002.05709" target="_blank" rel="noopener noreferrer">SimCLR</a></td><td>selfsup/simclr/r50_bs256_ep200.py</td><td>default</td><td>22.55</td><td>34.14</td><td>40.35</td><td>47.15</td><td>51.64</td></tr>
 <tr><td></td><td>selfsup/simclr/r50_bs256_ep200_mocov2_neck.py</td><td>-&gt; MoCo v2 neck</td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs4096_ep200.py</td><td>default</td><td>22.28</td><td>35.95</td><td>43.03</td><td>49.79</td><td>52.75</td></tr>
@@ -107,7 +107,7 @@
 <tr><td><a href="https://arxiv.org/abs/1805.01978" target="_blank" rel="noopener noreferrer">NPID</a></td><td>selfsup/npid/r50.py</td><td>default</td><td>r50_lr0_01_head100.py</td><td>27.95</td><td>54.37</td></tr>
 <tr><td><a href="http://openaccess.thecvf.com/content_CVPR_2020/papers/Zhan_Online_Deep_Clustering_for_Unsupervised_Representation_Learning_CVPR_2020_paper.pdf" target="_blank" rel="noopener noreferrer">ODC</a></td><td>selfsup/odc/r50_v1.py</td><td>default</td><td>r50_lr0_1_head100.py</td><td>32.39</td><td>61.02</td></tr>
 <tr><td><a href="https://arxiv.org/abs/1911.05722" target="_blank" rel="noopener noreferrer">MoCo</a></td><td>selfsup/moco/r50_v1.py</td><td>default</td><td>r50_lr0_01_head100.py</td><td>33.15</td><td>61.30</td></tr>
-<tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>r50_lr0_01_head100.py</td><td>38.71</td><td>67.90</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>r50_lr0_01_head100.py</td><td>39.07</td><td>68.31</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2002.05709" target="_blank" rel="noopener noreferrer">SimCLR</a></td><td>selfsup/simclr/r50_bs256_ep200.py</td><td>default</td><td>r50_lr0_01_head100.py</td><td>36.09</td><td>64.50</td></tr>
 <tr><td></td><td>selfsup/simclr/r50_bs256_ep200_mocov2_neck.py</td><td>-&gt; MoCo v2 neck</td><td>r50_lr0_01_head100.py</td><td>36.31</td><td>64.68</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs4096_ep200.py</td><td>default</td><td>r50_lr0_01_head10.py</td><td>49.37</td><td>76.75</td></tr>
@@ -123,7 +123,7 @@
 <tr><td><a href="https://arxiv.org/abs/1805.01978" target="_blank" rel="noopener noreferrer">NPID</a></td><td>selfsup/npid/r50.py</td><td>default</td><td>r50_lr0_01_head100.py</td><td>57.22</td><td>81.39</td></tr>
 <tr><td><a href="http://openaccess.thecvf.com/content_CVPR_2020/papers/Zhan_Online_Deep_Clustering_for_Unsupervised_Representation_Learning_CVPR_2020_paper.pdf" target="_blank" rel="noopener noreferrer">ODC</a></td><td>selfsup/odc/r50_v1.py</td><td>default</td><td>r50_lr0_1_head10.py</td><td>58.15</td><td>82.55</td></tr>
 <tr><td><a href="https://arxiv.org/abs/1911.05722" target="_blank" rel="noopener noreferrer">MoCo</a></td><td>selfsup/moco/r50_v1.py</td><td>default</td><td>r50_lr0_01_head100.py</td><td>60.08</td><td>84.02</td></tr>
-<tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>r50_lr0_01_head100.py</td><td>61.64</td><td>84.90</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>r50_lr0_01_head100.py</td><td>61.80</td><td>85.11</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2002.05709" target="_blank" rel="noopener noreferrer">SimCLR</a></td><td>selfsup/simclr/r50_bs256_ep200.py</td><td>default</td><td>r50_lr0_01_head100.py</td><td>58.46</td><td>82.60</td></tr>
 <tr><td></td><td>selfsup/simclr/r50_bs256_ep200_mocov2_neck.py</td><td>-&gt; MoCo v2 neck</td><td></td><td>58.38</td><td>82.53</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs4096_ep200.py</td><td>default</td><td>r50_lr0_01_head100.py</td><td>65.94</td><td>87.81</td></tr>
@@ -144,7 +144,7 @@
 <tr><td><a href="https://arxiv.org/abs/1803.07728" target="_blank" rel="noopener noreferrer">Rotation-Pred</a></td><td>selfsup/rotation_pred/r50.py</td><td>default</td><td>80.91</td><td>55.52</td><td>61.39</td></tr>
 <tr><td><a href="https://arxiv.org/abs/1805.01978" target="_blank" rel="noopener noreferrer">NPID</a></td><td>selfsup/npid/r50.py</td><td>default</td><td>80.03</td><td>54.11</td><td>59.50</td></tr>
 <tr><td><a href="https://arxiv.org/abs/1911.05722" target="_blank" rel="noopener noreferrer">MoCo</a></td><td>selfsup/moco/r50_v1.py</td><td>default</td><td>81.38</td><td>55.95</td><td>62.23</td></tr>
-<tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>81.96</td><td>56.63</td><td>62.90</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>82.24</td><td>56.97</td><td>63.43</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2002.05709" target="_blank" rel="noopener noreferrer">SimCLR</a></td><td>selfsup/simclr/r50_bs256_ep200.py</td><td>default</td><td>79.41</td><td>51.54</td><td>55.63</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs4096_ep200.py</td><td>default</td><td>80.95</td><td>51.87</td><td>56.53</td></tr>
 </tbody></table>
@@ -164,9 +164,9 @@
 <tr><td><a href="https://arxiv.org/abs/1803.07728" target="_blank" rel="noopener noreferrer">Rotation-Pred</a></td><td>selfsup/rotation_pred/r50.py</td><td>default</td><td>59.3</td><td>40.0</td><td>43.6</td><td>56.0</td><td>34.9</td><td>37.4</td></tr>
 <tr><td><a href="https://arxiv.org/abs/1805.01978" target="_blank" rel="noopener noreferrer">NPID</a></td><td>selfsup/npid/r50.py</td><td>default</td><td>59.0</td><td>39.4</td><td>42.8</td><td>55.9</td><td>34.5</td><td>36.6</td></tr>
 <tr><td><a href="https://arxiv.org/abs/1911.05722" target="_blank" rel="noopener noreferrer">MoCo</a></td><td>selfsup/moco/r50_v1.py</td><td>default</td><td>60.5</td><td>40.9</td><td>44.2</td><td>57.1</td><td>35.5</td><td>37.7</td></tr>
-<tr><td><a href="https://arxiv.org/abs/2003.04297">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>60.7</td><td>40.9</td><td>44.2</td><td>57.2</td><td>35.5</td><td>37.9</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2003.04297">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>60.1</td><td>40.6</td><td>44.0</td><td>56.9</td><td>35.3</td><td>38.0</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2002.05709">SimCLR</a></td><td>selfsup/simclr/r50_bs256_ep200.py</td><td>default</td><td>59.1</td><td>39.6</td><td>42.9</td><td>55.9</td><td>34.6</td><td>37.1</td></tr>
-<tr><td><a href="https://arxiv.org/abs/2006.07733">BYOL</a></td><td>selfsup/byol/r50.py</td><td>default</td><td>60.5</td><td>40.3</td><td>43.9</td><td>56.8</td><td>35.1</td><td>37.3</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2006.07733">BYOL</a></td><td>selfsup/byol/r50_bs4096_ep200.py</td><td>default</td><td>60.5</td><td>40.3</td><td>43.9</td><td>56.8</td><td>35.1</td><td>37.3</td></tr>
 </tbody></table>
 
 
