@@ -184,13 +184,13 @@ def _dist_train(model, dataset, cfg, logger=None, timestamp=None, meta=None):
             drop_last=getattr(cfg.data, 'drop_last', False)) for ds in dataset
     ]
     optimizer = build_optimizer(model, cfg.optimizer)
-    if 'use_fp16' in cfg and cfg.use_fp16 == True:
+    if 'use_fp16' in cfg and cfg.use_fp16:
         model, optimizer = apex.amp.initialize(model.cuda(), optimizer, opt_level="O1")
         print_log('**** Initializing mixed precision done. ****')
 
     # put model on gpus
     model = MMDistributedDataParallel(
-        model.cuda(),
+        model if next(model.parameters()).is_cuda else model.cuda(),
         device_ids=[torch.cuda.current_device()],
         broadcast_buffers=False)
 
