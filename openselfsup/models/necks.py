@@ -256,6 +256,7 @@ class NonLinearNeckSimCLR(nn.Module):
                  out_channels,
                  num_layers=2,
                  sync_bn=True,
+                 with_bias=False,
                  with_last_bn=True,
                  with_avg_pool=True):
         super(NonLinearNeckSimCLR, self).__init__()
@@ -271,7 +272,7 @@ class NonLinearNeckSimCLR(nn.Module):
             self.expand_for_syncbn = False
 
         self.relu = nn.ReLU(inplace=True)
-        self.fc0 = nn.Linear(in_channels, hid_channels, bias=False)
+        self.fc0 = nn.Linear(in_channels, hid_channels, bias=with_bias)
         if sync_bn:
             _, self.bn0 = build_norm_layer(
                 dict(type='SyncBN'), hid_channels)
@@ -285,7 +286,7 @@ class NonLinearNeckSimCLR(nn.Module):
                 else hid_channels
             self.add_module(
                 "fc{}".format(i),
-                nn.Linear(hid_channels, this_channels, bias=False))
+                nn.Linear(hid_channels, this_channels, bias=with_bias))
             self.fc_names.append("fc{}".format(i))
             if i != num_layers - 1 or self.with_last_bn:
                 if sync_bn:
