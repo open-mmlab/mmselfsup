@@ -18,10 +18,11 @@ class DeepCluster(nn.Module):
     of Visual Features (https://arxiv.org/abs/1807.05520)".
 
     Args:
-        backbone (nn.Module): Module of backbone ConvNet.
+        backbone (dict): Config dict for module of backbone ConvNet.
         with_sobel (bool): Whether to apply a Sobel filter on images. Default: False.
-        neck (nn.Module): Module of deep features to compact feature vectors.
-        head (nn.Module): Module of loss functions.
+        neck (dict): Config dict for module of deep features to compact feature vectors.
+            Default: None.
+        head (dict): Config dict for module of loss functions. Default: None.
         pretrained (str, optional): Path to pre-trained weights. Default: None.
     """
 

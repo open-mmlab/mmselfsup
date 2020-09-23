@@ -17,11 +17,12 @@ class ODC(nn.Module):
     (https://arxiv.org/abs/2006.10645)".
 
     Args:
-        backbone (nn.Module): Module of backbone ConvNet.
+        backbone (dict): Config dict for module of backbone ConvNet.
         with_sobel (bool): Whether to apply a Sobel filter on images. Default: False.
-        neck (nn.Module): Module of deep features to compact feature vectors.
-        head (nn.Module): Module of loss functions.
-        memory_bank (nn.Module): Module of memory banks.
+        neck (dict): Config dict for module of deep features to compact feature vectors.
+            Default: None.
+        head (dict): Config dict for module of loss functions. Default: None.
+        memory_bank (dict): Module of memory banks. Default: None.
         pretrained (str, optional): Path to pre-trained weights. Default: None.
     """
 

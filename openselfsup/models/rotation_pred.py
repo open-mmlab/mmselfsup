@@ -15,8 +15,8 @@ class RotationPred(nn.Module):
     by Predicting Image Rotations (https://arxiv.org/abs/1803.07728)".
 
     Args:
-        backbone (nn.Module): Module of backbone ConvNet.
-        head (nn.Module): Module of loss functions.
+        backbone (dict): Config dict for module of backbone ConvNet.
+        head (dict): Config dict for module of loss functions. Default: None.
         pretrained (str, optional): Path to pre-trained weights. Default: None.
     """
 
