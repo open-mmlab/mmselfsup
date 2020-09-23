@@ -14,9 +14,9 @@ class Classification(nn.Module):
     """Simple image classification.
 
     Args:
-        backbone (nn.Module): Module of backbone ConvNet.
+        backbone (dict): Config dict for module of backbone ConvNet.
         with_sobel (bool): Whether to apply a Sobel filter on images. Default: False.
-        head (nn.Module): Module of loss functions.
+        head (dict): Config dict for module of loss functions. Default: None.
         pretrained (str, optional): Path to pre-trained weights. Default: None.
     """
 

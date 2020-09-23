@@ -15,9 +15,10 @@ class BYOL(nn.Module):
     Self-Supervised Learning (https://arxiv.org/abs/2006.07733)".
 
     Args:
-        backbone (nn.Module): Module of backbone ConvNet.
-        neck (nn.Module): Module of deep features to compact feature vectors.
-        head (nn.Module): Module of loss functions.
+        backbone (dict): Config dict for module of backbone ConvNet.
+        neck (dict): Config dict for module of deep features to compact feature vectors.
+            Default: None.
+        head (dict): Config dict for module of loss functions. Default: None.
         pretrained (str, optional): Path to pre-trained weights. Default: None.
         base_momentum (float): The base momentum coefficient for the target network.
             Default: 0.996.

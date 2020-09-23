@@ -17,9 +17,10 @@ class MOCO(nn.Module):
     "https://github.com/facebookresearch/moco/blob/master/moco/builder.py".
 
     Args:
-        backbone (nn.Module): Module of backbone ConvNet.
-        neck (nn.Module): Module of deep features to compact feature vectors.
-        head (nn.Module): Module of loss functions.
+        backbone (dict): Config dict for module of backbone ConvNet.
+        neck (dict): Config dict for module of deep features to compact feature vectors.
+            Default: None.
+        head (dict): Config dict for module of loss functions. Default: None.
         pretrained (str, optional): Path to pre-trained weights. Default: None.
         queue_len (int): Number of negative keys maintained in the queue.
             Default: 65536.
