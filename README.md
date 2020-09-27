@@ -2,6 +2,8 @@
 # OpenSelfSup
 
 **News**
+* 'GaussianBlur' is replaced from Opencv to PIL, and MoCo v2 training speed doubles!    
+(time/iter 0.35s-->0.16s, SimCLR and BYOL are also affected.)
 * OpenSelfSup now supports [Mixed Precision Training (apex AMP)](https://github.com/NVIDIA/apex)!
 * A bug of MoCo v2 has been fixed and now the results are reproducible.
 * OpenSelfSup now supports [BYOL](https://arxiv.org/pdf/2006.07733.pdf)!
