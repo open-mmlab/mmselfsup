@@ -96,4 +96,4 @@ fair_self_supervision_benchmark](https://github.com/facebookresearch/fair_self_s
 
 ## Contact
 
-This repo is currently maintained by Xiaohang Zhan ([@XiaohangZhan](http://github.com/XiaohangZhan)) and Jiahao Xie ([@Jiahao000](https://github.com/Jiahao000)).
+This repo is currently maintained by Xiaohang Zhan ([@XiaohangZhan](http://github.com/XiaohangZhan)), Jiahao Xie ([@Jiahao000](https://github.com/Jiahao000)) and Enze Xie ([xieenze](https://github.com/xieenze)).
