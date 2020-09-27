@@ -47,8 +47,7 @@ train_pipeline = [
             dict(
                 type='GaussianBlur',
                 sigma_min=0.1,
-                sigma_max=2.0,
-                kernel_size=23)
+                sigma_max=2.0)
         ],
         p=0.5),
     dict(type='ToTensor'),

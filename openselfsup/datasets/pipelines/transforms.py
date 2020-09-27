@@ -81,10 +81,9 @@ class Lighting(object):
 class GaussianBlur(object):
     """Gaussian blur augmentation in SimCLR https://arxiv.org/abs/2002.05709."""
 
-    def __init__(self, sigma_min, sigma_max, kernel_size):
+    def __init__(self, sigma_min, sigma_max):
         self.sigma_min = sigma_min
         self.sigma_max = sigma_max
-        self.kernel_size = kernel_size
 
     def __call__(self, img):
         sigma = np.random.uniform(self.sigma_min, self.sigma_max)
