@@ -1,7 +1,8 @@
 import cv2
 import inspect
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageFilter
+
 
 import torch
 from torchvision import transforms as _transforms
@@ -87,9 +88,8 @@ class GaussianBlur(object):
 
     def __call__(self, img):
         sigma = np.random.uniform(self.sigma_min, self.sigma_max)
-        img = cv2.GaussianBlur(
-            np.array(img), (self.kernel_size, self.kernel_size), sigma)
-        return Image.fromarray(img.astype(np.uint8))
+        img = img.filter(ImageFilter.GaussianBlur(radius=sigma))
+        return img
 
     def __repr__(self):
         repr_str = self.__class__.__name__
