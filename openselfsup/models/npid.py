@@ -15,10 +15,11 @@ class NPID(nn.Module):
     Instance Discrimination (https://arxiv.org/abs/1805.01978)".
 
     Args:
-        backbone (nn.Module): Module of backbone ConvNet.
-        neck (nn.Module): Module of deep features to compact feature vectors.
-        head (nn.Module): Module of loss functions.
-        memory_bank (nn.Module): Module of memory banks.
+        backbone (dict): Config dict for module of backbone ConvNet.
+        neck (dict): Config dict for module of deep features to compact feature vectors.
+            Default: None.
+        head (dict): Config dict for module of loss functions. Default: None.
+        memory_bank (dict): Config dict for module of memory banks. Default: None.
         neg_num (int): Number of negative samples for each image. Default: 65536.
         ensure_neg (bool): If False, there is a small probability
             that negative samples contain positive ones. Default: False.

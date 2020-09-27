@@ -15,9 +15,10 @@ class RelativeLoc(nn.Module):
     by Context Prediction (https://arxiv.org/abs/1505.05192)".
 
     Args:
-        backbone (nn.Module): Module of backbone ConvNet.
-        neck (nn.Module): Module of deep features to compact feature vectors.
-        head (nn.Module): Module of loss functions.
+        backbone (dict): Config dict for module of backbone ConvNet.
+        neck (dict): Config dict for module of deep features to compact feature vectors.
+            Default: None.
+        head (dict): Config dict for module of loss functions. Default: None.
         pretrained (str, optional): Path to pre-trained weights. Default: None.
     """
 
