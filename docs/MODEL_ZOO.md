@@ -49,6 +49,7 @@
 * For DeepCluster, use the corresponding one with `_sobel`.
 * ImageNet (Multi) evaluates features in around 9k dimensions from different layers. Top-1 result of the last epoch is reported.
 * ImageNet (Last) evaluates the last feature after global average pooling, e.g., 2048 dimensions for resnet50. The best top-1 result among all epochs is reported.
+* Usually, we report the best result from ImageNet (Multi) and ImageNet (Last) to ensure fairness, since different methods achieve their best performance on different layers.
 
 <table><thead><tr><th rowspan="2">Method</th><th rowspan="2">Config</th><th rowspan="2">Remarks</th><th colspan="5">ImageNet (Multi)</th><th>ImageNet (Last)</th></tr>
 <tr><td>feat1</td><td>feat2</td><td>feat3</td><td>feat4</td><td>feat5</td><td>avgpool</td></tr></thead><tbody>
