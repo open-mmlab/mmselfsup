@@ -1,5 +1,8 @@
 # Model Zoo
 
+OpenSelfSup needs your contribution!
+Since we don't have sufficient GPUs to run these large-scale experiments, your contributions, including parameter studies, reproducing of results, implementing new methods, etc, are essential to make OpenSelfSup better. Your contribution will be recorded and recognized, top contributors will be included in the author list of OpenSelfSup!
+
 ## Pre-trained model download links and speed test.
 **Note**
 * The testing GPUs are NVIDIA Tesla V100.
