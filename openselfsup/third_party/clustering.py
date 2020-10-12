@@ -5,6 +5,7 @@ import time
 import numpy as np
 import faiss
 import torch
+from scipy.sparse import csr_matrix
 
 __all__ = ['Kmeans', 'PIC']
 
