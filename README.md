@@ -68,6 +68,8 @@ Below is the relations among Unsupervised Learning, Self-Supervised Learning and
 
 Please refer to [CHANGELOG.md](docs/CHANGELOG.md) for details and release history.
 
+[2020-10-14] `OpenSelfSup` v0.3.0 is released with some bugs fixed and support of new features.
+
 [2020-06-26] `OpenSelfSup` v0.2.0 is released with benchmark results and support of new features.
 
 [2020-06-16] `OpenSelfSup` v0.1.0 is released.
