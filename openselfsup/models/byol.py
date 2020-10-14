@@ -70,11 +70,7 @@ class BYOL(nn.Module):
             param_tgt.data = param_tgt.data * self.momentum + \
                              param_ol.data * (1. - self.momentum)
 
-    @torch.no_grad()
-    def momentum_update(self):
-        self._momentum_update()
-
-    def forward_train(self, img, **kwargs):
+    def forward_train(self, img, weight=None, **kwargs):
         """Forward computation during training.
 
         Args:
@@ -95,10 +91,13 @@ class BYOL(nn.Module):
             proj_target_v1 = self.target_net(img_v1)[0].clone().detach()
             proj_target_v2 = self.target_net(img_v2)[0].clone().detach()
 
-        loss = self.head(proj_online_v1, proj_target_v2)['loss'] + \
-               self.head(proj_online_v2, proj_target_v1)['loss']
-        self._momentum_update()
+        loss = self.head(proj_online_v1, proj_target_v2, weight)['loss'] + \
+               self.head(proj_online_v2, proj_target_v1, weight)['loss']
         return dict(loss=loss)
+
+    @torch.no_grad()
+    def momentum_update(self):
+        self._momentum_update()
 
     def forward_test(self, img, **kwargs):
         pass
