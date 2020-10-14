@@ -70,6 +70,10 @@ class BYOL(nn.Module):
             param_tgt.data = param_tgt.data * self.momentum + \
                              param_ol.data * (1. - self.momentum)
 
+    @torch.no_grad()
+    def momentum_update(self):
+        self._momentum_update()
+
     def forward_train(self, img, **kwargs):
         """Forward computation during training.
 
