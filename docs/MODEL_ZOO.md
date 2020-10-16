@@ -130,7 +130,7 @@ Since we don't have sufficient GPUs to run these large-scale experiments, your c
 <tr><td><a href="https://arxiv.org/abs/1911.05722" target="_blank" rel="noopener noreferrer">MoCo</a></td><td>selfsup/moco/r50_v1.py</td><td>default</td><td>r50_lr0_01_head100.py</td><td>60.08</td><td>84.02</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>r50_lr0_01_head100.py</td><td>61.80</td><td>85.11</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2002.05709" target="_blank" rel="noopener noreferrer">SimCLR</a></td><td>selfsup/simclr/r50_bs256_ep200.py</td><td>default</td><td>r50_lr0_01_head100.py</td><td>58.46</td><td>82.60</td></tr>
-<tr><td></td><td>selfsup/simclr/r50_bs256_ep200_mocov2_neck.py</td><td>-&gt; MoCo v2 neck</td><td></td><td>58.38</td><td>82.53</td></tr>
+<tr><td></td><td>selfsup/simclr/r50_bs256_ep200_mocov2_neck.py</td><td>-&gt; MoCo v2 neck</td><td>r50_lr0_01_head100.py</td><td>58.38</td><td>82.53</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs4096_ep200.py</td><td>default</td><td>r50_lr0_01_head100.py</td><td>65.94</td><td>87.81</td></tr>
 </tbody></table>
 
