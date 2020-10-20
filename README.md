@@ -68,6 +68,8 @@ Below is the relations among Unsupervised Learning, Self-Supervised Learning and
 
 Please refer to [CHANGELOG.md](docs/CHANGELOG.md) for details and release history.
 
+[2020-10-14] `OpenSelfSup` v0.3.0 is released with some bugs fixed and support of new features.
+
 [2020-06-26] `OpenSelfSup` v0.2.0 is released with benchmark results and support of new features.
 
 [2020-06-16] `OpenSelfSup` v0.1.0 is released.
@@ -95,6 +97,10 @@ This project is released under the [Apache 2.0 license](LICENSE).
 - The SVM benchmark borrows the code from [
 fair_self_supervision_benchmark](https://github.com/facebookresearch/fair_self_supervision_benchmark).
 - `openselfsup/third_party/clustering.py` is borrowed from [deepcluster](https://github.com/facebookresearch/deepcluster/blob/master/clustering.py).
+
+## Contributors
+
+We encourage researchers interested in Self-Supervised Learning to contribute to OpenSelfSup. Your contributions, including implementing or transferring new methods to OpenSelfSup, performing experiments, reproducing of results, parameter studies, etc, will be recorded in [MODEL_ZOO.md](docs/MODEL_ZOO.md). For now, the contributors include: Xiaohang Zhan ([@XiaohangZhan](http://github.com/XiaohangZhan)), Jiahao Xie ([@Jiahao000](https://github.com/Jiahao000)), Enze Xie ([@xieenze](https://github.com/xieenze)).
 
 ## Contact
 
