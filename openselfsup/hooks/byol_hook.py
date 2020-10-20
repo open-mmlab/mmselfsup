@@ -40,4 +40,3 @@ class BYOLHook(Hook):
                 runner.model.module.momentum_update()
             else:
                 runner.model.momentum_update()
-                
