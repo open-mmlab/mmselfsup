@@ -231,6 +231,89 @@ class NonLinearNeckV2(nn.Module):
 
 
 @NECKS.register_module
+class NonLinearNeckBYOL(nn.Module):
+    """BYOL non-linear neck using sync-bn.
+
+    Structure: fc(no_bias)-bn-[relu-fc].
+        The substructures in [] can be repeated. For the BYOL default setting,
+        the repeat time is 1.
+    Since SyncBatchNorm in pytorch<1.4.0 does not support 2D input, the input is
+        expanded to 4D with shape: (N,C,1,1). Not sure if this workaround
+        has no bugs. See the pull request here:
+        https://github.com/pytorch/pytorch/pull/29626.
+
+    Args:
+        num_layers (int): Number of fc layers, it is 2 in the BYOL default setting.
+    """
+
+    def __init__(self,
+                 in_channels,
+                 hid_channels,
+                 out_channels,
+                 num_layers=2,
+                 sync_bn=True,
+                 with_bias=True,
+                 with_last_bn=True,
+                 with_avg_pool=True):
+        super(NonLinearNeckBYOL, self).__init__()
+        self.sync_bn = sync_bn
+        self.with_last_bn = with_last_bn
+        self.with_avg_pool = with_avg_pool
+        if with_avg_pool:
+            self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
+
+        if version.parse(torch.__version__) < version.parse("1.4.0"):
+            self.expand_for_syncbn = True
+        else:
+            self.expand_for_syncbn = False
+
+        self.relu = nn.ReLU(inplace=True)
+        self.fc0 = nn.Linear(in_channels, hid_channels, bias=with_bias)
+        if sync_bn:
+            _, self.bn0 = build_norm_layer(
+                dict(type='SyncBN'), hid_channels)
+        else:
+            self.bn0 = nn.BatchNorm1d(hid_channels)
+
+        self.fc_names = []
+        for i in range(1, num_layers):
+            this_channels = out_channels if i == num_layers - 1 \
+                else hid_channels
+            self.add_module(
+                "fc{}".format(i),
+                nn.Linear(hid_channels, this_channels, bias=with_bias))
+            self.fc_names.append("fc{}".format(i))
+
+    def init_weights(self, init_linear='normal'):
+        _init_weights(self, init_linear)
+
+    def _forward_syncbn(self, module, x):
+        assert x.dim() == 2
+        if self.expand_for_syncbn:
+            x = module(x.unsqueeze(-1).unsqueeze(-1)).squeeze(-1).squeeze(-1)
+        else:
+            x = module(x)
+        return x
+
+    def forward(self, x):
+        assert len(x) == 1
+        x = x[0]
+        if self.with_avg_pool:
+            x = self.avgpool(x)
+        x = x.view(x.size(0), -1)
+        x = self.fc0(x)
+        if self.sync_bn:
+            x = self._forward_syncbn(self.bn0, x)
+        else:
+            x = self.bn0(x)
+        for fc_name in self.fc_names:
+            fc = getattr(self, fc_name)
+            x = self.relu(x)
+            x = fc(x)
+        return [x]
+
+
+@NECKS.register_module
 class NonLinearNeckSimCLR(nn.Module):
     """SimCLR non-linear neck.
 

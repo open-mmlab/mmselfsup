@@ -1,5 +1,5 @@
 from mmcv.runner import OptimizerHook
-from mmcv.parallel import is_module_wrapper
+
 try:
     import apex
 except:
@@ -30,10 +30,3 @@ class DistOptimizerHook(OptimizerHook):
                 self.clip_grads(runner.model.parameters())
             runner.optimizer.step()
             runner.optimizer.zero_grad()
-            try:
-                if is_module_wrapper(runner.model):
-                    runner.model.module.momentum_update()
-                else:
-                    runner.model.momentum_update()
-            except:
-                pass
