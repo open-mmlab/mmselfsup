@@ -234,7 +234,7 @@ class NonLinearNeckV2(nn.Module):
 class NonLinearNeckBYOL(nn.Module):
     """BYOL non-linear neck using sync-bn.
 
-    Structure: fc(no_bias)-bn-[relu-fc].
+    Structure: fc-bn-[relu-fc].
         The substructures in [] can be repeated. For the BYOL default setting,
         the repeat time is 1.
     Since SyncBatchNorm in pytorch<1.4.0 does not support 2D input, the input is
