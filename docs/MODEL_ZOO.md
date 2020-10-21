@@ -26,7 +26,6 @@ Since we don't have sufficient GPUs to run these large-scale experiments, your c
 <tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a>(<a href="https://github.com/XiaohangZhan">@scnuhealthy</a>)</td><td>selfsup/byol/r50_bs256_accumulate16_ep300.py</td><td>default</td><td><a href="https://drive.google.com/file/d/12Zu9r3fE8qKF4OW6WQXa5Ec6VuA2m3j7/view?usp=sharing" target="_blank" rel="noopener noreferrer">byol_r50_bs256_accmulate16_ep300-5df46722.pth</a></td><td>256</td><td>300</td><td></td></tr>
 </tbody></table>
 
-
 ## Benchmarks
 
 ### VOC07 SVM & SVM Low-shot
@@ -73,7 +72,6 @@ Since we don't have sufficient GPUs to run these large-scale experiments, your c
 <tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs4096_ep200.py</td><td>default</td><td>16.70</td><td>34.22</td><td>46.61</td><td>60.78</td><td>69.14</td><td>67.10</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs256_accumulate16_ep300.py</td><td>default</td><td>14.07</td><td>34.44</td><td>47.22</td><td>63.08</td><td>72.35</td><td></td></tr>
 </tbody></table>
-
 
 ### Places205 Linear Classification
 
