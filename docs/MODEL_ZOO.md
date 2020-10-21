@@ -23,7 +23,7 @@ Since we don't have sufficient GPUs to run these large-scale experiments, your c
 <tr><td><a href="https://arxiv.org/abs/2002.05709" target="_blank" rel="noopener noreferrer">SimCLR</a> (<a href="https://github.com/XiaohangZhan">@XiaohangZhan</a>)</td><td>selfsup/simclr/r50_bs256_ep200.py</td><td>default</td><td><a href="https://drive.google.com/file/d/1aZ43nSdivdNxHbM9DKVoZYVhZ8TNnmPp/view?usp=sharing" target="_blank" rel="noopener noreferrer">simclr_r50_bs256_ep200-4577e9a6.pth</a></td><td>256</td><td>200</td><td>32min13s</td></tr>
 <tr><td></td><td>selfsup/simclr/r50_bs256_ep200_mocov2_neck.py</td><td>-&gt; MoCo v2 neck</td><td><a href="https://drive.google.com/file/d/1AXpSKqgWfnj6jCgN65BXSTCKFfuIVELa/view?usp=sharing" target="_blank" rel="noopener noreferrer">simclr_r50_bs256_ep200_mocov2_neck-0d6e5ff2.pth</a></td><td></td><td></td><td></td></tr>
 <tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a> (<a href="https://github.com/XiaohangZhan">@XiaohangZhan</a>)</td><td>selfsup/byol/r50_bs4096_ep200.py (<a href="https://github.com/xieenze">@xieenze</a>)</td><td>default</td><td><a href="https://drive.google.com/file/d/1Whj3j5E3ShQj_VufjrJSzWiq1xcZZCXN/view?usp=sharing" target="_blank" rel="noopener noreferrer">byol_r50-e3b0c442.pth</a></td><td>4096 (256 for speed test)</td><td>200</td><td>30min57s</td></tr>
-<tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a>(<a href="https://github.com/XiaohangZhan">@scnuhealthy</a>)</td><td>selfsup/byol/r50_bs256_accumulate16_ep300.py</td><td>default</td><td><a href="https://drive.google.com/file/d/12Zu9r3fE8qKF4OW6WQXa5Ec6VuA2m3j7/view?usp=sharing" target="_blank" rel="noopener noreferrer">byol_r50_bs256_accmulate16_ep300-5df46722.pth</a></td><td>256</td><td>300</td><td></td></tr>
+<tr><td></td><td>selfsup/byol/r50_bs256_accumulate16_ep300.py (<a href="https://github.com/scnuhealthy">@scnuhealthy</a>)</td><td>default</td><td><a href="https://drive.google.com/file/d/12Zu9r3fE8qKF4OW6WQXa5Ec6VuA2m3j7/view?usp=sharing" target="_blank" rel="noopener noreferrer">byol_r50_bs256_accmulate16_ep300-5df46722.pth</a></td><td>256</td><td>300</td><td></td></tr>
 </tbody></table>
 
 ## Benchmarks
@@ -70,7 +70,7 @@ Since we don't have sufficient GPUs to run these large-scale experiments, your c
 <tr><td><a href="https://arxiv.org/abs/2002.05709" target="_blank" rel="noopener noreferrer">SimCLR</a></td><td>selfsup/simclr/r50_bs256_ep200.py</td><td>default</td><td>17.09</td><td>31.37</td><td>41.38</td><td>54.35</td><td>61.57</td><td>60.06</td></tr>
 <tr><td></td><td>selfsup/simclr/r50_bs256_ep200_mocov2_neck.py</td><td>-&gt; MoCo v2 neck</td><td>16.97</td><td>31.88</td><td>41.73</td><td>54.33</td><td>59.94</td><td>58.00</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs4096_ep200.py</td><td>default</td><td>16.70</td><td>34.22</td><td>46.61</td><td>60.78</td><td>69.14</td><td>67.10</td></tr>
-<tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs256_accumulate16_ep300.py</td><td>default</td><td>14.07</td><td>34.44</td><td>47.22</td><td>63.08</td><td>72.35</td><td></td></tr>
+<tr><td></td><td>selfsup/byol/r50_bs256_accumulate16_ep300.py</td><td>default</td><td>14.07</td><td>34.44</td><td>47.22</td><td>63.08</td><td>72.35</td><td></td></tr>
 </tbody></table>
 
 ### Places205 Linear Classification
