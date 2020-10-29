@@ -12,8 +12,10 @@ from openselfsup.utils import build_from_cfg
 from ..registry import PIPELINES
 
 # register all existing transforms in torchvision
+_EXCLUDED_TRANSFORMS = ['GaussianBlur']
 for m in inspect.getmembers(_transforms, inspect.isclass):
-    PIPELINES.register_module(m[1])
+    if m[0] not in _EXCLUDED_TRANSFORMS:
+        PIPELINES.register_module(m[1])
 
 
 @PIPELINES.register_module
