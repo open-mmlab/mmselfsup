@@ -1,0 +1,17 @@
+_BASE_: "Base-RCNN-FPN.yaml"
+MODEL:
+  MASK_ON: True
+  WEIGHTS: "detectron2://ImageNetPretrained/MSRA/R-50.pkl"
+  BACKBONE:
+    FREEZE_AT: 0
+  RESNETS:
+    DEPTH: 50
+    NORM: "SyncBN"
+  FPN:
+    NORM: "SyncBN"
+TEST:
+  PRECISE_BN:
+    ENABLED: True
+SOLVER:
+  STEPS: (60000, 80000)
+  MAX_ITER: 90000
