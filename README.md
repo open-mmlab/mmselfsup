@@ -2,6 +2,7 @@
 # OpenSelfSup
 
 **News**
+* Downstream tasks now support more methods(Mask RCNN-FPN, RetinaNet, Keypoints RCNN) and more datasets(Cityscapes).
 * 'GaussianBlur' is replaced from Opencv to PIL, and MoCo v2 training speed doubles!    
 (time/iter 0.35s-->0.16s, SimCLR and BYOL are also affected.)
 * OpenSelfSup now supports [Mixed Precision Training (apex AMP)](https://github.com/NVIDIA/apex)!
