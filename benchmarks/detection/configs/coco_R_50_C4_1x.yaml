@@ -1,0 +1,4 @@
+_BASE_: "coco_R_50_C4_2x.yaml"
+SOLVER:
+  STEPS: (60000, 80000)
+  MAX_ITER: 90000
