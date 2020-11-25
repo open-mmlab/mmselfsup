@@ -42,7 +42,7 @@ class Cifar100(object):
         assert split in ['train', 'test']
         try:
             self.cifar = CIFAR100(
-                root=root, train=spilt == 'train', download=False)
+                root=root, train=split == 'train', download=False)
         except:
             raise Exception("Please download CIFAR10 manually, \
                   in case of downloading the dataset parallelly \

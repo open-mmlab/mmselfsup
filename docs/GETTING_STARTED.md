@@ -38,6 +38,12 @@ An example:
 SRUN_ARGS="-w xx.xx.xx.xx" bash tools/srun_train.sh Dummy configs/selfsup/odc/r50_v1.py 8 --resume_from work_dirs/selfsup/odc/r50_v1/epoch_100.pth
 ```
 
+### Train with multiple machines
+
+If you launch with multiple machines simply connected with ethernet, you have to modify `tools/dist_train.sh` or create a new script, please refer to PyTorch [Launch utility](https://pytorch.org/docs/stable/distributed.html#launch-utility). Usually it is slow if you do not have high speed networking like InfiniBand.
+
+If you launch with slurm, the command is the same as that on single machine described above. You only need to change ${GPUS}, e.g., to 16 for two 8-GPU machines.
+
 ### Launch multiple jobs on a single machine
 
 If you launch multiple jobs on a single machine, e.g., 2 jobs of 4-GPU training on a machine with 8 GPUs,

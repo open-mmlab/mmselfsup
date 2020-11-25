@@ -24,5 +24,5 @@ class ContrastiveDataset(BaseDataset):
         img_cat = torch.cat((img1.unsqueeze(0), img2.unsqueeze(0)), dim=0)
         return dict(img=img_cat)
 
-    def evaluate(self, scores, keyword, logger=None):
+    def evaluate(self, scores, keyword, logger=None, **kwargs):
         raise NotImplemented

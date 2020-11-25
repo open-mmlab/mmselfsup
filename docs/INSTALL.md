@@ -14,7 +14,7 @@ We have tested the following versions of OS and softwares:
 
 - OS: Ubuntu 16.04/18.04 and CentOS 7.2
 - CUDA: 9.0/9.2/10.0/10.1
-- NCCL: 2.1.15/2.2.13/2.3.7/2.4.2
+- NCCL: 2.1.15/2.2.13/2.3.7/2.4.2 (PyTorch-1.1 w/ NCCL-2.4.2 has a deadlock bug, see [here](https://github.com/open-mmlab/OpenSelfSup/issues/6))
 - GCC(G++): 4.9/5.3/5.4/7.3
 
 ### Install openselfsup

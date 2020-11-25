@@ -1,5 +1,21 @@
 ## Changelog
 
+### v0.3.0 (14/10/2020)
+
+#### Highlight
+* Support Mixed Precision Training
+* Improvement of GaussianBlur doubles the training speed
+* More benchmarking results
+
+#### Bug Fixes
+* Fix bugs in moco v2, now the results are reproducible.
+* Fix bugs in byol.
+
+#### New Features
+* Mixed Precision Training
+* Improvement of GaussianBlur doubles the training speed of MoCo V2, SimCLR, BYOL
+* More benchmarking results, including Places, VOC, COCO
+
 ### v0.2.0 (26/6/2020)
 
 #### Highlights
