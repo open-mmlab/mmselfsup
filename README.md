@@ -91,19 +91,6 @@ Please refer to [MODEL_ZOO.md](docs/MODEL_ZOO.md) for for a comprehensive set of
 
 This project is released under the [Apache 2.0 license](LICENSE).
 
-## Citation
-
-If you use this toolbox in your research, please consider cite:
-
-```
-@inproceedings{zhan2020online,
-  title={Online Deep Clustering for Unsupervised Representation Learning},
-  author={Zhan, Xiaohang and Xie, Jiahao and Liu, Ziwei and Ong, Yew-Soon and Loy, Chen Change},
-  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
-  pages={6688--6697},
-  year={2020}
-}
-```
 
 ## Acknowledgement
 
