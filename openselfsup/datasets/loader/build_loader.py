@@ -103,8 +103,8 @@ class PrefetchLoader:
     def __iter__(self):
         stream = torch.cuda.Stream()
         first = True
-        self.mean = torch.tensor([x * 255 for x in self._mean]).cuda().view(1, 1, 3, 1, 1)
-        self.std = torch.tensor([x * 255 for x in self._std]).cuda().view(1, 1, 3, 1, 1)
+        self.mean = torch.tensor([x * 255 for x in self._mean]).cuda().view(1, 3, 1, 1)
+        self.std = torch.tensor([x * 255 for x in self._std]).cuda().view(1, 3, 1, 1)
 
         for next_input_dict in self.loader:
             with torch.cuda.stream(stream):

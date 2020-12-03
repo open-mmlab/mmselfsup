@@ -94,6 +94,7 @@ prefetch = True
 pip uninstall pillow
 pip install Pillow-SIMD
 ```
+We test it using MoCoV2 using a total batch size of 256 on Tesla V100. The training time per step is decreased to 0.17s from 0.23s.
 ## Benchmarks
 
 We provide several standard benchmarks to evaluate representation learning. The config files or scripts for evaluation mentioned below are NOT recommended to be changed if you want to use this repo in your publications. We hope that all methods are under a fair comparison.
