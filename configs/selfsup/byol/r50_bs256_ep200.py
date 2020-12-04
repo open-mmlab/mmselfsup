@@ -57,9 +57,11 @@ train_pipeline = [
         p=1.),
     dict(type='RandomAppliedTrans',
          transforms=[dict(type='Solarization')], p=0.),
-    dict(type='ToTensor'),
-    dict(type='Normalize', **img_norm_cfg),
 ]
+# prefetch
+prefetch = False
+if not prefetch:
+    train_pipeline.extend([dict(type='ToTensor'), dict(type='Normalize', **img_norm_cfg)])
 train_pipeline1 = copy.deepcopy(train_pipeline)
 train_pipeline2 = copy.deepcopy(train_pipeline)
 train_pipeline2[4]['p'] = 0.1 # gaussian blur
@@ -74,7 +76,9 @@ data = dict(
             list_file=data_train_list, root=data_train_root,
             **data_source_cfg),
         pipeline1=train_pipeline1,
-        pipeline2=train_pipeline2))
+        pipeline2=train_pipeline2,
+        prefetch=prefetch,
+    ))
 # additional hooks
 custom_hooks = [
     dict(type='BYOLHook', end_momentum=1.)

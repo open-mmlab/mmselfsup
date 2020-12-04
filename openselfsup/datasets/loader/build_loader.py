@@ -1,5 +1,6 @@
 import platform
 import random
+import torch
 from functools import partial
 
 import numpy as np
@@ -63,6 +64,12 @@ def build_dataloader(dataset,
         batch_size = num_gpus * imgs_per_gpu
         num_workers = num_gpus * workers_per_gpu
 
+    if kwargs.get('prefetch') is not None:
+        prefetch = kwargs.pop('prefetch')
+        img_norm_cfg = kwargs.pop('img_norm_cfg')
+    else:
+        prefetch = False
+
     data_loader = DataLoader(
         dataset,
         batch_size=batch_size,
@@ -73,9 +80,54 @@ def build_dataloader(dataset,
         worker_init_fn=worker_init_fn if seed is not None else None,
         **kwargs)
 
+    if prefetch:
+        data_loader = PrefetchLoader(data_loader, img_norm_cfg['mean'], img_norm_cfg['std'])
+
     return data_loader
 
 
 def worker_init_fn(seed):
     np.random.seed(seed)
     random.seed(seed)
+
+
+class PrefetchLoader:
+    """
+    A data loader wrapper for prefetching data
+    """
+    def __init__(self, loader, mean, std):
+        self.loader = loader
+        self._mean = mean
+        self._std = std
+
+    def __iter__(self):
+        stream = torch.cuda.Stream()
+        first = True
+        self.mean = torch.tensor([x * 255 for x in self._mean]).cuda().view(1, 3, 1, 1)
+        self.std = torch.tensor([x * 255 for x in self._std]).cuda().view(1, 3, 1, 1)
+
+        for next_input_dict in self.loader:
+            with torch.cuda.stream(stream):
+                data = next_input_dict['img'].cuda(non_blocking=True)
+                next_input_dict['img'] = data.float().sub_(self.mean).div_(self.std)
+
+            if not first:
+                yield input
+            else:
+                first = False
+
+            torch.cuda.current_stream().wait_stream(stream)
+            input = next_input_dict
+
+        yield input
+
+    def __len__(self):
+        return len(self.loader)
+
+    @property
+    def sampler(self):
+        return self.loader.sampler
+
+    @property
+    def dataset(self):
+        return self.loader.dataset

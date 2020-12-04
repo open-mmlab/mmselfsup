@@ -50,9 +50,13 @@ train_pipeline = [
                 sigma_max=2.0)
         ],
         p=0.5),
-    dict(type='ToTensor'),
-    dict(type='Normalize', **img_norm_cfg),
 ]
+
+# prefetch
+prefetch = False
+if not prefetch:
+    train_pipeline.extend([dict(type='ToTensor'), dict(type='Normalize', **img_norm_cfg)])
+
 data = dict(
     imgs_per_gpu=64,  # total 64*8
     workers_per_gpu=4,
@@ -61,7 +65,9 @@ data = dict(
         data_source=dict(
             list_file=data_train_list, root=data_train_root,
             **data_source_cfg),
-        pipeline=train_pipeline))
+        pipeline=train_pipeline,
+        prefetch=prefetch,
+    ))
 # optimizer
 optimizer = dict(type='LARS', lr=0.6, weight_decay=0.000001, momentum=0.9,
                  paramwise_options={
