@@ -42,7 +42,10 @@ class ValidateHook(Hook):
             eval_kwargs['imgs_per_gpu'],
             eval_kwargs['workers_per_gpu'],
             dist=dist_mode,
-            shuffle=False)
+            shuffle=False,
+            prefetch=eval_kwargs.get('prefetch', False),
+            img_norm_cfg=eval_kwargs.get('img_norm_cfg', dict()),
+        )
         self.dist_mode = dist_mode
         self.initial = initial
         self.interval = interval

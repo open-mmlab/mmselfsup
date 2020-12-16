@@ -92,7 +92,7 @@ prefetch = True
 3 . Replacing  Pillow with Pillow-SIMD (https://github.com/uploadcare/pillow-simd.git) to make use of SIMD command sets with modern CPU.
  ```shell
 pip uninstall pillow
-pip install Pillow-SIMD
+pip install Pillow-SIMD or CC="cc -mavx2" pip install -U --force-reinstall pillow-simd if AVX2 is available.
 ```
 We test it using MoCoV2 using a total batch size of 256 on Tesla V100. The training time per step is decreased to 0.17s from 0.23s.
 ## Benchmarks
