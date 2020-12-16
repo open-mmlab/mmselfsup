@@ -102,7 +102,7 @@ fair_self_supervision_benchmark](https://github.com/facebookresearch/fair_self_s
 
 ## Contributors
 
-We encourage researchers interested in Self-Supervised Learning to contribute to OpenSelfSup. Your contributions, including implementing or transferring new methods to OpenSelfSup, performing experiments, reproducing of results, parameter studies, etc, will be recorded in [MODEL_ZOO.md](docs/MODEL_ZOO.md). For now, the contributors include: Xiaohang Zhan ([@XiaohangZhan](http://github.com/XiaohangZhan)), Jiahao Xie ([@Jiahao000](https://github.com/Jiahao000)), Enze Xie ([@xieenze](https://github.com/xieenze)), Zijian He ([@scnuhealthy](https://github.com/scnuhealthy)).
+We encourage researchers interested in Self-Supervised Learning to contribute to OpenSelfSup. Your contributions, including implementing or transferring new methods to OpenSelfSup, performing experiments, reproducing of results, parameter studies, etc, will be recorded in [MODEL_ZOO.md](docs/MODEL_ZOO.md). For now, the contributors include: Xiaohang Zhan ([@XiaohangZhan](http://github.com/XiaohangZhan)), Jiahao Xie ([@Jiahao000](https://github.com/Jiahao000)), Enze Xie ([@xieenze](https://github.com/xieenze)), Xiangxiang Chu ([@cxxgtxy](https://github.com/cxxgtxy)), Zijian He ([@scnuhealthy](https://github.com/scnuhealthy)).
 
 ## Contact
 
