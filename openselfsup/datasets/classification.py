@@ -4,6 +4,7 @@ from openselfsup.utils import print_log
 
 from .registry import DATASETS
 from .base import BaseDataset
+from .utils import to_numpy
 
 
 @DATASETS.register_module
@@ -11,12 +12,14 @@ class ClassificationDataset(BaseDataset):
     """Dataset for classification.
     """
 
-    def __init__(self, data_source, pipeline):
-        super(ClassificationDataset, self).__init__(data_source, pipeline)
+    def __init__(self, data_source, pipeline, prefetch=False):
+        super(ClassificationDataset, self).__init__(data_source, pipeline, prefetch)
 
     def __getitem__(self, idx):
         img, target = self.data_source.get_sample(idx)
         img = self.pipeline(img)
+        if self.prefetch:
+            img = torch.from_numpy(to_numpy(img))
         return dict(img=img, gt_label=target)
 
     def evaluate(self, scores, keyword, logger=None, topk=(1, 5)):

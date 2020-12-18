@@ -35,15 +35,16 @@ train_pipeline = [
     dict(type='CenterCrop', size=256),
     dict(type='RandomCrop', size=224),
     dict(type='RandomHorizontalFlip'),
-    dict(type='ToTensor'),
-    dict(type='Normalize', **img_norm_cfg),
 ]
 test_pipeline = [
     dict(type='Resize', size=256),
     dict(type='CenterCrop', size=224),
-    dict(type='ToTensor'),
-    dict(type='Normalize', **img_norm_cfg),
 ]
+# prefetch
+prefetch = False
+if not prefetch:
+    train_pipeline.extend([dict(type='ToTensor'), dict(type='Normalize', **img_norm_cfg)])
+    test_pipeline.extend([dict(type='ToTensor'), dict(type='Normalize', **img_norm_cfg)])
 data = dict(
     imgs_per_gpu=32,  # total 32x8=256
     workers_per_gpu=4,
@@ -52,12 +53,14 @@ data = dict(
         data_source=dict(
             list_file=data_train_list, root=data_train_root,
             **data_source_cfg),
-        pipeline=train_pipeline),
+        pipeline=train_pipeline,
+        prefetch=prefetch),
     val=dict(
         type=dataset_type,
         data_source=dict(
             list_file=data_test_list, root=data_test_root, **data_source_cfg),
-        pipeline=test_pipeline))
+        pipeline=test_pipeline,
+        prefetch=prefetch))
 # additional hooks
 custom_hooks = [
     dict(
@@ -67,6 +70,8 @@ custom_hooks = [
         interval=10,
         imgs_per_gpu=32,
         workers_per_gpu=4,
+        prefetch=prefetch,
+        img_norm_cfg=img_norm_cfg,
         eval_param=dict(topk=(1, )))
 ]
 # optimizer

@@ -81,7 +81,20 @@ An example:
 bash tools/dist_train.sh configs/selfsup/moco/r50_v1_fp16.py 8
 ```
 
+### Speeding Up IO (Optional)
+1 . Prefetching data helps to speeding up IO and make better use of CUDA stream parallelization. 
+If you want to use it, you can activate it in the config file (disabled by default).
+```python
+prefetch = True
+```
+2 . Costly operation ToTensor is reimplemented along with prefetch.
 
+3 . Replacing  Pillow with Pillow-SIMD (https://github.com/uploadcare/pillow-simd.git) to make use of SIMD command sets with modern CPU.
+ ```shell
+pip uninstall pillow
+pip install Pillow-SIMD or CC="cc -mavx2" pip install -U --force-reinstall pillow-simd if AVX2 is available.
+```
+We test it using MoCoV2 using a total batch size of 256 on Tesla V100. The training time per step is decreased to 0.17s from 0.23s.
 ## Benchmarks
 
 We provide several standard benchmarks to evaluate representation learning. The config files or scripts for evaluation mentioned below are NOT recommended to be changed if you want to use this repo in your publications. We hope that all methods are under a fair comparison.
