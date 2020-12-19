@@ -5,6 +5,7 @@ from mmcv.cnn import normal_init
 from ..registry import HEADS
 from .. import builder
 
+
 @HEADS.register_module
 class LatentPredictHead(nn.Module):
     """Head for contrastive learning.
@@ -65,4 +66,30 @@ class LatentClsHead(nn.Module):
         with torch.no_grad():
             label = torch.argmax(self.predictor(target), dim=1).detach()
         loss = self.criterion(pred, label)
+        return dict(loss=loss)
+
+
+@HEADS.register_module
+class SimSiamPredictHead(nn.Module):
+    def __init__(self, predictor, loss):
+        super().__init__()
+        self.predictor = builder.build_neck(predictor)
+        self.loss = builder.build_loss(loss)
+
+    def init_weights(self, init_linear='normal'):
+        self.predictor.init_weights(init_linear=init_linear)
+
+    def forward(self, z1, z2):
+        """Forward head.
+
+        Args:
+            z1 (Tensor): NxC input features.
+            z2 (Tensor): NxC target features.
+
+        Returns:
+            dict[str, Tensor]: A dictionary of loss components.
+        """
+
+        p1, p2 = self.predictor(z1)[0], self.predictor(z2)[0]
+        loss = self.loss(p1, z2[0]) / 2 + self.loss(p2, z1[0]) / 2
         return dict(loss=loss)
