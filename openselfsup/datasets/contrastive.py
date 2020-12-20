@@ -12,7 +12,7 @@ class ContrastiveDataset(BaseDataset):
     """
 
     def __init__(self, data_source, pipeline, prefetch=False):
-        data_source['has_labels'] = False
+        data_source['return_label'] = False
         super(ContrastiveDataset, self).__init__(data_source, pipeline, prefetch)
 
     def __getitem__(self, idx):
