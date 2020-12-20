@@ -10,11 +10,11 @@ class Cifar(metaclass=ABCMeta):
 
     CLASSES = None
 
-    def __init__(self, root, split, has_labels=True):
+    def __init__(self, root, split, return_label=True):
         assert split in ['train', 'test']
         self.root = root
         self.split = split
-        self.has_labels = has_labels
+        self.return_label = return_label
         self.cifar = None
         self.set_cifar()
         self.labels = self.cifar.targets
@@ -28,7 +28,7 @@ class Cifar(metaclass=ABCMeta):
 
     def get_sample(self, idx):
         img = Image.fromarray(self.cifar.data[idx])
-        if self.has_labels:
+        if self.return_label:
             target = self.labels[idx]  # img: HWC, RGB
             return img, target
         else:
@@ -43,8 +43,8 @@ class Cifar10(Cifar):
         'horse', 'ship', 'truck'
     ]
 
-    def __init__(self, root, split, has_labels=True):
-        super().__init__(root, split, has_labels)
+    def __init__(self, root, split, return_label=True):
+        super().__init__(root, split, return_label)
 
     def set_cifar(self):
         try:
@@ -59,8 +59,8 @@ class Cifar10(Cifar):
 @DATASOURCES.register_module
 class Cifar100(Cifar):
 
-    def __init__(self, root, split, has_labels=True):
-        super().__init__(root, split, has_labels)
+    def __init__(self, root, split, return_label=True):
+        super().__init__(root, split, return_label)
 
     def set_cifar(self):
         try:

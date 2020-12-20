@@ -8,14 +8,16 @@ from .utils import McLoader
 @DATASOURCES.register_module
 class ImageList(object):
 
-    def __init__(self, root, list_file, memcached=False, mclient_path=None):
+    def __init__(self, root, list_file, memcached=False, mclient_path=None, return_label=True):
         with open(list_file, 'r') as f:
             lines = f.readlines()
         self.has_labels = len(lines[0].split()) == 2
+        self.return_label = return_label
         if self.has_labels:
             self.fns, self.labels = zip(*[l.strip().split() for l in lines])
             self.labels = [int(l) for l in self.labels]
         else:
+            assert self.return_label is False
             self.fns = [l.strip() for l in lines]
         self.fns = [os.path.join(root, fn) for fn in self.fns]
         self.memcached = memcached
@@ -39,7 +41,7 @@ class ImageList(object):
         else:
             img = Image.open(self.fns[idx])
         img = img.convert('RGB')
-        if self.has_labels:
+        if self.has_labels and self.return_label:
             target = self.labels[idx]
             return img, target
         else:
