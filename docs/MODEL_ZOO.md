@@ -6,7 +6,6 @@ Since we don't have sufficient GPUs to run these large-scale experiments, your c
 ## Pre-trained model download links and speed test.
 **Note**
 * If not specifically indicated, the testing GPUs are NVIDIA Tesla V100.
-* Experiments with the same batch size are directly comparable in speed.
 * The table records the implementors who implemented the methods (either by themselves or refactoring from other repos), and the experimenters who performed experiments and reproduced the results. The experimenters should be responsible for the evaluation results on all the benchmarks, and the implementors should be responsible for the implementation as well as the results; If the experimenter is not indicated, an implementator is the experimenter by default.
 
 <table><thead><tr><th>Method (Implementator)</th><th>Config (Experimenter)</th><th>Remarks</th><th>Download link</th><th>Batch size</th><th>Epochs</th></tr></thead><tbody>
@@ -176,7 +175,7 @@ Since we don't have sufficient GPUs to run these large-scale experiments, your c
 <tr><td><a href="https://arxiv.org/abs/1803.07728" target="_blank" rel="noopener noreferrer">Rotation-Pred</a></td><td>selfsup/rotation_pred/r50.py</td><td>default</td><td>59.3</td><td>40.0</td><td>43.6</td><td>56.0</td><td>34.9</td><td>37.4</td></tr>
 <tr><td><a href="https://arxiv.org/abs/1805.01978" target="_blank" rel="noopener noreferrer">NPID</a></td><td>selfsup/npid/r50.py</td><td>default</td><td>59.0</td><td>39.4</td><td>42.8</td><td>55.9</td><td>34.5</td><td>36.6</td></tr>
 <tr><td><a href="https://arxiv.org/abs/1911.05722" target="_blank" rel="noopener noreferrer">MoCo</a></td><td>selfsup/moco/r50_v1.py</td><td>default</td><td>60.5</td><td>40.9</td><td>44.2</td><td>57.1</td><td>35.5</td><td>37.7</td></tr>
-<tr><td><a href="https://arxiv.org/abs/2003.04297">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>60.1</td><td>40.6</td><td>44.0</td><td>56.9</td><td>35.3</td><td>38.0</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2003.04297">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>60.6</td><td>41.0</td><td>44.5</td><td>57.2</td><td>35.6</td><td>38.0</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2002.05709">SimCLR</a></td><td>selfsup/simclr/r50_bs256_ep200.py</td><td>default</td><td>59.1</td><td>39.6</td><td>42.9</td><td>55.9</td><td>34.6</td><td>37.1</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2006.07733">BYOL</a></td><td>selfsup/byol/r50_bs4096_ep200.py</td><td>default</td><td>60.5</td><td>40.3</td><td>43.9</td><td>56.8</td><td>35.1</td><td>37.3</td></tr>
 </tbody></table>
