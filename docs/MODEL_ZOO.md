@@ -47,7 +47,7 @@ Since we don't have sufficient GPUs to run these large-scale experiments, your c
 <tr><td></td><td>selfsup/simclr/r50_bs256_ep200_mocov2_neck.py</td><td>-&gt; MoCo v2 neck</td><td>feat5</td><td>77.65</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs4096_ep200.py</td><td>default</td><td>feat5</td><td>85.10</td><td>44.48</td><td>52.09</td><td>62.88</td><td>70.87</td><td>76.18</td><td>79.45</td><td>81.88</td><td>83.08</td></tr>
 <tr><td></td><td>selfsup/byol/r50_bs256_accumulate16_ep300.py</td><td>default</td><td>feat5</td><td>86.58</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td></td><td>selfsup/byol/r50_bs2048_accumulate2_ep200.py</td><td>default</td><td>feat5</td><td>-</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td>selfsup/byol/r50_bs2048_accumulate2_ep200.py</td><td>default</td><td>feat5</td><td>85.86</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 
 </tbody></table>
 
