@@ -17,7 +17,7 @@ class ImageList(object):
             self.fns, self.labels = zip(*[l.strip().split() for l in lines])
             self.labels = [int(l) for l in self.labels]
         else:
-            assert self.return_label is False
+            # assert self.return_label is False
             self.fns = [l.strip() for l in lines]
         self.fns = [os.path.join(root, fn) for fn in self.fns]
         self.memcached = memcached
