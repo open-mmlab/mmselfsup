@@ -1,6 +1,5 @@
 import copy
 _base_ = '../../base.py'
-
 # model settings
 model = dict(
     type='BYOL',
