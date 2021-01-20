@@ -102,7 +102,6 @@ Since we don't have sufficient GPUs to run these large-scale experiments, your c
 <tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>21.88</td><td>35.75</td><td>43.65</td><td>49.99</td><td>52.57</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2002.05709" target="_blank" rel="noopener noreferrer">SimCLR</a></td><td>selfsup/simclr/r50_bs256_ep200.py</td><td>default</td><td>22.55</td><td>34.14</td><td>40.35</td><td>47.15</td><td>51.64</td></tr>
 <tr><td></td><td>selfsup/simclr/r50_bs256_ep200_mocov2_neck.py</td><td>-&gt; MoCo v2 neck</td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs4096_ep200.py</td><td>default</td><td>22.28</td><td>35.95</td><td>43.03</td><td>49.79</td><td>52.75</td></tr>
 </tbody></table>
 
 ### ImageNet Semi-Supervised Classification
@@ -126,7 +125,6 @@ Since we don't have sufficient GPUs to run these large-scale experiments, your c
 <tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>r50_lr0_01_head100.py</td><td>39.07</td><td>68.31</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2002.05709" target="_blank" rel="noopener noreferrer">SimCLR</a></td><td>selfsup/simclr/r50_bs256_ep200.py</td><td>default</td><td>r50_lr0_01_head100.py</td><td>36.09</td><td>64.50</td></tr>
 <tr><td></td><td>selfsup/simclr/r50_bs256_ep200_mocov2_neck.py</td><td>-&gt; MoCo v2 neck</td><td>r50_lr0_01_head100.py</td><td>36.31</td><td>64.68</td></tr>
-<tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs4096_ep200.py</td><td>default</td><td>r50_lr0_01_head10.py</td><td>49.37</td><td>76.75</td></tr>
 </tbody></table>
 
 <table><thead><tr><th rowspan="2">Method</th><th rowspan="2">Config</th><th rowspan="2">Remarks</th><th rowspan="2">Optimal setting for ImageNet 10%</th><th colspan="2">ImageNet 10%</th></tr>
@@ -142,7 +140,6 @@ Since we don't have sufficient GPUs to run these large-scale experiments, your c
 <tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>r50_lr0_01_head100.py</td><td>61.80</td><td>85.11</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2002.05709" target="_blank" rel="noopener noreferrer">SimCLR</a></td><td>selfsup/simclr/r50_bs256_ep200.py</td><td>default</td><td>r50_lr0_01_head100.py</td><td>58.46</td><td>82.60</td></tr>
 <tr><td></td><td>selfsup/simclr/r50_bs256_ep200_mocov2_neck.py</td><td>-&gt; MoCo v2 neck</td><td>r50_lr0_01_head100.py</td><td>58.38</td><td>82.53</td></tr>
-<tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs4096_ep200.py</td><td>default</td><td>r50_lr0_01_head100.py</td><td>65.94</td><td>87.81</td></tr>
 </tbody></table>
 
 ### PASCAL VOC07+12 Object Detection
