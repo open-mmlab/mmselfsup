@@ -21,9 +21,11 @@ Since we don't have sufficient GPUs to run these large-scale experiments, your c
 <tr><td><a href="https://arxiv.org/abs/2003.04297">MoCo v2</a> (<a href="https://github.com/XiaohangZhan">@XiaohangZhan</a>)</td><td>selfsup/moco/r50_v2.py</td><td>default</td><td><a href="https://drive.google.com/file/d/1ImO8A3uWbrTx21D1IqBDMUQvpN6wmv0d/view?usp=sharing">moco_r50_v2-e3b0c442.pth</a></td><td>256</td><td>200</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2002.05709">SimCLR</a> (<a href="https://github.com/XiaohangZhan">@XiaohangZhan</a>)</td><td>selfsup/simclr/r50_bs256_ep200.py</td><td>default</td><td><a href="https://drive.google.com/file/d/1aZ43nSdivdNxHbM9DKVoZYVhZ8TNnmPp/view?usp=sharing">simclr_r50_bs256_ep200-4577e9a6.pth</a></td><td>256</td><td>200</td></tr>
 <tr><td></td><td>selfsup/simclr/r50_bs256_ep200_mocov2_neck.py</td><td>-&gt; MoCo v2 neck</td><td><a href="https://drive.google.com/file/d/1AXpSKqgWfnj6jCgN65BXSTCKFfuIVELa/view?usp=sharing">simclr_r50_bs256_ep200_mocov2_neck-0d6e5ff2.pth</a></td><td></td><td></td></tr>
+<!--
 <tr><td><a href="https://arxiv.org/abs/2006.07733">BYOL</a> (<a href="https://github.com/XiaohangZhan">@XiaohangZhan</a>)</td><td>selfsup/byol/r50_bs4096_ep200.py (<a href="https://github.com/xieenze">@xieenze</a>)</td><td>default</td><td><a href="https://drive.google.com/file/d/1Whj3j5E3ShQj_VufjrJSzWiq1xcZZCXN/view?usp=sharing">byol_r50-e3b0c442.pth</a></td><td>4096</td><td>200</td></tr>
-<tr><td></td><td>selfsup/byol/r50_bs256_accumulate16_ep300.py (<a href="https://github.com/scnuhealthy">@scnuhealthy</a>)</td><td>default</td><td><a href="https://drive.google.com/file/d/12Zu9r3fE8qKF4OW6WQXa5Ec6VuA2m3j7/view?usp=sharing">byol_r50_bs256_accmulate16_ep300-5df46722.pth</a></td><td>256</td><td>300</td></tr>
-<tr><td></td><td>selfsup/byol/r50_bs2048_accumulate2_ep200_fp16.py (<a href="https://github.com/xieenze">@xieenze</a>)</td><td>default</td><td><a href="https://drive.google.com/file/d/1Poj-rxIebE1ykJhB8EeliSxWiCGP_rbD/view?usp=sharing">byol_r50_bs2048_accmulate2_ep200-e3b0c442.pth</a></td><td>256</td><td>200</td></tr>
+-->
+<tr><td><a href="https://arxiv.org/abs/2006.07733">BYOL</a> (<a href="https://github.com/XiaohangZhan">@XiaohangZhan</a>)</td><td>selfsup/byol/r50_bs256_accumulate16_ep300.py (<a href="https://github.com/scnuhealthy">@scnuhealthy</a>)</td><td>default</td><td><a href="https://drive.google.com/file/d/12Zu9r3fE8qKF4OW6WQXa5Ec6VuA2m3j7/view?usp=sharing">byol_r50_bs256_accmulate16_ep300-5df46722.pth</a></td><td>256</td><td>300</td></tr>
+<tr><td></td><td>selfsup/byol/r50_bs2048_accumulate2_ep200_fp16.py (<a href="https://github.com/xieenze">@xieenze</a>)</td><td>default</td><td><a href="https://drive.google.com/file/d/1Poj-rxIebE1ykJhB8EeliSxWiCGP_rbD/view?usp=sharing">byol_r50_bs2048_accmulate2_ep200-e3b0c442.pth</a></td><td>2048</td><td>200</td></tr>
 </tbody></table>
 
 
@@ -47,7 +49,7 @@ Since we don't have sufficient GPUs to run these large-scale experiments, your c
 <tr><td></td><td>selfsup/simclr/r50_bs256_ep200_mocov2_neck.py</td><td>-&gt; MoCo v2 neck</td><td>feat5</td><td>77.65</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs4096_ep200.py</td><td>default</td><td>feat5</td><td>85.10</td><td>44.48</td><td>52.09</td><td>62.88</td><td>70.87</td><td>76.18</td><td>79.45</td><td>81.88</td><td>83.08</td></tr>
 <tr><td></td><td>selfsup/byol/r50_bs256_accumulate16_ep300.py</td><td>default</td><td>feat5</td><td>86.58</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td></td><td>selfsup/byol/r50_bs2048_accumulate2_ep200.py</td><td>default</td><td>feat5</td><td>85.86</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td>selfsup/byol/r50_bs2048_accumulate2_ep200_fp16.py</td><td>default</td><td>feat5</td><td>85.86</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 
 </tbody></table>
 
@@ -76,7 +78,7 @@ Since we don't have sufficient GPUs to run these large-scale experiments, your c
 <tr><td></td><td>selfsup/simclr/r50_bs256_ep200_mocov2_neck.py</td><td>-&gt; MoCo v2 neck</td><td>16.97</td><td>31.88</td><td>41.73</td><td>54.33</td><td>59.94</td><td>58.00</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs4096_ep200.py</td><td>default</td><td>16.70</td><td>34.22</td><td>46.61</td><td>60.78</td><td>69.14</td><td>67.10</td></tr>
 <tr><td></td><td>selfsup/byol/r50_bs256_accumulate16_ep300.py</td><td>default</td><td>14.07</td><td>34.44</td><td>47.22</td><td>63.08</td><td>72.35</td><td></td></tr>
-<tr><td></td><td>selfsup/byol/rr50_bs2048_accumulate2_ep200_fp16.py</td><td>default</td><td>15.52</td><td>34.50</td><td>47.22</td><td>62.78</td><td>71.61</td><td></td></tr>
+<tr><td></td><td>selfsup/byol/r50_bs2048_accumulate2_ep200_fp16.py</td><td>default</td><td>15.52</td><td>34.50</td><td>47.22</td><td>62.78</td><td>71.61</td><td></td></tr>
 </tbody></table>
 
 ### Places205 Linear Classification
@@ -179,6 +181,6 @@ Since we don't have sufficient GPUs to run these large-scale experiments, your c
 <tr><td><a href="https://arxiv.org/abs/1911.05722" target="_blank" rel="noopener noreferrer">MoCo</a></td><td>selfsup/moco/r50_v1.py</td><td>default</td><td>60.5</td><td>40.9</td><td>44.2</td><td>57.1</td><td>35.5</td><td>37.7</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2003.04297">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>60.6</td><td>41.0</td><td>44.5</td><td>57.2</td><td>35.6</td><td>38.0</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2002.05709">SimCLR</a></td><td>selfsup/simclr/r50_bs256_ep200.py</td><td>default</td><td>59.1</td><td>39.6</td><td>42.9</td><td>55.9</td><td>34.6</td><td>37.1</td></tr>
-<tr><td><a href="https://arxiv.org/abs/2006.07733">BYOL</a></td><td>selfsup/byol/r50_bs4096_ep200.py</td><td>default</td><td>60.5</td><td>40.3</td><td>43.9</td><td>56.8</td><td>35.1</td><td>37.3</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2006.07733">BYOL</a></td><td>selfsup/byol/r50_bs2048_accumulate2_ep200_fp16.py</td><td>default</td><td>60.6</td><td>40.2</td><td>43.3</td><td>57.0</td><td>34.9</td><td>36.7</td></tr>
 </tbody></table>
 
