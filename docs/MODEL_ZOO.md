@@ -47,8 +47,7 @@ Since we don't have sufficient GPUs to run these large-scale experiments, your c
 <tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>feat5</td><td>84.26</td><td>43.0</td><td>52.48</td><td>63.43</td><td>71.74</td><td>76.35</td><td>78.9</td><td>81.31</td><td>82.45</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2002.05709" target="_blank" rel="noopener noreferrer">SimCLR</a></td><td>selfsup/simclr/r50_bs256_ep200.py</td><td>default</td><td>feat5</td><td>78.95</td><td>32.45</td><td>40.76</td><td>50.4</td><td>59.01</td><td>65.45</td><td>70.13</td><td>73.58</td><td>75.35</td></tr>
 <tr><td></td><td>selfsup/simclr/r50_bs256_ep200_mocov2_neck.py</td><td>-&gt; MoCo v2 neck</td><td>feat5</td><td>77.65</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs4096_ep200.py</td><td>default</td><td>feat5</td><td>85.10</td><td>44.48</td><td>52.09</td><td>62.88</td><td>70.87</td><td>76.18</td><td>79.45</td><td>81.88</td><td>83.08</td></tr>
-<tr><td></td><td>selfsup/byol/r50_bs256_accumulate16_ep300.py</td><td>default</td><td>feat5</td><td>86.58</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs256_accumulate16_ep300.py</td><td>default</td><td>feat5</td><td>86.58</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td></td><td>selfsup/byol/r50_bs2048_accumulate2_ep200_fp16.py</td><td>default</td><td>feat5</td><td>85.86</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 
 </tbody></table>
