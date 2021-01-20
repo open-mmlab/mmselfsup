@@ -76,8 +76,10 @@ Since we don't have sufficient GPUs to run these large-scale experiments, your c
 <tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>14.74</td><td>32.81</td><td>44.95</td><td>61.61</td><td>66.73</td><td>67.69</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2002.05709" target="_blank" rel="noopener noreferrer">SimCLR</a></td><td>selfsup/simclr/r50_bs256_ep200.py</td><td>default</td><td>17.09</td><td>31.37</td><td>41.38</td><td>54.35</td><td>61.57</td><td>60.06</td></tr>
 <tr><td></td><td>selfsup/simclr/r50_bs256_ep200_mocov2_neck.py</td><td>-&gt; MoCo v2 neck</td><td>16.97</td><td>31.88</td><td>41.73</td><td>54.33</td><td>59.94</td><td>58.00</td></tr>
+<!--
 <tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs4096_ep200.py</td><td>default</td><td>16.70</td><td>34.22</td><td>46.61</td><td>60.78</td><td>69.14</td><td>67.10</td></tr>
-<tr><td></td><td>selfsup/byol/r50_bs256_accumulate16_ep300.py</td><td>default</td><td>14.07</td><td>34.44</td><td>47.22</td><td>63.08</td><td>72.35</td><td></td></tr>
+-->
+<tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs256_accumulate16_ep300.py</td><td>default</td><td>14.07</td><td>34.44</td><td>47.22</td><td>63.08</td><td>72.35</td><td></td></tr>
 <tr><td></td><td>selfsup/byol/r50_bs2048_accumulate2_ep200_fp16.py</td><td>default</td><td>15.52</td><td>34.50</td><td>47.22</td><td>62.78</td><td>71.61</td><td></td></tr>
 </tbody></table>
 
@@ -161,7 +163,7 @@ Since we don't have sufficient GPUs to run these large-scale experiments, your c
 <tr><td><a href="https://arxiv.org/abs/1911.05722" target="_blank" rel="noopener noreferrer">MoCo</a></td><td>selfsup/moco/r50_v1.py</td><td>default</td><td>81.38</td><td>55.95</td><td>62.23</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2003.04297" target="_blank" rel="noopener noreferrer">MoCo v2</a></td><td>selfsup/moco/r50_v2.py</td><td>default</td><td>82.24</td><td>56.97</td><td>63.43</td></tr>
 <tr><td><a href="https://arxiv.org/abs/2002.05709" target="_blank" rel="noopener noreferrer">SimCLR</a></td><td>selfsup/simclr/r50_bs256_ep200.py</td><td>default</td><td>79.41</td><td>51.54</td><td>55.63</td></tr>
-<tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs4096_ep200.py</td><td>default</td><td>80.95</td><td>51.87</td><td>56.53</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2006.07733" target="_blank" rel="noopener noreferrer">BYOL</a></td><td>selfsup/byol/r50_bs2048_accumulate2_ep200_fp16.py</td><td>default</td><td>79.60</td><td>49.00</td><td>52.80</td></tr>
 </tbody></table>
 
 ### COCO2017 Object Detection
