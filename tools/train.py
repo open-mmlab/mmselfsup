@@ -4,6 +4,7 @@ import importlib
 import os
 import os.path as osp
 import time
+import logging
 
 import mmcv
 import torch
@@ -87,6 +88,10 @@ def main():
 
     # create work_dir
     mmcv.mkdir_or_exist(osp.abspath(cfg.work_dir))
+    # reload `logging` module since pytorch1.8 will init it first
+    # which will get `getLogger` out of control
+    # ref: https://stackoverflow.com/a/53553516
+    importlib.reload(logging)
     # init the logger before other steps
     timestamp = time.strftime('%Y%m%d_%H%M%S', time.localtime())
     log_file = osp.join(cfg.work_dir, 'train_{}.log'.format(timestamp))
