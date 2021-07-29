@@ -20,7 +20,7 @@ def image_to_patches(img):
     """
     split_per_side = 3  # split of patches per image side
     patch_jitter = 21  # jitter of each patch from each grid
-    h, w = img.size
+    w, h = img.size
     h_grid = h // split_per_side
     w_grid = w // split_per_side
     h_patch = h_grid - patch_jitter
