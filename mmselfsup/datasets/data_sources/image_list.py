@@ -1,48 +1,38 @@
-import os
-from PIL import Image
+# Copyright (c) OpenMMLab. All rights reserved.
+import numpy as np
 
-from ..registry import DATASOURCES
-from .utils import McLoader
+from ..builder import DATASOURCES
+from .base import BaseDataSource
 
 
 @DATASOURCES.register_module
-class ImageList(object):
+class ImageList(BaseDataSource):
+    """The implementation for loading any image list file.
 
-    def __init__(self, root, list_file, memcached=False, mclient_path=None, return_label=True):
-        with open(list_file, 'r') as f:
-            lines = f.readlines()
-        self.has_labels = len(lines[0].split()) == 2
-        self.return_label = return_label
-        if self.has_labels:
-            self.fns, self.labels = zip(*[l.strip().split() for l in lines])
-            self.labels = [int(l) for l in self.labels]
-        else:
-            # assert self.return_label is False
-            self.fns = [l.strip() for l in lines]
-        self.fns = [os.path.join(root, fn) for fn in self.fns]
-        self.memcached = memcached
-        self.mclient_path = mclient_path
-        self.initialized = False
+    The `ImageList` can load an annotation file or a list of files and merge
+    all data records to one list. If data is unlabeled, the gt_label will be
+    set -1.
+    """
 
-    def _init_memcached(self):
-        if not self.initialized:
-            assert self.mclient_path is not None
-            self.mc_loader = McLoader(self.mclient_path)
-            self.initialized = True
+    def load_annotations(self):
+        assert self.ann_file is not None
+        if not isinstance(self.ann_file, list):
+            self.ann_file = [self.ann_file]
 
-    def get_length(self):
-        return len(self.fns)
+        data_infos = []
+        for ann_file in self.ann_file:
+            with open(ann_file, 'r') as f:
+                self.samples = f.readlines()
+            self.has_labels = len(self.samples[0].split()) == 2
 
-    def get_sample(self, idx):
-        if self.memcached:
-            self._init_memcached()
-        if self.memcached:
-            img = self.mc_loader(self.fns[idx])
-        else:
-            img = Image.open(self.fns[idx])
-        img = img.convert('RGB')
-        if self.has_labels and self.return_label:
-            target = self.labels[idx]
-            return img, target
-        else:
-            return img
+            for sample in self.samples:
+                info = {'img_prefix': self.data_prefix}
+                sample = sample.split()
+                if self.has_labels:
+                    info['img_info'] = {'filename': sample[0]}
+                    info['gt_label'] = np.array(sample[1], dtype=np.int64)
+                else:
+                    info['img_info'] = {'filename': sample[0]}
+                    info['gt_label'] = np.array(-1, dtype=np.int64)
+                data_infos.append(info)
+        return data_infos
