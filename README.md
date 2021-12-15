@@ -81,7 +81,7 @@ More algorithms are in our plan.
 
 ## Installation
 
-Please refer to [install.md](docs/install.md) for installation and [data_prepare.md](docs/data_prepare.md) for dataset preparation.
+Please refer to [install.md](docs/install.md) for installation and [prepare_data.md](docs/prepare_data.md) for dataset preparation.
 
 ## Get Started
 

@@ -104,7 +104,7 @@ The segmentation benchmarks includes 2 downstream task datasets, **Cityscapes** 
 
 #### Pascal VOC 2012 + Aug
 
-Please refer to [config](configs/benchmarks/mmsegmentation/voc12aug/fcn_r50-d8_512x512_20k_voc12aug.py) for details of config.
+Please refer to [fcn_r50-d8_512x512_20k_voc12aug.py](../../benchmarks/mmsegmentation/voc12aug/fcn_r50-d8_512x512_20k_voc12aug.py) for details of config.
 
 | Self-Supervised Config                                                       | mIOU  |
 | ---------------------------------------------------------------------------- | ----- |

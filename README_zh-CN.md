@@ -71,7 +71,7 @@
 
 ## 安装
 
-请参考 [安装文档](docs_zh-CN/install.md) 进行安装和参考 [数据准备](docs_zh-CN/data_prepare.md) 准备数据集。
+请参考 [安装文档](docs_zh-CN/install.md) 进行安装和参考 [准备数据](docs_zh-CN/prepare_data.md) 准备数据集。
 
 ## 快速入门
 
