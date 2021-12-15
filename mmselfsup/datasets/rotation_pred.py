@@ -1,8 +1,9 @@
+# Copyright (c) OpenMMLab. All rights reserved.
 import torch
-from PIL import Image
 
-from .registry import DATASETS
 from .base import BaseDataset
+from .builder import DATASETS
+from .utils import to_numpy
 
 
 def rotate(img):
@@ -22,24 +23,33 @@ def rotate(img):
     ]
 
 
-@DATASETS.register_module
+@DATASETS.register_module()
 class RotationPredDataset(BaseDataset):
     """Dataset for rotation prediction.
+
+    The dataset rotates the image with 0, 90, 180, and 270 degrees and outputs
+    labels `0, 1, 2, 3` correspodingly.
+
+    Args:
+        data_source (dict): Data source defined in
+            `mmselfsup.datasets.data_sources`.
+        pipeline (list[dict]): A list of dict, where each element represents
+            an operation defined in `mmselfsup.datasets.pipelines`.
+        prefetch (bool, optional): Whether to prefetch data. Defaults to False.
     """
 
-    def __init__(self, data_source, pipeline):
-        super(RotationPredDataset, self).__init__(data_source, pipeline)
+    def __init__(self, data_source, pipeline, prefetch=False):
+        super(RotationPredDataset, self).__init__(data_source, pipeline,
+                                                  prefetch)
 
     def __getitem__(self, idx):
-        img = self.data_source.get_sample(idx)
-        assert isinstance(img, Image.Image), \
-            'The output from the data source must be an Image, got: {}. \
-            Please ensure that the list file does not contain labels.'.format(
-            type(img))
+        img = self.data_source.get_img(idx)
         img = self.pipeline(img)
+        if self.prefetch:
+            img = torch.from_numpy(to_numpy(img))
         img = torch.stack(rotate(img), dim=0)
         rotation_labels = torch.LongTensor([0, 1, 2, 3])
         return dict(img=img, rot_label=rotation_labels)
 
-    def evaluate(self, scores, keyword, logger=None):
-        raise NotImplemented
+    def evaluate(self, results, logger=None):
+        return NotImplemented
