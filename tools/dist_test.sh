@@ -1,17 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-set -x
-
-CFG=$1
-GPUS=$2
-CHECKPOINT=$3
+CONFIG=$1
+CHECKPOINT=$2
+GPUS=$3
 PORT=${PORT:-29500}
 
-WORK_DIR="$(dirname $CHECKPOINT)/"
-
-# test
+PYTHONPATH="$(dirname $0)/..":$PYTHONPATH \
 python -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT \
-    tools/test.py \
-    $CFG \
-    $CHECKPOINT \
-    --work_dir $WORK_DIR --launcher="pytorch"
+    $(dirname "$0")/test.py $CONFIG $CHECKPOINT --launcher pytorch ${@:4}
