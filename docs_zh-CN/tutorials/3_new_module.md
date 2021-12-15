@@ -1,5 +1,11 @@
 # Tutorial 3: Adding New Modules
 
+- [Tutorial 3: Adding New Modules](#tutorial-3-adding-new-modules)
+  - [Add new backbone](#add-new-backbone)
+  - [Add new necks](#add-new-necks)
+  - [Add new loss](#add-new-loss)
+  - [Combine all](#combine-all)
+
 In self-supervised learning domain, each model can be divided into following four parts:
 
 - backbone: used to extract image's feature

@@ -1,5 +1,17 @@
 # Tutorial 4: Customize Schedule
 
+- [Tutorial 4: Customize Schedule](#tutorial-4-customize-schedule)
+  - [Customize optimizer supported by Pytorch](#customize-optimizer-supported-by-pytorch)
+  - [Customize learning rate schedules](#customize-learning-rate-schedules)
+    - [Learning rate decay](#learning-rate-decay)
+    - [Warmup strategy](#warmup-strategy)
+    - [Customize momentum schedules](#customize-momentum-schedules)
+    - [Parameter-wise configuration](#parameter-wise-configuration)
+  - [Gradient clipping and gradient accumulation](#gradient-clipping-and-gradient-accumulation)
+    - [Gradient clipping](#gradient-clipping)
+    - [Gradient accumulation](#gradient-accumulation)
+  - [Customize self-implemented optimizer](#customize-self-implemented-optimizer)
+
 In this tutorial, we will introduce some methods about how to construct optimizers, customize learning rate, momentum schedules, parameter-wise configuration, gradient clipping, gradient accumulation, and customize self-implemented methods for the project.
 
 ## Customize optimizer supported by Pytorch
@@ -143,7 +155,7 @@ Here is an example:
 
 ```py
 data = dict(imgs_per_gpu=64)
-optimizer_config = dict(type="GradientCumulativeOptimizerHook", cumulative_iters=4)
+optimizer_config = dict(type="DistOptimizerHook", update_interval=4)
 ```
 
 Indicates that during training, back-propagation is performed every 4 iters. And the above is equivalent to:

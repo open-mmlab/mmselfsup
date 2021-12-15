@@ -94,13 +94,13 @@ Remarks:
 
 ## Detection
 
-Here we prefer to use MMDetection to do the detection task. First, make sure you have installed `MIM`, which is also a project of OpenMMLab. Please refer to [MIM](https://github.com/open-mmlab/mim/blob/main/docs/installation.md) for installation. Or simply from pypi
+Here we prefer to use MMDetection to do the detection task. First, make sure you have installed [MIM](https://github.com/open-mmlab/mim), which is also a project of OpenMMLab. 
 ```shell
 pip install openmim
 ```
 It is very easy to install the package.
 
-Besides, please refer to MMDet for [installation](https://github.com/open-mmlab/mmdetection/blob/master/docs/get_started.md) and [data preparation](https://github.com/open-mmlab/mmdetection/blob/master/docs/1_exist_data_model.md)
+Besides, please refer to MMDet for [installation](https://github.com/open-mmlab/mmdetection/blob/master/docs/en/get_started.md) and [data preparation](https://github.com/open-mmlab/mmdetection/blob/master/docs/en/1_exist_data_model.md)
 
 After installation, you can run MMDet with simple command
 ```shell
@@ -127,7 +127,8 @@ bash run.sh ${DET_CFG} ${OUTPUT_FILE}
 ```
 ## Segmentation
 
-For semantic segmentation task, we are using MMSegmentation. First, make sure you have installed `MIM`, which is also a project of OpenMMLab. Please refer to [MIM](https://github.com/open-mmlab/mim/blob/main/docs/installation.md) for installation. Or simply from pypi
+For semantic segmentation task, we are using MMSegmentation. First, make sure you have installed [MIM](https://github.com/open-mmlab/mim), which is also a project of OpenMMLab. 
+
 ```shell
 pip install openmim
 ```

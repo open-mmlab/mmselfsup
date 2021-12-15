@@ -1,8 +1,12 @@
 # Tutorial 2: Customize Data Pipelines
 
+- [Tutorial 2: Customize Data Pipelines](#tutorial-2-customize-data-pipelines)
+  - [Overview of `Pipeline`](#overview-of-pipeline)
+  - [Creating new augmentations in `Pipeline`](#creating-new-augmentations-in-pipeline)
+
 ## Overview of `Pipeline`
 
-`DataSource` and `Pipeline` are two important components in `Dataset`. We have introduced `DataSource` in [add_new_dataset](./new_dataset.md). And the `Pipeline` is responsible for applying a series of data augmentations to images, such as random flip.
+`DataSource` and `Pipeline` are two important components in `Dataset`. We have introduced `DataSource` in [add_new_dataset](./1_new_dataset.md). And the `Pipeline` is responsible for applying a series of data augmentations to images, such as random flip.
 
 Here is a config example of `Pipeline` for `SimCLR` training:
 

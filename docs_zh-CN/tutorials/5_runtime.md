@@ -1,5 +1,18 @@
 # Tutorial 5: Customize Runtime Settings
 
+- [Tutorial 5: Customize Runtime Settings](#tutorial-5-customize-runtime-settings)
+  - [Customize Workflow](#customize-workflow)
+  - [Hooks](#hooks)
+    - [default training hooks](#default-training-hooks)
+      - [CheckpointHook](#checkpointhook)
+      - [LoggerHooks](#loggerhooks)
+      - [EvalHook](#evalhook)
+  - [Use other implemented hooks](#use-other-implemented-hooks)
+  - [Customize self-implemented hooks](#customize-self-implemented-hooks)
+    - [1. Implement a new hook](#1-implement-a-new-hook)
+    - [2. Import the new hook](#2-import-the-new-hook)
+    - [3. Modify the config](#3-modify-the-config)
+
 In this tutorial, we will introduce some methods about how to customize workflow and hooks when running your own settings for the project.
 
 ## Customize Workflow
@@ -38,17 +51,17 @@ The custom hooks are registered through custom_hooks. Generally, they are hooks 
 
 Priority list
 
-| Level           | Value      |
-|:--:|:--:|
-| HIGHEST         | 0          |
-| VERY_HIGH       | 10         |
-| HIGH            | 30         |
-| ABOVE_NORMAL    | 40         |
-| NORMAL(default) | 50         |
-| BELOW_NORMAL    | 60         |
-| LOW             | 70         |
-| VERY_LOW        | 90         |
-| LOWEST          | 100        |
+|      Level      | Value |
+| :-------------: | :---: |
+|     HIGHEST     |   0   |
+|    VERY_HIGH    |  10   |
+|      HIGH       |  30   |
+|  ABOVE_NORMAL   |  40   |
+| NORMAL(default) |  50   |
+|  BELOW_NORMAL   |  60   |
+|       LOW       |  70   |
+|    VERY_LOW     |  90   |
+|     LOWEST      |  100  |
 
 The priority determines the execution order of the hooks. Before training, the log will print out the execution order of the hooks at each stage to facilitate debugging.
 
@@ -56,17 +69,17 @@ The priority determines the execution order of the hooks. Before training, the l
 
 Some common hooks are not registered through `custom_hooks`, they are
 
-| Hooks                  | Priority                |
-|:--:|:--:|
-| `LrUpdaterHook`        | VERY_HIGH (10)          |
-| `MomentumUpdaterHook`  | HIGH (30)               |
-| `OptimizerHook`        | ABOVE_NORMAL (40)       |
-| `CheckpointHook`       | NORMAL (50)             |
-| `IterTimerHook`        | LOW (70)                |
-| `EvalHook`             | LOW (70)                |
-| `LoggerHook(s)`        | VERY_LOW (90)           |
+|         Hooks         |     Priority      |
+| :-------------------: | :---------------: |
+|    `LrUpdaterHook`    |  VERY_HIGH (10)   |
+| `MomentumUpdaterHook` |     HIGH (30)     |
+|    `OptimizerHook`    | ABOVE_NORMAL (40) |
+|   `CheckpointHook`    |    NORMAL (50)    |
+|    `IterTimerHook`    |     LOW (70)      |
+|      `EvalHook`       |     LOW (70)      |
+|    `LoggerHook(s)`    |   VERY_LOW (90)   |
 
-`OptimizerHook`, `MomentumUpdaterHook` and `LrUpdaterHook` have been introduced in [sehedule strategy](./schedule.md). `IterTimerHook` is used to record elapsed time and does not support modification.
+`OptimizerHook`, `MomentumUpdaterHook` and `LrUpdaterHook` have been introduced in [sehedule strategy](./4_schedule.md). `IterTimerHook` is used to record elapsed time and does not support modification.
 
 Here we reveal how to customize `CheckpointHook`, `LoggerHooks`, and `EvalHook`.
 
