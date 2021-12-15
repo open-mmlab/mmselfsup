@@ -1,0 +1,2 @@
+color.jpg 0
+gray.jpg 1
