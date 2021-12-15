@@ -1,0 +1,4 @@
+_BASE_: "coco_R_50_FPN_1x.yaml"
+SOLVER:
+  STEPS: (120000, 160000)
+  MAX_ITER: 180000
