@@ -1,18 +1,16 @@
-# Compatibility of MMSelfSup
+# Differences between MMSelfSup and OpenSelfSup
 
-This file records compatibility of the newest version of MMSelfSup with older versions and OpenSelfSup.
-
-## Compatibility with OpenSelfSup
+This file records differences between the newest version of MMSelfSup with older versions and OpenSelfSup.
 
 MMSelfSup goes through a refactoring and addresses many legacy issues. It is not compatitible with OpenSelfSup, i.e. the old config files are supposed to be updated as some arguments of the class or names of the components have been modified.
 
 The major differences are in two folds: codebase conventions, modular design.
 
-### Modular Design
+## Modular Design
 
 In order to build more clear directory structure, MMSelfSup redesigns some of the modules.
 
-#### Datasets
+### Datasets
 
 - MMSelfSup merges some datasets to reduce some redundant codes.
 
@@ -24,7 +22,7 @@ In order to build more clear directory structure, MMSelfSup redesigns some of th
 
 In addition, this part is still under refactoring, it will be released in following version.
 
-#### Models
+### Models
 
 - The registry mechanism is updated. Currently, the parts under the `models` folder are built with a parent called MMCV_MODELS that is imported from `MMCV`. Please check [mmselfsup/models/builder.py](../mmselfsup/models/builder.py) and refer to [mmcv/utils/registry.py](https://github.com/open-mmlab/mmcv/blob/master/mmcv/utils/registry.py) for more details.
 
@@ -32,11 +30,11 @@ In addition, this part is still under refactoring, it will be released in follow
 
 - In OpenSelfSup, the names of necks are kind of confused and all in one file. Now, the necks are refactored, managed with one folder and renamed for easier understanding. Please check `mmselfsup/models/necks` for more details.
 
-### Codebase Conventions
+## Codebase Conventions
 
 MMSelfSup renews codebase conventions as OpenSelfSup has not been updated for some time.
 
-#### Configs
+### Configs
 
 - MMSelfSup renames all config files to use new name convention. Please refer to [0_config](./tutorials/0_config.md) for more details.
 
@@ -50,7 +48,7 @@ MMSelfSup renews codebase conventions as OpenSelfSup has not been updated for so
 
   - The normalization layers are all built with arguments `norm_cfg`.
 
-#### Scripts
+### Scripts
 
 - The directory of `tools` is modified, thus it has more clear structure. It has several folders to manage different scripts. For example, it has two converter folders for models and data format. Besides, the benchmark related scripts are all in `benchmarks` folder, which has the same structure as `configs/benchmarks`.
 

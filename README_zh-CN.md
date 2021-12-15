@@ -94,7 +94,6 @@
 - [自定义运行](docs_zh-CN/tutorials/5_runtime.md)
 - [基准测试](docs_zh-CN/tutorials/6_benchmarks.md)
 
-
 ## 参与贡献
 
 我们非常欢迎任何有助于提升 MMSelfSup 的贡献，请参考 [贡献指南](docs_zh-CN/community/CONTRIBUTING.md) 来了解如何参与贡献。
@@ -102,7 +101,6 @@
 ## 致谢
 
 MMSulfSup 是一款由不同学校和公司共同贡献的开源项目，我们感谢所有为项目提供算法复现和新功能支持的贡献者，以及提供宝贵反馈的用户；同时，我们非常感谢 OpenSelfSup 的原开发者和贡献者。
-
 
 我们希望该工具箱和基准测试可以为社区提供灵活的代码工具，供用户复现现有算法并开发自己的新模型，从而不断为开源社区提供贡献。
 

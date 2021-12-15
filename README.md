@@ -122,12 +122,17 @@ We appreciate all contributions improving MMSelfSup. Please refer to [CONTRIBUTI
 
 ## Acknowledgement
 
+MMSelfSup originates from OpenSelfSup, and we appreciate all early contributions made to OpenSelfSup. A few contributors are listed here: Xiaohang Zhan, Jiahao Xie, Enze Xie, Xiangxiang Chu, Zijian He.
+
+**Thanks very much to all developers and contributors of OpenSelfSup**
+
+Remarks:
+
 - The implementation of MoCo and the detection benchmark borrow the code from [MoCo](https://github.com/facebookresearch/moco).
 - The implementation of SwAV borrows the code from [SwAV](https://github.com/facebookresearch/swav).
 - The SVM benchmark borrows the code from [fair_self_supervision_benchmark](https://github.com/facebookresearch/fair_self_supervision_benchmark).
 - `mmselfsup/utils/clustering.py` is borrowed from [deepcluster](https://github.com/facebookresearch/deepcluster/blob/master/clustering.py).
 
-**Thanks very much to all developers and contributors of OpenSelfSup**
 
 ## Projects in OpenMMLab
 
