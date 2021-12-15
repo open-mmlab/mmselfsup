@@ -1,6 +1,6 @@
-import numpy as np
-
+# Copyright (c) OpenMMLab. All rights reserved.
 import mmcv
+import numpy as np
 import torch
 
 from .gather import gather_tensors_batch
@@ -15,6 +15,7 @@ def nondist_forward_collect(func, data_loader, length):
     Args:
         func (function): The function to process data. The output must be
             a dictionary of CPU tensors.
+        data_loader (Dataloader): the torch Dataloader to yield data.
         length (int): Expected length of output arrays.
 
     Returns:
@@ -23,9 +24,10 @@ def nondist_forward_collect(func, data_loader, length):
     results = []
     prog_bar = mmcv.ProgressBar(len(data_loader))
     for i, data in enumerate(data_loader):
+        input_data = dict(img=data['img'])
         with torch.no_grad():
-            result = func(**data)
-        results.append(result)
+            result = func(**input_data)  # feat_dict
+        results.append(result)  # list of feat_dict
         prog_bar.update()
 
     results_all = {}
@@ -45,6 +47,7 @@ def dist_forward_collect(func, data_loader, rank, length, ret_rank=-1):
     Args:
         func (function): The function to process data. The output must be
             a dictionary of CPU tensors.
+        data_loader (Dataloader): the torch Dataloader to yield data.
         rank (int): This process id.
         length (int): Expected length of output arrays.
         ret_rank (int): The process that returns.

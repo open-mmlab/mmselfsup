@@ -1,5 +1,5 @@
+# Copyright (c) OpenMMLab. All rights reserved.
 import torch
-import numpy as np
 
 
 class AliasMethod(object):
@@ -9,7 +9,7 @@ class AliasMethod(object):
 
     Args:
         probs (Tensor): Sampling probabilities.
-    """
+    """  # noqa: E501
 
     def __init__(self, probs):
 
@@ -61,8 +61,8 @@ class AliasMethod(object):
         Returns:
             Tensor: Samples.
         """
+        assert N > 0
         K = self.alias.size(0)
-
         kk = torch.zeros(
             N, dtype=torch.long, device=self.prob.device).random_(0, K)
         prob = self.prob.index_select(0, kk)
