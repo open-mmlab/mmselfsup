@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+**/*.pyc
 
 # C extensions
 *.so
@@ -103,22 +104,16 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-openselfsup/version.py
-version.py
-data
+# custom
+/data
 .vscode
 .idea
-
-# custom
 *.pkl
 *.pkl.json
 *.log.json
 work_dirs/
+/mmselfsup/.mim
 pretrains
-
-# Pytorch
-*.pth
-
 *.swp
 source.sh
 tensorboard.sh
@@ -126,3 +121,6 @@ tensorboard.sh
 replace.sh
 benchmarks/detection/datasets
 benchmarks/detection/output
+
+# Pytorch
+*.pth
