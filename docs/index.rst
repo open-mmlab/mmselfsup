@@ -11,7 +11,7 @@ Welcome to MMSelfSup's documentation!
    :caption: Get Started
 
    install.md
-   GETTING_STARTED.md
+   getting_started.md
 
 .. toctree::
    :maxdepth: 1
