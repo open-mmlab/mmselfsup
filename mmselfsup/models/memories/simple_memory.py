@@ -1,15 +1,19 @@
+# Copyright (c) OpenMMLab. All rights reserved.
 import torch
-import torch.nn as nn
 import torch.distributed as dist
-from mmcv.runner import get_dist_info
-from openselfsup.utils import AliasMethod
+import torch.nn as nn
+from mmcv.runner import BaseModule, get_dist_info
 
-from ..registry import MEMORIES
+from mmselfsup.utils import AliasMethod
+from ..builder import MEMORIES
 
 
-@MEMORIES.register_module
-class SimpleMemory(nn.Module):
-    """Simple memory bank for NPID.
+@MEMORIES.register_module()
+class SimpleMemory(BaseModule):
+    """Simple memory bank (e.g., for NPID).
+
+    This module includes the memory bank that stores running average
+    features of all samples in the dataset.
 
     Args:
         length (int): Number of features stored in the memory bank.
@@ -21,7 +25,7 @@ class SimpleMemory(nn.Module):
         super(SimpleMemory, self).__init__()
         self.rank, self.num_replicas = get_dist_info()
         self.feature_bank = torch.randn(length, feat_dim).cuda()
-        self.feature_bank = nn.functional.normalize(self.feature_bank)
+        self.feature_bank = nn.functional.normalize(self.feature_bank).cuda()
         self.momentum = momentum
         self.multinomial = AliasMethod(torch.ones(length))
         self.multinomial.cuda()

@@ -1,22 +1,26 @@
+# Copyright (c) OpenMMLab. All rights reserved.
 import torch
 import torch.nn as nn
-from mmcv.cnn import normal_init
+from mmcv.runner import BaseModule
 
-from ..registry import HEADS
-from .. import builder
+from ..builder import HEADS, build_neck
 
-@HEADS.register_module
-class LatentPredictHead(nn.Module):
-    """Head for contrastive learning.
+
+@HEADS.register_module()
+class LatentPredictHead(BaseModule):
+    """Head for latent feature prediction.
+
+    This head builds a predictor, which can be any registered neck component.
+    For example, BYOL and SimSiam call this head and build NonLinearNeck.
+    It also implements similarity loss between two forward features.
+
+    Args:
+        predictor (dict): Config dict for module of predictor.
     """
 
-    def __init__(self, predictor, size_average=True):
+    def __init__(self, predictor):
         super(LatentPredictHead, self).__init__()
-        self.predictor = builder.build_neck(predictor)
-        self.size_average = size_average
-
-    def init_weights(self, init_linear='normal'):
-        self.predictor.init_weights(init_linear=init_linear)
+        self.predictor = build_neck(predictor)
 
     def forward(self, input, target):
         """Forward head.
@@ -29,27 +33,31 @@ class LatentPredictHead(nn.Module):
             dict[str, Tensor]: A dictionary of loss components.
         """
         pred = self.predictor([input])[0]
+        target = target.detach()
+
         pred_norm = nn.functional.normalize(pred, dim=1)
         target_norm = nn.functional.normalize(target, dim=1)
-        loss = -2 * (pred_norm * target_norm).sum()
-        if self.size_average:
-            loss /= input.size(0)
+        loss = -(pred_norm * target_norm).sum(dim=1).mean()
         return dict(loss=loss)
 
 
 @HEADS.register_module
-class LatentClsHead(nn.Module):
-    """Head for contrastive learning.
+class LatentClsHead(BaseModule):
+    """Head for latent feature classification.
+
+    Args:
+        in_channels (int): Number of input channels.
+        num_classes (int): Number of classes.
+        init_cfg (dict or list[dict], optional): Initialization config dict.
     """
 
-    def __init__(self, predictor):
-        super(LatentClsHead, self).__init__()
-        self.predictor = nn.Linear(predictor.in_channels,
-                                   predictor.num_classes)
+    def __init__(self,
+                 in_channels,
+                 num_classes,
+                 init_cfg=dict(type='Normal', std=0.01, layer='Linear')):
+        super(LatentClsHead, self).__init__(init_cfg)
+        self.predictor = nn.Linear(in_channels, num_classes)
         self.criterion = nn.CrossEntropyLoss()
-
-    def init_weights(self, init_linear='normal'):
-        normal_init(self.predictor, std=0.01)
 
     def forward(self, input, target):
         """Forward head.

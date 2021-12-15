@@ -1,8 +1,10 @@
+# Copyright (c) OpenMMLab. All rights reserved.
 import torch
 import torch.nn as nn
+from mmcv.runner import BaseModule
 
 
-class Sobel(nn.Module):
+class Sobel(BaseModule):
     """Sobel layer."""
 
     def __init__(self):

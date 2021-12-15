@@ -1,20 +1,35 @@
+# Copyright (c) OpenMMLab. All rights reserved.
 import torch.nn as nn
-from mmcv.cnn import kaiming_init, normal_init
+from mmcv.runner import BaseModule
 
+from ..builder import HEADS
 from ..utils import accuracy
-from ..registry import HEADS
 
 
-@HEADS.register_module
-class ClsHead(nn.Module):
+@HEADS.register_module()
+class ClsHead(BaseModule):
     """Simplest classifier head, with only one fc layer.
+
+    Args:
+        with_avg_pool (bool): Whether to apply the average pooling
+            after neck. Defaults to False.
+        in_channels (int): Number of input channels. Defaults to 2048.
+        num_classes (int): Number of classes. Defaults to 1000.
+        init_cfg (dict or list[dict], optional): Initialization config dict.
     """
 
     def __init__(self,
                  with_avg_pool=False,
                  in_channels=2048,
-                 num_classes=1000):
-        super(ClsHead, self).__init__()
+                 num_classes=1000,
+                 init_cfg=[
+                     dict(type='Normal', std=0.01, layer='Linear'),
+                     dict(
+                         type='Constant',
+                         val=1,
+                         layer=['_BatchNorm', 'GroupNorm'])
+                 ]):
+        super(ClsHead, self).__init__(init_cfg)
         self.with_avg_pool = with_avg_pool
         self.in_channels = in_channels
         self.num_classes = num_classes
@@ -25,34 +40,28 @@ class ClsHead(nn.Module):
             self.avg_pool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc_cls = nn.Linear(in_channels, num_classes)
 
-    def init_weights(self, init_linear='normal', std=0.01, bias=0.):
-        assert init_linear in ['normal', 'kaiming'], \
-            "Undefined init_linear: {}".format(init_linear)
-        for m in self.modules():
-            if isinstance(m, nn.Linear):
-                if init_linear == 'normal':
-                    normal_init(m, std=std, bias=bias)
-                else:
-                    kaiming_init(m, mode='fan_in', nonlinearity='relu')
-            elif isinstance(m,
-                            (nn.BatchNorm2d, nn.GroupNorm, nn.SyncBatchNorm)):
-                if m.weight is not None:
-                    nn.init.constant_(m.weight, 1)
-                if m.bias is not None:
-                    nn.init.constant_(m.bias, 0)
-
     def forward(self, x):
+        """Forward head.
+
+        Args:
+            x (list[Tensor] | tuple[Tensor]): Feature maps of backbone,
+                each tensor has shape (N, C, H, W).
+
+        Returns:
+            list[Tensor]: A list of class scores.
+        """
         assert isinstance(x, (tuple, list)) and len(x) == 1
         x = x[0]
         if self.with_avg_pool:
             assert x.dim() == 4, \
-                "Tensor must has 4 dims, got: {}".format(x.dim())
+                f'Tensor must has 4 dims, got: {x.dim()}'
             x = self.avg_pool(x)
         x = x.view(x.size(0), -1)
         cls_score = self.fc_cls(x)
         return [cls_score]
 
     def loss(self, cls_score, labels):
+        """Compute the loss."""
         losses = dict()
         assert isinstance(cls_score, (tuple, list)) and len(cls_score) == 1
         losses['loss'] = self.criterion(cls_score[0], labels)

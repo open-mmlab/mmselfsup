@@ -1,56 +1,36 @@
-from torch import nn
+# Copyright (c) OpenMMLab. All rights reserved.
+from mmcv.cnn import MODELS as MMCV_MODELS
+from mmcv.utils import Registry
 
-from openselfsup.utils import build_from_cfg
-from .registry import (BACKBONES, MODELS, NECKS, HEADS, MEMORIES, LOSSES)
+MODELS = Registry('models', parent=MMCV_MODELS)
+
+ALGORITHMS = MODELS
+BACKBONES = MODELS
+NECKS = MODELS
+HEADS = MODELS
+MEMORIES = MODELS
 
 
-def build(cfg, registry, default_args=None):
-    """Build a module.
-
-    Args:
-        cfg (dict, list[dict]): The config of modules, it is either a dict
-            or a list of configs.
-        registry (:obj:`Registry`): A registry the module belongs to.
-        default_args (dict, optional): Default arguments to build the module.
-            Default: None.
-
-    Returns:
-        nn.Module: A built nn module.
-    """
-    if isinstance(cfg, list):
-        modules = [
-            build_from_cfg(cfg_, registry, default_args) for cfg_ in cfg
-        ]
-        return nn.Sequential(*modules)
-    else:
-        return build_from_cfg(cfg, registry, default_args)
+def build_algorithm(cfg):
+    """Build algorithm."""
+    return ALGORITHMS.build(cfg)
 
 
 def build_backbone(cfg):
     """Build backbone."""
-    return build(cfg, BACKBONES)
+    return BACKBONES.build(cfg)
 
 
 def build_neck(cfg):
     """Build neck."""
-    return build(cfg, NECKS)
-
-
-def build_memory(cfg):
-    """Build memory."""
-    return build(cfg, MEMORIES)
+    return NECKS.build(cfg)
 
 
 def build_head(cfg):
     """Build head."""
-    return build(cfg, HEADS)
+    return HEADS.build(cfg)
 
 
-def build_loss(cfg):
-    """Build loss."""
-    return build(cfg, LOSSES)
-
-
-def build_model(cfg):
-    """Build model."""
-    return build(cfg, MODELS)
+def build_memory(cfg):
+    """Build memory."""
+    return MEMORIES.build(cfg)

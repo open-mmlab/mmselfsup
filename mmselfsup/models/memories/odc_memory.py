@@ -1,17 +1,20 @@
+# Copyright (c) OpenMMLab. All rights reserved.
 import numpy as np
+import torch
+import torch.distributed as dist
+from mmcv.runner import BaseModule, get_dist_info
 from sklearn.cluster import KMeans
 
-import torch
-import torch.nn as nn
-import torch.distributed as dist
-from mmcv.runner import get_dist_info
-
-from ..registry import MEMORIES
+from ..builder import MEMORIES
 
 
-@MEMORIES.register_module
-class ODCMemory(nn.Module):
-    """Memory modules for ODC.
+@MEMORIES.register_module()
+class ODCMemory(BaseModule):
+    """Memory module for ODC.
+
+    This module includes the samples memory and the centroids memory in ODC.
+    The samples memory stores features and pseudo-labels of all samples in the
+    dataset; while the centroids memory stores features of cluster centroids.
 
     Args:
         length (int): Number of features stored in samples memory.
@@ -65,12 +68,12 @@ class ODCMemory(nn.Module):
     def _compute_centroids(self):
         """Compute all non-empty centroids."""
         assert self.rank == 0
-        l = self.label_bank.numpy()
-        argl = np.argsort(l)
-        sortl = l[argl]
+        label_bank_np = self.label_bank.numpy()
+        argl = np.argsort(label_bank_np)
+        sortl = label_bank_np[argl]
         diff_pos = np.where(sortl[1:] - sortl[:-1] != 0)[0] + 1
         start = np.insert(diff_pos, 0, 0)
-        end = np.insert(diff_pos, len(diff_pos), len(l))
+        end = np.insert(diff_pos, len(diff_pos), len(label_bank_np))
         class_start = sortl[start]
         # keep empty class centroids unchanged
         centroids = self.centroids.cpu().clone()
@@ -80,12 +83,6 @@ class ODCMemory(nn.Module):
 
     def _gather(self, ind, feature):
         """Gather indices and features."""
-        # if not hasattr(self, 'ind_gathered'):
-        #    self.ind_gathered = [torch.ones_like(ind).cuda()
-        #                         for _ in range(self.num_replicas)]
-        # if not hasattr(self, 'feature_gathered'):
-        #    self.feature_gathered = [torch.ones_like(feature).cuda()
-        #                             for _ in range(self.num_replicas)]
         ind_gathered = [
             torch.ones_like(ind).cuda() for _ in range(self.num_replicas)
         ]
@@ -120,20 +117,20 @@ class ODCMemory(nn.Module):
                                            feature_norm.permute(1, 0))  # CxN
         newlabel = similarity_to_centroids.argmax(dim=0)  # cuda tensor
         newlabel_cpu = newlabel.cpu()
-        change_ratio = (newlabel_cpu !=
-            self.label_bank[ind]).sum().float().cuda() \
-            / float(newlabel_cpu.shape[0])
+        change_ratio = (newlabel_cpu != self.label_bank[ind]
+                        ).sum().float().cuda() / float(newlabel_cpu.shape[0])
         self.label_bank[ind] = newlabel_cpu.clone()  # copy to cpu
         return change_ratio
 
     def deal_with_small_clusters(self):
         """Deal with small clusters."""
         # check empty class
-        hist = np.bincount(self.label_bank.numpy(), minlength=self.num_classes)
-        small_clusters = np.where(hist < self.min_cluster)[0].tolist()
+        histogram = np.bincount(
+            self.label_bank.numpy(), minlength=self.num_classes)
+        small_clusters = np.where(histogram < self.min_cluster)[0].tolist()
         if self.debug and self.rank == 0:
-            print("mincluster: {}, num of small class: {}".format(
-                hist.min(), len(small_clusters)))
+            print(f'mincluster: {histogram.min()}, '
+                  f'num of small class: {len(small_clusters)}')
         if len(small_clusters) == 0:
             return
         # re-assign samples in small clusters to make them empty
@@ -163,7 +160,7 @@ class ODCMemory(nn.Module):
         """Update centroids memory."""
         if self.rank == 0:
             if self.debug:
-                print("updating centroids ...")
+                print('updating centroids ...')
             if cinds is None:
                 center = self._compute_centroids()
                 self.centroids.copy_(center)
@@ -181,13 +178,13 @@ class ODCMemory(nn.Module):
         assert len(max_cluster_inds) >= 2
         max_cluster_features = self.feature_bank[max_cluster_inds, :]
         if np.any(np.isnan(max_cluster_features.numpy())):
-            raise Exception("Has nan in features.")
+            raise Exception('Has nan in features.')
         kmeans_ret = self.kmeans.fit(max_cluster_features)
         sub_cluster1_ind = max_cluster_inds[kmeans_ret.labels_ == 0]
         sub_cluster2_ind = max_cluster_inds[kmeans_ret.labels_ == 1]
         if not (len(sub_cluster1_ind) > 0 and len(sub_cluster2_ind) > 0):
             print(
-                "Warning: kmeans partition fails, resort to random partition.")
+                'Warning: kmeans partition fails, resort to random partition.')
             sub_cluster1_ind = np.random.choice(
                 max_cluster_inds, len(max_cluster_inds) // 2, replace=False)
             sub_cluster2_ind = np.setdiff1d(
@@ -198,13 +195,13 @@ class ODCMemory(nn.Module):
         """Re-direct empty clusters."""
         for e in empty_clusters:
             assert (self.label_bank != e).all().item(), \
-                "Cluster #{} is not an empty cluster.".format(e)
+                f'Cluster #{e} is not an empty cluster.'
             max_cluster = np.bincount(
                 self.label_bank, minlength=self.num_classes).argmax().item()
             # gather partitioning indices
             if self.rank == 0:
-                sub_cluster1_ind, sub_cluster2_ind = self._partition_max_cluster(
-                    max_cluster)
+                sub_cluster1_ind, sub_cluster2_ind = \
+                    self._partition_max_cluster(max_cluster)
                 size1 = torch.LongTensor([len(sub_cluster1_ind)]).cuda()
                 size2 = torch.LongTensor([len(sub_cluster2_ind)]).cuda()
                 sub_cluster1_ind_tensor = torch.from_numpy(

@@ -1,8 +1,18 @@
+# Copyright (c) OpenMMLab. All rights reserved.
 import torch.nn as nn
+from mmcv.runner import BaseModule
 
 
-class MultiPooling(nn.Module):
-    """Pooling layers for features from multiple depth."""
+class MultiPooling(BaseModule):
+    """Pooling layers for features from multiple depth.
+
+    Args:
+        pool_type (str): Pooling type for the feature map. Options are
+            'adaptive' and 'specified'. Defaults to 'adaptive'.
+        in_indices (Sequence[int]): Output from which backbone stages.
+            Defaults to (0, ).
+        backbone (str): The selected backbone. Defaults to 'resnet50'.
+    """
 
     POOL_PARAMS = {
         'resnet50': [
@@ -22,15 +32,16 @@ class MultiPooling(nn.Module):
                  backbone='resnet50'):
         super(MultiPooling, self).__init__()
         assert pool_type in ['adaptive', 'specified']
+        assert backbone == 'resnet50', 'Now only support resnet50.'
         if pool_type == 'adaptive':
             self.pools = nn.ModuleList([
-                nn.AdaptiveAvgPool2d(self.POOL_SIZES[backbone][l])
-                for l in in_indices
+                nn.AdaptiveAvgPool2d(self.POOL_SIZES[backbone][i])
+                for i in in_indices
             ])
         else:
             self.pools = nn.ModuleList([
-                nn.AvgPool2d(**self.POOL_PARAMS[backbone][l])
-                for l in in_indices
+                nn.AvgPool2d(**self.POOL_PARAMS[backbone][i])
+                for i in in_indices
             ])
 
     def forward(self, x):

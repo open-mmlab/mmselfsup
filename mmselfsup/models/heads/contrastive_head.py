@@ -1,17 +1,22 @@
+# Copyright (c) OpenMMLab. All rights reserved.
 import torch
 import torch.nn as nn
+from mmcv.runner import BaseModule
 
-from ..registry import HEADS
+from ..builder import HEADS
 
 
-@HEADS.register_module
-class ContrastiveHead(nn.Module):
+@HEADS.register_module()
+class ContrastiveHead(BaseModule):
     """Head for contrastive learning.
+
+    The contrastive loss is implemented in this head and is used in SimCLR,
+    MoCo, DenseCL, etc.
 
     Args:
         temperature (float): The temperature hyper-parameter that
             controls the concentration level of the distribution.
-            Default: 0.1.
+            Defaults to 0.1.
     """
 
     def __init__(self, temperature=0.1):
@@ -20,7 +25,7 @@ class ContrastiveHead(nn.Module):
         self.temperature = temperature
 
     def forward(self, pos, neg):
-        """Forward head.
+        """Forward function to compute contrastive loss.
 
         Args:
             pos (Tensor): Nx1 positive similarity.
@@ -32,7 +37,7 @@ class ContrastiveHead(nn.Module):
         N = pos.size(0)
         logits = torch.cat((pos, neg), dim=1)
         logits /= self.temperature
-        labels = torch.zeros((N, ), dtype=torch.long).cuda()
+        labels = torch.zeros((N, ), dtype=torch.long).to(pos.device)
         losses = dict()
         losses['loss'] = self.criterion(logits, labels)
         return losses

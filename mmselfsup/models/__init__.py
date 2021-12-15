@@ -1,15 +1,22 @@
+# Copyright (c) OpenMMLab. All rights reserved.
+from .algorithms import *  # noqa: F401,F403
 from .backbones import *  # noqa: F401,F403
-from .builder import (build_backbone, build_model, build_head, build_loss)
-from .byol import BYOL
-from .heads import *
-from .classification import Classification
-from .deepcluster import DeepCluster
-from .odc import ODC
-from .necks import *
-from .npid import NPID
-from .memories import *
-from .moco import MOCO
-from .registry import (BACKBONES, MODELS, NECKS, MEMORIES, HEADS, LOSSES)
-from .rotation_pred import RotationPred
-from .relative_loc import RelativeLoc
-from .simclr import SimCLR
+from .builder import (ALGORITHMS, BACKBONES, HEADS, MEMORIES, NECKS,
+                      build_algorithm, build_backbone, build_head,
+                      build_memory, build_neck)
+from .heads import *  # noqa: F401,F403
+from .memories import *  # noqa: F401,F403
+from .necks import *  # noqa: F401,F403
+
+__all__ = [
+    'ALGORITHMS',
+    'BACKBONES',
+    'NECKS',
+    'HEADS',
+    'MEMORIES',
+    'build_algorithm',
+    'build_backbone',
+    'build_neck',
+    'build_head',
+    'build_memory',
+]
