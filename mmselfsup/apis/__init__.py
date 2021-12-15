@@ -1,1 +1,4 @@
-from .train import get_root_logger, set_random_seed, train_model
+# Copyright (c) OpenMMLab. All rights reserved.
+from .train import init_random_seed, set_random_seed, train_model
+
+__all__ = ['init_random_seed', 'set_random_seed', 'train_model']
