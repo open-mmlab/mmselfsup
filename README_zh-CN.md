@@ -30,11 +30,17 @@
 
   MMSelfSup 拥有丰富的基准进行评估和测试，包括线性评估, 线性特征的 SVM / Low-shot SVM, 半监督分类, 目标检测和语义分割。
 
+- **兼容性**
+
+  兼容 OpenMMLab 各大算法库，拥有丰富的下游评测任务和预训练模型的应用。
+
 ## 开源许可证
 
 该项目采用 [Apache 2.0 开源许可证](LICENSE).
 
-## 基准测试和模型库
+## 模型库和基准测试
+
+### 模型库
 
 请参考 [模型库](docs/model_zoo.md) 查看我们更加全面的模型基准结果。
 
@@ -55,15 +61,17 @@
 
 更多的算法实现已经在我们的计划中。
 
-| 基准测试方法                                 | 参考设置                                                                                                                                                             | 备注                                                   |
-| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| ImageNet Linear Classification (Multi-head)  | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) | 评测多层输出                                           |
-| ImageNet Linear Classification               |                                                                                                                                                                      | 只评测最后一层的输出，提供了多篇论文的设置             |
-| ImageNet Semi-Sup Classification             |
-| Places205 Linear Classification (Multi-head) | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) | 评测多层输出                                           |
-| iNaturalist 2018 Classification              | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)               | End-to-End Fine-tune                                   |
-| PASCAL VOC07 SVM                             | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) | Costs="1.0,10.0,100.0"，在不改变结果情况下节约评测时间 |
-| PASCAL VOC07 Low-shot SVM                    | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) | Costs="1.0,10.0,100.0"，在不改变结果情况下节约评测时间 |
+### 基准测试
+
+| 基准测试方法                                 | 参考设置                                                                                                                                                             |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ImageNet Linear Classification (Multi-head)  | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
+| ImageNet Linear Classification               |                                                                                                                                                                      |
+| ImageNet Semi-Sup Classification             |                                                                                                                                                                      |
+| Places205 Linear Classification (Multi-head) | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
+| iNaturalist 2018 Classification              | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)               |
+| PASCAL VOC07 SVM                             | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
+| PASCAL VOC07 Low-shot SVM                    | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
 | PASCAL VOC07+12 Object Detection             | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)               |
 | COCO17 Object Detection                      | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)               |
 | Cityscapes Segmentation                      | [MMSeg](configs/benchmarks/mmsegmentation/cityscapes/fcn_r50-d8_769x769_40k_cityscapes.py)                                                                           |
@@ -93,7 +101,8 @@
 
 ## 致谢
 
-MMSulfSup 是一款由不同学校和公司共同贡献的开源项目。我们感谢所有为项目提供算法复现和新功能支持的贡献者，以及提供宝贵反馈的用户。
+MMSulfSup 是一款由不同学校和公司共同贡献的开源项目，我们感谢所有为项目提供算法复现和新功能支持的贡献者，以及提供宝贵反馈的用户；同时，我们非常感谢 OpenSelfSup 的原开发者和贡献者。
+
 
 我们希望该工具箱和基准测试可以为社区提供灵活的代码工具，供用户复现现有算法并开发自己的新模型，从而不断为开源社区提供贡献。
 
@@ -126,6 +135,7 @@ MMSulfSup 是一款由不同学校和公司共同贡献的开源项目。我们�
 - [MMFlow](https://github.com/open-mmlab/mmflow): OpenMMLab 光流估计工具箱与测试基准
 - [MMFewShot](https://github.com/open-mmlab/mmfewshot): OpenMMLab 少样本学习工具箱与测试基准
 - [MMHuman3D](https://github.com/open-mmlab/mmhuman3d): OpenMMLab 人体参数化模型工具箱与测试基准
+
 ## 欢迎加入 OpenMMLab 社区
 
 扫描下方的二维码可关注 OpenMMLab 团队的 [知乎官方账号](https://www.zhihu.com/people/openmmlab)，加入 OpenMMLab 团队的 [官方交流 QQ 群](https://jq.qq.com/?_wv=1027&k=GJP18SjI)

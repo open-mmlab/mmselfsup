@@ -19,7 +19,7 @@ The master branch works with **PyTorch 1.5** or higher.
 
 ### Major features
 
-- **Methods in one repository**
+- **Methods All in One**
 
   MMSelfsup provides state-of-the-art methods in self-supervised learning. For comprehensive comparison in all benchmarks, most of the pretraining methods are under the same setting.
 
@@ -30,6 +30,10 @@ The master branch works with **PyTorch 1.5** or higher.
 - **Standardized Benchmarks**
 
   MMSelfSup standardizes the benchmarks including logistic regression, SVM / Low-shot SVM from linearly probed features, semi-supervised classification, object detection and semantic segmentation.
+
+- **Compatibility**
+
+  Since MMSelfSup adopts similar design of modulars and interfaces as those in other OpenMMLab projects, it supports smooth evaluation on downstream tasks with other OpenMMLab projects like object detection and segmentation.
 
 
 ## License
@@ -42,10 +46,11 @@ This project is released under the [Apache 2.0 license](LICENSE).
 
 Please refer to [changelog.md](docs/changelog.md) for details and release history.
 
-A comparison between MMSelfSup and OpenSelfSup codebases can be found in [compatibility.md](docs/compatibility.md).
+Differences between MMSelfSup and OpenSelfSup codebases can be found in [compatibility.md](docs/compatibility.md).
 
-## Benchmark and Model Zoo
+## Model Zoo and Benchmark
 
+### Model Zoo
 Please refer to [model_zoo.md](docs/model_zoo.md) for a comprehensive set of pre-trained models and benchmarks.
 
 Supported algorithms:
@@ -65,15 +70,17 @@ Supported algorithms:
 
 More algorithms are in our plan.
 
-  | Benchmarks                                   | Setting                                                                                                                                                              | Remarks                                                                                        |
-  | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-  | ImageNet Linear Classification (Multi-head)  | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) | Evaluate different layers.                                                                     |
-  | ImageNet Linear Classification               |                                                                                                                                                                      | Evaluate the last layer after global pooling, integrate several settings from different papers |
-  | ImageNet Semi-Sup Classification             |
-  | Places205 Linear Classification (Multi-head) | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) | Evaluate different layers.                                                                     |
-  | iNaturalist 2018 Classification              | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)               | End-to-End Fine-tune                                                                           |
-  | PASCAL VOC07 SVM                             | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) | Costs="1.0,10.0,100.0" to save evaluation time w/o change of results.                          |
-  | PASCAL VOC07 Low-shot SVM                    | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) | Costs="1.0,10.0,100.0" to save evaluation time w/o change of results.                          |
+### Benchmark
+
+  | Benchmarks                                   | Setting                                                                                                                                                              |
+  | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | ImageNet Linear Classification (Multi-head)  | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
+  | ImageNet Linear Classification               |                                                                                                                                                                      |
+  | ImageNet Semi-Sup Classification             |                                                                                                                                                                      |
+  | Places205 Linear Classification (Multi-head) | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
+  | iNaturalist 2018 Classification              | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)               |
+  | PASCAL VOC07 SVM                             | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
+  | PASCAL VOC07 Low-shot SVM                    | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
   | PASCAL VOC07+12 Object Detection             | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)               |
   | COCO17 Object Detection                      | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)               |
   | Cityscapes Segmentation                      | [MMSeg](configs/benchmarks/mmsegmentation/cityscapes/fcn_r50-d8_769x769_40k_cityscapes.py)                                                                           |
@@ -116,9 +123,11 @@ We appreciate all contributions improving MMSelfSup. Please refer to [CONTRIBUTI
 ## Acknowledgement
 
 - The implementation of MoCo and the detection benchmark borrow the code from [MoCo](https://github.com/facebookresearch/moco).
-- The implementation of SwAV borrow the code from [SwAV](https://github.com/facebookresearch/swav).
+- The implementation of SwAV borrows the code from [SwAV](https://github.com/facebookresearch/swav).
 - The SVM benchmark borrows the code from [fair_self_supervision_benchmark](https://github.com/facebookresearch/fair_self_supervision_benchmark).
 - `mmselfsup/utils/clustering.py` is borrowed from [deepcluster](https://github.com/facebookresearch/deepcluster/blob/master/clustering.py).
+
+**Thanks very much to all developers and contributors of OpenSelfSup**
 
 ## Projects in OpenMMLab
 
