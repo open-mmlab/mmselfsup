@@ -1,0 +1,5 @@
+faiss-cpu
+mmcv>=1.3.16
+sklearn
+torch
+torchvision
