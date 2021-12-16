@@ -26,7 +26,7 @@ To date, most existing self-supervised learning methods are designed and optimiz
 
 ## Models and Benchmarks
 
-**Back to [model_zoo.md](../../../docs/model_zoo.md) to download models.**
+**Back to [model_zoo.md](../../../docs/en/model_zoo.md) to download models.**
 
 In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models were trained on ImageNet1k dataset.
 
@@ -40,9 +40,9 @@ The **Best Layer** indicates that the best results are obtained from which layer
 
 Besides, k=1 to 96 indicates the hyper-parameter of Low-shot SVM.
 
-| Self-Supervised Config                                                 | Best Layer | SVM | k=1 | k=2 | k=4 | k=8 | k=16 | k=32 | k=64 | k=96 |
-| ---------------------------------------------------------------------- | ---------- | --- | --- | --- | --- | --- | ---- | ---- | ---- | ---- |
-| [resnet50_8xb32-coslr-200e](densecl_resnet50_8xb32-coslr-200e_in1k.py) | feature5   |82.5|42.68|50.64|61.74|68.17|72.99|76.07|79.19|80.55|
+| Self-Supervised Config                                                 | Best Layer | SVM  | k=1   | k=2   | k=4   | k=8   | k=16  | k=32  | k=64  | k=96  |
+| ---------------------------------------------------------------------- | ---------- | ---- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
+| [resnet50_8xb32-coslr-200e](densecl_resnet50_8xb32-coslr-200e_in1k.py) | feature5   | 82.5 | 42.68 | 50.64 | 61.74 | 68.17 | 72.99 | 76.07 | 79.19 | 80.55 |
 
 #### ImageNet Linear Evaluation
 

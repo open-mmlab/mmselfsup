@@ -50,7 +50,7 @@ Contrastive unsupervised learning has recently shown encouraging progress, e.g.,
 
 ## Models and Benchmarks
 
-**Back to [model_zoo.md](../../../docs/model_zoo.md) to download models.**
+**Back to [model_zoo.md](../../../docs/en/model_zoo.md) to download models.**
 
 In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models were trained on ImageNet1k dataset.
 

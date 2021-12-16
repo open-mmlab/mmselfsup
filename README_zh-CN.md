@@ -44,7 +44,7 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
 ### 模型库
 
-请参考 [模型库](docs/model_zoo.md) 查看我们更加全面的模型基准结果。
+请参考 [模型库](docs/zh_cn/model_zoo.md) 查看我们更加全面的模型基准结果。
 
 目前已支持的算法:
 
@@ -81,24 +81,24 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
 ## 安装
 
-请参考 [安装文档](docs_zh-CN/install.md) 进行安装和参考 [准备数据](docs_zh-CN/prepare_data.md) 准备数据集。
+请参考 [安装文档](docs/zh_cn/install.md) 进行安装和参考 [准备数据](docs/zh_cn/prepare_data.md) 准备数据集。
 
 ## 快速入门
 
-请参考 [入门指南](docs_zh-CN/getting_started.md) 获取 MMSelfSup 的基本使用方法.
+请参考 [入门指南](docs/zh_cn/getting_started.md) 获取 MMSelfSup 的基本使用方法.
 
 我们也提供了更加全面的教程，包括:
-- [配置文件](docs_zh-CN/tutorials/0_config.md)
-- [添加数据集](docs_zh-CN/tutorials/1_new_dataset.md)
-- [数据处理流](docs_zh-CN/tutorials/2_data_pipeline.md)
-- [添加新模块](docs_zh-CN/tutorials/3_new_module.md)
-- [自定义流程](docs_zh-CN/tutorials/4_schedule.md)
-- [自定义运行](docs_zh-CN/tutorials/5_runtime.md)
-- [基准测试](docs_zh-CN/tutorials/6_benchmarks.md)
+- [配置文件](docs/zh_cn/tutorials/0_config.md)
+- [添加数据集](docs/zh_cn/tutorials/1_new_dataset.md)
+- [数据处理流](docs/zh_cn/tutorials/2_data_pipeline.md)
+- [添加新模块](docs/zh_cn/tutorials/3_new_module.md)
+- [自定义流程](docs/zh_cn/tutorials/4_schedule.md)
+- [自定义运行](docs/zh_cn/tutorials/5_runtime.md)
+- [基准测试](docs/zh_cn/tutorials/6_benchmarks.md)
 
 ## 参与贡献
 
-我们非常欢迎任何有助于提升 MMSelfSup 的贡献，请参考 [贡献指南](docs_zh-CN/community/CONTRIBUTING.md) 来了解如何参与贡献。
+我们非常欢迎任何有助于提升 MMSelfSup 的贡献，请参考 [贡献指南](docs/zh_cn/community/CONTRIBUTING.md) 来了解如何参与贡献。
 
 ## 致谢
 
