@@ -42,7 +42,7 @@ Besides, k=1 to 96 indicates the hyper-parameter of Low-shot SVM.
 
 | Self-Supervised Config                                                 | Best Layer | SVM | k=1 | k=2 | k=4 | k=8 | k=16 | k=32 | k=64 | k=96 |
 | ---------------------------------------------------------------------- | ---------- | --- | --- | --- | --- | --- | ---- | ---- | ---- | ---- |
-| [resnet50_8xb32-coslr-200e](densecl_resnet50_8xb32-coslr-200e_in1k.py) |            |     |     |     |     |     |      |      |      |      |
+| [resnet50_8xb32-coslr-200e](densecl_resnet50_8xb32-coslr-200e_in1k.py) | feature5   |82.5|42.68|50.64|61.74|68.17|72.99|76.07|79.19|80.55|
 
 #### ImageNet Linear Evaluation
 
@@ -52,7 +52,7 @@ The **AvgPool** result is obtained from Linear Evaluation with GlobalAveragePool
 
 | Self-Supervised Config                                                 | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 | AvgPool |
 | ---------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- | ------- |
-| [resnet50_8xb32-coslr-200e](densecl_resnet50_8xb32-coslr-200e_in1k.py) |          |          |          |          |          |         |
+| [resnet50_8xb32-coslr-200e](densecl_resnet50_8xb32-coslr-200e_in1k.py) | 15.86    | 35.47    | 49.46    | 64.06    | 62.95    | 63.34   |
 
 ### Detection
 

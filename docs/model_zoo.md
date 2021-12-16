@@ -12,8 +12,7 @@ All models and benchmarks results are recorded below.
 | [DenseCL](../configs/selfsup/densecl/README.md)                   | [densecl_resnet50_8xb32-coslr-200e_in1k](../configs/selfsup/densecl/densecl_resnet50_8xb32-coslr-200e_in1k.py)                           | [model](https://download.openmmlab.com/mmselfsup/densecl/densecl_resnet50_8xb32-coslr-200e_in1k_20211214-1efb342c.pth)             |
 | [MoCo v2](../configs/selfsup/moco/README.md)                      | [mocov2_resnet50_8xb32-coslr-200e_in1k](../configs/selfsup/moco/mocov2_resnet50_8xb32-coslr-200e_in1k.py)                                | [model](https://download.openmmlab.com/mmselfsup/moco/mocov2_resnet50_8xb32-coslr-200e_in1k_20211213-7ce8f840.pth)                 |
 | [NPID](../configs/selfsup/npid/README.md)                         | [npid_resnet50_8xb32-steplr-200e_in1k](../configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py)                                  | [model](https://download.openmmlab.com/mmselfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k_20211213-b5fec6df.pth)                  |
-|                                                                   | [npid-ensure-neg_resnet50_8xb32-steplr-200e_in1k](../configs/selfsup/npid/npid-ensure-neg_resnet50_8xb32-steplr-200e_in1k.py)            | [model](https://download.openmmlab.com/mmselfsup/npid/npid-ensure-neg_resnet50_8xb32-steplr-200e_in1k_20211213-1052e779.pth)       |
-| [Online DeepCluster](../configs/selfsup/odc/README.md)            | [odc_resnet50_8xb64-steplr-440e_in1k](../configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py)                                     | [model](https://download.openmmlab.com/mmselfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k-5af5dd0c.pth)                             |
+| [ODC](../configs/selfsup/odc/README.md)                           | [odc_resnet50_8xb64-steplr-440e_in1k](../configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py)                                     | [model](https://download.openmmlab.com/mmselfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k-5af5dd0c.pth)                             |
 | [Relative Location](../configs/selfsup/relative_loc/README.md)    | [relative-loc_resnet50_8xb64-steplr-70e_in1k](../configs/selfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k.py)            | [model](https://download.openmmlab.com/mmselfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k_20211213-cdd3162f.pth)   |
 | [Rotation Prediction](../configs/selfsup/rotation_pred/README.md) | [rotation-pred_resnet50_8xb16-steplr-70e_in1k](../configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py)         | [model](https://download.openmmlab.com/mmselfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k_20211213-513972ac.pth) |
 | [SimCLR](../configs/selfsup/simclr/README.md)                     | [simclr_resnet50_8xb32-coslr-200e_in1k](../configs/selfsup/simclr/simclr_resnet50_8xb32-coslr-200e_in1k.py)                              | [model](https://download.openmmlab.com/mmselfsup/simclr/simclr_resnet50_8xb32-coslr-200e_in1k_20211213-d0e53669.pth)               |
@@ -36,10 +35,9 @@ If not specified, we use linear evaluation setting from [MoCo](http://openaccess
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | --------- |
 | BYOL                | [byol_resnet50_8xb32-accum16-coslr-200e_in1k](../configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py)                       |                       | 67.68     |
 | DeepCLuster         | [deepcluster-sobel_resnet50_8xb64-steplr-200e_in1k.py](../configs/selfsup/deepcluster/deepcluster-sobel_resnet50_8xb64-steplr-200e_in1k.py) |                       | 46.92     |
-| DenseCL             | [densecl_resnet50_8xb32-coslr-200e_in1k](../configs/selfsup/densecl/densecl_resnet50_8xb32-coslr-200e_in1k.py)                              |                       |           |
+| DenseCL             | [densecl_resnet50_8xb32-coslr-200e_in1k](../configs/selfsup/densecl/densecl_resnet50_8xb32-coslr-200e_in1k.py)                              |                       | 63.34     |
 | MoCo v2             | [mocov2_resnet50_8xb32-coslr-200e_in1k](../configs/selfsup/moco/mocov2_resnet50_8xb32-coslr-200e_in1k.py)                                   |                       | 67.56     |
-| NPID                | [npid_resnet50_8xb32-steplr-200e_in1k](../configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py)                                     |                       |           |
-|                     | [npid-ensure-neg_resnet50_8xb32-steplr-200e_in1k](../configs/selfsup/npid/npid-ensure-neg_resnet50_8xb32-steplr-200e_in1k.py)               |                       |           |
+| NPID                | [npid_resnet50_8xb32-steplr-200e_in1k](../configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py)                                     |                       | 58.16     |
 | ODC                 | [odc_resnet50_8xb64-steplr-440e_in1k](../configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py)                                        |                       | 53.42     |
 | Relative Location   | [relative-loc_resnet50_8xb64-steplr-70e_in1k](../configs/selfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k.py)               |                       | 39.65     |
 | Rotation Prediction | [rotation-pred_resnet50_8xb16-steplr-70e_in1k](../configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py)            |                       | 44.35     |
@@ -54,19 +52,16 @@ In COCO17 Object detection task, we choose the evluation protocol from [MoCo](ht
 
 | Algorithm           | Config                                                                                                                                   | mAP (Box) | mAP (Mask) |
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---------- |
-| BYOL                | [byol_resnet50_8xb32-accum16-coslr-200e_in1k](../configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py)                    |           |            |
-| DeepCLuster         | [deepcluster-sobel_resnet50_8xb64-steplr-200e_in1k](../configs/selfsup/deepcluster/deepcluster-sobel_resnet50_8xb64-steplr-200e_in1k.py) |           |            |
+| BYOL                | [byol_resnet50_8xb32-accum16-coslr-200e_in1k](../configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py)                    | 40.9      | 36.8       |
 | DenseCL             | [densecl_resnet50_8xb32-coslr-200e_in1k](../configs/selfsup/densecl/densecl_resnet50_8xb32-coslr-200e_in1k.py)                           |           |            |
-| MoCo v2             | [mocov2_resnet50_8xb32-coslr-200e_in1k](../configs/selfsup/moco/mocov2_resnet50_8xb32-coslr-200e_in1k.py)                                |           |            |
+| MoCo v2             | [mocov2_resnet50_8xb32-coslr-200e_in1k](../configs/selfsup/moco/mocov2_resnet50_8xb32-coslr-200e_in1k.py)                                | 40.2      | 36.1       |
 | NPID                | [npid_resnet50_8xb32-steplr-200e_in1k](../configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py)                                  |           |            |
-|                     | [npid-ensure-neg_resnet50_8xb32-steplr-200e_in1k](../configs/selfsup/npid/npid-ensure-neg_resnet50_8xb32-steplr-200e_in1k.py)            |           |            |
-| ODC                 | [odc_resnet50_8xb64-steplr-440e_in1k](../configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py)                                     |           |            |
-| Relative Location   | [relative-loc_resnet50_8xb64-steplr-70e_in1k](../configs/selfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k.py)            |           |            |
-| Rotation Prediction | [rotation-pred_resnet50_8xb16-steplr-70e_in1k](../configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py)         |           |            |
-| SimCLR              | [simclr_resnet50_8xb32-coslr-200e_in1k](../configs/selfsup/simclr/simclr_resnet50_8xb32-coslr-200e_in1k.py)                              |           |            |
-| SimSiam             | [simsiam_resnet50_8xb32-coslr-100e_in1k](../configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py)                           |           |            |
-|                     | [simsiam_resnet50_8xb32-coslr-200e_in1k](../configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k.py)                           |           |            |
-| SwAV                | [swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96](../configs/selfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py)  |           |            |
+| Relative Location   | [relative-loc_resnet50_8xb64-steplr-70e_in1k](../configs/selfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k.py)            | 37.5      | 33.7       |
+| Rotation Prediction | [rotation-pred_resnet50_8xb16-steplr-70e_in1k](../configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py)         | 37.9      | 34.2       |
+| SimCLR              | [simclr_resnet50_8xb32-coslr-200e_in1k](../configs/selfsup/simclr/simclr_resnet50_8xb32-coslr-200e_in1k.py)                              | 38.7      | 34.9       |
+| SimSiam             | [simsiam_resnet50_8xb32-coslr-100e_in1k](../configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py)                           | 38.3      | 34.4       |
+|                     | [simsiam_resnet50_8xb32-coslr-200e_in1k](../configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k.py)                           | 38.8      | 34.9       |
+| SwAV                | [swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96](../configs/selfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py)  | 40.2      | 36.3       |
 
 ### Pascal VOC12 Aug Segmentation
 
@@ -79,7 +74,6 @@ In Pascal VOC12 Aug Segmentation task, we choose the evluation protocol from [MM
 | DenseCL             | [densecl_resnet50_8xb32-coslr-200e_in1k](../configs/selfsup/densecl/densecl_resnet50_8xb32-coslr-200e_in1k.py)                           | 69.47 |
 | MoCo v2             | [mocov2_resnet50_8xb32-coslr-200e_in1k](../configs/selfsup/moco/mocov2_resnet50_8xb32-coslr-200e_in1k.py)                                | 67.55 |
 | NPID                | [npid_resnet50_8xb32-steplr-200e_in1k](../configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py)                                  | 65.45 |
-|                     | [npid-ensure-neg_resnet50_8xb32-steplr-200e_in1k](../configs/selfsup/npid/npid-ensure-neg_resnet50_8xb32-steplr-200e_in1k.py)            | 64.73 |
 | ODC                 | [odc_resnet50_8xb64-steplr-440e_in1k](../configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py)                                     | 54.76 |
 | Relative Location   | [relative-loc_resnet50_8xb64-steplr-70e_in1k](../configs/selfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k.py)            | 63.49 |
 | Rotation Prediction | [rotation-pred_resnet50_8xb16-steplr-70e_in1k](../configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py)         | 64.31 |

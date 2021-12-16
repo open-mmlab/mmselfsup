@@ -47,7 +47,6 @@ Besides, k=1 to 96 indicates the hyper-parameter of Low-shot SVM.
 | Self-Supervised Config                                                                      | Best Layer | SVM   | k=1   | k=2   | k=4   | k=8   | k=16  | k=32  | k=64  | k=96  |
 | ------------------------------------------------------------------------------------------- | ---------- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
 | [resnet50_8xb32-steplr-200e](npid_resnet50_8xb32-steplr-200e_in1k.py)                       | feature5   | 76.75 | 26.96 | 35.37 | 44.48 | 53.89 | 60.39 | 66.41 | 71.48 | 73.39 |
-| [ensure-neg_resnet50_8xb32-steplr-200e](npid-ensure-neg_resnet50_8xb32-steplr-200e_in1k.py) | feature5   | 76.59 | 27.22 | 34.73 | 44.30 | 53.82 | 59.97 | 66.11 | 71.27 | 73.12 |
 
 #### ImageNet Linear Evaluation
 
@@ -57,7 +56,7 @@ The **AvgPool** result is obtained from Linear Evaluation with GlobalAveragePool
 
 | Self-Supervised Config                                                | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 | AvgPool |
 | --------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- | ------- |
-| [resnet50_8xb32-steplr-200e](npid_resnet50_8xb32-steplr-200e_in1k.py) |          |          |          |          |          |         |
+| [resnet50_8xb32-steplr-200e](npid_resnet50_8xb32-steplr-200e_in1k.py) | 14.68    | 31.98    | 42.85    |  56.95   | 58.41    | 58.16   |
 
 ### Detection
 
@@ -69,9 +68,7 @@ Please refer to [faster_rcnn_r50_c4_mstrain_24k_voc0712.py](../../benchmarks/mmd
 
 | Self-Supervised Config                                                                      | AP50 |
 | ------------------------------------------------------------------------------------------- | ---- |
-| [resnet50_8xb32-steplr-200e](npid_resnet50_8xb32-steplr-200e_in1k.py)                       |      |
-| [ensure-neg_resnet50_8xb32-steplr-200e](npid-ensure-neg_resnet50_8xb32-steplr-200e_in1k.py) |      |
-
+| [resnet50_8xb32-steplr-200e](npid_resnet50_8xb32-steplr-200e_in1k.py)                       |79.52 |
 
 #### COCO2017
 
@@ -92,4 +89,3 @@ Please refer to [fcn_r50-d8_512x512_20k_voc12aug.py](../../benchmarks/mmsegmenta
 | Self-Supervised Config                                                                      | mIOU  |
 | ------------------------------------------------------------------------------------------- | ----- |
 | [resnet50_8xb32-steplr-200e](npid_resnet50_8xb32-steplr-200e_in1k.py)                       | 65.45 |
-| [ensure-neg_resnet50_8xb32-steplr-200e](npid-ensure-neg_resnet50_8xb32-steplr-200e_in1k.py) | 64.73 |

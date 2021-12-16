@@ -96,7 +96,7 @@ Please refer to [mask_rcnn_r50_fpn_mstrain_1x_coco.py](../../benchmarks/mmdetect
 
 | Self-Supervised Config                                                       | mAP(Box) | AP50(Box) | AP75(Box) | mAP(Mask) | AP50(Mask) | AP75(Mask) |
 | ---------------------------------------------------------------------------- | -------- | --------- | --------- | --------- | ---------- | ---------- |
-| [mocov2_resnet50_8xb32-coslr-200e](mocov2_resnet50_8xb32-coslr-200e_in1k.py) |          |           |           |           |            |            |
+| [mocov2_resnet50_8xb32-coslr-200e](mocov2_resnet50_8xb32-coslr-200e_in1k.py) | 40.2     | 59.7      | 44.2      | 36.1      | 56.7       | 38.8       |
 
 ### Segmentation
 
