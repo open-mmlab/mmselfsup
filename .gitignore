@@ -124,3 +124,8 @@ benchmarks/detection/output
 
 # Pytorch
 *.pth
+
+
+# readthedocs
+docs_zh-CN/_build
+src/
