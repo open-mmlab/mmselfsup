@@ -25,7 +25,7 @@ copyright = '2020-2021, OpenMMLab'
 author = 'MMSelfSup Authors'
 
 # The full version, including alpha/beta/rc tags
-version_file = '../mmselfsup/version.py'
+version_file = '../../mmselfsup/version.py'
 
 
 def get_version():
