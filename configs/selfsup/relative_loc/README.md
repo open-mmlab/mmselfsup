@@ -26,7 +26,7 @@ This work explores the use of spatial context as a source of free and plentiful 
 
 ## Models and Benchmarks
 
-**Back to [model_zoo.md](../../../docs/model_zoo.md) to download models.**
+**Back to [model_zoo.md](../../../docs/en/model_zoo.md) to download models.**
 
 In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models were trained on ImageNet1k dataset.
 
@@ -62,8 +62,8 @@ The detection benchmarks includes 2 downstream task datasets, **Pascal VOC 2007 
 
 Please refer to [faster_rcnn_r50_c4_mstrain_24k_voc0712.py](../../benchmarks/mmdetection/voc0712/faster_rcnn_r50_c4_mstrain_24k_voc0712.py) for details of config.
 
-| Self-Supervised Config                                                      | AP50 |
-| --------------------------------------------------------------------------- | ---- |
+| Self-Supervised Config                                                      | AP50  |
+| --------------------------------------------------------------------------- | ----- |
 | [resnet50_8xb64-steplr-70e](relative-loc_resnet50_8xb64-steplr-70e_in1k.py) | 79.70 |
 
 #### COCO2017
@@ -72,7 +72,7 @@ Please refer to [mask_rcnn_r50_fpn_mstrain_1x_coco.py](../../benchmarks/mmdetect
 
 | Self-Supervised Config                                                      | mAP(Box) | AP50(Box) | AP75(Box) | mAP(Mask) | AP50(Mask) | AP75(Mask) |
 | --------------------------------------------------------------------------- | -------- | --------- | --------- | --------- | ---------- | ---------- |
-| [resnet50_8xb64-steplr-70e](relative-loc_resnet50_8xb64-steplr-70e_in1k.py) | 37.5     | 56.2      | 41.3      | 33.7      | 53.3       |  36.1      |
+| [resnet50_8xb64-steplr-70e](relative-loc_resnet50_8xb64-steplr-70e_in1k.py) | 37.5     | 56.2      | 41.3      | 33.7      | 53.3       | 36.1       |
 
 ### Segmentation
 

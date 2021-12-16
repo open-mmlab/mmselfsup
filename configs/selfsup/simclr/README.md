@@ -26,7 +26,7 @@ This paper presents SimCLR: a simple framework for contrastive learning of visua
 
 ## Models and Benchmarks
 
-[Back to model_zoo.md](../../../docs/model_zoo.md)
+[Back to model_zoo.md](../../../docs/en/model_zoo.md)
 
 In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models were trained on ImageNet1k dataset.
 
@@ -72,7 +72,7 @@ Please refer to [mask_rcnn_r50_fpn_mstrain_1x_coco.py](../../benchmarks/mmdetect
 
 | Self-Supervised Config                                                | mAP(Box) | AP50(Box) | AP75(Box) | mAP(Mask) | AP50(Mask) | AP75(Mask) |
 | --------------------------------------------------------------------- | -------- | --------- | --------- | --------- | ---------- | ---------- |
-| [resnet50_8xb32-coslr-200e](simclr_resnet50_8xb32-coslr-200e_in1k.py) |  38.7    | 58.1      | 42.4      | 34.9      | 55.3       | 37.5       |
+| [resnet50_8xb32-coslr-200e](simclr_resnet50_8xb32-coslr-200e_in1k.py) | 38.7     | 58.1      | 42.4      | 34.9      | 55.3       | 37.5       |
 
 ### Segmentation
 

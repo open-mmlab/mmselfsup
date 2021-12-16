@@ -26,7 +26,7 @@ Over the last years, deep convolutional neural networks (ConvNets) have transfor
 
 ## Models and Benchmarks
 
-**Back to [model_zoo.md](../../../docs/model_zoo.md) to download models.**
+**Back to [model_zoo.md](../../../docs/en/model_zoo.md) to download models.**
 
 In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models were trained on ImageNet1k dataset.
 
@@ -72,7 +72,7 @@ Please refer to [mask_rcnn_r50_fpn_mstrain_1x_coco.py](../../benchmarks/mmdetect
 
 | Self-Supervised Config                                                       | mAP(Box) | AP50(Box) | AP75(Box) | mAP(Mask) | AP50(Mask) | AP75(Mask) |
 | ---------------------------------------------------------------------------- | -------- | --------- | --------- | --------- | ---------- | ---------- |
-| [resnet50_8xb16-steplr-70e](rotation-pred_resnet50_8xb16-steplr-70e_in1k.py) |  37.9    | 56.5      | 41.5      | 34.2      |   53.9     |  36.7      |
+| [resnet50_8xb16-steplr-70e](rotation-pred_resnet50_8xb16-steplr-70e_in1k.py) | 37.9     | 56.5      | 41.5      | 34.2      | 53.9       | 36.7       |
 
 ### Segmentation
 

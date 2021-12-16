@@ -46,14 +46,14 @@ This project is released under the [Apache 2.0 license](LICENSE).
 
 MMSelfSup **v0.5.0** was released with refactor in 16/12/2021.
 
-Please refer to [changelog.md](docs/changelog.md) for details and release history.
+Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
 
-Differences between MMSelfSup and OpenSelfSup codebases can be found in [compatibility.md](docs/compatibility.md).
+Differences between MMSelfSup and OpenSelfSup codebases can be found in [compatibility.md](docs/en/compatibility.md).
 
 ## Model Zoo and Benchmark
 
 ### Model Zoo
-Please refer to [model_zoo.md](docs/model_zoo.md) for a comprehensive set of pre-trained models and benchmarks.
+Please refer to [model_zoo.md](docs/en/model_zoo.md) for a comprehensive set of pre-trained models and benchmarks.
 
 Supported algorithms:
 
@@ -74,36 +74,36 @@ More algorithms are in our plan.
 
 ### Benchmark
 
-  | Benchmarks                                   | Setting                                                                                                                                                              |
-  | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-  | ImageNet Linear Classification (Multi-head)  | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
-  | ImageNet Linear Classification (Last)        |                                                                                                                                                                      |
-  | ImageNet Semi-Sup Classification             |                                                                                                                                                                      |
-  | Places205 Linear Classification (Multi-head) | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
-  | iNaturalist2018 Linear Classification (Multi-head) | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf)               |
-  | PASCAL VOC07 SVM                             | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
-  | PASCAL VOC07 Low-shot SVM                    | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
-  | PASCAL VOC07+12 Object Detection             | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)               |
-  | COCO17 Object Detection                      | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)               |
-  | Cityscapes Segmentation                      | [MMSeg](configs/benchmarks/mmsegmentation/cityscapes/fcn_r50-d8_769x769_40k_cityscapes.py)                                                                           |
-  | PASCAL VOC12 Aug Segmentation                | [MMSeg](configs/benchmarks/mmsegmentation/voc12aug/fcn_r50-d8_512x512_20k_voc12aug.py)                                                                               |
+  | Benchmarks                                         | Setting                                                                                                                                                              |
+  | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | ImageNet Linear Classification (Multi-head)        | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
+  | ImageNet Linear Classification (Last)              |                                                                                                                                                                      |
+  | ImageNet Semi-Sup Classification                   |                                                                                                                                                                      |
+  | Places205 Linear Classification (Multi-head)       | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
+  | iNaturalist2018 Linear Classification (Multi-head) | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
+  | PASCAL VOC07 SVM                                   | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
+  | PASCAL VOC07 Low-shot SVM                          | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
+  | PASCAL VOC07+12 Object Detection                   | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)               |
+  | COCO17 Object Detection                            | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)               |
+  | Cityscapes Segmentation                            | [MMSeg](configs/benchmarks/mmsegmentation/cityscapes/fcn_r50-d8_769x769_40k_cityscapes.py)                                                                           |
+  | PASCAL VOC12 Aug Segmentation                      | [MMSeg](configs/benchmarks/mmsegmentation/voc12aug/fcn_r50-d8_512x512_20k_voc12aug.py)                                                                               |
 
 ## Installation
 
-Please refer to [install.md](docs/install.md) for installation and [prepare_data.md](docs/prepare_data.md) for dataset preparation.
+Please refer to [install.md](docs/en/install.md) for installation and [prepare_data.md](docs/en/prepare_data.md) for dataset preparation.
 
 ## Get Started
 
-Please see [getting_started.md](docs/getting_started.md) for the basic usage of MMSelfSup.
+Please see [getting_started.md](docs/en/getting_started.md) for the basic usage of MMSelfSup.
 
 We also provides tutorials for more details:
-- [config](docs/tutorials/0_config.md)
-- [add new dataset](docs/tutorials/1_new_dataset.md)
-- [data pipeline](docs/tutorials/2_data_pipeline.md)
-- [add new module](docs/tutorials/3_new_module.md)
-- [customize schedules](docs/tutorials/4_schedule.md)
-- [customize runtime](docs/tutorials/5_runtime.md)
-- [benchmarks](docs/tutorials/6_benchmarks.md)
+- [config](docs/en/tutorials/0_config.md)
+- [add new dataset](docs/en/tutorials/1_new_dataset.md)
+- [data pipeline](docs/en/tutorials/2_data_pipeline.md)
+- [add new module](docs/en/tutorials/3_new_module.md)
+- [customize schedules](docs/en/tutorials/4_schedule.md)
+- [customize runtime](docs/en/tutorials/5_runtime.md)
+- [benchmarks](docs/en/tutorials/6_benchmarks.md)
 
 ## Citation
 
@@ -120,7 +120,7 @@ If you use this toolbox or benchmark in your research, please cite this project.
 
 ## Contributing
 
-We appreciate all contributions improving MMSelfSup. Please refer to [CONTRIBUTING.md](docs/community/CONTRIBUTING.md) for more details about the contributing guideline.
+We appreciate all contributions improving MMSelfSup. Please refer to [CONTRIBUTING.md](docs/en/community/CONTRIBUTING.md) for more details about the contributing guideline.
 
 ## Acknowledgement
 
