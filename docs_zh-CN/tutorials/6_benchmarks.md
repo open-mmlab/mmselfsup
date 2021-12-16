@@ -94,7 +94,7 @@ Remarks:
 
 ## Detection
 
-Here we prefer to use MMDetection to do the detection task. First, make sure you have installed [MIM](https://github.com/open-mmlab/mim), which is also a project of OpenMMLab. 
+Here we prefer to use MMDetection to do the detection task. First, make sure you have installed [MIM](https://github.com/open-mmlab/mim), which is also a project of OpenMMLab.
 ```shell
 pip install openmim
 ```
@@ -127,7 +127,7 @@ bash run.sh ${DET_CFG} ${OUTPUT_FILE}
 ```
 ## Segmentation
 
-For semantic segmentation task, we are using MMSegmentation. First, make sure you have installed [MIM](https://github.com/open-mmlab/mim), which is also a project of OpenMMLab. 
+For semantic segmentation task, we are using MMSegmentation. First, make sure you have installed [MIM](https://github.com/open-mmlab/mim), which is also a project of OpenMMLab.
 
 ```shell
 pip install openmim

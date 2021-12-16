@@ -6,7 +6,7 @@
 [![badge](https://github.com/open-mmlab/mmselfsup/workflows/build/badge.svg)]()
 [![codecov](https://codecov.io/gh/open-mmlab/mmselfsup/branch/master/graph/badge.svg)]()
 [![license](https://img.shields.io/github/license/open-mmlab/mmselfsup.svg)]()
-  
+
 </div>
 
 ## Introduction
