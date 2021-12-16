@@ -48,7 +48,7 @@ If not specified, we use linear evaluation setting from [MoCo](http://openaccess
 
 ### COCO17 Object Detection
 
-In COCO17 Object detection task, we choose the evluation protocol from [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf), with Mask-RCNN architecture, the results below are trained with the same [config](../configs/benchmarks/mmdetection/coco/mask_rcnn_r50_fpn_mstrain_1x.py).
+In COCO17 Object detection task, we choose the evluation protocol from [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf), with Mask-RCNN architecture, the results below are trained with the same [config](../configs/benchmarks/mmdetection/coco/mask_rcnn_r50_fpn_mstrain_1x_coco.py).
 
 | Algorithm           | Config                                                                                                                                   | mAP (Box) | mAP (Mask) |
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---------- |
