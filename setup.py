@@ -150,7 +150,7 @@ if __name__ == '__main__':
     setup(
         name='mmselfsup',
         version=get_version(),
-        description='OpenMMLab Self-Supervision Toolbox and Benchmark',
+        description='OpenMMLab Self-Supervised Learning Toolbox and Benchmark',
         long_description=readme(),
         long_description_content_type='text/markdown',
         author='MMSelfSup Contributors',
