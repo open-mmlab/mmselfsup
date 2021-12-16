@@ -78,7 +78,6 @@ html_theme_options = {
             'url': 'https://github.com/open-mmlab/mmselfsup'
         },
     ],
-
     'menu_lang': 'en'
 }
 
