@@ -127,5 +127,6 @@ benchmarks/detection/output
 
 
 # readthedocs
-docs_zh-CN/_build
+docs/zh_cn/_build
 src/
+docs/en/_build
