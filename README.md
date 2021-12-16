@@ -1,18 +1,19 @@
 <div align="center">
-  <img src="./resources/mmselfsup_logo.png" width="600"/>
-</div>
+  <img src="./resources/mmselfsup_logo.png" width="500"/>
 
 [![PyPI](https://img.shields.io/pypi/v/mmselfsup)]()
 [![docs](https://img.shields.io/badge/docs-latest-blue)]()
 [![badge](https://github.com/open-mmlab/mmselfsup/workflows/build/badge.svg)]()
 [![codecov](https://codecov.io/gh/open-mmlab/mmselfsup/branch/master/graph/badge.svg)]()
 [![license](https://img.shields.io/github/license/open-mmlab/mmselfsup.svg)]()
-
-English | [简体中文](README_zh-CN.md)
+  
+</div>
 
 ## Introduction
 
-`MMSelfSup` is an open source unsupervised representation learning toolbox based on PyTorch. It is a part of the [OpenMMLab](https://openmmlab.com/) project.
+English | [简体中文](README_zh-CN.md)
+
+MMSelfSup is an open source self-supervised representation learning toolbox based on PyTorch. It is a part of the [OpenMMLab](https://openmmlab.com/) project.
 
 The master branch works with **PyTorch 1.5** or higher.
 
@@ -21,7 +22,7 @@ The master branch works with **PyTorch 1.5** or higher.
 
 - **Methods All in One**
 
-  MMSelfsup provides state-of-the-art methods in self-supervised learning. For comprehensive comparison in all benchmarks, most of the pretraining methods are under the same setting.
+  MMSelfsup provides state-of-the-art methods in self-supervised learning. For comprehensive comparison in all benchmarks, most of the pre-training methods are under the same setting.
 
 - **Modular Design**
 
@@ -42,7 +43,7 @@ This project is released under the [Apache 2.0 license](LICENSE).
 
 ## ChangeLog
 
-`MMSelfSup` v0.4.0 was released with refactor in 13/12/2021.
+MMSelfSup **v0.5.0** was released with refactor in 16/12/2021.
 
 Please refer to [changelog.md](docs/changelog.md) for details and release history.
 
@@ -75,10 +76,10 @@ More algorithms are in our plan.
   | Benchmarks                                   | Setting                                                                                                                                                              |
   | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
   | ImageNet Linear Classification (Multi-head)  | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
-  | ImageNet Linear Classification               |                                                                                                                                                                      |
+  | ImageNet Linear Classification (Last)        |                                                                                                                                                                      |
   | ImageNet Semi-Sup Classification             |                                                                                                                                                                      |
   | Places205 Linear Classification (Multi-head) | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
-  | iNaturalist 2018 Classification              | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)               |
+  | iNaturalist2018 Linear Classification (Multi-head) | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf)               |
   | PASCAL VOC07 SVM                             | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
   | PASCAL VOC07 Low-shot SVM                    | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
   | PASCAL VOC07+12 Object Detection             | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)               |
@@ -105,11 +106,11 @@ We also provides tutorials for more details:
 
 ## Citation
 
-If you find this project useful in your research, please consider cite:
+If you use this toolbox or benchmark in your research, please cite this project.
 
 ```bibteX
 @misc{mmselfsup2021,
-    title={OpenMMLab's Unsupervised Representation Learning Toolbox and Benchmark},
+    title={{MMSelfSup}: OpenMMLab Self-Supervised Learning Toolbox and Benchmark},
     author={MMSelfSup Contributors},
     howpublished={\url{https://github.com/open-mmlab/mmselfsup}},
     year={2021}
@@ -118,21 +119,17 @@ If you find this project useful in your research, please consider cite:
 
 ## Contributing
 
-We appreciate all contributions improving MMSelfSup. Please refer to [CONTRIBUTING.md](docs/community/CONTRIBUTING.md) more details about the contributing guideline.
+We appreciate all contributions improving MMSelfSup. Please refer to [CONTRIBUTING.md](docs/community/CONTRIBUTING.md) for more details about the contributing guideline.
 
 ## Acknowledgement
 
-MMSelfSup originates from OpenSelfSup, and we appreciate all early contributions made to OpenSelfSup. A few contributors are listed here: Xiaohang Zhan, Jiahao Xie, Enze Xie, Xiangxiang Chu, Zijian He.
-
-**Thanks very much to all developers and contributors of OpenSelfSup**
-
 Remarks:
 
+- MMSelfSup originates from OpenSelfSup, and we appreciate all early contributions made to OpenSelfSup. A few contributors are listed here: Xiaohang Zhan, Jiahao Xie, Enze Xie, Xiangxiang Chu, Zijian He.
 - The implementation of MoCo and the detection benchmark borrow the code from [MoCo](https://github.com/facebookresearch/moco).
 - The implementation of SwAV borrows the code from [SwAV](https://github.com/facebookresearch/swav).
 - The SVM benchmark borrows the code from [fair_self_supervision_benchmark](https://github.com/facebookresearch/fair_self_supervision_benchmark).
 - `mmselfsup/utils/clustering.py` is borrowed from [deepcluster](https://github.com/facebookresearch/deepcluster/blob/master/clustering.py).
-
 
 ## Projects in OpenMMLab
 
@@ -151,3 +148,4 @@ Remarks:
 - [MMFlow](https://github.com/open-mmlab/mmflow): OpenMMLab optical flow toolbox and benchmark.
 - [MMFewShot](https://github.com/open-mmlab/mmfewshot): OpenMMLab few shot learning toolbox and benchmark.
 - [MMHuman3D](https://github.com/open-mmlab/mmhuman3d): OpenMMLab 3D human parametric model toolbox and benchmark.
+- [MMSelfSup](https://github.com/open-mmlab/mmselfsup): OpenMMLab self-supervised learning toolbox and benchmark.

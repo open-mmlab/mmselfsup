@@ -2,7 +2,7 @@
 
 ## MMSelfSup
 
-### v0.4.0 (13/12/2021)
+### v0.5.0 (16/12/2021)
 
 #### Highlight
 * Released with code refactor.
@@ -18,8 +18,8 @@
 * Rename all config files.
 
 #### New Features
-* Add SwAV, SimSiam, DenseCL algorithm.
-* Add tsne visualization tools.
+* Add SwAV, SimSiam, DenseCL algorithms.
+* Add t-SNE visualization tools.
 * Support MMCV version fp16.
 
 #### Benchmarks

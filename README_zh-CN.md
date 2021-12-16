@@ -1,6 +1,5 @@
 <div align="center">
-  <img src="./resources/mmselfsup_logo.png" width="600"/>
-</div>
+  <img src="./resources/mmselfsup_logo.png" width="500"/>
 
 [![PyPI](https://img.shields.io/pypi/v/mmselfsup)]()
 [![docs](https://img.shields.io/badge/docs-latest-blue)]()
@@ -8,11 +7,13 @@
 [![codecov](https://codecov.io/gh/open-mmlab/mmselfsup/branch/master/graph/badge.svg)]()
 [![license](https://img.shields.io/github/license/open-mmlab/mmselfsup.svg)]()
 
-[English](README.md) | 简体中文
+</div>
 
 ## 介绍
 
-`MMSelfSup` 是一个基于 PyTorch 实现的开源无监督表征学习工具箱，是 [OpenMMLab](https://openmmlab.com/) 项目成员之一。
+[English](README.md) | 简体中文
+
+MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱，是 [OpenMMLab](https://openmmlab.com/) 项目成员之一。
 
 主分支代码支持 **PyTorch 1.5** 及以上的版本。
 
@@ -66,10 +67,10 @@
 | 基准测试方法                                 | 参考设置                                                                                                                                                             |
 | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ImageNet Linear Classification (Multi-head)  | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
-| ImageNet Linear Classification               |                                                                                                                                                                      |
+| ImageNet Linear Classification (Last)        |                                                                                                                                                                  |
 | ImageNet Semi-Sup Classification             |                                                                                                                                                                      |
 | Places205 Linear Classification (Multi-head) | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
-| iNaturalist 2018 Classification              | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)               |
+| iNaturalist2018 Linear Classification (Multi-head) | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf)               |
 | PASCAL VOC07 SVM                             | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
 | PASCAL VOC07 Low-shot SVM                    | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
 | PASCAL VOC07+12 Object Detection             | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)               |
@@ -100,7 +101,7 @@
 
 ## 致谢
 
-MMSulfSup 是一款由不同学校和公司共同贡献的开源项目，我们感谢所有为项目提供算法复现和新功能支持的贡献者，以及提供宝贵反馈的用户；同时，我们非常感谢 OpenSelfSup 的原开发者和贡献者。
+MMSelfSup 是一款由不同学校和公司共同贡献的开源项目，我们感谢所有为项目提供算法复现和新功能支持的贡献者，以及提供宝贵反馈的用户；同时，我们非常感谢 OpenSelfSup 的原开发者和贡献者。
 
 我们希望该工具箱和基准测试可以为社区提供灵活的代码工具，供用户复现现有算法并开发自己的新模型，从而不断为开源社区提供贡献。
 
@@ -109,7 +110,7 @@ MMSulfSup 是一款由不同学校和公司共同贡献的开源项目，我们�
 
 ```bibtex
 @misc{mmselfsup2021,
-    title={OpenMMLab's Unsupervised Representation Learning Toolbox and Benchmark},
+    title={{MMSelfSup}: OpenMMLab Self-Supervised Learning Toolbox and Benchmark},
     author={MMSelfSup Contributors},
     howpublished = {\url{https://github.com/open-mmlab/mmselfsup}},
     year={2021}
@@ -133,6 +134,7 @@ MMSulfSup 是一款由不同学校和公司共同贡献的开源项目，我们�
 - [MMFlow](https://github.com/open-mmlab/mmflow): OpenMMLab 光流估计工具箱与测试基准
 - [MMFewShot](https://github.com/open-mmlab/mmfewshot): OpenMMLab 少样本学习工具箱与测试基准
 - [MMHuman3D](https://github.com/open-mmlab/mmhuman3d): OpenMMLab 人体参数化模型工具箱与测试基准
+- [MMSelfSup](https://github.com/open-mmlab/mmselfsup): OpenMMLab 自监督学习工具箱与测试基准
 
 ## 欢迎加入 OpenMMLab 社区
 
