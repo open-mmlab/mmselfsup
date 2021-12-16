@@ -1,11 +1,12 @@
 <div align="center">
   <img src="./resources/mmselfsup_logo.png" width="500"/>
 
-[![PyPI](https://img.shields.io/pypi/v/mmselfsup)]()
-[![docs](https://img.shields.io/badge/docs-latest-blue)]()
-[![badge](https://github.com/open-mmlab/mmselfsup/workflows/build/badge.svg)]()
-[![codecov](https://codecov.io/gh/open-mmlab/mmselfsup/branch/master/graph/badge.svg)]()
-[![license](https://img.shields.io/github/license/open-mmlab/mmselfsup.svg)]()
+[![PyPI](https://img.shields.io/pypi/v/mmselfsup)](https://pypi.org/project/mmselfsup)
+[![docs](https://img.shields.io/badge/docs-latest-blue)](https://mmselfsup.readthedocs.io/en/latest/)
+[![badge](https://github.com/open-mmlab/mmselfsup/workflows/build/badge.svg)](https://github.com/open-mmlab/mmselfsup/actions)
+[![codecov](https://codecov.io/gh/open-mmlab/mmselfsup/branch/master/graph/badge.svg)](https://codecov.io/gh/open-mmlab/mmselfsup)
+[![license](https://img.shields.io/github/license/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/blob/master/LICENSE)
+[![open issues](https://isitmaintained.com/badge/open/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/issues)
 
 </div>
 
