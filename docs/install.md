@@ -9,13 +9,13 @@
 - GCC 5+
 - [mmcv](https://github.com/open-mmlab/mmcv) 1.3.16+
 - [mmdet](https://mmdetection.readthedocs.io/en/latest/#installation) 2.16.0+
-- [mmseg](https://github.com/open-mmlab/mmsegmentation) 0.20.1+
+- [mmseg](https://github.com/open-mmlab/mmsegmentation) 0.20.2+
 
 Compatible MMCV, MMDetection and MMSegmentation versions are shown below. Please install the correct version of them to avoid installation issues.
 
 | MMSelfSup version |    MMCV version     | MMSegmentation version | MMDetection version |
 | :---------------: | :-----------------: | :--------------------: | :-----------------: |
-|      master       | mmcv-full >= 1.3.16 |    mmseg >= 0.20.1+    |  mmdet >= 2.16.0+   |
+|      master       | mmcv-full >= 1.3.16 |    mmseg >= 0.20.2+    |  mmdet >= 2.16.0+   |
 
 **Note:** You need to run `pip uninstall mmcv` first if you have mmcv installed. If mmcv and mmcv-full are both installed, there will be `ModuleNotFoundError`.
 
