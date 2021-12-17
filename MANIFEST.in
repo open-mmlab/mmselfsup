@@ -1,5 +1,0 @@
-include requirements/*.txt
-include mmselfsup/VERSION
-include mmselfsup/.mim/model-index.yml
-recursive-include mmselfsup/.mim/configs *.py *.yml
-recursive-include mmselfsup/.mim/tools *.sh *.py
