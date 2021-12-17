@@ -12,8 +12,10 @@ from .rotation_pred import RotationPred
 from .simclr import SimCLR
 from .simsiam import SimSiam
 from .swav import SwAV
+from .mae import PretrainVisionTransformer
 
 __all__ = [
     'BaseModel', 'BYOL', 'Classification', 'DeepCluster', 'DenseCL', 'MoCo',
-    'NPID', 'ODC', 'RelativeLoc', 'RotationPred', 'SimCLR', 'SimSiam', 'SwAV'
+    'NPID', 'ODC', 'RelativeLoc', 'RotationPred', 'SimCLR', 'SimSiam', 'SwAV',
+    'PretrainVisionTransformer'
 ]

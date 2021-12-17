@@ -6,8 +6,10 @@ from .multi_pooling import MultiPooling
 from .multi_prototypes import MultiPrototypes
 from .res_layer import ResLayer
 from .sobel import Sobel
+from .mae_blocks import Block, PatchEmbed, get_sinusoid_encoding_table
 
 __all__ = [
     'Accuracy', 'accuracy', 'ExtractProcess', 'GatherLayer', 'MultiPooling',
-    'MultiPrototypes', 'ResLayer', 'Sobel'
+    'MultiPrototypes', 'ResLayer', 'Sobel', 'Block', 'PatchEmbed',
+    'get_sinusoid_encoding_table'
 ]

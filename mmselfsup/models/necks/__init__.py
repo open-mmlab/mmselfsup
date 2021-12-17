@@ -7,8 +7,10 @@ from .nonlinear_neck import NonLinearNeck
 from .odc_neck import ODCNeck
 from .relative_loc_neck import RelativeLocNeck
 from .swav_neck import SwAVNeck
+from .mae_neck import PretrainVisionTransformerDecoder
 
 __all__ = [
     'AvgPool2dNeck', 'DenseCLNeck', 'LinearNeck', 'MoCoV2Neck',
-    'NonLinearNeck', 'ODCNeck', 'RelativeLocNeck', 'SwAVNeck'
+    'NonLinearNeck', 'ODCNeck', 'RelativeLocNeck', 'SwAVNeck',
+    'PretrainVisionTransformerDecoder'
 ]
