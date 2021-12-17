@@ -7,9 +7,11 @@ from .multi_prototypes import MultiPrototypes
 from .position_embedding import build_2d_sincos_position_embedding
 from .res_layer import ResLayer
 from .sobel import Sobel
+from .mae_blocks import Block, PatchEmbed, get_sinusoid_encoding_table
 
 __all__ = [
     'Accuracy', 'accuracy', 'ExtractProcess', 'GatherLayer', 'MultiPooling',
     'MultiPrototypes', 'build_2d_sincos_position_embedding', 'ResLayer',
-    'Sobel'
+    'Sobel', 'MultiPrototypes', 'Block', 'PatchEmbed',
+    'get_sinusoid_encoding_table'
 ]
