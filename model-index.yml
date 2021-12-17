@@ -1,0 +1,12 @@
+Import:
+  - configs/selfsup/byol/metafile.yml
+  - configs/selfsup/deepcluster/metafile.yml
+  - configs/selfsup/densecl/metafile.yml
+  - configs/selfsup/moco/metafile.yml
+  - configs/selfsup/npid/metafile.yml
+  - configs/selfsup/odc/metafile.yml
+  - configs/selfsup/relative_loc/metafile.yml
+  - configs/selfsup/rotation_pred/metafile.yml
+  - configs/selfsup/simclr/metafile.yml
+  - configs/selfsup/simsiam/metafile.yml
+  - configs/selfsup/swav/metafile.yml
