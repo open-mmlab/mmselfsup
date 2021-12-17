@@ -1,0 +1,28 @@
+Collections:
+  - Name: ODC
+    Metadata:
+      Training Data: ImageNet-1k
+      Training Techniques:
+        - SGD with Momentum
+        - Weight Decay
+      Training Resources: 8x V100 GPUs
+      Architecture:
+        - ResNet
+    Paper:
+        URL: https://arxiv.org/abs/2006.10645
+        Title: "Online deep clustering for unsupervised representation learning"
+    README: configs/selfsup/odc/README.md
+
+Models:
+  - Name: odc_resnet50_8xb64-steplr-440e_in1k
+    In Collection: ODC
+    Metadata:
+      Epochs: 200
+      Batch Size: 512
+    Results:
+      - Task: Self-Supervised Image Classification
+        Dataset: ImageNet-1k
+        Metrics:
+          Top 1 Accuracy: 53.42
+    Config: configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py
+    Weights: https://download.openmmlab.com/mmselfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k-5af5dd0c.pth

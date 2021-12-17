@@ -1,0 +1,28 @@
+Collections:
+  - Name: RotationPrediction
+    Metadata:
+      Training Data: ImageNet-1k
+      Training Techniques:
+        - SGD with Momentum
+        - Weight Decay
+      Training Resources: 8x V100 GPUs
+      Architecture:
+        - ResNet
+    Paper:
+        URL: https://arxiv.org/abs/1803.07728
+        Title: "Unsupervised representation learning by predicting image rotations"
+    README: configs/selfsup/rotation_pred/README.md
+
+Models:
+  - Name: rotation-pred_resnet50_8xb16-steplr-70e_in1k
+    In Collection: RotationPrediction
+    Metadata:
+      Epochs: 70
+      Batch Size: 128
+    Results:
+      - Task: Self-Supervised Image Classification
+        Dataset: ImageNet-1k
+        Metrics:
+          Top 1 Accuracy: 39.65
+    Config: configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py
+    Weights: https://download.openmmlab.com/mmselfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k_20211213-513972ac.pth

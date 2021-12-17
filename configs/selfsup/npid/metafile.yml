@@ -1,0 +1,29 @@
+Collections:
+  - Name: NPID
+    Metadata:
+      Training Data: ImageNet-1k
+      Training Techniques:
+        - SGD with Momentum
+        - Weight Decay
+      Training Resources: 8x V100 GPUs
+      Architecture:
+        - ResNet
+        - NPID
+    Paper:
+        URL: https://arxiv.org/abs/1805.01978
+        Title: "Unsupervised Feature Learning via Non-Parametric Instance Discrimination"
+    README: configs/selfsup/npid/README.md
+
+Models:
+  - Name: npid_resnet50_8xb32-steplr-200e_in1k
+    In Collection: NPID
+    Metadata:
+      Epochs: 200
+      Batch Size: 256
+    Results:
+      - Task: Self-Supervised Image Classification
+        Dataset: ImageNet-1k
+        Metrics:
+          Top 1 Accuracy: 58.16
+    Config: configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py
+    Weights: https://download.openmmlab.com/mmselfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k_20211213-b5fec6df.pth
