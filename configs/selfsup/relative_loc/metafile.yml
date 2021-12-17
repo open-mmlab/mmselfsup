@@ -1,0 +1,28 @@
+Collections:
+  - Name: RelativeLocation
+    Metadata:
+      Training Data: ImageNet-1k
+      Training Techniques:
+        - SGD with Momentum
+        - Weight Decay
+      Training Resources: 8x V100 GPUs
+      Architecture:
+        - ResNet
+    Paper:
+        URL: https://arxiv.org/abs/1505.05192
+        Title: "Unsupervised visual representation learning by context prediction"
+    README: configs/selfsup/relative_loc/README.md
+
+Models:
+  - Name: relative-loc_resnet50_8xb64-steplr-70e_in1k
+    In Collection: RelativeLocation
+    Metadata:
+      Epochs: 70
+      Batch Size: 512
+    Results:
+      - Task: Self-Supervised Image Classification
+        Dataset: ImageNet-1k
+        Metrics:
+          Top 1 Accuracy: 39.65
+    Config: configs/selfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k.py
+    Weights: https://download.openmmlab.com/mmselfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k_20211213-cdd3162f.pth

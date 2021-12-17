@@ -1,0 +1,28 @@
+Collections:
+  - Name: SwAV
+    Metadata:
+      Training Data: ImageNet-1k
+      Training Techniques:
+        - LARS
+      Training Resources: 8x V100 GPUs
+      Architecture:
+        - ResNet
+        - SwAV
+    Paper:
+        URL: https://arxiv.org/abs/2006.09882
+        Title: "Unsupervised Learning of Visual Features by Contrasting Cluster Assignments"
+    README: configs/selfsup/swav/README.md
+
+Models:
+  - Name: swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96
+    In Collection: SwAV
+    Metadata:
+      Epochs: 200
+      Batch Size: 256
+    Results:
+      - Task: Self-Supervised Image Classification
+        Dataset: ImageNet-1k
+        Metrics:
+          Top 1 Accuracy: 70.55
+    Config: configs/selfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py
+    Weights: https://download.openmmlab.com/mmselfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96_20211213-0028900c.pth
