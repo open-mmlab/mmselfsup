@@ -5,8 +5,9 @@ from .latent_pred_head import LatentClsHead, LatentPredictHead
 from .mocov3_head import MoCoV3Head
 from .multi_cls_head import MultiClsHead
 from .swav_head import SwAVHead
+from .pixel_head import PixelHead
 
 __all__ = [
     'ContrastiveHead', 'ClsHead', 'LatentPredictHead', 'LatentClsHead',
-    'MoCoV3Head', 'MultiClsHead', 'SwAVHead'
+    'MoCoV3Head', 'MultiClsHead', 'SwAVHead', 'PixelHead'
 ]
