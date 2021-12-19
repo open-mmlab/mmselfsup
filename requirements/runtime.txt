@@ -8,3 +8,5 @@ six
 sklearn
 tensorboard
 tqdm
+timm
+einops
