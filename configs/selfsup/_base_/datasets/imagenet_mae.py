@@ -7,15 +7,6 @@ target_img_norm_cfg = dict(mean=[-2.1179, -2.0357, -1.8044], std=[4.3668, 4.4643
 train_pipeline = [dict(type='RandomResizedCrop', size=224)]
 train_target_pipeline = []
 
-file_client_args = dict(
-    backend='petrel',
-    path_mapping=dict({
-        '.data/imagenet/':
-        'openmmlab:s3://openmmlab/datasets/classification/imagenet/',
-        'data/imagenet/':
-        'openmmlab:s3://openmmlab/datasets/classification/imagenet/'
-    }))
-
 # prefetch
 prefetch = False
 if not prefetch:
@@ -33,9 +24,8 @@ data = dict(
         type=dataset_type,
         data_source=dict(
             type=data_source,
-            data_prefix='data/imagenet/train',
-            ann_file='data/imagenet/meta/train.txt',
-            file_client_args=file_client_args,
+            data_prefix='/mnt/lustre/share_data/openmmlab/datasets/classification/imagenet/train',
+            ann_file='/mnt/lustre/share_data/openmmlab/datasets/classification/imagenet/meta/train.txt',
         ),
         pipeline=train_pipeline,
         target_pipeline=train_target_pipeline,
