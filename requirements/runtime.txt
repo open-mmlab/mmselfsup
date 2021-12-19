@@ -10,3 +10,5 @@ sklearn
 tensorboard
 terminaltables
 tqdm
+timm
+einops
