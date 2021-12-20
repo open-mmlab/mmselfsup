@@ -2,13 +2,11 @@
 import torch
 import numpy as np
 from mmcv.utils import build_from_cfg
-from torch.functional import norm
 from torchvision.transforms import Compose
 from einops import rearrange
 
 from .base import BaseDataset
 from .builder import DATASETS, PIPELINES, build_datasource
-from .utils import to_numpy
 
 
 class RandomMaskingGenerator:
@@ -64,7 +62,8 @@ class MAEDataset(BaseDataset):
                  normalize_target=True):
         self.data_source = build_datasource(data_source)
         self.trans = Compose([build_from_cfg(p, PIPELINES) for p in pipeline])
-        self.target_trans = Compose([build_from_cfg(p, PIPELINES) for p in target_pipeline])
+        self.target_trans = Compose(
+            [build_from_cfg(p, PIPELINES) for p in target_pipeline])
 
         self.prefetch = prefetch
         self.masked_position_generator = RandomMaskingGenerator(
@@ -80,14 +79,23 @@ class MAEDataset(BaseDataset):
         patch_size = h // self.window_size
 
         if self.normalize_target:
-            target = rearrange(target, 'c (h p1) (w p2) -> (h w) (p1 p2) c', p1=patch_size, p2=patch_size)
-            target = (target - target.mean(dim=-2, keepdim=True)
-                    ) / (target.var(dim=-2, unbiased=True, keepdim=True).sqrt() + 1e-6)
+            target = rearrange(
+                target,
+                'c (h p1) (w p2) -> (h w) (p1 p2) c',
+                p1=patch_size,
+                p2=patch_size)
+            target = (target - target.mean(dim=-2, keepdim=True)) / (
+                target.var(dim=-2, unbiased=True, keepdim=True).sqrt() + 1e-6)
             target = rearrange(target, 'n p c -> n (p c)')
         else:
-            target = rearrange(target, 'c (h p1) (w p2) -> (h w) (p1 p2 c)', p1=patch_size, p2=patch_size)
+            target = rearrange(
+                target,
+                'c (h p1) (w p2) -> (h w) (p1 p2 c)',
+                p1=patch_size,
+                p2=patch_size)
 
-        mask = torch.from_numpy(self.masked_position_generator()).to(torch.bool)
+        mask = torch.from_numpy(self.masked_position_generator()).to(
+            torch.bool)
         _, C = target.shape
         target = target[mask].reshape(-1, C)
 
