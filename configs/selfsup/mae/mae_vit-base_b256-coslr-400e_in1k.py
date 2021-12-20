@@ -32,10 +32,10 @@ lr_config = dict(
 # if it is 3, when CheckpointHook (in mmcv) saves the 4th ckpt
 # it will remove the oldest one to keep the number of total ckpts as 3
 checkpoint_config = dict(
-    interval=10, max_keep_ckpts=3, out_dir='./work_dirs/self_sup/mae')
+    interval=1, max_keep_ckpts=3, out_dir='/mnt/lustre/liuyuan1.vendor/ckptp/mae')
 
 persistent_workers = True
-runner = dict(max_epochs=1600)
+runner = dict(max_epochs=400)
 
 log_config = dict(
     interval=10,
@@ -43,5 +43,9 @@ log_config = dict(
         dict(type='TextLoggerHook'),
         # dict(type='TensorboardLoggerHook'),
     ])
+
+data = dict(
+    imgs_per_gpu=256
+)
 
 # dist_params = dict(backend='nccl', port=29500)
