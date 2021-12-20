@@ -1,4 +1,4 @@
-from mae_b4096_16gpus_100e import *
+from mae_b4096_100e import *
 
 nohup = True
 output_file = 'test_2.txt'
