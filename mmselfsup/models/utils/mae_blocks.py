@@ -1,6 +1,6 @@
 from functools import partial
-import numpy as np
 
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -23,9 +23,8 @@ def _cfg(url='', **kwargs):
 
 
 class DropPath(nn.Module):
-    """Drop paths (Stochastic Depth) per sample
-      (when applied in main path of residual blocks).
-    """
+    """Drop paths (Stochastic Depth) per sample (when applied in main path of
+    residual blocks)."""
 
     def __init__(self, drop_prob=None):
         super(DropPath, self).__init__()
@@ -58,7 +57,7 @@ class Mlp(nn.Module):
         x = self.fc1(x)
         x = self.act(x)
         # x = self.drop(x)
-        # commit this for the orignal BERT implement
+        # commit this for the original BERT implement
         x = self.fc2(x)
         x = self.drop(x)
         return x
@@ -177,8 +176,7 @@ class Block(nn.Module):
 
 
 class PatchEmbed(nn.Module):
-    """ Image to Patch Embedding
-    """
+    """Image to Patch Embedding."""
 
     def __init__(self, img_size=224, patch_size=16, in_chans=3, embed_dim=768):
         super().__init__()
@@ -210,7 +208,7 @@ class PatchEmbed(nn.Module):
 # https://github.com/jadore801120/attention-is-all-you-need-pytorch
 # /blob/master/transformer/Models.py#L31
 def get_sinusoid_encoding_table(n_position, d_hid):
-    ''' Sinusoid position encoding table '''
+    """Sinusoid position encoding table."""
 
     # TODO: make it with torch instead of numpy
     def get_position_angle_vec(position):
@@ -228,8 +226,7 @@ def get_sinusoid_encoding_table(n_position, d_hid):
 
 
 class VisionTransformer(nn.Module):
-    """ Vision Transformer with support for patch or hybrid CNN input stage
-    """
+    """Vision Transformer with support for patch or hybrid CNN input stage."""
 
     def __init__(self,
                  img_size=224,

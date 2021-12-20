@@ -7,10 +7,9 @@ from ..builder import NECKS
 from ..utils import Block
 
 
-@NECKS.register_module("MaeNeck")
+@NECKS.register_module('MaeNeck')
 class PretrainVisionTransformerDecoder(nn.Module):
-    """ Vision Transformer with support for patch or hybrid CNN input stage
-    """
+    """Vision Transformer with support for patch or hybrid CNN input stage."""
 
     def __init__(
         self,

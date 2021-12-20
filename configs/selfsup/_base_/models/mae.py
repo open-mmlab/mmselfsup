@@ -33,6 +33,4 @@ model = dict(
         attn_drop_rate=0.0,
         drop_path_rate=0.0,
         init_values=0.0),
-    head=dict(
-        type='PixelHead'
-    ))
+    head=dict(type='PixelHead'))
