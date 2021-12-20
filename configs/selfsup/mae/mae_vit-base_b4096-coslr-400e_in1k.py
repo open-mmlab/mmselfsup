@@ -44,6 +44,6 @@ log_config = dict(
         # dict(type='TensorboardLoggerHook'),
     ])
 
-data = dict(imgs_per_gpu=256)
+data = dict(imgs_per_gpu=128)
 
 # dist_params = dict(backend='nccl', port=29500)
