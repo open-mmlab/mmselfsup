@@ -121,6 +121,7 @@ tensorboard.sh
 replace.sh
 benchmarks/detection/datasets
 benchmarks/detection/output
+ftest*
 
 # Pytorch
 *.pth
