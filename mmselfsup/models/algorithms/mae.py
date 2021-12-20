@@ -1,17 +1,18 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import pdb
+
 import torch
-from torch import nn
 from timm.models.layers import trunc_normal_
+from torch import nn
 
-from ..builder import ALGORITHMS, build_backbone, build_neck, build_head
-from .base import BaseModel
+from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
 from ..utils.mae_blocks import get_sinusoid_encoding_table
+from .base import BaseModel
 
 
-@ALGORITHMS.register_module("MAE")
+@ALGORITHMS.register_module('MAE')
 class PretrainVisionTransformer(BaseModel):
-    """ MAE
+    """MAE.
 
     Implementation of `Masked Autoencoders Are Scalable Vision Learners
      <https://arxiv.org/abs/2111.06377>`_.
@@ -26,7 +27,6 @@ class PretrainVisionTransformer(BaseModel):
         Defaults to None.
     init (dict): Config dict for weight initialization.
         Defaults to None.
-
     """
 
     def __init__(self, backbone=None, neck=None, head=None, init_cfg=None):

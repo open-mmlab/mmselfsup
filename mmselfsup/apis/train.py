@@ -12,8 +12,8 @@ from mmcv.utils import build_from_cfg
 from mmselfsup.core import (DistOptimizerHook, GradAccumFp16OptimizerHook,
                             build_optimizer)
 from mmselfsup.datasets import build_dataloader, build_dataset
-from mmselfsup.utils import (get_root_logger, multi_gpu_test, single_gpu_test,
-                             find_available_ckpt)
+from mmselfsup.utils import (find_available_ckpt, get_root_logger,
+                             multi_gpu_test, single_gpu_test)
 
 
 def init_random_seed(seed=None, device='cuda'):

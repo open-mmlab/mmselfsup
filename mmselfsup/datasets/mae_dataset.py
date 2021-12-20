@@ -1,9 +1,9 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-import torch
 import numpy as np
+import torch
+from einops import rearrange
 from mmcv.utils import build_from_cfg
 from torchvision.transforms import Compose
-from einops import rearrange
 
 from .base import BaseDataset
 from .builder import DATASETS, PIPELINES, build_datasource
@@ -21,7 +21,7 @@ class RandomMaskingGenerator:
         self.num_mask = int(mask_ratio * self.num_patches)
 
     def __repr__(self):
-        repr_str = "Maks: total patches {}, mask patches {}".format(
+        repr_str = 'Maks: total patches {}, mask patches {}'.format(
             self.num_patches, self.num_mask)
         return repr_str
 

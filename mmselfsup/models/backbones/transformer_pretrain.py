@@ -2,16 +2,15 @@ from functools import partial
 
 import torch
 import torch.nn as nn
+from timm.models.layers import trunc_normal_
 
 from ..builder import BACKBONES
 from ..utils import Block, PatchEmbed, get_sinusoid_encoding_table
-from timm.models.layers import trunc_normal_
 
 
-@BACKBONES.register_module("Vit")
+@BACKBONES.register_module('Vit')
 class PretrainVisionTransformerEncoder(nn.Module):
-    """ Vision Transformer with support for patch or hybrid CNN input stage
-    """
+    """Vision Transformer with support for patch or hybrid CNN input stage."""
 
     def __init__(self,
                  img_size=224,

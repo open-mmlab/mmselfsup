@@ -9,4 +9,4 @@ sklearn
 tensorboard
 tqdm
 timm
-einops
+tqdm
