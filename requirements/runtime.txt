@@ -1,3 +1,4 @@
+einops
 faiss-gpu==1.6.1
 future
 matplotlib
@@ -8,6 +9,5 @@ six
 sklearn
 tensorboard
 terminaltables
-tqdm
 timm
-einops
+tqdm

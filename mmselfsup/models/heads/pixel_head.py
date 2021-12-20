@@ -9,7 +9,8 @@ from ..builder import HEADS
 class PixelHead(BaseModule):
     """Head for pixel_level reconstruction.
 
-    The MSE loss is implemented in this head and is used in generative methods, e.g. MAE
+    The MSE loss is implemented in this head and is used in generative methods,
+    e.g. MAE
     """
 
     def __init__(self):
