@@ -15,13 +15,13 @@ def find_available_ckpt(runner_work_dir, ckpt_out_dir):
     basename = osp.basename(runner_work_dir.rstrip(osp.sep))
     ckpt_out_dir = osp.join(ckpt_out_dir, basename)
 
-    ckpts = glob(osp.join(ckpt_out_dir, "epoch_*.pth"))
+    ckpts = glob(osp.join(ckpt_out_dir, 'epoch_*.pth'))
 
     if len(ckpts) == 0:
         return None
 
     ckpt_dict = {
-        int(ckpt.split(osp.sep)[-1].split("_")[-1][:-4]): ckpt
+        int(ckpt.split(osp.sep)[-1].split('_')[-1][:-4]): ckpt
         for ckpt in ckpts
     }
 

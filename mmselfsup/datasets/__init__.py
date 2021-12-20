@@ -5,13 +5,13 @@ from .builder import (DATASETS, DATASOURCES, PIPELINES, build_dataloader,
 from .data_sources import *  # noqa: F401,F403
 from .dataset_wrappers import ConcatDataset, RepeatDataset
 from .deepcluster import DeepClusterDataset
+from .mae_dataset import MAEDataset
 from .multi_view import MultiViewDataset
 from .pipelines import *  # noqa: F401,F403
 from .relative_loc import RelativeLocDataset
 from .rotation_pred import RotationPredDataset
 from .samplers import *  # noqa: F401,F403
 from .single_view import SingleViewDataset
-from .mae_dataset import MAEDataset
 
 __all__ = [
     'DATASETS', 'DATASOURCES', 'PIPELINES', 'BaseDataset', 'build_dataloader',
