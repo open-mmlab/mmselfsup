@@ -1,6 +1,14 @@
 # dataset settings
 data_source = 'ImageNet'
 dataset_type = 'MAEDataset'
+file_client_args = dict(
+    backend='petrel',
+    path_mapping=dict({
+        '.data/imagenet/':
+        'openmmlab:s3://openmmlab/datasets/classification/imagenet/',
+        'data/imagenet/':
+        'openmmlab:s3://openmmlab/datasets/classification/imagenet/'
+    }))
 file_client_args = dict()
 img_norm_cfg = dict(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 target_img_norm_cfg = dict(
@@ -25,10 +33,9 @@ data = dict(
         type=dataset_type,
         data_source=dict(
             type=data_source,
-            data_prefix=
-            '/mnt/lustre/share_data/openmmlab/datasets/classification/imagenet/train',
-            ann_file=
-            '/mnt/lustre/share_data/openmmlab/datasets/classification/imagenet/meta/train.txt',
+            data_prefix='data/imagenet/train',
+            ann_file='data/imagenet/meta/train.txt',
+            file_client_args=file_client_args,
         ),
         pipeline=train_pipeline,
         target_pipeline=train_target_pipeline,
