@@ -122,6 +122,7 @@ replace.sh
 benchmarks/detection/datasets
 benchmarks/detection/output
 ftest*
+test_*.txt
 
 # Pytorch
 *.pth
