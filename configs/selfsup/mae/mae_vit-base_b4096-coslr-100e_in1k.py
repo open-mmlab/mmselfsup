@@ -1,6 +1,3 @@
-from mmcv import runner
-
-
 _base_ = [
     '../_base_/models/mae.py',
     '../_base_/datasets/imagenet_mae.py',
@@ -10,6 +7,7 @@ _base_ = [
 
 # optimizer
 optimizer = dict(
+    lr=1.5e-4 * 4096 / 256,
     paramwise_options={
         '(bn|gn)(\\d+)?.(weight|bias)': dict(weight_decay=0.),
         'bias': dict(weight_decay=0.),
@@ -23,7 +21,7 @@ lr_config = dict(
     policy='CosineAnnealing',
     min_lr=1e-5,
     warmup='linear',
-    warmup_iters=40,
+    warmup_iters=40 * 100 // 1600,
     warmup_ratio=1e-4,
     warmup_by_epoch=True)
 
@@ -32,20 +30,20 @@ lr_config = dict(
 # if it is 3, when CheckpointHook (in mmcv) saves the 4th ckpt
 # it will remove the oldest one to keep the number of total ckpts as 3
 checkpoint_config = dict(
-    interval=1, max_keep_ckpts=3, out_dir='/mnt/lustre/liuyuan1.vendor/ckptp/mae')
+    interval=1,
+    max_keep_ckpts=3,
+    out_dir='/mnt/lustre/liuyuan1.vendor/ckpt/mae')
 
 persistent_workers = True
-runner = dict(max_epochs=400)
+runner = dict(max_epochs=100)
 
 log_config = dict(
-    interval=10,
+    interval=50,
     hooks=[
         dict(type='TextLoggerHook'),
         # dict(type='TensorboardLoggerHook'),
     ])
 
-data = dict(
-    imgs_per_gpu=256
-)
+data = dict(imgs_per_gpu=256)
 
 # dist_params = dict(backend='nccl', port=29500)
