@@ -9,7 +9,6 @@ file_client_args = dict(
         'data/imagenet/':
         'openmmlab:s3://openmmlab/datasets/classification/imagenet/'
     }))
-file_client_args = dict()
 img_norm_cfg = dict(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 target_img_norm_cfg = dict(
     mean=[-2.1179, -2.0357, -1.8044], std=[4.3668, 4.4643, 4.4444])
