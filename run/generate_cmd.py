@@ -1,7 +1,7 @@
-from mae_b4096_100e import *
+from mae_b4096_400e import *
 
 nohup = True
-output_file = 'test_2.txt'
+output_file = 'test_4.txt'
 resume_from = None
 
 if nohup:
