@@ -58,7 +58,7 @@ GPUS_PER_NODE=8 GPUS=8 bash tools/srun_train.sh Dummy Test_job configs/selfsup/o
 
 If you launch with multiple machines simply connected with ethernet, you have to modify `tools/dist_train.sh` or create a new script, please refer to PyTorch [Launch utility](https://pytorch.org/docs/stable/distributed.html#launch-utility). Usually it is slow if you do not have high speed networking like InfiniBand.
 
-If you launch with slurm, the command is the same as that on single machine described above, but you need refer to [slurm_train.sh](../tools/slurm_train.sh) to set appropriate parameters and environment variables.
+If you launch with slurm, the command is the same as that on single machine described above, but you need refer to [slurm_train.sh](https://github.com/open-mmlab/mmselfsup/blob/master/tools/slurm_train.sh) to set appropriate parameters and environment variables.
 
 ### Launch multiple jobs on a single machine
 
@@ -141,7 +141,7 @@ Arguments:
 - `CONFIG_FILE`: config file for the pre-trained model.
 - `CKPT_PATH`: the path of model's checkpoint.
 - `WORK_DIR`: the directory to save the results of visualization.
-- `[optional arguments]`: for optional arguments, you can refer to [visualize_tsne.py](../tools/analysis_tools/visualize_tsne.py)
+- `[optional arguments]`: for optional arguments, you can refer to [visualize_tsne.py](https://github.com/open-mmlab/mmselfsup/blob/master/tools/analysis_tools/visualize_tsne.py)
 
 
 ### Reproducibility

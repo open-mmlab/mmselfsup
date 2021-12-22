@@ -24,7 +24,7 @@ In addition, this part is still under refactoring, it will be released in follow
 
 ### Models
 
-- The registry mechanism is updated. Currently, the parts under the `models` folder are built with a parent called MMCV_MODELS that is imported from `MMCV`. Please check [mmselfsup/models/builder.py](../mmselfsup/models/builder.py) and refer to [mmcv/utils/registry.py](https://github.com/open-mmlab/mmcv/blob/master/mmcv/utils/registry.py) for more details.
+- The registry mechanism is updated. Currently, the parts under the `models` folder are built with a parent called MMCV_MODELS that is imported from `MMCV`. Please check [mmselfsup/models/builder.py](https://github.com/open-mmlab/mmselfsup/blob/master/mmselfsup/models/builder.py) and refer to [mmcv/utils/registry.py](https://github.com/open-mmlab/mmcv/blob/master/mmcv/utils/registry.py) for more details.
 
 - The `models` folder includes algorithms, backbones, necks, heads, memories and some required utils. The `algorithms` integrates the other main components to build the self-supervised learning algorithms, which is like `classifiers` in MMCls or `detectors` in MMDet.
 
