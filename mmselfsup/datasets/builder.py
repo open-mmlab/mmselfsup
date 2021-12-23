@@ -55,7 +55,7 @@ def build_dataloader(dataset,
                      replace=False,
                      seed=None,
                      pin_memory=True,
-                     persistent_workers=True,
+                     persistent_workers=False,
                      **kwargs):
     """Build PyTorch DataLoader.
 
@@ -131,7 +131,6 @@ def build_dataloader(dataset,
         img_norm_cfg = kwargs.pop('img_norm_cfg')
     else:
         prefetch = False
-
     data_loader = DataLoader(
         dataset,
         batch_size=batch_size,

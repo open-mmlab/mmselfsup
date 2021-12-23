@@ -1,23 +1,21 @@
-from functools import partial
-
 import torch
 import torch.nn as nn
-from mmcv.runner import BaseModule
 from timm.models.layers import trunc_normal_
-
+from ..utils import PatchEmbed, get_sinusoid_encoding_table, Block
 from ..builder import BACKBONES
-from ..utils import Block, PatchEmbed, get_sinusoid_encoding_table
+from mmcv.runner import BaseModule
+from functools import partial
 
 
-@BACKBONES.register_module('Vit')
-class PretrainVisionTransformerEncoder(BaseModule):
+@BACKBONES.register_module('Vit_ft')
+class VisionTransformer(BaseModule):
     """Vision Transformer with support for patch or hybrid CNN input stage."""
 
     def __init__(self,
                  img_size=224,
                  patch_size=16,
                  in_chans=3,
-                 num_classes=0,
+                 num_classes=1000,
                  embed_dim=768,
                  depth=12,
                  num_heads=12,
@@ -28,9 +26,12 @@ class PretrainVisionTransformerEncoder(BaseModule):
                  attn_drop_rate=0.,
                  drop_path_rate=0.,
                  norm_layer=partial(nn.LayerNorm, eps=1e-6),
-                 init_values=None,
-                 use_learnable_pos_emb=False):
-        super().__init__()
+                 init_values=0.,
+                 use_learnable_pos_emb=False,
+                 init_scale=0.,
+                 use_mean_pooling=True,
+                 init_cfg=None):
+        super(VisionTransformer, self).__init__(init_cfg)
         self.num_classes = num_classes
         # num_features for consistency with other models
         self.num_features = self.embed_dim = embed_dim
@@ -42,15 +43,16 @@ class PretrainVisionTransformerEncoder(BaseModule):
             embed_dim=embed_dim)
         num_patches = self.patch_embed.num_patches
 
-        # TODO: Add the cls token
         # self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
         if use_learnable_pos_emb:
             self.pos_embed = nn.Parameter(
-                torch.zeros(1, num_patches + 1, embed_dim))
+                torch.zeros(1, num_patches, embed_dim))
         else:
-            # sine-cosine positional embeddings
+            # sine-cosine positional embeddings is on the way
             self.pos_embed = get_sinusoid_encoding_table(
                 num_patches, embed_dim)
+
+        self.pos_drop = nn.Dropout(p=drop_rate)
 
         dpr = [x.item() for x in torch.linspace(0, drop_path_rate, depth)
                ]  # stochastic depth decay rule
@@ -67,41 +69,65 @@ class PretrainVisionTransformerEncoder(BaseModule):
                 norm_layer=norm_layer,
                 init_values=init_values) for i in range(depth)
         ])
-        self.norm = norm_layer(embed_dim)
+        self.norm = nn.Identity() if use_mean_pooling else norm_layer(
+            embed_dim)
+        self.fc_norm = norm_layer(embed_dim) if use_mean_pooling else None
         self.head = nn.Linear(
             embed_dim, num_classes) if num_classes > 0 else nn.Identity()
 
         if use_learnable_pos_emb:
             trunc_normal_(self.pos_embed, std=.02)
 
+        # trunc_normal_(self.cls_token, std=.02)
+        trunc_normal_(self.head.weight, std=.02)
         self.apply(self._init_weights)
+
+        self.head.weight.data.mul_(init_scale)
+        self.head.bias.data.mul_(init_scale)
 
     def _init_weights(self, m):
         if isinstance(m, nn.Linear):
-            nn.init.xavier_uniform_(m.weight)
+            trunc_normal_(m.weight, std=.02)
             if isinstance(m, nn.Linear) and m.bias is not None:
                 nn.init.constant_(m.bias, 0)
         elif isinstance(m, nn.LayerNorm):
             nn.init.constant_(m.bias, 0)
             nn.init.constant_(m.weight, 1.0)
 
-    def forward_features(self, x, mask):
+    def get_num_layers(self):
+        return len(self.blocks)
+
+    def get_classifier(self):
+        return self.head
+
+    def reset_classifier(self, num_classes, global_pool=''):
+        self.num_classes = num_classes
+        self.head = nn.Linear(
+            self.embed_dim, num_classes) if num_classes > 0 else nn.Identity()
+
+    def forward_features(self, x):
         x = self.patch_embed(x)
+        B, _, _ = x.size()
 
         # cls_tokens = self.cls_token.expand(batch_size, -1, -1)
+        # # stole cls_tokens impl from Phil Wang, thanks
         # x = torch.cat((cls_tokens, x), dim=1)
-        x = x + self.pos_embed.type_as(x).to(x.device).clone().detach()
-
-        B, _, C = x.shape
-        x_vis = x[~mask].reshape(B, -1, C)  # ~mask means visible
+        if self.pos_embed is not None:
+            x = x + self.pos_embed.expand(B, -1, -1).type_as(x).to(
+                x.device).clone().detach()
+        x = self.pos_drop(x)
 
         for blk in self.blocks:
-            x_vis = blk(x_vis)
+            x = blk(x)
 
-        x_vis = self.norm(x_vis)
-        return x_vis
+        x = self.norm(x)
+        if self.fc_norm is not None:
+            # return self.fc_norm(x[:, 1:].mean(1))
+            return self.fc_norm(x.mean(1))
+        else:
+            return x[:, 0]
 
-    def forward(self, x, mask):
-        x = self.forward_features(x, mask)
+    def forward(self, x):
+        x = self.forward_features(x)
         x = self.head(x)
         return x
