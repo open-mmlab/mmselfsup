@@ -1,6 +1,4 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-import pdb
-
 import torch
 from timm.models.layers import trunc_normal_
 from torch import nn
