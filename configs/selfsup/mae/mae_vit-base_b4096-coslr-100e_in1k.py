@@ -13,7 +13,7 @@ optimizer = dict(
         'bias': dict(weight_decay=0.),
         'pos_embed': dict(weight_decay=0.),
         'cls_token': dict(weight_decay=0.),
-        'mask_token': dict(weight_decay=0.)
+        'mask_token': dict(weight_decay=0.),
     })
 
 # learning policy
