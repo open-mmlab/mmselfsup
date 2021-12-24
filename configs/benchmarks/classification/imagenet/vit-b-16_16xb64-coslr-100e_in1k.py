@@ -37,7 +37,10 @@ lr_config = dict(
     warmup_ratio=1e-4,
     warmup_by_epoch=True)
 
-checkpoint_config = dict(interval=1, max_keep_ckpts=3)
+checkpoint_config = dict(
+    interval=1,
+    max_keep_ckpts=3,
+    out_dir='/mnt/lustre/liuyuan1.vendor/ckpt/mae/benchmark')
 
 persistent_workers = True
 runner = dict(max_epochs=100)
@@ -47,6 +50,6 @@ log_config = dict(
         dict(type='TextLoggerHook'),
     ])
 
-data = dict(imgs_per_gpu=128)
+data = dict(imgs_per_gpu=64, drop_last=True)
 
 model = dict(backbone=dict(init_cfg=dict(prefix='backbone.')))
