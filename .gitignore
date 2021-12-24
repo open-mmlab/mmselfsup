@@ -124,6 +124,7 @@ benchmarks/detection/output
 ftest*
 test_*.txt
 batchscript*
+*.out
 
 # Pytorch
 *.pth
