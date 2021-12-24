@@ -12,7 +12,8 @@ from mmcv.utils import build_from_cfg
 from mmselfsup.core import (DistOptimizerHook, GradAccumFp16OptimizerHook,
                             build_optimizer)
 from mmselfsup.datasets import build_dataloader, build_dataset
-from mmselfsup.utils import get_root_logger, multi_gpu_test, single_gpu_test
+from mmselfsup.utils import (find_available_ckpt, get_root_logger,
+                             multi_gpu_test, single_gpu_test)
 
 
 def init_random_seed(seed=None, device='cuda'):
@@ -105,7 +106,6 @@ def train_model(model,
     else:
         model = MMDataParallel(
             model.cuda(cfg.gpu_ids[0]), device_ids=cfg.gpu_ids)
-
     # build optimizer
     optimizer = build_optimizer(model, cfg.optimizer)
 
@@ -134,6 +134,8 @@ def train_model(model,
         optimizer_config = cfg.optimizer_config
 
     # register hooks
+    import pdb
+    pdb.set_trace()
     runner.register_training_hooks(cfg.lr_config, optimizer_config,
                                    cfg.checkpoint_config, cfg.log_config)
     if distributed:
@@ -167,6 +169,7 @@ def train_model(model,
             dist=distributed,
             shuffle=False,
             prefetch=cfg.data.val.prefetch,
+            drop_last=getattr(cfg.data, 'drop_last', False),
             img_norm_cfg=cfg.get('img_norm_cfg', dict()))
         eval_cfg = cfg.get('evaluation', {})
         eval_cfg['by_epoch'] = cfg.runner['type'] != 'IterBasedRunner'
@@ -179,8 +182,13 @@ def train_model(model,
             eval_hook(val_dataloader, test_fn=eval_fn, **eval_cfg),
             priority='LOW')
 
+    if cfg.resume_from is None:
+        cfg.resume_from = find_available_ckpt(cfg.work_dir,
+                                              cfg.checkpoint_config.out_dir)
     if cfg.resume_from:
         runner.resume(cfg.resume_from)
     elif cfg.load_from:
         runner.load_checkpoint(cfg.load_from)
+    import pdb
+    pdb.set_trace()
     runner.run(data_loaders, cfg.workflow)
