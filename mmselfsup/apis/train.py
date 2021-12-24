@@ -105,7 +105,6 @@ def train_model(model,
     else:
         model = MMDataParallel(
             model.cuda(cfg.gpu_ids[0]), device_ids=cfg.gpu_ids)
-
     # build optimizer
     optimizer = build_optimizer(model, cfg.optimizer)
 
@@ -167,6 +166,7 @@ def train_model(model,
             dist=distributed,
             shuffle=False,
             prefetch=cfg.data.val.prefetch,
+            drop_last=getattr(cfg.data, 'drop_last', False),
             img_norm_cfg=cfg.get('img_norm_cfg', dict()))
         eval_cfg = cfg.get('evaluation', {})
         eval_cfg['by_epoch'] = cfg.runner['type'] != 'IterBasedRunner'
