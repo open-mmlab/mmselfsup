@@ -134,8 +134,6 @@ def train_model(model,
         optimizer_config = cfg.optimizer_config
 
     # register hooks
-    import pdb
-    pdb.set_trace()
     runner.register_training_hooks(cfg.lr_config, optimizer_config,
                                    cfg.checkpoint_config, cfg.log_config)
     if distributed:
@@ -189,6 +187,4 @@ def train_model(model,
         runner.resume(cfg.resume_from)
     elif cfg.load_from:
         runner.load_checkpoint(cfg.load_from)
-    import pdb
-    pdb.set_trace()
     runner.run(data_loaders, cfg.workflow)
