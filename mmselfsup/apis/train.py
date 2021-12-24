@@ -180,9 +180,6 @@ def train_model(model,
             eval_hook(val_dataloader, test_fn=eval_fn, **eval_cfg),
             priority='LOW')
 
-    if cfg.resume_from is None:
-        cfg.resume_from = find_available_ckpt(cfg.work_dir,
-                                              cfg.checkpoint_config.out_dir)
     if cfg.resume_from:
         runner.resume(cfg.resume_from)
     elif cfg.load_from:
