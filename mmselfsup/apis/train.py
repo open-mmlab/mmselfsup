@@ -166,6 +166,7 @@ def train_model(model,
             workers_per_gpu=cfg.data.workers_per_gpu,
             dist=distributed,
             shuffle=False,
+            drop_last=getattr(cfg.data, 'drop_last', False),
             prefetch=cfg.data.val.prefetch,
             img_norm_cfg=cfg.get('img_norm_cfg', dict()))
         eval_cfg = cfg.get('evaluation', {})
