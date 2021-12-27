@@ -35,12 +35,13 @@ lr_config = dict(
     warmup='linear',
     warmup_iters=5,
     warmup_ratio=1e-4,
-    warmup_by_epoch=True)
+    warmup_by_epoch=True,
+    by_epoch=False)
 
 checkpoint_config = dict(
     interval=1,
     max_keep_ckpts=3,
-    out_dir='/mnt/lustre/liuyuan1.vendor/ckpt/mae/benchmark')
+    out_dir='/mnt/lustre/liuyuan1.vendor/ckpt/mae/benchmark_by_iter')
 
 persistent_workers = True
 runner = dict(max_epochs=100)
@@ -50,6 +51,6 @@ log_config = dict(
         dict(type='TextLoggerHook'),
     ])
 
-data = dict(imgs_per_gpu=64, drop_last=True)
+data = dict(imgs_per_gpu=32, drop_last=True)
 
 model = dict(backbone=dict(init_cfg=dict(prefix='backbone.')))
