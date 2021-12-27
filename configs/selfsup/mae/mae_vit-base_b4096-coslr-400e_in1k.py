@@ -23,7 +23,8 @@ lr_config = dict(
     warmup='linear',
     warmup_iters=40,
     warmup_ratio=1e-4,
-    warmup_by_epoch=True)
+    warmup_by_epoch=True,
+    by_epoch=False)
 
 # runtime settings
 # the max_keep_ckpts controls the max number of ckpt file in your work_dirs
@@ -32,7 +33,7 @@ lr_config = dict(
 checkpoint_config = dict(
     interval=1,
     max_keep_ckpts=3,
-    out_dir='/mnt/lustre/liuyuan1.vendor/ckpt/mae')
+    out_dir='/mnt/lustre/liuyuan1.vendor/ckpt/mae_by_iter')
 
 persistent_workers = True
 runner = dict(max_epochs=400)
@@ -45,5 +46,3 @@ log_config = dict(
     ])
 
 data = dict(imgs_per_gpu=128)
-
-# dist_params = dict(backend='nccl', port=29500)
