@@ -47,6 +47,6 @@ log_config = dict(
         dict(type='TextLoggerHook'),
     ])
 
-data = dict(imgs_per_gpu=128)
+data = dict(imgs_per_gpu=2)
 
 model = dict(backbone=dict(init_cfg=dict(prefix='backbone.')))
