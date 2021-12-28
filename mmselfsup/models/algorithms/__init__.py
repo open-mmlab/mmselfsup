@@ -4,7 +4,7 @@ from .byol import BYOL
 from .classification import Classification
 from .deepcluster import DeepCluster
 from .densecl import DenseCL
-from .mae import PretrainVisionTransformer
+from .mae import MAE
 from .moco import MoCo
 from .mocov3 import MoCoV3
 from .npid import NPID
@@ -19,5 +19,5 @@ from .vit_classification import VitClassification
 __all__ = [
     'BaseModel', 'BYOL', 'Classification', 'DeepCluster', 'DenseCL', 'MoCo',
     'NPID', 'ODC', 'RelativeLoc', 'RotationPred', 'SimCLR', 'SimSiam', 'SwAV',
-    'PretrainVisionTransformer', 'VitClassification', 'MoCoV3'
+    'MAE', 'VitClassification', 'MoCoV3'
 ]

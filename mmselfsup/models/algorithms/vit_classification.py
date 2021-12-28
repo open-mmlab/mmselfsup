@@ -1,6 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from ..builder import ALGORITHMS, build_backbone, build_head
-from ..utils import Sobel
 from .base import BaseModel
 from timm.data.mixup import Mixup
 
@@ -19,7 +18,6 @@ class VitClassification(BaseModel):
 
     def __init__(self,
                  backbone,
-                 with_sobel=False,
                  head=None,
                  init_cfg=None,
                  mixup_alpha=None,
@@ -31,9 +29,6 @@ class VitClassification(BaseModel):
                  label_smoothing=None,
                  num_classes=None):
         super(VitClassification, self).__init__(init_cfg)
-        self.with_sobel = with_sobel
-        if with_sobel:
-            self.sobel_layer = Sobel()
         self.backbone = build_backbone(backbone)
         assert head is not None
         self.head = build_head(head)
@@ -57,8 +52,6 @@ class VitClassification(BaseModel):
         Returns:
             tuple[Tensor]: backbone outputs.
         """
-        if self.with_sobel:
-            img = self.sobel_layer(img)
         x = self.backbone(img)
         return x
 
