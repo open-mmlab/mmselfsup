@@ -69,7 +69,9 @@ class SimCLR(BaseModel):
             dict[str, Tensor]: A dictionary of loss components.
         """
         assert isinstance(img, list)
-        img = torch.cat(img)
+        img = torch.stack(img, 1)
+        img = img.reshape(
+            (img.size(0) * 2, img.size(2), img.size(3), img.size(4)))
         x = self.extract_feat(img)  # 2n
         z = self.neck(x)[0]  # (2n)xd
         z = z / (torch.norm(z, p=2, dim=1, keepdim=True) + 1e-10)
