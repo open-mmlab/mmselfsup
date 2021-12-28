@@ -39,7 +39,7 @@ lr_config = dict(
     by_epoch=False)
 
 checkpoint_config = dict(
-    interval=1,
+    interval=100,
     max_keep_ckpts=3,
     out_dir='/mnt/lustre/liuyuan1.vendor/ckpt/mae/benchmark_by_iter')
 

@@ -2,12 +2,12 @@
 from .cls_head import ClsHead
 from .contrastive_head import ContrastiveHead
 from .latent_pred_head import LatentClsHead, LatentPredictHead
-from .mae_cls_head import VitHead
+from .soft_cls_head import SoftClsHead
 from .multi_cls_head import MultiClsHead
-from .pixel_head import PixelHead
+from .mse_head import MSEHead
 from .swav_head import SwAVHead
 
 __all__ = [
     'ContrastiveHead', 'ClsHead', 'LatentPredictHead', 'LatentClsHead',
-    'MultiClsHead', 'SwAVHead', 'PixelHead', 'VitHead'
+    'MultiClsHead', 'SwAVHead', 'SoftClsHead', 'MSEHead'
 ]
