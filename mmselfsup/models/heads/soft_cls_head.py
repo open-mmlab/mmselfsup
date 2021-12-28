@@ -3,10 +3,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from mmcv.runner import BaseModule
+from timm.models.layers import trunc_normal_
 
 from ..builder import HEADS
-
-HEADS.register_module()
 
 
 class SoftTargetCrossEntropy(nn.Module):
@@ -20,21 +19,27 @@ class SoftTargetCrossEntropy(nn.Module):
 
 
 @HEADS.register_module()
-class VitHead(BaseModule):
+class SoftClsHead(BaseModule):
     """Head for pixel_level reconstruction.
 
     The MSE loss is implemented in this head and is used in generative methods,
     e.g. MAE
     """
 
-    def __init__(self):
-        super(VitHead, self).__init__()
+    def __init__(self, embed_dim, num_classes, init_scale):
+        super(SoftClsHead, self).__init__()
         self.criterion = SoftTargetCrossEntropy()
+        self.head = nn.Linear(embed_dim, num_classes)
 
-    def forward(self, outputs, labels):
+        trunc_normal_(self.head.weight, std=.02)
+
+        self.head.weight.data.mul_(init_scale)
+        self.head.bias.data.mul_(init_scale)
+
+    def forward(self, x, labels):
 
         losses = dict()
-
+        outputs = self.head(x)
         losses['loss'] = self.criterion(outputs, labels)
 
         return losses
