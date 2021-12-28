@@ -58,5 +58,6 @@ data = dict(
         pipeline=test_pipeline,
         prefetch=prefetch),
 )
+
 evaluation = dict(interval=10, topk=(1, 5))
 img_norm_cfg = dict(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])

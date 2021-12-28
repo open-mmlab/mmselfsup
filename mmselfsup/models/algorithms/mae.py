@@ -9,7 +9,7 @@ from .base import BaseModel
 
 
 @ALGORITHMS.register_module('MAE')
-class PretrainVisionTransformer(BaseModel):
+class MAE(BaseModel):
     """MAE.
 
     Implementation of `Masked Autoencoders Are Scalable Vision Learners
@@ -23,16 +23,15 @@ class PretrainVisionTransformer(BaseModel):
         Defaults to None
     head (dict): Config dict for loss functions.
         Defaults to None.
-    init (dict): Config dict for weight initialization.
+    init_cfg (dict): Config dict for weight initialization.
         Defaults to None.
     """
 
     def __init__(self, backbone=None, neck=None, head=None, init_cfg=None):
-        super(PretrainVisionTransformer, self).__init__(init_cfg)
+        super(MAE, self).__init__(init_cfg)
         assert backbone is not None
         self.backbone = build_backbone(backbone)
         assert neck is not None
-        neck['num_patches'] = self.backbone.patch_embed.num_patches
         self.neck = build_neck(neck)
         assert head is not None
         self.head = build_head(head)
