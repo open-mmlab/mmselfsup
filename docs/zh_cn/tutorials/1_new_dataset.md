@@ -2,10 +2,10 @@
 
 在本节教程中，我们将介绍创建自定义数据格式的基本步骤：
 
-- [教程 1: 添加新的数据格式](#教程 1: 添加新的数据格式)
+- [教程 1: 添加新的数据格式](#教程-1-添加新的数据格式)
     - [自定义数据格式示例](#自定义数据格式示例)
-    - [创建`DataSource`子类](#创建DataSource子类)
-    - [创建`DataSource`子类](#创建DataSource子类)
+    - [创建`DataSource`子类](#创建-datasource-子类)
+    - [创建`Dataset`子类](#创建-dataset-子类)
     - [修改配置文件](#修改配置文件)
 
 如果你的算法不需要任何定制的数据格式，你可以使用[datasets](../../mmselfsup/datasets)目录中这些现成的数据格式。但是要使用这些现有的数据格式，你必须将你的数据集转换为现有的数据格式。
@@ -24,7 +24,7 @@
 - 子类`DataSource`：继承自父类`BaseDataSource`——负责加载注释文件和读取图像。
 - 子类`Dataset`：继承自父类 `BaseDataset` ——负责对图像进行转换和打包。
 
-### 创建 `DataSource`子类
+### 创建 `DataSource` 子类
 
 假设你基于父类`DataSource` 创建的子类名为 `NewDataSource`， 你可以在`mmselfsup/datasets/data_sources` 目录下创建一个文件，文件名为 `new_data_source.py` ，并在这个文件中实现 `NewDataSource` 创建。
 
@@ -59,7 +59,7 @@ __all__ = [
 ]
 ```
 
-### 创建 `Dataset`子类
+### 创建 `Dataset` 子类
 
 假设你基于父类 `Dataset` 创建的子类名为 `NewDataset`，你可以在`mmselfsup/datasets`目录下创建一个文件，文件名为`new_dataset.py` ，并在这个文件中实现 `NewDataset` 创建。
 
