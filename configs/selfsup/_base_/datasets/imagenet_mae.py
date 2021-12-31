@@ -24,8 +24,8 @@ data = dict(
         type=dataset_type,
         data_source=dict(
             type=data_source,
-            data_prefix='data/mae/train',
-            ann_file='data/mae/meta/train.txt',
+            data_prefix='data/imagenet/train',
+            ann_file='data/imagenet/meta/train.txt',
         ),
         pipeline=train_pipeline,
         target_pipeline=train_target_pipeline,
