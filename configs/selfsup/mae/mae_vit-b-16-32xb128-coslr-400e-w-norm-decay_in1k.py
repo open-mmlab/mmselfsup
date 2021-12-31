@@ -9,6 +9,7 @@ _base_ = [
 optimizer = dict(
     lr=1.5e-4 * 4096 / 256,
     paramwise_options={
+        'norm': dict(weight_decay=0.),
         'bias': dict(weight_decay=0.),
         'pos_embed': dict(weight_decay=0.),
         'mask_token': dict(weight_decay=0.)
@@ -28,16 +29,17 @@ lr_config = dict(
 # the max_keep_ckpts controls the max number of ckpt file in your work_dirs
 # if it is 3, when CheckpointHook (in mmcv) saves the 4th ckpt
 # it will remove the oldest one to keep the number of total ckpts as 3
-checkpoint_config = dict(interval=1, max_keep_ckpts=3, out_dir='test_ckpt')
+checkpoint_config = dict(
+    interval=1, max_keep_ckpts=3, out_dir='./best_version_pt')
 
 persistent_workers = True
 runner = dict(max_epochs=400)
 
 log_config = dict(
-    interval=1,
+    interval=100,
     hooks=[
         dict(type='TextLoggerHook'),
         # dict(type='TensorboardLoggerHook'),
     ])
 
-data = dict(imgs_per_gpu=1)
+data = dict(imgs_per_gpu=512)
