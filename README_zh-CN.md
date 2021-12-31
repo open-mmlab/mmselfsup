@@ -40,6 +40,14 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
 该项目采用 [Apache 2.0 开源许可证](LICENSE).
 
+## 修改日志
+
+MMSelfSup **v0.5.0** 在 16/12/2021 发版.
+
+请参考 [changelog.md](docs/zh_cn/changelog.md) 获取更多细节和历史版本信息。
+
+MMSelfSup 和 OpenSelfSup 的不同点写在 [compatibility.md](docs/en/compatibility.md) 当中。
+
 ## 模型库和基准测试
 
 ### 模型库
@@ -136,13 +144,15 @@ MMSelfSup 是一款由不同学校和公司共同贡献的开源项目，我们�
 - [MMFewShot](https://github.com/open-mmlab/mmfewshot): OpenMMLab 少样本学习工具箱与测试基准
 - [MMHuman3D](https://github.com/open-mmlab/mmhuman3d): OpenMMLab 人体参数化模型工具箱与测试基准
 - [MMSelfSup](https://github.com/open-mmlab/mmselfsup): OpenMMLab 自监督学习工具箱与测试基准
+- [MMRazor](https://github.com/open-mmlab/mmrazor): OpenMMLab 模型压缩工具箱与测试基准
+- [MMDeploy](https://github.com/open-mmlab/mmdeploy): OpenMMLab 模型部署框架
 
 ## 欢迎加入 OpenMMLab 社区
 
 扫描下方的二维码可关注 OpenMMLab 团队的 [知乎官方账号](https://www.zhihu.com/people/openmmlab)，加入 OpenMMLab 团队的 [官方交流 QQ 群](https://jq.qq.com/?_wv=1027&k=GJP18SjI)，添加OpenMMLab 官方小助手微信，加入 MMSelfSup 微信社区。
 
 <div align="center">
-<img src="./resources/zhihu_qrcode.jpg" height="400"/>  <img src="./resources/qq_group_qrcode.jpg" height="400"/> <img src="./resources/xiaozhushou_weixin_qrcode.jpeg" height="400"/> <img src="./resources/weixin_qrcode.jpeg" height="400"/>
+<img src="./resources/zhihu_qrcode.jpg" height="400"/>  <img src="./resources/qq_group_qrcode.jpg" height="400"/> <img src="./resources/xiaozhushou_weixin_qrcode.jpeg" height="400"/>
 </div>
 
 我们会在 OpenMMLab 社区为大家
