@@ -60,7 +60,6 @@ class Vit(BaseModule):
         ])
         self.norm = norm_layer(embed_dim) if self.pretrain else None
         self.fc_norm = norm_layer(embed_dim) if not self.pretrain else None
-
         self.apply(self._init_weights)
 
     def _init_weights(self, m):
