@@ -42,4 +42,4 @@ log_config = dict(
         # dict(type='TensorboardLoggerHook'),
     ])
 
-data = dict(imgs_per_gpu=512)
+data = dict(imgs_per_gpu=512, workers_per_gpu=32)
