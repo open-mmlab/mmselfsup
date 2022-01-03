@@ -1,6 +1,6 @@
 # Prepare Datasets
 
-MMSelfsup supports multiple datasets. Please follow the corresponding guidelines for data preparation. It is recommended to symlink your dataset root to `$MMSELFSUP/data`. If your folder structure is different, you may need to change the corresponding paths in config files.
+MMSelfSup supports multiple datasets. Please follow the corresponding guidelines for data preparation. It is recommended to symlink your dataset root to `$MMSELFSUP/data`. If your folder structure is different, you may need to change the corresponding paths in config files.
 
 - [Prepare ImageNet](#prepare-imagenet)
 - [Prepare Place205](#prepare-place205)
