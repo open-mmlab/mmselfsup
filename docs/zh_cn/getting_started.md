@@ -1,149 +1,146 @@
-# Getting Started
+# 基础教程
 
-- [Getting Started](#getting-started)
-  - [Train existing methods](#train-existing-methods)
-    - [Train with single/multiple GPUs](#train-with-singlemultiple-gpus)
-    - [Train with multiple machines](#train-with-multiple-machines)
-    - [Launch multiple jobs on a single machine](#launch-multiple-jobs-on-a-single-machine)
-  - [Benchmarks](#benchmarks)
-  - [Tools and Tips](#tools-and-tips)
-    - [Count number of parameters](#count-number-of-parameters)
-    - [Publish a model](#publish-a-model)
-    - [Use t-SNE](#use-t-sne)
-    - [Reproducibility](#reproducibility)
+- [基础教程](#基础教程)
+  - [训练已有的算法](#训练已有的算法)
+    - [使用 单张/多张 显卡训练](#使用-单张多张-显卡训练)
+    - [使用多台机器训练](#使用多台机器训练)
+    - [在一台机器上启动多个任务](#在一台机器上启动多个任务)
+  - [基准测试](#基准测试)
+  - [工具和建议](#工具和建议)
+    - [统计模型的参数](#统计模型的参数)
+    - [发布模型](#发布模型)
+    - [使用 t-SNE 来做模型可视化](#使用-t-sne-来做模型可视化)
+    - [可复现性](#可复现性)
 
-This page provides basic tutorials about the usage of MMSelfSup. For installation instructions, please see [install.md](install.md).
+本文档提供 MMSelfSup 相关用法的基础教程。 如果您对如何安装 MMSelfSup 以及其相关依赖库有疑问, 请参考 [安装文档](install.md).
 
-## Train existing methods
+## 训练已有的算法
 
-**Note**: The default learning rate in config files is for 8 GPUs. If using different number GPUs, the total batch size will change in proportion, you have to scale the learning rate following `new_lr = old_lr * new_ngpus / old_ngpus`. We recommend to use `tools/dist_train.sh` even with 1 gpu, since some methods do not support non-distributed training.
+**注意**: 当您启动一个任务的时候，默认会使用8块显卡. 如果您想使用少于或多余8块显卡, 那么你的 batch size 也会同比例缩放，同时您的学习率服从一个线性缩放原则, 那么您可以使用以下公式来调整您的学习率: `new_lr = old_lr * new_ngpus / old_ngpus`. 除此之外，我们推荐您使用 `tools/dist_train.sh` 来启动训练任务，即便您只使用一块显卡, 因为 MMSelfSup 中有些算法不支持非分布式训练。
 
-### Train with single/multiple GPUs
+### 使用 单张/多张 显卡训练
 
 ```shell
 bash tools/dist_train.sh ${CONFIG_FILE} ${GPUS} --work_dir ${YOUR_WORK_DIR} [optional arguments]
 ```
 
-Optional arguments are:
+可选参数:
 
-- `--resume_from ${CHECKPOINT_FILE}`: Resume from a previous checkpoint file.
-- `--deterministic`: Switch on "deterministic" mode which slows down training but the results are reproducible.
+- `--resume_from ${CHECKPOINT_FILE}`: 从某个 checkpoint 处继续训练.
+- `--deterministic`: 开启 "deterministic" 模式, 虽然开启会使得训练速度降低，但是会保证结果可复现。
 
-An example:
+例如:
 
 ```shell
 # checkpoints and logs saved in WORK_DIR=work_dirs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k/
 bash tools/dist_train.sh configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py 8 --work_dir work_dirs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k/
 ```
 
-**Note**: During training, checkpoints and logs are saved in the same folder structure as the config file under `work_dirs/`. Custom work directory is not recommended since evaluation scripts infer work directories from the config file name. If you want to save your weights somewhere else, please use symlink, for example:
+**注意**: 在训练过程中, checkpoints 和 logs 被保存在同一目录层级下.
 
-```shell
-ln -s ${YOUR_WORK_DIRS} ${MMSELFSUP}/work_dirs
-```
-
-Alternatively, if you run MMSelfSup on a cluster managed with [slurm](https://slurm.schedmd.com/):
+此外, 如果您在一个被 [slurm](https://slurm.schedmd.com/) 管理的集群中训练， 您可以使用以下的脚本开展训练:
 
 ```shell
 GPUS_PER_NODE=${GPUS_PER_NODE} GPUS=${GPUS} SRUN_ARGS=${SRUN_ARGS} bash tools/slurm_train.sh ${PARTITION} ${JOB_NAME} ${CONFIG_FILE} ${YOUR_WORK_DIR} [optional arguments]
 ```
 
-An example:
+例如:
 
 ```shell
 GPUS_PER_NODE=8 GPUS=8 bash tools/srun_train.sh Dummy Test_job configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py work_dirs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k/
 ```
 
-### Train with multiple machines
+### 使用多台机器训练
 
-If you launch with multiple machines simply connected with ethernet, you have to modify `tools/dist_train.sh` or create a new script, please refer to PyTorch [Launch utility](https://pytorch.org/docs/stable/distributed.html#launch-utility). Usually it is slow if you do not have high speed networking like InfiniBand.
+如果您想使用由 ethernet 连接起来的多台机器， 您可以参考 PyTorch [Launch utility](https://pytorch.org/docs/stable/distributed.html#launch-utility) 去修改一下 `tools/dist_train.sh`。但是，如果您不使用高速网路连接这几台机器的话，训练将会非常慢。
 
-If you launch with slurm, the command is the same as that on single machine described above, but you need refer to [slurm_train.sh](https://github.com/open-mmlab/mmselfsup/blob/master/tools/slurm_train.sh) to set appropriate parameters and environment variables.
+如果您使用的是 slurm 来管理多台机器，您可以使用同在单台机器上一样的命令来启动任务，但是您必须得设置合适的环境变量和参数，具体可以参考[slurm_train.sh](../../tools/slurm_train.sh)。
 
-### Launch multiple jobs on a single machine
+### 在一台机器上启动多个任务
 
-If you launch multiple jobs on a single machine, e.g., 2 jobs of 4-GPU training on a machine with 8 GPUs, you need to specify different ports (29500 by default) for each job to avoid communication conflict.
+如果您想在一台机器上启动多个任务，比如说，您启动两个4卡的任务在一台8卡的机器上，您需要为每个任务指定不懂的端口来防止端口冲突。
 
-If you use `dist_train.sh` to launch training jobs:
+如果您使用  `dist_train.sh`  来启动训练任务:
 
 ```shell
 CUDA_VISIBLE_DEVICES=0,1,2,3 PORT=29500 bash tools/dist_train.sh ${CONFIG_FILE} 4 --work_dir tmp_work_dir_1
 CUDA_VISIBLE_DEVICES=4,5,6,7 PORT=29501 bash tools/dist_train.sh ${CONFIG_FILE} 4 --work_dir tmp_work_dir_2
 ```
 
-If you use launch training jobs with slurm, you have two options to set different communication ports:
+如果您使用 slurm 来启动训练任务，你有两种方式来为每个任务设置不同的端口:
 
-Option 1:
+方法 1:
 
-In `config1.py`:
+在 `config1.py` 中, 做如下修改:
 
 ```python
 dist_params = dict(backend='nccl', port=29500)
 ```
 
-In `config2.py`:
+在 `config2.py`中，做如下修改:
 
 ```python
 dist_params = dict(backend='nccl', port=29501)
 ```
 
-Then you can launch two jobs with config1.py and config2.py.
+然后您可以通过 config1.py 和 config2.py 来启动两个不同的任务.
 
 ```shell
 CUDA_VISIBLE_DEVICES=0,1,2,3 GPUS=4 bash tools/slurm_train.sh ${PARTITION} ${JOB_NAME} config1.py tmp_work_dir_1
 CUDA_VISIBLE_DEVICES=4,5,6,7 GPUS=4 bash tools/slurm_train.sh ${PARTITION} ${JOB_NAME} config2.py tmp_work_dir_2
 ```
 
-Option 2:
+方法 2:
 
-You can set different communication ports without the need to modify the configuration file, but have to set the `cfg-options` to overwrite the default port in configuration file.
+除了修改配置文件之外, 您可以设置 `cfg-options` 来重写默认的端口号:
 
 ```shell
 CUDA_VISIBLE_DEVICES=0,1,2,3 GPUS=4 bash tools/slurm_train.sh ${PARTITION} ${JOB_NAME} config1.py tmp_work_dir_1 --cfg-options dist_params.port=29500
 CUDA_VISIBLE_DEVICES=4,5,6,7 GPUS=4 bash tools/slurm_train.sh ${PARTITION} ${JOB_NAME} config2.py tmp_work_dir_2 --cfg-options dist_params.port=29501
 ```
 
-## Benchmarks
+## 基准测试
 
-We also provide commands to evaluate your pre-trained model on several downstream task, and you can refer to [Benchmarks](./tutorials/6_benchmarks.md) for the details.
+我们同时提供多种命令来评估您的预训练模型, 具体您可以参考[Benchmarks](./tutorials/6_benchmarks.md)。
 
-## Tools and Tips
+## 工具和建议
 
-### Count number of parameters
+### 统计模型的参数
 
 ```shell
 python tools/analysis_tools/count_parameters.py ${CONFIG_FILE}
 ```
 
-### Publish a model
+### 发布模型
 
-Before you publish a model, you may want to
+当你发布一个模型之前，您可能想做以下几件事情
 
-- Convert model weights to CPU tensors.
-- Delete the optimizer states.
-- Compute the hash of the checkpoint file and append the hash id to the filename.
+- 将模型的参数转为 CPU tensor.
+- 删除 optimizer 的状态参数.
+- 计算 checkpoint 文件的哈希值，并将其添加到 checkpoint 的文件名中.
+
+您可以使用以下命令来完整上面几件事情:
 
 ```shell
 python tools/model_converters/publish_model.py ${INPUT_FILENAME} ${OUTPUT_FILENAME}
 ```
 
 
-### Use t-SNE
+### 使用 t-SNE 来做模型可视化
 
-We provide an off-the-shelf tool to visualize the quality of image representations by t-SNE.
+我们提供了一个开箱即用的来做图片向量可视化的方法:
 
 ```shell
 python tools/analysis_tools/visualize_tsne.py ${CONFIG_FILE} --checkpoint ${CKPT_PATH} --work_dir ${WORK_DIR} [optional arguments]
 ```
 
-Arguments:
+参数:
 
-- `CONFIG_FILE`: config file for the pre-trained model.
-- `CKPT_PATH`: the path of model's checkpoint.
-- `WORK_DIR`: the directory to save the results of visualization.
-- `[optional arguments]`: for optional arguments, you can refer to [visualize_tsne.py](https://github.com/open-mmlab/mmselfsup/blob/master/tools/analysis_tools/visualize_tsne.py)
+- `CONFIG_FILE`: 训练预训练模型的参数配置文件.
+- `CKPT_PATH`: 预训练模型的路径.
+- `WORK_DIR`: 保存可视化结果的路径.
+- `[optional arguments]`: 可选参数，具体可以参考 [visualize_tsne.py](../../tools/analysis_tools/visualize_tsne.py)
 
 
-### Reproducibility
-
-If you want to make your performance exactly reproducible, please switch on `--deterministic` to train the final model to be published. Note that this flag will switch off `torch.backends.cudnn.benchmark` and slow down the training speed.
+### 可复现性
+如果您想确保模型精度的可复现性，您可以设置 `--deterministic` 参数。但是，开启 `--deterministic` 意味着关闭 `torch.backends.cudnn.benchmark`, 所以会使模型的训练速度变慢。
