@@ -1,14 +1,14 @@
-# Tutorial 2: Customize Data Pipelines
+# 教程 2：自定义数据管道
 
-- [Tutorial 2: Customize Data Pipelines](#tutorial-2-customize-data-pipelines)
-  - [Overview of `Pipeline`](#overview-of-pipeline)
-  - [Creating new augmentations in `Pipeline`](#creating-new-augmentations-in-pipeline)
+- [教程 2：自定义数据管道](#教程-2-自定义数据管道)
+  - [`Pipeline` 概览](#Pipeline-概览)
+  - [在 `Pipeline` 中创建新的数据增强](#在-Pipeline-中创建新的数据增强)
 
-## Overview of `Pipeline`
+## `Pipeline` 概览
 
-`DataSource` and `Pipeline` are two important components in `Dataset`. We have introduced `DataSource` in [add_new_dataset](./1_new_dataset.md). And the `Pipeline` is responsible for applying a series of data augmentations to images, such as random flip.
+`DataSource` 和 `Pipeline` 是 `Dataset` 的两个重要组件。我们已经在 [add_new_dataset](./1_new_dataset.md) 中介绍了 `DataSource` 。  `Pipeline` 负责对图像进行一系列的数据增强，例如随机翻转。
 
-Here is a config example of `Pipeline` for `SimCLR` training:
+这是用于 `SimCLR` 训练的 `Pipeline` 的配置示例：
 
 ```py
 train_pipeline = [
@@ -30,11 +30,11 @@ train_pipeline = [
 ]
 ```
 
-Every augmentation in the `Pipeline` receives an image as input and outputs an augmented image.
+`Pipeline` 中的每个增强都接收一张图像作为输入，并输出一张增强后的图像。
 
-## Creating new augmentations in `Pipeline`
+## 在 `Pipeline` 中创建新的数据增强
 
-1.Write a new transformation function in [transforms.py](../../mmselfsup/datasets/pipelines/transforms.py) and overwrite the `__call__` function, which takes a `Pillow` image as input:
+1.在 [transforms.py](../../mmselfsup/datasets/pipelines/transforms.py) 中编写一个新的数据增强函数，并覆盖 `__call__` 函数，该函数接收一张 `Pillow` 图像作为输入：
 
 ```py
 @PIPELINES.register_module()
@@ -45,7 +45,7 @@ class MyTransform(object):
         return img
 ```
 
-2.Use it in config files. We reuse the config file shown above and add `MyTransform` to it.
+2.在配置文件中使用它。我们重新使用上面的配置文件，并在其中添加 `MyTransform`。
 
 ```py
 train_pipeline = [
