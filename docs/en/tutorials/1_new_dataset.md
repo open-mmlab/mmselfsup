@@ -22,7 +22,7 @@ Assuming the format of your dataset's annotation file is:
 To write a new dataset, you need to implement:
 
 - `DataSource`: inherited from `BaseDataSource` and responsible for loading the annotation files and reading images.
-- `Dataset`: inherited from BaseDataset and responsible for applying transformation to images and packing these images.
+- `Dataset`: inherited from `BaseDataset` and responsible for applying transformation to images and packing these images.
 
 ### Creating the `DataSource`
 

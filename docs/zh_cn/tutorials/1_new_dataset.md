@@ -1,32 +1,32 @@
-# Tutorial 1: Adding New Dataset
+# 教程 1: 添加新的数据格式
 
-In this tutorial, we introduce the basic steps to create your customized dataset:
+在本节教程中，我们将介绍创建自定义数据格式的基本步骤：
 
-- [Tutorial 1: Adding New Dataset](#tutorial-1-adding-new-dataset)
-    - [An example of customized dataset](#an-example-of-customized-dataset)
-    - [Creating the `DataSource`](#creating-the-datasource)
-    - [Creating the `Dataset`](#creating-the-dataset)
-    - [Modify config file](#modify-config-file)
+- [教程 1: 添加新的数据格式](#教程-1-添加新的数据格式)
+    - [自定义数据格式示例](#自定义数据格式示例)
+    - [创建`DataSource`子类](#创建-datasource-子类)
+    - [创建`Dataset`子类](#创建-dataset-子类)
+    - [修改配置文件](#修改配置文件)
 
-If your algorithm does not need any customized dataset, you can use these off-the-shelf datasets under [datasets](../../mmselfsup/datasets). But to use these existing datasets, you have to convert your dataset to existing dataset format.
+如果你的算法不需要任何定制的数据格式，你可以使用[datasets](../../mmselfsup/datasets)目录中这些现成的数据格式。但是要使用这些现有的数据格式，你必须将你的数据集转换为现有的数据格式。
 
-### An example of customized dataset
+### 自定义数据格式示例
 
-Assuming the format of your dataset's annotation file is:
+假设你的数据集的注释文件格式是：
 
 ```text
 000001.jpg 0
 000002.jpg 1
 ```
 
-To write a new dataset, you need to implement:
+要编写一个新的数据格式，你需要实现：
 
-- `DataSource`: inherited from `BaseDataSource` and responsible for loading the annotation files and reading images.
-- `Dataset`: inherited from BaseDataset and responsible for applying transformation to images and packing these images.
+- 子类`DataSource`：继承自父类`BaseDataSource`——负责加载注释文件和读取图像。
+- 子类`Dataset`：继承自父类 `BaseDataset` ——负责对图像进行转换和打包。
 
-### Creating the `DataSource`
+### 创建 `DataSource` 子类
 
-Assume the name of your `DataSource` is `NewDataSource`, you can create a file, named `new_data_source.py` under `mmselfsup/datasets/data_sources` and implement `NewDataSource` in it.
+假设你基于父类`DataSource` 创建的子类名为 `NewDataSource`， 你可以在`mmselfsup/datasets/data_sources` 目录下创建一个文件，文件名为 `new_data_source.py` ，并在这个文件中实现 `NewDataSource` 创建。
 
 ```py
 import mmcv
@@ -47,7 +47,7 @@ class NewDataSource(BaseDataSource):
         return data_infos
 ```
 
-Then, add `NewDataSource` in `mmselfsup/dataset/data_sources/__init__.py`.
+然后， 在 `mmselfsup/dataset/data_sources/__init__.py`中添加`NewDataSource`。
 
 ```py
 from .base import BaseDataSource
@@ -59,9 +59,9 @@ __all__ = [
 ]
 ```
 
-### Creating the `Dataset`
+### 创建 `Dataset` 子类
 
-Assume the name of your `Dataset` is `NewDataset`, you can create a file, named `new_dataset.py` under `mmselfsup/datasets` and implement `NewDataset` in it.
+假设你基于父类 `Dataset` 创建的子类名为 `NewDataset`，你可以在`mmselfsup/datasets`目录下创建一个文件，文件名为`new_dataset.py` ，并在这个文件中实现 `NewDataset` 创建。
 
 ```py
 # Copyright (c) OpenMMLab. All rights reserved.
@@ -87,7 +87,7 @@ class NewDataset(BaseDataset):
         return NotImplemented
 ```
 
-Then, add `NewDataset` in `mmselfsup/dataset/__init__.py`.
+然后，在 `mmselfsup/dataset/__init__.py`中添加 `NewDataset`。
 
 ```py
 from .base import BaseDataset
@@ -99,9 +99,9 @@ __all__ = [
 ]
 ```
 
-### Modify config file
+### 修改配置文件
 
-To use `NewDataset`, you can modify the config as the following:
+为了使用 `NewDataset`，你可以修改配置如下：
 
 ```py
 train=dict(
