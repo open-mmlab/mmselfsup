@@ -70,7 +70,7 @@
 
 在 Pascal VOC12 Aug 分割任务中，我们选用 [MMSeg](https://github.com/open-mmlab/mmsegmentation) 的评估设置, 基于 FCN 网络架构, 下列结果通过同样的 [配置文件](configs/benchmarks/mmsegmentation/voc12aug/fcn_r50-d8_512x512_20k_voc12aug.py) 训练得到。
 
-| 算法                | 屁配置文件                                                                                                                                                                                | mIOU  |
+| 算法                | 配置文件                                                                                                                                                                                  | mIOU  |
 | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | BYOL                | [byol_resnet50_8xb32-accum16-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py)                    | 67.16 |
 | DeepCLuster         | [deepcluster-sobel_resnet50_8xb64-steplr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/deepcluster/deepcluster-sobel_resnet50_8xb64-steplr-200e_in1k.py) | 59.69 |
