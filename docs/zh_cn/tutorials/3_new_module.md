@@ -19,7 +19,7 @@
 
 1.创建新文件 `mmselfsup/models/backbones/customized_backbone.py` 并在其中实现 `CustomizedBackbone` 。
 
-```py
+```python
 import torch.nn as nn
 from ..builder import BACKBONES
 
@@ -45,7 +45,7 @@ class CustomizedBackbone(nn.Module):
 
 2.在 `mmselfsup/models/backbones/__init__.py` 中导入自定义的 backbone。
 
-```py
+```python
 from .customized_backbone import CustomizedBackbone
 
 __all__ = [
@@ -55,7 +55,7 @@ __all__ = [
 
 3.在你的配置文件中使用它。
 
-```py
+```python
 model = dict(
     ...
     backbone=dict(
@@ -71,7 +71,7 @@ model = dict(
 
 1.创建一个新文件 `mmselfsup/models/necks/customized_proj_head.py` 并在其中实现 `CustomizedProjHead` 。
 
-```py
+```python
 import torch.nn as nn
 from mmcv.runner import BaseModule
 
@@ -92,7 +92,7 @@ class CustomizedProjHead(BaseModule):
 
 2.在 `mmselfsup/models/necks/__init__` 中导入 `CustomizedProjHead` 。
 
-```py
+```python
 from .customized_proj_head import CustomizedProjHead
 
 __all__ = [
@@ -104,7 +104,7 @@ __all__ = [
 
 3.在你的配置文件中使用它。
 
-```py
+```python
 model = dict(
     ...,
     neck=dict(
@@ -119,7 +119,7 @@ model = dict(
 
 1.创建一个新的文件 `mmselfsup/models/heads/customized_head.py` 并在其中实现你自定义的 `CustomizedHead` 。
 
-```py
+```python
 import torch
 import torch.nn as nn
 from mmcv.runner import BaseModule
@@ -142,7 +142,7 @@ class CustomizedHead(BaseModule):
 
 2.在 `mmselfsup/models/heads/__init__.py` 中导入该模块。
 
-```py
+```python
 from .customized_head import CustomizedHead
 
 __all__ = [..., CustomizedHead, ...]
@@ -150,7 +150,7 @@ __all__ = [..., CustomizedHead, ...]
 
 3.在你的配置文件中使用它。
 
-```py
+```python
 model = dict(
     ...,
     head=dict(type='CustomizedHead')
@@ -163,7 +163,7 @@ model = dict(
 
 1.创建一个新文件 `mmselfsup/models/algorithms/customized_algorithm.py` 并在其中实现 `CustomizedAlgorithm`。
 
-```py
+```python
 # Copyright (c) OpenMMLab. All rights reserved.
 import torch
 
@@ -187,7 +187,7 @@ class CustomizedAlgorithm(BaseModel):
 
 2.在 `mmselfsup/models/algorithms/__init__.py` 中导入该模块。
 
-```py
+```python
 from .customized_algorithm import CustomizedAlgorithm
 
 __all__ = [..., CustomizedAlgorithm, ...]
@@ -195,7 +195,7 @@ __all__ = [..., CustomizedAlgorithm, ...]
 
 3.在你的配置文件中使用它。
 
-```py
+```python
 model = dict(
     type='CustomizedAlgorightm',
     backbone=...,

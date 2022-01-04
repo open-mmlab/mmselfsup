@@ -11,7 +11,7 @@ In MMSelfSup, we provide many benchmarks, thus the models can be evaluated on di
   - [Segmentation](#segmentation)
 
 First, you are supposed to extract your backbone weights by `tools/model_converters/extract_backbone_weights.py`
-```
+```shell
 python ./tools/misc/extract_backbone_weights.py {CHECKPOINT} {MODEL_FILE}
 ```
 
@@ -119,7 +119,7 @@ Remarks:
 Or if you want to do detection task with [detectron2](https://github.com/facebookresearch/detectron2), we also provides some config files.
 Please refer [INSTALL.md](https://github.com/facebookresearch/detectron2/blob/main/INSTALL.md) for installation and follow the [directory structure](https://github.com/facebookresearch/detectron2/tree/main/datasets) to prepare your datasets required by detectron2.
 
-```
+```shell
 conda activate detectron2 # use detectron2 environment here, otherwise use open-mmlab environment
 cd benchmarks/detection
 python convert-pretrain-to-detectron2.py ${WEIGHT_FILE} ${OUTPUT_FILE} # must use .pkl as the output extension.

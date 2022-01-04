@@ -10,7 +10,7 @@
 
 这是用于 `SimCLR` 训练的 `Pipeline` 的配置示例：
 
-```py
+```python
 train_pipeline = [
     dict(type='RandomResizedCrop', size=224),
     dict(type='RandomHorizontalFlip'),
@@ -36,7 +36,7 @@ train_pipeline = [
 
 1.在 [transforms.py](../../mmselfsup/datasets/pipelines/transforms.py) 中编写一个新的数据增强函数，并覆盖 `__call__` 函数，该函数接收一张 `Pillow` 图像作为输入：
 
-```py
+```python
 @PIPELINES.register_module()
 class MyTransform(object):
 
@@ -47,7 +47,7 @@ class MyTransform(object):
 
 2.在配置文件中使用它。我们重新使用上面的配置文件，并在其中添加 `MyTransform`。
 
-```py
+```python
 train_pipeline = [
     dict(type='RandomResizedCrop', size=224),
     dict(type='RandomHorizontalFlip'),

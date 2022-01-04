@@ -28,7 +28,7 @@ To write a new dataset, you need to implement:
 
 Assume the name of your `DataSource` is `NewDataSource`, you can create a file, named `new_data_source.py` under `mmselfsup/datasets/data_sources` and implement `NewDataSource` in it.
 
-```py
+```python
 import mmcv
 import numpy as np
 
@@ -49,7 +49,7 @@ class NewDataSource(BaseDataSource):
 
 Then, add `NewDataSource` in `mmselfsup/dataset/data_sources/__init__.py`.
 
-```py
+```python
 from .base import BaseDataSource
 ...
 from .new_data_source import NewDataSource
@@ -63,7 +63,7 @@ __all__ = [
 
 Assume the name of your `Dataset` is `NewDataset`, you can create a file, named `new_dataset.py` under `mmselfsup/datasets` and implement `NewDataset` in it.
 
-```py
+```python
 # Copyright (c) OpenMMLab. All rights reserved.
 import torch
 from mmcv.utils import build_from_cfg
@@ -89,7 +89,7 @@ class NewDataset(BaseDataset):
 
 Then, add `NewDataset` in `mmselfsup/dataset/__init__.py`.
 
-```py
+```python
 from .base import BaseDataset
 ...
 from .new_dataset import NewDataset
@@ -103,7 +103,7 @@ __all__ = [
 
 To use `NewDataset`, you can modify the config as the following:
 
-```py
+```python
 train=dict(
         type='NewDataset',
         data_source=dict(
