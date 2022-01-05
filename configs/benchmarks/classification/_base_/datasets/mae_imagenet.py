@@ -1,14 +1,6 @@
 # dataset settings
 data_source = 'ImageNet'
 dataset_type = 'MAEFtDataset'
-file_client_args = dict(
-    backend='petrel',
-    path_mapping=dict({
-        '.data/imagenet/':
-        'openmmlab:s3://openmmlab/datasets/classification/imagenet/',
-        'data/imagenet/':
-        'openmmlab:s3://openmmlab/datasets/classification/imagenet/'
-    }))
 train_pipeline = [
     dict(
         type='MAEFtAugment',
@@ -42,9 +34,7 @@ data = dict(
         data_source=dict(
             type=data_source,
             data_prefix='data/imagenet/train',
-            ann_file='data/imagenet/meta/train.txt',
-            file_client_args=file_client_args,
-        ),
+            ann_file='data/imagenet/meta/train.txt'),
         pipeline=train_pipeline,
         prefetch=prefetch),
     val=dict(
@@ -52,12 +42,9 @@ data = dict(
         data_source=dict(
             type=data_source,
             data_prefix='data/imagenet/val',
-            ann_file='data/imagenet/meta/val.txt',
-            file_client_args=file_client_args,
-        ),
+            ann_file='data/imagenet/meta/val.txt'),
         pipeline=test_pipeline,
         prefetch=prefetch),
 )
 
 evaluation = dict(interval=10, topk=(1, 5))
-img_norm_cfg = dict(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
