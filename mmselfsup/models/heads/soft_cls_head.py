@@ -36,10 +36,15 @@ class SoftClsHead(BaseModule):
         self.head.weight.data.mul_(init_scale)
         self.head.bias.data.mul_(init_scale)
 
-    def forward(self, x, labels):
-
-        losses = dict()
+    def forward(self, x):
+        """"Get the logits."""
         outputs = self.head(x)
+
+        return outputs
+
+    def loss(self, outputs, labels):
+        """Compute the loss."""
+        losses = dict()
         losses['loss'] = self.criterion(outputs, labels)
 
         return losses
