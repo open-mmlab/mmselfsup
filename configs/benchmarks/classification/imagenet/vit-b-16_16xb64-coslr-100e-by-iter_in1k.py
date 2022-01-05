@@ -9,7 +9,7 @@ _base_ = [
 optimizer = dict(
     lr=1e-3 * 1024 / 256,
     paramwise_options={
-        '(bn|gn)(\\d+)?.(weight|bias)': dict(weight_decay=0.),
+        'norm': dict(weight_decay=0.),
         'bias': dict(weight_decay=0.),
         'pos_embed': dict(weight_decay=0.),
         'patch_embed': dict(lr_mult=0.023757264018058777),
@@ -39,9 +39,7 @@ lr_config = dict(
     by_epoch=False)
 
 checkpoint_config = dict(
-    interval=100,
-    max_keep_ckpts=3,
-    out_dir='/mnt/lustre/liuyuan1.vendor/ckpt/mae/benchmark_by_iter')
+    interval=100, max_keep_ckpts=3, out_dir='./pre_release_ft')
 
 persistent_workers = True
 runner = dict(max_epochs=100)
@@ -51,6 +49,6 @@ log_config = dict(
         dict(type='TextLoggerHook'),
     ])
 
-data = dict(imgs_per_gpu=32, drop_last=True)
+data = dict(imgs_per_gpu=128, drop_last=True, workers_per_gpu=32)
 
 model = dict(backbone=dict(init_cfg=dict(prefix='backbone.')))
