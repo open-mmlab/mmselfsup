@@ -28,7 +28,7 @@
     conda activate openmmlab
     ```
 
-2. 请参考 [官方教程](https://pytorch.org/) torch 和 torchvision, 例如您可以使用以下命令:
+2. 请参考 [官方教程](https://pytorch.org/) 安装 torch 和 torchvision, 例如您可以使用以下命令:
 
     ```shell
     conda install pytorch torchvision -c pytorch
