@@ -69,7 +69,9 @@ class VitClassification(BaseModel):
         """
         img, label = self.mix_up(img, label)
         x = self.extract_feat(img)
-        losses = self.head(x, label)
+        outs = self.head(x)
+        loss_inputs = (outs, label)
+        losses = self.head.loss(*loss_inputs)
         return losses
 
     def forward_test(self, img, **kwargs):
@@ -82,7 +84,8 @@ class VitClassification(BaseModel):
         Returns:
             dict[str, Tensor]: A dictionary of output features.
         """
-        out = self.extract_feat(img)
+        x = self.extract_feat(img)
+        outs = self.head(x)
         key = 'last_layer'
-        out_tensor = out.cpu()
+        out_tensor = outs.cpu()
         return {key: out_tensor}
