@@ -32,6 +32,7 @@ class SoftClsHead(BaseModule):
         self.head = nn.Linear(embed_dim, num_classes)
 
         trunc_normal_(self.head.weight, std=.02)
+        nn.init.constant_(self.head.bias, 0)
 
         self.head.weight.data.mul_(init_scale)
         self.head.bias.data.mul_(init_scale)
