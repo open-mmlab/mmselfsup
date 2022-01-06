@@ -89,5 +89,5 @@ Please refer to [fcn_r50-d8_512x512_20k_voc12aug.py](../../benchmarks/mmsegmenta
 
 | Self-Supervised Config                                                 | mIOU  |
 | ---------------------------------------------------------------------- | ----- |
-| [resnet50_8xb32-coslr-100e](simsiam_resnet50_8xb32-coslr-100e_in1k.py) | 48.13 |
+| [resnet50_8xb32-coslr-100e](simsiam_resnet50_8xb32-coslr-100e_in1k.py) | 48.35 |
 | [resnet50_8xb32-coslr-200e](simsiam_resnet50_8xb32-coslr-200e_in1k.py) | 46.27 |
