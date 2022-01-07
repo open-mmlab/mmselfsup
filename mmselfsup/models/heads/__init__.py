@@ -6,6 +6,8 @@ from .mocov3_head import MoCoV3Head
 from .soft_cls_head import SoftClsHead
 from .multi_cls_head import MultiClsHead
 from .mse_head import MSEHead
+from .multi_cls_head import MultiClsHead
+from .soft_cls_head import SoftClsHead
 from .swav_head import SwAVHead
 
 __all__ = [
