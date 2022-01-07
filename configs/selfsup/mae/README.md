@@ -44,7 +44,7 @@ methods that use only ImageNet-1K data. Transfer performance in downstream tasks
 
 ## Models and Benchmarks
 
-Here, we report the results of the model, which is pre-trained on ImageNet1k
+Here, we report the results of the model, which is pre-trained on ImageNet1K
 for 400 epochs, the details are below:
 
 
