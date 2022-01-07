@@ -1,7 +1,8 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from timm.data.mixup import Mixup
+
 from ..builder import ALGORITHMS, build_backbone, build_head
 from .base import BaseModel
-from timm.data.mixup import Mixup
 
 
 @ALGORITHMS.register_module()

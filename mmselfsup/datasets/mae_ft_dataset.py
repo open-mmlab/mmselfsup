@@ -1,8 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from mmcv.utils import build_from_cfg
-from torchvision.transforms import Compose
 import torch
-from mmcv.utils import print_log
+from mmcv.utils import build_from_cfg, print_log
+from torchvision.transforms import Compose
 
 from .base import BaseDataset
 from .builder import DATASETS, PIPELINES, build_datasource
