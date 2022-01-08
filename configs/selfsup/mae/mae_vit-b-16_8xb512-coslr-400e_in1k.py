@@ -33,7 +33,7 @@ checkpoint_config = dict(
     interval=100, max_keep_ckpts=3, out_dir='./best_version_pt')
 
 persistent_workers = False
-runner = dict(max_epochs=400)
+runner = dict(max_epochs=1600)
 
 log_config = dict(
     interval=100,
