@@ -32,7 +32,7 @@ lr_config = dict(
 checkpoint_config = dict(
     interval=1, max_keep_ckpts=3, out_dir='./best_version_pt')
 
-persistent_workers = True
+persistent_workers = False
 runner = dict(max_epochs=400)
 
 log_config = dict(
@@ -42,4 +42,4 @@ log_config = dict(
         # dict(type='TensorboardLoggerHook'),
     ])
 
-data = dict(imgs_per_gpu=512, workers_per_gpu=16)
+data = dict(imgs_per_gpu=512, workers_per_gpu=32)

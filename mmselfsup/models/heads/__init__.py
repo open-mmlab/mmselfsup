@@ -5,13 +5,10 @@ from .latent_pred_head import LatentClsHead, LatentPredictHead
 from .mocov3_head import MoCoV3Head
 from .soft_cls_head import SoftClsHead
 from .multi_cls_head import MultiClsHead
-from .mse_head import MSEHead
-from .multi_cls_head import MultiClsHead
-from .soft_cls_head import SoftClsHead
+from .mse_pretrain_head import MAEPretrainHead
 from .swav_head import SwAVHead
 
 __all__ = [
     'ContrastiveHead', 'ClsHead', 'LatentPredictHead', 'LatentClsHead',
-    'PixelHead', 'VitHead', 'MoCoV3Head', 'MultiClsHead', 'SwAVHead',
-    'SoftClsHead', 'MSEHead'
+    'MultiClsHead', 'SwAVHead', 'SoftClsHead', 'MAEPretrainHead', 'MoCoV3Head'
 ]
