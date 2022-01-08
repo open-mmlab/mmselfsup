@@ -1,22 +1,15 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import torch
-from timm.models.layers import trunc_normal_
 from torch import nn
 
 from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
-from ..utils.mae_blocks import get_sinusoid_encoding_table
 from .base import BaseModel
+from ..utils import get_2d_sincos_pos_embed
 
 
 @ALGORITHMS.register_module('MAE')
 class MAE(BaseModel):
     """MAE.
-
-    Implementation of `Masked Autoencoders Are Scalable Vision Learners
-     <https://arxiv.org/abs/2111.06377>`_.
-    Part of the code is borrowed from:
-    `<https://github.com/pengzhiliang/MAE-pytorch>`_.
-
     backbone (dict): Config dict for encoder.
         Defaults to None.
     neck (dict): Config dict for encoder.
@@ -33,40 +26,51 @@ class MAE(BaseModel):
         self.backbone = build_backbone(backbone)
         assert neck is not None
         self.neck = build_neck(neck)
+        self.neck.num_patches = self.backbone.patch_embed.num_patches
         assert head is not None
         self.head = build_head(head)
+        self.initialize_weights()
 
-        self.encoder_to_decoder = nn.Linear(
-            backbone['embed_dim'], neck['embed_dim'], bias=False)
+    def initialize_weights(self):
+        pos_embed = get_2d_sincos_pos_embed(
+            self.backbone.pos_embed.shape[-1],
+            int(self.backbone.patch_embed.num_patches**.5),
+            cls_token=True)
+        self.backbone.pos_embed.data.copy_(
+            torch.from_numpy(pos_embed).float().unsqueeze(0))
 
-        self.mask_token = nn.Parameter(torch.zeros(1, 1, neck['embed_dim']))
+        decoder_pos_embed = get_2d_sincos_pos_embed(
+            self.neck.decoder_pos_embed.shape[-1],
+            int(self.backbone.patch_embed.num_patches**.5),
+            cls_token=True)
+        self.neck.decoder_pos_embed.data.copy_(
+            torch.from_numpy(decoder_pos_embed).float().unsqueeze(0))
 
-        self.pos_embed = get_sinusoid_encoding_table(
-            self.backbone.patch_embed.num_patches, neck['embed_dim'])
+        w = self.backbone.patch_embed.proj.weight.data
+        torch.nn.init.xavier_uniform_(w.view([w.shape[0], -1]))
 
-        trunc_normal_(self.mask_token, std=.02)
+        torch.nn.init.normal_(self.backbone.cls_token, std=.02)
+        torch.nn.init.normal_(self.neck.mask_token, std=.02)
 
-    def extract_feat(self, img, mask):
+        self.apply(self._init_weights)
 
-        return self.backbone(img, mask)
+    def _init_weights(self, m):
+        if isinstance(m, nn.Linear):
+            torch.nn.init.xavier_uniform_(m.weight)
+            if isinstance(m, nn.Linear) and m.bias is not None:
+                nn.init.constant_(m.bias, 0)
+        elif isinstance(m, nn.LayerNorm):
+            nn.init.constant_(m.bias, 0)
+            nn.init.constant_(m.weight, 1.0)
 
-    def forward_train(self, x, mask, target):
-        x_vis = self.backbone(x, mask)  # [B, N_vis, C_e]
-        x_vis = self.encoder_to_decoder(x_vis)  # [B, N_vis, C_d]
+    def extract_feat(self, img):
 
-        B, _, C = x_vis.shape
+        return self.backbone(img)
 
-        # we don't unshuffle the correct visible token order,
-        # but shuffle the pos embedding accorddingly.
-        expand_pos_embed = self.pos_embed.expand(B, -1, -1).type_as(x).to(
-            x.device).clone().detach()
-        pos_emd_vis = expand_pos_embed[~mask].reshape(B, -1, C)
-        pos_emd_mask = expand_pos_embed[mask].reshape(B, -1, C)
-        x_full = torch.cat(
-            [x_vis + pos_emd_vis, self.mask_token + pos_emd_mask], dim=1)
-        # notice: if N_mask==0, the shape of x is [B, N_mask, 3 * 16 * 16]
-        x = self.neck(x_full,
-                      pos_emd_mask.shape[1])  # [B, N_mask, 3 * 16 * 16]
-        losses = self.head(x, target)
+    def forward_train(self, x):
+
+        latent, mask, ids_restore = self.backbone(x)
+        pred = self.neck(latent, ids_restore)
+        losses = self.head(x, pred, mask)
 
         return losses
