@@ -30,7 +30,7 @@ lr_config = dict(
 # if it is 3, when CheckpointHook (in mmcv) saves the 4th ckpt
 # it will remove the oldest one to keep the number of total ckpts as 3
 checkpoint_config = dict(
-    interval=1, max_keep_ckpts=3, out_dir='./best_version_pt')
+    interval=100, max_keep_ckpts=3, out_dir='./best_version_pt')
 
 persistent_workers = False
 runner = dict(max_epochs=400)
