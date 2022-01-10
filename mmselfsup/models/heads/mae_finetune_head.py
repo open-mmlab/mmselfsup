@@ -1,8 +1,8 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
 from mmcv.runner import BaseModule
+from torch import nn
+import torch
+import torch.nn.functional as F
 from timm.models.layers import trunc_normal_
 
 from ..builder import HEADS
@@ -19,23 +19,19 @@ class SoftTargetCrossEntropy(nn.Module):
 
 
 @HEADS.register_module()
-class SoftClsHead(BaseModule):
-    """Head for pixel_level reconstruction.
-
-    The MSE loss is implemented in this head and is used in generative methods,
-    e.g. MAE
+class MAEFinetuneHead(BaseModule):
+    """Fine-tuning head for MAE.
+    Args:
+        embed_dim (int): The dim of the feature before the classifier head.
+        num_classes (int): The total classes. Defaults to 1000.
     """
 
-    def __init__(self, embed_dim, num_classes, init_scale):
-        super(SoftClsHead, self).__init__()
-        self.criterion = SoftTargetCrossEntropy()
+    def __init__(self, embed_dim, num_classes=1000):
+        super(MAEFinetuneHead, self).__init__()
         self.head = nn.Linear(embed_dim, num_classes)
-
-        trunc_normal_(self.head.weight, std=.02)
+        self.criterion = SoftTargetCrossEntropy()
         nn.init.constant_(self.head.bias, 0)
-
-        self.head.weight.data.mul_(init_scale)
-        self.head.bias.data.mul_(init_scale)
+        trunc_normal_(self.head.weight, std=2e-5)
 
     def forward(self, x):
         """"Get the logits."""
