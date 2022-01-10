@@ -38,8 +38,7 @@ lr_config = dict(
     warmup_by_epoch=True,
     by_epoch=False)
 
-checkpoint_config = dict(
-    interval=100, max_keep_ckpts=3, out_dir='./pre_release_ft')
+checkpoint_config = dict(interval=100, max_keep_ckpts=3, out_dir='')
 
 persistent_workers = True
 runner = dict(max_epochs=100)
