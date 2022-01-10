@@ -42,7 +42,7 @@ Besides, k=1 to 96 indicates the hyper-parameter of Low-shot SVM.
 
 | Self-Supervised Config                                                 | Best Layer | SVM   | k=1   | k=2   | k=4   | k=8   | k=16  | k=32  | k=64  | k=96  |
 | ---------------------------------------------------------------------- | ---------- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
-| [resnet50_8xb32-coslr-100e](simsiam_resnet50_8xb32-coslr-100e_in1k.py) | feature5   | 84.21 | 39.71 | 49.65 | 62.79 | 69.97 | 74.73 | 78.30 | 81.06 | 82.44 |
+| [resnet50_8xb32-coslr-100e](simsiam_resnet50_8xb32-coslr-100e_in1k.py) | feature5   | 84.64 | 39.65 | 49.86 | 62.48 | 69.50 | 74.48 | 78.31 | 81.06 | 82.56 |
 | [resnet50_8xb32-coslr-200e](simsiam_resnet50_8xb32-coslr-200e_in1k.py) | feature5   | 85.20 | 39.85 | 50.44 | 63.73 | 70.93 | 75.74 | 79.42 | 82.02 | 83.44 |
 
 #### ImageNet Linear Evaluation
@@ -53,7 +53,7 @@ The **AvgPool** result is obtained from Linear Evaluation with GlobalAveragePool
 
 | Self-Supervised Config                                                 | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 | AvgPool |
 | ---------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- | ------- |
-| [resnet50_8xb32-coslr-100e](simsiam_resnet50_8xb32-coslr-100e_in1k.py) | 15.85    | 34.02    | 46.00    | 60.90    | 67.92    | 67.88   |
+| [resnet50_8xb32-coslr-100e](simsiam_resnet50_8xb32-coslr-100e_in1k.py) | 16.27    | 33.77    | 45.80    | 60.83    | 68.21    | 68.20   |
 | [resnet50_8xb32-coslr-200e](simsiam_resnet50_8xb32-coslr-200e_in1k.py) | 15.57    | 37.21    | 47.28    | 62.21    | 69.85    | 69.80   |
 
 
@@ -67,7 +67,7 @@ Please refer to [faster_rcnn_r50_c4_mstrain_24k_voc0712.py](../../benchmarks/mmd
 
 | Self-Supervised Config                                                 | AP50  |
 | ---------------------------------------------------------------------- | ----- |
-| [resnet50_8xb32-coslr-100e](simsiam_resnet50_8xb32-coslr-100e_in1k.py) | 79.97 |
+| [resnet50_8xb32-coslr-100e](simsiam_resnet50_8xb32-coslr-100e_in1k.py) | 79.80 |
 | [resnet50_8xb32-coslr-200e](simsiam_resnet50_8xb32-coslr-200e_in1k.py) | 79.85 |
 
 #### COCO2017
@@ -76,7 +76,7 @@ Please refer to [mask_rcnn_r50_fpn_mstrain_1x_coco.py](../../benchmarks/mmdetect
 
 | Self-Supervised Config                                                 | mAP(Box) | AP50(Box) | AP75(Box) | mAP(Mask) | AP50(Mask) | AP75(Mask) |
 | ---------------------------------------------------------------------- | -------- | --------- | --------- | --------- | ---------- | ---------- |
-| [resnet50_8xb32-coslr-100e](simsiam_resnet50_8xb32-coslr-100e_in1k.py) | 38.3     | 57.6      | 41.7      | 34.4      | 54.8       | 36.9       |
+| [resnet50_8xb32-coslr-100e](simsiam_resnet50_8xb32-coslr-100e_in1k.py) | 38.6     | 57.6      | 42.3      | 34.6      | 54.8       | 36.9       |
 | [resnet50_8xb32-coslr-200e](simsiam_resnet50_8xb32-coslr-200e_in1k.py) | 38.8     | 58.0      | 42.3      | 34.9      | 55.3       | 37.6       |
 
 ### Segmentation
@@ -89,5 +89,5 @@ Please refer to [fcn_r50-d8_512x512_20k_voc12aug.py](../../benchmarks/mmsegmenta
 
 | Self-Supervised Config                                                 | mIOU  |
 | ---------------------------------------------------------------------- | ----- |
-| [resnet50_8xb32-coslr-100e](simsiam_resnet50_8xb32-coslr-100e_in1k.py) | 46.11 |
+| [resnet50_8xb32-coslr-100e](simsiam_resnet50_8xb32-coslr-100e_in1k.py) | 48.35 |
 | [resnet50_8xb32-coslr-200e](simsiam_resnet50_8xb32-coslr-200e_in1k.py) | 46.27 |

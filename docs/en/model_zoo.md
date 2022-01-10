@@ -1,6 +1,6 @@
 # Model Zoo
 
-All models and benchmarks results are recorded below.
+All models and part of benchmark results are recorded below.
 
 ## Pre-trained models
 
@@ -16,16 +16,19 @@ All models and benchmarks results are recorded below.
 | [Relative Location](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/relative_loc/README.md)    | [relative-loc_resnet50_8xb64-steplr-70e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k.py)            | [model](https://download.openmmlab.com/mmselfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k_20211213-cdd3162f.pth) &#124; [log](https://download.openmmlab.com/mmselfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k_20210930_144754.log.json)     |
 | [Rotation Prediction](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/rotation_pred/README.md) | [rotation-pred_resnet50_8xb16-steplr-70e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py)         | [model](https://download.openmmlab.com/mmselfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k_20211213-513972ac.pth) &#124; [log](https://download.openmmlab.com/mmselfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k_20210930_151459.log.json) |
 | [SimCLR](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simclr/README.md)                     | [simclr_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simclr/simclr_resnet50_8xb32-coslr-200e_in1k.py)                              | [model](https://download.openmmlab.com/mmselfsup/simclr/simclr_resnet50_8xb32-coslr-200e_in1k_20211213-d0e53669.pth)                                                                                                                                                          |
-| [SimSiam](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/README.md)                   | [simsiam_resnet50_8xb32-coslr-100e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py)                           | [model](https://download.openmmlab.com/mmselfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k_20211213-925d628c.pth)                                                                                                                                                        |
-|                                                                                                                    | [simsiam_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k.py)                           | [model](https://download.openmmlab.com/mmselfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k_20211213-b605f9f1.pth)                                                                                                                                                        |
+| [SimSiam](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/README.md)                   | [simsiam_resnet50_8xb32-coslr-100e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py)                           | [model](https://download.openmmlab.com/mmselfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k_20211230-65a0eff4.pth) &#124; [log](https://download.openmmlab.com/mmselfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k_20211225_132004.log.json)                         |
+|                                                                                                                    | [simsiam_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k.py)                           | [model](https://download.openmmlab.com/mmselfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k_20211213-b605f9f1.pth) &#124; [log](https://download.openmmlab.com/mmselfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k_20211225_132031.log.json)                         |
 | [SwAV](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/swav/README.md)                         | [swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py)  | [model](https://download.openmmlab.com/mmselfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96_20211213-0028900c.pth) &#124; [log](https://download.openmmlab.com/mmselfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96_20211206_102636.log.json)   |
 
 Remarks:
 
-- If not specified, the models are trained 200 epochs.
+- The training details are recorded in the config names.
+
+- You can click algorithm name to obtain more information.
+
 ## Benchmarks
 
-In following tables, we only displayed ImageNet Linear Evaluation, COCO17 Object Detection and PASCAL VOC12 Aug Segmentation, you can click the model name above to get the comprehensive benchmark results.
+In following tables, we only displayed ImageNet Linear Evaluation, COCO17 Object Detection and PASCAL VOC12 Aug Segmentation, you can click algorithm name above to check the comprehensive benchmark results.
 
 ### ImageNet Linear Evaluation
 
@@ -42,7 +45,7 @@ If not specified, we use linear evaluation setting from [MoCo](http://openaccess
 | Relative Location   | [relative-loc_resnet50_8xb64-steplr-70e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k.py)               |                       | 39.65     |
 | Rotation Prediction | [rotation-pred_resnet50_8xb16-steplr-70e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py)            |                       | 44.35     |
 | SimCLR              | [simclr_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simclr/simclr_resnet50_8xb32-coslr-200e_in1k.py)                                 |                       | 58.92     |
-| SimSiam             | [simsiam_resnet50_8xb32-coslr-100e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py)                              | SimSiam paper setting | 67.88     |
+| SimSiam             | [simsiam_resnet50_8xb32-coslr-100e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py)                              | SimSiam paper setting | 68.20     |
 |                     | [simsiam_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k.py)                              | SimSiam paper setting | 69.80     |
 | SwAV                | [swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py)     | SwAV paper setting    | 70.55     |
 
@@ -59,7 +62,7 @@ In COCO17 Object detection task, we choose the evluation protocol from [MoCo](ht
 | Relative Location   | [relative-loc_resnet50_8xb64-steplr-70e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k.py)           | 37.5      | 33.7       |
 | Rotation Prediction | [rotation-pred_resnet50_8xb16-steplr-70e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py)        | 37.9      | 34.2       |
 | SimCLR              | [simclr_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simclr/simclr_resnet50_8xb32-coslr-200e_in1k.py)                             | 38.7      | 34.9       |
-| SimSiam             | [simsiam_resnet50_8xb32-coslr-100e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py)                          | 38.3      | 34.4       |
+| SimSiam             | [simsiam_resnet50_8xb32-coslr-100e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py)                          | 38.6      | 34.6       |
 |                     | [simsiam_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k.py)                          | 38.8      | 34.9       |
 | SwAV                | [swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py) | 40.2      | 36.3       |
 
@@ -78,6 +81,6 @@ In Pascal VOC12 Aug Segmentation task, we choose the evluation protocol from [MM
 | Relative Location   | [relative-loc_resnet50_8xb64-steplr-70e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k.py)            | 63.49 |
 | Rotation Prediction | [rotation-pred_resnet50_8xb16-steplr-70e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py)         | 64.31 |
 | SimCLR              | [simclr_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simclr/simclr_resnet50_8xb32-coslr-200e_in1k.py)                              | 64.03 |
-| SimSiam             | [simsiam_resnet50_8xb32-coslr-100e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py)                           | 46.11 |
+| SimSiam             | [simsiam_resnet50_8xb32-coslr-100e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py)                           | 48.35 |
 |                     | [simsiam_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k.py)                           | 46.27 |
 | SwAV                | [swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py)  | 63.73 |
