@@ -70,7 +70,7 @@ class MAEPretrainViT(BaseModule):
         self.norm = norm_layer(embed_dim)
         self.mask_ratio = mask_ratio
 
-    def random_masking(self, x, mask_ratio):
+    def random_masking(self, x, mask_ratio=0.75):
         """ Generate the mask for MAE Pre-training.
 
         Args:
