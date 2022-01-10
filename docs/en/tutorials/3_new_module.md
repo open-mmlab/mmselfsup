@@ -19,7 +19,7 @@ Assuming we are going to create a customized backbone `CustomizedBackbone`
 
 1.Create a new file `mmselfsup/models/backbones/customized_backbone.py` and implement `CustomizedBackbone` in it.
 
-```py
+```python
 import torch.nn as nn
 from ..builder import BACKBONES
 
@@ -45,7 +45,7 @@ class CustomizedBackbone(nn.Module):
 
 2.Import the customized backbone in `mmselfsup/models/backbones/__init__.py`.
 
-```py
+```python
 from .customized_backbone import CustomizedBackbone
 
 __all__ = [
@@ -55,7 +55,7 @@ __all__ = [
 
 3.Use it in your config file.
 
-```py
+```python
 model = dict(
     ...
     backbone=dict(
@@ -71,7 +71,7 @@ we include all projection heads in `mmselfsup/models/necks`. Assuming we are goi
 
 1.Create a new file `mmselfsup/models/necks/customized_proj_head.py` and implement `CustomizedProjHead` in it.
 
-```py
+```python
 import torch.nn as nn
 from mmcv.runner import BaseModule
 
@@ -92,7 +92,7 @@ You need to implement the forward function, which takes the feature from the bac
 
 2.Import the `CustomizedProjHead` in `mmselfsup/models/necks/__init__`.
 
-```py
+```python
 from .customized_proj_head import CustomizedProjHead
 
 __all__ = [
@@ -104,7 +104,7 @@ __all__ = [
 
 3.Use it in your config file.
 
-```py
+```python
 model = dict(
     ...,
     neck=dict(
@@ -119,7 +119,7 @@ To add a new loss function, we mainly implement the `forward` function in the lo
 
 1.Create a new file `mmselfsup/models/heads/customized_head.py` and implement your customized `CustomizedHead` in it.
 
-```py
+```python
 import torch
 import torch.nn as nn
 from mmcv.runner import BaseModule
@@ -142,7 +142,7 @@ class CustomizedHead(BaseModule):
 
 2.Import the module in `mmselfsup/models/heads/__init__.py`
 
-```py
+```python
 from .customized_head import CustomizedHead
 
 __all__ = [..., CustomizedHead, ...]
@@ -150,7 +150,7 @@ __all__ = [..., CustomizedHead, ...]
 
 3.Use it in your config file.
 
-```py
+```python
 model = dict(
     ...,
     head=dict(type='CustomizedHead')
@@ -163,7 +163,7 @@ After creating each component, mentioned above, we need to create a `CustomizedA
 
 1.Create a new file `mmselfsup/models/algorithms/customized_algorithm.py` and implement `CustomizedAlgorithm` in it.
 
-```py
+```python
 # Copyright (c) OpenMMLab. All rights reserved.
 import torch
 
@@ -187,7 +187,7 @@ class CustomizedAlgorithm(BaseModel):
 
 2.Import the module in `mmselfsup/models/algorithms/__init__.py`
 
-```py
+```python
 from .customized_algorithm import CustomizedAlgorithm
 
 __all__ = [..., CustomizedAlgorithm, ...]
@@ -195,7 +195,7 @@ __all__ = [..., CustomizedAlgorithm, ...]
 
 3.Use it in your config file.
 
-```py
+```python
 model = dict(
     type='CustomizedAlgorightm',
     backbone=...,

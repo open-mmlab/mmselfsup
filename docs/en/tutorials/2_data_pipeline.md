@@ -10,7 +10,7 @@
 
 Here is a config example of `Pipeline` for `SimCLR` training:
 
-```py
+```python
 train_pipeline = [
     dict(type='RandomResizedCrop', size=224),
     dict(type='RandomHorizontalFlip'),
@@ -36,7 +36,7 @@ Every augmentation in the `Pipeline` receives an image as input and outputs an a
 
 1.Write a new transformation function in [transforms.py](../../mmselfsup/datasets/pipelines/transforms.py) and overwrite the `__call__` function, which takes a `Pillow` image as input:
 
-```py
+```python
 @PIPELINES.register_module()
 class MyTransform(object):
 
@@ -47,7 +47,7 @@ class MyTransform(object):
 
 2.Use it in config files. We reuse the config file shown above and add `MyTransform` to it.
 
-```py
+```python
 train_pipeline = [
     dict(type='RandomResizedCrop', size=224),
     dict(type='RandomHorizontalFlip'),

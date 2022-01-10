@@ -21,13 +21,13 @@ Workflow is a list of (phase, duration) to specify the running order and duratio
 
 For example, we use epoch-based runner by default, and the "duration" means how many epochs the phase to be executed in a cycle. Usually, we only want to execute training phase, just use the following config.
 
-```py
+```python
 workflow = [('train', 1)]
 ```
 
 Sometimes we may want to check some metrics (e.g. loss, accuracy) about the model on the validate set. In such case, we can set the workflow as
 
-```py
+```python
 [('train', 1), ('val', 1)]
 ```
 

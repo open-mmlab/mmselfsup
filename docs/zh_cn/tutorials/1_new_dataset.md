@@ -28,7 +28,7 @@
 
 假设你基于父类`DataSource` 创建的子类名为 `NewDataSource`， 你可以在`mmselfsup/datasets/data_sources` 目录下创建一个文件，文件名为 `new_data_source.py` ，并在这个文件中实现 `NewDataSource` 创建。
 
-```py
+```python
 import mmcv
 import numpy as np
 
@@ -49,7 +49,7 @@ class NewDataSource(BaseDataSource):
 
 然后， 在 `mmselfsup/dataset/data_sources/__init__.py`中添加`NewDataSource`。
 
-```py
+```python
 from .base import BaseDataSource
 ...
 from .new_data_source import NewDataSource
@@ -63,7 +63,7 @@ __all__ = [
 
 假设你基于父类 `Dataset` 创建的子类名为 `NewDataset`，你可以在`mmselfsup/datasets`目录下创建一个文件，文件名为`new_dataset.py` ，并在这个文件中实现 `NewDataset` 创建。
 
-```py
+```python
 # Copyright (c) OpenMMLab. All rights reserved.
 import torch
 from mmcv.utils import build_from_cfg
@@ -89,7 +89,7 @@ class NewDataset(BaseDataset):
 
 然后，在 `mmselfsup/dataset/__init__.py`中添加 `NewDataset`。
 
-```py
+```python
 from .base import BaseDataset
 ...
 from .new_dataset import NewDataset
@@ -103,7 +103,7 @@ __all__ = [
 
 为了使用 `NewDataset`，你可以修改配置如下：
 
-```py
+```python
 train=dict(
         type='NewDataset',
         data_source=dict(

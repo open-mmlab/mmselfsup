@@ -20,7 +20,7 @@ We already support to use all the optimizers implemented by PyTorch, and to use 
 
 For example, if you want to use SGD, the modification could be as the following.
 
-```py
+```python
 optimizer = dict(type='SGD', lr=0.0003, weight_decay=0.0001)
 ```
 
@@ -28,7 +28,7 @@ To modify the learning rate of the model, just modify the `lr` in the config of 
 
 For example, if you want to use `Adam` with the setting like `torch.optim.Adam(params, lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0, amsgrad=False)` in PyTorch, the config should looks like:
 
-```py
+```python
 optimizer = dict(type='Adam', lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0, amsgrad=False)
 ```
 
@@ -42,7 +42,7 @@ Learning rate decay is widely used to improve performance. And to use learning r
 
 For example, we use CosineAnnealing policy to train SimCLR, and the config is:
 
-```py
+```python
 lr_config = dict(
     policy='CosineAnnealing',
     ...)
@@ -67,7 +67,7 @@ Here are some examples:
 
 1.linear & warmup by iter
 
-```py
+```python
 lr_config = dict(
     policy='CosineAnnealing',
     by_epoch=False,
@@ -80,7 +80,7 @@ lr_config = dict(
 
 2.exp & warmup by epoch
 
-```py
+```python
 lr_config = dict(
     policy='CosineAnnealing',
     min_lr=0,
@@ -98,7 +98,7 @@ Momentum scheduler is usually used with LR scheduler, for example, the following
 
 Here is an example:
 
-```py
+```python
 lr_config = dict(
     policy='cyclic',
     target_ratio=(10, 1e-4),
@@ -119,7 +119,7 @@ Some models may have some parameter-specific settings for optimization, for exam
 
 For example, if we do not want to apply weight decay to the parameters of BatchNorm or GroupNorm, and the bias in each layer, we can use following config file:
 
-```py
+```python
 optimizer = dict(
     type=...,
     lr=...,
@@ -140,7 +140,7 @@ Currently we support `grad_clip` option in `optimizer_config`, and you can refer
 
 Here is an example:
 
-```py
+```python
 optimizer_config = dict(grad_clip=dict(max_norm=35, norm_type=2))
 # norm_type: type of the used p-norm, here norm_type is 2.
 ```
@@ -153,14 +153,14 @@ When there is not enough computation resource, the batch size can only be set to
 
 Here is an example:
 
-```py
+```python
 data = dict(imgs_per_gpu=64)
 optimizer_config = dict(type="DistOptimizerHook", update_interval=4)
 ```
 
 Indicates that during training, back-propagation is performed every 4 iters. And the above is equivalent to:
 
-```py
+```python
 data = dict(imgs_per_gpu=256)
 optimizer_config = dict(type="OptimizerHook")
 ```
@@ -171,7 +171,7 @@ In academic research and industrial practice, it is likely that you need some op
 
 Implement your `CustomizedOptim` in `mmselfsup/core/optimizer/optimizers.py`
 
-```py
+```python
 import torch
 from torch.optim import *  # noqa: F401,F403
 from torch.optim.optimizer import Optimizer, required
@@ -193,7 +193,7 @@ class CustomizedOptim(Optimizer):
 
 Import it in `mmselfsup/core/optimizer/__init__.py`
 
-```py
+```python
 from .optimizers import CustomizedOptim
 from .builder import build_optimizer
 
@@ -202,7 +202,7 @@ __all__ = ['CustomizedOptim', 'build_optimizer', ...]
 
 Use it in your config file
 
-```py
+```python
 optimizer = dict(
     type='CustomizedOptim',
     ...
