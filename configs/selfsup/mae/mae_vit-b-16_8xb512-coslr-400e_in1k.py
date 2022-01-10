@@ -15,6 +15,8 @@ optimizer = dict(
         'mask_token': dict(weight_decay=0.)
     })
 
+optimizer_config = dict(type='GradAccumFp16OptimizerHook')
+
 # learning policy
 lr_config = dict(
     policy='CosineAnnealing',
