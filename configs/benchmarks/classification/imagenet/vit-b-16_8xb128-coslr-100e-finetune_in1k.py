@@ -27,7 +27,7 @@ test_pipeline = [
     dict(type='Normalize', **img_norm_cfg)
 ]
 data = dict(
-    imgs_per_gpu=2,
+    imgs_per_gpu=128,
     drop_last=True,
     workers_per_gpu=32,
     train=dict(pipeline=train_pipeline),
@@ -74,6 +74,6 @@ lr_config = dict(
 checkpoint_config = dict(interval=1, max_keep_ckpts=3, out_dir='')
 persistent_workers = True
 log_config = dict(
-    interval=1, hooks=[
+    interval=100, hooks=[
         dict(type='TextLoggerHook'),
     ])
