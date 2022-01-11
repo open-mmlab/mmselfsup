@@ -9,7 +9,7 @@ from timm.models.vision_transformer import PatchEmbed, Block
 
 @BACKBONES.register_module()
 class MAEFinetuneViT(BaseModule):
-    """ Vision Transformer for MAE finetuning.
+    """ Vision Transformer for MAE classification benchmark.
     """
 
     def __init__(self,
@@ -29,7 +29,8 @@ class MAEFinetuneViT(BaseModule):
                  norm_layer=partial(nn.LayerNorm, eps=1e-6),
                  act_layer=None,
                  init_cfg=None,
-                 global_pool=False):
+                 global_pool=False,
+                 finetune=True):
         super(MAEFinetuneViT, self).__init__(init_cfg)
 
         self.num_classes = num_classes
@@ -45,7 +46,7 @@ class MAEFinetuneViT(BaseModule):
 
         self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
         self.pos_embed = nn.Parameter(
-            torch.zeros(1, num_patches + 1, embed_dim))
+            torch.zeros(1, num_patches + 1, embed_dim), requires_grad=False)
         self.pos_drop = nn.Dropout(p=drop_rate)
 
         dpr = [x.item() for x in torch.linspace(0, drop_path_rate, depth)]
@@ -72,6 +73,10 @@ class MAEFinetuneViT(BaseModule):
             self.fc_norm = norm_layer(embed_dim)
 
             del self.norm
+
+        self.finetune = finetune
+        if not self.finetune:
+            self._freeze_stages()
 
     def _init_weights(self, m):
         if isinstance(m, nn.Linear):
@@ -102,3 +107,15 @@ class MAEFinetuneViT(BaseModule):
             outcome = x[:, 0]
 
         return outcome
+
+    def train(self, mode=True):
+        super(MAEFinetuneViT, self).train(mode)
+        if not self.finetune:
+            self._freeze_stages()
+
+    def _freeze_stages(self):
+        for name, param in self.named_parameters():
+            param.requires_grad = False
+            m = getattr(self, name.split('.')[0])
+            if isinstance(m, nn.Module):
+                m.eval()

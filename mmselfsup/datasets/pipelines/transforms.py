@@ -18,7 +18,7 @@ for m in inspect.getmembers(_transforms, inspect.isclass):
 
 
 @PIPELINES.register_module()
-class MAEFtAugment(object):
+class RandomAug(object):
     """RandAugment data augmentation method based on
     `"RandAugment: Practical automated data augmentation
     with a reduced search space"
@@ -36,41 +36,20 @@ class MAEFtAugment(object):
                  re_mode=None,
                  re_count=None,
                  mean=None,
-                 std=None,
-                 is_train=False):
+                 std=None):
 
-        resize_im = input_size > 32
-        if is_train:
-            self.trans = create_transform(
-                input_size=input_size,
-                is_training=True,
-                color_jitter=color_jitter,
-                auto_augment=auto_augment,
-                interpolation=interpolation,
-                re_prob=re_prob,
-                re_mode=re_mode,
-                re_count=re_count,
-                mean=mean,
-                std=std,
-            )
-        else:
-            t = []
-            if resize_im:
-                if input_size < 384:
-                    crop_pct = 224 / 256
-                else:
-                    crop_pct = 1.0
-                size = int(input_size / crop_pct)
-                t.append(
-                    _transforms.Resize(
-                        size, interpolation=3
-                    ),  # to maintain same ratio w.r.t. 224 images
-                )
-                t.append(_transforms.CenterCrop(input_size))
-
-            t.append(_transforms.ToTensor())
-            t.append(_transforms.Normalize(mean, std))
-            self.trans = _transforms.Compose(t)
+        self.trans = create_transform(
+            input_size=input_size,
+            is_training=True,
+            color_jitter=color_jitter,
+            auto_augment=auto_augment,
+            interpolation=interpolation,
+            re_prob=re_prob,
+            re_mode=re_mode,
+            re_count=re_count,
+            mean=mean,
+            std=std,
+        )
 
     def __call__(self, img):
         return self.trans(img)

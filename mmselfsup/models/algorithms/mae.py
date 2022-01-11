@@ -70,13 +70,28 @@ class MAE(BaseModel):
             nn.init.constant_(m.weight, 1.0)
 
     def extract_feat(self, img):
+        """Function to extract features from backbone.
 
+        Args:
+            img (Tensor): Input images of shape (N, C, H, W).
+
+        Returns:
+            tuple[Tensor]: backbone outputs.
+        """
         return self.backbone(img)
 
-    def forward_train(self, x):
+    def forward_train(self, img, **kwargs):
+        """Forward computation during training.
 
-        latent, mask, ids_restore = self.backbone(x)
+        Args:
+            img (Tensor): Input images of shape (N, C, H, W).
+            kwargs: Any keyword arguments to be used to forward.
+
+        Returns:
+            dict[str, Tensor]: A dictionary of loss components.
+        """
+        latent, mask, ids_restore = self.backbone(img)
         pred = self.neck(latent, ids_restore)
-        losses = self.head(x, pred, mask)
+        losses = self.head(img, pred, mask)
 
         return losses
