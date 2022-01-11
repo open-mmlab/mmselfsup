@@ -122,4 +122,4 @@ class MAEPretrainViT(BaseModule):
             x = blk(x)
         x = self.norm(x)
 
-        return x, mask, ids_restore
+        return (x, mask, ids_restore)
