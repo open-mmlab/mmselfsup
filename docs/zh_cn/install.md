@@ -11,17 +11,17 @@
 - [mmdet](https://mmdetection.readthedocs.io/en/latest/#installation) 2.16.0+
 - [mmseg](https://github.com/open-mmlab/mmsegmentation) 0.20.2+
 
-下表显示了与 MMSelfSup 适配的 MMCV, MMDetection 和 MMSegmentation 的版本号. 为避免安装过程中出现问题，请参照下表安装适配的版本。
+下表显示了与 MMSelfSup 适配的 MMCV, MMDetection 和 MMSegmentation 的版本号。 为避免安装过程中出现问题，请参照下表安装适配的版本。
 
 | MMSelfSup version |    MMCV version     | MMSegmentation version | MMDetection version |
 | :---------------: | :-----------------: | :--------------------: | :-----------------: |
 |      master       | mmcv-full >= 1.3.16 |    mmseg >= 0.20.2+    |  mmdet >= 2.16.0+   |
 
-**注意:** 如果您已经安装了 mmcv, 您需要运行 `pip uninstall mmcv` 来卸载已经安装的 mmcv. 如果您在本地同时安装了 mmcv 和 mmcv-full, `ModuleNotFoundError` 将会抛出.
+**注意:** 如果您已经安装了 mmcv, 您需要运行 `pip uninstall mmcv` 来卸载已经安装的 mmcv。 如果您在本地同时安装了 mmcv 和 mmcv-full, `ModuleNotFoundError` 将会抛出。
 
 ## 配置环境
 
-1. 首先您需要用以下命令安装一个 conda 的虚拟环境，并激活它.
+1. 首先您需要用以下命令安装一个 conda 的虚拟环境，并激活它
 
     ```shell
     conda create -n openmmlab python=3.7 -y
@@ -36,7 +36,7 @@
 
     请确保您的 PyTorch 版本和 CUDA 版本匹配，具体您可以参考 [PyTorch 官网](https://pytorch.org/)。
 
-    比如，您在 `/usr/local/cuda` 下安装了 CUDA 10.1，同时您想安装 PyTorch 1.7, 您可以使用以下命令安装适配 CUDA 10.1 的 PyTorch 预编译包.
+    比如，您在 `/usr/local/cuda` 下安装了 CUDA 10.1，同时您想安装 PyTorch 1.7, 您可以使用以下命令安装适配 CUDA 10.1 的 PyTorch 预编译包。
 
     ```shell
     conda install pytorch==1.7.0 torchvision==0.8.0 cudatoolkit=10.1 -c pytorch
@@ -53,7 +53,7 @@
     pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/{cu_version}/{torch_version}/index.html
     ```
 
-    请将上面链接中 `{cu_version}` 和 `{torch_version}` 替换成您想要的版本. 比如, 安装最新版本 `mmcv-full`，同时适配 `CUDA 11.0` 和 `PyTorch 1.7.0`, 可以使用以下命令:
+    请将上面链接中 `{cu_version}` 和 `{torch_version}` 替换成您想要的版本。 比如, 安装最新版本 `mmcv-full`，同时适配 `CUDA 11.0` 和 `PyTorch 1.7.0`, 可以使用以下命令:
 
     ```shell
     pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/cu110/torch1.7.0/index.html
@@ -61,9 +61,9 @@
 
     您可以从 [这里](https://github.com/open-mmlab/mmcv#installation) 查找适配不同 PyTorch 和 CUDA 版本的 MMCV 版本。
 
-    除此之外，您可以选择从源编译 MMCV，具体请参考 [MMCV安装文档](https://github.com/open-mmlab/mmcv#installation).
+    除此之外，您可以选择从源编译 MMCV，具体请参考 [MMCV安装文档](https://github.com/open-mmlab/mmcv#installation)。
 
-2. 安装 MMSegmentation 和 MMDetection.
+2. 安装 MMSegmentation 和 MMDetection
 
     您可以使用以下命令安装 MMSegmentation 和 MMDetection:
 
@@ -79,7 +79,7 @@
     mim install mmsegmentation
     ```
 
-3. 克隆 MMSelfSup 并且安装.
+3. 克隆 MMSelfSup 并且安装
 
     ```shell
     git clone https://github.com/open-mmlab/mmselfsup.git
@@ -93,7 +93,7 @@ a. 当您指定 `-e` 或 `develop`参数, MMSelfSup 采用开发者安装模式,
 
 ## 从零开始安装脚本
 
-下面脚本提供了使用 conda 端到端安装 MMSelfSup 的所有命令.
+下面脚本提供了使用 conda 端到端安装 MMSelfSup 的所有命令。
 
 ```shell
 conda create -n openmmlab python=3.7 -y
@@ -114,14 +114,14 @@ pip install -v -e .
 
 ## 另一种选择: 使用 Docker
 
-我们提供了一个配置好所有环境的 [Dockerfile](/docker/Dockerfile).
+我们提供了一个配置好所有环境的 [Dockerfile](/docker/Dockerfile)。
 
 ```shell
 # build an image with PyTorch 1.6.0, CUDA 10.1, CUDNN 7.
 docker build -f ./docker/Dockerfile --rm -t mmselfsup:torch1.10.0-cuda11.3-cudnn8 .
 ```
 
-**重要:** 请确保您安装了 [nvidia-container-toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker).
+**重要:** 请确保您安装了 [nvidia-container-toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker)。
 
 运行下面命令:
 
@@ -129,7 +129,7 @@ docker build -f ./docker/Dockerfile --rm -t mmselfsup:torch1.10.0-cuda11.3-cudnn
 docker run --gpus all --shm-size=8g -it -v {DATA_DIR}:/workspace/mmselfsup/data mmselfsup:torch1.10.0-cuda11.3-cudnn8 /bin/bash
 ```
 
-`{DATA_DIR}` 是保存你所有数据集的根目录.
+`{DATA_DIR}` 是保存你所有数据集的根目录。
 
 ## 安装校验
 
