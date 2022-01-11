@@ -6,7 +6,7 @@ _base_ = [
 ]
 
 # dataset
-data = dict(imgs_per_gpu=2, workers_per_gpu=32)
+data = dict(imgs_per_gpu=512, workers_per_gpu=32)
 
 # model
 model = dict(fp16_enabled=False)
@@ -37,7 +37,7 @@ lr_config = dict(
 runner = dict(max_epochs=400)
 
 # runtime
-checkpoint_config = dict(interval=100, max_keep_ckpts=3, out_dir='')
+checkpoint_config = dict(interval=1, max_keep_ckpts=3, out_dir='')
 persistent_workers = True
 log_config = dict(
     interval=100, hooks=[
