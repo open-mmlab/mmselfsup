@@ -5,8 +5,6 @@ from .builder import (DATASETS, DATASOURCES, PIPELINES, build_dataloader,
 from .data_sources import *  # noqa: F401,F403
 from .dataset_wrappers import ConcatDataset, RepeatDataset
 from .deepcluster import DeepClusterDataset
-from .mae_pre_train_dataset import MAEDataset
-from .mae_ft_dataset import MAEFtDataset
 from .multi_view import MultiViewDataset
 from .pipelines import *  # noqa: F401,F403
 from .relative_loc import RelativeLocDataset
@@ -18,5 +16,5 @@ __all__ = [
     'DATASETS', 'DATASOURCES', 'PIPELINES', 'BaseDataset', 'build_dataloader',
     'build_dataset', 'build_datasource', 'ConcatDataset', 'RepeatDataset',
     'DeepClusterDataset', 'MultiViewDataset', 'SingleViewDataset',
-    'RelativeLocDataset', 'RotationPredDataset', 'MAEDataset', 'MAEFtDataset'
+    'RelativeLocDataset', 'RotationPredDataset'
 ]
