@@ -15,9 +15,10 @@ from .simclr import SimCLR
 from .simsiam import SimSiam
 from .swav import SwAV
 from .vit_classification import VitClassification
+from .vit_classification_linear import MAELinearClassification
 
 __all__ = [
     'BaseModel', 'BYOL', 'Classification', 'DeepCluster', 'DenseCL', 'MoCo',
     'NPID', 'ODC', 'RelativeLoc', 'RotationPred', 'SimCLR', 'SimSiam', 'SwAV',
-    'MAE', 'VitClassification', 'MoCoV3'
+    'MAE', 'VitClassification', 'MAELinearClassification', 'MoCoV3'
 ]

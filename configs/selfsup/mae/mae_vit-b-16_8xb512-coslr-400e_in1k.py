@@ -5,6 +5,12 @@ _base_ = [
     '../_base_/default_runtime.py',
 ]
 
+# dataset
+data = dict(imgs_per_gpu=2, workers_per_gpu=32)
+
+# model
+model = dict(fp16_enabled=False)
+
 # optimizer
 optimizer = dict(
     lr=1.5e-4 * 4096 / 256,
@@ -12,10 +18,10 @@ optimizer = dict(
         'norm': dict(weight_decay=0.),
         'bias': dict(weight_decay=0.),
         'pos_embed': dict(weight_decay=0.),
-        'mask_token': dict(weight_decay=0.)
+        'mask_token': dict(weight_decay=0.),
+        'cls_token': dict(weight_decay=0.)
     })
-
-optimizer_config = dict(type='GradAccumFp16OptimizerHook')
+optimizer_config = dict()
 
 # learning policy
 lr_config = dict(
@@ -27,21 +33,13 @@ lr_config = dict(
     warmup_by_epoch=True,
     by_epoch=False)
 
-# runtime settings
-# the max_keep_ckpts controls the max number of ckpt file in your work_dirs
-# if it is 3, when CheckpointHook (in mmcv) saves the 4th ckpt
-# it will remove the oldest one to keep the number of total ckpts as 3
-checkpoint_config = dict(
-    interval=100, max_keep_ckpts=3, out_dir='./official_mae_1')
-
-persistent_workers = True
+# schedule
 runner = dict(max_epochs=400)
 
+# runtime
+checkpoint_config = dict(interval=100, max_keep_ckpts=3, out_dir='')
+persistent_workers = True
 log_config = dict(
-    interval=100,
-    hooks=[
+    interval=100, hooks=[
         dict(type='TextLoggerHook'),
-        # dict(type='TensorboardLoggerHook'),
     ])
-
-data = dict(imgs_per_gpu=512, workers_per_gpu=32)
