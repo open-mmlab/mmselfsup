@@ -46,7 +46,7 @@ MMSelfSup **v0.5.0** 在 16/12/2021 发版.
 
 请参考 [changelog.md](docs/zh_cn/changelog.md) 获取更多细节和历史版本信息。
 
-MMSelfSup 和 OpenSelfSup 的不同点写在 [compatibility.md](docs/en/compatibility.md) 当中。
+MMSelfSup 和 OpenSelfSup 的不同点写在 [compatibility.md](docs/zh_cn/compatibility.md) 当中。
 
 ## 模型库和基准测试
 

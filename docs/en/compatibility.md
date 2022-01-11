@@ -24,11 +24,11 @@ In addition, this part is still under refactoring, it will be released in follow
 
 ### Models
 
-- The registry mechanism is updated. Currently, the parts under the `models` folder are built with a parent called MMCV_MODELS that is imported from `MMCV`. Please check [mmselfsup/models/builder.py](https://github.com/open-mmlab/mmselfsup/blob/master/mmselfsup/models/builder.py) and refer to [mmcv/utils/registry.py](https://github.com/open-mmlab/mmcv/blob/master/mmcv/utils/registry.py) for more details.
+- The registry mechanism is updated. Currently, the parts under the `models` folder are built with a parent called `MMCV_MODELS` that is imported from `MMCV`. Please check [mmselfsup/models/builder.py](https://github.com/open-mmlab/mmselfsup/blob/master/mmselfsup/models/builder.py) and refer to [mmcv/utils/registry.py](https://github.com/open-mmlab/mmcv/blob/master/mmcv/utils/registry.py) for more details.
 
-- The `models` folder includes algorithms, backbones, necks, heads, memories and some required utils. The `algorithms` integrates the other main components to build the self-supervised learning algorithms, which is like `classifiers` in MMCls or `detectors` in MMDet.
+- The `models` folder includes `algorithms`, `backbones`, `necks`, `heads`, `memories` and some required utils. The `algorithms` integrates the other main components to build the self-supervised learning algorithms, which is like `classifiers` in `MMCls` or `detectors` in `MMDet`.
 
-- In OpenSelfSup, the names of necks are kind of confused and all in one file. Now, the necks are refactored, managed with one folder and renamed for easier understanding. Please check `mmselfsup/models/necks` for more details.
+- In OpenSelfSup, the names of `necks` are kind of confused and all in one file. Now, the `necks` are refactored, managed with one folder and renamed for easier understanding. Please check `mmselfsup/models/necks` for more details.
 
 ## Codebase Conventions
 
@@ -42,7 +42,7 @@ MMSelfSup renews codebase conventions as OpenSelfSup has not been updated for so
 
   - One algorithm name has been modified: MOCO -> MoCo
 
-  - As all models' components inherit `BaseModule` from `MMCV`, the models are initialized with `init_cfg`. Please use it to set your initialization.
+  - As all models' components inherit `BaseModule` from `MMCV`, the models are initialized with `init_cfg`. Please use it to set your initialization. Besides, `init_weights` also can be used.
 
   - Please use new neck names to compose your algorithms, check it before write your own configs.
 
