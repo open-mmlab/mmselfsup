@@ -3,14 +3,14 @@ from functools import partial
 import torch
 import torch.nn as nn
 from mmcv.runner import BaseModule
+from timm.models.vision_transformer import Block, PatchEmbed
+
 from ..builder import BACKBONES
-from timm.models.vision_transformer import PatchEmbed, Block
 
 
 @BACKBONES.register_module()
 class MAEFinetuneViT(BaseModule):
-    """ Vision Transformer for MAE classification benchmark.
-    """
+    """Vision Transformer for MAE classification benchmark."""
 
     def __init__(self,
                  img_size=224,

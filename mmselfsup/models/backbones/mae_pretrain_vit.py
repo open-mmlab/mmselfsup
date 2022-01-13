@@ -3,7 +3,7 @@ from functools import partial
 import torch
 import torch.nn as nn
 from mmcv.runner import BaseModule
-from timm.models.vision_transformer import PatchEmbed, Block
+from timm.models.vision_transformer import Block, PatchEmbed
 
 from ..builder import BACKBONES
 
@@ -71,7 +71,7 @@ class MAEPretrainViT(BaseModule):
         self.mask_ratio = mask_ratio
 
     def random_masking(self, x, mask_ratio=0.75):
-        """ Generate the mask for MAE Pre-training.
+        """Generate the mask for MAE Pre-training.
 
         Args:
             x (torch.tensor): Image with data augmentation applied.
