@@ -3,21 +3,18 @@ import torch
 from torch import nn
 
 from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
-from .base import BaseModel
 from ..utils import get_2d_sincos_pos_embed
+from .base import BaseModel
 
 
 @ALGORITHMS.register_module('MAE')
 class MAE(BaseModel):
     """MAE.
-    backbone (dict): Config dict for encoder.
-        Defaults to None.
-    neck (dict): Config dict for encoder.
-        Defaults to None
-    head (dict): Config dict for loss functions.
-        Defaults to None.
-    init_cfg (dict): Config dict for weight initialization.
-        Defaults to None.
+
+    backbone (dict): Config dict for encoder.     Defaults to None. neck
+    (dict): Config dict for encoder.     Defaults to None head (dict): Config
+    dict for loss functions.     Defaults to None. init_cfg (dict): Config dict
+    for weight initialization.     Defaults to None.
     """
 
     def __init__(self,

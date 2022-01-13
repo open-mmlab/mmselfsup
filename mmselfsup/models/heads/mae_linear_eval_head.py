@@ -1,7 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from mmcv.runner import BaseModule
-from torch import nn
 from timm.models.layers import trunc_normal_
+from torch import nn
 
 from ..builder import HEADS
 
@@ -9,6 +9,7 @@ from ..builder import HEADS
 @HEADS.register_module()
 class MAELinearEvalHead(BaseModule):
     """Linear evaluation head for MAE.
+
     Args:
         embed_dim (int): The dim of the feature before the classifier head.
         num_classes (int): The total classes. Defaults to 1000.
