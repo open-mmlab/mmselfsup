@@ -28,6 +28,7 @@ class RandomAppliedTrans(object):
     def __init__(self, transforms, p=0.5):
         t = [build_from_cfg(t, PIPELINES) for t in transforms]
         self.trans = _transforms.RandomApply(t, p=p)
+        self.prob = p
 
     def __call__(self, img):
         return self.trans(img)
