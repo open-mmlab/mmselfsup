@@ -1,7 +1,7 @@
 _base_ = 'vit-b-16_8xb128-coslr-100e-linear-eval_in1k.py'
 
 # dataset
-data = dict(imgs_per_gpu=2048, workers_per_gpu=32)
+data = dict(imgs_per_gpu=2048, workers_per_gpu=8)
 
 # optimizer
 optimizer = dict(
