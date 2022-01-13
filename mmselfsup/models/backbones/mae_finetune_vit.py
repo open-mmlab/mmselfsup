@@ -114,8 +114,5 @@ class MAEFinetuneViT(BaseModule):
             self._freeze_stages()
 
     def _freeze_stages(self):
-        for name, param in self.named_parameters():
+        for _, param in self.named_parameters():
             param.requires_grad = False
-            m = getattr(self, name.split('.')[0])
-            if isinstance(m, nn.Module):
-                m.eval()
