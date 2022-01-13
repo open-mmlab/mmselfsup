@@ -18,10 +18,10 @@ class MAELinearEvalHead(BaseModule):
     def __init__(self, embed_dim, num_classes=1000):
         super(MAELinearEvalHead, self).__init__()
         self.head = nn.Linear(embed_dim, num_classes)
-        self.bn = nn.BatchNorm1d(embed_dim, affine=False)
+        self.bn = nn.BatchNorm1d(embed_dim, affine=False, eps=1e-6)
         self.criterion = nn.CrossEntropyLoss()
         nn.init.constant_(self.head.bias, 0)
-        trunc_normal_(self.head.weight, std=2e-5)
+        trunc_normal_(self.head.weight, std=0.01)
 
     def forward(self, x):
         """"Get the logits."""
