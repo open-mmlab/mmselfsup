@@ -9,3 +9,9 @@ optimizer = dict(
 
 # learning policy
 lr_config = dict(min_lr=0.0)
+
+# runtime
+log_config = dict(
+    interval=25, hooks=[
+        dict(type='TextLoggerHook'),
+    ])
