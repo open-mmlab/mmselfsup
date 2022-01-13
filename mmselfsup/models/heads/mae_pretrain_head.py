@@ -1,6 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from mmcv.runner import BaseModule
 import torch
+from mmcv.runner import BaseModule
 
 from ..builder import HEADS
 
@@ -8,6 +8,7 @@ from ..builder import HEADS
 @HEADS.register_module()
 class MAEPretrainHead(BaseModule):
     """Pre-training head for MAE.
+
     Args:
         norm_pix_loss (bool): Whether or not normalize target.
             Defaults to False.
@@ -43,5 +44,4 @@ class MAEPretrainHead(BaseModule):
 
         loss = (loss * mask).sum() / mask.sum()
         losses['loss'] = loss
-
         return losses
