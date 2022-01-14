@@ -54,6 +54,6 @@ MMSelfSup 进行了重构并解决了许多遗留问题，它与 OpenSelfSup 并
 
 - `train.py` 脚本中的参数已被更新， 两个主要修改点为
 
-  - 增加 `--cfg-options` 参数来，通过命令行传参对配置文件进行修改。
+  - 增加 `--cfg-options` 参数，通过命令行传参对配置文件进行修改。
 
-  - 移除 `--pretrained`， 通过 `--cfg-options` 来设置预训练模型。
+  - 移除 `--pretrained`， 通过 `--cfg-options` 设置预训练模型。
