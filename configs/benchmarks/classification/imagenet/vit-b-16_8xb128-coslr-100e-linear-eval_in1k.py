@@ -8,7 +8,8 @@ _base_ = [
 # dataset
 img_norm_cfg = dict(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 train_pipeline = [
-    dict(type='RandomResizedCrop', size=224, scale=(0.2, 1.0)),
+    dict(type='RandomResizedCrop', size=224, interpolation=3),
+    dict(type='RandomHorizontalFlip'),
     dict(type='ToTensor'),
     dict(type='Normalize', **img_norm_cfg)
 ]
@@ -34,7 +35,7 @@ optimizer = dict(lr=0.1 * 4096 / 256, weight_decay=0.0)
 # learning policy
 lr_config = dict(
     policy='CosineAnnealing',
-    min_lr=1e-6,
+    min_lr=0,
     warmup='linear',
     warmup_iters=10,
     warmup_ratio=1e-4,
