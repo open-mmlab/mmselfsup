@@ -183,6 +183,9 @@ if __name__ == '__main__':
             'Programming Language :: Python :: 3.9',
         ],
         license='Apache License 2.0',
-        tests_require=parse_requirements('requirements/tests.txt'),
         install_requires=parse_requirements('requirements/runtime.txt'),
+        extras_require={
+            'all': parse_requirements('requirements.txt'),
+            'tests': parse_requirements('requirements/tests.txt'),
+        },
         zip_safe=False)
