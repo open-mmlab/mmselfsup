@@ -15,3 +15,4 @@ log_config = dict(
     interval=25, hooks=[
         dict(type='TextLoggerHook'),
     ])
+runner = dict(type='EpochBasedRunner', max_epochs=90)

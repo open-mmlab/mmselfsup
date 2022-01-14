@@ -44,6 +44,7 @@ lr_config = dict(
 # runtime
 checkpoint_config = dict(interval=1, max_keep_ckpts=3, out_dir='')
 persistent_workers = True
+runner = dict(type='EpochBasedRunner', max_epochs=90)
 log_config = dict(
     interval=100, hooks=[
         dict(type='TextLoggerHook'),
