@@ -42,7 +42,7 @@ MMSelfSup 进行了重构并解决了许多遗留问题，它与 OpenSelfSup 并
 
   - 一个算法名被修改： MOCO -> MoCo
 
-  - 由于所有模型的组件继承自 `MMCV` 的 `BaseModule`，模型根据 `init_cfg`进行初始化。请您依照该规范进行初始化设置，`init_weights` 仍然适用。
+  - 由于所有模型的组件继承自 `MMCV` 的 `BaseModule`，模型根据 `init_cfg` 进行初始化。请您依照该规范进行初始化设置，`init_weights` 仍然适用。
 
   - 请使用新的 necks 的命名来组合算，请在写配置文件前确认。
 

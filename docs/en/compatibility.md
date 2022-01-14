@@ -42,7 +42,7 @@ MMSelfSup renews codebase conventions as OpenSelfSup has not been updated for so
 
   - One algorithm name has been modified: MOCO -> MoCo
 
-  - As all models' components inherit `BaseModule` from `MMCV`, the models are initialized with `init_cfg`. Please use it to set your initialization. Besides, `init_weights` also can be used.
+  - As all models' components inherit `BaseModule` from `MMCV`, the models are initialized with `init_cfg`. Please use it to set your initialization. Besides, `init_weights` can also be used.
 
   - Please use new neck names to compose your algorithms, check it before write your own configs.
 
