@@ -1,8 +1,10 @@
 # NPID
 
-## Unsupervised Feature Learning via Non-Parametric Instance Discrimination
+[Unsupervised Feature Learning via Non-Parametric Instance Discrimination](https://arxiv.org/abs/1805.01978)
 
-<!-- [ABSTRACT] -->
+<!-- [ALGORITHM] -->
+
+## Abstract
 
 Neural net classifiers trained on data with annotated class labels can also capture apparent visual similarity among categories without being directed to do so. We study whether this observation can be extended beyond the conventional domain of supervised learning: Can we learn a good feature representation that captures apparent similar- ity among instances, instead of classes, by merely asking the feature to be discriminative of individual instances?
 
@@ -12,23 +14,10 @@ Our method is also remarkable for consistently improving test performance with m
 
 <!-- [IMAGE] -->
 <div align="center">
-<img  />
+<img  src="https://user-images.githubusercontent.com/36138628/149722257-1651c283-ac68-4cdc-90e6-970d820529af.png" width="800" />
 </div>
 
-## Citation
-
-<!-- [ALGORITHM] -->
-
-```bibtex
-@inproceedings{wu2018unsupervised,
-  title={Unsupervised feature learning via non-parametric instance discrimination},
-  author={Wu, Zhirong and Xiong, Yuanjun and Yu, Stella X and Lin, Dahua},
-  booktitle={CVPR},
-  year={2018}
-}
-```
-
-## Models and Benchmarks
+## Results and Models
 
 **Back to [model_zoo.md](../../../docs/en/model_zoo.md) to download models.**
 
@@ -89,3 +78,14 @@ Please refer to [fcn_r50-d8_512x512_20k_voc12aug.py](../../benchmarks/mmsegmenta
 | Self-Supervised Config                                                | mIOU  |
 | --------------------------------------------------------------------- | ----- |
 | [resnet50_8xb32-steplr-200e](npid_resnet50_8xb32-steplr-200e_in1k.py) | 65.45 |
+
+## Citation
+
+```bibtex
+@inproceedings{wu2018unsupervised,
+  title={Unsupervised feature learning via non-parametric instance discrimination},
+  author={Wu, Zhirong and Xiong, Yuanjun and Yu, Stella X and Lin, Dahua},
+  booktitle={CVPR},
+  year={2018}
+}
+```

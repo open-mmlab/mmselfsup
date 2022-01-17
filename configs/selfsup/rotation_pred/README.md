@@ -1,30 +1,19 @@
 # Rotation Prediction
 
-## Unsupervised Representation Learning by Predicting Image Rotation
+[Unsupervised Representation Learning by Predicting Image Rotation](https://arxiv.org/abs/1803.07728)
 
-<!-- [ABSTRACT] -->
+<!-- [ALGORITHM] -->
+
+## Abstract
 
 Over the last years, deep convolutional neural networks (ConvNets) have transformed the field of computer vision thanks to their unparalleled capacity to learn high level semantic image features. However, in order to successfully learn those features, they usually require massive amounts of manually labeled data, which is both expensive and impractical to scale. Therefore, unsupervised semantic feature learning, i.e., learning without requiring manual annotation effort, is of crucial importance in order to successfully harvest the vast amount of visual data that are available today. In our work we propose to learn image features by training ConvNets to recognize the 2d rotation that is applied to the image that it gets as input. We demonstrate both qualitatively and quantitatively that this apparently simple task actually provides a very powerful supervisory signal for semantic feature learning. We exhaustively evaluate our method in various unsupervised feature learning benchmarks and we exhibit in all of them state-of-the-art performance. Specifically, our results on those benchmarks demonstrate dramatic improvements w.r.t. prior state-of-the-art approaches in unsupervised representation learning and thus significantly close the gap with supervised feature learning.
 
 <!-- [IMAGE] -->
 <div align="center">
-<img  />
+<img  src="https://user-images.githubusercontent.com/36138628/149723477-8f63e237-362e-4962-b405-9bab0f579808.png" width="700" />
 </div>
 
-## Citation
-
-<!-- [ALGORITHM] -->
-
-```bibtex
-@inproceedings{komodakis2018unsupervised,
-  title={Unsupervised representation learning by predicting image rotations},
-  author={Komodakis, Nikos and Gidaris, Spyros},
-  booktitle={ICLR},
-  year={2018}
-}
-```
-
-## Models and Benchmarks
+## Results and Models
 
 **Back to [model_zoo.md](../../../docs/en/model_zoo.md) to download models.**
 
@@ -85,3 +74,14 @@ Please refer to [fcn_r50-d8_512x512_20k_voc12aug.py](../../benchmarks/mmsegmenta
 | Self-Supervised Config                                                       | mIOU  |
 | ---------------------------------------------------------------------------- | ----- |
 | [resnet50_8xb16-steplr-70e](rotation-pred_resnet50_8xb16-steplr-70e_in1k.py) | 64.31 |
+
+## Citation
+
+```bibtex
+@inproceedings{komodakis2018unsupervised,
+  title={Unsupervised representation learning by predicting image rotations},
+  author={Komodakis, Nikos and Gidaris, Spyros},
+  booktitle={ICLR},
+  year={2018}
+}
+```

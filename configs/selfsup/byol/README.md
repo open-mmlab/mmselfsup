@@ -1,30 +1,18 @@
 # BYOL
 
-## Bootstrap your own latent: A new approach to self-supervised Learning
+[Bootstrap your own latent: A new approach to self-supervised Learning](https://arxiv.org/abs/2006.07733)
 
-<!-- [ABSTRACT] -->
+<!-- [ALGORITHM] -->
 
+## Abstract
 **B**ootstrap **Y**our **O**wn **L**atent (BYOL) is a new approach to self-supervised image representation learning. BYOL relies on two neural networks, referred to as online and target networks, that interact and learn from each other. From an augmented view of an image, we train the online network to predict the target network representation of the same image under a different augmented view. At the same time, we update the target network with a slow-moving average of the online network.
 
 <!-- [IMAGE] -->
 <div align="center">
-<img  />
+<img src="https://user-images.githubusercontent.com/36138628/149720208-5ffbee78-1437-44c7-9ddb-b8caab60d2c3.png" width="800" />
 </div>
 
-## Citation
-
-<!-- [ALGORITHM] -->
-
-```bibtex
-@inproceedings{grill2020bootstrap,
-  title={Bootstrap your own latent: A new approach to self-supervised learning},
-  author={Grill, Jean-Bastien and Strub, Florian and Altch{\'e}, Florent and Tallec, Corentin and Richemond, Pierre H and Buchatskaya, Elena and Doersch, Carl and Pires, Bernardo Avila and Guo, Zhaohan Daniel and Azar, Mohammad Gheshlaghi and others},
-  booktitle={NeurIPS},
-  year={2020}
-}
-```
-
-## Models and Benchmarks
+## Results and Models
 
 **Back to [model_zoo.md](../../../docs/en/model_zoo.md) to download models.**
 
@@ -85,3 +73,14 @@ Please refer to [fcn_r50-d8_512x512_20k_voc12aug.py](../../benchmarks/mmsegmenta
 | Self-Supervised Config                                                              | mIOU  |
 | ----------------------------------------------------------------------------------- | ----- |
 | [resnet50_8xb32-accum16-coslr-200e](byol_resnet50_8xb32-accum16-coslr-200e_in1k.py) | 67.16 |
+
+## Citation
+
+```bibtex
+@inproceedings{grill2020bootstrap,
+  title={Bootstrap your own latent: A new approach to self-supervised learning},
+  author={Grill, Jean-Bastien and Strub, Florian and Altch{\'e}, Florent and Tallec, Corentin and Richemond, Pierre H and Buchatskaya, Elena and Doersch, Carl and Pires, Bernardo Avila and Guo, Zhaohan Daniel and Azar, Mohammad Gheshlaghi and others},
+  booktitle={NeurIPS},
+  year={2020}
+}
+```

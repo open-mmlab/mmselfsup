@@ -1,30 +1,19 @@
 # DenseCL
 
-## Dense Contrastive Learning for Self-Supervised Visual Pre-Training
+[Dense Contrastive Learning for Self-Supervised Visual Pre-Training](https://arxiv.org/abs/2011.09157)
 
-<!-- [ABSTRACT] -->
+<!-- [ALGORITHM] -->
+
+## Abstract
 
 To date, most existing self-supervised learning methods are designed and optimized for image classification. These pre-trained models can be sub-optimal for dense prediction tasks due to the discrepancy between image-level prediction and pixel-level prediction. To fill this gap, we aim to design an effective, dense self-supervised learning method that directly works at the level of pixels (or local features) by taking into account the correspondence between local features. We present dense contrastive learning (DenseCL), which implements self-supervised learning by optimizing a pairwise contrastive (dis)similarity loss at the pixel level between two views of input images.
 
 <!-- [IMAGE] -->
 <div align="center">
-<img  />
+<img src="https://user-images.githubusercontent.com/36138628/149721111-bab03a6d-a30d-418e-b338-43c3689cfc65.png" width="800" />
 </div>
 
-## Citation
-
-<!-- [ALGORITHM] -->
-
-```bibtex
-@inproceedings{wang2021dense,
-  title={Dense contrastive learning for self-supervised visual pre-training},
-  author={Wang, Xinlong and Zhang, Rufeng and Shen, Chunhua and Kong, Tao and Li, Lei},
-  booktitle={CVPR},
-  year={2021}
-}
-```
-
-## Models and Benchmarks
+## Results and Models
 
 **Back to [model_zoo.md](../../../docs/en/model_zoo.md) to download models.**
 
@@ -85,3 +74,14 @@ Please refer to [fcn_r50-d8_512x512_20k_voc12aug.py](../../benchmarks/mmsegmenta
 | Self-Supervised Config                                                 | mIOU  |
 | ---------------------------------------------------------------------- | ----- |
 | [resnet50_8xb32-coslr-200e](densecl_resnet50_8xb32-coslr-200e_in1k.py) | 69.47 |
+
+## Citation
+
+```bibtex
+@inproceedings{wang2021dense,
+  title={Dense contrastive learning for self-supervised visual pre-training},
+  author={Wang, Xinlong and Zhang, Rufeng and Shen, Chunhua and Kong, Tao and Li, Lei},
+  booktitle={CVPR},
+  year={2021}
+}
+```
