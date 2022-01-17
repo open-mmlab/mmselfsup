@@ -12,7 +12,7 @@ Collections:
     Paper:
         URL: https://arxiv.org/abs/2003.04297
         Title: "Improved Baselines with Momentum Contrastive Learning"
-    README: configs/selfsup/moco/README.md
+    README: configs/selfsup/mocov2/README.md
 
 Models:
   - Name: mocov2_resnet50_8xb32-coslr-200e_in1k
@@ -25,6 +25,6 @@ Models:
         Dataset: ImageNet-1k
         Metrics:
           Top 1 Accuracy: 67.56
-    Config: configs/selfsup/moco/mocov2_resnet50_8xb32-coslr-200e_in1k.py
+    Config: configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py
     Weights: https://download.openmmlab.com/mmselfsup/moco/mocov2_resnet50_8xb32-coslr-200e_in1k_20211213-7ce8f840.pth
     

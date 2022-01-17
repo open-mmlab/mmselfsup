@@ -127,7 +127,7 @@ You can easily build your own training config file by inherit some base config f
 
 For easy understanding, we use MoCo v2 as a example and comment the meaning of each line. For more detaile, please refer to the API documentation.
 
-The config file `configs/selfsup/moco/mocov2_resnet50_8xb32-coslr-200e_in1k.py` is displayed below.
+The config file `configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py` is displayed below.
 ```python
 _base_ = [
     '../_base_/models/mocov2.py',                  # model
@@ -275,7 +275,7 @@ For easy understanding, we recommend contributors to inherit from existing metho
 
 For all configs under the same folder, it is recommended to have only **one** _primitive_ config. All other configs should inherit from the _primitive_ config. In this way, the maximum of inheritance level is 3.
 
-For example, if your config file is based on MoCo v2 with some other modification, you can first inherit the basic MoCo v2 structure, dataset and other training setting by specifying `_base_ ='./mocov2_resnet50_8xb32-coslr-200e_in1k.py.py'` (The path relative to your config file), and then modify the necessary parameters in the config file. A more specific example, now we want to use almost all configs in `configs/selfsup/moco/mocov2_resnet50_8xb32-coslr-200e_in1k.py.py`, but change the number of training epochs from 200 to 800, modify when to decay the learning rate, and modify the dataset path, you can create a new config file `configs/selfsup/moco/mocov2_resnet50_8xb32-coslr-800e_in1k.py.py` with content as below:
+For example, if your config file is based on MoCo v2 with some other modification, you can first inherit the basic MoCo v2 structure, dataset and other training setting by specifying `_base_ ='./mocov2_resnet50_8xb32-coslr-200e_in1k.py.py'` (The path relative to your config file), and then modify the necessary parameters in the config file. A more specific example, now we want to use almost all configs in `configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py.py`, but change the number of training epochs from 200 to 800, modify when to decay the learning rate, and modify the dataset path, you can create a new config file `configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-800e_in1k.py.py` with content as below:
 
 ```python
 _base_ = './mocov2_resnet50_8xb32-coslr-200e_in1k.py'

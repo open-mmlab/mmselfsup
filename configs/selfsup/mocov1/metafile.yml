@@ -12,4 +12,4 @@ Collections:
     Paper:
         URL: https://arxiv.org/abs/1911.05722
         Title: "Momentum Contrast for Unsupervised Visual Representation Learning"
-    README: configs/selfsup/moco/README.md
+    README: configs/selfsup/mocov1/README.md
