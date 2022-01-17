@@ -1,5 +1,5 @@
 Collections:
-  - Name: MoCo
+  - Name: MoCov2
     Metadata:
       Training Data: ImageNet-1k
       Training Techniques:
@@ -10,8 +10,8 @@ Collections:
         - ResNet
         - MoCo
     Paper:
-        URL: https://arxiv.org/abs/1911.05722
-        Title: "Momentum Contrast for Unsupervised Visual Representation Learning"
+        URL: https://arxiv.org/abs/2003.04297
+        Title: "Improved Baselines with Momentum Contrastive Learning"
     README: configs/selfsup/moco/README.md
 
 Models:
@@ -27,6 +27,4 @@ Models:
           Top 1 Accuracy: 67.56
     Config: configs/selfsup/moco/mocov2_resnet50_8xb32-coslr-200e_in1k.py
     Weights: https://download.openmmlab.com/mmselfsup/moco/mocov2_resnet50_8xb32-coslr-200e_in1k_20211213-7ce8f840.pth
-    Paper:
-        URL: https://arxiv.org/abs/2003.04297
-        Title: "Improved Baselines with Momentum Contrastive Learning"
+    

@@ -1,54 +1,18 @@
-# MoCo v1 / v2
+# MoCo v2
 
-## Momentum Contrast for Unsupervised Visual Representation Learning (MoCo v1)
-
-<!-- [ABSTRACT] -->
-
-We present Momentum Contrast (MoCo) for unsupervised visual representation learning. From a perspective on contrastive learning as dictionary look-up, we build a dynamic dictionary with a queue and a moving-averaged encoder. This enables building a large and consistent dictionary on-the-fly that facilitates contrastive unsupervised learning. MoCo provides competitive results under the common linear protocol on ImageNet classification. More importantly, the representations learned by MoCo transfer well to downstream tasks.
-
-<!-- [IMAGE] -->
-<div align="center">
-<img  />
-</div>
-
-## Citation
+[Improved Baselines with Momentum Contrastive Learning](https://arxiv.org/abs/2003.04297)
 
 <!-- [ALGORITHM] -->
 
-```bibtex
-@inproceedings{he2020momentum,
-  title={Momentum contrast for unsupervised visual representation learning},
-  author={He, Kaiming and Fan, Haoqi and Wu, Yuxin and Xie, Saining and Girshick, Ross},
-  booktitle={CVPR},
-  year={2020}
-}
-```
-
-## Improved Baselines with Momentum Contrastive Learning (MoCo v2)
-
-<!-- [ABSTRACT] -->
-
+## Abstract
 Contrastive unsupervised learning has recently shown encouraging progress, e.g., in Momentum Contrast (MoCo) and SimCLR. In this note, we verify the effectiveness of two of SimCLR’s design improvements by implementing them in the MoCo framework. With simple modifications to MoCo—namely, using an MLP projection head and more data augmentation—we establish stronger baselines that outperform SimCLR and do not require large training batches. We hope this will make state-of-the-art unsupervised learning research more accessible.
 
 <!-- [IMAGE] -->
 <div align="center">
-<img  />
+<img  src="https://user-images.githubusercontent.com/36138628/149720067-b65e5736-d425-45b3-93ed-6f2427fc6217.png" width="400" />
 </div>
 
-## Citation
-
-<!-- [ALGORITHM] -->
-
-```bibtex
-@article{chen2020improved,
-  title={Improved baselines with momentum contrastive learning},
-  author={Chen, Xinlei and Fan, Haoqi and Girshick, Ross and He, Kaiming},
-  journal={arXiv preprint arXiv:2003.04297},
-  year={2020}
-}
-```
-
-## Models and Benchmarks
+## Results and Models
 
 **Back to [model_zoo.md](../../../docs/en/model_zoo.md) to download models.**
 
@@ -109,3 +73,14 @@ Please refer to [fcn_r50-d8_512x512_20k_voc12aug.py](../../benchmarks/mmsegmenta
 | Self-Supervised Config                                                       | mIOU  |
 | ---------------------------------------------------------------------------- | ----- |
 | [mocov2_resnet50_8xb32-coslr-200e](mocov2_resnet50_8xb32-coslr-200e_in1k.py) | 67.55 |
+
+## Citation
+
+```bibtex
+@article{chen2020improved,
+  title={Improved baselines with momentum contrastive learning},
+  author={Chen, Xinlei and Fan, Haoqi and Girshick, Ross and He, Kaiming},
+  journal={arXiv preprint arXiv:2003.04297},
+  year={2020}
+}
+```
