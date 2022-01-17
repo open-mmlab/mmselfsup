@@ -1,6 +1,6 @@
 blank_issues_enabled: false
 
-# contact_links:
-#   - name: MMSelfSup Documentation
-#     url: https://mmselfsup.readthedocs.io/en/latest/
-#     about: Check if your question is answered in docs
+contact_links:
+  - name: MMSelfSup Documentation
+    url: https://mmselfsup.readthedocs.io/en/latest/
+    about: Check if your question is answered in docs
