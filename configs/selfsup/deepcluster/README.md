@@ -9,7 +9,7 @@ Clustering is a class of unsupervised learning methods that has been extensively
 
 <!-- [IMAGE] -->
 <div align="center">
-<img src="https://user-images.githubusercontent.com/36138628/149720586-5bfd213e-0638-47fc-b48a-a16689190e17.png" width="600" />
+<img src="https://user-images.githubusercontent.com/36138628/149720586-5bfd213e-0638-47fc-b48a-a16689190e17.png" width="700" />
 </div>
 
 ## Results and Models

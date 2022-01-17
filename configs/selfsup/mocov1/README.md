@@ -9,7 +9,7 @@ We present Momentum Contrast (MoCo) for unsupervised visual representation learn
 
 <!-- [IMAGE] -->
 <div align="center">
-<img  src="https://user-images.githubusercontent.com/36138628/149719892-1b6928e1-37cb-4cee-b053-ff12e1aa43c0.png" width="300" />
+<img  src="https://user-images.githubusercontent.com/36138628/149719892-1b6928e1-37cb-4cee-b053-ff12e1aa43c0.png" width="400" />
 </div>
 
 ## Citation

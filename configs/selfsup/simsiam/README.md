@@ -10,7 +10,7 @@ Siamese networks have become a common structure in various recent models for uns
 
 <!-- [IMAGE] -->
 <div align="center">
-<img  src="https://user-images.githubusercontent.com/36138628/149724180-bc7bac6a-fcb8-421e-b8f1-9550c624d154.png" width="400" />
+<img  src="https://user-images.githubusercontent.com/36138628/149724180-bc7bac6a-fcb8-421e-b8f1-9550c624d154.png" width="500" />
 </div>
 
 ## Results and Models

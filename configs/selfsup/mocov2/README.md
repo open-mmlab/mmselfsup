@@ -9,7 +9,7 @@ Contrastive unsupervised learning has recently shown encouraging progress, e.g.,
 
 <!-- [IMAGE] -->
 <div align="center">
-<img  src="https://user-images.githubusercontent.com/36138628/149720067-b65e5736-d425-45b3-93ed-6f2427fc6217.png" width="400" />
+<img  src="https://user-images.githubusercontent.com/36138628/149720067-b65e5736-d425-45b3-93ed-6f2427fc6217.png" width="500" />
 </div>
 
 ## Results and Models

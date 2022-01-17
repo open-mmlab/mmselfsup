@@ -10,7 +10,7 @@ To date, most existing self-supervised learning methods are designed and optimiz
 
 <!-- [IMAGE] -->
 <div align="center">
-<img src="https://user-images.githubusercontent.com/36138628/149721111-bab03a6d-a30d-418e-b338-43c3689cfc65.png" width="800" />
+<img src="https://user-images.githubusercontent.com/36138628/149721111-bab03a6d-a30d-418e-b338-43c3689cfc65.png" width="900" />
 </div>
 
 ## Results and Models
