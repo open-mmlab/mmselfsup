@@ -17,12 +17,7 @@ class MAE(BaseModel):
     for weight initialization.     Defaults to None.
     """
 
-    def __init__(self,
-                 backbone=None,
-                 neck=None,
-                 head=None,
-                 fp16_enabled=False,
-                 init_cfg=None):
+    def __init__(self, backbone=None, neck=None, head=None, init_cfg=None):
         super(MAE, self).__init__(init_cfg)
         assert backbone is not None
         self.backbone = build_backbone(backbone)
@@ -32,7 +27,6 @@ class MAE(BaseModel):
         assert head is not None
         self.head = build_head(head)
         self.initialize_weights()
-        self.fp16_enabled = fp16_enabled
 
     def initialize_weights(self):
         pos_embed = get_2d_sincos_pos_embed(
