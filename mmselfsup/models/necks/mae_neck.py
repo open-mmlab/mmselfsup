@@ -1,11 +1,9 @@
-from functools import partial
-
 import torch
 import torch.nn as nn
 from mmcv.runner import BaseModule
-from timm.models.vision_transformer import Block
-
+from mmcls.models.backbones.vision_transformer import TransformerEncoderLayer
 from ..builder import NECKS
+from mmcv.cnn import build_norm_layer
 
 
 @NECKS.register_module()
@@ -24,7 +22,7 @@ class MAEPretrainDecoder(BaseModule):
             Defaults to 16.
         mlp_ratio (int): Ratio of mlp hidden dim to decoder's embedding dim.
             Defaults to 4.
-        norm_layer (nn.Module): Normalization layer. Defaults to nn.LayerNorm.
+        norm_cfg (dict): Normalization layer. Defaults to LayerNorm.
 
     Some of the code is borrowed from
     `https://github.com/facebookresearch/mae`.
@@ -50,30 +48,35 @@ class MAEPretrainDecoder(BaseModule):
                  decoder_depth=8,
                  decoder_num_heads=16,
                  mlp_ratio=4.,
-                 norm_layer=partial(nn.LayerNorm, eps=1e-6)):
+                 norm_cfg=dict(type='LN', eps=1e-6)):
         super(MAEPretrainDecoder, self).__init__()
-        self.num_patches = num_patches  # TODO
+        self.num_patches = num_patches
         self.decoder_embed = nn.Linear(embed_dim, decoder_embed_dim, bias=True)
 
         self.mask_token = nn.Parameter(torch.zeros(1, 1, decoder_embed_dim))
 
         self.decoder_pos_embed = nn.Parameter(
             torch.zeros(1, self.num_patches + 1, decoder_embed_dim),
-            requires_grad=False)  # fixed sin-cos embedding
+            requires_grad=False)
 
         self.decoder_blocks = nn.ModuleList([
-            Block(
+            TransformerEncoderLayer(
                 decoder_embed_dim,
                 decoder_num_heads,
-                mlp_ratio,
+                int(mlp_ratio * decoder_embed_dim),
                 qkv_bias=True,
-                norm_layer=norm_layer) for _ in range(decoder_depth)
+                norm_cfg=norm_cfg) for _ in range(decoder_depth)
         ])
 
-        self.decoder_norm = norm_layer(decoder_embed_dim)
+        self.decoder_norm_name, decoder_norm = build_norm_layer(
+            norm_cfg, decoder_embed_dim, postfix=1)
+        self.add_module(self.decoder_norm_name, decoder_norm)
         self.decoder_pred = nn.Linear(
-            decoder_embed_dim, patch_size**2 * in_chans,
-            bias=True)  # encoder to decoder
+            decoder_embed_dim, patch_size**2 * in_chans, bias=True)
+
+    @property
+    def decoder_norm(self):
+        return getattr(self, self.decoder_norm_name)
 
     def forward(self, x, ids_restore):
         # embed tokens
@@ -82,13 +85,12 @@ class MAEPretrainDecoder(BaseModule):
         # append mask tokens to sequence
         mask_tokens = self.mask_token.repeat(
             x.shape[0], ids_restore.shape[1] + 1 - x.shape[1], 1)
-        x_ = torch.cat([x[:, 1:, :], mask_tokens], dim=1)  # no cls token
+        x_ = torch.cat([x[:, 1:, :], mask_tokens], dim=1)
         x_ = torch.gather(
             x_,
             dim=1,
-            index=ids_restore.unsqueeze(-1).repeat(1, 1,
-                                                   x.shape[2]))  # unshuffle
-        x = torch.cat([x[:, :1, :], x_], dim=1)  # append cls token
+            index=ids_restore.unsqueeze(-1).repeat(1, 1, x.shape[2]))
+        x = torch.cat([x[:, :1, :], x_], dim=1)
 
         # add pos embed
         x = x + self.decoder_pos_embed

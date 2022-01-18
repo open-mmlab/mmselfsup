@@ -1,14 +1,6 @@
 model = dict(
     type='VitClassification',
-    backbone=dict(
-        type='MAEFinetuneViT',
-        patch_size=16,
-        embed_dim=768,
-        depth=12,
-        num_heads=12,
-        mlp_ratio=4,
-        qkv_bias=True,
-        global_pool=True),
+    backbone=dict(type='MAEClsViT', arch='b', patch_size=16, global_pool=True),
     head=dict(type='MAEFinetuneHead', num_classes=1000, embed_dim=768),
     mixup_alpha=0.8,
     cutmix_alpha=1.0,
