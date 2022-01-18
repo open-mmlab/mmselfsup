@@ -249,7 +249,7 @@ runner = dict(
 `../_base_/default_runtime.py` is the default runtime settings.
 ```python
 # checkpoint saving
-checkpoint_config = dict(interval=10)  # The save interval is 1
+checkpoint_config = dict(interval=10)  # The save interval is 10
 
 # yapf:disable
 log_config = dict(
