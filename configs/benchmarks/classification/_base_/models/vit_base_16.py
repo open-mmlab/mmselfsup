@@ -1,6 +1,11 @@
 model = dict(
     type='VitClassification',
-    backbone=dict(type='MAEClsViT', arch='b', patch_size=16, global_pool=True),
+    backbone=dict(
+        type='MAEClsViT',
+        arch='b',
+        patch_size=16,
+        global_pool=True,
+        drop_path_rate=0.1),
     head=dict(type='MAEFinetuneHead', num_classes=1000, embed_dim=768),
     mixup_alpha=0.8,
     cutmix_alpha=1.0,
