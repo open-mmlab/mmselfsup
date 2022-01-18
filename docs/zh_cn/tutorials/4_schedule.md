@@ -1,46 +1,46 @@
-# Tutorial 4: Customize Schedule
+# 教程 4：自定义优化策略
 
-- [Tutorial 4: Customize Schedule](#tutorial-4-customize-schedule)
-  - [Customize optimizer supported by Pytorch](#customize-optimizer-supported-by-pytorch)
-  - [Customize learning rate schedules](#customize-learning-rate-schedules)
-    - [Learning rate decay](#learning-rate-decay)
-    - [Warmup strategy](#warmup-strategy)
-    - [Customize momentum schedules](#customize-momentum-schedules)
-    - [Parameter-wise configuration](#parameter-wise-configuration)
-  - [Gradient clipping and gradient accumulation](#gradient-clipping-and-gradient-accumulation)
-    - [Gradient clipping](#gradient-clipping)
-    - [Gradient accumulation](#gradient-accumulation)
-  - [Customize self-implemented optimizer](#customize-self-implemented-optimizer)
+- [教程 4：自定义优化策略](#教程-4：自定义优化策略)
+  - [构造 PyTorch 内置优化器](#构造-pytorch-内置优化器)
+  - [定制学习率调整策略](#定制学习率调整策略)
+    - [定制学习率衰减曲线](#定制学习率衰减曲线)
+    - [定制学习率预热策略](#定制学习率预热策略)
+    - [定制动量调整策略](#定制动量调整策略)
+    - [参数化精细配置](#参数化精细配置)
+  - [梯度裁剪与梯度累计](#梯度裁剪与梯度累计)
+    - [梯度裁剪](#梯度裁剪)
+    - [梯度累计](#梯度累计)
+  - [用户自定义优化方法](#用户自定义优化方法)
 
-In this tutorial, we will introduce some methods about how to construct optimizers, customize learning rate, momentum schedules, parameter-wise configuration, gradient clipping, gradient accumulation, and customize self-implemented methods for the project.
+在本教程中，我们将介绍如何在运行自定义模型时，进行构造优化器、定制学习率、动量调整策略、参数化精细配置、梯度裁剪、梯度累计以及用户自定义优化方法等。
 
-## Customize optimizer supported by Pytorch
+## 构造 PyTorch 内置优化器
 
-We already support to use all the optimizers implemented by PyTorch, and to use and modify them, please change the `optimizer` field of config files.
+我们已经支持使用PyTorch实现的所有优化器，要使用和修改这些优化器，请修改配置文件中的`optimizer`字段。
 
-For example, if you want to use SGD, the modification could be as the following.
+例如，如果您想使用SGD，可以进行如下修改。
 
 ```python
 optimizer = dict(type='SGD', lr=0.0003, weight_decay=0.0001)
 ```
 
-To modify the learning rate of the model, just modify the `lr` in the config of optimizer. You can also directly set other arguments according to the [API doc](https://pytorch.org/docs/stable/optim.html?highlight=optim#module-torch.optim) of PyTorch.
+要修改模型的学习率，只需要在优化器的配置中修改 `lr` 即可。 要配置其他参数，可直接根据 [PyTorch API 文档](https://pytorch.org/docs/stable/optim.html?highlight=optim#module-torch.optim)进行。
 
-For example, if you want to use `Adam` with the setting like `torch.optim.Adam(params, lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0, amsgrad=False)` in PyTorch, the config should looks like:
+例如，如果想使用 `Adam` 并设置参数为 `torch.optim.Adam(params, lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0, amsgrad=False)`， 则需要进行如下配置
 
 ```python
 optimizer = dict(type='Adam', lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0, amsgrad=False)
 ```
 
-In addition to optimizers implemented by PyTorch, we also implement a customized [LARS](https://arxiv.org/abs/1708.03888) in `mmselfsup/core/optimizer/optimizers.py`
+除了PyTorch实现的优化器之外，我们还在 `mmselfsup/core/optimizer/optimizers.py` 中构造了一个[LARS](https://arxiv.org/abs/1708.03888)。
 
-## Customize learning rate schedules
+## 定制学习率调整策略
 
-### Learning rate decay
+### 定制学习率衰减曲线
 
-Learning rate decay is widely used to improve performance. And to use learning rate decay, please set the `lr_confg` field in config files.
+深度学习研究中，广泛应用学习率衰减来提高网络的性能。要使用学习率衰减，可以在配置中设置 `lr_confg` 字段。
 
-For example, we use CosineAnnealing policy to train SimCLR, and the config is:
+例如，在 SimCLR 网络训练中，我们使用 CosineAnnealing 的学习率衰减策略，配置文件为：
 
 ```python
 lr_config = dict(
@@ -48,24 +48,24 @@ lr_config = dict(
     ...)
 ```
 
-Then during training, the program will call [CosineAnealingLrUpdaterHook](https://github.com/open-mmlab/mmcv/blob/f48241a65aebfe07db122e9db320c31b685dc674/mmcv/runner/hooks/lr_updater.py#L227) periodically to update the learning rate.
+在训练过程中，程序会周期性地调用 MMCV 中的 [CosineAnealingLrUpdaterHook](https://github.com/open-mmlab/mmcv/blob/f48241a65aebfe07db122e9db320c31b685dc674/mmcv/runner/hooks/lr_updater.py#L227) 来进行学习率更新。
 
-We also support many other learning rate schedules [here](https://github.com/open-mmlab/mmcv/blob/f48241a65aebfe07db122e9db320c31b685dc674/mmcv/runner/hooks/lr_updater.py), such as Poly schedule.
+此外，我们也支持其他学习率调整方法，如 `Poly` 等。详情可见 [这里](https://github.com/open-mmlab/mmcv/blob/f48241a65aebfe07db122e9db320c31b685dc674/mmcv/runner/hooks/lr_updater.py)
 
-### Warmup strategy
+### 定制学习率预热策略
 
-In the early stage, training is easy to be volatile, and warmup is a technique to reduce volatility. With warmup, the learning rate will increase gradually from a small value to the expected value.
+在训练的早期阶段，网络容易不稳定，而学习率的预热就是为了减少这种不稳定性。通过预热，学习率将会从一个很小的值逐步提高到预定值。
 
-In MMSelfSup, we use `lr_config` to configure the warmup strategy, the main parameters are as follows：
+在 MMSelfSup 中，我们同样使用 `lr_config` 配置学习率预热策略，主要的参数有以下几个：
 
-- `warmup`: The warmup curve type. Please choose one from 'constant', 'linear', 'exp' and `None`, and `None` means disable warmup.
-- `warmup_by_epoch` : whether warmup by epoch or not, default to be True, if set to be False, warmup by iter.
-- `warmup_iters` : the number of warm-up iterations, when `warmup_by_epoch=True`, the unit is epoch; when `warmup_by_epoch=False`, the unit is the number of iterations (iter).
-- `warmup_ratio` : warm-up initial learning rate will calculate as `lr = lr * warmup_ratio`.
+- `warmup` : 学习率预热曲线类别，必须为 'constant'、 'linear'， 'exp' 或者 `None` 其一， 如果为 `None`, 则不使用学习率预热策略。
+- `warmup_by_epoch` : 是否以轮次（epoch）为单位进行预热，默认为 True 。如果被设置为 False ， 则以 iter 为单位进行预热。
+- `warmup_iters` : 预热的迭代次数，当 `warmup_by_epoch=True` 时，单位为轮次（epoch）；当 `warmup_by_epoch=False` 时，单位为迭代次数（iter）。
+- `warmup_ratio` : 预热的初始学习率 `lr = lr * warmup_ratio`。
 
-Here are some examples:
+例如：
 
-1.linear & warmup by iter
+1.逐**迭代次数**地**线性**预热
 
 ```python
 lr_config = dict(
@@ -78,7 +78,7 @@ lr_config = dict(
     warmup_by_epoch=False)
 ```
 
-2.exp & warmup by epoch
+2.逐**轮次**地**指数**预热
 
 ```python
 lr_config = dict(
@@ -90,13 +90,13 @@ lr_config = dict(
     warmup_by_epoch=True)
 ```
 
-### Customize momentum schedules
+### 定制动量调整策略
 
-We support the momentum scheduler to modify the model's momentum according to learning rate, which could make the model converge in a faster way.
+我们支持动量调整器根据学习率修改模型的动量，从而使模型收敛更快。
 
-Momentum scheduler is usually used with LR scheduler, for example, the following config is used to accelerate convergence. For more details, please refer to the implementation of [CyclicLrUpdater](https://github.com/open-mmlab/mmcv/blob/f48241a65aebfe07db122e9db320c31b685dc674/mmcv/runner/hooks/lr_updater.py#L327) and [CyclicMomentumUpdater](https://github.com/open-mmlab/mmcv/blob/f48241a65aebfe07db122e9db320c31b685dc674/mmcv/runner/hooks/momentum_updater.py#L130).
+动量调整策略通常与学习率调整策略一起使用，例如，以下配置用于加速收敛。更多细节可参考 [CyclicLrUpdater](https://github.com/open-mmlab/mmcv/blob/f48241a65aebfe07db122e9db320c31b685dc674/mmcv/runner/hooks/lr_updater.py#L327) 和 [CyclicMomentumUpdater](https://github.com/open-mmlab/mmcv/blob/f48241a65aebfe07db122e9db320c31b685dc674/mmcv/runner/hooks/momentum_updater.py#L130)。
 
-Here is an example:
+例如：
 
 ```python
 lr_config = dict(
@@ -113,11 +113,11 @@ momentum_config = dict(
 )
 ```
 
-### Parameter-wise configuration
+### 参数化精细配置
 
-Some models may have some parameter-specific settings for optimization, for example, no weight decay to the BatchNorm layer and the bias in each layer. To finely configure them, we can use the `paramwise_options` in optimizer.
+一些模型的优化策略，包含作用于特定参数的精细设置，例如 BatchNorm 层不添加权重衰减或者对不同的网络层使用不同的学习率。为了进行精细配置，我们通过 `optimizer` 中的 `paramwise_options` 参数进行配置。
 
-For example, if we do not want to apply weight decay to the parameters of BatchNorm or GroupNorm, and the bias in each layer, we can use following config file:
+例如，如果我们不想对 BatchNorm 或 GroupNorm 的参数以及各层的 bias 应用权重衰减，我们可以使用以下配置文件：
 
 ```python
 optimizer = dict(
@@ -130,46 +130,46 @@ optimizer = dict(
     })
 ```
 
-## Gradient clipping and gradient accumulation
+## 梯度裁剪与梯度累计
 
-### Gradient clipping
+### 梯度裁剪
 
-Besides the basic function of PyTorch optimizers, we also provide some enhancement functions, such as gradient clipping, gradient accumulation, etc. Please refer to [MMCV](https://github.com/open-mmlab/mmcv/blob/master/mmcv/runner/hooks/optimizer.py) for more details.
+除了 PyTorch 优化器的基本功能，我们还提供了一些增强功能，例如梯度裁剪、梯度累计等。更多细节参考 [MMCV](https://github.com/open-mmlab/mmcv/blob/master/mmcv/runner/hooks/optimizer.py)。
 
-Currently we support `grad_clip` option in `optimizer_config`, and you can refer to [PyTorch Documentation](https://pytorch.org/docs/stable/generated/torch.nn.utils.clip_grad_norm_.html) for more arguments .
+目前我们支持在 `optimizer_config` 字段中添加 `grad_clip` 参数来进行梯度裁剪，更详细的参数可参考 [PyTorch 文档](https://pytorch.org/docs/stable/generated/torch.nn.utils.clip_grad_norm_.html)。
 
-Here is an example:
+用例如下：
 
 ```python
 optimizer_config = dict(grad_clip=dict(max_norm=35, norm_type=2))
-# norm_type: type of the used p-norm, here norm_type is 2.
+# norm_type: 使用的范数类型，此处使用范数2。
 ```
 
-When inheriting from base and modifying configs, if `grad_clip=None` in base, `_delete_=True` is needed.
+当使用继承并修改基础配置时，如果基础配置中 `grad_clip=None`，需要添加 `_delete_=True`。
 
-### Gradient accumulation
+### 梯度累计
 
-When there is not enough computation resource, the batch size can only be set to a small value, which may degrade the performance of model. Gradient accumulation can be used to solve this problem.
+计算资源缺乏时，每个批次的大小（batch size）只能设置为较小的值，这可能会影响模型的性能。可以使用梯度累计来规避这一问题。
 
-Here is an example:
+用例如下：
 
 ```python
 data = dict(imgs_per_gpu=64)
 optimizer_config = dict(type="DistOptimizerHook", update_interval=4)
 ```
 
-Indicates that during training, back-propagation is performed every 4 iters. And the above is equivalent to:
+表示训练时，每 4 个 iter 执行一次反向传播。由于此时单张 GPU 上的批次大小为 64，也就等价于单张 GPU 上一次迭代的批次大小为 256，也即：
 
 ```python
 data = dict(imgs_per_gpu=256)
 optimizer_config = dict(type="OptimizerHook")
 ```
 
-## Customize self-implemented optimizer
+## 用户自定义优化方法
 
-In academic research and industrial practice, it is likely that you need some optimization methods not implemented by MMSelfSup, and you can add them through the following methods.
+在学术研究和工业实践中，可能需要使用 MMSelfSup 未实现的优化方法，可以通过以下方法添加。
 
-Implement your `CustomizedOptim` in `mmselfsup/core/optimizer/optimizers.py`
+在 `mmselfsup/core/optimizer/optimizers.py` 中实现您的 `CustomizedOptim` 。
 
 ```python
 import torch
@@ -191,7 +191,7 @@ class CustomizedOptim(Optimizer):
         ## TODO
 ```
 
-Import it in `mmselfsup/core/optimizer/__init__.py`
+修改 `mmselfsup/core/optimizer/__init__.py`，将其导入
 
 ```python
 from .optimizers import CustomizedOptim
@@ -200,7 +200,7 @@ from .builder import build_optimizer
 __all__ = ['CustomizedOptim', 'build_optimizer', ...]
 ```
 
-Use it in your config file
+在配置文件中指定优化器
 
 ```python
 optimizer = dict(
