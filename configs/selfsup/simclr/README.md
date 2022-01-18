@@ -1,30 +1,19 @@
 # SimCLR
 
-## A Simple Framework for Contrastive Learning of Visual Representations
+[A Simple Framework for Contrastive Learning of Visual Representations](https://arxiv.org/abs/2002.05709)
 
-<!-- [ABSTRACT] -->
+<!-- [ALGORITHM] -->
+
+## Abstract
 
 This paper presents SimCLR: a simple framework for contrastive learning of visual representations. We simplify recently proposed contrastive self-supervised learning algorithms without requiring specialized architectures or a memory bank. In order to understand what enables the contrastive prediction tasks to learn useful representations, we systematically study the major components of our framework. We show that (1) composition of data augmentations plays a critical role in defining effective predictive tasks, (2) introducing a learnable nonlinear transformation between the representation and the contrastive loss substantially improves the quality of the learned representations, and (3) contrastive learning benefits from larger batch sizes and more training steps compared to supervised learning. By combining these findings, we are able to considerably outperform previous methods for self-supervised and semi-supervised learning on ImageNet. A linear classifier trained on self-supervised representations learned by SimCLR achieves 76.5% top-1 accuracy, which is a 7% relative improvement over previous state-of-the-art, matching the performance of a supervised ResNet-50.
 
 <!-- [IMAGE] -->
 <div align="center">
-<img  />
+<img  src="https://user-images.githubusercontent.com/36138628/149723851-cf5f309e-d891-454d-90c0-e5337e5a11ed.png" width="400" />
 </div>
 
-## Citation
-
-<!-- [ALGORITHM] -->
-
-```bibtex
-@inproceedings{chen2020simple,
-  title={A simple framework for contrastive learning of visual representations},
-  author={Chen, Ting and Kornblith, Simon and Norouzi, Mohammad and Hinton, Geoffrey},
-  booktitle={ICML},
-  year={2020},
-}
-```
-
-## Models and Benchmarks
+## Results and Models
 
 [Back to model_zoo.md](../../../docs/en/model_zoo.md)
 
@@ -85,3 +74,14 @@ Please refer to [fcn_r50-d8_512x512_20k_voc12aug.py](../../benchmarks/mmsegmenta
 | Self-Supervised Config                                                | mIOU  |
 | --------------------------------------------------------------------- | ----- |
 | [resnet50_8xb32-coslr-200e](simclr_resnet50_8xb32-coslr-200e_in1k.py) | 64.03 |
+
+## Citation
+
+```bibtex
+@inproceedings{chen2020simple,
+  title={A simple framework for contrastive learning of visual representations},
+  author={Chen, Ting and Kornblith, Simon and Norouzi, Mohammad and Hinton, Geoffrey},
+  booktitle={ICML},
+  year={2020},
+}
+```

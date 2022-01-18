@@ -1,30 +1,18 @@
 # DeepCluster
 
-## Deep Clustering for Unsupervised Learning of Visual Features
+[Deep Clustering for Unsupervised Learning of Visual Features](https://arxiv.org/abs/1807.05520)
 
-<!-- [ABSTRACT] -->
+<!-- [ALGORITHM] -->
+## Abstract
 
 Clustering is a class of unsupervised learning methods that has been extensively applied and studied in computer vision. Little work has been done to adapt it to the end-to-end training of visual features on large scale datasets. In this work, we present DeepCluster, a clustering method that jointly learns the parameters of a neural network and the cluster assignments of the resulting features. DeepCluster iteratively groups the features with a standard clustering algorithm, k-means, and uses the subsequent assignments as supervision to update the weights of the network.
 
 <!-- [IMAGE] -->
 <div align="center">
-<img  />
+<img src="https://user-images.githubusercontent.com/36138628/149720586-5bfd213e-0638-47fc-b48a-a16689190e17.png" width="700" />
 </div>
 
-## Citation
-
-<!-- [ALGORITHM] -->
-
-```bibtex
-@inproceedings{caron2018deep,
-  title={Deep clustering for unsupervised learning of visual features},
-  author={Caron, Mathilde and Bojanowski, Piotr and Joulin, Armand and Douze, Matthijs},
-  booktitle={ECCV},
-  year={2018}
-}
-```
-
-## Models and Benchmarks
+## Results and Models
 
 **Back to [model_zoo.md](../../../docs/en/model_zoo.md) to download models.**
 
@@ -53,3 +41,14 @@ The **AvgPool** result is obtained from Linear Evaluation with GlobalAveragePool
 | Self-Supervised Config                                                                   | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 | AvgPool |
 | ---------------------------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- | ------- |
 | [sobel_resnet50_8xb64-steplr-200e](deepcluster-sobel_resnet50_8xb64-steplr-200e_in1k.py) | 12.78    | 30.81    | 43.88    | 57.71    | 51.68    | 46.92   |
+
+## Citation
+
+```bibtex
+@inproceedings{caron2018deep,
+  title={Deep clustering for unsupervised learning of visual features},
+  author={Caron, Mathilde and Bojanowski, Piotr and Joulin, Armand and Douze, Matthijs},
+  booktitle={ECCV},
+  year={2018}
+}
+```

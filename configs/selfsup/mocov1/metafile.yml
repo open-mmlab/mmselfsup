@@ -1,0 +1,15 @@
+Collections:
+  - Name: MoCo
+    Metadata:
+      Training Data: ImageNet-1k
+      Training Techniques:
+        - SGD with Momentum
+        - Weight Decay
+      Training Resources: 8x V100 GPUs
+      Architecture:
+        - ResNet
+        - MoCo
+    Paper:
+        URL: https://arxiv.org/abs/1911.05722
+        Title: "Momentum Contrast for Unsupervised Visual Representation Learning"
+    README: configs/selfsup/mocov1/README.md
