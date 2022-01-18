@@ -2,7 +2,7 @@
 import torch
 import torch.nn.functional as F
 from mmcv.runner import BaseModule
-from timm.models.layers import trunc_normal_
+from mmcv.cnn.utils.weight_init import trunc_normal_
 from torch import nn
 
 from ..builder import HEADS
