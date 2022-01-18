@@ -43,7 +43,7 @@ class MAE(BaseModel):
         self.neck.decoder_pos_embed.data.copy_(
             torch.from_numpy(decoder_pos_embed).float().unsqueeze(0))
 
-        w = self.backbone.patch_embed.proj.weight.data
+        w = self.backbone.patch_embed.projection.weight.data
         torch.nn.init.xavier_uniform_(w.view([w.shape[0], -1]))
 
         torch.nn.init.normal_(self.backbone.cls_token, std=.02)

@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from timm.data.mixup import Mixup
+from ..utils import Mixup
 
 from ..builder import ALGORITHMS, build_backbone, build_head
 from .base import BaseModel

@@ -1,74 +1,37 @@
-from functools import partial
-
 import torch
-import torch.nn as nn
-from mmcv.runner import BaseModule
-from timm.models.vision_transformer import Block, PatchEmbed
+from mmcls.models import VisionTransformer
 
 from ..builder import BACKBONES
 
 
 @BACKBONES.register_module()
-class MAEPretrainViT(BaseModule):
-    """ViT backbone for MAE pre-training.
-
-    Args:
-        img_size (int): Input image size, Defaults to 224.
-        patch_size (int): Image patch size. Defaults to 16.
-        in_chans (int): The channel of input image. Defaults to 3.
-        embed_dim (int): embedding dimension. Defaults to 1024.
-        depth (int): Depth of transformer. Defaults to 24.
-        num_heads (int): Number of attention heads. Defaults to 16.
-        mlp_ratio (int): Ratio of mlp hidden dim to embedding dim.
-            Defaults to 4.
-        norm_layer (nn.Module): Normalization layer. Defaults to nn.LayerNorm.
-        mask_ratio (float): Mask ratio of total patches. Defaults to 0.75.
-        init_cfg (dict, optional): Initialization config dict. Defaults to
-            None.
-
-    Some of the code is borrowed from
-    `https://github.com/facebookresearch/mae`.
-
-    Example:
-        >>> from mmselfsup.models import MAEPretrainViT
-        >>> import torch
-        >>> self = MAEPretrainViT()
-        >>> self.eval()
-        >>> inputs = torch.rand(1, 3, 224, 224)
-        >>> level_outputs = self.forward(inputs)
-        >>> print(tuple(level_outputs.shape))
-        (1, 50, 1024)
-    """
+class MAEViT(VisionTransformer):
 
     def __init__(self,
+                 arch='b',
                  img_size=224,
                  patch_size=16,
-                 in_chans=3,
-                 embed_dim=1024,
-                 depth=12,
-                 num_heads=16,
-                 mlp_ratio=4.,
-                 norm_layer=partial(nn.LayerNorm, eps=1e-6),
+                 out_indices=-1,
+                 drop_rate=0,
+                 drop_path_rate=0,
+                 norm_cfg=dict(type='LN', eps=1e-6),
+                 final_norm=True,
+                 output_cls_token=True,
+                 interpolate_mode='bicubic',
+                 patch_cfg=dict(),
+                 layer_cfgs=dict(),
                  mask_ratio=0.75,
                  init_cfg=None):
-        super().__init__(init_cfg)
-        self.patch_embed = PatchEmbed(img_size, patch_size, in_chans,
-                                      embed_dim)
-        num_patches = self.patch_embed.num_patches
-        self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
-        self.pos_embed = nn.Parameter(
-            torch.zeros(1, num_patches + 1, embed_dim),
-            requires_grad=False)  # fixed sin-cos embedding
-        self.blocks = nn.ModuleList([
-            Block(
-                embed_dim,
-                num_heads,
-                mlp_ratio,
-                qkv_bias=True,
-                norm_layer=norm_layer) for _ in range(depth)
-        ])
-        self.norm = norm_layer(embed_dim)
+        super().__init__(arch, img_size, patch_size, out_indices, drop_rate,
+                         drop_path_rate, norm_cfg, final_norm,
+                         output_cls_token, interpolate_mode, patch_cfg,
+                         layer_cfgs, init_cfg)
+
+        self.pos_embed.requires_grad = False
         self.mask_ratio = mask_ratio
+
+    def init_weights(self):
+        pass
 
     def random_masking(self, x, mask_ratio=0.75):
         """Generate the mask for MAE Pre-training.
@@ -102,8 +65,7 @@ class MAEPretrainViT(BaseModule):
         return x_masked, mask, ids_restore
 
     def forward(self, x):
-
-        # embed patches
+        B = x.shape[0]
         x = self.patch_embed(x)
 
         # add pos embed w/o cls token
@@ -114,12 +76,14 @@ class MAEPretrainViT(BaseModule):
 
         # append cls token
         cls_token = self.cls_token + self.pos_embed[:, :1, :]
-        cls_tokens = cls_token.expand(x.shape[0], -1, -1)
+        cls_tokens = cls_token.expand(B, -1, -1)
         x = torch.cat((cls_tokens, x), dim=1)
+        x = self.drop_after_pos(x)
 
-        # apply Transformer blocks
-        for blk in self.blocks:
-            x = blk(x)
-        x = self.norm(x)
+        for i, layer in enumerate(self.layers):
+            x = layer(x)
+
+            if i == len(self.layers) - 1 and self.final_norm:
+                x = self.norm1(x)
 
         return (x, mask, ids_restore)
