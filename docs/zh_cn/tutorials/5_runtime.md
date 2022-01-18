@@ -1,55 +1,55 @@
-# Tutorial 5: Customize Runtime Settings
+# 教程 5：自定义模型运行参数
 
-- [Tutorial 5: Customize Runtime Settings](#tutorial-5-customize-runtime-settings)
-  - [Customize Workflow](#customize-workflow)
-  - [Hooks](#hooks)
-    - [default training hooks](#default-training-hooks)
-      - [CheckpointHook](#checkpointhook)
-      - [LoggerHooks](#loggerhooks)
-      - [EvalHook](#evalhook)
-  - [Use other implemented hooks](#use-other-implemented-hooks)
-  - [Customize self-implemented hooks](#customize-self-implemented-hooks)
-    - [1. Implement a new hook](#1-implement-a-new-hook)
-    - [2. Import the new hook](#2-import-the-new-hook)
-    - [3. Modify the config](#3-modify-the-config)
+- [教程 5：自定义模型运行参数](#教程-5：自定义模型运行参数)
+  - [定制工作流](#定制工作流)
+  - [钩子](#钩子)
+    - [默认训练钩子](#默认训练钩子)
+      - [权重文件钩子 CheckpointHook](#权重文件钩子-checkpointhook)
+      - [日志钩子 LoggerHooks](#日志钩子-loggerhooks)
+      - [验证钩子 EvalHook](#验证钩子-evalhook)
+  - [使用其他内置钩子](#使用其他内置钩子)
+  - [自定义钩子](#自定义钩子)
+    - [1. 创建一个新钩子](#1-创建一个新钩子)
+    - [2. 导入新钩子](#2-导入新钩子)
+    - [3. 修改配置](#3-修改配置)
 
-In this tutorial, we will introduce some methods about how to customize workflow and hooks when running your own settings for the project.
+在本教程中，我们将介绍如何在运行自定义模型时，进行自定义工作流和钩子的方法。
 
-## Customize Workflow
+## 定制工作流
 
-Workflow is a list of (phase, duration) to specify the running order and duration. The meaning of "duration" depends on the runner's type.
+工作流是一个形如 (任务名，周期数) 的列表，用于指定运行顺序和周期。这里“周期数”的单位由执行器的类型来决定。
 
-For example, we use epoch-based runner by default, and the "duration" means how many epochs the phase to be executed in a cycle. Usually, we only want to execute training phase, just use the following config.
+比如，我们默认使用基于**轮次**的执行器（`EpochBasedRunner`），那么“周期数”指的就是对应的任务在一个周期中要执行多少个轮次。通常，我们只希望执行训练任务，那么只需要使用以下设置：
 
 ```python
 workflow = [('train', 1)]
 ```
 
-Sometimes we may want to check some metrics (e.g. loss, accuracy) about the model on the validate set. In such case, we can set the workflow as
+有时我们可能希望在训练过程中穿插检查模型在验证集上的一些指标（例如，损失，准确率）。在这种情况下，可以将工作流程设置为：
 
 ```python
 [('train', 1), ('val', 1)]
 ```
 
-so we will run training and valiation for one epoch iteratively.
+这样一来，程序会一轮训练一轮验证地反复执行。
 
-By default, we recommend using `EvalHook` to do evaluation after the training epoch.
+默认情况下，我们更推荐在每个训练轮次后使用 **`EvalHook`** 进行模型验证。
 
-## Hooks
+## 钩子
 
-The hook mechanism is widely used in the OpenMMLab open-source algorithm library. Inserted in the `Runner`, the entire life cycle of the training process can be managed easily. You can learn more about the hook through [related article](https://www.calltutors.com/blog/what-is-hook/).
+钩子机制在 OpenMMLab 开源算法库中应用非常广泛，结合执行器可以实现对训练过程的整个生命周期进行管理，可以通过[相关文章](https://www.calltutors.com/blog/what-is-hook/)进一步理解钩子。
 
-Hooks only work after being registered into the runner. At present, hooks are mainly divided into two categories:
+钩子只有被注册进执行器才起作用，目前钩子主要分为两类：
 
-- default training hooks
+- 默认训练钩子
 
-Those hooks are registered by the runner by default. Generally, they fulfill some basic functions, and have default priority, you don't need to modify the priority.
+默认训练钩子由运行器默认注册，一般为一些基础型功能的钩子，已经有确定的优先级，一般不需要修改优先级。
 
-- custom hooks
+- 定制钩子
 
-The custom hooks are registered through custom_hooks. Generally, they are hooks with enhanced functions. The priority needs to be specified in the configuration file. If you do not specify the priority of the hook, it will be set to 'NORMAL' by default.
+定制钩子通过 `custom_hooks` 注册，一般为一些增强型功能的钩子，需要在配置文件中指定优先级，不指定该钩子的优先级将默被设定为 'NORMAL'。
 
-Priority list
+**优先级列表**
 
 |      Level      | Value |
 | :-------------: | :---: |
@@ -63,11 +63,11 @@ Priority list
 |    VERY_LOW     |  90   |
 |     LOWEST      |  100  |
 
-The priority determines the execution order of the hooks. Before training, the log will print out the execution order of the hooks at each stage to facilitate debugging.
+优先级确定钩子的执行顺序，每次训练前，日志会打印出各个阶段钩子的执行顺序，方便调试。
 
-### default training hooks
+### 默认训练钩子
 
-Some common hooks are not registered through `custom_hooks`, they are
+有一些常见的钩子未通过 `custom_hooks` 注册，但会在运行器（`Runner`）中默认注册，它们是：
 
 |         Hooks         |     Priority      |
 | :-------------------: | :---------------: |
@@ -79,24 +79,25 @@ Some common hooks are not registered through `custom_hooks`, they are
 |      `EvalHook`       |     LOW (70)      |
 |    `LoggerHook(s)`    |   VERY_LOW (90)   |
 
-`OptimizerHook`, `MomentumUpdaterHook` and `LrUpdaterHook` have been introduced in [sehedule strategy](./4_schedule.md). `IterTimerHook` is used to record elapsed time and does not support modification.
+`OptimizerHook`，`MomentumUpdaterHook`和 `LrUpdaterHook` 在 [优化策略](./4_schedule.md) 部分进行了介绍， `IterTimerHook` 用于记录所用时间，目前不支持修改。
 
-Here we reveal how to customize `CheckpointHook`, `LoggerHooks`, and `EvalHook`.
+下面介绍如何使用去定制 `CheckpointHook`、`LoggerHooks` 以及 `EvalHook`。
 
-#### CheckpointHook
+#### 权重文件钩子 CheckpointHook
 
-The MMCV runner will use `checkpoint_config` to initialize [`CheckpointHook`](https://github.com/open-mmlab/mmcv/blob/9ecd6b0d5ff9d2172c49a182eaa669e9f27bb8e7/mmcv/runner/hooks/checkpoint.py).
+MMCV 的 runner 使用 `checkpoint_config` 来初始化 [`CheckpointHook`](https://github.com/open-mmlab/mmcv/blob/9ecd6b0d5ff9d2172c49a182eaa669e9f27bb8e7/mmcv/runner/hooks/checkpoint.py)。
 
 ```python
 checkpoint_config = dict(interval=1)
 ```
 
-We could set `max_keep_ckpts` to save only a small number of checkpoints or decide whether to store state dict of optimizer by `save_optimizer`. More details of the arguments are [here](https://mmcv.readthedocs.io/en/latest/api.html#mmcv.runner.CheckpointHook)
+用户可以设置 `max_keep_ckpts` 来仅保存少量模型权重文件，或者通过 `save_optimizer`决定是否存储优化器的状态字典。更多细节可参考 [这里](https://mmcv.readthedocs.io/en/latest/api.html#mmcv.runner.CheckpointHook)。
 
-#### LoggerHooks
+#### 日志钩子 LoggerHooks
 
-The `log_config` wraps multiple logger hooks and enables to set intervals. Now MMCV supports `TextLoggerHook`, `WandbLoggerHook`, `MlflowLoggerHook`, `NeptuneLoggerHook`, `DvcliveLoggerHook` and `TensorboardLoggerHook`.
-The detailed usages can be found in the [doc](https://mmcv.readthedocs.io/en/latest/api.html#mmcv.runner.LoggerHook).
+`log_config` 包装了多个记录器钩子，并可以设置间隔。
+目前，MMCV 支持 `TextLoggerHook`、 `WandbLoggerHook`、`MlflowLoggerHook`、 `NeptuneLoggerHook`、 `DvcliveLoggerHook` 和 `TensorboardLoggerHook`。
+更多细节可参考[这里](https://mmcv.readthedocs.io/zh_CN/latest/api.html#mmcv.runner.LoggerHook)。
 
 ```python
 log_config = dict(
@@ -107,35 +108,35 @@ log_config = dict(
     ])
 ```
 
-#### EvalHook
+#### 验证钩子 EvalHook
 
-The config of `evaluation` will be used to initialize the [`EvalHook`](https://github.com/open-mmlab/mmclassification/blob/master/mmcls/core/evaluation/eval_hooks.py).
+配置中的 `evaluation` 字段将用于初始化 [`EvalHook`](https://github.com/open-mmlab/mmclassification/blob/master/mmcls/core/evaluation/eval_hooks.py).
 
-The `EvalHook` has some reserved keys, such as `interval`, `save_best` and `start`, and the other arguments such as `metrics` will be passed to the `dataset.evaluate()`
+`EvalHook` 有一些保留参数，如 `interval`，`save_best` 和 `start` 等。其他的参数，如 `metrics` 将被传递给 `dataset.evaluate()`。
 
 ```python
 evaluation = dict(interval=1, metric='accuracy', metric_options={'topk': (1, )})
 ```
 
-You can save the model weight when the best verification result is obtained by modifying the parameter `save_best`:
+我们可以通过参数 `save_best` 保存取得最好验证结果时的模型权重：
 
 ```python
-# "auto" means automatically select the metrics to compare.
-# You can also use a specific key like "accuracy_top-1".
+# "auto" 表示自动选择指标来进行模型的比较。
+# 也可以指定一个特定的 key 比如 "accuracy_top-1"。
 evaluation = dict(interval=1, save_best="auto", metric='accuracy', metric_options={'topk': (1, )})
 ```
 
-When running some large-scale experiments, you can skip the validation step at the beginning of training by modifying the parameter `start` as below:
+在跑一些大型实验时，可以通过修改参数 `start` 跳过训练靠前轮次时的验证步骤，以节约时间。如下：
 
 ```python
 evaluation = dict(interval=1, start=200, metric='accuracy', metric_options={'topk': (1, )})
 ```
 
-This indicates that, during the first 200 epochs, evaluation will not be executed. From the 200th epoch, evaluation will be executed after the training process.
+表示在第 200 轮之前，只执行训练流程，不执行验证；从轮次 200 开始，在每一轮训练之后进行验证。
 
-## Use other implemented hooks
+## 使用其他内置钩子
 
-Some hooks have been already implemented in MMCV and MMClassification, they are:
+一些钩子已在 MMCV 和 MMClassification 中实现：
 
 - [EMAHook](https://github.com/open-mmlab/mmcv/blob/master/mmcv/runner/hooks/ema.py)
 - [SyncBuffersHook](https://github.com/open-mmlab/mmcv/blob/master/mmcv/runner/hooks/sync_buffer.py)
@@ -144,7 +145,7 @@ Some hooks have been already implemented in MMCV and MMClassification, they are:
 - ......
 
 
-If the hook is already implemented in MMCV, you can directly modify the config to use the hook as below
+如果要用的钩子已经在MMCV中实现，可以直接修改配置以使用该钩子，如下格式：
 
 ```python
 mmcv_hooks = [
@@ -152,7 +153,7 @@ mmcv_hooks = [
 ]
 ```
 
-such as using `EMAHook`, interval is 100 iters:
+例如使用 `EMAHook`，进行一次 EMA 的间隔是100个 iter：
 
 ```python
 custom_hooks = [
@@ -160,11 +161,11 @@ custom_hooks = [
 ]
 ```
 
-## Customize self-implemented hooks
+## 自定义钩子
 
-### 1. Implement a new hook
+### 1. 创建一个新钩子
 
-Here we give an example of creating a new hook in MMSelfSup.
+这里举一个在 MMSelfSup 中创建一个新钩子的示例：
 
 ```python
 from mmcv.runner import HOOKS, Hook
@@ -195,13 +196,13 @@ class MyHook(Hook):
         pass
 ```
 
-Depending on your intention of this hook, you need to implement different functionalities in `before_run`, `after_run`, `before_epoch`, `after_epoch`, `before_iter`, and `after_iter`.
+根据钩子的功能，用户需要指定钩子在训练的每个阶段将要执行的操作，比如 `before_run`，`after_run`，`before_epoch`，`after_epoch`，`before_iter` 和 `after_iter`。
 
-### 2. Import the new hook
+### 2. 导入新钩子
 
-Then we need to ensure `MyHook` imported. Assuming `MyHook` is in `mmselfsup/core/hooks/my_hook.py`, there are two ways to import it:
+之后，需要导入 `MyHook`。假设该文件在 `mmselfsup/core/hooks/my_hook.py`，有两种办法导入它：
 
-- Modify `mmselfsup/core/hooks/__init__.py` as below
+- 修改 `mmselfsup/core/hooks/__init__.py` 进行导入，如下：
 
 ```python
 from .my_hook import MyHook
@@ -209,13 +210,13 @@ from .my_hook import MyHook
 __all__ = [..., MyHook, ...]
 ```
 
-- Use `custom_imports` in the config to manually import it
+- 使用配置文件中的 `custom_imports` 变量手动导入
 
 ```python
 custom_imports = dict(imports=['mmselfsup.core.hooks.my_hook'], allow_failed_imports=False)
 ```
 
-### 3. Modify the config
+### 3. 修改配置
 
 ```python
 custom_hooks = [
@@ -223,7 +224,7 @@ custom_hooks = [
 ]
 ```
 
-You can also set the priority of the hook as below:
+还可通过 `priority` 参数设置钩子优先级，如下所示：
 
 ```python
 custom_hooks = [
@@ -231,4 +232,4 @@ custom_hooks = [
 ]
 ```
 
-By default, the hook's priority is set as `NORMAL` during registration.
+默认情况下，在注册过程中，钩子的优先级设置为 `NORMAL` 。
