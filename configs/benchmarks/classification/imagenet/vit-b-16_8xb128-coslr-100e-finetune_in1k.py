@@ -11,7 +11,7 @@ train_pipeline = [
     dict(
         type='RandomAug',
         input_size=224,
-        color_jitter=0.4,
+        color_jitter=None,
         auto_augment='rand-m9-mstd0.5-inc1',
         interpolation='bicubic',
         re_prob=0.25,
