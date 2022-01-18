@@ -1,5 +1,22 @@
 <div align="center">
   <img src="./resources/mmselfsup_logo.png" width="500"/>
+  <div>&nbsp;</div>
+  <div align="center">
+    <b><font size="5">OpenMMLab website</font></b>
+    <sup>
+      <a href="https://openmmlab.com">
+        <i><font size="4">HOT</font></i>
+      </a>
+    </sup>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <b><font size="5">OpenMMLab platform</font></b>
+    <sup>
+      <a href="https://platform.openmmlab.com">
+        <i><font size="4">TRY IT OUT</font></i>
+      </a>
+    </sup>
+  </div>
+  <div>&nbsp;</div>
 
 [![PyPI](https://img.shields.io/pypi/v/mmselfsup)](https://pypi.org/project/mmselfsup)
 [![docs](https://img.shields.io/badge/docs-latest-blue)](https://mmselfsup.readthedocs.io/en/latest/)
@@ -8,6 +25,11 @@
 [![license](https://img.shields.io/github/license/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/blob/master/LICENSE)
 [![open issues](https://isitmaintained.com/badge/open/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/issues)
 
+[📘Documentation](https://mmselfsup.readthedocs.io/en/latest/) |
+[🛠️Installation](https://mmselfsup.readthedocs.io/en/latest/install.html) |
+[👀Model Zoo](https://github.com/open-mmlab/mmselfsup/blob/master/docs/en/model_zoo.md) |
+[🆕Update News](https://mmselfsup.readthedocs.io/en/latest/changelog.html) |
+[🤔Reporting Issues](https://github.com/open-mmlab/mmselfsup/issues/new/choose)
 </div>
 
 ## Introduction

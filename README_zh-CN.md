@@ -1,5 +1,22 @@
 <div align="center">
   <img src="./resources/mmselfsup_logo.png" width="500"/>
+  <div>&nbsp;</div>
+  <div align="center">
+    <b><font size="5">OpenMMLab 官网</font></b>
+    <sup>
+      <a href="https://openmmlab.com">
+        <i><font size="4">HOT</font></i>
+      </a>
+    </sup>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <b><font size="5">OpenMMLab 开放平台</font></b>
+    <sup>
+      <a href="https://platform.openmmlab.com">
+        <i><font size="4">TRY IT OUT</font></i>
+      </a>
+    </sup>
+  </div>
+  <div>&nbsp;</div>
 
 [![PyPI](https://img.shields.io/pypi/v/mmselfsup)](https://pypi.org/project/mmselfsup)
 [![docs](https://img.shields.io/badge/docs-latest-blue)](https://mmselfsup.readthedocs.io/en/latest/)
@@ -8,6 +25,11 @@
 [![license](https://img.shields.io/github/license/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/blob/master/LICENSE)
 [![open issues](https://isitmaintained.com/badge/open/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/issues)
 
+[📘使用文档](https://mmselfsup.readthedocs.io/zh_CN/latest/) |
+[🛠️安装教程](https://mmselfsup.readthedocs.io/zh_CN/latest/install.html) |
+[👀模型库](https://github.com/open-mmlab/mmselfsup/blob/master/docs/zh_cn/model_zoo.md) |
+[🆕变更日志](https://mmselfsup.readthedocs.io/zh_CN/latest/changelog.html) |
+[🤔报告问题](https://github.com/open-mmlab/mmselfsup/issues/new/choose)
 </div>
 
 ## 介绍
@@ -44,9 +66,9 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
 MMSelfSup **v0.5.0** 在 16/12/2021 发版.
 
-请参考 [changelog.md](docs/zh_cn/changelog.md) 获取更多细节和历史版本信息。
+请参考 [变更日志](docs/zh_cn/changelog.md) 获取更多细节和历史版本信息。
 
-MMSelfSup 和 OpenSelfSup 的不同点写在 [compatibility.md](docs/zh_cn/compatibility.md) 当中。
+MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibility.md) 中。
 
 ## 模型库和基准测试
 
