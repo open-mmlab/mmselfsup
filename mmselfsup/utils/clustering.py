@@ -1,9 +1,10 @@
 # This file is modified from
 # https://github.com/facebookresearch/deepcluster/blob/master/clustering.py
 
+import time
+
 import faiss
 import numpy as np
-import time
 import torch
 from scipy.sparse import csr_matrix
 
@@ -101,7 +102,7 @@ def run_kmeans(x, nmb_clusters, verbose=False):
     _, I = index.search(x, 1)  # noqa E741
     losses = faiss.vector_to_array(clus.obj)
     if verbose:
-        print(f'k-means loss evolution: {losses[-1]:.4f}')
+        print(f'k-means loss evolution: {losses}')
 
     return [int(n[0]) for n in I], losses[-1]
 
