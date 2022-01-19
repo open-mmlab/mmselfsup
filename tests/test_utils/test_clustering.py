@@ -12,11 +12,12 @@ def test_kmeans():
     pca_dim = 2
 
     kmeans = Kmeans(2, pca_dim)
-    loss = kmeans.cluster(fake_input)
-    assert loss is not None
+    for verbose in [True, False]:
+        loss = kmeans.cluster(fake_input, verbose=verbose)
+        assert loss is not None
 
-    with pytest.raises(AssertionError):
-        loss = kmeans.cluster(np.random.rand(10, 8))
+        with pytest.raises(AssertionError):
+            loss = kmeans.cluster(np.random.rand(10, 8), verbose=verbose)
 
 
 @pytest.mark.skipif(
