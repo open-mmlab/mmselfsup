@@ -1,16 +1,5 @@
-""" Mixup and Cutmix
+# Copyright (c) OpenMMLab. All rights reserved.
 
-Papers:
-mixup: Beyond Empirical Risk Minimization (https://arxiv.org/abs/1710.09412)
-
-CutMix: Regularization Strategy to Train Strong Classifiers with Localizable 
-Features (https://arxiv.org/abs/1905.04899)
-
-Code Reference:
-CutMix: https://github.com/clovaai/CutMix-PyTorch
-
-Hacked together by / Copyright 2020 Ross Wightman
-"""
 import numpy as np
 import torch
 
@@ -47,7 +36,7 @@ def rand_bbox(img_shape, lam, margin=0., count=None):
     Args:
         img_shape (tuple): Image shape as tuple
         lam (float): Cutmix lambda value
-        margin (float): Percentage of bbox dimension to enforce as margin 
+        margin (float): Percentage of bbox dimension to enforce as margin
         (reduce amount of box outside image)
         count (int): Number of bbox to generate
     """
@@ -110,6 +99,29 @@ def cutmix_bbox_and_lam(img_shape,
 
 
 class Mixup:
+    """ Mixup/Cutmix that applies different params to each
+        element or whole batch
+
+    Args:
+        mixup_alpha (float): mixup alpha value, mixup is active if > 0.
+            Defaults to 1.
+        cutmix_alpha (float): cutmix alpha value, cutmix is active if > 0.
+            Defaults to 0.
+        cutmix_minmax (List[float]): cutmix min/max image ratio, cutmix is
+            active and uses this vs alpha if not None. Defaults to None.
+        prob (float): probability of applying mixup or cutmix
+            per batch or element. Defaults to 1.0.
+        switch_prob (float): probability of switching to cutmix instead
+            of mixup when both are active. Defaults to 0.5.
+        mode (str): how to apply mixup/cutmix params
+            (per 'batch', 'pair' (pair of elements), 'elem' (element).
+            Defaults to batch.
+        correct_lam (bool): apply lambda correction when cutmix bbox
+            clipped by image borders. Defaults to True.
+        label_smoothing (float): apply label smoothing to the
+            mixed target tensor. Defaults to 0.1.
+        num_classes (int): number of classes for target. Defaults to 1000.
+    """
 
     def __init__(self,
                  mixup_alpha=1.,
@@ -259,121 +271,3 @@ class Mixup:
         target = mixup_target(target, self.num_classes, lam,
                               self.label_smoothing)
         return x, target
-
-
-class FastCollateMixup(Mixup):
-    """ Fast Collate w/ Mixup/Cutmix that applies different params 
-     each element or whole batch
-
-    A Mixup impl that's performed while collating the batches.
-    """
-
-    def _mix_elem_collate(self, output, batch, half=False):
-        batch_size = len(batch)
-        num_elem = batch_size // 2 if half else batch_size
-        assert len(output) == num_elem
-        lam_batch, use_cutmix = self._params_per_elem(num_elem)
-        for i in range(num_elem):
-            j = batch_size - i - 1
-            lam = lam_batch[i]
-            mixed = batch[i][0]
-            if lam != 1.:
-                if use_cutmix[i]:
-                    if not half:
-                        mixed = mixed.copy()
-                    (yl, yh, xl, xh), lam = cutmix_bbox_and_lam(
-                        output.shape,
-                        lam,
-                        ratio_minmax=self.cutmix_minmax,
-                        correct_lam=self.correct_lam)
-                    mixed[:, yl:yh, xl:xh] = batch[j][0][:, yl:yh, xl:xh]
-                    lam_batch[i] = lam
-                else:
-                    mixed = mixed.astype(
-                        np.float32) * lam + batch[j][0].astype(
-                            np.float32) * (1 - lam)
-                    np.rint(mixed, out=mixed)
-            output[i] += torch.from_numpy(mixed.astype(np.uint8))
-        if half:
-            lam_batch = np.concatenate((lam_batch, np.ones(num_elem)))
-        return torch.tensor(lam_batch).unsqueeze(1)
-
-    def _mix_pair_collate(self, output, batch):
-        batch_size = len(batch)
-        lam_batch, use_cutmix = self._params_per_elem(batch_size // 2)
-        for i in range(batch_size // 2):
-            j = batch_size - i - 1
-            lam = lam_batch[i]
-            mixed_i = batch[i][0]
-            mixed_j = batch[j][0]
-            assert 0 <= lam <= 1.0
-            if lam < 1.:
-                if use_cutmix[i]:
-                    (yl, yh, xl, xh), lam = cutmix_bbox_and_lam(
-                        output.shape,
-                        lam,
-                        ratio_minmax=self.cutmix_minmax,
-                        correct_lam=self.correct_lam)
-                    patch_i = mixed_i[:, yl:yh, xl:xh].copy()
-                    mixed_i[:, yl:yh, xl:xh] = mixed_j[:, yl:yh, xl:xh]
-                    mixed_j[:, yl:yh, xl:xh] = patch_i
-                    lam_batch[i] = lam
-                else:
-                    mixed_temp = mixed_i.astype(
-                        np.float32) * lam + mixed_j.astype(
-                            np.float32) * (1 - lam)
-                    mixed_j = mixed_j.astype(
-                        np.float32) * lam + mixed_i.astype(
-                            np.float32) * (1 - lam)
-                    mixed_i = mixed_temp
-                    np.rint(mixed_j, out=mixed_j)
-                    np.rint(mixed_i, out=mixed_i)
-            output[i] += torch.from_numpy(mixed_i.astype(np.uint8))
-            output[j] += torch.from_numpy(mixed_j.astype(np.uint8))
-        lam_batch = np.concatenate((lam_batch, lam_batch[::-1]))
-        return torch.tensor(lam_batch).unsqueeze(1)
-
-    def _mix_batch_collate(self, output, batch):
-        batch_size = len(batch)
-        lam, use_cutmix = self._params_per_batch()
-        if use_cutmix:
-            (yl, yh, xl, xh), lam = cutmix_bbox_and_lam(
-                output.shape,
-                lam,
-                ratio_minmax=self.cutmix_minmax,
-                correct_lam=self.correct_lam)
-        for i in range(batch_size):
-            j = batch_size - i - 1
-            mixed = batch[i][0]
-            if lam != 1.:
-                if use_cutmix:
-                    mixed = mixed.copy(
-                    )  # don't want to modify the original while iterating
-                    mixed[:, yl:yh, xl:xh] = batch[j][0][:, yl:yh, xl:xh]
-                else:
-                    mixed = mixed.astype(
-                        np.float32) * lam + batch[j][0].astype(
-                            np.float32) * (1 - lam)
-                    np.rint(mixed, out=mixed)
-            output[i] += torch.from_numpy(mixed.astype(np.uint8))
-        return lam
-
-    def __call__(self, batch, _=None):
-        batch_size = len(batch)
-        assert batch_size % 2 == 0, 'Batch size should be even when using this'
-        half = 'half' in self.mode
-        if half:
-            batch_size //= 2
-        output = torch.zeros((batch_size, *batch[0][0].shape),
-                             dtype=torch.uint8)
-        if self.mode == 'elem' or self.mode == 'half':
-            lam = self._mix_elem_collate(output, batch, half=half)
-        elif self.mode == 'pair':
-            lam = self._mix_pair_collate(output, batch)
-        else:
-            lam = self._mix_batch_collate(output, batch)
-        target = torch.tensor([b[1] for b in batch], dtype=torch.int64)
-        target = mixup_target(
-            target, self.num_classes, lam, self.label_smoothing, device='cpu')
-        target = target[:batch_size]
-        return output, target
