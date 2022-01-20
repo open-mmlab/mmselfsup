@@ -5,8 +5,6 @@ import torch
 from mmselfsup.utils.clustering import PIC, Kmeans
 
 
-@pytest.mark.skipif(
-    not torch.cuda.is_available(), reason='CUDA is not available.')
 def test_kmeans():
     fake_input = np.random.rand(10, 8).astype(np.float32)
     pca_dim = 2
@@ -20,8 +18,6 @@ def test_kmeans():
             loss = kmeans.cluster(np.random.rand(10, 8), verbose=verbose)
 
 
-@pytest.mark.skipif(
-    not torch.cuda.is_available(), reason='CUDA is not available.')
 def test_pic():
     fake_input = np.random.rand(1000, 16).astype(np.float32)
     pic = PIC(pca_dim=8)
