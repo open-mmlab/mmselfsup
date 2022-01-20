@@ -10,3 +10,4 @@ tensorboard
 tqdm
 timm
 tqdm
+mmcls
