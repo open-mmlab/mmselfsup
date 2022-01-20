@@ -1,7 +1,6 @@
 # MAE Experimental
 
-## Masked Autoencoders Are Scalable Vision Learners
-
+## Abstract
 
 <!-- [ABSTRACT] -->
 
@@ -27,6 +26,19 @@ methods that use only ImageNet-1K data. Transfer performance in downstream tasks
 <img src="../../../resources/model_zoo/mae.png" width="40%"/>
 </div>
 
+
+## Models and Benchmarks
+
+Here, we report the results of the model, which is pre-trained on ImageNet1K
+for 400 epochs, the details are below:
+
+
+
+| Backbone | Pre-train epoch | Fine-tuning Top-1 |                  Pre-train Config                  |                                       Fine-tuning Config                                       |                                                                                                                            Download                                                                                                                            |
+| :------: | :-------------: | :---------------: | :------------------------------------------------: | :--------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| ViT-B/16 |       400       |       82.93       | [config](./mae_vit-b-16_8xb512-coslr-400e_in1k.py) | [config](../../benchmarks/classification/imagenet/vit-b-16_8xb128-coslr-100e-finetune_in1k.py) | [model](https://download.openmmlab.com/mmselfsup/mae/mae_vit-b-16_8xb512-coslr-400e_in1k_20220107-4f3b0ae2.pth) &#124; [log](https://github.com/open-mmlab/mmselfsup/blob/feature/mae_experimental/configs/selfsup/mae/mae_vit-b-16_8xb512-coslr-400e_in1k.py) |
+
+
 ## Citation
 
 <!-- [ALGORITHM] -->
@@ -41,19 +53,3 @@ methods that use only ImageNet-1K data. Transfer performance in downstream tasks
   volume={abs/2111.06377}
 }
 ```
-
-## Models and Benchmarks
-
-Here, we report the results of the model, which is pre-trained on ImageNet1K
-for 400 epochs, the details are below:
-
-
-
-| Model | Backbone | Pre-train epoch | Fine-tuning Top-1 |                  Pre-train config                  |                                       Fine-tuning config                                       |                                                  Pre-train log                                                   |                                               Fine-tuning log                                                |                                                Pre-train weight                                                 |
-| :---: | :------: | :-------------: | :---------------: | :------------------------------------------------: | :--------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------: |
-|  MAE  | ViT-B/16 |       400       |       82.93       | [config](./mae_vit-b-16_8xb512-coslr-400e_in1k.py) | [config](../../benchmarks/classification/imagenet/vit-b-16_8xb128-coslr-100e-finetune_in1k.py) | [log](https://download.openmmlab.com/mmselfsup/mae/mae_vit-b-16_8xb512-coslr-400e_in1k_20220104_102206.log.json) | [log](https://download.openmmlab.com/mmselfsup/mae/vit-b-16_8xb128-coslr-100e_in1k_20220106_105846.log.json) | [model](https://download.openmmlab.com/mmselfsup/mae/mae_vit-b-16_8xb512-coslr-400e_in1k_20220107-4f3b0ae2.pth) |
-
-
-Since this version is in experiment, some of the code may not follow the code
-style of OpenMMLab, e.g. missing docstring, but we will fix it in our official
-version. Please stay tuned !
