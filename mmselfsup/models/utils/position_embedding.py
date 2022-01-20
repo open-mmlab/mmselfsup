@@ -1,40 +1,22 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-import torch
+import numpy as np
 
 
-def build_2d_sincos_position_embedding(patches_resolution,
-                                       embed_dims,
-                                       temperature=10000.,
-                                       cls_token=False):
-    """The function is to build position embedding for model to obtain the
-    position information of the image patches."""
+def get_2d_sincos_pos_embed(embed_dim, grid_size, cls_token=False):
+    """Generate 2d sincos position embedding.
 
-    if isinstance(patches_resolution, int):
-        patches_resolution = (patches_resolution, patches_resolution)
+    Borrow this code from https://github.com/facebookresearch/mae.
+    Args:
+        embed_dim (int): The dimension of token.
+        grid_size (int): int of the grid height and width.
+    """
+    grid_h = np.arange(grid_size, dtype=np.float32)
+    grid_w = np.arange(grid_size, dtype=np.float32)
+    grid = np.meshgrid(grid_w, grid_h)  # here w goes first
+    grid = np.stack(grid, axis=0)
 
-    h, w = patches_resolution
-    grid_w = torch.arange(w, dtype=torch.float32)
-    grid_h = torch.arange(h, dtype=torch.float32)
-    grid_w, grid_h = torch.meshgrid(grid_w, grid_h)
-    assert embed_dims % 4 == 0, \
-        'Embed dimension must be divisible by 4.'
-    pos_dim = embed_dims // 4
-
-    omega = torch.arange(pos_dim, dtype=torch.float32) / pos_dim
-    omega = 1. / (temperature**omega)
-    out_w = torch.einsum('m,d->md', [grid_w.flatten(), omega])
-    out_h = torch.einsum('m,d->md', [grid_h.flatten(), omega])
-
-    pos_emb = torch.cat(
-        [
-            torch.sin(out_w),
-            torch.cos(out_w),
-            torch.sin(out_h),
-            torch.cos(out_h)
-        ],
-        dim=1,
-    )[None, :, :]
-
+    grid = grid.reshape([2, 1, grid_size, grid_size])
+    pos_embed = get_2d_sincos_pos_embed_from_grid(embed_dim, grid)
     if cls_token:
         cls_token_pe = torch.zeros([1, 1, embed_dims], dtype=torch.float32)
         pos_emb = torch.cat([cls_token_pe, pos_emb], dim=1)
