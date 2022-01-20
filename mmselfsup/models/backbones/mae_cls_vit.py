@@ -35,7 +35,7 @@ class MAEClsViT(VisionTransformer):
             _, self.fc_norm = build_norm_layer(
                 norm_cfg, self.embed_dims, postfix=1)
             self.final_norm = False
-            del self.norm1
+            self.norm1.requires_grad = False
 
         self.finetune = finetune
         if not self.finetune:
