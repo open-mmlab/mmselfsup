@@ -1,7 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from ..utils import Mixup
-
 from ..builder import ALGORITHMS, build_backbone, build_head
+from ..utils import Mixup
 from .base import BaseModel
 
 
