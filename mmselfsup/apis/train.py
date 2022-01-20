@@ -12,8 +12,7 @@ from mmcv.utils import build_from_cfg
 from mmselfsup.core import (DistOptimizerHook, GradAccumFp16OptimizerHook,
                             build_optimizer)
 from mmselfsup.datasets import build_dataloader, build_dataset
-from mmselfsup.utils import (find_available_ckpt, get_root_logger,
-                             multi_gpu_test, single_gpu_test)
+from mmselfsup.utils import get_root_logger, multi_gpu_test, single_gpu_test
 
 
 def init_random_seed(seed=None, device='cuda'):
@@ -168,7 +167,6 @@ def train_model(model,
             shuffle=False,
             drop_last=False,
             prefetch=cfg.data.val.prefetch,
-            drop_last=getattr(cfg.data, 'drop_last', False),
             img_norm_cfg=cfg.get('img_norm_cfg', dict()))
         eval_cfg = cfg.get('evaluation', {})
         eval_cfg['by_epoch'] = cfg.runner['type'] != 'IterBasedRunner'
@@ -181,9 +179,6 @@ def train_model(model,
             eval_hook(val_dataloader, test_fn=eval_fn, **eval_cfg),
             priority='LOW')
 
-    if cfg.resume_from is None:
-        cfg.resume_from = find_available_ckpt(cfg.work_dir,
-                                              cfg.checkpoint_config.out_dir)
     if cfg.resume_from:
         runner.resume(cfg.resume_from)
     elif cfg.load_from:
