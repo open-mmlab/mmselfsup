@@ -1,8 +1,8 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import torch
 import torch.nn.functional as F
-from mmcv.runner import BaseModule
 from mmcv.cnn.utils.weight_init import trunc_normal_
+from mmcv.runner import BaseModule
 from torch import nn
 
 from ..builder import HEADS

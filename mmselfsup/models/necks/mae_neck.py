@@ -1,9 +1,10 @@
 import torch
 import torch.nn as nn
-from mmcv.runner import BaseModule
 from mmcls.models.backbones.vision_transformer import TransformerEncoderLayer
-from ..builder import NECKS
 from mmcv.cnn import build_norm_layer
+from mmcv.runner import BaseModule
+
+from ..builder import NECKS
 
 
 @NECKS.register_module()

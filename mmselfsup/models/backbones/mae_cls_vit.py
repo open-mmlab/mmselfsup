@@ -1,7 +1,8 @@
+import torch
 from mmcls.models import VisionTransformer
 from mmcv.cnn import build_norm_layer
 from torch import nn
-import torch
+
 from ..builder import BACKBONES
 
 
