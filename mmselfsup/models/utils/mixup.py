@@ -29,9 +29,9 @@ def mixup_target(target, num_classes, lam=1., smoothing=0.0, device='cuda'):
 
 
 def rand_bbox(img_shape, lam, margin=0., count=None):
-    """ Standard CutMix bounding-box
-    Generates a random square bbox based on lambda value. This impl includes
-    support for enforcing a border margin as percent of bbox dimensions.
+    """Standard CutMix bounding-box Generates a random square bbox based on
+    lambda value. This impl includes support for enforcing a border margin as
+    percent of bbox dimensions.
 
     Args:
         img_shape (tuple): Image shape as tuple
@@ -54,10 +54,9 @@ def rand_bbox(img_shape, lam, margin=0., count=None):
 
 
 def rand_bbox_minmax(img_shape, minmax, count=None):
-    """ Min-Max CutMix bounding-box
-    Inspired by Darknet cutmix impl, generates a random rectangular bbox
-    based on min/max percent values applied to each dimension of the
-    input image.
+    """Min-Max CutMix bounding-box Inspired by Darknet cutmix impl, generates a
+    random rectangular bbox based on min/max percent values applied to each
+    dimension of the input image.
 
     Typical defaults for minmax are usually in the  .2-.3 for min and
     .8-.9 range for max.
@@ -86,8 +85,7 @@ def cutmix_bbox_and_lam(img_shape,
                         ratio_minmax=None,
                         correct_lam=True,
                         count=None):
-    """ Generate bbox and apply lambda correction.
-    """
+    """Generate bbox and apply lambda correction."""
     if ratio_minmax is not None:
         yl, yu, xl, xu = rand_bbox_minmax(img_shape, ratio_minmax, count=count)
     else:
@@ -99,8 +97,8 @@ def cutmix_bbox_and_lam(img_shape,
 
 
 class Mixup:
-    """ Mixup/Cutmix that applies different params to each
-        element or whole batch
+    """Mixup/Cutmix that applies different params to each element or whole
+    batch.
 
     Args:
         mixup_alpha (float): mixup alpha value, mixup is active if > 0.
@@ -167,8 +165,8 @@ class Mixup:
                 lam_mix = np.random.beta(
                     self.cutmix_alpha, self.cutmix_alpha, size=batch_size)
             else:
-                assert False, "One of mixup_alpha > 0., cutmix_alpha > 0., \
-                    cutmix_minmax not None should be true."
+                assert False, 'One of mixup_alpha > 0., cutmix_alpha > 0., \
+                    cutmix_minmax not None should be true.'
 
             lam = np.where(
                 np.random.rand(batch_size) < self.mix_prob,
@@ -191,8 +189,8 @@ class Mixup:
                 use_cutmix = True
                 lam_mix = np.random.beta(self.cutmix_alpha, self.cutmix_alpha)
             else:
-                assert False, "One of mixup_alpha > 0., cutmix_alpha > 0., \
-                    cutmix_minmax not None should be true."
+                assert False, 'One of mixup_alpha > 0., cutmix_alpha > 0., \
+                    cutmix_minmax not None should be true.'
 
             lam = float(lam_mix)
         return lam, use_cutmix
