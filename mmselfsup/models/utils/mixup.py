@@ -100,6 +100,8 @@ class Mixup:
     """Mixup/Cutmix that applies different params to each element or whole
     batch.
 
+    Borrow this code from https://github.com/rwightman/pytorch-image-models.
+
     Args:
         mixup_alpha (float): mixup alpha value, mixup is active if > 0.
             Defaults to 1.
