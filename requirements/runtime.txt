@@ -12,3 +12,4 @@ tensorboard
 terminaltables
 timm
 tqdm
+mmcls
