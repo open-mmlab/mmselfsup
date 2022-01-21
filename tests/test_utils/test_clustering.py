@@ -16,7 +16,7 @@ def mock_faiss(mock_faiss_in_clutering):
     )
 
 
-@pytest.mark.parametrize("verbose", [True, False])
+@pytest.mark.parametrize('verbose', [True, False])
 def test_kmeans(mock_faiss, verbose):
     fake_input = np.random.rand(10, 8).astype(np.float32)
     pca_dim = 2
