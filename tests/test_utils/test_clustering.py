@@ -7,11 +7,11 @@ from mmselfsup.utils.clustering import PIC, Kmeans
 @pytest.fixture
 def mock_faiss(mock_faiss_in_clutering):
     mock_PCAmatrix = mock_faiss_in_clutering.PCAMatrix.return_value
-    mock_GpuIndexFlatL2 = mock_faiss_in_clutering.GpuIndexFlatL2.return_value
+    mock_GpuIndexFlatL2 = mock_faiss_in_clutering.GpuIndexFlatL2.reeturn_value
 
     mock_PCAmatrix.apply_py.return_value = np.random.rand(10, 8)
     mock_GpuIndexFlatL2.search.return_value = (
-        np.random.rand(1000, 6), 
+        np.random.rand(1000, 6),
         np.random.rand(1000, 6),
     )
 
