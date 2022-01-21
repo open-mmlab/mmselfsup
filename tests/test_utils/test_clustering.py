@@ -1,3 +1,4 @@
+from unittest.mock import patch
 import numpy as np
 import pytest
 import torch
@@ -5,9 +6,10 @@ import torch
 from mmselfsup.utils.clustering import PIC, Kmeans
 
 
-@pytest.mark.skipif(
-    not torch.cuda.is_available(), reason='CUDA is not available.')
-def test_kmeans():
+@patch('faiss.Clustering')
+@patch('faiss.vector_to_array')
+def test_kmeans(faiss_vector_to_array, _):
+    faiss_vector_to_array.return_value = np.random.rand(20)
     fake_input = np.random.rand(10, 8).astype(np.float32)
     pca_dim = 2
 
