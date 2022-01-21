@@ -5,6 +5,8 @@ from .classification import Classification
 from .deepcluster import DeepCluster
 from .densecl import DenseCL
 from .mae import MAE
+from .mae_finetune import VitClassification
+from .mae_linprobe import MAELinearClassification
 from .moco import MoCo
 from .mocov3 import MoCoV3
 from .npid import NPID
@@ -14,8 +16,6 @@ from .rotation_pred import RotationPred
 from .simclr import SimCLR
 from .simsiam import SimSiam
 from .swav import SwAV
-from .mae_finetune import VitClassification
-from .mae_linprobe import MAELinearClassification
 
 __all__ = [
     'BaseModel', 'BYOL', 'Classification', 'DeepCluster', 'DenseCL', 'MoCo',
