@@ -14,8 +14,8 @@ from .rotation_pred import RotationPred
 from .simclr import SimCLR
 from .simsiam import SimSiam
 from .swav import SwAV
-from .vit_classification import VitClassification
-from .vit_classification_linear import MAELinearClassification
+from .mae_finetune import VitClassification
+from .mae_linprobe import MAELinearClassification
 
 __all__ = [
     'BaseModel', 'BYOL', 'Classification', 'DeepCluster', 'DenseCL', 'MoCo',
