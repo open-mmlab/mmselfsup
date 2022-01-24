@@ -17,7 +17,7 @@ class MAE(BaseModel):
         backbone (dict): Config dict for encoder. Defaults to None.
         neck (dict): Config dict for encoder. Defaults to None.
         head (dict): Config dict for loss functions. Defaults to None.
-        init_cfg (dict): Config dict for weight initialization. 
+        init_cfg (dict): Config dict for weight initialization.
             Defaults to None.
     """
 
