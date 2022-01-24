@@ -7,7 +7,7 @@ import torch
 def one_hot(x, num_classes, on_value=1., off_value=0., device='cuda'):
     x = x.long().view(-1, 1)
     return torch.full((x.size()[0], num_classes), off_value,
-                      device=device).scatter_(1, x, on_value)
+                      device=x.device).scatter_(1, x, on_value)
 
 
 def mixup_target(target, num_classes, lam=1., smoothing=0.0, device='cuda'):
