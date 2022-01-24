@@ -154,6 +154,7 @@ def main():
     cfg.seed = seed
     meta['seed'] = seed
     meta['exp_name'] = osp.basename(args.config)
+
     model = build_algorithm(cfg.model)
     model.init_weights()
 
