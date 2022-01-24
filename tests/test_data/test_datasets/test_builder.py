@@ -11,7 +11,7 @@ DATASET_CONFIG = dict(
         ann_file='data/imagenet/meta/train.txt',
     ),
     num_views=[1, 1],
-    pipeline=[
+    pipelines=[
         dict(type='RandomResizedCrop', size=224, interpolation=3),
         dict(type='RandomHorizontalFlip'),
         dict(
