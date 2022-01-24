@@ -1,4 +1,4 @@
-_base_ = 'vit-b-16_8xb128-coslr-100e-linear-eval_in1k.py'
+_base_ = 'vit-b-p16_linprobe-8xb512-coslr-sgd-90e_in1k.py'
 
 # dataset
 data = dict(imgs_per_gpu=2048, workers_per_gpu=8)
