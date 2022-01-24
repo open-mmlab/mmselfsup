@@ -1,4 +1,7 @@
-# MAE Experimental
+# MAE
+
+[Masked Autoencoders Are Scalable Vision Learners](https://arxiv.org/abs/2111.06377)
+
 
 ## Abstract
 
@@ -23,7 +26,7 @@ methods that use only ImageNet-1K data. Transfer performance in downstream tasks
 
 <!-- [IMAGE] -->
 <div align="center">
-<img src="../../../resources/model_zoo/mae.png" width="40%"/>
+<img src="https://user-images.githubusercontent.com/30762564/150733959-2959852a-c7bd-4d3f-911f-3e8d8839fe67.png" width="40%"/>
 </div>
 
 
