@@ -11,10 +11,13 @@ from .base import BaseModel
 class MAE(BaseModel):
     """MAE.
 
-    backbone (dict): Config dict for encoder.     Defaults to None. neck
-    (dict): Config dict for encoder.     Defaults to None head (dict): Config
-    dict for loss functions.     Defaults to None. init_cfg (dict): Config dict
-    for weight initialization.     Defaults to None.
+    Implementation of `Masked Autoencoders Are Scalable Vision Learners
+     <https://arxiv.org/abs/2111.06377>`_.
+
+    backbone (dict): Config dict for encoder. Defaults to None.
+    neck (dict): Config dict for encoder. Defaults to None.
+    head (dict): Config dict for loss functions. Defaults to None.
+    init_cfg (dict): Config dict for weight initialization. Defaults to None.
     """
 
     def __init__(self, backbone=None, neck=None, head=None, init_cfg=None):
