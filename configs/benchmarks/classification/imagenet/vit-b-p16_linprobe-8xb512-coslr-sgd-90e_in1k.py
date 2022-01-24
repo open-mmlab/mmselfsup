@@ -1,5 +1,5 @@
 _base_ = [
-    '../_base_/models/vit-base-16_linprobe.py',
+    '../_base_/models/vit-base-p16_linprobe.py',
     '../_base_/datasets/imagenet.py',
     '../_base_/schedules/sgd_coslr-100e.py',
     '../_base_/default_runtime.py',
