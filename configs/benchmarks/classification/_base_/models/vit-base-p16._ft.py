@@ -1,5 +1,5 @@
 model = dict(
-    type='VitClassification',
+    type='MAEClassification',
     backbone=dict(
         type='MAEClsViT',
         arch='b',
