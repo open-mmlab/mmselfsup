@@ -18,7 +18,7 @@ neck = dict(
 head = dict(type='MAEPretrainHead', norm_pix_loss=False, patch_size=16)
 
 
-def test_simclr():
+def test_mae():
     with pytest.raises(AssertionError):
         alg = MAE(backbone=backbone, neck=None, head=head)
     with pytest.raises(AssertionError):
@@ -29,5 +29,11 @@ def test_simclr():
     alg = MAE(backbone=backbone, neck=neck, head=head)
 
     fake_input = torch.randn((16, 3, 224, 224))
-    fake_backbone_out = alg.extract_feat(fake_input)
-    assert fake_backbone_out[0].size() == torch.Size([16, 2048, 7, 7])
+    fake_loss = alg.forward_train(fake_input)
+    fake_feature = alg.extract_feat(fake_input)
+    assert isinstance(fake_loss['loss'].item(), float)
+    assert list(fake_feature[0].shape) == [16, 50, 768]
+
+
+if __name__ == "__main__":
+    test_mae()
