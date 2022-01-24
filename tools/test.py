@@ -12,7 +12,8 @@ from mmcv.runner import get_dist_info, init_dist, load_checkpoint
 
 from mmselfsup.datasets import build_dataloader, build_dataset
 from mmselfsup.models import build_algorithm
-from mmselfsup.utils import get_root_logger, multi_gpu_test, single_gpu_test
+from mmselfsup.utils import (get_root_logger, multi_gpu_test,
+                             setup_multi_processes, single_gpu_test)
 
 
 def parse_args():
@@ -54,6 +55,10 @@ def main():
     cfg = mmcv.Config.fromfile(args.config)
     if args.cfg_options is not None:
         cfg.merge_from_dict(args.cfg_options)
+
+    # set multi-process settings
+    setup_multi_processes(cfg)
+
     # set cudnn_benchmark
     if cfg.get('cudnn_benchmark', False):
         torch.backends.cudnn.benchmark = True
