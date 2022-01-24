@@ -1,7 +1,15 @@
+from unittest.mock import patch
+
 import numpy as np
 import pytest
 
 from mmselfsup.utils.clustering import PIC, Kmeans
+
+
+@pytest.fixture
+def mock_faiss_in_clutering():
+    with patch('mmselfsup.utils.clustering.faiss') as faiss:
+        yield faiss
 
 
 @pytest.fixture
