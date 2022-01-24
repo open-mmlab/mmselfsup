@@ -15,4 +15,5 @@ model = dict(
     switch_prob=0.5,
     mode='batch',
     label_smoothing=0.1,
-    num_classes=1000)
+    num_classes=1000,
+    finetune=True)

@@ -5,8 +5,8 @@ from .base import BaseModel
 
 
 @ALGORITHMS.register_module()
-class VitClassification(BaseModel):
-    """Simple image classification for ViT.
+class MAEClassification(BaseModel):
+    """Simple image classification for MAE classification benchmark.
 
     Args:
         backbone (dict): Config dict for module of backbone.
@@ -27,20 +27,23 @@ class VitClassification(BaseModel):
                  switch_prob=None,
                  mode=None,
                  label_smoothing=None,
-                 num_classes=None):
-        super(VitClassification, self).__init__(init_cfg)
+                 num_classes=None,
+                 finetune=True):
+        super(MAEClassification, self).__init__(init_cfg)
         self.backbone = build_backbone(backbone)
         assert head is not None
         self.head = build_head(head)
-        self.mix_up = Mixup(
-            mixup_alpha=mixup_alpha,
-            cutmix_alpha=cutmix_alpha,
-            cutmix_minmax=cutmix_minmax,
-            prob=prob,
-            switch_prob=switch_prob,
-            mode=mode,
-            label_smoothing=label_smoothing,
-            num_classes=num_classes)
+        self.finetune = finetune
+        if self.finetune:
+            self.mix_up = Mixup(
+                mixup_alpha=mixup_alpha,
+                cutmix_alpha=cutmix_alpha,
+                cutmix_minmax=cutmix_minmax,
+                prob=prob,
+                switch_prob=switch_prob,
+                mode=mode,
+                label_smoothing=label_smoothing,
+                num_classes=num_classes)
 
     def extract_feat(self, img):
         """Function to extract features from backbone.
@@ -67,7 +70,8 @@ class VitClassification(BaseModel):
         Returns:
             dict[str, Tensor]: A dictionary of loss components.
         """
-        img, label = self.mix_up(img, label)
+        if self.finetune:
+            img, label = self.mix_up(img, label)
         x = self.extract_feat(img)
         outs = self.head(x)
         loss_inputs = (outs, label)
