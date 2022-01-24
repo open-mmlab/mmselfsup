@@ -1,5 +1,5 @@
 model = dict(
-    type='MAELinearClassification',
+    type='MAEClassification',
     backbone=dict(
         type='MAEClsViT',
         arch='b',
@@ -7,4 +7,5 @@ model = dict(
         global_pool=True,
         finetune=False,
         final_norm=False),
-    head=dict(type='MAELinearEvalHead', num_classes=1000, embed_dim=768))
+    head=dict(type='MAELinprobeHead', num_classes=1000, embed_dim=768),
+    finetune=False)

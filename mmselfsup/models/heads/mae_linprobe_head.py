@@ -7,8 +7,8 @@ from ..builder import HEADS
 
 
 @HEADS.register_module()
-class MAELinearEvalHead(BaseModule):
-    """Linear evaluation head for MAE.
+class MAELinprobeHead(BaseModule):
+    """Linear probing head for MAE.
 
     Args:
         embed_dim (int): The dim of the feature before the classifier head.
@@ -16,7 +16,7 @@ class MAELinearEvalHead(BaseModule):
     """
 
     def __init__(self, embed_dim, num_classes=1000):
-        super(MAELinearEvalHead, self).__init__()
+        super(MAELinprobeHead, self).__init__()
         self.head = nn.Linear(embed_dim, num_classes)
         self.bn = nn.BatchNorm1d(embed_dim, affine=False, eps=1e-6)
         self.criterion = nn.CrossEntropyLoss()
