@@ -35,5 +35,5 @@ def test_mae():
     assert list(fake_feature[0].shape) == [16, 50, 768]
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     test_mae()
