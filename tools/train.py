@@ -14,7 +14,7 @@ from mmselfsup import __version__
 from mmselfsup.apis import init_random_seed, set_random_seed, train_model
 from mmselfsup.datasets import build_dataset
 from mmselfsup.models import build_algorithm
-from mmselfsup.utils import collect_env, get_root_logger
+from mmselfsup.utils import collect_env, get_root_logger, setup_multi_processes
 
 
 def parse_args():
@@ -70,6 +70,10 @@ def main():
     cfg = Config.fromfile(args.config)
     if args.cfg_options is not None:
         cfg.merge_from_dict(args.cfg_options)
+
+    # set multi-process settings
+    setup_multi_processes(cfg)
+
     # set cudnn_benchmark
     if cfg.get('cudnn_benchmark', False):
         torch.backends.cudnn.benchmark = True
