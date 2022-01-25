@@ -3,9 +3,9 @@ import torch
 import torch.nn.functional as F
 
 from mmselfsup.models.heads import (ClsHead, ContrastiveHead, LatentClsHead,
-                                    LatentPredictHead, MultiClsHead, SwAVHead,
-                                    MAEPretrainHead, MAEFinetuneHead,
-                                    MAELinprobeHead)
+                                    LatentPredictHead, MAEFinetuneHead,
+                                    MAELinprobeHead, MAEPretrainHead,
+                                    MultiClsHead, SwAVHead)
 
 
 def test_cls_head():
