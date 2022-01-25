@@ -97,3 +97,26 @@ def test_solarization():
     res = module(img)
 
     assert img.size == res.size
+
+
+def test_randomaug():
+    transform = dict(
+        type='RandomAug',
+        input_size=224,
+        color_jitter=None,
+        auto_augment='rand-m9-mstd0.5-inc1',
+        interpolation='bicubic',
+        re_prob=0.25,
+        re_mode='pixel',
+        re_count=1,
+        mean=(0.485, 0.456, 0.406),
+        std=(0.229, 0.224, 0.225))
+
+    img = Image.open(osp.join(osp.dirname(__file__), '../data/color.jpg'))
+
+    module = build_from_cfg(transform, PIPELINES)
+    res = module(img)
+
+    assert list(res.shape) == [3, 224, 224]
+
+    assert isinstance(str(module), str)
