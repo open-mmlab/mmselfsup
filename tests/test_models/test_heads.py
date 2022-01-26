@@ -79,7 +79,7 @@ def test_swav_head():
 
 
 def test_mae_pretrain_head():
-    head = MAEPretrainHead(norm_pix_loss=False, patch_size=16)
+    head = MAEPretrainHead(norm_pix=False, patch_size=16)
     fake_input = torch.rand((2, 3, 224, 224))
     fake_mask = torch.ones((2, 196))
     fake_pred = torch.rand((2, 196, 768))
