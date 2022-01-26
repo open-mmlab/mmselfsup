@@ -88,7 +88,7 @@ def test_mae_pretrain_head():
 
     assert loss['loss'].item() > 0
 
-    head_norm_pixel = MAEPretrainHead(norm_pix_loss=True, patch_size=16)
+    head_norm_pixel = MAEPretrainHead(norm_pix=True, patch_size=16)
 
     loss_norm_pixel = head_norm_pixel.forward(fake_input, fake_pred, fake_mask)
 

@@ -105,5 +105,6 @@ class MAEClsViT(VisionTransformer):
         if not self.final_norm:
             x = x[:, 1:, :].mean(dim=1)
             outcome = self.fc_norm(x)
-
+        else:
+            outcome = x[:, 0]
         return outcome
