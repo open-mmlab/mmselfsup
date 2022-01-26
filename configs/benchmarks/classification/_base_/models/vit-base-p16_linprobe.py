@@ -8,4 +8,4 @@ model = dict(
         finetune=False,
         final_norm=False),
     head=dict(type='MAELinprobeHead', num_classes=1000, embed_dim=768),
-    finetune=False)
+    mixup=False)

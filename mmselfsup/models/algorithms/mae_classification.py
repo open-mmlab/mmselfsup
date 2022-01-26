@@ -28,13 +28,13 @@ class MAEClassification(BaseModel):
                  mode=None,
                  label_smoothing=None,
                  num_classes=None,
-                 finetune=True):
+                 mixup=True):
         super(MAEClassification, self).__init__(init_cfg)
         self.backbone = build_backbone(backbone)
         assert head is not None
         self.head = build_head(head)
-        self.finetune = finetune
-        if self.finetune:
+        self.mixup = mixup
+        if self.mixup:
             self.mix_up = Mixup(
                 mixup_alpha=mixup_alpha,
                 cutmix_alpha=cutmix_alpha,
@@ -70,7 +70,7 @@ class MAEClassification(BaseModel):
         Returns:
             dict[str, Tensor]: A dictionary of loss components.
         """
-        if self.finetune:
+        if self.mixup:
             img, label = self.mix_up(img, label)
         x = self.extract_feat(img)
         outs = self.head(x)
