@@ -20,6 +20,8 @@ class MAELinprobeHead(BaseModule):
         self.head = nn.Linear(embed_dim, num_classes)
         self.bn = nn.BatchNorm1d(embed_dim, affine=False, eps=1e-6)
         self.criterion = nn.CrossEntropyLoss()
+
+    def init_weights(self):
         nn.init.constant_(self.head.bias, 0)
         trunc_normal_(self.head.weight, std=0.01)
 
