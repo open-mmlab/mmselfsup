@@ -121,10 +121,6 @@ tensorboard.sh
 replace.sh
 benchmarks/detection/datasets
 benchmarks/detection/output
-ftest*
-test_*.txt
-batchscript*
-*.out
 
 # Pytorch
 *.pth
