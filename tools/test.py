@@ -31,6 +31,12 @@ def parse_args():
         choices=['none', 'pytorch', 'slurm', 'mpi'],
         default='none',
         help='job launcher')
+    parser.add_argument(
+        '--gpu-id',
+        type=int,
+        default=0,
+        help='id of gpu to use '
+        '(only applicable to non-distributed testing)')
     parser.add_argument('--local_rank', type=int, default=0)
     parser.add_argument(
         '--cfg-options',
@@ -71,6 +77,7 @@ def main():
         work_type = args.config.split('/')[1]
         cfg.work_dir = osp.join('./work_dirs', work_type,
                                 osp.splitext(osp.basename(args.config))[0])
+    cfg.gpu_ids = [args.gpu_id]
 
     # init distributed env first, since logger depends on the dist info.
     if args.launcher == 'none':
@@ -98,7 +105,7 @@ def main():
     load_checkpoint(model, args.checkpoint, map_location='cpu')
 
     if not distributed:
-        model = MMDataParallel(model, device_ids=[0])
+        model = MMDataParallel(model, cfg.gpu_ids)
         outputs = single_gpu_test(model, data_loader)
     else:
         model = MMDistributedDataParallel(
