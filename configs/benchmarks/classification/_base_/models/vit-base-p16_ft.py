@@ -16,4 +16,4 @@ model = dict(
     mode='batch',
     label_smoothing=0.1,
     num_classes=1000,
-    finetune=True)
+    mixup=True)
