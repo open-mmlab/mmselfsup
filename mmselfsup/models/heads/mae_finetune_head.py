@@ -31,6 +31,8 @@ class MAEFinetuneHead(BaseModule):
         super(MAEFinetuneHead, self).__init__()
         self.head = nn.Linear(embed_dim, num_classes)
         self.criterion = SoftTargetCrossEntropy()
+
+    def init_weights(self):
         nn.init.constant_(self.head.bias, 0)
         trunc_normal_(self.head.weight, std=2e-5)
 
