@@ -7,7 +7,7 @@ from mmcv.runner import HOOKS, Hook
 
 @HOOKS.register_module()
 class BYOLHook(Hook):
-    """Hook for BYOL.
+    """Hook for updating momentum parameter.
 
     This hook includes momentum adjustment in BYOL following:
 
@@ -29,9 +29,9 @@ class BYOLHook(Hook):
 
     def before_train_iter(self, runner):
         assert hasattr(runner.model.module, 'momentum'), \
-            "The runner must have attribute \"momentum\" in BYOL."
+            "The runner must have attribute \"momentum\" in algorithms."
         assert hasattr(runner.model.module, 'base_momentum'), \
-            "The runner must have attribute \"base_momentum\" in BYOL."
+            "The runner must have attribute \"base_momentum\" in algorithms."
         if self.every_n_iters(runner, self.update_interval):
             cur_iter = runner.iter
             max_iter = runner.max_iters
