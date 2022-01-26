@@ -4,25 +4,13 @@ import torch
 from mmselfsup.models.backbones import MAEClsViT
 
 finetune_backbone = dict(
-    arch='b',
-    patch_size=16,
-    global_pool=True,
-    drop_path_rate=0.1,
-    final_norm=False)
+    arch='b', patch_size=16, drop_path_rate=0.1, final_norm=False)
 
 finetune_backbone_norm = dict(
-    arch='b',
-    patch_size=16,
-    global_pool=False,
-    drop_path_rate=0.1,
-    final_norm=True)
+    arch='b', patch_size=16, drop_path_rate=0.1, final_norm=True)
 
 linprobe_backbone = dict(
-    arch='b',
-    patch_size=16,
-    global_pool=True,
-    finetune=False,
-    final_norm=False)
+    arch='b', patch_size=16, finetune=False, final_norm=False)
 
 
 def test_mae_cls_vit():
