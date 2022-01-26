@@ -8,7 +8,6 @@ from .extractor import Extractor
 from .gather import concat_all_gather, gather_tensors, gather_tensors_batch
 from .logger import get_root_logger
 from .position_embedding import build_2d_sincos_position_embedding
-from .setup_env import setup_multi_processes
 from .test_helper import multi_gpu_test, single_gpu_test
 
 __all__ = [
@@ -16,6 +15,5 @@ __all__ = [
     'dist_forward_collect', 'nondist_forward_collect', 'collect_env',
     'distributed_sinkhorn', 'Extractor', 'concat_all_gather', 'gather_tensors',
     'gather_tensors_batch', 'get_root_logger',
-    'build_2d_sincos_position_embedding', 'setup_multi_processes',
-    'multi_gpu_test', 'single_gpu_test'
+    'build_2d_sincos_position_embedding', 'multi_gpu_test', 'single_gpu_test'
 ]
