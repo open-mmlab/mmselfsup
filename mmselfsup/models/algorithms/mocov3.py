@@ -47,7 +47,7 @@ class MoCov3(BaseModel):
         self.momentum = base_momentum
 
     def init_weights(self):
-        """Initialize base_encoder with init_cfg defined in backbone"""
+        """Initialize base_encoder with init_cfg defined in backbone."""
         super(MoCov3, self).init_weights()
 
         for param_b, param_m in zip(self.base_encoder.parameters(),

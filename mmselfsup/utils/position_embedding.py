@@ -6,7 +6,7 @@ def build_2d_sincos_position_embedding(patches_resolution,
                                        embed_dims,
                                        temperature=10000.):
     """The function is to build position embedding for model to obtain the
-        position information of the image patches."""
+    position information of the image patches."""
     h, w = patches_resolution
     grid_w = torch.arange(w, dtype=torch.float32)
     grid_h = torch.arange(h, dtype=torch.float32)
