@@ -105,7 +105,7 @@ def main():
     load_checkpoint(model, args.checkpoint, map_location='cpu')
 
     if not distributed:
-        model = MMDataParallel(model, cfg.gpu_ids)
+        model = MMDataParallel(model, device_ids=cfg.gpu_ids)
         outputs = single_gpu_test(model, data_loader)
     else:
         model = MMDistributedDataParallel(
