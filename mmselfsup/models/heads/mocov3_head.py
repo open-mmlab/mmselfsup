@@ -3,8 +3,8 @@ import torch
 import torch.nn as nn
 from mmcv.runner import BaseModule
 
-from ..builder import HEADS, build_neck
 from mmselfsup.utils import concat_all_gather
+from ..builder import HEADS, build_neck
 
 
 @HEADS.register_module()

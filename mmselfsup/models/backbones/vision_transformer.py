@@ -1,14 +1,15 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import math
+from functools import reduce
+from operator import mul
+
 import torch
 import torch.nn as nn
-from functools import reduce
 from mmcls.models.backbones import VisionTransformer as _VisionTransformer
 from mmcls.models.utils import PatchEmbed, to_2tuple
-from mmselfsup.utils import build_2d_sincos_position_embedding
-from operator import mul
 from torch.nn.modules.batchnorm import _BatchNorm
 
+from mmselfsup.utils import build_2d_sincos_position_embedding
 from ..builder import BACKBONES
 
 
