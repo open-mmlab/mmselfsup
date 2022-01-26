@@ -4,7 +4,6 @@ model = dict(
         type='MAEClsViT',
         arch='b',
         patch_size=16,
-        global_pool=True,
         drop_path_rate=0.1,
         final_norm=False),
     head=dict(type='MAEFinetuneHead', num_classes=1000, embed_dim=768),

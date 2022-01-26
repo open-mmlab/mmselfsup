@@ -34,8 +34,6 @@ class MAEClsViT(VisionTransformer):
         patch_cfg (dict): Configs of patch embeding. Defaults to an empty dict.
         layer_cfgs (Sequence | dict): Configs of each transformer layer in
             encoder. Defaults to an empty dict.
-        global_pool (bool): Whether or not use the global_pooling feature
-            for classification. Defaults to True.
         finetune (bool): Whether or not do fine-tuning. Defaults to True.
         init_cfg (dict, optional): Initialization config dict.
             Defaults to None.
@@ -54,7 +52,6 @@ class MAEClsViT(VisionTransformer):
                  interpolate_mode='bicubic',
                  patch_cfg=dict(),
                  layer_cfgs=dict(),
-                 global_pool=True,
                  finetune=True,
                  init_cfg=None):
         super().__init__(arch, img_size, patch_size, out_indices, drop_rate,
@@ -63,8 +60,7 @@ class MAEClsViT(VisionTransformer):
                          layer_cfgs, init_cfg)
 
         self.embed_dims = self.arch_settings['embed_dims']
-        self.global_pool = global_pool
-        if self.global_pool:
+        if not self.final_norm:
             _, self.fc_norm = build_norm_layer(
                 norm_cfg, self.embed_dims, postfix=1)
 
@@ -106,11 +102,8 @@ class MAEClsViT(VisionTransformer):
             if i == len(self.layers) - 1 and self.final_norm:
                 x = self.norm1(x)
 
-        if self.global_pool:
+        if not self.final_norm:
             x = x[:, 1:, :].mean(dim=1)
             outcome = self.fc_norm(x)
-        else:
-            x = self.norm1(x)
-            outcome = x[:, 0]
 
         return outcome
