@@ -15,9 +15,9 @@ class MAEPretrainHead(BaseModule):
         patch_size (int): Patch size. Defaults to 16.
     """
 
-    def __init__(self, norm_pix_loss=False, patch_size=16):
+    def __init__(self, norm_pix=False, patch_size=16):
         super(MAEPretrainHead, self).__init__()
-        self.norm_pix_loss = norm_pix_loss
+        self.norm_pix = norm_pix
         self.patch_size = patch_size
 
     def patchify(self, imgs):
@@ -34,7 +34,7 @@ class MAEPretrainHead(BaseModule):
     def forward(self, x, pred, mask):
         losses = dict()
         target = self.patchify(x)
-        if self.norm_pix_loss:
+        if self.norm_pix:
             mean = target.mean(dim=-1, keepdim=True)
             var = target.var(dim=-1, keepdim=True)
             target = (target - mean) / (var + 1.e-6)**.5
