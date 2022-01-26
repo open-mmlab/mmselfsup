@@ -20,7 +20,7 @@ model_finetune = dict(
     mode='batch',
     label_smoothing=0.1,
     num_classes=1000,
-    finetune=True)
+    mixup=True)
 
 model_linprobe = dict(
     backbone=dict(
@@ -31,7 +31,7 @@ model_linprobe = dict(
         finetune=False,
         final_norm=False),
     head=dict(type='MAELinprobeHead', num_classes=1000, embed_dim=768),
-    finetune=False)
+    mixup=False)
 
 
 def test_mae():
