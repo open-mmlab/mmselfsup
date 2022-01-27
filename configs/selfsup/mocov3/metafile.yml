@@ -1,0 +1,28 @@
+Collections:
+  - Name: MoCov3
+    Metadata:
+      Training Data: ImageNet-1k
+      Training Techniques:
+        - LARS
+      Training Resources: 32x V100 GPUs
+      Architecture:
+        - ViT
+        - MoCo
+    Paper:
+        URL: https://arxiv.org/abs/2104.02057
+        Title: "An Empirical Study of Training Self-Supervised Vision Transformers"
+    README: configs/selfsup/mocov3/README.md
+
+Models:
+  - Name: mocov3_vit-small-p16_32xb128-fp16-coslr-300e_in1k-224
+    In Collection: MoCov3
+    Metadata:
+      Epochs: 300
+      Batch Size: 4096
+    Results:
+      - Task: Self-Supervised Image Classification
+        Dataset: ImageNet-1k
+        Metrics:
+          Top 1 Accuracy: 73.07
+    Config: configs/selfsup/mocov3/mocov3_vit-small-p16_32xb128-fp16-coslr-300e_in1k-224.py
+    Weights: https://download.openmmlab.com/mmselfsup/moco/mocov3_vit-small-p16_32xb128-fp16-coslr-300e_in1k-224_20220127-e9332db2.pth
