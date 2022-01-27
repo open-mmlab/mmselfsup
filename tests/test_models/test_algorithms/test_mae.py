@@ -25,7 +25,6 @@ def test_mae():
         alg = MAE(backbone=backbone, neck=neck, head=None)
     with pytest.raises(AssertionError):
         alg = MAE(backbone=None, neck=neck, head=head)
-
     alg = MAE(backbone=backbone, neck=neck, head=head)
 
     fake_input = torch.randn((16, 3, 224, 224))
@@ -33,7 +32,3 @@ def test_mae():
     fake_feature = alg.extract_feat(fake_input)
     assert isinstance(fake_loss['loss'].item(), float)
     assert list(fake_feature[0].shape) == [16, 50, 768]
-
-
-if __name__ == '__main__':
-    test_mae()

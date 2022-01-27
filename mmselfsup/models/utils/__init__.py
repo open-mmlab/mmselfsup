@@ -11,6 +11,6 @@ from .sobel import Sobel
 
 __all__ = [
     'Accuracy', 'accuracy', 'ExtractProcess', 'GatherLayer', 'MultiPooling',
-    'MultiPrototypes', 'ResLayer', 'Sobel', 'get_2d_sincos_pos_embed', 'Mixup',
-    'build_2d_sincos_position_embedding'
+    'MultiPrototypes', 'ResLayer', 'Sobel',
+    'build_2d_sincos_position_embedding', 'Mixup'
 ]

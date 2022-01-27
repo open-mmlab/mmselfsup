@@ -3,7 +3,7 @@ import torch
 from torch import nn
 
 from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
-from ..utils import get_2d_sincos_pos_embed
+from ..utils import build_2d_sincos_position_embedding
 from .base import BaseModel
 
 
@@ -33,19 +33,17 @@ class MAE(BaseModel):
         self.initialize_weights()
 
     def initialize_weights(self):
-        pos_embed = get_2d_sincos_pos_embed(
+        pos_embed = build_2d_sincos_position_embedding(
+            int(self.backbone.patch_embed.num_patches**.5),
             self.backbone.pos_embed.shape[-1],
-            int(self.backbone.patch_embed.num_patches**.5),
             cls_token=True)
-        self.backbone.pos_embed.data.copy_(
-            torch.from_numpy(pos_embed).float().unsqueeze(0))
+        self.backbone.pos_embed.data.copy_(pos_embed.float())
 
-        decoder_pos_embed = get_2d_sincos_pos_embed(
-            self.neck.decoder_pos_embed.shape[-1],
+        decoder_pos_embed = build_2d_sincos_position_embedding(
             int(self.backbone.patch_embed.num_patches**.5),
+            self.neck.decoder_pos_embed.shape[-1],
             cls_token=True)
-        self.neck.decoder_pos_embed.data.copy_(
-            torch.from_numpy(decoder_pos_embed).float().unsqueeze(0))
+        self.neck.decoder_pos_embed.data.copy_(decoder_pos_embed.float())
 
         w = self.backbone.patch_embed.projection.weight.data
         torch.nn.init.xavier_uniform_(w.view([w.shape[0], -1]))
