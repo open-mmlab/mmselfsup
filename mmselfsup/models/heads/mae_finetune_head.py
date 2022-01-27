@@ -1,7 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from mmcls.models import LabelSmoothLoss
 from mmcv.cnn.utils.weight_init import trunc_normal_
 from mmcv.runner import BaseModule
-from mmcls.models import LabelSmoothLoss
 from torch import nn
 
 from ..builder import HEADS
