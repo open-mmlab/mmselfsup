@@ -1,21 +1,10 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-import torch
-import torch.nn.functional as F
 from mmcv.cnn.utils.weight_init import trunc_normal_
 from mmcv.runner import BaseModule
+from mmcls.models import LabelSmoothLoss
 from torch import nn
 
 from ..builder import HEADS
-
-
-class SoftTargetCrossEntropy(nn.Module):
-
-    def __init__(self):
-        super(SoftTargetCrossEntropy, self).__init__()
-
-    def forward(self, x, target):
-        loss = torch.sum(-target * F.log_softmax(x, dim=-1), dim=-1)
-        return loss.mean()
 
 
 @HEADS.register_module()
@@ -27,10 +16,10 @@ class MAEFinetuneHead(BaseModule):
         num_classes (int): The total classes. Defaults to 1000.
     """
 
-    def __init__(self, embed_dim, num_classes=1000):
+    def __init__(self, embed_dim, num_classes=1000, label_smooth_val=0.1):
         super(MAEFinetuneHead, self).__init__()
         self.head = nn.Linear(embed_dim, num_classes)
-        self.criterion = SoftTargetCrossEntropy()
+        self.criterion = LabelSmoothLoss(label_smooth_val, num_classes)
 
     def init_weights(self):
         nn.init.constant_(self.head.bias, 0)
@@ -40,11 +29,11 @@ class MAEFinetuneHead(BaseModule):
         """"Get the logits."""
         outputs = self.head(x)
 
-        return outputs
+        return [outputs]
 
     def loss(self, outputs, labels):
         """Compute the loss."""
         losses = dict()
-        losses['loss'] = self.criterion(outputs, labels)
+        losses['loss'] = self.criterion(outputs[0], labels)
 
         return losses

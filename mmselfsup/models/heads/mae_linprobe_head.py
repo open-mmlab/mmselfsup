@@ -30,11 +30,11 @@ class MAELinprobeHead(BaseModule):
         x = self.bn(x)
         outputs = self.head(x)
 
-        return outputs
+        return [outputs]
 
     def loss(self, outputs, labels):
         """Compute the loss."""
         losses = dict()
-        losses['loss'] = self.criterion(outputs, labels)
+        losses['loss'] = self.criterion(outputs[0], labels)
 
         return losses
