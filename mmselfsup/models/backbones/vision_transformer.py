@@ -3,13 +3,12 @@ import math
 from functools import reduce
 from operator import mul
 
-import torch
 import torch.nn as nn
 from mmcls.models.backbones import VisionTransformer as _VisionTransformer
 from mmcls.models.utils import PatchEmbed, to_2tuple
 from torch.nn.modules.batchnorm import _BatchNorm
 
-from mmselfsup.utils import build_2d_sincos_position_embedding
+from mmselfsup.models.utils import build_2d_sincos_position_embedding
 from ..builder import BACKBONES
 
 
@@ -78,9 +77,11 @@ class VisionTransformer(_VisionTransformer):
                 and self.init_cfg['type'] == 'Pretrained'):
 
             # Use fixed 2D sin-cos position embedding
-            pe_token, pos_emb = build_2d_sincos_position_embedding(
-                self.patch_embed.patches_resolution, self.embed_dims)
-            self.pos_embed.data.copy_(torch.cat([pe_token, pos_emb], dim=1))
+            pos_emb = build_2d_sincos_position_embedding(
+                patches_resolution=self.patch_embed.patches_resolution,
+                embed_dims=self.embed_dims,
+                cls_token=True)
+            self.pos_embed.data.copy_(pos_emb)
             self.pos_embed.requires_grad = False
 
             # xavier_uniform initialization for PatchEmbed
