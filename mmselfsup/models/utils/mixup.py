@@ -192,7 +192,7 @@ class Mixup:
         return x, target
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 
     target = torch.tensor([1, 2])
     import pdb
