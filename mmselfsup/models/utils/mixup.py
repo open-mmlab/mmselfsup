@@ -1,5 +1,4 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-
 import numpy as np
 import torch
 
@@ -191,3 +190,11 @@ class Mixup:
         target = mixup_target(target, self.num_classes, lam,
                               self.label_smoothing)
         return x, target
+
+
+if __name__ == "__main__":
+
+    target = torch.tensor([1, 2])
+    import pdb
+    pdb.set_trace()
+    mixup_loss = mixup_target(target, 10, 0.8, 0.1)
