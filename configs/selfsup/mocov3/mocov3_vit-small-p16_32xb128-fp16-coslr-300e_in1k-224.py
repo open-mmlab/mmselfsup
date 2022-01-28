@@ -61,7 +61,7 @@ data = dict(
     imgs_per_gpu=128, train=dict(pipelines=[train_pipeline1, train_pipeline2]))
 
 # MoCo v3 use the same momentum update method as BYOL
-custom_hooks = [dict(type='BYOLHook')]
+custom_hooks = [dict(type='MomentumUpdateHook')]
 
 # optimizer
 optimizer = dict(type='AdamW', lr=2.4e-3, weight_decay=0.1)

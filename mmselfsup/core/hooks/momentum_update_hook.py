@@ -5,11 +5,11 @@ from mmcv.parallel import is_module_wrapper
 from mmcv.runner import HOOKS, Hook
 
 
-@HOOKS.register_module()
-class BYOLHook(Hook):
-    """Hook for updating momentum parameter.
+@HOOKS.register_module(name=['BYOLHook', 'MomentumUpdateHook'])
+class MomentumUpdateHook(Hook):
+    """Hook for updating momentum parameter, used by BYOL, MoCoV3, etc.
 
-    This hook includes momentum adjustment in BYOL following:
+    This hook includes momentum adjustment:
 
     .. math::
         m = 1 - (1 - m_0) * (cos(pi * k / K) + 1) / 2
