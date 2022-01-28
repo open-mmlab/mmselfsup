@@ -2,6 +2,7 @@
 
 - [Getting Started](#getting-started)
   - [Train existing methods](#train-existing-methods)
+    - [Training with CPU](#training-with-cpu)
     - [Train with single/multiple GPUs](#train-with-singlemultiple-gpus)
     - [Train with multiple machines](#train-with-multiple-machines)
     - [Launch multiple jobs on a single machine](#launch-multiple-jobs-on-a-single-machine)
@@ -17,6 +18,15 @@ This page provides basic tutorials about the usage of MMSelfSup. For installatio
 ## Train existing methods
 
 **Note**: The default learning rate in config files is for 8 GPUs. If using different number GPUs, the total batch size will change in proportion, you have to scale the learning rate following `new_lr = old_lr * new_ngpus / old_ngpus`. We recommend to use `tools/dist_train.sh` even with 1 gpu, since some methods do not support non-distributed training.
+
+### Training with CPU
+
+```shell
+export CUDA_VISIBLE_DEVICES=-1
+python tools/train.py ${CONFIG_FILE}
+```
+
+**Note**: We do not recommend users to use CPU for training because it is too slow and some algorithms are using `SyncBN` which is based on distributed training. We support this feature to allow users to debug on machines without GPU for convenience.
 
 ### Train with single/multiple GPUs
 
