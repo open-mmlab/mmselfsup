@@ -28,7 +28,7 @@ test_pipeline = [
 ]
 data = dict(
     imgs_per_gpu=128,
-    drop_last=True,
+    drop_last=False,
     workers_per_gpu=32,
     train=dict(pipeline=train_pipeline),
     val=dict(pipeline=test_pipeline))
