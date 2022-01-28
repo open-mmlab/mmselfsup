@@ -7,7 +7,7 @@ from .base import BaseModel
 
 
 @ALGORITHMS.register_module()
-class MoCov3(BaseModel):
+class MoCoV3(BaseModel):
     """MoCo v3.
 
     Implementation of `An Empirical Study of Training Self-Supervised Vision
@@ -32,7 +32,7 @@ class MoCov3(BaseModel):
                  base_momentum=0.99,
                  init_cfg=None,
                  **kwargs):
-        super(MoCov3, self).__init__(init_cfg)
+        super(MoCoV3, self).__init__(init_cfg)
         assert neck is not None
         self.base_encoder = nn.Sequential(
             build_backbone(backbone), build_neck(neck))
@@ -48,7 +48,7 @@ class MoCov3(BaseModel):
 
     def init_weights(self):
         """Initialize base_encoder with init_cfg defined in backbone."""
-        super(MoCov3, self).init_weights()
+        super(MoCoV3, self).init_weights()
 
         for param_b, param_m in zip(self.base_encoder.parameters(),
                                     self.momentum_encoder.parameters()):
