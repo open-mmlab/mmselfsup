@@ -31,7 +31,7 @@ def test_classification():
     # test ViT
     backbone = dict(
         type='VisionTransformer',
-        arch='small',  # embed_dim = 384
+        arch='mocov3-small',  # embed_dim = 384
         img_size=224,
         patch_size=16,
         stop_grad_conv1=True)

@@ -2,11 +2,11 @@
 import pytest
 import torch
 
-from mmselfsup.models import MoCov3
+from mmselfsup.models import MoCoV3
 
 backbone = dict(
     type='VisionTransformer',
-    arch='small',  # embed_dim = 384
+    arch='mocov3-small',  # embed_dim = 384
     img_size=224,
     patch_size=16,
     stop_grad_conv1=True)
@@ -40,11 +40,11 @@ head = dict(
 
 def test_mocov3():
     with pytest.raises(AssertionError):
-        alg = MoCov3(backbone=backbone, neck=None, head=head)
+        alg = MoCoV3(backbone=backbone, neck=None, head=head)
     with pytest.raises(AssertionError):
-        alg = MoCov3(backbone=backbone, neck=neck, head=None)
+        alg = MoCoV3(backbone=backbone, neck=neck, head=None)
 
-    alg = MoCov3(backbone, neck, head)
+    alg = MoCoV3(backbone, neck, head)
     alg.init_weights()
     alg.momentum_update()
 
