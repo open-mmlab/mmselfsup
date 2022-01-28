@@ -36,7 +36,7 @@ class VisionTransformer(_VisionTransformer):
 
     arch_zoo = {
         **dict.fromkeys(
-            ['s', 'small'], {
+            ['mocov3-s', 'mocov3-small'], {
                 'embed_dims': 384,
                 'num_layers': 12,
                 'num_heads': 12,

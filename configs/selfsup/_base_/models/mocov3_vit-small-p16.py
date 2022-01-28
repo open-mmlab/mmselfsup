@@ -1,10 +1,10 @@
 # model settings
 model = dict(
-    type='MoCov3',
+    type='MoCoV3',
     base_momentum=0.99,
     backbone=dict(
         type='VisionTransformer',
-        arch='small',  # embed_dim = 384
+        arch='mocov3-small',  # embed_dim = 384
         img_size=224,
         patch_size=16,
         stop_grad_conv1=True),
