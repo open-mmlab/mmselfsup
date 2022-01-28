@@ -24,7 +24,7 @@ The classification benchmarks includes 4 downstream task datasets, **VOC**, **Im
 
 #### ImageNet Linear Evaluation
 
-The **Linear Evaluation** result is obtained from ViT cls_token output. Please refer to [vit-small-p16_8xb128-coslr-90e_in1k](../../benchmarks/classification/imagenet/vit-small-p16_8xb128-coslr-90e_in1k.py) for details of config.
+The **Linear Evaluation** result is obtained by training a linear head upon the pre-trained backbone. Please refer to [vit-small-p16_8xb128-coslr-90e_in1k](../../benchmarks/classification/imagenet/vit-small-p16_8xb128-coslr-90e_in1k.py) for details of config.
 
 | Self-Supervised Config                                                                                            | Linear Evaluation |
 | ----------------------------------------------------------------------------------------------------------------- | ----------------- |
