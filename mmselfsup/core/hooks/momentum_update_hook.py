@@ -9,7 +9,7 @@ from mmcv.runner import HOOKS, Hook
 class MomentumUpdateHook(Hook):
     """Hook for updating momentum parameter, used by BYOL, MoCoV3, etc.
 
-    This hook includes momentum adjustment:
+    This hook includes momentum adjustment following:
 
     .. math::
         m = 1 - (1 - m_0) * (cos(pi * k / K) + 1) / 2
