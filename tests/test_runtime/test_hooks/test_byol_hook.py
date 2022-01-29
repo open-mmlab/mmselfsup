@@ -9,7 +9,7 @@ from mmcv.parallel import MMDataParallel
 from mmcv.runner import build_runner, obj_from_dict
 from torch.utils.data import DataLoader, Dataset
 
-from mmselfsup.core.hooks import BYOLHook
+from mmselfsup.core.hooks import MomentumUpdateHook
 
 
 class ExampleDataset(Dataset):
@@ -61,12 +61,12 @@ def test_byol_hook():
     runner_cfg = dict(type='EpochBasedRunner', max_epochs=2)
     optim_cfg = dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0005)
 
-    # test BYOLHook
+    # test MomentumUpdateHook
     with tempfile.TemporaryDirectory() as tmpdir:
         model = MMDataParallel(ExampleModel())
         optimizer = obj_from_dict(optim_cfg, torch.optim,
                                   dict(params=model.parameters()))
-        byol_hook = BYOLHook()
+        momentum_hook = MomentumUpdateHook()
         runner = build_runner(
             runner_cfg,
             default_args=dict(
@@ -74,6 +74,6 @@ def test_byol_hook():
                 optimizer=optimizer,
                 work_dir=tmpdir,
                 logger=logging.getLogger()))
-        runner.register_hook(byol_hook)
+        runner.register_hook(momentum_hook)
         runner.run([data_loader], [('train', 1)])
         assert runner.model.module.momentum == 0.98

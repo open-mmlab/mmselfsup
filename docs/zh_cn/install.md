@@ -8,16 +8,22 @@
 - CUDA 9.2+
 - GCC 5+
 - [mmcv](https://github.com/open-mmlab/mmcv) 1.3.16+
-- [mmdet](https://mmdetection.readthedocs.io/en/latest/#installation) 2.16.0+
-- [mmseg](https://github.com/open-mmlab/mmsegmentation) 0.20.2+
+- [mmcls](https://mmclassification.readthedocs.io/en/latest/install.html) 0.19.0+
+- [mmdet](https://mmdetection.readthedocs.io/en/latest/get_started.html#installation) 2.16.0+
+- [mmseg](https://mmsegmentation.readthedocs.io/en/latest/get_started.html#installation) 0.20.2+
 
-下表显示了与 MMSelfSup 适配的 MMCV, MMDetection 和 MMSegmentation 的版本号。 为避免安装过程中出现问题，请参照下表安装适配的版本。
+下表显示了与 MMSelfSup 适配的 MMCV, MMClassification, MMDetection 和 MMSegmentation 的版本号。 为避免安装过程中出现问题，请参照下表安装适配的版本。
 
-| MMSelfSup version |    MMCV version     | MMSegmentation version | MMDetection version |
-| :---------------: | :-----------------: | :--------------------: | :-----------------: |
-|      master       | mmcv-full >= 1.3.16 |    mmseg >= 0.20.2+    |  mmdet >= 2.16.0+   |
+| MMSelfSup version |    MMCV version     | MMClassification version | MMSegmentation version | MMDetection version |
+| :---------------: | :-----------------: | :----------------------: | :--------------------: | :-----------------: |
+|  0.6.0 (master)   | mmcv-full >= 1.3.16 |     mmcls >= 0.19.0      |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
+|       0.5.0       | mmcv-full >= 1.3.16 |            /             |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
 
-**注意:** 如果您已经安装了 mmcv, 您需要运行 `pip uninstall mmcv` 来卸载已经安装的 mmcv。 如果您在本地同时安装了 mmcv 和 mmcv-full, `ModuleNotFoundError` 将会抛出。
+
+**注意:**
+- 如果您已经安装了 mmcv, 您需要运行 `pip uninstall mmcv` 来卸载已经安装的 mmcv。 如果您在本地同时安装了 mmcv 和 mmcv-full, `ModuleNotFoundError` 将会抛出。
+- 由于 MMSelfSup 从 MMClassification 引入了部分网络主干，所以您在使用 MMSelfSup 前必须安装 MMClassification。
+- 如果您不需要 MMDetection and MMSegmentation 的基准评测，则安装它们不是必须的。
 
 ## 配置环境
 
@@ -47,7 +53,7 @@
 
 ## 安装 MMSelfSup
 
-1. 安装 mmcv-full
+1. 安装 MMCV 和 MMClassification
 
     ```shell
     pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/{cu_version}/{torch_version}/index.html
@@ -63,7 +69,24 @@
 
     除此之外，您可以选择从源编译 MMCV，具体请参考 [MMCV安装文档](https://github.com/open-mmlab/mmcv#installation)。
 
-2. 安装 MMSegmentation 和 MMDetection
+    您可以使用以下命令安装 MMClassification：
+
+    ```shell
+    pip install mmcls
+    ```
+
+2. 克隆 MMSelfSup 并且安装
+
+    ```shell
+    git clone https://github.com/open-mmlab/mmselfsup.git
+    cd mmselfsup
+    pip install -v -e .
+    ```
+
+    **注意:**
+    - 当您指定 `-e` 或 `develop`参数, MMSelfSup 采用开发者安装模式, 任何改动将会立即生效，而无需重新安装。
+
+3. 安装 MMSegmentation 和 MMDetection
 
     您可以使用以下命令安装 MMSegmentation 和 MMDetection:
 
@@ -78,18 +101,6 @@
     mim install mmdet
     mim install mmsegmentation
     ```
-
-3. 克隆 MMSelfSup 并且安装
-
-    ```shell
-    git clone https://github.com/open-mmlab/mmselfsup.git
-    cd mmselfsup
-    pip install -v -e .
-    ```
-
-**注意:**
-
-a. 当您指定 `-e` 或 `develop`参数, MMSelfSup 采用开发者安装模式, 任何改动将会立即生效，而无需重新安装。
 
 ## 从零开始安装脚本
 
