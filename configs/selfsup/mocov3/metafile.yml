@@ -1,5 +1,5 @@
 Collections:
-  - Name: MoCov3
+  - Name: MoCoV3
     Metadata:
       Training Data: ImageNet-1k
       Training Techniques:
@@ -15,7 +15,7 @@ Collections:
 
 Models:
   - Name: mocov3_vit-small-p16_32xb128-fp16-coslr-300e_in1k-224
-    In Collection: MoCov3
+    In Collection: MoCoV3
     Metadata:
       Epochs: 300
       Batch Size: 4096

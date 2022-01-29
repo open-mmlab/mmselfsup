@@ -8,7 +8,7 @@ from ..builder import HEADS, build_neck
 
 
 @HEADS.register_module()
-class MoCov3Head(BaseModule):
+class MoCoV3Head(BaseModule):
     """Head for MoCo v3 algorithms.
 
     This head builds a predictor, which can be any registered neck component.
@@ -24,7 +24,7 @@ class MoCov3Head(BaseModule):
     """
 
     def __init__(self, predictor, temperature=1.0):
-        super(MoCov3Head, self).__init__()
+        super(MoCoV3Head, self).__init__()
         self.predictor = build_neck(predictor)
         self.temperature = temperature
 
