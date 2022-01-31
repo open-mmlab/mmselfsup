@@ -12,12 +12,13 @@ from mmcv.runner import get_dist_info, init_dist, load_checkpoint
 
 from mmselfsup.datasets import build_dataloader, build_dataset
 from mmselfsup.models import build_algorithm
-from mmselfsup.utils import get_root_logger, multi_gpu_test, single_gpu_test
+from mmselfsup.utils import (get_root_logger, multi_gpu_test,
+                             setup_multi_processes, single_gpu_test)
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description='MMDet test (and eval) a model')
+        description='MMSelfSup test (and eval) a model')
     parser.add_argument('config', help='test config file path')
     parser.add_argument('checkpoint', help='checkpoint file')
     parser.add_argument(
@@ -30,6 +31,12 @@ def parse_args():
         choices=['none', 'pytorch', 'slurm', 'mpi'],
         default='none',
         help='job launcher')
+    parser.add_argument(
+        '--gpu-id',
+        type=int,
+        default=0,
+        help='id of gpu to use '
+        '(only applicable to non-distributed testing)')
     parser.add_argument('--local_rank', type=int, default=0)
     parser.add_argument(
         '--cfg-options',
@@ -54,6 +61,10 @@ def main():
     cfg = mmcv.Config.fromfile(args.config)
     if args.cfg_options is not None:
         cfg.merge_from_dict(args.cfg_options)
+
+    # set multi-process settings
+    setup_multi_processes(cfg)
+
     # set cudnn_benchmark
     if cfg.get('cudnn_benchmark', False):
         torch.backends.cudnn.benchmark = True
@@ -66,6 +77,7 @@ def main():
         work_type = args.config.split('/')[1]
         cfg.work_dir = osp.join('./work_dirs', work_type,
                                 osp.splitext(osp.basename(args.config))[0])
+    cfg.gpu_ids = [args.gpu_id]
 
     # init distributed env first, since logger depends on the dist info.
     if args.launcher == 'none':
@@ -73,6 +85,9 @@ def main():
     else:
         distributed = True
         init_dist(args.launcher, **cfg.dist_params)
+
+    # create work_dir
+    mmcv.mkdir_or_exist(osp.abspath(cfg.work_dir))
 
     # logger
     timestamp = time.strftime('%Y%m%d_%H%M%S', time.localtime())
@@ -93,7 +108,7 @@ def main():
     load_checkpoint(model, args.checkpoint, map_location='cpu')
 
     if not distributed:
-        model = MMDataParallel(model, device_ids=[0])
+        model = MMDataParallel(model, device_ids=cfg.gpu_ids)
         outputs = single_gpu_test(model, data_loader)
     else:
         model = MMDistributedDataParallel(
@@ -104,8 +119,7 @@ def main():
 
     rank, _ = get_dist_info()
     if rank == 0:
-        for name, val in outputs.items():
-            dataset.evaluate(torch.from_numpy(val), name, logger, topk=(1, 5))
+        dataset.evaluate(outputs, logger, topk=(1, 5))
 
 
 if __name__ == '__main__':

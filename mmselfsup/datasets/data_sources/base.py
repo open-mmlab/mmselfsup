@@ -83,14 +83,18 @@ class BaseDataSource(object, metaclass=ABCMeta):
         if self.file_client is None:
             self.file_client = mmcv.FileClient(**self.file_client_args)
 
-        if self.data_infos[idx]['img_prefix'] is not None:
-            filename = osp.join(self.data_infos[idx]['img_prefix'],
-                                self.data_infos[idx]['img_info']['filename'])
+        if self.data_infos[idx].get('img_prefix', None) is not None:
+            if self.data_infos[idx]['img_prefix'] is not None:
+                filename = osp.join(
+                    self.data_infos[idx]['img_prefix'],
+                    self.data_infos[idx]['img_info']['filename'])
+            else:
+                filename = self.data_infos[idx]['img_info']['filename']
+            img_bytes = self.file_client.get(filename)
+            img = mmcv.imfrombytes(img_bytes, flag=self.color_type)
         else:
-            filename = self.data_infos[idx]['img_info']['filename']
+            img = self.data_infos[idx]['img']
 
-        img_bytes = self.file_client.get(filename)
-        img = mmcv.imfrombytes(img_bytes, flag=self.color_type)
         img = img.astype(np.uint8)
         return Image.fromarray(img)
 
