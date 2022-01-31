@@ -22,6 +22,7 @@ class ClsHead(BaseModule):
                  with_avg_pool=False,
                  in_channels=2048,
                  num_classes=1000,
+                 vit_backbone=False,
                  init_cfg=[
                      dict(type='Normal', std=0.01, layer='Linear'),
                      dict(
@@ -33,6 +34,7 @@ class ClsHead(BaseModule):
         self.with_avg_pool = with_avg_pool
         self.in_channels = in_channels
         self.num_classes = num_classes
+        self.vit_backbone = vit_backbone
 
         self.criterion = nn.CrossEntropyLoss()
 
@@ -52,6 +54,8 @@ class ClsHead(BaseModule):
         """
         assert isinstance(x, (tuple, list)) and len(x) == 1
         x = x[0]
+        if self.vit_backbone:
+            x = x[-1]
         if self.with_avg_pool:
             assert x.dim() == 4, \
                 f'Tensor must has 4 dims, got: {x.dim()}'

@@ -8,16 +8,22 @@
 - CUDA 9.2+
 - GCC 5+
 - [mmcv](https://github.com/open-mmlab/mmcv) 1.3.16+
-- [mmdet](https://mmdetection.readthedocs.io/en/latest/#installation) 2.16.0+
-- [mmseg](https://github.com/open-mmlab/mmsegmentation) 0.20.2+
+- [mmcls](https://mmclassification.readthedocs.io/en/latest/install.html) 0.19.0+
+- [mmdet](https://mmdetection.readthedocs.io/en/latest/get_started.html#installation) 2.16.0+
+- [mmseg](https://mmsegmentation.readthedocs.io/en/latest/get_started.html#installation) 0.20.2+
 
-Compatible MMCV, MMDetection and MMSegmentation versions are shown below. Please install the correct version of them to avoid installation issues.
+Compatible MMCV, MMClassification, MMDetection and MMSegmentation versions are shown below. Please install the correct version of them to avoid installation issues.
 
-| MMSelfSup version |    MMCV version     | MMSegmentation version | MMDetection version |
-| :---------------: | :-----------------: | :--------------------: | :-----------------: |
-|      master       | mmcv-full >= 1.3.16 |    mmseg >= 0.20.2+    |  mmdet >= 2.16.0+   |
+| MMSelfSup version |    MMCV version     | MMClassification version | MMSegmentation version | MMDetection version |
+| :---------------: | :-----------------: | :----------------------: | :--------------------: | :-----------------: |
+|  0.6.0 (master)   | mmcv-full >= 1.3.16 |     mmcls >= 0.19.0      |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
+|       0.5.0       | mmcv-full >= 1.3.16 |            /             |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
 
-**Note:** You need to run `pip uninstall mmcv` first if you have mmcv installed. If mmcv and mmcv-full are both installed, there will be `ModuleNotFoundError`.
+**Note:**
+
+- You need to run `pip uninstall mmcv` first if you have mmcv installed. If mmcv and mmcv-full are both installed, there will be `ModuleNotFoundError`.
+- As MMSelfSup imports some backbones from MMClassification, you need to install MMClassification before using MMSelfSup.
+- If you don't run MMDetection and MMSegmentation benchmark, it is unnecessary to install them.
 
 ## Prepare environment
 
@@ -47,7 +53,7 @@ Compatible MMCV, MMDetection and MMSegmentation versions are shown below. Please
 
 ## Install MMSelfSup
 
-1. install mmcv-full
+1. Install MMCV and MMClassification
 
     ```shell
     pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/{cu_version}/{torch_version}/index.html
@@ -63,7 +69,24 @@ Compatible MMCV, MMDetection and MMSegmentation versions are shown below. Please
 
     Optionally you can compile mmcv from source if you need to develop both mmcv and mmselfsup. Refer to the [guide](https://github.com/open-mmlab/mmcv#installation) for details.
 
-2. Install MMSegmentation and MMDetection.
+    You can simply install MMClassification with the following command:
+
+    ```shell
+    pip install mmcls
+    ```
+
+2. Clone MMSelfSup repository and install
+
+    ```shell
+    git clone https://github.com/open-mmlab/mmselfsup.git
+    cd mmselfsup
+    pip install -v -e .
+    ```
+
+    **Note:**
+    - When specifying `-e` or `develop`, MMSelfSup is installed on dev mode, any local modifications made to the code will take effect without reinstallation.
+
+3. Install MMSegmentation and MMDetection
 
     You can simply install MMSegmentation and MMDetection with the following command:
 
@@ -78,18 +101,6 @@ Compatible MMCV, MMDetection and MMSegmentation versions are shown below. Please
     mim install mmdet
     mim install mmsegmentation
     ```
-
-3. Clone the mmselfsup repository and install.
-
-    ```shell
-    git clone https://github.com/open-mmlab/mmselfsup.git
-    cd mmselfsup
-    pip install -v -e .
-    ```
-
-**Note:**
-
-a. When specifying `-e` or `develop`, MMSelfSup is installed on dev mode, any local modifications made to the code will take effect without reinstallation.
 
 ## A from-scratch setup script
 
