@@ -28,7 +28,7 @@
 [📘使用文档](https://mmselfsup.readthedocs.io/zh_CN/latest/) |
 [🛠️安装教程](https://mmselfsup.readthedocs.io/zh_CN/latest/install.html) |
 [👀模型库](https://github.com/open-mmlab/mmselfsup/blob/master/docs/zh_cn/model_zoo.md) |
-[🆕变更日志](https://mmselfsup.readthedocs.io/zh_CN/latest/changelog.html) |
+[🆕更新日志](https://mmselfsup.readthedocs.io/zh_CN/latest/changelog.html) |
 [🤔报告问题](https://github.com/open-mmlab/mmselfsup/issues/new/choose)
 </div>
 
@@ -62,11 +62,11 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
 该项目采用 [Apache 2.0 开源许可证](LICENSE).
 
-## 修改日志
+## 更新日志
 
-MMSelfSup **v0.5.0** 在 16/12/2021 发版.
+最新的 **v0.6.0** 版本已经在 2022.02.02 发布。
 
-请参考 [变更日志](docs/zh_cn/changelog.md) 获取更多细节和历史版本信息。
+请参考 [更新日志](docs/zh_cn/changelog.md) 获取更多细节和历史版本信息。
 
 MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibility.md) 中。
 
@@ -90,6 +90,7 @@ MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibilit
 - [x] [SwAV (NeurIPS'2020)](https://arxiv.org/abs/2006.09882)
 - [x] [DenseCL (CVPR'2021)](https://arxiv.org/abs/2011.09157)
 - [x] [SimSiam (CVPR'2021)](https://arxiv.org/abs/2011.10566)
+- [x] [MoCo v3 (ICCV'2021)](https://arxiv.org/abs/2104.02057)
 
 更多的算法实现已经在我们的计划中。
 

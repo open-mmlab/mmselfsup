@@ -2,6 +2,43 @@
 
 ## MMSelfSup
 
+### v0.6.0 (02/02/2022)
+
+#### Highlight
+* Support vision transformer based MoCo v3 ([#194](https://github.com/open-mmlab/mmselfsup/pull/194))
+* Speed up training and start time ([#181](https://github.com/open-mmlab/mmselfsup/pull/181))
+* Support cpu training ([#188](https://github.com/open-mmlab/mmselfsup/pull/188))
+
+#### New Features
+* Support vision transformer based MoCo v3 ([#194](https://github.com/open-mmlab/mmselfsup/pull/194))
+* Support cpu training ([#188](https://github.com/open-mmlab/mmselfsup/pull/188))
+
+#### Bug Fixes
+* Fix issue ([#159](https://github.com/open-mmlab/mmselfsup/issues/159), [#160](https://github.com/open-mmlab/mmselfsup/issues/160)) related bugs ([#161](https://github.com/open-mmlab/mmselfsup/pull/161))
+* Fix missing prob assignment in `RandomAppliedTrans` ([#173](https://github.com/open-mmlab/mmselfsup/pull/173))
+* Fix bug of showing k-means losses ([#182](https://github.com/open-mmlab/mmselfsup/pull/182))
+* Fix bug in non-distributed multi-gpu training/testing ([#189](https://github.com/open-mmlab/mmselfsup/pull/189))
+* Fix bug when loading cifar dataset ([#191](https://github.com/open-mmlab/mmselfsup/pull/191))
+* Fix `dataset.evaluate` args bug ([#192](https://github.com/open-mmlab/mmselfsup/pull/192))
+
+#### Improvements
+* Cancel previous runs that are not completed in CI ([#145](https://github.com/open-mmlab/mmselfsup/pull/145))
+* Enhance MIM function ([#152](https://github.com/open-mmlab/mmselfsup/pull/152))
+* Skip CI when some specific files were changed ([#154](https://github.com/open-mmlab/mmselfsup/pull/154))
+* Add `drop_last` when building eval optimizer ([#158](https://github.com/open-mmlab/mmselfsup/pull/158))
+* Deprecate the support for "python setup.py test" ([#174](https://github.com/open-mmlab/mmselfsup/pull/174))
+* Speed up training and start time ([#181](https://github.com/open-mmlab/mmselfsup/pull/181))
+* Upgrade `isort` to 5.10.1 ([#184](https://github.com/open-mmlab/mmselfsup/pull/184))
+
+#### Docs
+* Refactor the directory structure of docs ([#146](https://github.com/open-mmlab/mmselfsup/pull/146))
+* Fix readthedocs ([#148](https://github.com/open-mmlab/mmselfsup/pull/148), [#149](https://github.com/open-mmlab/mmselfsup/pull/149), [#153](https://github.com/open-mmlab/mmselfsup/pull/153))
+* Fix typos and dead links in some docs ([#155](https://github.com/open-mmlab/mmselfsup/pull/155), [#180](https://github.com/open-mmlab/mmselfsup/pull/180), [#195](https://github.com/open-mmlab/mmselfsup/pull/195))
+* Update training logs and benchmark results in model zoo ([#157](https://github.com/open-mmlab/mmselfsup/pull/157), [#165](https://github.com/open-mmlab/mmselfsup/pull/165), [#195](https://github.com/open-mmlab/mmselfsup/pull/195))
+* Update and translate some docs into Chinese ([#163](https://github.com/open-mmlab/mmselfsup/pull/163), [#164](https://github.com/open-mmlab/mmselfsup/pull/164), [#165](https://github.com/open-mmlab/mmselfsup/pull/165), [#166](https://github.com/open-mmlab/mmselfsup/pull/166), [#167](https://github.com/open-mmlab/mmselfsup/pull/167), [#168](https://github.com/open-mmlab/mmselfsup/pull/168), [#169](https://github.com/open-mmlab/mmselfsup/pull/169), [#172](https://github.com/open-mmlab/mmselfsup/pull/172), [#176](https://github.com/open-mmlab/mmselfsup/pull/176), [#178](https://github.com/open-mmlab/mmselfsup/pull/178), [#179](https://github.com/open-mmlab/mmselfsup/pull/179))
+* Update algorithm README with the new format ([#177](https://github.com/open-mmlab/mmselfsup/pull/177))
+
+
 ### v0.5.0 (16/12/2021)
 
 #### Highlight
