@@ -1,6 +1,43 @@
-# 变更日志
+# 更新日志
 
 ## MMSelfSup
+
+### v0.6.0 (02/02/2022)
+
+#### 亮点
+* 支持基于 vision transformer 的 MoCo v3 ([#194](https://github.com/open-mmlab/mmselfsup/pull/194))
+* 加速训练和启动时间 ([#181](https://github.com/open-mmlab/mmselfsup/pull/181))
+* 支持 cpu 训练 ([#188](https://github.com/open-mmlab/mmselfsup/pull/188))
+
+#### 新特性
+* 支持基于 vision transformer 的 MoCo v3 ([#194](https://github.com/open-mmlab/mmselfsup/pull/194))
+* 支持 cpu 训练 ([#188](https://github.com/open-mmlab/mmselfsup/pull/188))
+
+#### Bug 修复
+* 修复问题 ([#159](https://github.com/open-mmlab/mmselfsup/issues/159), [#160](https://github.com/open-mmlab/mmselfsup/issues/160)) 中提到的相关 bugs ([#161](https://github.com/open-mmlab/mmselfsup/pull/161))
+* 修复 `RandomAppliedTrans` 中缺失的 prob 赋值 ([#173](https://github.com/open-mmlab/mmselfsup/pull/173))
+* 修复 k-means losses 显示的 bug ([#182](https://github.com/open-mmlab/mmselfsup/pull/182))
+* 修复非分布式多 gpu 训练/测试中的 bug ([#189](https://github.com/open-mmlab/mmselfsup/pull/189))
+* 修复加载 cifar 数据集时的 bug ([#191](https://github.com/open-mmlab/mmselfsup/pull/191))
+* 修复 `dataset.evaluate` 的参数 bug ([#192](https://github.com/open-mmlab/mmselfsup/pull/192))
+
+#### 改进
+* 取消之前在 CI 中未完成的运行 ([#145](https://github.com/open-mmlab/mmselfsup/pull/145))
+* 增强 MIM 功能 ([#152](https://github.com/open-mmlab/mmselfsup/pull/152))
+* 更改某些特定文件时跳过 CI ([#154](https://github.com/open-mmlab/mmselfsup/pull/154))
+* 在构建 eval 优化器时添加 `drop_last` 选项 ([#158](https://github.com/open-mmlab/mmselfsup/pull/158))
+* 弃用对 “python setup.py test” 的支持 ([#174](https://github.com/open-mmlab/mmselfsup/pull/174))
+* 加速训练和启动时间 ([#181](https://github.com/open-mmlab/mmselfsup/pull/181))
+* 升级 `isort` 到 5.10.1 ([#184](https://github.com/open-mmlab/mmselfsup/pull/184))
+
+#### 文档
+* 重构文档目录结构 ([#146](https://github.com/open-mmlab/mmselfsup/pull/146))
+* 修复 readthedocs ([#148](https://github.com/open-mmlab/mmselfsup/pull/148), [#149](https://github.com/open-mmlab/mmselfsup/pull/149), [#153](https://github.com/open-mmlab/mmselfsup/pull/153))
+* 修复一些文档中的拼写错误和无效链接 ([#155](https://github.com/open-mmlab/mmselfsup/pull/155), [#180](https://github.com/open-mmlab/mmselfsup/pull/180), [#195](https://github.com/open-mmlab/mmselfsup/pull/195))
+* 更新模型库里的训练日志和基准测试结果 ([#157](https://github.com/open-mmlab/mmselfsup/pull/157), [#165](https://github.com/open-mmlab/mmselfsup/pull/165), [#195](https://github.com/open-mmlab/mmselfsup/pull/195))
+* 更新部分文档并翻译成中文 ([#163](https://github.com/open-mmlab/mmselfsup/pull/163), [#164](https://github.com/open-mmlab/mmselfsup/pull/164), [#165](https://github.com/open-mmlab/mmselfsup/pull/165), [#166](https://github.com/open-mmlab/mmselfsup/pull/166), [#167](https://github.com/open-mmlab/mmselfsup/pull/167), [#168](https://github.com/open-mmlab/mmselfsup/pull/168), [#169](https://github.com/open-mmlab/mmselfsup/pull/169), [#172](https://github.com/open-mmlab/mmselfsup/pull/172), [#176](https://github.com/open-mmlab/mmselfsup/pull/176), [#178](https://github.com/open-mmlab/mmselfsup/pull/178), [#179](https://github.com/open-mmlab/mmselfsup/pull/179))
+* 更新算法 README 到新格式 ([#177](https://github.com/open-mmlab/mmselfsup/pull/177))
+
 
 ### v0.5.0 (16/12/2021)
 
