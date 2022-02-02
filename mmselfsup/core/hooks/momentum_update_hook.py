@@ -5,11 +5,11 @@ from mmcv.parallel import is_module_wrapper
 from mmcv.runner import HOOKS, Hook
 
 
-@HOOKS.register_module()
-class BYOLHook(Hook):
-    """Hook for BYOL.
+@HOOKS.register_module(name=['BYOLHook', 'MomentumUpdateHook'])
+class MomentumUpdateHook(Hook):
+    """Hook for updating momentum parameter, used by BYOL, MoCoV3, etc.
 
-    This hook includes momentum adjustment in BYOL following:
+    This hook includes momentum adjustment following:
 
     .. math::
         m = 1 - (1 - m_0) * (cos(pi * k / K) + 1) / 2
@@ -29,9 +29,9 @@ class BYOLHook(Hook):
 
     def before_train_iter(self, runner):
         assert hasattr(runner.model.module, 'momentum'), \
-            "The runner must have attribute \"momentum\" in BYOL."
+            "The runner must have attribute \"momentum\" in algorithms."
         assert hasattr(runner.model.module, 'base_momentum'), \
-            "The runner must have attribute \"base_momentum\" in BYOL."
+            "The runner must have attribute \"base_momentum\" in algorithms."
         if self.every_n_iters(runner, self.update_interval):
             cur_iter = runner.iter
             max_iter = runner.max_iters

@@ -44,6 +44,7 @@ class NonLinearNeck(BaseModule):
                  with_last_bn_affine=True,
                  with_last_bias=False,
                  with_avg_pool=True,
+                 vit_backbone=False,
                  norm_cfg=dict(type='SyncBN'),
                  init_cfg=[
                      dict(
@@ -53,6 +54,7 @@ class NonLinearNeck(BaseModule):
                  ]):
         super(NonLinearNeck, self).__init__(init_cfg)
         self.with_avg_pool = with_avg_pool
+        self.vit_backbone = vit_backbone
         if with_avg_pool:
             self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.relu = nn.ReLU(inplace=True)
@@ -90,6 +92,8 @@ class NonLinearNeck(BaseModule):
     def forward(self, x):
         assert len(x) == 1
         x = x[0]
+        if self.vit_backbone:
+            x = x[-1]
         if self.with_avg_pool:
             x = self.avgpool(x)
         x = x.view(x.size(0), -1)

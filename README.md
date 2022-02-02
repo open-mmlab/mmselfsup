@@ -66,7 +66,7 @@ This project is released under the [Apache 2.0 license](LICENSE).
 
 ## ChangeLog
 
-MMSelfSup **v0.5.0** was released with refactor in 16/12/2021.
+MMSelfSup **v0.6.0** was released in 02/02/2022.
 
 Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
 
@@ -91,6 +91,7 @@ Supported algorithms:
 - [x] [SwAV (NeurIPS'2020)](https://arxiv.org/abs/2006.09882)
 - [x] [DenseCL (CVPR'2021)](https://arxiv.org/abs/2011.09157)
 - [x] [SimSiam (CVPR'2021)](https://arxiv.org/abs/2011.10566)
+- [x] [MoCo v3 (ICCV'2021)](https://arxiv.org/abs/2104.02057)
 
 More algorithms are in our plan.
 
