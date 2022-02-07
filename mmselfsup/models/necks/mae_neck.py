@@ -5,6 +5,7 @@ from mmcv.cnn import build_norm_layer
 from mmcv.runner import BaseModule
 
 from ..builder import NECKS
+from ..utils import build_2d_sincos_position_embedding
 
 
 @NECKS.register_module()
@@ -74,6 +75,30 @@ class MAEPretrainDecoder(BaseModule):
         self.add_module(self.decoder_norm_name, decoder_norm)
         self.decoder_pred = nn.Linear(
             decoder_embed_dim, patch_size**2 * in_chans, bias=True)
+
+    def init_weights(self):
+        super(MAEPretrainDecoder, self).init_weights()
+
+        # initialize position embedding of MAE decoder
+        decoder_pos_embed = build_2d_sincos_position_embedding(
+            int(self.num_patches**.5),
+            self.decoder_pos_embed.shape[-1],
+            cls_token=True)
+        self.decoder_pos_embed.data.copy_(decoder_pos_embed.float())
+
+        torch.nn.init.normal_(self.mask_token, std=.02)
+
+        self.apply(self._init_weights)
+
+    def _init_weights(self, m):
+        
+        if isinstance(m, nn.Linear):
+            torch.nn.init.xavier_uniform_(m.weight)
+            if isinstance(m, nn.Linear) and m.bias is not None:
+                nn.init.constant_(m.bias, 0)
+        elif isinstance(m, nn.LayerNorm):
+            nn.init.constant_(m.bias, 0)
+            nn.init.constant_(m.weight, 1.0)
 
     @property
     def decoder_norm(self):
