@@ -70,7 +70,7 @@ bash tools/benchmarks/classification/slurm_train_linear.sh ${PARTITION} ${JOB_NA
 ```
 
 Remarks:
-- The default GPU number is 8. When changing GPUS, please also change imgs_per_gpu in the config file accordingly to ensure the total batch size is 256.
+- The default GPU number is 8. When changing GPUS, please also change samples_per_gpu in the config file accordingly to ensure the total batch size is 256.
 - `CONFIG`: Use config files under `configs/benchmarks/classification/`, excluding svm_voc07.py and tsne_imagenet.py and imagenet_*percent folders.
 - `PRETRAIN`: the pretrained model file.
 

@@ -154,14 +154,14 @@ When there is not enough computation resource, the batch size can only be set to
 Here is an example:
 
 ```python
-data = dict(imgs_per_gpu=64)
+data = dict(samples_per_gpu=64)
 optimizer_config = dict(type="DistOptimizerHook", update_interval=4)
 ```
 
 Indicates that during training, back-propagation is performed every 4 iters. And the above is equivalent to:
 
 ```python
-data = dict(imgs_per_gpu=256)
+data = dict(samples_per_gpu=256)
 optimizer_config = dict(type="OptimizerHook")
 ```
 

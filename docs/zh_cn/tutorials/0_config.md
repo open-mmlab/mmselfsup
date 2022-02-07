@@ -207,7 +207,7 @@ if not prefetch:
 
 # dataset summary
 data = dict(
-    imgs_per_gpu=32,  # Batch size of a single GPU, total 32*8=256
+    samples_per_gpu=32,  # Batch size of a single GPU, total 32*8=256
     workers_per_gpu=4,  # Worker to pre-fetch data for each single GPU
     drop_last=True,  # Whether to drop the last batch of data
     train=dict(
@@ -304,7 +304,7 @@ if not prefetch:
 
 # dataset summary
 data = dict(
-    imgs_per_gpu=32,
+    samples_per_gpu=32,
     workers_per_gpu=4,
     drop_last=True,
     train=dict(type=dataset_type, type=data_source, data_prefix=...),

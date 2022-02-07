@@ -154,14 +154,14 @@ optimizer_config = dict(grad_clip=dict(max_norm=35, norm_type=2))
 用例如下：
 
 ```python
-data = dict(imgs_per_gpu=64)
+data = dict(samples_per_gpu=64)
 optimizer_config = dict(type="DistOptimizerHook", update_interval=4)
 ```
 
 表示训练时，每 4 个 iter 执行一次反向传播。由于此时单张 GPU 上的批次大小为 64，也就等价于单张 GPU 上一次迭代的批次大小为 256，也即：
 
 ```python
-data = dict(imgs_per_gpu=256)
+data = dict(samples_per_gpu=256)
 optimizer_config = dict(type="OptimizerHook")
 ```
 
