@@ -42,8 +42,8 @@ optimizer = dict(
     paramwise_options={
         'norm': dict(weight_decay=0.),
         'bias': dict(weight_decay=0.),
-        'pos_embed': dict(weight_decay=0.003697205891018715),
-        'cls_token': dict(weight_decay=0.003697205891018715),
+        'pos_embed': dict(weight_decay=0., lr_mult=0.003697205891018715),
+        'cls_token': dict(weight_decay=0., lr_mult=0.003697205891018715),
         'patch_embed': dict(lr_mult=0.003697205891018715),
         '\\.0\\.': dict(lr_mult=0.005688009063105715),
         '\\.1\\.': dict(lr_mult=0.008750783174008792),
