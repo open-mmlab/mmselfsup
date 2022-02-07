@@ -7,7 +7,7 @@ from ..utils import build_2d_sincos_position_embedding
 from .base import BaseModel
 
 
-@ALGORITHMS.register_module('MAE')
+@ALGORITHMS.register_module()
 class MAE(BaseModel):
     """MAE.
 
