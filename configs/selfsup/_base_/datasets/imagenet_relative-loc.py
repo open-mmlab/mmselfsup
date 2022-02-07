@@ -21,7 +21,7 @@ prefetch = False
 
 # dataset summary
 data = dict(
-    imgs_per_gpu=64,  # 64 x 8 = 512
+    samples_per_gpu=64,  # 64 x 8 = 512
     workers_per_gpu=4,
     train=dict(
         type=dataset_type,

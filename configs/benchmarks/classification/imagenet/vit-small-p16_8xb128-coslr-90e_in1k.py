@@ -9,7 +9,7 @@ _base_ = [
 model = dict(backbone=dict(frozen_stages=12, norm_eval=True))
 
 # dataset summary
-data = dict(imgs_per_gpu=128)  # total 128*8=1024, 8 GPU linear cls
+data = dict(samples_per_gpu=128)  # total 128*8=1024, 8 GPU linear cls
 
 # optimizer
 optimizer = dict(type='SGD', lr=12, momentum=0.9, weight_decay=0.)

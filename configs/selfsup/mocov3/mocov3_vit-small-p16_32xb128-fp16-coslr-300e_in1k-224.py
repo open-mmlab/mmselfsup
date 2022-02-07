@@ -58,7 +58,8 @@ if not prefetch:
 
 # dataset summary
 data = dict(
-    imgs_per_gpu=128, train=dict(pipelines=[train_pipeline1, train_pipeline2]))
+    samples_per_gpu=128,
+    train=dict(pipelines=[train_pipeline1, train_pipeline2]))
 
 # MoCo v3 use the same momentum update method as BYOL
 custom_hooks = [dict(type='MomentumUpdateHook')]
