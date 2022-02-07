@@ -64,10 +64,10 @@ def build_dataloader(dataset,
 
     Args:
         dataset (Dataset): A PyTorch dataset.
-        imgs_per_gpu (int): Number of images on each GPU, i.e., batch size of
-            each GPU. (Deprecated, please use samples_per_gpu)
+        imgs_per_gpu (int): (Deprecated, please use samples_per_gpu) Number of
+            images on each GPU, i.e., batch size of each GPU. Defaults to None.
         samples_per_gpu (int): Number of images on each GPU, i.e., batch size
-            of each GPU.
+            of each GPU. Defaults to None.
         workers_per_gpu (int): How many subprocesses to use for data loading
             for each GPU. 0 means that the data will be loaded in the main
             process. Defaults to 0.
@@ -94,7 +94,7 @@ def build_dataloader(dataset,
         raise ValueError(
             'Please inidcate number of images on each GPU, ',
             '"imgs_per_gpu" and "samples_per_gpu" can not be "None" at the ',
-            'same time. "imgs_per_gpu" is deprecated please use ',
+            'same time. "imgs_per_gpu" is deprecated, please use ',
             '"samples_per_gpu".')
 
     if imgs_per_gpu is not None:
