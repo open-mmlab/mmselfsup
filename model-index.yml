@@ -2,7 +2,9 @@ Import:
   - configs/selfsup/byol/metafile.yml
   - configs/selfsup/deepcluster/metafile.yml
   - configs/selfsup/densecl/metafile.yml
-  - configs/selfsup/moco/metafile.yml
+  - configs/selfsup/mocov1/metafile.yml
+  - configs/selfsup/mocov2/metafile.yml
+  - configs/selfsup/mocov3/metafile.yml
   - configs/selfsup/npid/metafile.yml
   - configs/selfsup/odc/metafile.yml
   - configs/selfsup/relative_loc/metafile.yml
