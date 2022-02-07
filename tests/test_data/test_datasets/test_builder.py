@@ -3,7 +3,7 @@ from unittest.mock import ANY
 import pytest
 
 from mmselfsup.datasets import (ConcatDataset, DeepClusterDataset,
-                                RepeatDataset, build_dataset, build_dataloader)
+                                RepeatDataset, build_dataloader, build_dataset)
 
 DATASET_CONFIG = dict(
     type='DeepClusterDataset',
