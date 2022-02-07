@@ -1,5 +1,7 @@
 import torch
+from torch import nn
 from mmcls.models import VisionTransformer
+from ..utils import build_2d_sincos_position_embedding
 
 from ..builder import BACKBONES
 
@@ -62,7 +64,33 @@ class MAEViT(VisionTransformer):
         self.mask_ratio = mask_ratio
 
     def init_weights(self):
-        pass
+        super(MAEViT, self).init_weights()
+        if not (isinstance(self.init_cfg, dict)
+                and self.init_cfg['type'] == 'Pretrained'):
+            # initialize position  embedding in backbone
+            pos_embed = build_2d_sincos_position_embedding(
+                int(self.patch_embed.num_patches**.5),
+                self.pos_embed.shape[-1],
+                cls_token=True)
+            self.pos_embed.data.copy_(pos_embed.float())
+
+            w = self.patch_embed.projection.weight.data
+            torch.nn.init.xavier_uniform_(w.view([w.shape[0], -1]))
+
+            torch.nn.init.normal_(self.cls_token, std=.02)
+
+            self.apply(self._init_weights)
+
+    
+    def _init_weights(self, m):
+        
+        if isinstance(m, nn.Linear):
+            torch.nn.init.xavier_uniform_(m.weight)
+            if isinstance(m, nn.Linear) and m.bias is not None:
+                nn.init.constant_(m.bias, 0)
+        elif isinstance(m, nn.LayerNorm):
+            nn.init.constant_(m.bias, 0)
+            nn.init.constant_(m.weight, 1.0)
 
     def random_masking(self, x, mask_ratio=0.75):
         """Generate the mask for MAE Pre-training.
