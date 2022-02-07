@@ -5,8 +5,9 @@ import torch.distributed as dist
 from mmcv.runner import HOOKS, Hook
 from mmcv.utils import print_log
 
-from mmselfsup.utils import Extractor, get_root_logger
+from mmselfsup.utils import Extractor
 from mmselfsup.utils import clustering as _clustering
+from mmselfsup.utils import get_root_logger
 
 
 @HOOKS.register_module()
