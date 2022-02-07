@@ -1,6 +1,6 @@
 # NPID
 
-[Unsupervised Feature Learning via Non-Parametric Instance Discrimination](https://arxiv.org/abs/1805.01978)
+> [Unsupervised Feature Learning via Non-Parametric Instance Discrimination](https://arxiv.org/abs/1805.01978)
 
 <!-- [ALGORITHM] -->
 
@@ -12,7 +12,6 @@ We formulate this intuition as a non-parametric classification problem at the in
 
 Our method is also remarkable for consistently improving test performance with more training data and better network architectures. By fine-tuning the learned feature, we further obtain competitive results for semi-supervised learning and object detection tasks. Our non-parametric model is highly compact: With 128 features per image, our method requires only 600MB storage for a million images, enabling fast nearest neighbour retrieval at the run time.
 
-<!-- [IMAGE] -->
 <div align="center">
 <img  src="https://user-images.githubusercontent.com/36138628/149722257-1651c283-ac68-4cdc-90e6-970d820529af.png" width="800" />
 </div>

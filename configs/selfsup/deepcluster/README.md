@@ -1,13 +1,13 @@
 # DeepCluster
 
-[Deep Clustering for Unsupervised Learning of Visual Features](https://arxiv.org/abs/1807.05520)
+> [Deep Clustering for Unsupervised Learning of Visual Features](https://arxiv.org/abs/1807.05520)
 
 <!-- [ALGORITHM] -->
+
 ## Abstract
 
 Clustering is a class of unsupervised learning methods that has been extensively applied and studied in computer vision. Little work has been done to adapt it to the end-to-end training of visual features on large scale datasets. In this work, we present DeepCluster, a clustering method that jointly learns the parameters of a neural network and the cluster assignments of the resulting features. DeepCluster iteratively groups the features with a standard clustering algorithm, k-means, and uses the subsequent assignments as supervision to update the weights of the network.
 
-<!-- [IMAGE] -->
 <div align="center">
 <img src="https://user-images.githubusercontent.com/36138628/149720586-5bfd213e-0638-47fc-b48a-a16689190e17.png" width="700" />
 </div>

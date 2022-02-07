@@ -1,13 +1,13 @@
 # BYOL
 
-[Bootstrap your own latent: A new approach to self-supervised Learning](https://arxiv.org/abs/2006.07733)
+> [Bootstrap your own latent: A new approach to self-supervised Learning](https://arxiv.org/abs/2006.07733)
 
 <!-- [ALGORITHM] -->
 
 ## Abstract
+
 **B**ootstrap **Y**our **O**wn **L**atent (BYOL) is a new approach to self-supervised image representation learning. BYOL relies on two neural networks, referred to as online and target networks, that interact and learn from each other. From an augmented view of an image, we train the online network to predict the target network representation of the same image under a different augmented view. At the same time, we update the target network with a slow-moving average of the online network.
 
-<!-- [IMAGE] -->
 <div align="center">
 <img src="https://user-images.githubusercontent.com/36138628/149720208-5ffbee78-1437-44c7-9ddb-b8caab60d2c3.png" width="800" />
 </div>

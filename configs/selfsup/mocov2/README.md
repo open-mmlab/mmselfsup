@@ -1,13 +1,13 @@
 # MoCo v2
 
-[Improved Baselines with Momentum Contrastive Learning](https://arxiv.org/abs/2003.04297)
+> [Improved Baselines with Momentum Contrastive Learning](https://arxiv.org/abs/2003.04297)
 
 <!-- [ALGORITHM] -->
 
 ## Abstract
+
 Contrastive unsupervised learning has recently shown encouraging progress, e.g., in Momentum Contrast (MoCo) and SimCLR. In this note, we verify the effectiveness of two of SimCLR’s design improvements by implementing them in the MoCo framework. With simple modifications to MoCo—namely, using an MLP projection head and more data augmentation—we establish stronger baselines that outperform SimCLR and do not require large training batches. We hope this will make state-of-the-art unsupervised learning research more accessible.
 
-<!-- [IMAGE] -->
 <div align="center">
 <img  src="https://user-images.githubusercontent.com/36138628/149720067-b65e5736-d425-45b3-93ed-6f2427fc6217.png" width="500" />
 </div>
