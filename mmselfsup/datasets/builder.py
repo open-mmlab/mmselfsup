@@ -48,7 +48,7 @@ def build_dataset(cfg, default_args=None):
 def build_dataloader(dataset,
                      imgs_per_gpu=None,
                      samples_per_gpu=None,
-                     workers_per_gpu=0,
+                     workers_per_gpu=1,
                      num_gpus=1,
                      dist=True,
                      shuffle=True,
@@ -69,8 +69,8 @@ def build_dataloader(dataset,
         samples_per_gpu (int): Number of images on each GPU, i.e., batch size
             of each GPU. Defaults to None.
         workers_per_gpu (int): How many subprocesses to use for data loading
-            for each GPU. 0 means that the data will be loaded in the main
-            process. Defaults to 0.
+            for each GPU. `persistent_workers` option needs num_workers > 0.
+            Defaults to 1.
         num_gpus (int): Number of GPUs. Only used in non-distributed training.
         dist (bool): Distributed training/test or not. Defaults to True.
         shuffle (bool): Whether to shuffle the data at every epoch.

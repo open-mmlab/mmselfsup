@@ -3,7 +3,7 @@ from unittest.mock import ANY
 import pytest
 
 from mmselfsup.datasets import (ConcatDataset, DeepClusterDataset,
-                                RepeatDataset, build_dataset)
+                                RepeatDataset, build_dataset, build_dataloader)
 
 DATASET_CONFIG = dict(
     type='DeepClusterDataset',
@@ -50,3 +50,19 @@ DATASET_CONFIG = dict(
 ])
 def test_build_dataset(cfg, expected_type):
     assert isinstance(build_dataset(cfg), expected_type)
+
+
+def test_build_dataloader():
+    dataset = build_dataset(DATASET_CONFIG)
+
+    with pytest.raises(ValueError):
+        data_loader = build_dataloader(dataset)
+
+    data_loader = build_dataloader(
+        dataset,
+        imgs_per_gpu=1,
+        samples_per_gpu=None,
+        dist=False,
+    )
+    assert len(data_loader) == 2
+    assert data_loader.batch_size == 1
