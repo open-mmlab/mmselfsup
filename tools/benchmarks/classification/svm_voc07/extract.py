@@ -96,9 +96,23 @@ def main():
     # build the dataloader
     dataset_cfg = mmcv.Config.fromfile(args.dataset_config)
     dataset = build_dataset(dataset_cfg.data.extract)
+    if 'imgs_per_gpu' in cfg.data:
+        logger.warning('"imgs_per_gpu" is deprecated. '
+                       'Please use "samples_per_gpu" instead')
+        if 'samples_per_gpu' in cfg.data:
+            logger.warning(
+                f'Got "imgs_per_gpu"={cfg.data.imgs_per_gpu} and '
+                f'"samples_per_gpu"={cfg.data.samples_per_gpu}, "imgs_per_gpu"'
+                f'={cfg.data.imgs_per_gpu} is used in this experiments')
+        else:
+            logger.warning(
+                'Automatically set "samples_per_gpu"="imgs_per_gpu"='
+                f'{cfg.data.imgs_per_gpu} in this experiments')
+        cfg.data.samples_per_gpu = cfg.data.imgs_per_gpu
+
     data_loader = build_dataloader(
         dataset,
-        imgs_per_gpu=dataset_cfg.data.imgs_per_gpu,
+        samples_per_gpu=dataset_cfg.data.samples_per_gpu,
         workers_per_gpu=dataset_cfg.data.workers_per_gpu,
         dist=distributed,
         shuffle=False)

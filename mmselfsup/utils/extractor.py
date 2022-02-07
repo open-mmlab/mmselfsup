@@ -11,8 +11,8 @@ class Extractor(object):
     Args:
         dataset (Dataset | dict): A PyTorch dataset or dict that indicates
             the dataset.
-        imgs_per_gpu (int): Number of images on each GPU, i.e., batch size of
-            each GPU.
+        samples_per_gpu (int): Number of images on each GPU, i.e., batch size
+            of each GPU.
         workers_per_gpu (int): How many subprocesses to use for data loading
             for each GPU.
         dist_mode (bool): Use distributed extraction or not. Defaults to False.
@@ -25,7 +25,7 @@ class Extractor(object):
 
     def __init__(self,
                  dataset,
-                 imgs_per_gpu,
+                 samples_per_gpu,
                  workers_per_gpu,
                  dist_mode=False,
                  persistent_workers=True,
@@ -40,8 +40,8 @@ class Extractor(object):
                             f'not {type(dataset)}')
         self.data_loader = datasets.build_dataloader(
             self.dataset,
-            imgs_per_gpu,
-            workers_per_gpu,
+            samples_per_gpu=samples_per_gpu,
+            workers_per_gpu=workers_per_gpu,
             dist=dist_mode,
             shuffle=False,
             persistent_workers=persistent_workers,

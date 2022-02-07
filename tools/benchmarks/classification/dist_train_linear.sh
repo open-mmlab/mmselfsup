@@ -6,7 +6,7 @@ set -x
 CFG=$1  # use cfgs under "configs/benchmarks/classification/imagenet/*.py"
 PRETRAIN=$2  # pretrained model
 PY_ARGS=${@:3}
-GPUS=${GPUS:-8}  # When changing GPUS, please also change imgs_per_gpu in the config file accordingly to ensure the total batch size is 256.
+GPUS=${GPUS:-8}  # When changing GPUS, please also change samples_per_gpu in the config file accordingly to ensure the total batch size is 256.
 PORT=${PORT:-29500}
 
 # set work_dir according to config path and pretrained model to distinguish different models
