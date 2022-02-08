@@ -91,7 +91,7 @@ class MAEPretrainDecoder(BaseModule):
         self.apply(self._init_weights)
 
     def _init_weights(self, m):
-        
+
         if isinstance(m, nn.Linear):
             torch.nn.init.xavier_uniform_(m.weight)
             if isinstance(m, nn.Linear) and m.bias is not None:
