@@ -27,7 +27,6 @@ class MAE(BaseModel):
         assert head is not None
         self.head = build_head(head)
 
-    
     def init_weights(self):
         super(MAE, self).init_weights()
 
