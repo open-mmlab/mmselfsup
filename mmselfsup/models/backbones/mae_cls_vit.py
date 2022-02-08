@@ -68,15 +68,6 @@ class MAEClsViT(VisionTransformer):
         if not self.finetune:
             self._freeze_stages()
 
-    def _init_weights(self, m):
-        if isinstance(m, nn.Linear):
-            nn.init.xavier_uniform_(m.weight)
-            if isinstance(m, nn.Linear) and m.bias is not None:
-                nn.init.constant_(m.bias, 0)
-        elif isinstance(m, nn.LayerNorm):
-            nn.init.constant_(m.bias, 0)
-            nn.init.constant_(m.weight, 1.0)
-
     def train(self, mode=True):
         super(MAEClsViT, self).train(mode)
         if not self.finetune:
