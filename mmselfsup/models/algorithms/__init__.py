@@ -1,4 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from .barlowtwins import BarlowTwins
 from .base import BaseModel
 from .byol import BYOL
 from .classification import Classification
@@ -16,7 +17,7 @@ from .simsiam import SimSiam
 from .swav import SwAV
 
 __all__ = [
-    'BaseModel', 'BYOL', 'Classification', 'DeepCluster', 'DenseCL', 'MoCo',
-    'NPID', 'ODC', 'RelativeLoc', 'RotationPred', 'SimCLR', 'SimSiam', 'SwAV',
-    'MAE', 'MoCoV3'
+    'BaseModel', 'BarlowTwins', 'BYOL', 'Classification', 'DeepCluster',
+    'DenseCL', 'MoCo', 'NPID', 'ODC', 'RelativeLoc', 'RotationPred', 'SimCLR',
+    'SimSiam', 'SwAV', 'MAE', 'MoCoV3'
 ]

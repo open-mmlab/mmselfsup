@@ -74,3 +74,42 @@ class LatentClsHead(BaseModule):
             label = torch.argmax(self.predictor(target), dim=1).detach()
         loss = self.criterion(pred, label)
         return dict(loss=loss)
+
+
+@HEADS.register_module()
+class LatentCrossCorrelationHead(BaseModule):
+    """Head for latent feature cross correlation.
+
+    Args:
+        in_channels (int): Number of input channels.
+    """
+
+    def __init__(self, in_channels, lambd=0.0051):
+        super(LatentCrossCorrelationHead, self).__init__()
+        self.lambd = lambd
+        self.bn = nn.BatchNorm1d(in_channels, affine=False)
+
+    def forward(self, input, target):
+        """Forward head.
+
+        Args:
+            input (Tensor): NxC input features.
+            target (Tensor): NxC target features.
+
+        Returns:
+            dict[str, Tensor]: A dictionary of loss components.
+        """
+
+        def off_diagonal(x):
+            # return a flattened view of the off-diagonal elements of
+            # a square matrix
+            n, m = x.shape
+            assert n == m
+            return x.flatten()[:-1].view(n - 1, n + 1)[:, 1:].flatten()
+
+        c = self.bn(input).T @ self.bn(target)
+        c.div_(input.size(0))
+        on_diag = torch.diagonal(c).add_(-1).pow_(2).sum()
+        off_diag = off_diagonal(c).pow_(2).sum()
+        loss = on_diag + self.lambd * off_diag
+        return dict(loss=loss)
