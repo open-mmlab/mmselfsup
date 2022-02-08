@@ -23,6 +23,8 @@ class DefaultOptimizerConstructor:
                   lr, weight_decay, momentum, etc.
         paramwise_cfg (dict, optional): Parameter-wise options.
             Defaults to None
+        layer_decay (float): base value for layer wise learning rate decay.
+            Defaults to 0.0
 
     Example 1:
         >>> model = torch.nn.modules.Conv1d(1, 1, 1)
@@ -35,18 +37,24 @@ class DefaultOptimizerConstructor:
         >>> optimizer = optim_builder(model)
     """
 
-    def __init__(self, optimizer_cfg, paramwise_cfg=None):
+    def __init__(self, optimizer_cfg, paramwise_cfg=None, layer_decay=0.0):
         if not isinstance(optimizer_cfg, dict):
             raise TypeError('optimizer_cfg should be a dict',
                             f'but got {type(optimizer_cfg)}')
         self.optimizer_cfg = optimizer_cfg
         self.paramwise_cfg = {} if paramwise_cfg is None else paramwise_cfg
+        self.layer_decay = layer_decay
 
     def __call__(self, model):
         if hasattr(model, 'module'):
             model = model.module
         optimizer_cfg = self.optimizer_cfg.copy()
         paramwise_options = self.paramwise_cfg
+
+        # generate layer-wise lr decay
+        if self.layer_decay > 0:
+            self._generate_layer_wise_lr_decay(model, paramwise_options)
+
         # if no paramwise option is specified, just use the global setting
         if paramwise_options is None:
             optimizer_cfg['params'] = model.parameters()
@@ -79,3 +87,31 @@ class DefaultOptimizerConstructor:
 
             optimizer_cfg['params'] = params
             return build_from_cfg(optimizer_cfg, OPTIMIZERS)
+
+    def _generate_layer_wise_lr_decay(self, model, paramwise_options):
+        """Currently, we follow the same layer-wise lr decay schedule as MAE."""
+        num_layers = len(model.backbone.layers) + 1
+        layer_scales = list(self.layer_decay ** (num_layers - i) \
+                    for i in range(num_layers + 1))
+
+        if 'pos_embed' in  paramwise_options:
+            paramwise_options['pos_embed'].update(dict(lr_mult=layer_scales[0]))
+        else:
+            paramwise_options['pos_embed'] = dict(lr_mult=layer_scales[0])
+        
+        if 'cls_token' in  paramwise_options:
+            paramwise_options['cls_token'].update(dict(lr_mult=layer_scales[0]))
+        else:
+            paramwise_options['cls_token'] = dict(lr_mult=layer_scales[0])
+
+        if 'patch_embed' in  paramwise_options:
+            paramwise_options['patch_embed'].update(dict(lr_mult=layer_scales[0]))
+        else:
+            paramwise_options['patch_embed'] = dict(lr_mult=layer_scales[0])
+
+        for i in range(num_layers-1):
+            paramwise_options[f'\\.{i}.\\'] = dict(lr_mult=layer_scales[i+1])
+
+        
+        
+
