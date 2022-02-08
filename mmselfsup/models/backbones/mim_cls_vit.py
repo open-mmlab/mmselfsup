@@ -8,7 +8,7 @@ from ..builder import BACKBONES
 @BACKBONES.register_module()
 class MIMVisionTransformer(VisionTransformer):
     """Vision Transformer for MIM-style model (Mask Image Modeling)
-       classification (fine-tuning or linear probe).
+    classification (fine-tuning or linear probe).
 
     A PyTorch implement of : `An Image is Worth 16x16 Words: Transformers
     for Image Recognition at Scale <https://arxiv.org/abs/2010.11929>`_
@@ -74,7 +74,7 @@ class MIMVisionTransformer(VisionTransformer):
             self._freeze_stages()
 
     def _freeze_stages(self):
-        """Freeze params in backbone when linear probing"""
+        """Freeze params in backbone when linear probing."""
         for _, param in self.named_parameters():
             param.requires_grad = False
 

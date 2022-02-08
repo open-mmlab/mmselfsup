@@ -1,9 +1,9 @@
 import torch
-from torch import nn
 from mmcls.models import VisionTransformer
-from ..utils import build_2d_sincos_position_embedding
+from torch import nn
 
 from ..builder import BACKBONES
+from ..utils import build_2d_sincos_position_embedding
 
 
 @BACKBONES.register_module()
@@ -81,9 +81,8 @@ class MAEViT(VisionTransformer):
 
             self.apply(self._init_weights)
 
-    
     def _init_weights(self, m):
-        
+
         if isinstance(m, nn.Linear):
             torch.nn.init.xavier_uniform_(m.weight)
             if isinstance(m, nn.Linear) and m.bias is not None:
