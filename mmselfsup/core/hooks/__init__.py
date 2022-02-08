@@ -6,9 +6,10 @@ from .odc_hook import ODCHook
 from .optimizer_hook import DistOptimizerHook, GradAccumFp16OptimizerHook
 from .simsiam_hook import SimSiamHook
 from .swav_hook import SwAVHook
+from .cosineAnnealing_hook  import StepFixCosineAnnealingLrUpdaterHook
 
 __all__ = [
     'MomentumUpdateHook', 'DeepClusterHook', 'DenseCLHook', 'ODCHook',
     'DistOptimizerHook', 'GradAccumFp16OptimizerHook', 'SimSiamHook',
-    'SwAVHook'
+    'SwAVHook', 'StepFixCosineAnnealingLrUpdaterHook'
 ]

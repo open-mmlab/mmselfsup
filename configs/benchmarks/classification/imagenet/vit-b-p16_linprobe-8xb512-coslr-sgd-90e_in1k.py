@@ -34,7 +34,7 @@ optimizer = dict(lr=0.1 * 4096 / 256, weight_decay=0.0)
 
 # learning policy
 lr_config = dict(
-    policy='CosineAnnealing',
+    policy='StepFixCosineAnnealing',
     min_lr=0,
     warmup='linear',
     warmup_iters=10,
