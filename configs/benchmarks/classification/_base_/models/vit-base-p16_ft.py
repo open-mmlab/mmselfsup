@@ -1,7 +1,7 @@
 model = dict(
     type='Classification',
     backbone=dict(
-        type='MAEClsViT',
+        type='MIMVisionTransformer',
         arch='b',
         patch_size=16,
         drop_path_rate=0.1,
