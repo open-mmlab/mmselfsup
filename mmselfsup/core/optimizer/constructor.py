@@ -114,4 +114,4 @@ class DefaultOptimizerConstructor:
             paramwise_options['patch_embed'] = dict(lr_mult=layer_scales[0])
 
         for i in range(num_layers - 1):
-            paramwise_options[f'\\.{i}.\\'] = dict(lr_mult=layer_scales[i + 1])
+            paramwise_options[f'backbone\\.layers\\.{i}\\.'] = dict(lr_mult=layer_scales[i + 1])
