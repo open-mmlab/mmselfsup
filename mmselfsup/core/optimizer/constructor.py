@@ -89,29 +89,29 @@ class DefaultOptimizerConstructor:
             return build_from_cfg(optimizer_cfg, OPTIMIZERS)
 
     def _generate_layer_wise_lr_decay(self, model, paramwise_options):
-        """Currently, we follow the same layer-wise lr decay schedule as MAE."""
+        """Currently, we follow the same layer-wise lr decay schedule as
+        MAE."""
         num_layers = len(model.backbone.layers) + 1
-        layer_scales = list(self.layer_decay ** (num_layers - i) \
-                    for i in range(num_layers + 1))
+        layer_scales = list(self.layer_decay**(num_layers - i)
+                            for i in range(num_layers + 1))
 
-        if 'pos_embed' in  paramwise_options:
-            paramwise_options['pos_embed'].update(dict(lr_mult=layer_scales[0]))
+        if 'pos_embed' in paramwise_options:
+            paramwise_options['pos_embed'].update(
+                dict(lr_mult=layer_scales[0]))
         else:
             paramwise_options['pos_embed'] = dict(lr_mult=layer_scales[0])
-        
-        if 'cls_token' in  paramwise_options:
-            paramwise_options['cls_token'].update(dict(lr_mult=layer_scales[0]))
+
+        if 'cls_token' in paramwise_options:
+            paramwise_options['cls_token'].update(
+                dict(lr_mult=layer_scales[0]))
         else:
             paramwise_options['cls_token'] = dict(lr_mult=layer_scales[0])
 
-        if 'patch_embed' in  paramwise_options:
-            paramwise_options['patch_embed'].update(dict(lr_mult=layer_scales[0]))
+        if 'patch_embed' in paramwise_options:
+            paramwise_options['patch_embed'].update(
+                dict(lr_mult=layer_scales[0]))
         else:
             paramwise_options['patch_embed'] = dict(lr_mult=layer_scales[0])
 
-        for i in range(num_layers-1):
-            paramwise_options[f'\\.{i}.\\'] = dict(lr_mult=layer_scales[i+1])
-
-        
-        
-
+        for i in range(num_layers - 1):
+            paramwise_options[f'\\.{i}.\\'] = dict(lr_mult=layer_scales[i + 1])
