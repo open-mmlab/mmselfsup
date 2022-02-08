@@ -22,7 +22,7 @@ optimizer_config = dict()
 
 # learning policy
 lr_config = dict(
-    policy='CosineAnnealing',
+    policy='StepFixCosineAnnealing',
     min_lr=0.0,
     warmup='linear',
     warmup_iters=40,
