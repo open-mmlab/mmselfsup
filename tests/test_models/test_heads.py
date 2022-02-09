@@ -103,7 +103,7 @@ def test_mae_linprobe_head():
 
     fake_features = head.forward(fake_input)
 
-    assert list(fake_features.shape) == [2, 1000]
+    assert list(fake_features[0].shape) == [2, 1000]
 
     loss = head.loss(fake_features, fake_labels)
 
@@ -115,10 +115,9 @@ def test_mae_finetune_head():
     head = MAEFinetuneHead(num_classes=1000, embed_dim=768)
     fake_input = torch.rand((2, 768))
     fake_labels = F.normalize(torch.rand((2, 1000)), dim=-1)
-
     fake_features = head.forward(fake_input)
 
-    assert list(fake_features.shape) == [2, 1000]
+    assert list(fake_features[0].shape) == [2, 1000]
 
     loss = head.loss(fake_features, fake_labels)
 
