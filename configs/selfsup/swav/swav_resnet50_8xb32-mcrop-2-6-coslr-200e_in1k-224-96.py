@@ -13,7 +13,7 @@ custom_hooks = [
     dict(
         type='SwAVHook',
         priority='VERY_HIGH',
-        batch_size={{_base_.data.imgs_per_gpu}},
+        batch_size={{_base_.data.samples_per_gpu}},
         epoch_queue_starts=15,
         crops_for_assign=[0, 1],
         feat_dim=128,

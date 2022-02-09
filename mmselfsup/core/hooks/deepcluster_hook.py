@@ -7,6 +7,7 @@ from mmcv.utils import print_log
 
 from mmselfsup.utils import Extractor
 from mmselfsup.utils import clustering as _clustering
+from mmselfsup.utils import get_root_logger
 
 
 @HOOKS.register_module()
@@ -41,6 +42,23 @@ class DeepClusterHook(Hook):
             interval=1,
             dist_mode=True,
             data_loaders=None):
+
+        logger = get_root_logger()
+        if 'imgs_per_gpu' in extractor:
+            logger.warning('"imgs_per_gpu" is deprecated. '
+                           'Please use "samples_per_gpu" instead')
+            if 'samples_per_gpu' in extractor:
+                logger.warning(
+                    f'Got "imgs_per_gpu"={extractor["imgs_per_gpu"]} and '
+                    f'"samples_per_gpu"={extractor["samples_per_gpu"]}, '
+                    f'"imgs_per_gpu"={extractor["imgs_per_gpu"]} is used in '
+                    f'this experiments')
+            else:
+                logger.warning(
+                    'Automatically set "samples_per_gpu"="imgs_per_gpu"='
+                    f'{extractor["imgs_per_gpu"]} in this experiments')
+            extractor['samples_per_gpu'] = extractor['imgs_per_gpu']
+
         self.extractor = Extractor(dist_mode=dist_mode, **extractor)
         self.clustering_type = clustering.pop('type')
         self.clustering_cfg = clustering

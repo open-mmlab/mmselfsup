@@ -1,6 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import platform
 import random
+import warnings
 from functools import partial
 
 import numpy as np
@@ -45,8 +46,9 @@ def build_dataset(cfg, default_args=None):
 
 
 def build_dataloader(dataset,
-                     imgs_per_gpu,
-                     workers_per_gpu,
+                     imgs_per_gpu=None,
+                     samples_per_gpu=None,
+                     workers_per_gpu=1,
                      num_gpus=1,
                      dist=True,
                      shuffle=True,
@@ -62,10 +64,13 @@ def build_dataloader(dataset,
 
     Args:
         dataset (Dataset): A PyTorch dataset.
-        imgs_per_gpu (int): Number of images on each GPU, i.e., batch size of
-            each GPU.
+        imgs_per_gpu (int): (Deprecated, please use samples_per_gpu) Number of
+            images on each GPU, i.e., batch size of each GPU. Defaults to None.
+        samples_per_gpu (int): Number of images on each GPU, i.e., batch size
+            of each GPU. Defaults to None.
         workers_per_gpu (int): How many subprocesses to use for data loading
-            for each GPU.
+            for each GPU. `persistent_workers` option needs num_workers > 0.
+            Defaults to 1.
         num_gpus (int): Number of GPUs. Only used in non-distributed training.
         dist (bool): Distributed training/test or not. Defaults to True.
         shuffle (bool): Whether to shuffle the data at every epoch.
@@ -85,18 +90,33 @@ def build_dataloader(dataset,
     Returns:
         DataLoader: A PyTorch dataloader.
     """
+    if imgs_per_gpu is None and samples_per_gpu is None:
+        raise ValueError(
+            'Please inidcate number of images on each GPU, ',
+            '"imgs_per_gpu" and "samples_per_gpu" can not be "None" at the ',
+            'same time. "imgs_per_gpu" is deprecated, please use ',
+            '"samples_per_gpu".')
+
+    if imgs_per_gpu is not None:
+        warnings.warn(f'Got "imgs_per_gpu"={imgs_per_gpu} and '
+                      f'"samples_per_gpu"={samples_per_gpu}, "imgs_per_gpu"'
+                      f'={imgs_per_gpu} is used in this experiments. '
+                      'Automatically set "samples_per_gpu"="imgs_per_gpu"='
+                      f'{imgs_per_gpu} in this experiments')
+        samples_per_gpu = imgs_per_gpu
+
     rank, world_size = get_dist_info()
     if dist:
         sampler = DistributedSampler(
             dataset, world_size, rank, shuffle=shuffle, replace=replace)
         shuffle = False
-        batch_size = imgs_per_gpu
+        batch_size = samples_per_gpu
         num_workers = workers_per_gpu
     else:
         if replace:
             return NotImplemented
         sampler = None  # TODO: set replace
-        batch_size = num_gpus * imgs_per_gpu
+        batch_size = num_gpus * samples_per_gpu
         num_workers = num_gpus * workers_per_gpu
 
     init_fn = partial(
@@ -117,7 +137,7 @@ def build_dataloader(dataset,
         batch_size=batch_size,
         sampler=sampler,
         num_workers=num_workers,
-        collate_fn=partial(collate, samples_per_gpu=imgs_per_gpu),
+        collate_fn=partial(collate, samples_per_gpu=samples_per_gpu),
         pin_memory=pin_memory,
         shuffle=shuffle,
         worker_init_fn=init_fn,

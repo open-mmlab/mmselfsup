@@ -31,7 +31,7 @@ if not prefetch:
 
 # dataset summary
 data = dict(
-    imgs_per_gpu=64,  # 64*8
+    samples_per_gpu=64,  # 64*8
     sampling_replace=True,
     workers_per_gpu=4,
     train=dict(
@@ -50,7 +50,7 @@ custom_hooks = [
     dict(
         type='DeepClusterHook',
         extractor=dict(
-            imgs_per_gpu=128,
+            samples_per_gpu=128,
             workers_per_gpu=8,
             dataset=dict(
                 type=dataset_type,

@@ -51,7 +51,7 @@ if not prefetch:
 
 # dataset summary
 data = dict(
-    imgs_per_gpu=32,  # total 32*8=256
+    samples_per_gpu=32,  # total 32*8=256
     workers_per_gpu=4,
     drop_last=True,
     train=dict(

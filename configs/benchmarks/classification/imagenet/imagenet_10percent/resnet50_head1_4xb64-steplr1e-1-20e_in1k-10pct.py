@@ -10,7 +10,7 @@ model = dict(backbone=dict(norm_cfg=dict(type='SyncBN')))
 
 # dataset settings
 data = dict(
-    imgs_per_gpu=64,  # total 64x4=256
+    samples_per_gpu=64,  # total 64x4=256
     train=dict(
         data_source=dict(ann_file='data/imagenet/meta/train_10pct.txt')))
 

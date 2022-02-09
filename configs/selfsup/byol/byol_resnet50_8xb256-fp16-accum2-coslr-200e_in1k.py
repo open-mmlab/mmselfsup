@@ -6,7 +6,7 @@ _base_ = [
 ]
 
 # dataset summary
-data = dict(imgs_per_gpu=256)
+data = dict(samples_per_gpu=256)
 
 # additional hooks
 # interval for accumulate gradient, total 8*256*2(interval)=4096
