@@ -102,6 +102,9 @@ class BaseDataSource(object, metaclass=ABCMeta):
         else:
             img = self.data_infos[idx]['img']
 
+        img_bytes = self.file_client.get(filename)
+        img = mmcv.imfrombytes(
+            img_bytes, flag=self.color_type, channel_order='rgb')
         img = img.astype(np.uint8)
         return Image.fromarray(img)
 
