@@ -23,7 +23,7 @@
 **注意:**
 - 如果您已经安装了 mmcv, 您需要运行 `pip uninstall mmcv` 来卸载已经安装的 mmcv。 如果您在本地同时安装了 mmcv 和 mmcv-full, `ModuleNotFoundError` 将会抛出。
 - 由于 MMSelfSup 从 MMClassification 引入了部分网络主干，所以您在使用 MMSelfSup 前必须安装 MMClassification。
-- 如果您不需要 MMDetection and MMSegmentation 的基准评测，则安装它们不是必须的。
+- 如果您不需要 MMDetection 和 MMSegmentation 的基准评测，则安装它们不是必须的。
 
 ## 配置环境
 
@@ -59,11 +59,13 @@
     pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/{cu_version}/{torch_version}/index.html
     ```
 
-    请将上面链接中 `{cu_version}` 和 `{torch_version}` 替换成您想要的版本。 比如, 安装最新版本 `mmcv-full`，同时适配 `CUDA 11.0` 和 `PyTorch 1.7.0`, 可以使用以下命令:
+    请将上面链接中 `{cu_version}` 和 `{torch_version}` 替换成您想要的版本。 比如, 安装最新版本 `mmcv-full`，同时适配 `CUDA 11.0` 和 `PyTorch 1.7.x`, 可以使用以下命令:
 
     ```shell
-    pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/cu110/torch1.7.0/index.html
+    pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/cu110/torch1.7/index.html
     ```
+
+    - PyTorch 在 1.x.0 和 1.x.1 之间通常是兼容的，故 mmcv-full 只提供 1.x.0 的编译包。如果您的 PyTorch 版本是 1.x.1，您可以放心地安装在 1.x.0 版本编译的 mmcv-full。
 
     您可以从 [这里](https://github.com/open-mmlab/mmcv#installation) 查找适配不同 PyTorch 和 CUDA 版本的 MMCV 版本。
 
