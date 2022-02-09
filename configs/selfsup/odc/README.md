@@ -1,6 +1,6 @@
 # ODC
 
-[Online Deep Clustering for Unsupervised Representation Learning](https://arxiv.org/abs/2006.10645)
+> [Online Deep Clustering for Unsupervised Representation Learning](https://arxiv.org/abs/2006.10645)
 
 <!-- [ALGORITHM] -->
 
@@ -8,7 +8,6 @@
 
 Joint clustering and feature learning methods have shown remarkable performance in unsupervised representation learning. However, the training schedule alternating between feature clustering and network parameters update leads to unstable learning of visual representations. To overcome this challenge, we propose Online Deep Clustering (ODC) that performs clustering and network update simultaneously rather than alternatingly. Our key insight is that the cluster centroids should evolve steadily in keeping the classifier stably updated. Specifically, we design and maintain two dynamic memory modules, i.e., samples memory to store samples’ labels and features, and centroids memory for centroids evolution. We break down the abrupt global clustering into steady memory update and batch-wise label re-assignment. The process is integrated into network update iterations. In this way, labels and the network evolve shoulder-to-shoulder rather than alternatingly. Extensive experiments demonstrate that ODC stabilizes the training process and boosts the performance effectively.
 
-<!-- [IMAGE] -->
 <div align="center">
 <img  src="https://user-images.githubusercontent.com/36138628/149722645-8da8e5b2-8846-4554-aa3e-727d286b85cd.png" width="700" />
 </div>

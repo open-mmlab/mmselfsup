@@ -1,6 +1,6 @@
 # SimSiam
 
-[Exploring Simple Siamese Representation Learning](https://arxiv.org/abs/2011.10566)
+> [Exploring Simple Siamese Representation Learning](https://arxiv.org/abs/2011.10566)
 
 <!-- [ALGORITHM] -->
 
@@ -8,7 +8,6 @@
 
 Siamese networks have become a common structure in various recent models for unsupervised visual representation learning. These models maximize the similarity between two augmentations of one image, subject to certain conditions for avoiding collapsing solutions. In this paper, we report surprising empirical results that simple Siamese networks can learn meaningful representations even using none of the following: (i) negative sample pairs, (ii) large batches, (iii) momentum encoders. Our experiments show that collapsing solutions do exist for the loss and structure, but a stop-gradient operation plays an essential role in preventing collapsing. We provide a hypothesis on the implication of stop-gradient, and further show proof-of-concept experiments verifying it. Our “SimSiam” method achieves competitive results on ImageNet and downstream tasks. We hope this simple baseline will motivate people to rethink the roles of Siamese architectures for unsupervised representation learning.
 
-<!-- [IMAGE] -->
 <div align="center">
 <img  src="https://user-images.githubusercontent.com/36138628/149724180-bc7bac6a-fcb8-421e-b8f1-9550c624d154.png" width="500" />
 </div>
