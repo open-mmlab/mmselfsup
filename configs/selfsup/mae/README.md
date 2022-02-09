@@ -1,11 +1,10 @@
 # MAE
 
-[Masked Autoencoders Are Scalable Vision Learners](https://arxiv.org/abs/2111.06377)
+> [Masked Autoencoders Are Scalable Vision Learners](https://arxiv.org/abs/2111.06377)
 
+<!-- [ALGORITHM] -->
 
 ## Abstract
-
-<!-- [ABSTRACT] -->
 
 This paper shows that masked autoencoders (MAE) are
 scalable self-supervised learners for computer vision. Our
@@ -24,7 +23,6 @@ for learning high-capacity models that generalize well: e.g., a vanilla
 ViT-Huge model achieves the best accuracy (87.8%) among
 methods that use only ImageNet-1K data. Transfer performance in downstream tasks outperforms supervised pretraining and shows promising scaling behavior.
 
-<!-- [IMAGE] -->
 <div align="center">
 <img src="https://user-images.githubusercontent.com/30762564/150733959-2959852a-c7bd-4d3f-911f-3e8d8839fe67.png" width="40%"/>
 </div>
@@ -43,8 +41,6 @@ for 400 epochs, the details are below:
 
 
 ## Citation
-
-<!-- [ALGORITHM] -->
 
 ```bibtex
 @article{He2021MaskedAA,
