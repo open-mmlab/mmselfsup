@@ -98,6 +98,14 @@ class MAEViT(VisionTransformer):
             x (torch.tensor): Image with data augmentation applied.
             mask_ratio (float): The mask ratio of total patches.
                 Defaults to 0.75.
+
+        Returns:
+            tuple[Tensor, Tensor, Tensor]: masked image, mask and the ids
+                to restore original image.
+
+            - x_masked (Tensor): masked image.
+            - mask (Tensor): mask used to mask image.
+            - ids_restore (Tensor): ids to restore original image.
         """
         N, L, D = x.shape  # batch, length, dim
         len_keep = int(L * (1 - mask_ratio))
