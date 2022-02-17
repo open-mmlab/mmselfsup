@@ -1,3 +1,6 @@
+# Copyright (c) 2017-present, Facebook, Inc.
+# All rights reserved.
+
 # This file is modified from
 # https://github.com/facebookresearch/deepcluster/blob/master/clustering.py
 
