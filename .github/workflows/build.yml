@@ -99,7 +99,7 @@ jobs:
           env_vars: OS,PYTHON
           name: codecov-umbrella
           fail_ci_if_error: false
-  
+
   test_windows:
     runs-on: ${{ matrix.os }}
     strategy:
