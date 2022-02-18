@@ -11,7 +11,8 @@ from mmselfsup.datasets.utils import check_integrity, rm_suffix, to_numpy
 
 
 def test_to_numpy():
-    pil_img = Image.open(osp.join(osp.dirname(__file__), '../data/color.jpg'))
+    pil_img = Image.open(
+        osp.join(osp.dirname(__file__), '..', 'data', 'color.jpg'))
     np_img = to_numpy(pil_img)
     assert type(np_img) == np.ndarray
     if np_img.ndim < 3:

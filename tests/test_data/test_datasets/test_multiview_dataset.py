@@ -22,9 +22,9 @@ def test_multi_views_dataste():
     data = dict(
         data_source=dict(
             type=data_source,
-            data_prefix=osp.join(osp.dirname(__file__), '../../data'),
+            data_prefix=osp.join(osp.dirname(__file__), '..', '..', 'data'),
             ann_file=osp.join(
-                osp.dirname(__file__), '../../data/data_list.txt'),
+                osp.dirname(__file__), '..', '..', 'data', 'data_list.txt'),
         ),
         num_views=[2],
         pipelines=[train_pipeline, train_pipeline],
@@ -36,9 +36,9 @@ def test_multi_views_dataste():
     data = dict(
         data_source=dict(
             type=data_source,
-            data_prefix=osp.join(osp.dirname(__file__), '../../data'),
+            data_prefix=osp.join(osp.dirname(__file__), '..', '..', 'data'),
             ann_file=osp.join(
-                osp.dirname(__file__), '../../data/data_list.txt'),
+                osp.dirname(__file__), '..', '..', 'data', 'data_list.txt'),
         ),
         num_views=[2, 6],
         pipelines=[train_pipeline, train_pipeline],

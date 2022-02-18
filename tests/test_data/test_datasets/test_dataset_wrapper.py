@@ -12,9 +12,9 @@ def construct_toy_dataset():
     data = dict(
         data_source=dict(
             type='ImageNet',
-            data_prefix=osp.join(osp.dirname(__file__), '../../data'),
+            data_prefix=osp.join(osp.dirname(__file__), '..', '..', 'data'),
             ann_file=osp.join(
-                osp.dirname(__file__), '../../data/data_list.txt'),
+                osp.dirname(__file__), '..', '..', 'data', 'data_list.txt'),
         ),
         pipeline=[])
     dataset = BaseDataset(**data)
