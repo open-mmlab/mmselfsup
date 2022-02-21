@@ -10,7 +10,7 @@ def test_imagenet():
     data_source = dict(data_prefix='tests')
 
     dataset = ImageNet(**data_source)
-    assert len(dataset) == 2, data_source
+    assert len(dataset) == 2
 
     with pytest.raises(TypeError):
         dataset = ImageNet(ann_file=1, **data_source)
