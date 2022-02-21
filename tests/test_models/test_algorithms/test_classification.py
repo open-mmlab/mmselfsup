@@ -1,9 +1,13 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import platform
+
+import pytest
 import torch
 
 from mmselfsup.models.algorithms import Classification
 
 
+@pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_classification():
     # test ResNet
     with_sobel = True,
