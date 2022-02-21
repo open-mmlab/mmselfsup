@@ -7,5 +7,4 @@ scipy
 six
 sklearn
 tensorboard
-terminaltables
 tqdm
