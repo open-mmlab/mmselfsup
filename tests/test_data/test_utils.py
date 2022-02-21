@@ -1,10 +1,12 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import os.path as osp
+import platform
 import random
 import string
 import tempfile
 
 import numpy as np
+import pytest
 from PIL import Image
 
 from mmselfsup.datasets.utils import check_integrity, rm_suffix, to_numpy
@@ -21,6 +23,8 @@ def test_to_numpy():
         assert np_img.shape[0] == 3
 
 
+@pytest.mark.skipif(
+    platform.system() == 'Windows', reason='Windows permission')
 def test_dataset_utils():
     # test rm_suffix
     assert rm_suffix('a.jpg') == 'a'

@@ -1,4 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import platform
 import tempfile
 from unittest.mock import MagicMock
 
@@ -7,6 +8,8 @@ import pytest
 from mmselfsup.datasets import DATASOURCES
 
 
+@pytest.mark.skipif(
+    platform.system() == 'Windows', reason='Windows permission')
 @pytest.mark.parametrize('dataset_name',
                          ['CIFAR10', 'CIFAR100', 'ImageNet', 'ImageList'])
 def test_data_sources_override_default(dataset_name):
