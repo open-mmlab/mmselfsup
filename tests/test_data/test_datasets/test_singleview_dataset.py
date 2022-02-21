@@ -19,7 +19,7 @@ if not prefetch:
          dict(type='Normalize', **img_norm_cfg)])
 
 
-def test_one_view_dataset():
+def test_single_view_dataset():
     data = dict(
         data_source=dict(
             type=data_source,
