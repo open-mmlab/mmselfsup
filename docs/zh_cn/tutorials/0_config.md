@@ -53,7 +53,6 @@ MMSelfSup 主要使用python文件作为配置。我们设计的配置文件系�
 ```
 {backbone setting}_{neck setting}_{head_setting}
 ```
-这里我们使用 `'_'` 连接各个部分提升名字可读性。
 
 模块信息主要包含 backboe 信息。例如：
 - `resnet50`
@@ -61,7 +60,6 @@ MMSelfSup 主要使用python文件作为配置。我们设计的配置文件系�
 
 或者其他一些需要在配置名字中强调的特殊的设置。例如：
 - `resnet50-nofrz`：在一些下游任务的训练中，该 backbone 不会冻结 stages
-- `simclr_resnet50_mocov2-neck`：在 simclr 中，使用 mocov2-neck 训练，而不是 simclr 自己的 neck
 
 ### 训练信息
 

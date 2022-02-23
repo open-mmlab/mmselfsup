@@ -53,7 +53,6 @@ We follow the below convention to name config files. Contributors are advised to
 ```
 {backbone setting}_{neck setting}_{head_setting}
 ```
-Here we use `'_'` to concatenate to make the name more readable.
 
 The module information mainly includes the backbone information. E.g:
 - `resnet50`
@@ -61,7 +60,6 @@ The module information mainly includes the backbone information. E.g:
 
 Or there are some special settings which is needed to be mentioned in the config name. E.g:
 - `resnet50-nofrz`: In some downstream tasks，the backbone will not froze stages while training
-- `simclr_resnet50_mocov2-neck`: In simclr, using mocov2-neck to train, not simclr its own neck
 
 ### Training information
 
