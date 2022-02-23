@@ -51,7 +51,7 @@ MMSelfSup 主要使用python文件作为配置。我们设计的配置文件系�
 
 ### 模块信息
 ```
-{backbone setting}_{neck setting}_{head_setting}
+{backbone setting}-{neck setting}-{head_setting}
 ```
 
 模块信息主要包含 backboe 信息。例如：
@@ -80,18 +80,6 @@ MMSelfSup 主要使用python文件作为配置。我们设计的配置文件系�
 - `places205`
 
 ### 配置文件命名示例
-```
-mocov2_resnet50_simclr-neck_8xb32-coslr-200e_in1k.py
-```
-  - `mocov2`：算法信息
-  - `resnet50_simclr-neck`：模块信息
-    - `resnet50`：Backbone
-    - `simclr-neck`：使用特殊的 neck，而不是默认的 mocov2-neck
-  - `8xb32-coslr-200e`：训练信息
-    - `8xb32`：共使用 8 张 GPU，每张 GPU上 的 batch size 是 32
-    - `coslr`：使用余弦学习率调度器
-    - `200e`：训练模型 200 个周期
-  - `in1k`：数据信息，在 ImageNet1k 数据集上训练
 ```
 swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py
 ```
