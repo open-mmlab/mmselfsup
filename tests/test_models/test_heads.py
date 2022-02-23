@@ -4,8 +4,7 @@ import torch.nn.functional as F
 
 from mmselfsup.models.heads import (ClsHead, ContrastiveHead, LatentClsHead,
                                     LatentPredictHead, MAEFinetuneHead,
-                                    MAELinprobeHead, MAEPretrainHead,
-                                    MultiClsHead, SwAVHead)
+                                    MAEPretrainHead, MultiClsHead, SwAVHead)
 
 
 def test_cls_head():
@@ -93,21 +92,6 @@ def test_mae_pretrain_head():
     loss_norm_pixel = head_norm_pixel.forward(fake_input, fake_pred, fake_mask)
 
     assert loss_norm_pixel['loss'].item() > 0
-
-
-def test_mae_linprobe_head():
-
-    head = MAELinprobeHead(num_classes=1000, embed_dim=768)
-    fake_input = torch.rand((2, 768))
-    fake_labels = torch.ones((2, )).long()
-
-    fake_features = head.forward(fake_input)
-
-    assert list(fake_features[0].shape) == [2, 1000]
-
-    loss = head.loss(fake_features, fake_labels)
-
-    assert loss['loss'].item() > 0
 
 
 def test_mae_finetune_head():
