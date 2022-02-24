@@ -1,7 +1,8 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import platform
+
 import pytest
 import torch
-import platform
 
 from mmselfsup.models.algorithms import MAE
 

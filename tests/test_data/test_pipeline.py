@@ -110,7 +110,7 @@ def test_randomaug():
         mean=(0.485, 0.456, 0.406),
         std=(0.229, 0.224, 0.225))
 
-    img = Image.open(osp.join(osp.dirname(__file__), '../data/color.jpg'))
+    img = Image.fromarray(np.uint8(np.ones((224, 224, 3))))
 
     module = build_from_cfg(transform, PIPELINES)
     res = module(img)

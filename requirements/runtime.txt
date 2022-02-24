@@ -7,6 +7,5 @@ scipy
 six
 sklearn
 tensorboard
-tqdm
 timm
 tqdm
