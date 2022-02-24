@@ -6,7 +6,10 @@
 
 import time
 
-import faiss
+try:
+    import faiss
+except ImportError:
+    faiss = None
 import numpy as np
 import torch
 from scipy.sparse import csr_matrix

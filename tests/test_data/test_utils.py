@@ -1,17 +1,20 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import os.path as osp
+import platform
 import random
 import string
 import tempfile
 
 import numpy as np
+import pytest
 from PIL import Image
 
 from mmselfsup.datasets.utils import check_integrity, rm_suffix, to_numpy
 
 
 def test_to_numpy():
-    pil_img = Image.open(osp.join(osp.dirname(__file__), '../data/color.jpg'))
+    pil_img = Image.open(
+        osp.join(osp.dirname(__file__), '..', 'data', 'color.jpg'))
     np_img = to_numpy(pil_img)
     assert type(np_img) == np.ndarray
     if np_img.ndim < 3:
@@ -20,6 +23,8 @@ def test_to_numpy():
         assert np_img.shape[0] == 3
 
 
+@pytest.mark.skipif(
+    platform.system() == 'Windows', reason='Windows permission')
 def test_dataset_utils():
     # test rm_suffix
     assert rm_suffix('a.jpg') == 'a'

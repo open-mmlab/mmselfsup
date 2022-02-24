@@ -1,4 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import platform
+
 import pytest
 import torch
 
@@ -32,6 +34,7 @@ head = dict(
         norm_cfg=dict(type='BN1d')))
 
 
+@pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_byol():
     with pytest.raises(AssertionError):
         alg = BYOL(backbone=backbone, neck=None, head=head)

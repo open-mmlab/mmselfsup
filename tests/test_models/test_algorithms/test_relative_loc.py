@@ -1,4 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import platform
+
 import pytest
 import torch
 
@@ -18,6 +20,7 @@ neck = dict(
 head = dict(type='ClsHead', with_avg_pool=False, in_channels=4, num_classes=8)
 
 
+@pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_relative_loc():
     with pytest.raises(AssertionError):
         alg = RelativeLoc(backbone=backbone, neck=None, head=head)

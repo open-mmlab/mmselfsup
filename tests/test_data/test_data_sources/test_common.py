@@ -25,12 +25,11 @@ def test_data_sources_override_default(dataset_name):
     assert dataset.CLASSES == ['bus', 'car']
 
     # Test setting classes through a file
-    tmp_file = tempfile.NamedTemporaryFile()
-    with open(tmp_file.name, 'w') as f:
-        f.write('bus\ncar\n')
-    dataset = dataset_class(data_prefix='', classes=tmp_file.name)
-    tmp_file.close()
-
+    with tempfile.TemporaryDirectory() as tmpdir:
+        path = tmpdir + 'classes.txt'
+        with open(path, 'w') as f:
+            f.write('bus\ncar\n')
+    dataset = dataset_class(data_prefix='', classes=path)
     assert dataset.CLASSES == ['bus', 'car']
 
     # Test overriding not a subset

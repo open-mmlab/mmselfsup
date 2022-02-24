@@ -1,4 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import platform
+
 import pytest
 import torch
 
@@ -14,6 +16,7 @@ head = dict(
     type='ClsHead', with_avg_pool=True, in_channels=2048, num_classes=4)
 
 
+@pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_rotation_pred():
     with pytest.raises(AssertionError):
         alg = RotationPred(backbone=backbone, head=None)

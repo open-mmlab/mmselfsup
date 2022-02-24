@@ -1,4 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import platform
+
 import pytest
 import torch
 
@@ -33,6 +35,7 @@ head = dict(
         norm_cfg=dict(type='BN1d')))
 
 
+@pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_simsiam():
     with pytest.raises(AssertionError):
         alg = SimSiam(backbone=backbone, neck=neck, head=None)

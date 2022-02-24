@@ -1,4 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import platform
+
 import pytest
 import torch
 
@@ -20,6 +22,7 @@ head = dict(
     num_classes=num_classes)
 
 
+@pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_deepcluster():
     with pytest.raises(AssertionError):
         alg = DeepCluster(

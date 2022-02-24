@@ -22,9 +22,9 @@ def test_relative_loc_dataset():
     data = dict(
         data_source=dict(
             type=data_source,
-            data_prefix=osp.join(osp.dirname(__file__), '../../data'),
+            data_prefix=osp.join(osp.dirname(__file__), '..', '..', 'data'),
             ann_file=osp.join(
-                osp.dirname(__file__), '../../data/data_list.txt'),
+                osp.dirname(__file__), '..', '..', 'data', 'data_list.txt'),
         ),
         pipeline=train_pipeline,
         format_pipeline=format_pipeline)
