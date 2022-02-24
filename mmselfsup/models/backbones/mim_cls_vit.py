@@ -1,3 +1,4 @@
+# Copyright (c) OpenMMLab. All rights reserved.
 import torch
 from mmcls.models import VisionTransformer
 from mmcv.cnn import build_norm_layer
