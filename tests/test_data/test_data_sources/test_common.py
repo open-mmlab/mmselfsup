@@ -1,5 +1,4 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-import platform
 import tempfile
 from unittest.mock import MagicMock
 
@@ -8,8 +7,6 @@ import pytest
 from mmselfsup.datasets import DATASOURCES
 
 
-@pytest.mark.skipif(
-    platform.system() == 'Windows', reason='Windows permission')
 @pytest.mark.parametrize('dataset_name',
                          ['CIFAR10', 'CIFAR100', 'ImageNet', 'ImageList'])
 def test_data_sources_override_default(dataset_name):
@@ -28,12 +25,11 @@ def test_data_sources_override_default(dataset_name):
     assert dataset.CLASSES == ['bus', 'car']
 
     # Test setting classes through a file
-    tmp_file = tempfile.NamedTemporaryFile()
-    with open(tmp_file.name, 'w') as f:
-        f.write('bus\ncar\n')
-    dataset = dataset_class(data_prefix='', classes=tmp_file.name)
-    tmp_file.close()
-
+    with tempfile.TemporaryDirectory() as tmpdir:
+        path = tmpdir + 'classes.txt'
+        with open(path, 'w') as f:
+            f.write('bus\ncar\n')
+    dataset = dataset_class(data_prefix='', classes=path)
     assert dataset.CLASSES == ['bus', 'car']
 
     # Test overriding not a subset
