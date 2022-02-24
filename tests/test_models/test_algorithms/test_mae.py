@@ -1,6 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import pytest
 import torch
+import platform
 
 from mmselfsup.models.algorithms import MAE
 
@@ -18,6 +19,7 @@ neck = dict(
 head = dict(type='MAEPretrainHead', norm_pix=False, patch_size=16)
 
 
+@pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_mae():
     with pytest.raises(AssertionError):
         alg = MAE(backbone=backbone, neck=None, head=head)
