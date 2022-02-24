@@ -51,9 +51,8 @@ We follow the below convention to name config files. Contributors are advised to
 
 ### Module information
 ```
-{backbone setting}_{neck setting}_{head_setting}
+{backbone setting}-{neck setting}-{head_setting}
 ```
-Here we use `'_'` to concatenate to make the name more readable.
 
 The module information mainly includes the backbone information. E.g:
 - `resnet50`
@@ -61,7 +60,6 @@ The module information mainly includes the backbone information. E.g:
 
 Or there are some special settings which is needed to be mentioned in the config name. E.g:
 - `resnet50-nofrz`: In some downstream tasks，the backbone will not froze stages while training
-- `simclr_resnet50_mocov2-neck`: In simclr, using mocov2-neck to train, not simclr its own neck
 
 ### Training information
 
@@ -82,18 +80,6 @@ Data information contains the dataset, input size, etc. E.g:
 - `places205`
 
 ### Config File Name Example
-```
-mocov2_resnet50_simclr-neck_8xb32-coslr-200e_in1k.py
-```
-  - `mocov2`: Algorithm information
-  - `resnet50_simclr-neck`: Module information
-    - `resnet50`: Backbone
-    - `simclr-neck`: Using special neck，not the default mocov2-neck
-  - `8xb32-coslr-200e`: Training information
-    - `8xb32`: Use 8 GPUs in total，and the batch size is 32 per GPU
-    - `coslr`: Use cosine learning rate scheduler
-    - `200e`: Train the model for 200 epoch
-  - `in1k`: Data information, train on ImageNet1k dataset
 ```
 swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py
 ```
