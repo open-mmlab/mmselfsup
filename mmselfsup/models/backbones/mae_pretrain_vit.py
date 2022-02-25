@@ -11,7 +11,7 @@ from ..utils import build_2d_sincos_position_embedding
 class MAEViT(VisionTransformer):
     """Vision Transformer for MAE pre-training.
 
-    A PyTorch implement of : `An Image is Worth 16x16 Words: Transformers
+    A PyTorch implement of: `An Image is Worth 16x16 Words: Transformers
     for Image Recognition at Scale <https://arxiv.org/abs/2010.11929>`_
 
     Args:
