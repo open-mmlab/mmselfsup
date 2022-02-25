@@ -34,7 +34,7 @@ data = dict(
     val=dict(pipeline=test_pipeline))
 
 # model
-model = dict(backbone=dict(init_cfg=dict(prefix='backbone.')))
+model = dict(backbone=dict(init_cfg=dict()))
 
 # optimizer
 optimizer = dict(
