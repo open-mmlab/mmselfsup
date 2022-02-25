@@ -50,7 +50,7 @@ The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map
 
 | Self-Supervised Config                                                                                                                             | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 |
 | -------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- |
-| [resnet50_8xb32-coslr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py) | 21.32    | 35.66    | 43.05    | 50.79    | 53.27    |
+| [resnet50_8xb32-coslr-100e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py) | 21.32    | 35.66    | 43.05    | 50.79    | 53.27    |
 | [resnet50_8xb32-coslr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k.py) | 21.17    | 35.85    | 43.49    | 50.99    | 54.10    |
 
 ### Detection
