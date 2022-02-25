@@ -38,13 +38,10 @@ def build_optimizer(model, optimizer_cfg):
     constructor_type = optimizer_cfg.pop('constructor',
                                          'DefaultOptimizerConstructor')
     paramwise_cfg = optimizer_cfg.pop('paramwise_options', None)
-    layer_decay = optimizer_cfg.pop('layer_decay', 0.0)
-
     optim_constructor = build_optimizer_constructor(
         dict(
             type=constructor_type,
             optimizer_cfg=optimizer_cfg,
-            paramwise_cfg=paramwise_cfg,
-            layer_decay=layer_decay))
+            paramwise_cfg=paramwise_cfg))
     optimizer = optim_constructor(model)
     return optimizer
