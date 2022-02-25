@@ -23,6 +23,6 @@ Models:
       - Task: Self-Supervised Image Classification
         Dataset: ImageNet-1k
         Metrics:
-          Top 1 Accuracy: 63.34
+          Top 1 Accuracy: 63.62
     Config: configs/selfsup/densecl/densecl_resnet50_8xb32-coslr-200e_in1k.py
-    Weights: https://download.openmmlab.com/mmselfsup/densecl/densecl_resnet50_8xb32-coslr-200e_in1k_20211214-1efb342c.pth
+    Weights: https://download.openmmlab.com/mmselfsup/densecl/densecl_resnet50_8xb32-coslr-200e_in1k_20220225-8c7808fe.pth

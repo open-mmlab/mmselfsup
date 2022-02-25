@@ -26,4 +26,4 @@ Models:
         Metrics:
           Top 1 Accuracy: 58.16
     Config: configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py
-    Weights: https://download.openmmlab.com/mmselfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k_20211213-b5fec6df.pth
+    Weights: https://download.openmmlab.com/mmselfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k_20220225-5fbbda2a.pth

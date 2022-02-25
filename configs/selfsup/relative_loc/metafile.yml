@@ -23,6 +23,6 @@ Models:
       - Task: Self-Supervised Image Classification
         Dataset: ImageNet-1k
         Metrics:
-          Top 1 Accuracy: 39.65
+          Top 1 Accuracy: 38.78
     Config: configs/selfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k.py
-    Weights: https://download.openmmlab.com/mmselfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k_20211213-cdd3162f.pth
+    Weights: https://download.openmmlab.com/mmselfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k_20220225-84784688.pth
