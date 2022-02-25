@@ -191,7 +191,8 @@ def main():
         if getattr(cfg.model.backbone.init_cfg, 'type', None) == 'Pretrained':
             logger.info(
                 f'Use pretrained model: '
-                f'{cfg.model.backbone.init_cfg.checkpoint} to extract features')
+                f'{cfg.model.backbone.init_cfg.checkpoint} to extract features'
+            )
     elif args.checkpoint is not None:
         logger.info(f'Use checkpoint: {args.checkpoint} to extract features')
         load_checkpoint(model, args.checkpoint, map_location='cpu')
