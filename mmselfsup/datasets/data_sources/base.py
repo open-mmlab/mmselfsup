@@ -83,7 +83,15 @@ class BaseDataSource(object, metaclass=ABCMeta):
         if self.file_client is None:
             self.file_client = mmcv.FileClient(**self.file_client_args)
 
-        if self.data_infos[idx].get('img_prefix', None) is not None:
+        if 'ImageNet-21k' in self.data_prefix:
+            filename = osp.join(
+                self.data_prefix, self.data_infos[idx].decode("utf-8"))
+            img_bytes = self.file_client.get(filename)
+            img = mmcv.imfrombytes(
+                img_bytes,
+                flag=self.color_type,
+                channel_order=self.channel_order)
+        elif self.data_infos[idx].get('img_prefix', None) is not None:
             if self.data_infos[idx]['img_prefix'] is not None:
                 filename = osp.join(
                     self.data_infos[idx]['img_prefix'],
