@@ -46,9 +46,9 @@ The **AvgPool** result is obtained from Linear Evaluation with GlobalAveragePool
 
 The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map is pooled to the specific dimensions and then follows a Linear layer to do the classification. Please refer to [resnet50_mhead_8xb32-steplr-28e_places205.py](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/places205/resnet50_mhead_8xb32-steplr-28e_places205.py) for details of config.
 
-| Self-Supervised Config                                                                                                                                       | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | -------- | -------- | -------- | -------- |
-| [resnet50_8xb32-accum16-coslr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py) | 18.80    | 33.93    | 41.44    | 47.22    | 42.61    |
+| Self-Supervised Config                                                                                                                                                   | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | -------- | -------- | -------- | -------- |
+| [sobel_resnet50_8xb64-steplr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/deepcluster/deepcluster-sobel_resnet50_8xb64-steplr-200e_in1k.py) | 18.80    | 33.93    | 41.44    | 47.22    | 42.61    |
 
 ## Citation
 
