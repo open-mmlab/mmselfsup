@@ -181,12 +181,13 @@ class PrefetchLoader:
                 if isinstance(next_input_dict['img'], list):
                     next_input_dict['img'] = [
                         data.cuda(non_blocking=True).float().sub_(
-                        self.mean).div_(self.std)
-                        for data in next_input_dict['img']]
+                            self.mean).div_(self.std)
+                        for data in next_input_dict['img']
+                    ]
                 else:
                     data = next_input_dict['img'].cuda(non_blocking=True)
-                    next_input_dict['img'] = data.float().sub_(
-                        self.mean).div_(self.std)
+                    next_input_dict['img'] = data.float().sub_(self.mean).div_(
+                        self.std)
 
             if not first:
                 yield input_dict  # noqa F821
