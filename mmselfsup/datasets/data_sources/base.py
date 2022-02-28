@@ -84,8 +84,8 @@ class BaseDataSource(object, metaclass=ABCMeta):
             self.file_client = mmcv.FileClient(**self.file_client_args)
 
         if 'ImageNet-21k' in self.data_prefix:
-            filename = osp.join(
-                self.data_prefix, self.data_infos[idx].decode("utf-8"))
+            filename = osp.join(self.data_prefix,
+                                self.data_infos[idx].decode('utf-8'))
             img_bytes = self.file_client.get(filename)
             img = mmcv.imfrombytes(
                 img_bytes,

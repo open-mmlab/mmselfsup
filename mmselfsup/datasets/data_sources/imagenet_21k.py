@@ -1,23 +1,22 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import os
 import warnings
-from typing import List
 
 import numpy as np
 from mmcv.utils import scandir
 
-from .base import BaseDataSource
 from ..builder import DATASOURCES
+from .base import BaseDataSource
 from .imagenet import find_folders
 
 
 @DATASOURCES.register_module()
 class ImageNet21k(BaseDataSource):
-    """ImageNet21k Dataset.
-    Since the dataset ImageNet21k is extremely big, cantains 21k+ classes
-    and 1.4B files. This class has improved the following points on the
-    basis of the class ``ImageNet``, in order to save memory usage and time
-    required :
+    """ImageNet21k Dataset. Since the dataset ImageNet21k is extremely big,
+    cantains 21k+ classes and 1.4B files. This class has improved the following
+    points on the basis of the class ``ImageNet``, in order to save memory
+    usage and time required :
+
         - Delete the samples attribute
         - using 'slots' create a Data_item tp replace dict
         - Modify setting ``info`` dict from function ``load_annotations`` to
@@ -49,9 +48,8 @@ class ImageNet21k(BaseDataSource):
         if multi_label:
             raise NotImplementedError('Multi_label have not be implemented.')
         self.multi_lable = multi_label
-        super(ImageNet21k, self).__init__(data_prefix, classes,
-                                          ann_file, test_mode)
-
+        super(ImageNet21k, self).__init__(data_prefix, classes, ann_file,
+                                          test_mode)
 
     def load_annotations(self):
         """load dataset annotations."""
