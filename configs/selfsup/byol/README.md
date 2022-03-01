@@ -40,7 +40,7 @@ The **AvgPool** result is obtained from Linear Evaluation with GlobalAveragePool
 
 | Self-Supervised Config                                                                                                                                       | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 | AvgPool |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | -------- | -------- | -------- | -------- | ------- |
-| [resnet50_8xb32-accum16-coslr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py) | 15.59    | 35.16    | 47.37    | 62.86    | 71.62    | 67.68   |
+| [resnet50_8xb32-accum16-coslr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py) | 15.59    | 35.16    | 47.37    | 62.86    | 71.62    | 67.55   |
 
 #### Places205 Linear Evaluation
 

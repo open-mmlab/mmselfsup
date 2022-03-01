@@ -40,7 +40,7 @@ The **AvgPool** result is obtained from Linear Evaluation with GlobalAveragePool
 
 | Self-Supervised Config                                                                                                                                         | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 | AvgPool |
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- | ------- |
-| [resnet50_8xb16-steplr-70e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py) | 12.15    | 31.99    | 44.57    | 54.20    | 45.94    | 44.35   |
+| [resnet50_8xb16-steplr-70e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py) | 12.15    | 31.99    | 44.57    | 54.20    | 45.94    | 48.12   |
 
 #### Places205 Linear Evaluation
 
