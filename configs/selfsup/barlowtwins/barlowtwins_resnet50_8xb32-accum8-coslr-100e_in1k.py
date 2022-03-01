@@ -12,13 +12,16 @@ update_interval = 8
 # optimizer
 optimizer = dict(
     type='LARS',
-    lr=4.8,
+    lr=0.,
     momentum=0.9,
     weight_decay=1e-6,
     paramwise_options={
+        'weight':
+        dict(lr=0.2),
         '(bn|gn)(\\d+)?.(weight|bias)':
-        dict(weight_decay=0., lars_exclude=True),
-        'bias': dict(weight_decay=0., lars_exclude=True)
+        dict(weight_decay=0, lr=0.0048, lars_exclude=True),
+        'bias':
+        dict(weight_decay=0, lr=0.0048, lars_exclude=True)
     })
 optimizer_config = dict(update_interval=update_interval)
 
@@ -27,3 +30,5 @@ optimizer_config = dict(update_interval=update_interval)
 # if it is 3, when CheckpointHook (in mmcv) saves the 4th ckpt
 # it will remove the oldest one to keep the number of total ckpts as 3
 checkpoint_config = dict(interval=10, max_keep_ckpts=3)
+
+runner = dict(type='EpochBasedRunner', max_epochs=100)
