@@ -66,7 +66,7 @@ This project is released under the [Apache 2.0 license](LICENSE).
 
 ## ChangeLog
 
-MMSelfSup **v0.6.0** was released in 02/02/2022.
+MMSelfSup **v0.7.0** was released in 03/03/2022.
 
 Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
 

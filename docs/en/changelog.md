@@ -2,6 +2,33 @@
 
 ## MMSelfSup
 
+### v0.7.0 (03/03/2022)
+
+#### Highlight
+* Support MAE ([#221](https://github.com/open-mmlab/mmselfsup/pull/221))
+* Add Places205 benchmarks ([#210](https://github.com/open-mmlab/mmselfsup/pull/210))
+* Add test Windows in workflows ([#215](https://github.com/open-mmlab/mmselfsup/pull/215))
+
+#### New Features
+* Support MAE ([#221](https://github.com/open-mmlab/mmselfsup/pull/221))
+* Add Places205 benchmarks ([#210](https://github.com/open-mmlab/mmselfsup/pull/210))
+
+#### Bug Fixes
+* Fix config typos for rotation prediction and deepcluster ([#200](https://github.com/open-mmlab/mmselfsup/pull/200))
+* Fix image channel bgr/rgb bug and update benchmarks ([#210](https://github.com/open-mmlab/mmselfsup/pull/210))
+* Fix the bug when using prefetch under multi-view methods ([#218](https://github.com/open-mmlab/mmselfsup/pull/218))
+* Fix tsne 'no init_cfg' error ([#222](https://github.com/open-mmlab/mmselfsup/pull/222))
+
+#### Improvements
+* Deprecate `imgs_per_gpu` and use `samples_per_gpu` ([#204](https://github.com/open-mmlab/mmselfsup/pull/204))
+* Update the installation of MMCV ([#208](https://github.com/open-mmlab/mmselfsup/pull/208))
+* Add pre-commit hook for algo-readme and copyright ([#213](https://github.com/open-mmlab/mmselfsup/pull/213))
+* Add test Windows in workflows ([#215](https://github.com/open-mmlab/mmselfsup/pull/215))
+
+#### Docs
+* Translate 0_config.md into Chinese ([#216](https://github.com/open-mmlab/mmselfsup/pull/216))
+* Reorganizing OpenMMLab projects and update algorithms in readme ([#219](https://github.com/open-mmlab/mmselfsup/pull/219))
+
 ### v0.6.0 (02/02/2022)
 
 #### Highlight
