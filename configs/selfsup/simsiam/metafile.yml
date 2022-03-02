@@ -23,9 +23,9 @@ Models:
       - Task: Self-Supervised Image Classification
         Dataset: ImageNet-1k
         Metrics:
-          Top 1 Accuracy: 68.20
+          Top 1 Accuracy: 68.28
     Config: configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py
-    Weights: https://download.openmmlab.com/mmselfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k_20211230-65a0eff4.pth
+    Weights: https://download.openmmlab.com/mmselfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k_20220225-68a88ad8.pth
   - Name: simsiam_resnet50_8xb32-coslr-200e_in1k
     In Collection: SimSiam
     Metadata:
@@ -35,6 +35,6 @@ Models:
       - Task: Self-Supervised Image Classification
         Dataset: ImageNet-1k
         Metrics:
-          Top 1 Accuracy: 69.80
+          Top 1 Accuracy: 69.84
     Config: configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k.py
-    Weights: https://download.openmmlab.com/mmselfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k_20211213-b605f9f1.pth
+    Weights: https://download.openmmlab.com/mmselfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k_20220225-2f488143.pth
