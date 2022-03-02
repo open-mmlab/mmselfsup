@@ -1,4 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import platform
+
+import pytest
 import torch
 
 from mmselfsup.models.backbones import MIMVisionTransformer
@@ -13,6 +16,7 @@ linprobe_backbone = dict(
     arch='b', patch_size=16, finetune=False, final_norm=False)
 
 
+@pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_mae_cls_vit():
     mae_finetune_backbone = MIMVisionTransformer(**finetune_backbone)
     mae_finetune_backbone_norm = MIMVisionTransformer(**finetune_backbone_norm)
