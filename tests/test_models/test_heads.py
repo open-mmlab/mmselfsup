@@ -1,8 +1,10 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import torch
+import torch.nn.functional as F
 
 from mmselfsup.models.heads import (ClsHead, ContrastiveHead, LatentClsHead,
-                                    LatentPredictHead, MultiClsHead, SwAVHead)
+                                    LatentPredictHead, MAEFinetuneHead,
+                                    MAEPretrainHead, MultiClsHead, SwAVHead)
 
 
 def test_cls_head():
@@ -72,4 +74,35 @@ def test_swav_head():
     fake_input = torch.rand(32, 128)  # N, C
 
     loss = head.forward(fake_input)
+    assert loss['loss'].item() > 0
+
+
+def test_mae_pretrain_head():
+    head = MAEPretrainHead(norm_pix=False, patch_size=16)
+    fake_input = torch.rand((2, 3, 224, 224))
+    fake_mask = torch.ones((2, 196))
+    fake_pred = torch.rand((2, 196, 768))
+
+    loss = head.forward(fake_input, fake_pred, fake_mask)
+
+    assert loss['loss'].item() > 0
+
+    head_norm_pixel = MAEPretrainHead(norm_pix=True, patch_size=16)
+
+    loss_norm_pixel = head_norm_pixel.forward(fake_input, fake_pred, fake_mask)
+
+    assert loss_norm_pixel['loss'].item() > 0
+
+
+def test_mae_finetune_head():
+
+    head = MAEFinetuneHead(num_classes=1000, embed_dim=768)
+    fake_input = torch.rand((2, 768))
+    fake_labels = F.normalize(torch.rand((2, 1000)), dim=-1)
+    fake_features = head.forward(fake_input)
+
+    assert list(fake_features[0].shape) == [2, 1000]
+
+    loss = head.loss(fake_features, fake_labels)
+
     assert loss['loss'].item() > 0

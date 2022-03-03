@@ -5,6 +5,7 @@ import numpy as np
 import torch
 from mmcv.utils import build_from_cfg
 from PIL import Image, ImageFilter
+from timm.data import create_transform
 from torchvision import transforms as _transforms
 
 from ..builder import PIPELINES
@@ -14,6 +15,48 @@ _EXCLUDED_TRANSFORMS = ['GaussianBlur']
 for m in inspect.getmembers(_transforms, inspect.isclass):
     if m[0] not in _EXCLUDED_TRANSFORMS:
         PIPELINES.register_module(m[1])
+
+
+@PIPELINES.register_module()
+class RandomAug(object):
+    """RandAugment data augmentation method based on
+    `"RandAugment: Practical automated data augmentation
+    with a reduced search space"
+    <https://arxiv.org/abs/1909.13719>`_.
+
+    This code is borrowed from <https://github.com/pengzhiliang/MAE-pytorch>
+    """
+
+    def __init__(self,
+                 input_size=None,
+                 color_jitter=None,
+                 auto_augment=None,
+                 interpolation=None,
+                 re_prob=None,
+                 re_mode=None,
+                 re_count=None,
+                 mean=None,
+                 std=None):
+
+        self.trans = create_transform(
+            input_size=input_size,
+            is_training=True,
+            color_jitter=color_jitter,
+            auto_augment=auto_augment,
+            interpolation=interpolation,
+            re_prob=re_prob,
+            re_mode=re_mode,
+            re_count=re_count,
+            mean=mean,
+            std=std,
+        )
+
+    def __call__(self, img):
+        return self.trans(img)
+
+    def __repr__(self) -> str:
+        repr_str = self.__class__.__name__
+        return repr_str
 
 
 @PIPELINES.register_module()

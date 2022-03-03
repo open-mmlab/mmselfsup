@@ -1,4 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from mmcls.models.utils import Augments
+
 from ..builder import ALGORITHMS, build_backbone, build_head
 from ..utils import Sobel
 from .base import BaseModel
@@ -16,7 +18,12 @@ class Classification(BaseModel):
             Defaults to None.
     """
 
-    def __init__(self, backbone, with_sobel=False, head=None, init_cfg=None):
+    def __init__(self,
+                 backbone,
+                 with_sobel=False,
+                 head=None,
+                 train_cfg=None,
+                 init_cfg=None):
         super(Classification, self).__init__(init_cfg)
         self.with_sobel = with_sobel
         if with_sobel:
@@ -24,6 +31,11 @@ class Classification(BaseModel):
         self.backbone = build_backbone(backbone)
         assert head is not None
         self.head = build_head(head)
+
+        self.augments = None
+        if train_cfg is not None:
+            augments_cfg = train_cfg.get('augments', None)
+            self.augments = Augments(augments_cfg)
 
     def extract_feat(self, img):
         """Function to extract features from backbone.
@@ -52,6 +64,8 @@ class Classification(BaseModel):
         Returns:
             dict[str, Tensor]: A dictionary of loss components.
         """
+        if self.augments is not None:
+            img, label = self.augments(img, label)
         x = self.extract_feat(img)
         outs = self.head(x)
         loss_inputs = (outs, label)
