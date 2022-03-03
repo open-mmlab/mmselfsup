@@ -2,6 +2,33 @@
 
 ## MMSelfSup
 
+### v0.7.0 (03/03/2022)
+
+#### 亮点
+* 支持 MAE 算法 ([#221](https://github.com/open-mmlab/mmselfsup/pull/221))
+* 增加 Places205 下游基准测试 ([#210](https://github.com/open-mmlab/mmselfsup/pull/210))
+* 在 CI 工作流中添加 Windows 测试 ([#215](https://github.com/open-mmlab/mmselfsup/pull/215))
+
+#### 新特性
+* 支持 MAE 算法 ([#221](https://github.com/open-mmlab/mmselfsup/pull/221))
+* 增加 Places205 下游基准测试 ([#210](https://github.com/open-mmlab/mmselfsup/pull/210))
+
+#### Bug 修复
+* 修复部分配置文件中的错误 ([#200](https://github.com/open-mmlab/mmselfsup/pull/200))
+* 修复图像读取通道问题并更新相关结果 ([#210](https://github.com/open-mmlab/mmselfsup/pull/210))
+* 修复在使用 prefetch 时，部分 dataset 输出格式不匹配的问题 ([#218](https://github.com/open-mmlab/mmselfsup/pull/218))
+* 修复 t-sne 'no init_cfg' 的错误 ([#222](https://github.com/open-mmlab/mmselfsup/pull/222))
+
+#### 改进
+* 配置文件中弃用 `imgs_per_gpu`， 改用 `samples_per_gpu` ([#204](https://github.com/open-mmlab/mmselfsup/pull/204))
+* 更新 MMCV 的安装方式 ([#208](https://github.com/open-mmlab/mmselfsup/pull/208))
+* 为 算法 readme 和代码版权增加 pre-commit 钩子 ([#213](https://github.com/open-mmlab/mmselfsup/pull/213))
+* 在 CI 工作流中添加 Windows 测试 ([#215](https://github.com/open-mmlab/mmselfsup/pull/215))
+
+#### 文档
+* 将 0_config.md 翻译成中文 ([#216](https://github.com/open-mmlab/mmselfsup/pull/216))
+* 更新主页 OpenMMLab 项目和介绍 ([#219](https://github.com/open-mmlab/mmselfsup/pull/219))
+
 ### v0.6.0 (02/02/2022)
 
 #### 亮点

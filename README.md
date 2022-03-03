@@ -66,7 +66,13 @@ This project is released under the [Apache 2.0 license](LICENSE).
 
 ## ChangeLog
 
-MMSelfSup **v0.6.0** was released in 02/02/2022.
+MMSelfSup **v0.7.0** was released in 03/03/2022.
+
+Highlights of the new version:
+
+* Support **MAE**
+* Add **Places205** benchmarks
+* Add test Windows in workflows
 
 Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
 
