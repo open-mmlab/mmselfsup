@@ -66,6 +66,12 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
 最新的 **v0.7.0** 版本已经在 2022.03.03 发布。
 
+新版本亮点：
+
+* 支持 **MAE**
+* 增加 **Places205** 下游基准测试
+* 增加 Windows 测试
+
 请参考 [更新日志](docs/zh_cn/changelog.md) 获取更多细节和历史版本信息。
 
 MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibility.md) 中。
