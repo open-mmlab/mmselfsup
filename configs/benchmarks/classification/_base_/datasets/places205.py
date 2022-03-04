@@ -31,8 +31,10 @@ data = dict(
         type=dataset_type,
         data_source=dict(
             type=data_source,
-            data_prefix='data/Places205/train',
-            ann_file='data/Places205/meta/train.txt',
+            data_prefix=  # noqa: E251
+            'data/Places205/data/vision/torralba/deeplearning/images256/',
+            ann_file=  # noqa: E251
+            'data/Places205/trainvalsplit_places205/train_places205.csv',
         ),
         pipeline=train_pipeline,
         prefetch=prefetch),
@@ -40,8 +42,10 @@ data = dict(
         type=dataset_type,
         data_source=dict(
             type=data_source,
-            data_prefix='data/Places205/val',
-            ann_file='data/Places205/meta/val.txt',
+            data_prefix=  # noqa: E251
+            'data/Places205/data/vision/torralba/deeplearning/images256/',
+            ann_file=  # noqa: E251
+            'data/Places205/trainvalsplit_places205/val_places205.csv',
         ),
         pipeline=test_pipeline,
         prefetch=prefetch))

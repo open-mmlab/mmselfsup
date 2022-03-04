@@ -4,6 +4,7 @@ from .byol import BYOL
 from .classification import Classification
 from .deepcluster import DeepCluster
 from .densecl import DenseCL
+from .mae import MAE
 from .moco import MoCo
 from .mocov3 import MoCoV3
 from .npid import NPID
@@ -16,6 +17,6 @@ from .swav import SwAV
 
 __all__ = [
     'BaseModel', 'BYOL', 'Classification', 'DeepCluster', 'DenseCL', 'MoCo',
-    'MoCoV3', 'NPID', 'ODC', 'RelativeLoc', 'RotationPred', 'SimCLR',
-    'SimSiam', 'SwAV'
+    'NPID', 'ODC', 'RelativeLoc', 'RotationPred', 'SimCLR', 'SimSiam', 'SwAV',
+    'MAE', 'MoCoV3'
 ]

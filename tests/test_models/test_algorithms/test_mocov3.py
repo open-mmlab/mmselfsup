@@ -1,4 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import platform
+
 import pytest
 import torch
 
@@ -38,6 +40,7 @@ head = dict(
     temperature=0.2)
 
 
+@pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_mocov3():
     with pytest.raises(AssertionError):
         alg = MoCoV3(backbone=backbone, neck=None, head=head)

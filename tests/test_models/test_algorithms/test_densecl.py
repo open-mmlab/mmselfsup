@@ -1,4 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import platform
+
 import pytest
 import torch
 
@@ -23,6 +25,7 @@ neck = dict(
 head = dict(type='ContrastiveHead', temperature=0.2)
 
 
+@pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_densecl():
     with pytest.raises(AssertionError):
         alg = DenseCL(backbone=backbone, neck=None, head=head)

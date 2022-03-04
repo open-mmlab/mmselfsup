@@ -23,6 +23,18 @@ Models:
       - Task: Self-Supervised Image Classification
         Dataset: ImageNet-1k
         Metrics:
-          Top 1 Accuracy: 67.68
+          Top 1 Accuracy: 67.55
     Config: configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py
-    Weights: https://download.openmmlab.com/mmselfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k_20211213-30dbaef1.pth
+    Weights: https://download.openmmlab.com/mmselfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k_20220225-5c8b2c2e.pth
+  - Name: byol_resnet50_8xb32-accum16-coslr-300e_in1k
+    In Collection: BYOL
+    Metadata:
+      Epochs: 300
+      Batch Size: 256
+    Results:
+      - Task: Self-Supervised Image Classification
+        Dataset: ImageNet-1k
+        Metrics:
+          Top 1 Accuracy: 68.55
+    Config: configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py
+    Weights: https://download.openmmlab.com/mmselfsup/byol/byol_resnet50_8xb32-accum16-coslr-300e_in1k_20220225-a0daa54a.pth

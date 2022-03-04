@@ -1,4 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import platform
+
 import pytest
 import torch
 
@@ -27,6 +29,7 @@ head = dict(
     num_crops=nmb_crops)
 
 
+@pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_swav():
     with pytest.raises(AssertionError):
         alg = SwAV(backbone=backbone, neck=neck, head=None)

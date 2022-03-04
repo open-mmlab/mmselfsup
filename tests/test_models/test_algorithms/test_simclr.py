@@ -1,4 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import platform
+
 import pytest
 import torch
 
@@ -20,6 +22,7 @@ neck = dict(
 head = dict(type='ContrastiveHead', temperature=0.1)
 
 
+@pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_simclr():
     with pytest.raises(AssertionError):
         alg = SimCLR(backbone=backbone, neck=None, head=head)

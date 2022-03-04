@@ -1,3 +1,5 @@
+# Copyright (c) OpenMMLab. All rights reserved.
+import os.path as osp
 from unittest.mock import ANY
 
 import pytest
@@ -10,7 +12,7 @@ DATASET_CONFIG = dict(
     data_source=dict(
         type='ImageNet',
         data_prefix=ANY,
-        ann_file='tests/data/data_list.txt',
+        ann_file=osp.join('tests', 'data', 'data_list.txt'),
     ),
     pipeline=[
         dict(type='RandomResizedCrop', size=224),

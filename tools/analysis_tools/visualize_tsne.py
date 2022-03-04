@@ -37,7 +37,13 @@ def parse_args():
     parser.add_argument(
         '--layer_ind',
         type=str,
+        default='0,1,2,3,4',
         help='layer indices, separated by comma, e.g., "0,1,2,3,4"')
+    parser.add_argument(
+        '--pool_type',
+        choices=['specified', 'adaptive'],
+        default='specified',
+        help='Pooling type in :class:`MultiPooling`')
     parser.add_argument(
         '--max_num_class',
         type=int,
@@ -181,10 +187,12 @@ def main():
     model.init_weights()
 
     # model is determined in this priority: init_cfg > checkpoint > random
-    if getattr(cfg.model.backbone.init_cfg, 'type', None) == 'Pretrained':
-        logger.info(
-            f'Use pretrained model: '
-            f'{cfg.model.backbone.init_cfg.checkpoint} to extract features')
+    if hasattr(cfg.model.backbone, 'init_cfg'):
+        if getattr(cfg.model.backbone.init_cfg, 'type', None) == 'Pretrained':
+            logger.info(
+                f'Use pretrained model: '
+                f'{cfg.model.backbone.init_cfg.checkpoint} to extract features'
+            )
     elif args.checkpoint is not None:
         logger.info(f'Use checkpoint: {args.checkpoint} to extract features')
         load_checkpoint(model, args.checkpoint, map_location='cpu')
@@ -201,7 +209,7 @@ def main():
 
     # build extraction processor and run
     extractor = ExtractProcess(
-        pool_type='specified', backbone='resnet50', layer_indices=layer_ind)
+        pool_type=args.pool_type, backbone='resnet50', layer_indices=layer_ind)
     features = extractor.extract(model, data_loader, distributed=distributed)
     labels = dataset.data_source.get_gt_labels()
 

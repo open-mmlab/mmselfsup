@@ -131,7 +131,6 @@ def build_dataloader(dataset,
         img_norm_cfg = kwargs.pop('img_norm_cfg')
     else:
         prefetch = False
-
     data_loader = DataLoader(
         dataset,
         batch_size=batch_size,
@@ -166,3 +165,4 @@ def worker_init_fn(worker_id, num_workers, rank, seed):
     worker_seed = num_workers * rank + worker_id + seed
     np.random.seed(worker_seed)
     random.seed(worker_seed)
+    torch.manual_seed(worker_seed)

@@ -19,6 +19,8 @@ class BaseDataSource(object, metaclass=ABCMeta):
         test_mode (bool): in train mode or test mode. Defaults to False.
         color_type (str): The flag argument for :func:`mmcv.imfrombytes()`.
             Defaults to color.
+        channel_order (str): The channel order of images when loaded. Defaults
+            to rgb.
         file_client_args (dict): Arguments to instantiate a FileClient.
             See :class:`mmcv.fileio.FileClient` for details.
             Defaults to dict(backend='disk').
@@ -32,11 +34,13 @@ class BaseDataSource(object, metaclass=ABCMeta):
                  ann_file=None,
                  test_mode=False,
                  color_type='color',
+                 channel_order='rgb',
                  file_client_args=dict(backend='disk')):
         self.data_prefix = data_prefix
         self.ann_file = ann_file
         self.test_mode = test_mode
         self.color_type = color_type
+        self.channel_order = channel_order
         self.file_client_args = file_client_args
         self.file_client = None
         self.CLASSES = self.get_classes(classes)
@@ -91,10 +95,16 @@ class BaseDataSource(object, metaclass=ABCMeta):
             else:
                 filename = self.data_infos[idx]['img_info']['filename']
             img_bytes = self.file_client.get(filename)
-            img = mmcv.imfrombytes(img_bytes, flag=self.color_type)
+            img = mmcv.imfrombytes(
+                img_bytes,
+                flag=self.color_type,
+                channel_order=self.channel_order)
         else:
             img = self.data_infos[idx]['img']
 
+        img_bytes = self.file_client.get(filename)
+        img = mmcv.imfrombytes(
+            img_bytes, flag=self.color_type, channel_order=self.channel_order)
         img = img.astype(np.uint8)
         return Image.fromarray(img)
 

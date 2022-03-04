@@ -22,7 +22,7 @@ class DefaultOptimizerConstructor:
                 - any arguments of the corresponding optimizer type, e.g.,
                   lr, weight_decay, momentum, etc.
         paramwise_cfg (dict, optional): Parameter-wise options.
-            Defaults to None
+            Defaults to None.
 
     Example 1:
         >>> model = torch.nn.modules.Conv1d(1, 1, 1)
@@ -47,6 +47,7 @@ class DefaultOptimizerConstructor:
             model = model.module
         optimizer_cfg = self.optimizer_cfg.copy()
         paramwise_options = self.paramwise_cfg
+
         # if no paramwise option is specified, just use the global setting
         if paramwise_options is None:
             optimizer_cfg['params'] = model.parameters()

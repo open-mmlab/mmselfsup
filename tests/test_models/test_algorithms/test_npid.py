@@ -1,4 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import platform
+
 import pytest
 import torch
 
@@ -17,7 +19,8 @@ memory_bank = dict(type='SimpleMemory', length=8, feat_dim=4, momentum=0.5)
 
 
 @pytest.mark.skipif(
-    not torch.cuda.is_available(), reason='CUDA is not available.')
+    not torch.cuda.is_available() or platform.system() == 'Windows',
+    reason='CUDA is not available or Windows mem limit')
 def test_npid():
     with pytest.raises(AssertionError):
         alg = NPID(backbone=backbone, neck=neck, head=head, memory_bank=None)

@@ -14,6 +14,6 @@ __all__ = [
     'AliasMethod', 'batch_shuffle_ddp', 'batch_unshuffle_ddp',
     'dist_forward_collect', 'nondist_forward_collect', 'collect_env',
     'distributed_sinkhorn', 'Extractor', 'concat_all_gather', 'gather_tensors',
-    'gather_tensors_batch', 'get_root_logger', 'setup_multi_processes',
-    'multi_gpu_test', 'single_gpu_test'
+    'gather_tensors_batch', 'get_root_logger', 'multi_gpu_test',
+    'single_gpu_test', 'setup_multi_processes'
 ]
