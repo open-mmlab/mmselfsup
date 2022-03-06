@@ -68,6 +68,6 @@ fp16 = dict(loss_scale='dynamic')
 checkpoint_config = dict(interval=1, max_keep_ckpts=3, out_dir='')
 persistent_workers = True
 log_config = dict(
-    interval=1, hooks=[
+    interval=100, hooks=[
         dict(type='TextLoggerHook'),
     ])
