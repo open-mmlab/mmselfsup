@@ -31,7 +31,7 @@ class SingleViewDataset(BaseDataset):
         img = self.pipeline(img)
         if self.prefetch:
             img = torch.from_numpy(to_numpy(img))
-        return dict(img=img, label=label, idx=idx)
+        return dict(img=img, gt_label=label, idx=idx)
 
     def evaluate(self, results, logger=None, topk=(1, 5)):
         """The evaluation function to output accuracy.
