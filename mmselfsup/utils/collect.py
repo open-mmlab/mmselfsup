@@ -62,6 +62,8 @@ def dist_forward_collect(func, data_loader, rank, length, ret_rank=-1):
     for idx, data in enumerate(data_loader):
         with torch.no_grad():
             result = func(**data)  # dict{key: tensor}
+            result = np.concatenate([res.reshape(1, -1) for res in result])
+            result = {'last_head': torch.from_numpy(result)}
         results.append(result)
 
         if rank == 0:

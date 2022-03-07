@@ -21,7 +21,8 @@ def multi_gpu_test(model, data_loader, tmpdir=None, gpu_collect=False):
 
     # the function sent to collect function
     def test_mode_func(**x):
-        return model(mode='test', **x)
+        x = {'img': x['img']}
+        return model(return_loss=False, **x)
 
     rank, world_size = get_dist_info()
     results = dist_forward_collect(test_mode_func, data_loader, rank,
