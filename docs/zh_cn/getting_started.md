@@ -62,7 +62,21 @@ GPUS_PER_NODE=8 GPUS=8 bash tools/srun_train.sh Dummy Test_job configs/selfsup/o
 
 ### 使用多台机器训练
 
-如果您想使用由 ethernet 连接起来的多台机器， 您可以参考 PyTorch [Launch utility](https://pytorch.org/docs/stable/distributed.html#launch-utility) 去修改一下 `tools/dist_train.sh`。但是，如果您不使用高速网路连接这几台机器的话，训练将会非常慢。
+如果您想使用由 ethernet 连接起来的多台机器， 您可以使用以下命令:
+
+在第一台机器上:
+
+```shell
+NNODES=2 NODE_RANK=0 PORT=$MASTER_PORT MASTER_ADDR=$MASTER_ADDR bash tools/dist_train $CONFIG $GPUS
+```
+
+在第二台机器上:
+
+```shell
+NNODES=2 NODE_RANK=1 PORT=$MASTER_PORT MASTER_ADDR=$MASTER_ADDR bash tools/dist_train $CONFIG $GPUS
+```
+
+但是，如果您不使用高速网路连接这几台机器的话，训练将会非常慢。
 
 如果您使用的是 slurm 来管理多台机器，您可以使用同在单台机器上一样的命令来启动任务，但是您必须得设置合适的环境变量和参数，具体可以参考[slurm_train.sh](../../tools/slurm_train.sh)。
 
