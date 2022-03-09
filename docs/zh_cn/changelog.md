@@ -2,6 +2,10 @@
 
 ## MMSelfSup
 
+### v0.7.1 (03/03/2022)
+
+* 修复 MMClassification 版本依赖问题 ([#221](https://github.com/open-mmlab/mmselfsup/pull/236))
+
 ### v0.7.0 (03/03/2022)
 
 #### 亮点

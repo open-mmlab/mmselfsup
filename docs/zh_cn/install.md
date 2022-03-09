@@ -16,7 +16,7 @@
 
 | MMSelfSup version |    MMCV version     |  MMClassification version   | MMSegmentation version | MMDetection version |
 | :---------------: | :-----------------: | :-------------------------: | :--------------------: | :-----------------: |
-|  0.7.0 (master)   | mmcv-full >= 1.3.16 | mmcls >= 0.19.0 , <= 0.20.1 |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
+|  0.7.1 (master)   | mmcv-full >= 1.3.16 | mmcls >= 0.19.0 , <= 0.20.1 |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
 |       0.6.0       | mmcv-full >= 1.3.16 |       mmcls >= 0.19.0       |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
 |       0.5.0       | mmcv-full >= 1.3.16 |              /              |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
 
