@@ -1,6 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import torch
-import torch.nn as nn
 from mmcv.utils.parrots_wrapper import _BatchNorm
 
 from mmselfsup.models.backbones import ResNet
@@ -34,111 +33,6 @@ def check_norm_state(modules, train_state):
             if mod.training != train_state:
                 return False
     return True
-
-
-def test_basic_block():
-    # BasicBlock with stride 1, out_channels == in_channels
-    block = BasicBlock(64, 64)
-    assert block.conv1.in_channels == 64
-    assert block.conv1.out_channels == 64
-    assert block.conv1.kernel_size == (3, 3)
-    assert block.conv1.stride == (1, 1)
-    assert block.conv2.in_channels == 64
-    assert block.conv2.out_channels == 64
-    assert block.conv2.kernel_size == (3, 3)
-    x = torch.randn(1, 64, 56, 56)
-    x_out = block(x)
-    assert x_out.shape == torch.Size([1, 64, 56, 56])
-
-    # BasicBlock with stride 1 and downsample
-    downsample = nn.Sequential(
-        nn.Conv2d(64, 128, kernel_size=1, bias=False), nn.BatchNorm2d(128))
-    block = BasicBlock(64, 128, downsample=downsample)
-    assert block.conv1.in_channels == 64
-    assert block.conv1.out_channels == 128
-    assert block.conv1.kernel_size == (3, 3)
-    assert block.conv1.stride == (1, 1)
-    assert block.conv2.in_channels == 128
-    assert block.conv2.out_channels == 128
-    assert block.conv2.kernel_size == (3, 3)
-    x = torch.randn(1, 64, 56, 56)
-    x_out = block(x)
-    assert x_out.shape == torch.Size([1, 128, 56, 56])
-
-    # BasicBlock with stride 2 and downsample
-    downsample = nn.Sequential(
-        nn.Conv2d(64, 128, kernel_size=1, stride=2, bias=False),
-        nn.BatchNorm2d(128))
-    block = BasicBlock(64, 128, stride=2, downsample=downsample)
-    assert block.conv1.in_channels == 64
-    assert block.conv1.out_channels == 128
-    assert block.conv1.kernel_size == (3, 3)
-    assert block.conv1.stride == (2, 2)
-    assert block.conv2.in_channels == 128
-    assert block.conv2.out_channels == 128
-    assert block.conv2.kernel_size == (3, 3)
-    x = torch.randn(1, 64, 56, 56)
-    x_out = block(x)
-    assert x_out.shape == torch.Size([1, 128, 28, 28])
-
-
-def test_bottleneck():
-    # Test Bottleneck style
-    block = Bottleneck(64, 64, stride=2, style='pytorch')
-    assert block.conv1.stride == (1, 1)
-    assert block.conv2.stride == (2, 2)
-    block = Bottleneck(64, 64, stride=2, style='caffe')
-    assert block.conv1.stride == (2, 2)
-    assert block.conv2.stride == (1, 1)
-
-    # Bottleneck with stride 1
-    block = Bottleneck(64, 16, style='pytorch')
-    assert block.conv1.in_channels == 64
-    assert block.conv1.out_channels == 16
-    assert block.conv1.kernel_size == (1, 1)
-    assert block.conv2.in_channels == 16
-    assert block.conv2.out_channels == 16
-    assert block.conv2.kernel_size == (3, 3)
-    assert block.conv3.in_channels == 16
-    assert block.conv3.out_channels == 64
-    assert block.conv3.kernel_size == (1, 1)
-    x = torch.randn(1, 64, 56, 56)
-    x_out = block(x)
-    assert x_out.shape == (1, 64, 56, 56)
-
-    # Bottleneck with stride 1 and downsample
-    downsample = nn.Sequential(
-        nn.Conv2d(64, 256, kernel_size=1), nn.BatchNorm2d(256))
-    block = Bottleneck(64, 64, style='pytorch', downsample=downsample)
-    assert block.conv1.in_channels == 64
-    assert block.conv1.out_channels == 64
-    assert block.conv1.kernel_size == (1, 1)
-    assert block.conv2.in_channels == 64
-    assert block.conv2.out_channels == 64
-    assert block.conv2.kernel_size == (3, 3)
-    assert block.conv3.in_channels == 64
-    assert block.conv3.out_channels == 256
-    assert block.conv3.kernel_size == (1, 1)
-    x = torch.randn(1, 64, 56, 56)
-    x_out = block(x)
-    assert x_out.shape == (1, 256, 56, 56)
-
-    # Bottleneck with stride 2 and downsample
-    downsample = nn.Sequential(
-        nn.Conv2d(64, 256, kernel_size=1, stride=2), nn.BatchNorm2d(256))
-    block = Bottleneck(
-        64, 64, stride=2, style='pytorch', downsample=downsample)
-    x = torch.randn(1, 64, 56, 56)
-    x_out = block(x)
-    assert x_out.shape == (1, 256, 28, 28)
-
-    # Test Bottleneck with checkpointing
-    block = Bottleneck(64, 16, with_cp=True)
-    block.train()
-    assert block.with_cp
-    x = torch.randn(1, 64, 56, 56, requires_grad=True)
-    x_out = block(x)
-    assert x_out.shape == torch.Size([1, 64, 56, 56])
 
 
 def test_resnet():
