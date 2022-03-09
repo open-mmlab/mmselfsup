@@ -24,7 +24,7 @@ class ResNet(_ResNet):
         dilations (Sequence[int]): Dilation of each stage.
             Defaults to ``(1, 1, 1, 1)``.
         out_indices (Sequence[int]): Output from which stages.
-            Defaults to ``(3, )``.
+            Defaults to ``(4, )``.
         style (str): `pytorch` or `caffe`. If set to "pytorch", the stride-two
             layer is the 3x3 conv layer, otherwise the stride-two layer is
             the first 1x1 conv layer.
@@ -77,7 +77,7 @@ class ResNet(_ResNet):
                  num_stages=4,
                  strides=(1, 2, 2, 2),
                  dilations=(1, 1, 1, 1),
-                 out_indices=(3, ),
+                 out_indices=(4, ),
                  style='pytorch',
                  deep_stem=False,
                  avg_down=False,
