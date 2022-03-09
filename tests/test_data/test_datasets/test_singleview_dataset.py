@@ -30,6 +30,13 @@ def test_single_view_dataset():
         pipeline=train_pipeline,
         prefetch=prefetch)
     dataset = SingleViewDataset(**data)
+    x = dataset[0]
+    assert 'img' in x
+    assert 'label' in x
+    assert 'idx' in x
+    assert x['img'].size() == (3, 4, 4)
+    assert x['idx'] == 0
+
     fake_results = {'test': np.array([[0.7, 0, 0.3], [0.5, 0.3, 0.2]])}
 
     with pytest.raises(AssertionError):
