@@ -102,12 +102,28 @@ class ResNet(_ResNet):
         # init function, we use a fake input of `out_indices` to pass it.
         temp_out_indices = out_indices
         out_indices = (3, )
-        super().__init__(depth, in_channels, stem_channels, base_channels,
-                         expansion, num_stages, strides, dilations,
-                         out_indices, style, deep_stem, avg_down,
-                         frozen_stages, conv_cfg, norm_cfg, norm_eval, with_cp,
-                         zero_init_residual, init_cfg, drop_path_rate,
-                         **kwargs)
+        super(ResNet, self).__init__(
+            depth=depth,
+            in_channels=in_channels,
+            stem_channels=stem_channels,
+            base_channels=base_channels,
+            expansion=expansion,
+            num_stages=num_stages,
+            strides=strides,
+            dilations=dilations,
+            out_indices=out_indices,
+            style=style,
+            deep_stem=deep_stem,
+            avg_down=avg_down,
+            frozen_stages=frozen_stages,
+            conv_cfg=conv_cfg,
+            norm_cfg=norm_cfg,
+            norm_eval=norm_eval,
+            with_cp=with_cp,
+            zero_init_residual=zero_init_residual,
+            init_cfg=init_cfg,
+            drop_path_rate=drop_path_rate,
+            **kwargs)
         self.out_indices = temp_out_indices
         assert max(out_indices) < num_stages + 1
 

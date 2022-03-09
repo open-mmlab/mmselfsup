@@ -73,7 +73,7 @@ class ResNeXt(ResNet):
     def __init__(self, depth, groups=32, width_per_group=4, **kwargs):
         self.groups = groups
         self.width_per_group = width_per_group
-        super(ResNeXt, self).__init__(depth, **kwargs)
+        super(ResNeXt, self).__init__(depth=depth, **kwargs)
 
     def make_res_layer(self, **kwargs):
         """Redefine the function for ResNeXt related args."""
