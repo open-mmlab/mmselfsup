@@ -55,12 +55,23 @@ class MIMVisionTransformer(VisionTransformer):
                  layer_cfgs=dict(),
                  finetune=True,
                  init_cfg=None):
-        super().__init__(arch, img_size, patch_size, out_indices, drop_rate,
-                         drop_path_rate, norm_cfg, final_norm,
-                         output_cls_token, interpolate_mode, patch_cfg,
-                         layer_cfgs, init_cfg)
+        super().__init__(
+            arch,
+            img_size=img_size,
+            patch_size=patch_size,
+            out_indices=out_indices,
+            drop_rate=drop_rate,
+            drop_path_rate=drop_path_rate,
+            norm_cfg=norm_cfg,
+            final_norm=final_norm,
+            output_cls_token=output_cls_token,
+            interpolate_mode=interpolate_mode,
+            patch_cfg=patch_cfg,
+            layer_cfgs=layer_cfgs,
+            init_cfg=init_cfg)
 
         self.embed_dims = self.arch_settings['embed_dims']
+        self.num_patches = self.patch_resolution[0] * self.patch_resolution[1]
         if not self.final_norm:
             _, self.fc_norm = build_norm_layer(
                 norm_cfg, self.embed_dims, postfix=1)
@@ -81,7 +92,7 @@ class MIMVisionTransformer(VisionTransformer):
 
     def forward(self, x):
         B = x.shape[0]
-        x = self.patch_embed(x)
+        x = self.patch_embed(x)[0]
 
         # stole cls_tokens impl from Phil Wang, thanks
         cls_tokens = self.cls_token.expand(B, -1, -1)

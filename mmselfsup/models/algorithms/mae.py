@@ -23,7 +23,7 @@ class MAE(BaseModel):
         self.backbone = build_backbone(backbone)
         assert neck is not None
         self.neck = build_neck(neck)
-        self.neck.num_patches = self.backbone.patch_embed.num_patches
+        self.neck.num_patches = self.backbone.num_patches
         assert head is not None
         self.head = build_head(head)
 
