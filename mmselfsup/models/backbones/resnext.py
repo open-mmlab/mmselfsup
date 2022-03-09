@@ -76,7 +76,7 @@ class ResNeXt(ResNet):
         super(ResNeXt, self).__init__(depth, **kwargs)
 
     def make_res_layer(self, **kwargs):
-        """Redefine the function for ResNeXt related args"""
+        """Redefine the function for ResNeXt related args."""
         return ResLayer(
             groups=self.groups,
             width_per_group=self.width_per_group,
