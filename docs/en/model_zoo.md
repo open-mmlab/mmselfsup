@@ -40,7 +40,7 @@ Linear Probing on ImageNet-1k
 
 Fine-tuning on ImageNet-1k
 
-Detection on COCO 
+Detection on COCO
 
 Segmentation on ADE20K
 
