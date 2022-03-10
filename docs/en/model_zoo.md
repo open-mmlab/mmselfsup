@@ -32,6 +32,36 @@ Remarks:
 
 In following tables, we only displayed ImageNet Linear Evaluation, COCO17 Object Detection and PASCAL VOC12 Aug Segmentation, you can click algorithm name above to check the comprehensive benchmark results.
 
+### Benchmark Table
+
+Pre-train on ImageNet-1k
+
+Linear Probing on ImageNet-1k
+
+Fine-tuning on ImageNet-1k
+
+Detection on COCO 
+
+Segmentation on ADE20K
+
+| Method        | Backbone  | Pre-train Epoch | Linear Probing | Fine-tuning | Detection | Segmentation | Paper Link                               |
+| ------------- | --------- | --------------- | -------------- | ----------- | --------- | ------------ | ---------------------------------------- |
+| Relative-Loc  | ResNet 50 | 70              | 38.78*         |             |           |              | [link](https://arxiv.org/abs/1505.05192) |
+| Rotation-Pred | ResNet 50 | 70              | 48.12*         |             |           |              | [link](https://arxiv.org/abs/1803.07728) |
+| DeepCluster   | ResNet 50 | 200             | 46.92*         |             |           |              | [link](https://arxiv.org/abs/1807.05520) |
+| NPID          | ResNet 50 | 200             | 58.97*         |             |           |              | [link](https://arxiv.org/abs/1805.01978) |
+| ODC           | ResNet 50 | 440             | 53.43*         |             |           |              | [link](https://arxiv.org/abs/2006.10645) |
+| SimCLR        | ResNet 50 | 200             | 57.28*         |             |           |              | [link](https://arxiv.org/abs/2002.05709) |
+| MoCo v2       | ResNet 50 | 200             | 67.58          |             |           |              | [link](https://arxiv.org/abs/2003.04297) |
+| BYOL          | ResNet 50 | 200             | 67.55*         |             |           |              | [link](https://arxiv.org/abs/2006.07733) |
+| BYOL          | ResNet 50 | 300             | 68.55*         |             |           |              | [link](https://arxiv.org/abs/2006.07733) |
+| SwAV          | ResNet 50 | 200             | 70.47*         |             | 40.2*     |              | [link](https://arxiv.org/abs/2006.09882) |
+| DenseCL       | ResNet 50 | 200             | 63.62*         |             |           |              | [link](https://arxiv.org/abs/2011.09157) |
+| SimSiam       | ResNet 50 | 100             | 68.28          |             |           |              | [link](https://arxiv.org/abs/2011.10566) |
+| SimSiam       | ResNet 50 | 200             | 69.84          |             |           |              | [link](https://arxiv.org/abs/2011.10566) |
+| MoCo v3       | ViT Small | 300             | 73.19          |             |           |              | [link](https://arxiv.org/abs/2104.02057) |
+| MAE           | ViT Base  | 400             |                | 83.1        |           |              | [link](https://arxiv.org/abs/2111.06377) |
+
 ### ImageNet Linear Evaluation
 
 If not specified, we use linear evaluation setting from [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf). Or the settings is mentioned in Remark.
