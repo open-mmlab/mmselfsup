@@ -67,13 +67,13 @@ GPUS_PER_NODE=8 GPUS=8 bash tools/srun_train.sh Dummy Test_job configs/selfsup/o
 在第一台机器上:
 
 ```shell
-NNODES=2 NODE_RANK=0 PORT=$MASTER_PORT MASTER_ADDR=$MASTER_ADDR sh tools/dist_train $CONFIG $GPUS
+NNODES=2 NODE_RANK=0 PORT=$MASTER_PORT MASTER_ADDR=$MASTER_ADDR sh tools/dist_train.sh $CONFIG $GPUS
 ```
 
 在第二台机器上:
 
 ```shell
-NNODES=2 NODE_RANK=1 PORT=$MASTER_PORT MASTER_ADDR=$MASTER_ADDR sh tools/dist_train $CONFIG $GPUS
+NNODES=2 NODE_RANK=1 PORT=$MASTER_PORT MASTER_ADDR=$MASTER_ADDR sh tools/dist_train.sh $CONFIG $GPUS
 ```
 
 但是，如果您不使用高速网路连接这几台机器的话，训练将会非常慢。
