@@ -4,6 +4,7 @@ from unittest.mock import MagicMock
 
 import pytest
 import torch
+
 import mmselfsup
 from mmselfsup.models.algorithms import DenseCL
 
