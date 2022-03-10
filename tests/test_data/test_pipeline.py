@@ -53,7 +53,7 @@ def test_lighting():
     transform = dict(type='Lighting', alphastd=0)
     module = build_from_cfg(transform, PIPELINES)
     res = module(img)
-    assert img.all() == res.all()
+    assert img.equal(res)
 
 
 def test_gaussianblur():
