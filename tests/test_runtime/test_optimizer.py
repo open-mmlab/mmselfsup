@@ -3,7 +3,7 @@ import pytest
 import torch
 import torch.nn as nn
 
-from mmselfsup.core import build_optimizer, LARS
+from mmselfsup.core import LARS, build_optimizer
 
 
 class ExampleModel(nn.Module):
