@@ -102,11 +102,11 @@ class SimMIMFtOptimizerConstructor:
             paramwise_options[name] = dict(lr_mult=layer_scales[layer_id])
 
     def _get_swin_layer(self, name, num_layers, depths):
-        if "mask_token" in name:
+        if 'mask_token' in name:
             return 0
-        elif "patch_embed" in name:
+        elif 'patch_embed' in name:
             return 0
-        elif name.startswith("backbone.stages"):
+        elif name.startswith('backbone.stages'):
             layer_id = int(name.split('.')[2])
             block_id = name.split('.')[4]
             if block_id == 'reduction' or block_id == 'norm':

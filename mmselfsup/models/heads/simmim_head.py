@@ -1,26 +1,27 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import torch
-from torch.nn import functional as F
 from mmcv.runner import BaseModule
+from torch.nn import functional as F
 
 from ..builder import HEADS
 
 
 @HEADS.register_module()
 class SimMIMPretrainHead(BaseModule):
+    """Pretrain Head for SimMIM.
 
-    def __init__(self, patch_size, encoder_in_channels):
+    Args:
+        patch_size (int): Patch size of each token.
+        encoder_in_channels (int): Number of input channels for encoder.
+    """
+
+    def __init__(self, patch_size: int, encoder_in_channels: int) -> None:
         super(SimMIMPretrainHead, self).__init__()
         self.patch_size = patch_size
         self.encoder_in_channels = encoder_in_channels
 
-    def patchify(self, x, mask: torch.Tensor):
-
-        mask = mask.repeat_interleave(self.patch_size, 1).repeat_interleave(
-            self.patch_size, 2).unsqueeze(1).contiguous()
-        return x
-
-    def forward(self, x, x_rec, mask):
+    def forward(self, x: torch.Tensor, x_rec: torch.Tensor,
+                mask: torch.Tensor) -> dict:
         losses = dict()
 
         mask = mask.repeat_interleave(self.patch_size, 1).repeat_interleave(

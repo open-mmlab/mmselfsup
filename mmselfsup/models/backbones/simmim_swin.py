@@ -1,16 +1,20 @@
-from mmcls.models import SwinTransformer
-from ..builder import BACKBONES
+# Copyright (c) OpenMMLab. All rights reserved.
+from typing import Optional, Sequence, Tuple, Union
 
-import torch.nn as nn
 import torch
+import torch.nn as nn
+from mmcls.models import SwinTransformer
 from mmcv.cnn.utils.weight_init import trunc_normal_
+
+from ..builder import BACKBONES
 
 
 @BACKBONES.register_module()
 class SwinForSimMIM(SwinTransformer):
-    """Swin Transformer for SimMIM
+    """Swin Transformer for SimMIM.
 
     Args:
+        Args:
         arch (str | dict): Swin Transformer architecture
             Defaults to 'T'.
         img_size (int | tuple): The size of input image.
@@ -21,9 +25,12 @@ class SwinForSimMIM(SwinTransformer):
             Defaults to 0.
         drop_path_rate (float): Stochastic depth rate.
             Defaults to 0.1.
+        out_indices (tuple): Layers to be outputted. Defaults to (3, ).
         use_abs_pos_embed (bool): If True, add absolute position embedding to
             the patch embedding. Defaults to False.
-        with_cp (bool, optional): Use checkpoint or not. Using checkpoint
+        auto_pad (bool): If True, auto pad feature map to fit window_size.
+            Defaults to False.
+        with_cp (bool): Use checkpoint or not. Using checkpoint
             will save some memory while slowing down the training speed.
             Defaults to False.
         frozen_stages (int): Stages to be frozen (stop grad and set eval mode).
@@ -31,42 +38,53 @@ class SwinForSimMIM(SwinTransformer):
         norm_eval (bool): Whether to set norm layers to eval mode, namely,
             freeze running stats (mean and var). Note: Effect on Batch Norm
             and its variants only. Defaults to False.
-        auto_pad (bool): If True, auto pad feature map to fit window_size.
-            Defaults to False.
-        norm_cfg (dict, optional): Config dict for normalization layer at end
+        norm_cfg (dict): Config dict for normalization layer at end
             of backone. Defaults to dict(type='LN')
-        stage_cfgs (Sequence | dict, optional): Extra config dict for each
+        stage_cfgs (Sequence | dict): Extra config dict for each
             stage. Defaults to empty dict.
-        patch_cfg (dict, optional): Extra config dict for patch embedding.
+        patch_cfg (dict): Extra config dict for patch embedding.
             Defaults to empty dict.
         init_cfg (dict, optional): The Config for initialization.
             Defaults to None.
     """
 
     def __init__(self,
-                 arch='T',
-                 img_size=224,
-                 in_channels=3,
-                 drop_rate=0.,
-                 drop_path_rate=0.1,
-                 out_indices=(3, ),
-                 use_abs_pos_embed=False,
-                 auto_pad=False,
-                 with_cp=False,
-                 frozen_stages=-1,
-                 norm_eval=False,
-                 norm_cfg=dict(type='LN'),
-                 stage_cfgs=dict(),
-                 patch_cfg=dict(),
-                 init_cfg=None):
-        super().__init__(arch, img_size, in_channels, drop_rate,
-                         drop_path_rate, out_indices, use_abs_pos_embed,
-                         auto_pad, with_cp, frozen_stages, norm_eval, norm_cfg,
-                         stage_cfgs, patch_cfg, init_cfg)
+                 arch: Union[str, dict] = 'T',
+                 img_size: Union[Tuple[int, int], int] = 224,
+                 in_channels: int = 3,
+                 drop_rate: float = 0.,
+                 drop_path_rate: float = 0.1,
+                 out_indices: tuple = (3, ),
+                 use_abs_pos_embed: bool = False,
+                 auto_pad: bool = False,
+                 with_cp: bool = False,
+                 frozen_stages: bool = -1,
+                 norm_eval: bool = False,
+                 norm_cfg: dict = dict(type='LN'),
+                 stage_cfgs: Union[Sequence, dict] = dict(),
+                 patch_cfg: dict = dict(),
+                 init_cfg: Optional[dict] = None) -> None:
+        super().__init__(
+            arch=arch,
+            img_size=img_size,
+            in_channels=in_channels,
+            drop_rate=drop_rate,
+            drop_path_rate=drop_path_rate,
+            out_indices=out_indices,
+            use_abs_pos_embed=use_abs_pos_embed,
+            auto_pad=auto_pad,
+            with_cp=with_cp,
+            frozen_stages=frozen_stages,
+            norm_eval=norm_eval,
+            norm_cfg=norm_cfg,
+            stage_cfgs=stage_cfgs,
+            patch_cfg=patch_cfg,
+            init_cfg=init_cfg)
 
         self.mask_token = nn.Parameter(torch.zeros(1, 1, self.embed_dims))
 
-    def init_weights(self):
+    def init_weights(self) -> None:
+        """Initialize weights."""
         super(SwinTransformer, self).init_weights()
 
         if (isinstance(self.init_cfg, dict)
@@ -90,7 +108,7 @@ class SwinForSimMIM(SwinTransformer):
             nn.init.constant_(m.bias, 0)
             nn.init.constant_(m.weight, 1.0)
 
-    def forward(self, x, mask):
+    def forward(self, x: torch.Tensor, mask: torch.Tensor) -> tuple:
         x = self.patch_embed(x)
 
         assert mask is not None

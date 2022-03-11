@@ -12,9 +12,9 @@ from .odc import ODC
 from .relative_loc import RelativeLoc
 from .rotation_pred import RotationPred
 from .simclr import SimCLR
+from .simmim import SimMIM
 from .simsiam import SimSiam
 from .swav import SwAV
-from .simmim import SimMIM
 
 __all__ = [
     'BaseModel', 'BYOL', 'Classification', 'DeepCluster', 'DenseCL', 'MoCo',

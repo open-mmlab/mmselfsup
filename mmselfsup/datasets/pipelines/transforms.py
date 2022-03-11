@@ -1,5 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import inspect
+from typing import List
 
 import numpy as np
 import torch
@@ -19,12 +20,20 @@ for m in inspect.getmembers(_transforms, inspect.isclass):
 
 @PIPELINES.register_module()
 class BlockMaskGen(object):
+    """Generate random block mask for each Image.
+
+    Args:
+        input_size (int): Size of input image. Defaults to 192.
+        mask_patch_size (int): Size of each block mask. Defaults to 32.
+        model_patch_size (int): Patch size of each token. Defaults to 4.
+        mask_ratio (float): The mask ratio of image. Defaults to 0.6.
+    """
 
     def __init__(self,
-                 input_size=192,
-                 mask_patch_size=32,
-                 model_patch_size=4,
-                 mask_ratio=0.6):
+                 input_size: int = 192,
+                 mask_patch_size: int = 32,
+                 model_patch_size: int = 4,
+                 mask_ratio: float = 0.6) -> None:
         self.input_size = input_size
         self.mask_patch_size = mask_patch_size
         self.model_patch_size = model_patch_size
@@ -39,7 +48,8 @@ class BlockMaskGen(object):
         self.token_count = self.rand_size**2
         self.mask_count = int(np.ceil(self.token_count * self.mask_ratio))
 
-    def __call__(self, img):
+    def __call__(self, img: torch.Tensor,
+                 mask: torch.Tensor) -> List[torch.Tensor, torch.Tensor]:
         mask_idx = np.random.permutation(self.token_count)[:self.mask_count]
         mask = np.zeros(self.token_count, dtype=int)
         mask[mask_idx] = 1
