@@ -27,8 +27,10 @@ def test_classification():
 
     fake_input = torch.randn((16, 3, 224, 224))
     fake_labels = torch.ones(16, dtype=torch.long)
-    fake_backbone_out = alg.extract_feat(fake_input)
-    assert fake_backbone_out[0].size() == torch.Size([16, 2048, 7, 7])
+    fake_out = alg.forward_test(fake_input)
+    assert 'head4' in fake_out
+    assert fake_out['head4'].size() == torch.Size([16, 4])
+
     fake_out = alg.forward_train(fake_input, fake_labels)
     assert fake_out['loss'].item() > 0
 
@@ -47,7 +49,7 @@ def test_classification():
     )
 
     alg = Classification(backbone=backbone, head=head)
-    assert hasattr(alg, 'head')
+    assert alg.with_head
 
     fake_input = torch.randn((16, 3, 224, 224))
     fake_labels = torch.ones(16, dtype=torch.long)
