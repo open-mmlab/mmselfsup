@@ -36,7 +36,7 @@ def test_deepcluster():
 
     fake_input = torch.randn((16, 3, 224, 224))
     fake_labels = torch.ones(16, dtype=torch.long)
-    fake_out = alg.forward_test(fake_input)
+    fake_out = alg.forward(fake_input, mode='test')
     assert 'head0' in fake_out
     assert fake_out['head0'].size() == torch.Size([16, num_classes])
 

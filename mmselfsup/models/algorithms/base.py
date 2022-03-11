@@ -150,7 +150,10 @@ class BaseModel(BaseModule, metaclass=ABCMeta):
         losses = self(**data)
         loss, log_vars = self._parse_losses(losses)
 
-        outputs = dict(
-            loss=loss, log_vars=log_vars, num_samples=len(data['img'].data))
+        if isinstance(data['img'], list):
+            num_samples = len(data['img'][0].data)
+        else:
+            num_samples = len(data['img'].data)
+        outputs = dict(loss=loss, log_vars=log_vars, num_samples=num_samples)
 
         return outputs

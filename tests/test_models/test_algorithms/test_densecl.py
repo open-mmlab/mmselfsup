@@ -77,3 +77,8 @@ def test_densecl():
     assert fake_loss['loss_dense'] > 0
     assert alg.queue_ptr.item() == 16
     assert alg.queue2_ptr.item() == 16
+
+    # test train step with 2 keys in loss
+    fake_outputs = alg.train_step(dict(img=[fake_input, fake_input]), None)
+    assert fake_outputs['loss'].item() > -1
+    assert fake_outputs['num_samples'] == 16
