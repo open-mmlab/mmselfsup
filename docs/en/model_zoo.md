@@ -60,6 +60,7 @@ Segmentation on ADE20K
 | SimSiam       | ResNet 50 | 100             | 68.28          |             |           |              | [link](https://arxiv.org/abs/2011.10566) |
 | SimSiam       | ResNet 50 | 200             | 69.84          |             |           |              | [link](https://arxiv.org/abs/2011.10566) |
 | MoCo v3       | ViT Small | 300             | 73.19          |             |           |              | [link](https://arxiv.org/abs/2104.02057) |
+| MoCo v3       | ViT Base  | 300             | 76.84          |             |           |              | [link](https://arxiv.org/abs/2104.02057) |
 | MAE           | ViT Base  | 400             |                | 83.1        |           |              | [link](https://arxiv.org/abs/2111.06377) |
 
 ### ImageNet Linear Evaluation
