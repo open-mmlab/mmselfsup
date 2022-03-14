@@ -1,0 +1,27 @@
+Collections:
+  - Name: MAE
+    Metadata:
+      Training Data: ImageNet-1k
+      Training Techniques:
+        - AdamW
+      Training Resources: 8x A100-80G GPUs
+      Architecture:
+        - ViT
+    Paper:
+        URL: https://arxiv.org/abs/2111.06377
+        Title: "Masked Autoencoders Are Scalable Vision Learners"
+    README: configs/selfsup/mae/README.md
+
+Models:
+  - Name: mae_vit-base-p16_8xb512-coslr-400e_in1k
+    In Collection: MAE
+    Metadata:
+      Epochs: 400
+      Batch Size: 4096
+    Results:
+      - Task: Self-Supervised Image Classification
+        Dataset: ImageNet-1k
+        Metrics:
+          Top 1 Accuracy: 83.1
+    Config: configs/selfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k.py
+    Weights: https://download.openmmlab.com/mmselfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k-224_20220223-85be947b.pth
