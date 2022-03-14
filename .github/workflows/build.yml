@@ -89,10 +89,10 @@ jobs:
           coverage run --branch --source mmselfsup -m pytest tests/
           coverage xml
           coverage report -m --omit="mmselfsup/apis/*"
-      # Only upload coverage report for python3.7 && pytorch1.5
+      # Only upload coverage report for python3.8 && pytorch1.9.0
       - name: Upload coverage to Codecov
-        if: ${{matrix.torch == '1.9' && matrix.python-version == '3.7'}}
-        uses: codecov/codecov-action@v1.0.10
+        if: ${{matrix.torch == '1.9.0' && matrix.python-version == '3.8'}}
+        uses: codecov/codecov-action@v2
         with:
           file: ./coverage.xml
           flags: unittests
