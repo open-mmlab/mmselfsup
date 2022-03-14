@@ -15,6 +15,7 @@ def test_random_applied_trans():
     transform = dict(
         type='RandomAppliedTrans', transforms=[dict(type='Solarization')])
     module = build_from_cfg(transform, PIPELINES)
+    assert isinstance(str(module), str)
     res = module(img)
     assert img.size == res.size
 
@@ -39,6 +40,7 @@ def test_random_applied_trans():
 def test_lighting():
     transform = dict(type='Lighting')
     module = build_from_cfg(transform, PIPELINES)
+    assert isinstance(str(module), str)
     img = np.ones((224, 224, 3), dtype=np.uint8)
 
     with pytest.raises(AssertionError):
@@ -46,8 +48,12 @@ def test_lighting():
 
     img = torch.from_numpy(img).float().permute(2, 1, 0)
     res = module(img)
-
     assert img.size() == res.size()
+
+    transform = dict(type='Lighting', alphastd=0)
+    module = build_from_cfg(transform, PIPELINES)
+    res = module(img)
+    assert img.equal(res)
 
 
 def test_gaussianblur():
@@ -61,6 +67,7 @@ def test_gaussianblur():
     # p=0.5
     transform = dict(type='GaussianBlur', sigma_min=0.1, sigma_max=1.0)
     module = build_from_cfg(transform, PIPELINES)
+    assert isinstance(str(module), str)
     res = module(img)
 
     transform = dict(type='GaussianBlur', sigma_min=0.1, sigma_max=1.0, p=0.)
@@ -84,6 +91,7 @@ def test_solarization():
     # p=0.5
     transform = dict(type='Solarization')
     module = build_from_cfg(transform, PIPELINES)
+    assert isinstance(str(module), str)
     res = module(img)
 
     transform = dict(type='Solarization', p=0.)
