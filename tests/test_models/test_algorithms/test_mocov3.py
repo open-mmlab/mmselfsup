@@ -52,6 +52,6 @@ def test_mocov3():
     alg.momentum_update()
 
     fake_input = torch.randn((16, 3, 224, 224))
-    fake_backbone_out = alg.extract_feat(fake_input)
+    fake_backbone_out = alg.forward(fake_input, mode='extract')
     assert fake_backbone_out[0][0].size() == torch.Size([16, 384, 14, 14])
     assert fake_backbone_out[0][1].size() == torch.Size([16, 384])

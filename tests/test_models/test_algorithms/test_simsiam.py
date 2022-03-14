@@ -51,3 +51,13 @@ def test_simsiam():
     ]
     fake_out = alg.forward(fake_input)
     assert fake_out['loss'].item() > -1
+
+    # test train step
+    fake_outputs = alg.train_step(dict(img=fake_input), None)
+    assert fake_outputs['loss'].item() > -1
+    assert fake_outputs['num_samples'] == 16
+
+    # test val step
+    fake_outputs = alg.val_step(dict(img=fake_input), None)
+    assert fake_outputs['loss'].item() > -1
+    assert fake_outputs['num_samples'] == 16
