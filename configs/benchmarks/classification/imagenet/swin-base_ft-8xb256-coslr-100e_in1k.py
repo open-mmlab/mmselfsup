@@ -45,7 +45,7 @@ optimizer = dict(
         'absolute_pos_embed': dict(weight_decay=0.),
         'relative_position_bias_table': dict(weight_decay=0.)
     },
-    constructor='SimMIMFtOptimizerConstructor',
+    model_type='swin',
     layer_decay=0.9)
 
 # clip gradient
