@@ -1,11 +1,11 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import platform
 
+import mmcls.models  # noqa: F401
 import pytest
 import torch
 
 from mmselfsup.models import ALGORITHMS
-import mmcls.models
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
