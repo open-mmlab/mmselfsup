@@ -126,3 +126,20 @@ def test_randomaug():
     assert list(res.shape) == [3, 224, 224]
 
     assert isinstance(str(module), str)
+
+
+def test_mask_gen():
+    transform = dict(
+        type='BlockMaskGen',
+        input_size=192,
+        mask_patch_size=32,
+        model_patch_size=4,
+        mask_ratio=0.6)
+
+    img = torch.rand((3, 192, 192))
+    module = build_from_cfg(transform, PIPELINES)
+
+    res = module(img)
+
+    assert list(res[0].shape) == [3, 192, 192]
+    assert list(res[1].shape) == [48, 48]
