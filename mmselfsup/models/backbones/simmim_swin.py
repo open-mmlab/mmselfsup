@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Optional, Sequence, Tuple, Union
+from typing import Optional, Sequence, Union, Tuple
 
 import torch
 import torch.nn as nn
@@ -28,8 +28,6 @@ class SwinForSimMIM(SwinTransformer):
         out_indices (tuple): Layers to be outputted. Defaults to (3, ).
         use_abs_pos_embed (bool): If True, add absolute position embedding to
             the patch embedding. Defaults to False.
-        auto_pad (bool): If True, auto pad feature map to fit window_size.
-            Defaults to False.
         with_cp (bool): Use checkpoint or not. Using checkpoint
             will save some memory while slowing down the training speed.
             Defaults to False.
@@ -56,7 +54,6 @@ class SwinForSimMIM(SwinTransformer):
                  drop_path_rate: float = 0.1,
                  out_indices: tuple = (3, ),
                  use_abs_pos_embed: bool = False,
-                 auto_pad: bool = False,
                  with_cp: bool = False,
                  frozen_stages: bool = -1,
                  norm_eval: bool = False,
@@ -72,7 +69,6 @@ class SwinForSimMIM(SwinTransformer):
             drop_path_rate=drop_path_rate,
             out_indices=out_indices,
             use_abs_pos_embed=use_abs_pos_embed,
-            auto_pad=auto_pad,
             with_cp=with_cp,
             frozen_stages=frozen_stages,
             norm_eval=norm_eval,
@@ -108,8 +104,9 @@ class SwinForSimMIM(SwinTransformer):
             nn.init.constant_(m.bias, 0)
             nn.init.constant_(m.weight, 1.0)
 
-    def forward(self, x: torch.Tensor, mask: torch.Tensor) -> tuple:
-        x = self.patch_embed(x)
+    def forward(self, x: torch.Tensor,
+                mask: torch.Tensor) -> Sequence[torch.Tensor]:
+        x, hw_shape = self.patch_embed(x)
 
         assert mask is not None
         B, L, _ = x.shape
@@ -125,11 +122,11 @@ class SwinForSimMIM(SwinTransformer):
 
         outs = []
         for i, stage in enumerate(self.stages):
-            x = stage(x)
+            x, hw_shape = stage(x, hw_shape)
             if i in self.out_indices:
                 norm_layer = getattr(self, f'norm{i}')
                 out = norm_layer(x)
-                out = out.view(-1, *stage.out_resolution,
+                out = out.view(-1, *hw_shape,
                                stage.out_channels).permute(0, 3, 1,
                                                            2).contiguous()
                 outs.append(out)
