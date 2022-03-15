@@ -22,7 +22,7 @@ class DefaultOptimizerConstructor:
                   lr, weight_decay, momentum, etc.
         paramwise_cfg (dict, optional): Parameter-wise options.
             Defaults to None.
-        
+
 
     Example 1:
         >>> model = torch.nn.modules.Conv1d(1, 1, 1)
@@ -125,7 +125,7 @@ class DefaultOptimizerConstructor:
             return num_layers - 1
 
     def _generate_vit_layer_wise_lr_decay(self, model, paramwise_options):
-        """Generate layer-wise learning rate decay for Vision Transformer"""
+        """Generate layer-wise learning rate decay for Vision Transformer."""
         num_layers = len(model.backbone.layers) + 1
         layer_scales = list(self.layer_decay**(num_layers - i)
                             for i in range(num_layers + 1))

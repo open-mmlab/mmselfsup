@@ -1,6 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import inspect
-from typing import List
+from typing import Tuple
 
 import numpy as np
 import torch
@@ -49,7 +49,7 @@ class BlockMaskGen(object):
         self.mask_count = int(np.ceil(self.token_count * self.mask_ratio))
 
     def __call__(self, img: torch.Tensor,
-                 mask: torch.Tensor) -> List[torch.Tensor, torch.Tensor]:
+                 mask: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
         mask_idx = np.random.permutation(self.token_count)[:self.mask_count]
         mask = np.zeros(self.token_count, dtype=int)
         mask[mask_idx] = 1
