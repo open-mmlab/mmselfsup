@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Optional, Sequence, Union, Tuple
+from typing import Optional, Sequence, Tuple, Union
 
 import torch
 import torch.nn as nn
