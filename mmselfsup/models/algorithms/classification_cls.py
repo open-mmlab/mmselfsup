@@ -59,6 +59,31 @@ class ClassificationForCls(ImageClassifier):
         else:
             raise Exception(f'No such mode: {mode}')
 
+    def forward_train(self, img, label, **kwargs):
+        """Forward computation during training.
+
+        Args:
+            img (Tensor): of shape (N, C, H, W) encoding input images.
+                Typically these should be mean centered and std scaled.
+            label (Tensor): It should be of shape (N, 1) encoding the
+                ground-truth label of input images for single label task. It
+                shoulf be of shape (N, C) encoding the ground-truth label
+                of input images for multi-labels task.
+        Returns:
+            dict[str, Tensor]: a dictionary of loss components
+        """
+        if self.augments is not None:
+            img, label = self.augments(img, label)
+
+        x = self.extract_feat(img)
+
+        losses = dict()
+        loss = self.head.forward_train(x, label)
+
+        losses.update(loss)
+
+        return losses
+
     def forward_test(self, imgs, **kwargs):
         """
         Args:
@@ -66,8 +91,8 @@ class ClassificationForCls(ImageClassifier):
                 augmentations and inner Tensor should have a shape NxCxHxW,
                 which contains all images in the batch.
         """
-        kwargs.pop('label')
-        kwargs.pop('idx')
+        kwargs.pop('label', None)
+        kwargs.pop('idx', None)
         if isinstance(imgs, torch.Tensor):
             imgs = [imgs]
         for var, name in [(imgs, 'imgs')]:
