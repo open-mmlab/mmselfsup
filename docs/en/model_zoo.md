@@ -30,7 +30,7 @@ Remarks:
 
 ## Benchmarks
 
-In following tables, we only displayed ImageNet Linear Evaluation, COCO17 Object Detection and PASCAL VOC12 Aug Segmentation, you can click algorithm name above to check the comprehensive benchmark results.
+In following tables, we only display ImageNet Linear Evaluation, COCO17 Object Detection and PASCAL VOC12 Aug Segmentation, you can click algorithm name above to check the comprehensive benchmark results.
 
 ### Benchmark Table
 
