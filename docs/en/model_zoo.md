@@ -30,38 +30,36 @@ Remarks:
 
 ## Benchmarks
 
-In following tables, we only display ImageNet Linear Evaluation, COCO17 Object Detection and PASCAL VOC12 Aug Segmentation, you can click algorithm name above to check the comprehensive benchmark results.
+In following table, we display downstream task results on ImageNet, COCO17, PASCAL VOC12 Aug and ADE20K, you can click algorithm name above to check the comprehensive benchmark results.
 
-### Benchmark Table
+- Pre-train on ImageNet-1k
 
-Pre-train on ImageNet-1k
+- Linear Probing on ImageNet-1k
 
-Linear Probing on ImageNet-1k
+- Fine-tuning on ImageNet-1k
 
-Fine-tuning on ImageNet-1k
+- Detection task on COCO with Mask R-CNN
 
-Detection on COCO
+- Segmentation task on PASCAL VOC12 Aug with FCN and ADE20K with UPerNet
 
-Segmentation on ADE20K
-
-| Method        | Backbone  | Pre-train Epoch | Linear Probing | Fine-tuning | Detection | Segmentation | Paper Link                               |
-| ------------- | --------- | --------------- | -------------- | ----------- | --------- | ------------ | ---------------------------------------- |
-| Relative-Loc  | ResNet 50 | 70              | 38.78*         |             |           |              | [link](https://arxiv.org/abs/1505.05192) |
-| Rotation-Pred | ResNet 50 | 70              | 48.12*         |             |           |              | [link](https://arxiv.org/abs/1803.07728) |
-| DeepCluster   | ResNet 50 | 200             | 46.92*         |             |           |              | [link](https://arxiv.org/abs/1807.05520) |
-| NPID          | ResNet 50 | 200             | 58.97*         |             |           |              | [link](https://arxiv.org/abs/1805.01978) |
-| ODC           | ResNet 50 | 440             | 53.43*         |             |           |              | [link](https://arxiv.org/abs/2006.10645) |
-| SimCLR        | ResNet 50 | 200             | 57.28*         |             |           |              | [link](https://arxiv.org/abs/2002.05709) |
-| MoCo v2       | ResNet 50 | 200             | 67.58          |             |           |              | [link](https://arxiv.org/abs/2003.04297) |
-| BYOL          | ResNet 50 | 200             | 67.55*         |             |           |              | [link](https://arxiv.org/abs/2006.07733) |
-| BYOL          | ResNet 50 | 300             | 68.55*         |             |           |              | [link](https://arxiv.org/abs/2006.07733) |
-| SwAV          | ResNet 50 | 200             | 70.47*         |             | 40.2*     |              | [link](https://arxiv.org/abs/2006.09882) |
-| DenseCL       | ResNet 50 | 200             | 63.62*         |             |           |              | [link](https://arxiv.org/abs/2011.09157) |
-| SimSiam       | ResNet 50 | 100             | 68.28          |             |           |              | [link](https://arxiv.org/abs/2011.10566) |
-| SimSiam       | ResNet 50 | 200             | 69.84          |             |           |              | [link](https://arxiv.org/abs/2011.10566) |
-| MoCo v3       | ViT Small | 300             | 73.19          |             |           |              | [link](https://arxiv.org/abs/2104.02057) |
-| MoCo v3       | ViT Base  | 300             | 76.84          |             |           |              | [link](https://arxiv.org/abs/2104.02057) |
-| MAE           | ViT Base  | 400             |                | 83.1        |           |              | [link](https://arxiv.org/abs/2111.06377) |
+| Method        | Backbone  | Pre-train Epoch | Linear Probing | Fine-tuning | COCO mAP (Box) | COCO mAP (Mask) | VOC12 | ADE20K | Link                                      |
+| ------------- | --------- | --------------- | -------------- | ----------- | -------------- | --------------- | ----- | ------ | ----------------------------------------- |
+| Relative-Loc  | ResNet 50 | 70              | 38.78*         |             |                |                 |       |        | [paper](https://arxiv.org/abs/1505.05192) |
+| Rotation-Pred | ResNet 50 | 70              | 48.12*         |             |                |                 |       |        | [paper](https://arxiv.org/abs/1803.07728) |
+| DeepCluster   | ResNet 50 | 200             | 46.92*         |             |                |                 |       |        | [paper](https://arxiv.org/abs/1807.05520) |
+| NPID          | ResNet 50 | 200             | 58.97*         |             |                |                 |       |        | [paper](https://arxiv.org/abs/1805.01978) |
+| ODC           | ResNet 50 | 440             | 53.43*         |             |                |                 |       |        | [paper](https://arxiv.org/abs/2006.10645) |
+| SimCLR        | ResNet 50 | 200             | 57.28*         |             |                |                 |       |        | [paper](https://arxiv.org/abs/2002.05709) |
+| MoCo v2       | ResNet 50 | 200             | 67.58          |             |                |                 |       |        | [paper](https://arxiv.org/abs/2003.04297) |
+| BYOL          | ResNet 50 | 200             | 67.55*         |             |                |                 |       |        | [paper](https://arxiv.org/abs/2006.07733) |
+| BYOL          | ResNet 50 | 300             | 68.55*         |             |                |                 |       |        | [paper](https://arxiv.org/abs/2006.07733) |
+| SwAV          | ResNet 50 | 200             | 70.47*         |             | 40.2*          | 36.3*           |       |        | [paper](https://arxiv.org/abs/2006.09882) |
+| DenseCL       | ResNet 50 | 200             | 63.62*         |             |                |                 |       |        | [paper](https://arxiv.org/abs/2011.09157) |
+| SimSiam       | ResNet 50 | 100             | 68.28          |             |                |                 |       |        | [paper](https://arxiv.org/abs/2011.10566) |
+| SimSiam       | ResNet 50 | 200             | 69.84          |             |                |                 |       |        | [paper](https://arxiv.org/abs/2011.10566) |
+| MoCo v3       | ViT Small | 300             | 73.19          |             |                |                 |       |        | [paper](https://arxiv.org/abs/2104.02057) |
+| MoCo v3       | ViT Base  | 300             | 76.84          |             |                |                 |       |        | [paper](https://arxiv.org/abs/2104.02057) |
+| MAE           | ViT Base  | 400             |                | 83.1        |                |                 |       |        | [paper](https://arxiv.org/abs/2111.06377) |
 
 ### ImageNet Linear Evaluation
 
