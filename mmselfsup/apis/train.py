@@ -12,7 +12,8 @@ from mmcv.utils import build_from_cfg
 from mmselfsup.core import (DistOptimizerHook, GradAccumFp16OptimizerHook,
                             build_optimizer)
 from mmselfsup.datasets import build_dataloader, build_dataset
-from mmselfsup.utils import get_root_logger, multi_gpu_test, single_gpu_test
+from mmselfsup.utils import (find_latest_checkpoint, get_root_logger,
+                             multi_gpu_test, single_gpu_test)
 
 
 def init_random_seed(seed=None, device='cuda'):
@@ -191,6 +192,12 @@ def train_model(model,
         runner.register_hook(
             eval_hook(val_dataloader, test_fn=eval_fn, **eval_cfg),
             priority='LOW')
+
+    resume_from = None
+    if cfg.resume_from is None and cfg.get('auto_resume'):
+        resume_from = find_latest_checkpoint(cfg.work_dir)
+    if resume_from is not None:
+        cfg.resume_from = resume_from
 
     if cfg.resume_from:
         runner.resume(cfg.resume_from)

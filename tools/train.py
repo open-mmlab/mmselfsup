@@ -25,6 +25,10 @@ def parse_args():
     parser.add_argument('--work_dir', help='the dir to save logs and models')
     parser.add_argument(
         '--resume_from', help='the checkpoint file to resume from')
+    parser.add_argument(
+        '--auto-resume',
+        action='store_true',
+        help='resume from the latest checkpoint automatically')
     group_gpus = parser.add_mutually_exclusive_group()
     group_gpus.add_argument(
         '--gpus',
@@ -100,6 +104,7 @@ def main():
                                 osp.splitext(osp.basename(args.config))[0])
     if args.resume_from is not None:
         cfg.resume_from = args.resume_from
+    cfg.auto_resume = args.auto_resume
     if args.gpus is not None:
         cfg.gpu_ids = range(1)
         warnings.warn('`--gpus` is deprecated because we only support '
