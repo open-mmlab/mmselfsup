@@ -35,7 +35,7 @@ class MMClsImageClassifierWrapper(ImageClassifier):
                  pretrained: str = None,
                  train_cfg: dict = None,
                  init_cfg: dict = None):
-        super(ClassificationForCls, self).__init__(
+        super(MMClsImageClassifierWrapper, self).__init__(
             backbone=backbone,
             neck=neck,
             head=head,

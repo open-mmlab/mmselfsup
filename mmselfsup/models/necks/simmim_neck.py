@@ -1,6 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-import torch.nn as nn
 import torch
+import torch.nn as nn
 from mmcv.runner import BaseModule
 
 from ..builder import NECKS
@@ -8,9 +8,9 @@ from ..builder import NECKS
 
 @NECKS.register_module()
 class SimMIMNeck(BaseModule):
-    """Pre-train Neck For SimMIM
-    
-    This neck reconstructs the original image from the shrinked feature map.
+    """Pre-train Neck For SimMIM.
+
+    This neck reconstructs the original image from the shrunk feature map.
 
     Args:
         in_channels (int): Channel dimension of the feature map.

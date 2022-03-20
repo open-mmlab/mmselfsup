@@ -8,13 +8,13 @@ from mmcv.utils import build_from_cfg, print_log
 
 @OPTIMIZER_BUILDERS.register_module(force=True)
 class DefaultOptimizerConstructor:
-    """Rewrote default constructor for optimizers. 
-    
-    By default each parameter share the same optimizer settings, and we 
-    provide an argument ``paramwise_cfg`` to specify parameter-wise settings. 
-    In addition, we provide two optional parameters, ``model_type`` and 
-    ``layer_decay`` to set the commonly used layer-wise learning rate decay 
-    schedule. Currently, we only support layer-wise learning rate schedule 
+    """Rewrote default constructor for optimizers.
+
+    By default each parameter share the same optimizer settings, and we
+    provide an argument ``paramwise_cfg`` to specify parameter-wise settings.
+    In addition, we provide two optional parameters, ``model_type`` and
+    ``layer_decay`` to set the commonly used layer-wise learning rate decay
+    schedule. Currently, we only support layer-wise learning rate schedule
     for swin and vit.
 
     Args:

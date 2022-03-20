@@ -107,7 +107,7 @@ class SwinForSimMIM(SwinTransformer):
     def forward(self, x: torch.Tensor,
                 mask: torch.Tensor) -> Sequence[torch.Tensor]:
         """Generate features for masked images.
-        
+
         This function generates mask images and get the hidden features for
         them.
 
