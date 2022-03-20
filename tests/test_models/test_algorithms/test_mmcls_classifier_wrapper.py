@@ -9,9 +9,9 @@ from mmselfsup.models import ALGORITHMS
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
-def test_classification_cls():
+def test_mmcls_classifier_wrapper():
     model_config = dict(
-        type='ClassificationForCls',
+        type='MMClsImageClassifierWrapper',
         backbone=dict(
             type='mmcls.SwinTransformer',
             arch='base',
