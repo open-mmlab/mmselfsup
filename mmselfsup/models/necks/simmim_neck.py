@@ -1,5 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import torch.nn as nn
+import torch
 from mmcv.runner import BaseModule
 
 from ..builder import NECKS
@@ -7,8 +8,16 @@ from ..builder import NECKS
 
 @NECKS.register_module()
 class SimMIMNeck(BaseModule):
+    """Pre-train Neck For SimMIM
+    
+    This neck reconstructs the original image from the shrinked feature map.
 
-    def __init__(self, in_channels, encoder_stride):
+    Args:
+        in_channels (int): Channel dimension of the feature map.
+        encoder_stride (int): The total stride of the encoder.
+    """
+
+    def __init__(self, in_channels: int, encoder_stride: int) -> None:
         super(SimMIMNeck, self).__init__()
         self.decoder = nn.Sequential(
             nn.Conv2d(
@@ -18,7 +27,7 @@ class SimMIMNeck(BaseModule):
             nn.PixelShuffle(encoder_stride),
         )
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
 
         x = self.decoder(x)
 
