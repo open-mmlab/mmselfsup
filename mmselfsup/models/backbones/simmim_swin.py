@@ -106,6 +106,18 @@ class SwinForSimMIM(SwinTransformer):
 
     def forward(self, x: torch.Tensor,
                 mask: torch.Tensor) -> Sequence[torch.Tensor]:
+        """Generate features for masked images.
+        
+        This function generates mask images and get the hidden features for
+        them.
+
+        Args:
+            x (torch.Tensor): Input images.
+            mask (torch.Tensor): Masks used to construct masked images.
+
+        Returns:
+            tuple: A tuple containing features from multi-stages.
+        """
         x, hw_shape = self.patch_embed(x)
 
         assert mask is not None
