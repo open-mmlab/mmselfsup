@@ -7,7 +7,7 @@ from ..builder import ALGORITHMS
 
 
 @ALGORITHMS.register_module()
-class ClassificationForCls(ImageClassifier):
+class MMClsImageClassifierWrapper(ImageClassifier):
     """Workaround to use models from mmclassificaiton.
 
     Since the output of classifier from mmclassification is not compatible

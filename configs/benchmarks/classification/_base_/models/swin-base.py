@@ -3,7 +3,7 @@
 custom_imports = dict(imports='mmcls.models', allow_failed_imports=False)
 
 model = dict(
-    type='ClassificationForCls',
+    type='MMClsImageClassifierWrapper',
     backbone=dict(
         type='mmcls.SwinTransformer',
         arch='base',
