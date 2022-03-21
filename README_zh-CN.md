@@ -126,6 +126,7 @@ MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibilit
 请参考 [入门指南](docs/zh_cn/getting_started.md) 获取 MMSelfSup 的基本使用方法.
 
 我们也提供了更加全面的教程，包括:
+
 - [配置文件](docs/zh_cn/tutorials/0_config.md)
 - [添加数据集](docs/zh_cn/tutorials/1_new_dataset.md)
 - [数据处理流](docs/zh_cn/tutorials/2_data_pipeline.md)
@@ -133,6 +134,8 @@ MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibilit
 - [自定义流程](docs/zh_cn/tutorials/4_schedule.md)
 - [自定义运行](docs/zh_cn/tutorials/5_runtime.md)
 - [基准测试](docs/zh_cn/tutorials/6_benchmarks.md)
+
+另外，我们提供了 [colab 教程](https://github.com/open-mmlab/mmselfsup/blob/master/demo/mmselfsup_colab_tutorial.ipynb)。
 
 ## 参与贡献
 
