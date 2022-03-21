@@ -6,25 +6,6 @@ from mmselfsup.models.backbones import ResNeXt
 from mmselfsup.models.backbones.resnext import Bottleneck as BottleneckX
 
 
-def test_bottleneck():
-    with pytest.raises(AssertionError):
-        # Style must be in ['pytorch', 'caffe']
-        BottleneckX(64, 64, groups=32, width_per_group=4, style='tensorflow')
-
-    # Test ResNeXt Bottleneck structure
-    block = BottleneckX(
-        64, 64, stride=2, groups=32, width_per_group=4, style='pytorch')
-    assert block.conv2.stride == (2, 2)
-    assert block.conv2.groups == 32
-    assert block.conv2.out_channels == 128
-
-    # Test ResNeXt Bottleneck forward
-    block = BottleneckX(64, 16, stride=1, groups=32, width_per_group=4)
-    x = torch.randn(1, 64, 56, 56)
-    x_out = block(x)
-    assert x_out.shape == torch.Size([1, 64, 56, 56])
-
-
 def test_resnext():
     with pytest.raises(KeyError):
         # ResNeXt depth should be in [50, 101, 152]
@@ -58,4 +39,5 @@ def test_resnext():
 
     imgs = torch.randn(1, 3, 224, 224)
     feat = model(imgs)
+    assert len(feat) == 1
     assert feat[0].shape == torch.Size([1, 2048, 7, 7])

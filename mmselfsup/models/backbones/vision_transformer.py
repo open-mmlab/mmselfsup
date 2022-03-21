@@ -5,7 +5,8 @@ from operator import mul
 
 import torch.nn as nn
 from mmcls.models.backbones import VisionTransformer as _VisionTransformer
-from mmcls.models.utils import PatchEmbed, to_2tuple
+from mmcls.models.utils import to_2tuple
+from mmcv.cnn.bricks.transformer import PatchEmbed
 from torch.nn.modules.batchnorm import _BatchNorm
 
 from mmselfsup.models.utils import build_2d_sincos_position_embedding
