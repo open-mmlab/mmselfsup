@@ -1,4 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import platform
+
 import pytest
 import torch
 
@@ -23,6 +25,7 @@ neck = dict(
 head = dict(type='LatentCrossCorrelationHead', in_channels=8192, lambd=0.0015)
 
 
+@pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_barlowtwins():
     with pytest.raises(AssertionError):
         alg = BarlowTwins(backbone=backbone, neck=None, head=head)
