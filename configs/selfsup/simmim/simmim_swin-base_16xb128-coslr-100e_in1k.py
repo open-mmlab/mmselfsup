@@ -6,7 +6,6 @@ _base_ = [
 ]
 
 # data
-
 data = dict(samples_per_gpu=128)
 
 # optimizer
