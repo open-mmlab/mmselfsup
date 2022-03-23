@@ -40,8 +40,6 @@ Welcome to MMSelfSup's documentation!
    algorithms/simclr.md
    algorithms/ss.md
    algorithms/swav.md
-   algorithms/mocov3.md
-   algorithms/mae.md
    algorithms/simmim.md
 
 
