@@ -34,11 +34,9 @@ The **Linear Evaluation** result is obtained by training a linear head upon the 
 
 ```bibtex
 @InProceedings{Chen_2021_ICCV,
-    author    = {Chen, Xinlei and Xie, Saining and He, Kaiming},
     title     = {An Empirical Study of Training Self-Supervised Vision Transformers},
+    author    = {Chen, Xinlei and Xie, Saining and He, Kaiming},
     booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
-    month     = {October},
-    year      = {2021},
-    pages     = {9640-9649}
+    year      = {2021}
 }
 ```
