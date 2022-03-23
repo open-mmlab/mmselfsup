@@ -45,7 +45,8 @@ optimizer = dict(
         'pos_embed': dict(weight_decay=0.),
         'cls_token': dict(weight_decay=0.)
     },
-    constructor='MAEFtOptimizerConstructor',
+    constructor='TransformerFinetuneConstructor',
+    model_type='vit',
     layer_decay=0.65)
 
 # learning policy
