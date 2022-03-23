@@ -6,11 +6,10 @@ from mmcv.runner import get_dist_info
 
 
 def sync_random_seed(seed=None, device='cuda'):
-    """Make sure different ranks share the same seed.
-    All workers must call this function, otherwise it will deadlock.
-    This method is generally used in `DistributedSampler`,
-    because the seed should be identical across all processes
-    in the distributed group.
+    """Make sure different ranks share the same seed. All workers must call
+    this function, otherwise it will deadlock. This method is generally used in
+    `DistributedSampler`, because the seed should be identical across all
+    processes in the distributed group.
 
     In distributed sampling, different ranks should sample non-overlapped
     data in the dataset. Therefore, this function is used to make sure that
