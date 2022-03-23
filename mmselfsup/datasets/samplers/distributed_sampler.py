@@ -5,6 +5,8 @@ from mmcv.runner import get_dist_info
 from torch.utils.data import DistributedSampler as _DistributedSampler
 from torch.utils.data import Sampler
 
+from mmselfsup.utils import sync_random_seed
+
 
 class DistributedSampler(_DistributedSampler):
 
@@ -13,11 +15,20 @@ class DistributedSampler(_DistributedSampler):
                  num_replicas=None,
                  rank=None,
                  shuffle=True,
-                 replace=False):
+                 replace=False,
+                 seed=0):
         super().__init__(dataset, num_replicas=num_replicas, rank=rank)
         self.shuffle = shuffle
         self.replace = replace
         self.unif_sampling_flag = False
+
+        # In distributed sampling, different ranks should sample
+        # non-overlapped data in the dataset. Therefore, this function
+        # is used to make sure that each rank shuffles the data indices
+        # in the same order based on the same seed. Then different ranks
+        # could use different indices to select non-overlapped data from the
+        # same data list.
+        self.seed = sync_random_seed(seed)
 
     def __iter__(self):
         # deterministically shuffle based on epoch
@@ -31,7 +42,11 @@ class DistributedSampler(_DistributedSampler):
     def generate_new_list(self):
         if self.shuffle:
             g = torch.Generator()
-            g.manual_seed(self.epoch)
+            # When :attr:`shuffle=True`, this ensures all replicas
+            # use a different random ordering for each epoch.
+            # Otherwise, the next iteration of this sampler will
+            # yield the same ordering.
+            g.manual_seed(self.epoch + self.seed)
             if self.replace:
                 indices = torch.randint(
                     low=0,
