@@ -19,7 +19,7 @@ for m in inspect.getmembers(_transforms, inspect.isclass):
 
 
 @PIPELINES.register_module()
-class BlockMaskGen(object):
+class BlockwiseMaskGenerator(object):
     """Generate random block mask for each Image.
 
     Args:

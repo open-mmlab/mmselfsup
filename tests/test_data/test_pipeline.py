@@ -130,7 +130,7 @@ def test_randomaug():
 
 def test_mask_gen():
     transform = dict(
-        type='BlockMaskGen',
+        type='BlockwiseMaskGenerator',
         input_size=192,
         mask_patch_size=32,
         model_patch_size=4,
