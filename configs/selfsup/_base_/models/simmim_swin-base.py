@@ -2,7 +2,7 @@
 model = dict(
     type='SimMIM',
     backbone=dict(
-        type='SwinForSimMIM',
+        type='SimMIMSwinTransformer',
         arch='B',
         img_size=192,
         stage_cfgs=dict(block_cfgs=dict(window_size=6))),

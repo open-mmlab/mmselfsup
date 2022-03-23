@@ -10,7 +10,7 @@ from ..builder import BACKBONES
 
 
 @BACKBONES.register_module()
-class SwinForSimMIM(SwinTransformer):
+class SimMIMSwinTransformer(SwinTransformer):
     """Swin Transformer for SimMIM.
 
     Args:
