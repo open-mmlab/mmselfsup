@@ -48,7 +48,6 @@ for 400 epochs, the details are below:
   author={Kaiming He and Xinlei Chen and Saining Xie and Yanghao Li and
   Piotr Doll'ar and Ross B. Girshick},
   journal={ArXiv},
-  year={2021},
-  volume={abs/2111.06377}
+  year={2021}
 }
 ```
