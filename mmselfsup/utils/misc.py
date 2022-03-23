@@ -31,7 +31,9 @@ def find_latest_checkpoint(path, suffix='pth'):
         latest_path(str | None): File path of the latest checkpoint.
     References:
         .. [1] https://github.com/microsoft/SoftTeacher
-                  /blob/main/ssod/utils/patch.py
+                    /blob/main/ssod/utils/patch.py
+        .. [2] https://github.com/open-mmlab/mmdetection
+                    /blob/master/mmdet/utils/misc.py#L7
     """
     if not osp.exists(path):
         warnings.warn('The path of checkpoints does not exist.')
