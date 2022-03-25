@@ -24,7 +24,10 @@ def parse_args():
     parser.add_argument('config', help='train config file path')
     parser.add_argument('--checkpoint', default=None, help='checkpoint file')
     parser.add_argument(
-        '--work_dir', type=str, default=None, help='the dir to save results')
+        '--work_dir',
+        help='(Deprecated, please use --work-dir) the dir to save logs and '
+        'models')
+    parser.add_argument('--work-dir', help='the dir to save logs and models')
     parser.add_argument(
         '--launcher',
         choices=['none', 'pytorch', 'slurm', 'mpi'],
@@ -33,9 +36,20 @@ def parse_args():
     parser.add_argument(
         '--dataset_config',
         default='configs/benchmarks/classification/tsne_imagenet.py',
+        help='(Deprecated, please use --dataset-config) '
+        'extract dataset config file path')
+    parser.add_argument(
+        '--dataset-config',
+        default='configs/benchmarks/classification/tsne_imagenet.py',
         help='extract dataset config file path')
     parser.add_argument(
         '--layer_ind',
+        type=str,
+        default='0,1,2,3,4',
+        help='(Deprecated, please use --layer-ind) layer indices, '
+        'separated by comma, e.g., "0,1,2,3,4"')
+    parser.add_argument(
+        '--layer-ind',
         type=str,
         default='0,1,2,3,4',
         help='layer indices, separated by comma, e.g., "0,1,2,3,4"')
@@ -43,9 +57,22 @@ def parse_args():
         '--pool_type',
         choices=['specified', 'adaptive'],
         default='specified',
+        help='(Deprecated, please use --pool-type) Pooling type in '
+        ':class:`MultiPooling`')
+    parser.add_argument(
+        '--pool-type',
+        choices=['specified', 'adaptive'],
+        default='specified',
         help='Pooling type in :class:`MultiPooling`')
     parser.add_argument(
         '--max_num_class',
+        type=int,
+        default=20,
+        help='(Deprecated, please use --max-num-class) the maximum number '
+        'of classes to apply t-SNE algorithms, now the function supports '
+        'maximum 20 classes')
+    parser.add_argument(
+        '--max-num-class',
         type=int,
         default=20,
         help='the maximum number of classes to apply t-SNE algorithms, now the'
@@ -68,7 +95,13 @@ def parse_args():
 
     # t-SNE settings
     parser.add_argument(
-        '--n_components', type=int, default=2, help='the dimension of results')
+        '--n_components',
+        type=int,
+        default=2,
+        help='(Deprecated, please use --n-components) the dimension of results'
+    )
+    parser.add_argument(
+        '--n-components', type=int, default=2, help='the dimension of results')
     parser.add_argument(
         '--perplexity',
         type=float,
@@ -79,10 +112,27 @@ def parse_args():
         '--early_exaggeration',
         type=float,
         default=12.0,
+        help='(Deprecated, please use --early-exaggeration) Controls how '
+        'tight natural clusters in the original space are in the embedded '
+        'space and how much space will be between them.')
+    parser.add_argument(
+        '--early-exaggeration',
+        type=float,
+        default=12.0,
         help='Controls how tight natural clusters in the original space are in'
         'the embedded space and how much space will be between them.')
     parser.add_argument(
         '--learning_rate',
+        type=float,
+        default=200.0,
+        help='(Deprecated, please use --learning-rate) The learning rate '
+        'for t-SNE is usually in the range [10.0, 1000.0]. '
+        'If the learning rate is too high, the data may look'
+        'like a ball with any point approximately equidistant from its nearest'
+        'neighbours. If the learning rate is too low, most points may look'
+        'compressed in a dense cloud with few outliers.')
+    parser.add_argument(
+        '--learning-rate',
         type=float,
         default=200.0,
         help='The learning rate for t-SNE is usually in the range'
@@ -94,14 +144,27 @@ def parse_args():
         '--n_iter',
         type=int,
         default=1000,
+        help='(Deprecated, please use --n-iter) Maximum number of iterations '
+        'for the optimization. Should be at least 250.')
+    parser.add_argument(
+        '--n-iter',
+        type=int,
+        default=1000,
         help='Maximum number of iterations for the optimization. Should be at'
         'least 250.')
     parser.add_argument(
         '--n_iter_without_progress',
         type=int,
         default=300,
+        help='(Deprecated, please use --n-iter-without-progress) Maximum '
+        'number of iterations without progress before we abort the '
+        'optimization.')
+    parser.add_argument(
+        '--n-iter-without-progress',
+        type=int,
+        default=300,
         help='Maximum number of iterations without progress before we abort'
-        'the optimization')
+        'the optimization.')
     parser.add_argument(
         '--init', type=str, default='random', help='The init method')
     args = parser.parse_args()
