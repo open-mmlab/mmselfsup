@@ -25,7 +25,7 @@ python -m torch.distributed.launch \
     tools/train.py $CFG \
     --cfg-options model.backbone.init_cfg.type=Pretrained \
     model.backbone.init_cfg.checkpoint=$PRETRAIN \
-    --work_dir $WORK_DIR \
+    --work-dir $WORK_DIR \
     --seed 0 \
     --launcher="pytorch" \
     ${PY_ARGS}
