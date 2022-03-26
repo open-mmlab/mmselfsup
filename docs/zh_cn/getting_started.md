@@ -155,7 +155,7 @@ python tools/model_converters/publish_model.py ${INPUT_FILENAME} ${OUTPUT_FILENA
 我们提供了一个开箱即用的来做图片向量可视化的方法:
 
 ```shell
-python tools/analysis_tools/visualize_tsne.py ${CONFIG_FILE} --checkpoint ${CKPT_PATH} --work_dir ${WORK_DIR} [optional arguments]
+python tools/analysis_tools/visualize_tsne.py ${CONFIG_FILE} --checkpoint ${CKPT_PATH} --work-dir ${WORK_DIR} [optional arguments]
 ```
 
 参数:

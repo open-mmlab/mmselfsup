@@ -157,7 +157,7 @@ python tools/model_converters/publish_model.py ${INPUT_FILENAME} ${OUTPUT_FILENA
 We provide an off-the-shelf tool to visualize the quality of image representations by t-SNE.
 
 ```shell
-python tools/analysis_tools/visualize_tsne.py ${CONFIG_FILE} --checkpoint ${CKPT_PATH} --work_dir ${WORK_DIR} [optional arguments]
+python tools/analysis_tools/visualize_tsne.py ${CONFIG_FILE} --checkpoint ${CKPT_PATH} --work-dir ${WORK_DIR} [optional arguments]
 ```
 
 Arguments:
