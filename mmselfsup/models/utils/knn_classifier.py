@@ -15,11 +15,23 @@ def knn_classifier(train_features,
                    k,
                    T,
                    num_classes=1000):
+    """Compute accuracy of knn classifier predictions.
+
+    Args:
+        train_features (Tensor): Extracted features in the training set.
+        train_labels (Tensor): Labels in the training set.
+        test_features (Tensor): Extracted features in the testing set.
+        test_labels (Tensor): Labels in the testing set.
+        k (int): Number of NN to use.
+        T (float): Temperature used in the voting coefficient.
+        num_classes (int): Number of classes. Defaults to 1000.
+    """
     top1, top5, total = 0.0, 0.0, 0
     train_features = nn.functional.normalize(train_features, dim=1)
     test_features = nn.functional.normalize(test_features, dim=1)
     train_features = train_features.t()
     num_test_images, num_chunks = test_labels.shape[0], 100
+    # split all test images into several chunks to prevent out-of-memory
     imgs_per_chunk = num_test_images // num_chunks
     retrieval_one_hot = torch.zeros(k, num_classes).to(train_features.device)
     for idx in range(0, num_test_images, imgs_per_chunk):

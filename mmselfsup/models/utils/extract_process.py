@@ -8,7 +8,11 @@ from .multi_pooling import MultiPooling
 
 
 class ExtractProcess(object):
-    """Global average-pooled feature extraction process."""
+    """Global average-pooled feature extraction process.
+
+    This process extracts the global average-pooled features from the
+    last layer of resnet backbone.
+    """
 
     def __init__(self):
         self.avg_pool = nn.AdaptiveAvgPool2d((1, 1))
@@ -42,6 +46,9 @@ class ExtractProcess(object):
 class MultiExtractProcess(object):
     """Multi-stage intermediate feature extraction process for `extract.py` and
     `tsne_visualization.py` in tools.
+
+    This process extracts feature maps from different stages of backbone, and
+    average pools each feature map to around 9000 dimensions.
 
     Args:
         pool_type (str): Pooling type in :class:`MultiPooling`. Options are
@@ -90,3 +97,4 @@ class MultiExtractProcess(object):
             results = nondist_forward_collect(func, data_loader,
                                               len(data_loader.dataset))
         return results
+    
