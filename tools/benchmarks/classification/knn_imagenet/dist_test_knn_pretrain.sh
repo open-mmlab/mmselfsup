@@ -24,4 +24,4 @@ python -m torch.distributed.launch \
     tools/benchmarks/classification/knn_imagenet/test_knn.py $CFG \
     --cfg-options model.backbone.init_cfg.type=Pretrained \
     model.backbone.init_cfg.checkpoint=$PRETRAIN \
-    --work_dir $WORK_DIR --launcher="pytorch" ${PY_ARGS}
+    --work-dir $WORK_DIR --launcher="pytorch" ${PY_ARGS}

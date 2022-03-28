@@ -21,17 +21,17 @@ def parse_args():
     parser.add_argument('config', help='train config file path')
     parser.add_argument('--checkpoint', default=None, help='checkpoint file')
     parser.add_argument(
-        '--dataset_config',
+        '--dataset-config',
         default='configs/benchmarks/classification/knn_imagenet.py',
         help='knn dataset config file path')
     parser.add_argument(
-        '--work_dir', type=str, default=None, help='the dir to save results')
+        '--work-dir', type=str, default=None, help='the dir to save results')
     parser.add_argument(
         '--launcher',
         choices=['none', 'pytorch', 'slurm', 'mpi'],
         default='none',
         help='job launcher')
-    parser.add_argument('--local_rank', type=int, default=0)
+    parser.add_argument('--local-rank', type=int, default=0)
     parser.add_argument(
         '--cfg-options',
         nargs='+',
@@ -44,7 +44,7 @@ def parse_args():
         'is allowed.')
     # KNN settings
     parser.add_argument(
-        '--num_knn',
+        '--num-knn',
         default=[10, 20, 100, 200],
         nargs='+',
         type=int,
@@ -55,7 +55,7 @@ def parse_args():
         type=float,
         help='Temperature used in the voting coefficient.')
     parser.add_argument(
-        '--use_cuda',
+        '--use-cuda',
         default=True,
         type=bool,
         help='Store the features on GPU. Set to False if you encounter OOM')
@@ -133,10 +133,12 @@ def main():
     model.init_weights()
 
     # model is determined in this priority: init_cfg > checkpoint > random
-    if getattr(cfg.model.backbone.init_cfg, 'type', None) == 'Pretrained':
-        logger.info(
-            f'Use pretrained model: '
-            f'{cfg.model.backbone.init_cfg.checkpoint} to extract features')
+    if hasattr(cfg.model.backbone, 'init_cfg'):
+        if getattr(cfg.model.backbone.init_cfg, 'type', None) == 'Pretrained':
+            logger.info(
+                f'Use pretrained model: '
+                f'{cfg.model.backbone.init_cfg.checkpoint} to extract features'
+            )
     elif args.checkpoint is not None:
         logger.info(f'Use checkpoint: {args.checkpoint} to extract features')
         load_checkpoint(model, args.checkpoint, map_location='cpu')

@@ -33,4 +33,4 @@ srun -p ${PARTITION} \
     python -u tools/benchmarks/classification/knn_imagenet/test_knn.py $CFG \
         --checkpoint $WORK_DIR/epoch_${EPOCH}.pth \
         --cfg-options dist_params.port=$PORT \
-        --work_dir $WORK_DIR --launcher="slurm" ${PY_ARGS}
+        --work-dir $WORK_DIR --launcher="slurm" ${PY_ARGS}

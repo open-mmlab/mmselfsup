@@ -27,4 +27,4 @@ python -m torch.distributed.launch \
     --master_port=$PORT \
     tools/benchmarks/classification/knn_imagenet/test_knn.py $CFG \
     --checkpoint $WORK_DIR/epoch_${EPOCH}.pth \
-    --work_dir $WORK_DIR --launcher="pytorch" ${PY_ARGS}
+    --work-dir $WORK_DIR --launcher="pytorch" ${PY_ARGS}
