@@ -6,7 +6,7 @@ from mmcv.runner.optimizer.builder import OPTIMIZER_BUILDERS, OPTIMIZERS
 from mmcv.utils import build_from_cfg, print_log
 
 
-@OPTIMIZER_BUILDERS.register_module(force=True)
+@OPTIMIZER_BUILDERS.register_module()
 class TransformerFinetuneConstructor:
     """Rewrote default constructor for optimizers.
 
@@ -31,10 +31,10 @@ class TransformerFinetuneConstructor:
     Example 1:
         >>> model = torch.nn.modules.Conv1d(1, 1, 1)
         >>> optimizer_cfg = dict(type='SGD', lr=0.01, momentum=0.9,
-        >>>                      weight_decay=0.0001)
+        >>>                      weight_decay=0.0001, model_type='vit')
         >>> paramwise_cfg = dict('bias': dict(weight_decay=0., \
                                  lars_exclude=True))
-        >>> optim_builder = DefaultOptimizerConstructor(
+        >>> optim_builder = TransformerFinetuneConstructor(
         >>>     optimizer_cfg, paramwise_cfg)
         >>> optimizer = optim_builder(model)
     """
