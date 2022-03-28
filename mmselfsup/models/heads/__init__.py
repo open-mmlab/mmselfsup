@@ -5,11 +5,11 @@ from .latent_pred_head import LatentClsHead, LatentPredictHead
 from .mae_head import MAEFinetuneHead, MAEPretrainHead
 from .mocov3_head import MoCoV3Head
 from .multi_cls_head import MultiClsHead
-from .simmim_head import SimMIMPretrainHead
+from .simmim_head import SimMIMHead
 from .swav_head import SwAVHead
 
 __all__ = [
     'ContrastiveHead', 'ClsHead', 'LatentPredictHead', 'LatentClsHead',
     'MultiClsHead', 'SwAVHead', 'MAEFinetuneHead', 'MAEPretrainHead',
-    'MoCoV3Head', 'SimMIMPretrainHead'
+    'MoCoV3Head', 'SimMIMHead'
 ]

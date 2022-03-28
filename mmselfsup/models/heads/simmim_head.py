@@ -7,7 +7,7 @@ from ..builder import HEADS
 
 
 @HEADS.register_module()
-class SimMIMPretrainHead(BaseModule):
+class SimMIMHead(BaseModule):
     """Pretrain Head for SimMIM.
 
     Args:
@@ -16,7 +16,7 @@ class SimMIMPretrainHead(BaseModule):
     """
 
     def __init__(self, patch_size: int, encoder_in_channels: int) -> None:
-        super(SimMIMPretrainHead, self).__init__()
+        super(SimMIMHead, self).__init__()
         self.patch_size = patch_size
         self.encoder_in_channels = encoder_in_channels
 
