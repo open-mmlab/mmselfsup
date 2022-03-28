@@ -16,11 +16,11 @@
 
 **Back to [model_zoo.md](https://github.com/open-mmlab/mmselfsup/blob/master/docs/en/model_zoo.md) to download models.**
 
-In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models were trained on ImageNet1k dataset.
+In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models are pre-trained on ImageNet-1k dataset.
 
 ### Classification
 
-The classification benchmarks includes 4 downstream task datasets, **VOC**, **ImageNet**,  **iNaturalist2018** and **Places205**. If not specified, the results are  Top-1 (%).
+The classification benchmarks includes 4 downstream task datasets, **VOC**, **ImageNet**,  **iNaturalist2018** and **Places205**. If not specified, the results are Top-1 (%).
 
 #### VOC SVM / Low-shot SVM
 
@@ -50,6 +50,15 @@ The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | -------- | -------- | -------- | -------- |
 | [resnet50_8xb32-accum16-coslr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py) | 21.25    | 36.55    | 43.66    | 50.74    | 53.82    |
 | [resnet50_8xb32-accum16-coslr-300e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-300e_in1k.py) | 21.18    | 36.68    | 43.42    | 51.04    | 54.06    |
+
+#### ImageNet Nearest-Neighbor Classification
+
+The results are obtained from the features after GlobalAveragePooling. Here, k=10 to 200 indicates different number of nearest neighbors.
+
+| Self-Supervised Config                                                                                                                                       | k=10 | k=20 | k=100 | k=200 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---- | ---- | ----- | ----- |
+| [resnet50_8xb32-accum16-coslr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py) | 63.9 | 64.2 | 62.9  | 61.9  |
+| [resnet50_8xb32-accum16-coslr-300e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-300e_in1k.py) | 66.1 | 66.3 | 65.2  | 64.4  |
 
 ### Detection
 

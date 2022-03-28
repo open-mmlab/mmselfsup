@@ -30,11 +30,11 @@ Remarks:
 
 ## Benchmarks
 
-In following tables, we only displayed ImageNet Linear Evaluation, COCO17 Object Detection and PASCAL VOC12 Aug Segmentation, you can click algorithm name above to check the comprehensive benchmark results.
+In the following tables, we only display ImageNet linear evaluation, ImageNet fine-tuning, COCO17 object detection and instance segmentation, and PASCAL VOC12 Aug semantic segmentation. You can click algorithm name above to check more comprehensive benchmark results.
 
 ### ImageNet Linear Evaluation
 
-If not specified, we use linear evaluation setting from [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf). Or the settings is mentioned in Remark.
+If not specified, we use linear evaluation setting from [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf) as default. Other settings are mentioned in Remarks.
 
 | Algorithm           | Config                                                                                                                                                                                       | Remarks               | Top-1 (%) |
 | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | --------- |
@@ -53,15 +53,14 @@ If not specified, we use linear evaluation setting from [MoCo](http://openaccess
 | SwAV                | [swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py)     | SwAV paper setting    | 70.47     |
 | MoCo v3             | [mocov3_vit-small-p16_32xb128-fp16-coslr-300e_in1k-224](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/mocov3/mocov3_vit-small-p16_32xb128-fp16-coslr-300e_in1k-224.py) | MoCo v3 paper setting | 73.19     |
 
-
 ### ImageNet Fine-tuning
 | Algorithm | Config                                                                                                                                                        | Remarks | Top-1 (%) |
 | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | --------- |
 | MAE       | [mae_vit-base-p16_8xb512-coslr-400e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k.py) |         | 83.1      |
 
-### COCO17 Object Detection
+### COCO17 Object Detection and Instance Segmentation
 
-In COCO17 Object detection task, we choose the evluation protocol from [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf), with Mask-RCNN architecture, the results below are trained with the same [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/mmdetection/coco/mask_rcnn_r50_fpn_mstrain_1x_coco.py).
+In COCO17 object detection and instance segmentation task, we choose the evaluation protocol from [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf), with Mask-RCNN FPN architecture. The results below are fine-tuned with the same [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/mmdetection/coco/mask_rcnn_r50_fpn_mstrain_1x_coco.py).
 
 | Algorithm           | Config                                                                                                                                                                                   | mAP (Box) | mAP (Mask) |
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---------- |
@@ -76,9 +75,9 @@ In COCO17 Object detection task, we choose the evluation protocol from [MoCo](ht
 |                     | [simsiam_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k.py)                          | 38.8      | 34.9       |
 | SwAV                | [swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py) | 40.2      | 36.3       |
 
-### Pascal VOC12 Aug Segmentation
+### Pascal VOC12 Aug Semantic Segmentation
 
-In Pascal VOC12 Aug Segmentation task, we choose the evluation protocol from [MMSeg](https://github.com/open-mmlab/mmsegmentation), with FCN architecture, the results below are trained with the same [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/mmsegmentation/voc12aug/fcn_r50-d8_512x512_20k_voc12aug.py).
+In Pascal VOC12 Aug semantic segmentation task, we choose the evaluation protocol from [MMSeg](https://github.com/open-mmlab/mmsegmentation), with FCN architecture. The results below are fine-tuned with the same [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/mmsegmentation/voc12aug/fcn_r50-d8_512x512_20k_voc12aug.py).
 
 | Algorithm           | Config                                                                                                                                                                                   | mIOU  |
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
