@@ -10,8 +10,8 @@ from .multi_pooling import MultiPooling
 class ExtractProcess(object):
     """Global average-pooled feature extraction process.
 
-    This process extracts the global average-pooled features from the
-    last layer of resnet backbone.
+    This process extracts the global average-pooled features from the last
+    layer of resnet backbone.
     """
 
     def __init__(self):
@@ -97,4 +97,3 @@ class MultiExtractProcess(object):
             results = nondist_forward_collect(func, data_loader,
                                               len(data_loader.dataset))
         return results
-    
