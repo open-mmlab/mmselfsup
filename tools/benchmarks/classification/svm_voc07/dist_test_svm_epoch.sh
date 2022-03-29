@@ -5,7 +5,7 @@ set -x
 
 CFG=$1
 EPOCH=$2
-FEAT_LIST=$2  # e.g.: "feat5", "feat4 feat5". If leave empty, the default is "feat5"
+FEAT_LIST=$3  # e.g.: "feat5", "feat4 feat5". If leave empty, the default is "feat5"
 GPUS=${GPUS:-8}
 WORK_DIR=$(echo ${CFG%.*} | sed -e "s/configs/work_dirs/g")/
 
