@@ -15,7 +15,7 @@ from sklearn.manifold import TSNE
 from mmselfsup.apis import set_random_seed
 from mmselfsup.datasets import build_dataloader, build_dataset
 from mmselfsup.models import build_algorithm
-from mmselfsup.models.utils import ExtractProcess
+from mmselfsup.models.utils import MultiExtractProcess
 from mmselfsup.utils import get_root_logger
 
 
@@ -208,7 +208,7 @@ def main():
             broadcast_buffers=False)
 
     # build extraction processor and run
-    extractor = ExtractProcess(
+    extractor = MultiExtractProcess(
         pool_type=args.pool_type, backbone='resnet50', layer_indices=layer_ind)
     features = extractor.extract(model, data_loader, distributed=distributed)
     labels = dataset.data_source.get_gt_labels()
