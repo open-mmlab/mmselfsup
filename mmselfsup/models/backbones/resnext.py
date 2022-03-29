@@ -13,6 +13,10 @@ class ResNeXt(ResNet):
     Please refer to the `paper <https://arxiv.org/abs/1611.05431>`__ for
     details.
 
+    As the behavior of forward function in MMSelfSup is different from
+    MMCls, we register our own ResNeXt, inheriting from
+    `mmselfsup.model.backbone.ResNet`.
+
     Args:
         depth (int): Network depth, from {50, 101, 152}.
         groups (int): Groups of conv2 in Bottleneck. Defaults to 32.

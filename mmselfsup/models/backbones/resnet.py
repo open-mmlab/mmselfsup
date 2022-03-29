@@ -128,7 +128,13 @@ class ResNet(_ResNet):
         assert max(out_indices) < num_stages + 1
 
     def forward(self, x):
-        """Forward function."""
+        """Forward function.
+
+        As the behavior of forward function in MMSelfSup is different from
+        MMCls, we rewrite the forward function. MMCls does not output the
+        feature map from the 'stem' layer, which we will use for downstream
+        evaluation.
+        """
         if self.deep_stem:
             x = self.stem(x)
         else:
