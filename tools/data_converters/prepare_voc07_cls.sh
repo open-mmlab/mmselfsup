@@ -30,5 +30,5 @@ mkdir $VOC/Lists
 
 awk 'NF{print $0 ".jpg"}' $VOC/ImageSets/Main/trainval.txt $VOC/ImageSets/Main/test.txt > $VOC/Lists/trainvaltest.txt
 
-mkdir data/
+mkdir -p data/
 ln -s $DATA/VOCdevkit data/
