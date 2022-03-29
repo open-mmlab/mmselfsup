@@ -172,7 +172,8 @@ def train_model(model,
 
     # register evaluation hook
     if cfg.get('evaluation', None):
-        val_samples_per_gpu = cfg.data.val.pop('samples_per_gpu', 1)
+        val_samples_per_gpu = cfg.data.val.pop('samples_per_gpu',
+                                               cfg.data.samples_per_gpu)
         val_dataset = build_dataset(cfg.data.val)
         val_dataloader = build_dataloader(
             val_dataset,
