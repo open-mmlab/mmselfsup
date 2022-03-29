@@ -16,7 +16,7 @@ Contrastive unsupervised learning has recently shown encouraging progress, e.g.,
 
 **Back to [model_zoo.md](https://github.com/open-mmlab/mmselfsup/blob/master/docs/en/model_zoo.md) to download models.**
 
-In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models were trained on ImageNet1k dataset.
+In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models are pre-trained on ImageNet-1k dataset.
 
 ### Classification
 
@@ -49,6 +49,14 @@ The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map
 | Self-Supervised Config                                                                                                                           | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 |
 | ------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | -------- | -------- | -------- | -------- |
 | [resnet50_8xb32-coslr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py) | 20.92    | 35.72    | 42.62    | 49.79    | 52.25    |
+
+#### ImageNet Nearest-Neighbor Classification
+
+The results are obtained from the features after GlobalAveragePooling. Here, k=10 to 200 indicates different number of nearest neighbors.
+
+| Self-Supervised Config                                                                                                                           | k=10 | k=20 | k=100 | k=200 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------ | ---- | ---- | ----- | ----- |
+| [resnet50_8xb32-coslr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py) | 55.6 | 55.7 | 53.7  | 52.5  |
 
 ### Detection
 
