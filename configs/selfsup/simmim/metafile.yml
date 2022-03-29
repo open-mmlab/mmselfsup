@@ -1,0 +1,28 @@
+Collections:
+  - Name: SimMIM
+    Metadata:
+      Training Data: ImageNet-1k
+      Training Techniques:
+        - AdamW
+      Training Resources: 16x A100 GPUs
+      Architecture:
+        - Swin
+        - ViT
+    Paper:
+        URL: https://arxiv.org/abs/2111.09886
+        Title: "SimMIM: A Simple Framework for Masked Image Modeling"
+    README: configs/selfsup/simmim/README.md
+
+Models:
+  - Name: simmim_swin-base_8xb256-coslr-100e_in1k-192
+    In Collection: SimMIM
+    Metadata:
+      Epochs: 100
+      Batch Size: 2048
+    Results:
+      - Task: Self-Supervised Image Classification
+        Dataset: ImageNet-1k
+        Metrics:
+          Top 1 Accuracy: 82.9
+    Config: configs/selfsup/simmim/simmim_swin-base_16xb128-coslr-100e_in1k-192.py
+    Weights: https://download.openmmlab.com/mmselfsup/simmim/simmim_swin-base_16xb128-coslr-100e_in1k-192_20220316-1d090125.pth
