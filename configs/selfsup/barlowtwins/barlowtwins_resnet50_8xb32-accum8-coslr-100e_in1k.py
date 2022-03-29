@@ -12,16 +12,13 @@ update_interval = 8
 # optimizer
 optimizer = dict(
     type='LARS',
-    lr=0.,
+    lr=1.6,
     momentum=0.9,
     weight_decay=1e-6,
     paramwise_options={
-        'weight':
-        dict(lr=0.2),
         '(bn|gn)(\\d+)?.(weight|bias)':
-        dict(weight_decay=0, lr=0.0048, lars_exclude=True),
-        'bias':
-        dict(weight_decay=0, lr=0.0048, lars_exclude=True)
+        dict(weight_decay=0, lars_exclude=True),
+        'bias': dict(weight_decay=0, lr_mult=0.024, lars_exclude=True),
     })
 optimizer_config = dict(update_interval=update_interval)
 
