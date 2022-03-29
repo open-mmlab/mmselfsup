@@ -172,15 +172,15 @@ def train_model(model,
 
     # register evaluation hook
     if cfg.get('evaluation', None):
+        val_samples_per_gpu = cfg.data.val.pop('samples_per_gpu', 1)
         val_dataset = build_dataset(cfg.data.val)
         val_dataloader = build_dataloader(
             val_dataset,
-            samples_per_gpu=cfg.data.samples_per_gpu,
+            samples_per_gpu=val_samples_per_gpu,
             workers_per_gpu=cfg.data.workers_per_gpu,
             dist=distributed,
             shuffle=False,
             prefetch=cfg.data.val.prefetch,
-            drop_last=getattr(cfg.data, 'drop_last', False),
             img_norm_cfg=cfg.get('img_norm_cfg', dict()))
         eval_cfg = cfg.get('evaluation', {})
         eval_cfg['by_epoch'] = cfg.runner['type'] != 'IterBasedRunner'
