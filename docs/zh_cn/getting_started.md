@@ -31,12 +31,12 @@ python tools/train.py ${CONFIG_FILE}
 ### 使用 单张/多张 显卡训练
 
 ```shell
-sh tools/dist_train.sh ${CONFIG_FILE} ${GPUS} --work_dir ${YOUR_WORK_DIR} [optional arguments]
+sh tools/dist_train.sh ${CONFIG_FILE} ${GPUS} --work-dir ${YOUR_WORK_DIR} [optional arguments]
 ```
 
 可选参数:
 
-- `--resume_from ${CHECKPOINT_FILE}`: 从某个 checkpoint 处继续训练.
+- `--resume-from ${CHECKPOINT_FILE}`: 从某个 checkpoint 处继续训练.
 - `--deterministic`: 开启 "deterministic" 模式, 虽然开启会使得训练速度降低，但是会保证结果可复现。
 
 例如:
@@ -57,7 +57,7 @@ GPUS_PER_NODE=${GPUS_PER_NODE} GPUS=${GPUS} SRUN_ARGS=${SRUN_ARGS} sh tools/slur
 例如:
 
 ```shell
-GPUS_PER_NODE=8 GPUS=8 sh tools/srun_train.sh Dummy Test_job configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py work_dirs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k/
+GPUS_PER_NODE=8 GPUS=8 sh tools/slurm_train.sh Dummy Test_job configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py work_dirs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k/
 ```
 
 ### 使用多台机器训练
@@ -87,8 +87,8 @@ NNODES=2 NODE_RANK=1 PORT=$MASTER_PORT MASTER_ADDR=$MASTER_ADDR sh tools/dist_tr
 如果您使用  `dist_train.sh`  来启动训练任务:
 
 ```shell
-CUDA_VISIBLE_DEVICES=0,1,2,3 PORT=29500 sh tools/dist_train.sh ${CONFIG_FILE} 4 --work_dir tmp_work_dir_1
-CUDA_VISIBLE_DEVICES=4,5,6,7 PORT=29501 sh tools/dist_train.sh ${CONFIG_FILE} 4 --work_dir tmp_work_dir_2
+CUDA_VISIBLE_DEVICES=0,1,2,3 PORT=29500 sh tools/dist_train.sh ${CONFIG_FILE} 4 --work-dir tmp_work_dir_1
+CUDA_VISIBLE_DEVICES=4,5,6,7 PORT=29501 sh tools/dist_train.sh ${CONFIG_FILE} 4 --work-dir tmp_work_dir_2
 ```
 
 如果您使用 slurm 来启动训练任务，你有两种方式来为每个任务设置不同的端口:
@@ -155,7 +155,7 @@ python tools/model_converters/publish_model.py ${INPUT_FILENAME} ${OUTPUT_FILENA
 我们提供了一个开箱即用的来做图片向量可视化的方法:
 
 ```shell
-python tools/analysis_tools/visualize_tsne.py ${CONFIG_FILE} --checkpoint ${CKPT_PATH} --work_dir ${WORK_DIR} [optional arguments]
+python tools/analysis_tools/visualize_tsne.py ${CONFIG_FILE} --checkpoint ${CKPT_PATH} --work-dir ${WORK_DIR} [optional arguments]
 ```
 
 参数:
