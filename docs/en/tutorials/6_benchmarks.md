@@ -13,7 +13,7 @@ In MMSelfSup, we provide many benchmarks, thus the models can be evaluated on di
 
 First, you are supposed to extract your backbone weights by `tools/model_converters/extract_backbone_weights.py`
 ```shell
-python ./tools/misc/extract_backbone_weights.py {CHECKPOINT} {MODEL_FILE}
+python ./tools/model_converters/extract_backbone_weights.py {CHECKPOINT} {MODEL_FILE}
 ```
 
 Arguments:
@@ -174,10 +174,10 @@ After installation, you can run MMSeg with simple command.
 
 ```shell
 # distributed version
-bash tools/benchmarks/mmdetection/mim_dist_train.sh ${CONFIG} ${PRETRAIN} ${GPUS}
+bash tools/benchmarks/mmsegmentation/mim_dist_train.sh ${CONFIG} ${PRETRAIN} ${GPUS}
 
 # slurm version
-bash tools/benchmarks/mmdetection/mim_slurm_train.sh ${PARTITION} ${CONFIG} ${PRETRAIN}
+bash tools/benchmarks/mmsegmentation/mim_slurm_train.sh ${PARTITION} ${CONFIG} ${PRETRAIN}
 ```
 
 Remarks:
