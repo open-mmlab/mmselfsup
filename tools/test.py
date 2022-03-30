@@ -115,16 +115,29 @@ def main():
                 f'{cfg.data.imgs_per_gpu} in this experiments')
         cfg.data.samples_per_gpu = cfg.data.imgs_per_gpu
 
-    samples_per_gpu = cfg.data.val.pop('samples_per_gpu',
-                                       cfg.data.samples_per_gpu)
-    workers_per_gpu = cfg.data.val.pop('samples_per_gpu',
-                                       cfg.data.workers_per_gpu)
-    data_loader = build_dataloader(
-        dataset,
-        samples_per_gpu=samples_per_gpu,
-        workers_per_gpu=workers_per_gpu,
+    # The default loader config
+    loader_cfg = dict(
+        # cfg.gpus will be ignored if distributed
+        num_gpus=len(cfg.gpu_ids),
         dist=distributed,
-        shuffle=False)
+        prefetch=getattr(cfg, 'prefetch', False),
+        img_norm_cfg=cfg.img_norm_cfg)
+
+    # The overall dataloader settings
+    loader_cfg.update({
+        k: v
+        for k, v in cfg.data.items() if k not in [
+            'train', 'val', 'test', 'train_dataloader', 'val_dataloader',
+            'test_dataloader'
+        ]
+    })
+    # The specific train dataloader settings
+    test_loader_cfg = {
+        **loader_cfg,
+        'shuffle': False,  # Not shuffle by default
+        **cfg.data.get('test_dataloader', {}),
+    }
+    data_loader = build_dataloader(dataset, **test_loader_cfg)
 
     # build the model and load checkpoint
     model = build_algorithm(cfg.model)

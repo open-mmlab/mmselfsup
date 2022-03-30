@@ -90,21 +90,30 @@ def train_model(model,
                 f'{cfg.data.imgs_per_gpu} in this experiments')
         cfg.data.samples_per_gpu = cfg.data.imgs_per_gpu
 
-    data_loaders = [
-        build_dataloader(
-            ds,
-            samples_per_gpu=cfg.data.samples_per_gpu,
-            workers_per_gpu=cfg.data.workers_per_gpu,
-            # `num_gpus` will be ignored if distributed
-            num_gpus=len(cfg.gpu_ids),
-            dist=distributed,
-            replace=getattr(cfg.data, 'sampling_replace', False),
-            seed=cfg.seed,
-            drop_last=getattr(cfg.data, 'drop_last', False),
-            prefetch=cfg.prefetch,
-            persistent_workers=cfg.persistent_workers,
-            img_norm_cfg=cfg.img_norm_cfg) for ds in dataset
-    ]
+    # The default loader config
+    loader_cfg = dict(
+        # cfg.gpus will be ignored if distributed
+        num_gpus=len(cfg.gpu_ids),
+        dist=distributed,
+        replace=getattr(cfg.data, 'sampling_replace', False),
+        drop_last=getattr(cfg.data, 'drop_last', False),
+        prefetch=getattr(cfg, 'prefetch', False),
+        seed=cfg.get('seed'),
+        persistent_workers=cfg.persistent_workers,
+        img_norm_cfg=cfg.img_norm_cfg)
+
+    # The overall dataloader settings
+    loader_cfg.update({
+        k: v
+        for k, v in cfg.data.items() if k not in [
+            'train', 'val', 'test', 'train_dataloader', 'val_dataloader',
+            'test_dataloader'
+        ]
+    })
+    # The specific train dataloader settings
+    train_loader_cfg = {**loader_cfg, **cfg.data.get('train_dataloader', {})}
+
+    data_loaders = [build_dataloader(ds, **train_loader_cfg) for ds in dataset]
 
     # put model on gpus
     if distributed:
@@ -172,19 +181,17 @@ def train_model(model,
 
     # register evaluation hook
     if cfg.get('evaluation', None):
-        val_samples_per_gpu = cfg.data.val.pop('samples_per_gpu',
-                                               cfg.data.samples_per_gpu)
-        val_workers_per_gpu = cfg.data.val.pop('samples_per_gpu',
-                                               cfg.data.workers_per_gpu)
         val_dataset = build_dataset(cfg.data.val)
-        val_dataloader = build_dataloader(
-            val_dataset,
-            samples_per_gpu=val_samples_per_gpu,
-            workers_per_gpu=val_workers_per_gpu,
-            dist=distributed,
-            shuffle=False,
-            prefetch=cfg.data.val.prefetch,
-            img_norm_cfg=cfg.get('img_norm_cfg', dict()))
+
+        # The specific validation dataloader settings
+        val_loader_cfg = {
+            **loader_cfg,
+            'shuffle': False,  # Not shuffle by default
+            'drop_last': False,
+            **cfg.data.get('val_dataloader', {}),
+        }
+        val_dataloader = build_dataloader(val_dataset, **val_loader_cfg)
+
         eval_cfg = cfg.get('evaluation', {})
         eval_cfg['by_epoch'] = cfg.runner['type'] != 'IterBasedRunner'
         eval_hook = DistEvalHook if distributed else EvalHook
