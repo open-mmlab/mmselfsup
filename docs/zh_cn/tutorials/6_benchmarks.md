@@ -1,8 +1,8 @@
-# 教程 6：运行基准
+# 教程 6：运行基准评测
 
-在 MMSelfSup 中，我们提供了许多基准，因此模型可以在不同的下游任务中进行评估。这里提供了全面的教程和例子来解释如何用 MMSelfSup 运行所有的基准。
+在 MMSelfSup 中，我们提供了许多基准评测，因此模型可以在不同的下游任务中进行评估。这里提供了全面的教程和例子来解释如何用 MMSelfSup 运行所有的基准。
 
-- [教程 6：运行基准](#教程6：运行基准)
+- [教程 6：运行基准评测](#教程6：运行基准评测)
   - [分类](#分类)
     - [VOC SVM / Low-shot SVM](#voc-svm--low-shot-svm)
     - [线性评估](#线性评估)
@@ -27,7 +27,7 @@ python ./tools/model_converters/extract_backbone_weights.py {CHECKPOINT} {MODEL_
 
 ### VOC SVM / Low-shot SVM
 
-为了运行这个基准，你应该首先准备你的 VOC 数据集，数据预准备的细节请参考[prepare_data.md](https://github.com/open-mmlab/mmselfsup/blob/master/docs/en/prepare_data.md)。
+为了运行这个基准评测，你应该首先准备你的 VOC 数据集，数据预准备的细节请参考[prepare_data.md](https://github.com/open-mmlab/mmselfsup/blob/master/docs/en/prepare_data.md)。
 
 为了评估预训练的模型，你可以运行以下命令。
 
@@ -61,7 +61,7 @@ bash tools/benchmarks/classification/svm_voc07/slurm_test_svm_epoch.sh ${PARTITI
 
 ### 线性评估
 
-线性评估是最通用的基准之一，我们整合了几篇论文的配置设置，也包括多头线性评估。我们在自己的代码库中为多头功能编写分类模型，因此，为了运行线性评估，我们仍然使用 `.sh` 脚本来启动训练。支持的数据集是**ImageNet**、**Places205**和**iNaturalist18**。
+线性评估是最通用的基准评测之一，我们整合了几篇论文的配置设置，也包括多头线性评估。我们在自己的代码库中为多头功能编写分类模型，因此，为了运行线性评估，我们仍然使用 `.sh` 脚本来启动训练。支持的数据集是**ImageNet**、**Places205**和**iNaturalist18**。
 
 
 ```shell
@@ -96,7 +96,7 @@ bash tools/benchmarks/classification/slurm_train_semi.sh ${PARTITION} ${JOB_NAME
 
 ### ImageNet最邻近分类
 
-为了使用最邻近基准评估预训练的模型，你可以运行以下命令。
+为了使用最邻近基准评测来评估预训练的模型，你可以运行以下命令。
 
 ```shell
 # 分布式版本
