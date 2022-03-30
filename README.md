@@ -120,11 +120,24 @@ More algorithms are in our plan.
 
 ## Installation
 
-Please refer to [install.md](docs/en/install.md) for installation and [prepare_data.md](docs/en/prepare_data.md) for dataset preparation.
+MMSelfSup depends on [PyTorch](https://pytorch.org/)], [MMCV](https://github.com/open-mmlab/mmcv) and [MMClassification](https://github.com/open-mmlab/mmclassification).
+
+Please refer to [install.md](docs/en/install.md) for more detailed instruction and below are quick steps for installation.
+
+```shell
+conda create -n open-mmlab python=3.8 pytorch=1.10 cudatoolkit=11.3 torchvision -c pytorch -y
+conda activate open-mmlab
+pip3 install openmim
+mim install mmcv-full
+mim install mmcls
+git clone https://github.com/open-mmlab/mmselfsup.git
+cd mmselfsup
+pip3 install -e .
+```
 
 ## Get Started
 
-Please see [getting_started.md](docs/en/getting_started.md) for the basic usage of MMSelfSup.
+Please refer to [prepare_data.md](docs/en/prepare_data.md) for dataset preparation and [getting_started.md](docs/en/getting_started.md) for the basic usage of MMSelfSup.
 
 We also provides tutorials for more details:
 - [config](docs/en/tutorials/0_config.md)
