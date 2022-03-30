@@ -22,4 +22,4 @@ srun -p ${PARTITION} \
     --kill-on-bad-exit=1 \
     ${SRUN_ARGS} \
     python -u tools/train.py ${CONFIG} \
-        --work_dir=${WORK_DIR} --seed 0 --launcher="slurm" ${PY_ARGS}
+        --work-dir=${WORK_DIR} --seed 0 --launcher="slurm" ${PY_ARGS}

@@ -23,9 +23,9 @@ def parse_args():
     parser.add_argument('checkpoint', help='checkpoint file')
     parser.add_argument(
         '--work_dir',
-        type=str,
-        default=None,
-        help='the dir to save logs and models')
+        help='(Deprecated, please use --work-dir) the dir to save logs and '
+        'models')
+    parser.add_argument('--work-dir', help='the dir to save logs and models')
     parser.add_argument(
         '--launcher',
         choices=['none', 'pytorch', 'slurm', 'mpi'],
@@ -37,7 +37,12 @@ def parse_args():
         default=0,
         help='id of gpu to use '
         '(only applicable to non-distributed testing)')
-    parser.add_argument('--local_rank', type=int, default=0)
+    parser.add_argument(
+        '--local_rank',
+        type=int,
+        default=0,
+        help='(Deprecated, please use --local-rank)')
+    parser.add_argument('--local-rank', type=int, default=0)
     parser.add_argument(
         '--cfg-options',
         nargs='+',
