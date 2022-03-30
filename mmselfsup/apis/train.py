@@ -174,11 +174,13 @@ def train_model(model,
     if cfg.get('evaluation', None):
         val_samples_per_gpu = cfg.data.val.pop('samples_per_gpu',
                                                cfg.data.samples_per_gpu)
+        val_workers_per_gpu = cfg.data.val.pop('samples_per_gpu',
+                                               cfg.data.workers_per_gpu)
         val_dataset = build_dataset(cfg.data.val)
         val_dataloader = build_dataloader(
             val_dataset,
             samples_per_gpu=val_samples_per_gpu,
-            workers_per_gpu=cfg.data.workers_per_gpu,
+            workers_per_gpu=val_workers_per_gpu,
             dist=distributed,
             shuffle=False,
             prefetch=cfg.data.val.prefetch,
