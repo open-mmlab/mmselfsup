@@ -72,7 +72,7 @@ Highlights of the new version:
 
 * Support **SimMIM**
 * Add **KNN** benchmark, support KNN test with checkpoint and extracted backbone weights
-* Support ImageNet-21k dataset 
+* Support ImageNet-21k dataset
 
 Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
 

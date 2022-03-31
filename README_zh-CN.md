@@ -70,7 +70,7 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
 * 支持 **SimMIM**
 * 增加 **KNN** 基准测试，支持中间 checkpoint 和提取的 backbone 权重进行评估
-* 支持 ImageNet-21k 数据集 
+* 支持 ImageNet-21k 数据集
 
 请参考 [更新日志](docs/zh_cn/changelog.md) 获取更多细节和历史版本信息。
 

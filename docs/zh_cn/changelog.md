@@ -26,7 +26,7 @@
 #### Docs
 * 修复 6_benchmarks.md 中命令文档([#263](https://github.com/open-mmlab/mmselfsup/pull/263))
 * 翻译 6_benchmarks.md 到中文 ([#262](https://github.com/open-mmlab/mmselfsup/pull/262))
-* 
+*
 ### v0.7.0 (03/03/2022)
 
 #### 亮点
