@@ -16,11 +16,11 @@ This paper does not describe a novel method. Instead, it studies a straightforwa
 
 **Back to [model_zoo.md](https://github.com/open-mmlab/mmselfsup/blob/master/docs/en/model_zoo.md) to download models.**
 
-In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models were trained on ImageNet1k dataset.
+In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models are pre-trained on ImageNet-1k dataset.
 
 ### Classification
 
-The classification benchmarks includes 4 downstream task datasets, **VOC**, **ImageNet**,  **iNaturalist2018** and **Places205**. If not specified, the results are  Top-1 (%).
+The classification benchmarks includes 4 downstream task datasets, **VOC**, **ImageNet**,  **iNaturalist2018** and **Places205**. If not specified, the results are Top-1 (%).
 
 #### ImageNet Linear Evaluation
 
@@ -33,10 +33,10 @@ The **Linear Evaluation** result is obtained by training a linear head upon the 
 ## Citation
 
 ```bibtex
-@Article{chen2021mocov3,
-  author  = {Xinlei Chen* and Saining Xie* and Kaiming He},
-  title   = {An Empirical Study of Training Self-Supervised Vision Transformers},
-  journal = {arXiv preprint arXiv:2104.02057},
-  year    = {2021},
+@InProceedings{Chen_2021_ICCV,
+    title     = {An Empirical Study of Training Self-Supervised Vision Transformers},
+    author    = {Chen, Xinlei and Xie, Saining and He, Kaiming},
+    booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+    year      = {2021}
 }
 ```

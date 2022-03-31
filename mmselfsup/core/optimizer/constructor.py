@@ -12,7 +12,6 @@ class DefaultOptimizerConstructor:
     share the same optimizer settings, and we provide an argument
     ``paramwise_cfg`` to specify parameter-wise settings. It is a dict and may
     contain the following fields:
-
     Args:
         model (:obj:`nn.Module`): The model with parameters to be optimized.
         optimizer_cfg (dict): The config dict of the optimizer.
@@ -23,7 +22,6 @@ class DefaultOptimizerConstructor:
                   lr, weight_decay, momentum, etc.
         paramwise_cfg (dict, optional): Parameter-wise options.
             Defaults to None.
-
     Example 1:
         >>> model = torch.nn.modules.Conv1d(1, 1, 1)
         >>> optimizer_cfg = dict(type='SGD', lr=0.01, momentum=0.9,

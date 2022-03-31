@@ -2,10 +2,31 @@
 
 ## MMSelfSup
 
-### v0.7.1 (03/03/2022)
+### v0.8.0 (31/03/2022)
 
-* 修复 MMClassification 版本依赖问题 ([#236](https://github.com/open-mmlab/mmselfsup/pull/236))
+#### 亮点
+* 支持 **SimMIM** ([#239](https://github.com/open-mmlab/mmselfsup/pull/239))
+* 增加 **KNN** 基准测试，支持中间 checkpoint 和提取的 backbone 权重进行评估 ([#243](https://github.com/open-mmlab/mmselfsup/pull/243))
+* 支持 ImageNet-21k 数据集 ([#225](https://github.com/open-mmlab/mmselfsup/pull/225))
 
+#### New Features
+* 支持 SimMIM ([#239](https://github.com/open-mmlab/mmselfsup/pull/239))
+* 增加 KNN 基准测试，支持中间 checkpoint 和提取的 backbone 权重进行评估 ([#243](https://github.com/open-mmlab/mmselfsup/pull/243))
+* 支持 ImageNet-21k 数据集 ([#225](https://github.com/open-mmlab/mmselfsup/pull/225))
+* 支持自动继续 checkpoint 文件的训练 ([#245](https://github.com/open-mmlab/mmselfsup/pull/245))
+
+#### Bug Fixes
+* 在分布式 sampler 中增加种子 ([#250](https://github.com/open-mmlab/mmselfsup/pull/250))
+* 修复 dist_test_svm_epoch.sh 中参数位置问题 ([#260](https://github.com/open-mmlab/mmselfsup/pull/260))
+* 修复 prepare_voc07_cls.sh 中 mkdir 潜在错误 ([#261](https://github.com/open-mmlab/mmselfsup/pull/261))
+
+#### Improvements
+* 更新命令行参数模式 ([#253](https://github.com/open-mmlab/mmselfsup/pull/253))
+
+#### Docs
+* 修复 6_benchmarks.md 中命令文档([#263](https://github.com/open-mmlab/mmselfsup/pull/263))
+* 翻译 6_benchmarks.md 到中文 ([#262](https://github.com/open-mmlab/mmselfsup/pull/262))
+*
 ### v0.7.0 (03/03/2022)
 
 #### 亮点

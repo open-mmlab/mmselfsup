@@ -30,7 +30,7 @@
 
 ## 基准测试
 
-在下列表格中，我们只展示了基于 ImageNet 数据集的线性评估，COCO17 数据集的目标检测和 PASCAL VOC12 Aug 数据集的分割任务，您可以点击预训练模型表格中的算法名查看其它基准测试结果。
+在下列表格中，我们只展示了基于 ImageNet 数据集的线性评估，COCO17 数据集的目标检测和实例分割以及 PASCAL VOC12 Aug 数据集的语义分割任务，您可以点击预训练模型表格中的算法名查看更多基准测试结果。
 
 ### ImageNet 线性评估
 
@@ -53,14 +53,14 @@
 | SwAV                | [swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py)     | SwAV 论文设置    | 70.47     |
 | MoCo v3             | [mocov3_vit-small-p16_32xb128-fp16-coslr-300e_in1k-224](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/mocov3/mocov3_vit-small-p16_32xb128-fp16-coslr-300e_in1k-224.py) | MoCo v3 论文设置 | 73.19     |
 
-
 ### ImageNet 微调
 | 算法 | 配置文件                                                                                                                                                      | 备注 | Top-1 (%) |
 | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | --------- |
 | MAE  | [mae_vit-base-p16_8xb512-coslr-400e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k.py) |      | 83.1      |
-### COCO17 目标检测
 
-在 COCO17 数据集的目标检测任务中，我们选用 [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf) 的评估设置，基于 Mask-RCNN 网络架构，下列结果通过同样的 [配置文件](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/mmdetection/coco/mask_rcnn_r50_fpn_mstrain_1x_coco.py) 训练得到。
+### COCO17 目标检测和实例分割
+
+在 COCO17 数据集的目标检测和实例分割任务中，我们选用 [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf) 的评估设置，基于 Mask-RCNN FPN 网络架构，下列结果通过同样的 [配置文件](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/mmdetection/coco/mask_rcnn_r50_fpn_mstrain_1x_coco.py) 训练得到。
 
 | 算法                | 配置文件                                                                                                                                                                                 | mAP (Box) | mAP (Mask) |
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---------- |
@@ -75,9 +75,9 @@
 |                     | [simsiam_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k.py)                          | 38.8      | 34.9       |
 | SwAV                | [swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py) | 40.2      | 36.3       |
 
-### Pascal VOC12 Aug 分割
+### Pascal VOC12 Aug 语义分割
 
-在 Pascal VOC12 Aug 分割任务中，我们选用 [MMSeg](https://github.com/open-mmlab/mmsegmentation) 的评估设置, 基于 FCN 网络架构, 下列结果通过同样的 [配置文件](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/mmsegmentation/voc12aug/fcn_r50-d8_512x512_20k_voc12aug.py) 训练得到。
+在 Pascal VOC12 Aug 语义分割任务中，我们选用 [MMSeg](https://github.com/open-mmlab/mmsegmentation) 的评估设置, 基于 FCN 网络架构, 下列结果通过同样的 [配置文件](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/mmsegmentation/voc12aug/fcn_r50-d8_512x512_20k_voc12aug.py) 训练得到。
 
 | 算法                | 配置文件                                                                                                                                                                                 | mIOU  |
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |

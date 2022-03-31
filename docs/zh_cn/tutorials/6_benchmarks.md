@@ -1,150 +1,186 @@
-# Tutorial 6: Run Benchmarks
+# 教程 6：运行基准评测
 
-In MMSelfSup, we provide many benchmarks, thus the models can be evaluated on different downstream tasks. Here are comprehensive tutorials and examples to explain how to run all benchmarks with MMSelfSup.
+在 MMSelfSup 中，我们提供了许多基准评测，因此模型可以在不同的下游任务中进行评估。这里提供了全面的教程和例子来解释如何用 MMSelfSup 运行所有的基准。
 
-- [Tutorial 6: Run Benchmarks](#tutorial-6-run-benchmarks)
-  - [Classification](#classification)
+- [教程 6：运行基准评测](#教程6：运行基准评测)
+  - [分类](#分类)
     - [VOC SVM / Low-shot SVM](#voc-svm--low-shot-svm)
-    - [Linear Evaluation](#linear-evaluation)
-    - [ImageNet Semi-supervised Classification](#imagenet-semi-supervised-classification)
-  - [Detection](#detection)
-  - [Segmentation](#segmentation)
+    - [线性评估](#线性评估)
+    - [ImageNet半监督分类](#imagenet半监督分类)
+    - [ImageNet最邻近分类](#imagenet最邻近分类)
+  - [检测](#检测)
+  - [分割](#分割)
 
-First, you are supposed to extract your backbone weights by `tools/model_converters/extract_backbone_weights.py`
+首先，你应该通过`tools/model_converters/extract_backbone_weights.py`提取你的 backbone 权重。
 ```shell
-python ./tools/misc/extract_backbone_weights.py {CHECKPOINT} {MODEL_FILE}
+python ./tools/model_converters/extract_backbone_weights.py {CHECKPOINT} {MODEL_FILE}
 ```
 
-Arguments:
-- `CHECKPOINT`: the checkpoint file of a selfsup method named as epoch_*.pth.
-- `MODEL_FILE`: the output backbone weights file. If not mentioned, the `PRETRAIN` below uses this extracted model file.
+参数：
+- `CHECKPOINT`：selfsup 方法的权重文件，名称为 epoch_*.pth 。
+- `MODEL_FILE`：输出的 backbone 权重文件。如果没有指定，下面的 `PRETRAIN` 会使用这个提取的模型文件。
 
 
-## Classification
+## 分类
 
-As for classification, we provide scripts in folder `tools/benchmarks/classification/`, which has 4 `.sh` files and 1 folder for VOC SVM related classification task.
+关于分类，我们在`tools/benchmarks/classification/`文件夹中提供了脚本，其中有 4 个 `.sh` 文件，1 个用于 VOC SVM 相关的分类任务的文件夹，1 个用于 ImageNet 最邻近分类任务的文件夹。
 
 ### VOC SVM / Low-shot SVM
 
-To run this benchmarks, you should first prepare your VOC datasets, the details of data prepareation please refer to [data_prepare.md](../data_prepare.md).
+为了运行这个基准评测，你应该首先准备你的 VOC 数据集，数据准备的细节请参考[prepare_data.md](https://github.com/open-mmlab/mmselfsup/blob/master/docs/en/prepare_data.md)。
 
-To evaluate the pretrained models, you can run command below.
+为了评估预训练的模型，你可以运行以下命令。
+
 
 ```shell
-# distributed version
+# 分布式版本
 bash tools/benchmarks/classification/svm_voc07/dist_test_svm_pretrain.sh ${SELFSUP_CONFIG} ${GPUS} ${PRETRAIN} ${FEATURE_LIST}
 
-
-# slurm version
+# slurm 版本
 bash tools/benchmarks/classification/svm_voc07/slurm_test_svm_pretrain.sh ${PARTITION} ${JOB_NAME} ${SELFSUP_CONFIG} ${PRETRAIN} ${FEATURE_LIST}
-
 ```
 
-Besides, if you want to evaluate the ckpt files saved by runner, you can run command below.
+此外，如果你想评估 runner 保存的 ckpt 文件，你可以运行下面的命令。
+
 ```shell
-# distributed version
+# 分布式版本
 bash tools/benchmarks/classification/svm_voc07/dist_test_svm_epoch.sh ${SELFSUP_CONFIG} ${EPOCH} ${FEATURE_LIST}
 
-# slurm version
-bash tools/benchmarks/classification/svm_voc07/dist_test_svm_epoch.sh ${PARTITION} ${JOB_NAME} ${SELFSUP_CONFIG} ${EPOCH} ${FEATURE_LIST}
+# slurm 版本
+bash tools/benchmarks/classification/svm_voc07/slurm_test_svm_epoch.sh ${PARTITION} ${JOB_NAME} ${SELFSUP_CONFIG} ${EPOCH} ${FEATURE_LIST}
 ```
-**To test with ckpt, the code uses the epoch_*.pth file, there is no need to extract weights.**
 
-Remarks:
-- `${SELFSUP_CONFIG}` is the config file of the self-supervised experiment.
-- `${FEATURE_LIST}` is a string to specify features from layer1 to layer5 to evaluate; e.g., if you want to evaluate layer5 only, then `FEATURE_LIST` is "feat5", if you want to evaluate all features, then then `FEATURE_LIST` is "feat1 feat2 feat3 feat4 feat5" (separated by space). If left empty, the default `FEATURE_LIST` is "feat5".
-- `PRETRAIN`: the pretrained model file.
-- if you want to change GPU numbers, you could add `GPUS_PER_NODE=4 GPUS=4` at the beginning of the command.
-- `EPOCH` is the epoch number of the ckpt that you want to test
+**用ckpt测试时，代码使用epoch_*.pth文件，不需要提取权重。**
 
-### Linear Evaluation
+备注：
+- `${SELFSUP_CONFIG}`是自监督实验的配置文件。
+- `${FEATURE_LIST}`是一个字符串，指定 layer1 到 layer5 的特征用于评估；例如，如果你只想评估 layer5 ，那么 `FEATURE_LIST` 是 "feat5"，如果你想评估所有的特征，那么`FEATURE_LIST`是 "feat1 feat2 feat3 feat4 feat5"（用空格分隔）。如果留空，默认`FEATURE_LIST`为 "feat5"。
+- `PRETRAIN`：预训练的模型文件。
+- 如果你想改变GPU的数量，你可以在命令的开头加上`GPUS_PER_NODE=4 GPUS=4`。
+- `EPOCH`是你要测试的 ckpt 的 epoch 数。
 
-The linear evaluation is one of the most general benchmarks, we integrate several papers' config settings, also including multi-head linear evaluation. We write classification model in our own codebase for the multi-head function, thus, to run linear evaluation, we still use `.sh` script to launch training. The supported datasets are **ImageNet**, **Places205** and **iNaturalist18**.
+### 线性评估
+
+线性评估是最通用的基准评测之一，我们整合了几篇论文的配置设置，也包括多头线性评估。我们在自己的代码库中为多头功能编写分类模型，因此，为了运行线性评估，我们仍然使用 `.sh` 脚本来启动训练。支持的数据集是**ImageNet**、**Places205**和**iNaturalist18**。
+
 
 ```shell
-# distributed version
+# 分布式版本
 bash tools/benchmarks/classification/dist_train_linear.sh ${CONFIG} ${PRETRAIN}
 
-# slurm version
+# slurm 版本
 bash tools/benchmarks/classification/slurm_train_linear.sh ${PARTITION} ${JOB_NAME} ${CONFIG} ${PRETRAIN}
 ```
 
-Remarks:
-- The default GPU number is 8. When changing GPUS, please also change `samples_per_gpu` in the config file accordingly to ensure the total batch size is 256.
-- `CONFIG`: Use config files under `configs/benchmarks/classification/`, excluding svm_voc07.py and tsne_imagenet.py and imagenet_*percent folders.
-- `PRETRAIN`: the pretrained model file.
+备注：
+- 默认的 GPU 数量是 8，当改变 GPUS 时，也请相应改变配置文件中的 `samples_per_gpu` ，以确保总 batch size 为256。
+- `CONFIG`: 使用 `configs/benchmarks/classification/` 下的配置文件。具体有`imagenet`（不包括 `imagenet_*percent` 文件夹）， `places205` 和`inaturalist2018`。
+- `PRETRAIN`：预训练的模型文件。
 
+### ImageNet半监督分类
 
-### ImageNet Semi-supervised Classification
-
-To run ImageNet semi-supervised classification, we still use `.sh` script to launch training.
+为了运行 ImageNet 半监督分类，我们仍然使用 `.sh` 脚本来启动训练。
 
 ```shell
-# distributed version
+# 分布式版本
 bash tools/benchmarks/classification/dist_train_semi.sh ${CONFIG} ${PRETRAIN}
 
-# slurm version
+# slurm 版本
 bash tools/benchmarks/classification/slurm_train_semi.sh ${PARTITION} ${JOB_NAME} ${CONFIG} ${PRETRAIN}
 ```
 
-Remarks:
-- The default GPU number is 4.
-- `CONFIG`: Use config files under `configs/benchmarks/classification/imagenet/`, named `imagenet_*percent` folders.
-- `PRETRAIN`: the pretrained model file.
+备注：
+- 默认的 GPU 数量是4。
+- `CONFIG`: 使用 `configs/benchmarks/classification/imagenet/` 下的配置文件，名为 `imagenet_*percent` 文件夹。
+- `PRETRAIN`：预训练的模型文件。
 
-## Detection
+### ImageNet最邻近分类
 
-Here we prefer to use MMDetection to do the detection task. First, make sure you have installed [MIM](https://github.com/open-mmlab/mim), which is also a project of OpenMMLab.
+为了使用最邻近基准评测来评估预训练的模型，你可以运行以下命令。
+
+```shell
+# 分布式版本
+bash tools/benchmarks/classification/knn_imagenet/dist_test_knn_pretrain.sh ${SELFSUP_CONFIG} ${PRETRAIN}
+
+# slurm 版本
+bash tools/benchmarks/classification/knn_imagenet/slurm_test_knn_pretrain.sh ${PARTITION} ${JOB_NAME} ${SELFSUP_CONFIG} ${PRETRAIN}
+```
+
+此外，如果你想评估 runner 保存的 ckpt 文件，你可以运行下面的命令。
+
+```shell
+# 分布式版本
+bash tools/benchmarks/classification/knn_imagenet/dist_test_knn_epoch.sh ${SELFSUP_CONFIG} ${EPOCH}
+
+# slurm 版本
+bash tools/benchmarks/classification/knn_imagenet/slurm_test_knn_epoch.sh ${PARTITION} ${JOB_NAME} ${SELFSUP_CONFIG} ${EPOCH}
+```
+
+**用ckpt测试时，代码使用epoch_*.pth文件，不需要提取权重。**
+
+备注：
+- `${SELFSUP_CONFIG}`是自监督实验的配置文件。
+- `PRETRAIN`：预训练的模型文件。
+- 如果你想改变GPU的数量，你可以在命令的开头加上`GPUS_PER_NODE=4 GPUS=4`。
+- `EPOCH`是你要测试的 ckpt 的 epoch 数。
+
+## 检测
+在这里，我们倾向于使用 MMDetection 来完成检测任务。首先，确保你已经安装了[MIM](https://github.com/open-mmlab/mim)，它也是OpenMMLab的一个项目。
+
 ```shell
 pip install openmim
 ```
-It is very easy to install the package.
 
-Besides, please refer to MMDet for [installation](https://github.com/open-mmlab/mmdetection/blob/master/docs/en/get_started.md) and [data preparation](https://github.com/open-mmlab/mmdetection/blob/master/docs/en/1_exist_data_model.md)
+安装该软件包非常容易。
 
-After installation, you can run MMDet with simple command
+此外，请参考MMDet的[安装](https://github.com/open-mmlab/mmdetection/blob/master/docs/en/get_started.md)和[数据准备](https://github.com/open-mmlab/mmdetection/blob/master/docs/en/1_exist_data_model.md)
+
+安装完成后，你可以用简单的命令运行 MMDet
+
 ```shell
-# distributed version
+# 分布式版本
 bash tools/benchmarks/mmdetection/mim_dist_train.sh ${CONFIG} ${PRETRAIN} ${GPUS}
 
-# slurm version
+# slurm 版本
 bash tools/benchmarks/mmdetection/mim_slurm_train.sh ${PARTITION} ${CONFIG} ${PRETRAIN}
 ```
 
-Remarks:
-- `CONFIG`: Use config files under `configs/benchmarks/mmdetection/` or write your own config files
-- `PRETRAIN`: the pretrained model file.
+备注：
+- `CONFIG`：使用 `configs/benchmarks/mmdetection/` 下的配置文件或编写你自己的配置文件。
+- `PRETRAIN`: 预训练的模型文件。
+
+或者如果你想用[detectron2](https://github.com/facebookresearch/detectron2)做检测任务，我们也提供一些配置文件。
+请参考[INSTALL.md](https://github.com/facebookresearch/detectron2/blob/main/INSTALL.md)进行安装，并按照[目录结构](https://github.com/facebookresearch/detectron2/tree/main/datasets)来准备 detectron2 所需的数据集。
 
 
-Or if you want to do detection task with [detectron2](https://github.com/facebookresearch/detectron2), we also provides some config files.
-Please refer [INSTALL.md](https://github.com/facebookresearch/detectron2/blob/main/INSTALL.md) for installation and follow the [directory structure](https://github.com/facebookresearch/detectron2/tree/main/datasets) to prepare your datasets required by detectron2.
-
-```shell
-conda activate detectron2 # use detectron2 environment here, otherwise use open-mmlab environment
+````shell
+conda activate detectron2 # 在这里使用 detectron2 环境，否则使用 open-mmlab 环境
 cd benchmarks/detection
-python convert-pretrain-to-detectron2.py ${WEIGHT_FILE} ${OUTPUT_FILE} # must use .pkl as the output extension.
+python convert-pretrain-to-detectron2.py ${WEIGHT_FILE} ${OUTPUT_FILE} # 必须使用 .pkl 作为输出文件扩展名
 bash run.sh ${DET_CFG} ${OUTPUT_FILE}
 ```
-## Segmentation
 
-For semantic segmentation task, we are using MMSegmentation. First, make sure you have installed [MIM](https://github.com/open-mmlab/mim), which is also a project of OpenMMLab.
+## 分割
+
+对于语义分割任务，我们使用的是 MMSegmentation 。首先，确保你已经安装了[MIM](https://github.com/open-mmlab/mim)，它也是OpenMMLab的一个项目。
 
 ```shell
 pip install openmim
 ```
-It is very easy to install the package.
+安装该软件包非常容易。
 
-Besides, please refer to MMSeg for [installation](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/get_started.md) and [data preparation](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/dataset_prepare.md#prepare-datasets).
+此外，请参考 MMSeg 的[安装](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/get_started.md)和[数据准备](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/dataset_prepare.md#prepare-datasets)。
 
-After installation, you can run MMSeg with simple command
+安装后，你可以用简单的命令运行 MMSeg
+
 ```shell
-# distributed version
-bash tools/benchmarks/mmdetection/mim_dist_train.sh ${CONFIG} ${PRETRAIN} ${GPUS}
+#分布式版本
+bash tools/benchmarks/mmsegmentation/mim_dist_train.sh ${CONFIG} ${PRETRAIN} ${GPUS}
 
-# slurm version
-bash tools/benchmarks/mmdetection/mim_slurm_train.sh ${PARTITION} ${CONFIG} ${PRETRAIN}
+# slurm 版本
+bash tools/benchmarks/mmsegmentation/mim_slurm_train.sh ${PARTITION} ${CONFIG} ${PRETRAIN}
 ```
 
-Remarks:
-- `CONFIG`: Use config files under `configs/benchmarks/mmsegmentation/` or write your own config files
-- `PRETRAIN`: the pretrained model file.
+备注：
+- `CONFIG`：使用 `configs/benchmarks/mmsegmentation/` 下的配置文件或编写自己的配置文件。
+- `PRETRAIN`：预训练的模型文件。

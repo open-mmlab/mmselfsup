@@ -7,7 +7,7 @@ import torch.nn as nn
 from mmcv.parallel import MMDataParallel
 from torch.utils.data import DataLoader, Dataset
 
-from mmselfsup.models.utils import ExtractProcess
+from mmselfsup.models.utils import ExtractProcess, MultiExtractProcess
 
 
 class ExampleDataset(Dataset):
@@ -39,8 +39,22 @@ class ExampleModel(nn.Module):
 
 
 def test_extract_process():
+    test_dataset = ExampleDataset()
+    test_dataset.evaluate = MagicMock(return_value=dict(test='success'))
+    data_loader = DataLoader(
+        test_dataset, batch_size=1, sampler=None, num_workers=0, shuffle=False)
+    model = MMDataParallel(ExampleModel())
+
+    process = ExtractProcess()
+
+    results = process.extract(model, data_loader)
+    assert 'feat' in results
+    assert results['feat'].shape == (1, 128 * 1 * 1)
+
+
+def test_multi_extract_process():
     with pytest.raises(AssertionError):
-        process = ExtractProcess(
+        process = MultiExtractProcess(
             pool_type='specified', backbone='resnet50', layer_indices=(-1, ))
 
     test_dataset = ExampleDataset()
@@ -49,7 +63,7 @@ def test_extract_process():
         test_dataset, batch_size=1, sampler=None, num_workers=0, shuffle=False)
     model = MMDataParallel(ExampleModel())
 
-    process = ExtractProcess(
+    process = MultiExtractProcess(
         pool_type='specified', backbone='resnet50', layer_indices=(0, 1, 2))
 
     results = process.extract(model, data_loader)

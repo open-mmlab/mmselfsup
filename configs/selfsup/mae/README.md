@@ -30,14 +30,14 @@ methods that use only ImageNet-1K data. Transfer performance in downstream tasks
 
 ## Models and Benchmarks
 
-Here, we report the results of the model, which is pre-trained on ImageNet1K
+Here, we report the results of the model, which is pre-trained on ImageNet-1k
 for 400 epochs, the details are below:
 
 
 
 | Backbone | Pre-train epoch | Fine-tuning Top-1 |                  Pre-train Config                   |                                    Fine-tuning Config                                     |                                                                                                                        Download                                                                                                                         |
 | :------: | :-------------: | :---------------: | :-------------------------------------------------: | :---------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| ViT-B/16 |       400       |       83.1        | [config](./mae_vit-b-p16_8xb512-coslr-400e_in1k.py) | [config](../../benchmarks/classification/imagenet/vit-b-p16_ft-8xb128-coslr-100e_in1k.py) | [model](https://download.openmmlab.com/mmselfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k-224_20220223-85be947b.pth) &#124; [log](https://download.openmmlab.com/mmselfsup/mae/mae_vit-base-p16_8xb512-coslr-300e_in1k-224_20220210_140925.log.json) |
+| ViT-B/16 |       400       |       83.1        | [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/mae/mae_vit-b-p16_8xb512-coslr-400e_in1k.py) | [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/imagenet/vit-b-p16_ft-8xb128-coslr-100e_in1k.py) | [model](https://download.openmmlab.com/mmselfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k-224_20220223-85be947b.pth) &#124; [log](https://download.openmmlab.com/mmselfsup/mae/mae_vit-base-p16_8xb512-coslr-300e_in1k-224_20220210_140925.log.json) |
 
 
 ## Citation
@@ -48,7 +48,6 @@ for 400 epochs, the details are below:
   author={Kaiming He and Xinlei Chen and Saining Xie and Yanghao Li and
   Piotr Doll'ar and Ross B. Girshick},
   journal={ArXiv},
-  year={2021},
-  volume={abs/2111.06377}
+  year={2021}
 }
 ```

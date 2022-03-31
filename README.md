@@ -66,13 +66,13 @@ This project is released under the [Apache 2.0 license](LICENSE).
 
 ## ChangeLog
 
-MMSelfSup **v0.7.0** was released in 03/03/2022.
+MMSelfSup **v0.8.0** was released in 31/03/2022.
 
 Highlights of the new version:
 
-* Support **MAE**
-* Add **Places205** benchmarks
-* Add test Windows in workflows
+* Support **SimMIM**
+* Add **KNN** benchmark, support KNN test with checkpoint and extracted backbone weights
+* Support ImageNet-21k dataset
 
 Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
 
@@ -99,6 +99,7 @@ Supported algorithms:
 - [x] [SimSiam (CVPR'2021)](https://arxiv.org/abs/2011.10566)
 - [x] [MoCo v3 (ICCV'2021)](https://arxiv.org/abs/2104.02057)
 - [x] [MAE](https://arxiv.org/abs/2111.06377)
+- [x] [SimMIM](https://arxiv.org/abs/2111.09886)
 
 More algorithms are in our plan.
 
@@ -120,13 +121,16 @@ More algorithms are in our plan.
 
 ## Installation
 
-Please refer to [install.md](docs/en/install.md) for installation and [prepare_data.md](docs/en/prepare_data.md) for dataset preparation.
+MMSelfSup depends on [PyTorch](https://pytorch.org/)], [MMCV](https://github.com/open-mmlab/mmcv) and [MMClassification](https://github.com/open-mmlab/mmclassification).
+
+Please refer to [install.md](docs/en/install.md) for more detailed instruction.
 
 ## Get Started
 
-Please see [getting_started.md](docs/en/getting_started.md) for the basic usage of MMSelfSup.
+Please refer to [prepare_data.md](docs/en/prepare_data.md) for dataset preparation and [getting_started.md](docs/en/getting_started.md) for the basic usage of MMSelfSup.
 
 We also provides tutorials for more details:
+
 - [config](docs/en/tutorials/0_config.md)
 - [add new dataset](docs/en/tutorials/1_new_dataset.md)
 - [data pipeline](docs/en/tutorials/2_data_pipeline.md)
@@ -134,6 +138,8 @@ We also provides tutorials for more details:
 - [customize schedules](docs/en/tutorials/4_schedule.md)
 - [customize runtime](docs/en/tutorials/5_runtime.md)
 - [benchmarks](docs/en/tutorials/6_benchmarks.md)
+
+Besides, we provide [colab tutorial](https://github.com/open-mmlab/mmselfsup/blob/master/demo/mmselfsup_colab_tutorial.ipynb) for basic usage.
 
 ## Citation
 

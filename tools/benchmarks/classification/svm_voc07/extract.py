@@ -13,7 +13,7 @@ from mmcv.runner import get_dist_info, init_dist, load_checkpoint
 
 from mmselfsup.datasets import build_dataloader, build_dataset
 from mmselfsup.models import build_algorithm
-from mmselfsup.models.utils import ExtractProcess
+from mmselfsup.models.utils import MultiExtractProcess
 from mmselfsup.utils import get_root_logger
 
 
@@ -141,7 +141,7 @@ def main():
             broadcast_buffers=False)
 
     # build extraction processor
-    extractor = ExtractProcess(
+    extractor = MultiExtractProcess(
         pool_type='specified', backbone='resnet50', layer_indices=layer_ind)
 
     # run

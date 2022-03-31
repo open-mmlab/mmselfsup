@@ -56,13 +56,24 @@ class MAEViT(VisionTransformer):
                  layer_cfgs=dict(),
                  mask_ratio=0.75,
                  init_cfg=None):
-        super().__init__(arch, img_size, patch_size, out_indices, drop_rate,
-                         drop_path_rate, norm_cfg, final_norm,
-                         output_cls_token, interpolate_mode, patch_cfg,
-                         layer_cfgs, init_cfg)
+        super().__init__(
+            arch=arch,
+            img_size=img_size,
+            patch_size=patch_size,
+            out_indices=out_indices,
+            drop_rate=drop_rate,
+            drop_path_rate=drop_path_rate,
+            norm_cfg=norm_cfg,
+            final_norm=final_norm,
+            output_cls_token=output_cls_token,
+            interpolate_mode=interpolate_mode,
+            patch_cfg=patch_cfg,
+            layer_cfgs=layer_cfgs,
+            init_cfg=init_cfg)
 
         self.pos_embed.requires_grad = False
         self.mask_ratio = mask_ratio
+        self.num_patches = self.patch_resolution[0] * self.patch_resolution[1]
 
     def init_weights(self):
         super(MAEViT, self).init_weights()
@@ -70,7 +81,7 @@ class MAEViT(VisionTransformer):
                 and self.init_cfg['type'] == 'Pretrained'):
             # initialize position  embedding in backbone
             pos_embed = build_2d_sincos_position_embedding(
-                int(self.patch_embed.num_patches**.5),
+                int(self.num_patches**.5),
                 self.pos_embed.shape[-1],
                 cls_token=True)
             self.pos_embed.data.copy_(pos_embed.float())
@@ -133,8 +144,7 @@ class MAEViT(VisionTransformer):
 
     def forward(self, x):
         B = x.shape[0]
-        x = self.patch_embed(x)
-
+        x = self.patch_embed(x)[0]
         # add pos embed w/o cls token
         x = x + self.pos_embed[:, 1:, :]
 

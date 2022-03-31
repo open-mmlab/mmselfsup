@@ -16,11 +16,11 @@ Siamese networks have become a common structure in various recent models for uns
 
 **Back to [model_zoo.md](https://github.com/open-mmlab/mmselfsup/blob/master/docs/en/model_zoo.md) to download models.**
 
-In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models were trained on ImageNet1k dataset.
+In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models are pre-trained on ImageNet-1k dataset.
 
 ### Classification
 
-The classification benchmarks includes 4 downstream task datasets, **VOC**, **ImageNet**,  **iNaturalist2018** and **Places205**. If not specified, the results are  Top-1 (%).
+The classification benchmarks includes 4 downstream task datasets, **VOC**, **ImageNet**,  **iNaturalist2018** and **Places205**. If not specified, the results are Top-1 (%).
 
 #### VOC SVM / Low-shot SVM
 
@@ -52,6 +52,15 @@ The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map
 | -------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- |
 | [resnet50_8xb32-coslr-100e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py) | 21.32    | 35.66    | 43.05    | 50.79    | 53.27    |
 | [resnet50_8xb32-coslr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k.py) | 21.17    | 35.85    | 43.49    | 50.99    | 54.10    |
+
+#### ImageNet Nearest-Neighbor Classification
+
+The results are obtained from the features after GlobalAveragePooling. Here, k=10 to 200 indicates different number of nearest neighbors.
+
+| Self-Supervised Config                                                                                                                             | k=10 | k=20 | k=100 | k=200 |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ---- | ----- | ----- |
+| [resnet50_8xb32-coslr-100e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py) | 57.4 | 57.6 | 55.8  | 54.2  |
+| [resnet50_8xb32-coslr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k.py) | 60.2 | 60.4 | 58.8  | 57.4  |
 
 ### Detection
 

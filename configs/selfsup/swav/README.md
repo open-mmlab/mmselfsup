@@ -16,11 +16,11 @@ Unsupervised image representations have significantly reduced the gap with super
 
 **Back to [model_zoo.md](https://github.com/open-mmlab/mmselfsup/blob/master/docs/en/model_zoo.md) to download models.**
 
-In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models were trained on ImageNet1k dataset.
+In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models are pre-trained on ImageNet-1k dataset.
 
 ### Classification
 
-The classification benchmarks includes 4 downstream task datasets, **VOC**, **ImageNet**,  **iNaturalist2018** and **Places205**. If not specified, the results are  Top-1 (%).
+The classification benchmarks includes 4 downstream task datasets, **VOC**, **ImageNet**,  **iNaturalist2018** and **Places205**. If not specified, the results are Top-1 (%).
 
 #### VOC SVM / Low-shot SVM
 
@@ -49,6 +49,14 @@ The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map
 | Self-Supervised Config                                                                                                                                                              | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 |
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- |
 | [resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py) | 23.33    | 35.45    | 43.13    | 51.98    | 55.09    |
+
+#### ImageNet Nearest-Neighbor Classification
+
+The results are obtained from the features after GlobalAveragePooling. Here, k=10 to 200 indicates different number of nearest neighbors.
+
+| Self-Supervised Config                                                                                                                                                              | k=10 | k=20 | k=100 | k=200 |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ---- | ----- | ----- |
+| [resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py) | 60.5 | 60.6 | 59.0  | 57.6  |
 
 ### Detection
 

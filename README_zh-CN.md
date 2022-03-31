@@ -64,13 +64,13 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
 ## 更新日志
 
-最新的 **v0.7.0** 版本已经在 2022.03.03 发布。
+最新的 **v0.8.0** 版本已经在 2022.03.31 发布。
 
 新版本亮点：
 
-* 支持 **MAE**
-* 增加 **Places205** 下游基准测试
-* 增加 Windows 测试
+* 支持 **SimMIM**
+* 增加 **KNN** 基准测试，支持中间 checkpoint 和提取的 backbone 权重进行评估
+* 支持 ImageNet-21k 数据集
 
 请参考 [更新日志](docs/zh_cn/changelog.md) 获取更多细节和历史版本信息。
 
@@ -98,6 +98,7 @@ MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibilit
 - [x] [SimSiam (CVPR'2021)](https://arxiv.org/abs/2011.10566)
 - [x] [MoCo v3 (ICCV'2021)](https://arxiv.org/abs/2104.02057)
 - [x] [MAE](https://arxiv.org/abs/2111.06377)
+- [x] [SimMIM](https://arxiv.org/abs/2111.09886)
 
 更多的算法实现已经在我们的计划中。
 
@@ -119,13 +120,16 @@ MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibilit
 
 ## 安装
 
-请参考 [安装文档](docs/zh_cn/install.md) 进行安装和参考 [准备数据](docs/zh_cn/prepare_data.md) 准备数据集。
+MMSelfSup 依赖 [PyTorch](https://pytorch.org/)], [MMCV](https://github.com/open-mmlab/mmcv) 和 [MMClassification](https://github.com/open-mmlab/mmclassification).
+
+请参考 [安装文档](docs/zh_cn/install.md) 获取更详细的安装指南。
 
 ## 快速入门
 
-请参考 [入门指南](docs/zh_cn/getting_started.md) 获取 MMSelfSup 的基本使用方法.
+请参考 [准备数据](docs/zh_cn/prepare_data.md) 准备数据集和 [入门指南](docs/zh_cn/getting_started.md) 获取 MMSelfSup 的基本使用方法.
 
 我们也提供了更加全面的教程，包括:
+
 - [配置文件](docs/zh_cn/tutorials/0_config.md)
 - [添加数据集](docs/zh_cn/tutorials/1_new_dataset.md)
 - [数据处理流](docs/zh_cn/tutorials/2_data_pipeline.md)
@@ -133,6 +137,8 @@ MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibilit
 - [自定义流程](docs/zh_cn/tutorials/4_schedule.md)
 - [自定义运行](docs/zh_cn/tutorials/5_runtime.md)
 - [基准测试](docs/zh_cn/tutorials/6_benchmarks.md)
+
+另外，我们提供了 [colab 教程](https://github.com/open-mmlab/mmselfsup/blob/master/demo/mmselfsup_colab_tutorial.ipynb)。
 
 ## 参与贡献
 

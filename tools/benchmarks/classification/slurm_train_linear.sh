@@ -30,4 +30,4 @@ srun -p ${PARTITION} \
         --cfg-options model.backbone.init_cfg.type=Pretrained \
         model.backbone.init_cfg.checkpoint=$PRETRAIN \
         dist_params.port=$PORT \
-        --work_dir $WORK_DIR --seed 0 --launcher="slurm" ${PY_ARGS}
+        --work-dir $WORK_DIR --seed 0 --launcher="slurm" ${PY_ARGS}

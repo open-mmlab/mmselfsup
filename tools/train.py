@@ -22,9 +22,21 @@ from mmselfsup.utils import collect_env, get_root_logger, setup_multi_processes
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a model')
     parser.add_argument('config', help='train config file path')
-    parser.add_argument('--work_dir', help='the dir to save logs and models')
     parser.add_argument(
-        '--resume_from', help='the checkpoint file to resume from')
+        '--work_dir',
+        help='(Deprecated, please use --work-dir) the dir to save logs and '
+        'models')
+    parser.add_argument('--work-dir', help='the dir to save logs and models')
+    parser.add_argument(
+        '--resume_from',
+        help='(Deprecated, please use --resume-from) the checkpoint file '
+        'to resume from')
+    parser.add_argument(
+        '--resume-from', help='the checkpoint file to resume from')
+    parser.add_argument(
+        '--auto-resume',
+        action='store_true',
+        help='resume from the latest checkpoint automatically')
     group_gpus = parser.add_mutually_exclusive_group()
     group_gpus.add_argument(
         '--gpus',
@@ -46,7 +58,7 @@ def parse_args():
         '(only applicable to non-distributed training)')
     parser.add_argument('--seed', type=int, default=None, help='random seed')
     parser.add_argument(
-        '--diff_seed',
+        '--diff-seed',
         action='store_true',
         help='Whether or not set different seeds for different ranks')
     parser.add_argument(
@@ -68,7 +80,12 @@ def parse_args():
         choices=['none', 'pytorch', 'slurm', 'mpi'],
         default='none',
         help='job launcher')
-    parser.add_argument('--local_rank', type=int, default=0)
+    parser.add_argument(
+        '--local_rank',
+        type=int,
+        default=0,
+        help='(Deprecated, please use --local-rank)')
+    parser.add_argument('--local-rank', type=int, default=0)
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
         os.environ['LOCAL_RANK'] = str(args.local_rank)
@@ -100,6 +117,7 @@ def main():
                                 osp.splitext(osp.basename(args.config))[0])
     if args.resume_from is not None:
         cfg.resume_from = args.resume_from
+    cfg.auto_resume = args.auto_resume
     if args.gpus is not None:
         cfg.gpu_ids = range(1)
         warnings.warn('`--gpus` is deprecated because we only support '

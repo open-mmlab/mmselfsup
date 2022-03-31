@@ -5,7 +5,8 @@ from operator import mul
 
 import torch.nn as nn
 from mmcls.models.backbones import VisionTransformer as _VisionTransformer
-from mmcls.models.utils import PatchEmbed, to_2tuple
+from mmcls.models.utils import to_2tuple
+from mmcv.cnn.bricks.transformer import PatchEmbed
 from torch.nn.modules.batchnorm import _BatchNorm
 
 from mmselfsup.models.utils import build_2d_sincos_position_embedding
@@ -78,7 +79,7 @@ class VisionTransformer(_VisionTransformer):
 
             # Use fixed 2D sin-cos position embedding
             pos_emb = build_2d_sincos_position_embedding(
-                patches_resolution=self.patch_embed.patches_resolution,
+                patches_resolution=self.patch_resolution,
                 embed_dims=self.embed_dims,
                 cls_token=True)
             self.pos_embed.data.copy_(pos_emb)

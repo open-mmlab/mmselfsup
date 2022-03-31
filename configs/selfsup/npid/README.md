@@ -20,7 +20,7 @@ Our method is also remarkable for consistently improving test performance with m
 
 **Back to [model_zoo.md](https://github.com/open-mmlab/mmselfsup/blob/master/docs/en/model_zoo.md) to download models.**
 
-In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models were trained on ImageNet1k dataset.
+In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models are pre-trained on ImageNet-1k dataset.
 
 ### Classification
 
@@ -53,6 +53,14 @@ The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map
 | Self-Supervised Config                                                                                                                         | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 |
 | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- |
 | [resnet50_8xb32-steplr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py) | 19.98    | 34.86    | 41.59    | 48.43    | 48.71    |
+
+#### ImageNet Nearest-Neighbor Classification
+
+The results are obtained from the features after GlobalAveragePooling. Here, k=10 to 200 indicates different number of nearest neighbors.
+
+| Self-Supervised Config                                                                                                                         | k=10 | k=20 | k=100 | k=200 |
+| ---------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ---- | ----- | ----- |
+| [resnet50_8xb32-steplr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py) | 42.9 | 44.0 | 43.2  | 42.2  |
 
 ### Detection
 
