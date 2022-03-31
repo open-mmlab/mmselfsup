@@ -2,6 +2,31 @@
 
 ## MMSelfSup
 
+### v0.8.0 (31/03/2022)
+
+#### Highlight
+* Support **SimMIM** ([#239](https://github.com/open-mmlab/mmselfsup/pull/239))
+* Add **KNN** benchmark, support KNN test with checkpoint and extracted backbone weights ([#243](https://github.com/open-mmlab/mmselfsup/pull/243))
+* Support ImageNet-21k dataset ([#225](https://github.com/open-mmlab/mmselfsup/pull/225))
+
+#### New Features
+* Support SimMIM ([#239](https://github.com/open-mmlab/mmselfsup/pull/239))
+* Add KNN benchmark, support KNN test with checkpoint and extracted backbone weights ([#243](https://github.com/open-mmlab/mmselfsup/pull/243))
+* Support ImageNet-21k dataset ([#225](https://github.com/open-mmlab/mmselfsup/pull/225))
+* Resume latest checkpoint automatically ([#245](https://github.com/open-mmlab/mmselfsup/pull/245))
+
+#### Bug Fixes
+* Add seed to distributed sampler ([#250](https://github.com/open-mmlab/mmselfsup/pull/250))
+* Fix positional parameter error in dist_test_svm_epoch.sh ([#260](https://github.com/open-mmlab/mmselfsup/pull/260))
+* Fix 'mkdir' error in prepare_voc07_cls.sh ([#261](https://github.com/open-mmlab/mmselfsup/pull/261))
+
+#### Improvements
+* Update args format from command line ([#253](https://github.com/open-mmlab/mmselfsup/pull/253))
+
+#### Docs
+* Fix command errors in 6_benchmarks.md ([#263](https://github.com/open-mmlab/mmselfsup/pull/263))
+* Translate 6_benchmarks.md to Chinese ([#262](https://github.com/open-mmlab/mmselfsup/pull/262))
+
 ### v0.7.0 (03/03/2022)
 
 #### Highlight
