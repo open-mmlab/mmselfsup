@@ -121,18 +121,7 @@ MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibilit
 
 MMSelfSup 依赖 [PyTorch](https://pytorch.org/)], [MMCV](https://github.com/open-mmlab/mmcv) 和 [MMClassification](https://github.com/open-mmlab/mmclassification).
 
-请参考 [安装文档](docs/zh_cn/install.md) 获取更详细的安装指南，以下是安装的简要步骤。
-
-```shell
-conda create -n open-mmlab python=3.8 pytorch=1.10 cudatoolkit=11.3 torchvision -c pytorch -y
-conda activate open-mmlab
-pip3 install openmim
-mim install mmcv-full
-mim install mmcls
-git clone https://github.com/open-mmlab/mmselfsup.git
-cd mmselfsup
-pip3 install -e .
-```
+请参考 [安装文档](docs/zh_cn/install.md) 获取更详细的安装指南。
 
 ## 快速入门
 
