@@ -66,13 +66,13 @@ This project is released under the [Apache 2.0 license](LICENSE).
 
 ## ChangeLog
 
-MMSelfSup **v0.7.0** was released in 03/03/2022.
+MMSelfSup **v0.8.0** was released in 31/03/2022.
 
 Highlights of the new version:
 
-* Support **MAE**
-* Add **Places205** benchmarks
-* Add test Windows in workflows
+* Support **SimMIM**
+* Add **KNN** benchmark, support KNN test with checkpoint and extracted backbone weights
+* Support ImageNet-21k dataset
 
 Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
 
