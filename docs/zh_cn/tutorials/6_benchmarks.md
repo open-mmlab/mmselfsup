@@ -23,11 +23,11 @@ python ./tools/model_converters/extract_backbone_weights.py {CHECKPOINT} {MODEL_
 
 ## 分类
 
-关于分类，我们在`tools/benchmarks/classification/`文件夹中提供了脚本，其中有4个 `.sh` 文件和1个文件夹用于 VOC SVM 相关的分类任务。
+关于分类，我们在`tools/benchmarks/classification/`文件夹中提供了脚本，其中有 4 个 `.sh` 文件，1 个用于 VOC SVM 相关的分类任务的文件夹，1 个用于 ImageNet 最邻近分类任务的文件夹。
 
 ### VOC SVM / Low-shot SVM
 
-为了运行这个基准评测，你应该首先准备你的 VOC 数据集，数据预准备的细节请参考[prepare_data.md](https://github.com/open-mmlab/mmselfsup/blob/master/docs/en/prepare_data.md)。
+为了运行这个基准评测，你应该首先准备你的 VOC 数据集，数据准备的细节请参考[prepare_data.md](https://github.com/open-mmlab/mmselfsup/blob/master/docs/en/prepare_data.md)。
 
 为了评估预训练的模型，你可以运行以下命令。
 
