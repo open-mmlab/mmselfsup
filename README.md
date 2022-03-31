@@ -140,6 +140,7 @@ pip3 install -e .
 Please refer to [prepare_data.md](docs/en/prepare_data.md) for dataset preparation and [getting_started.md](docs/en/getting_started.md) for the basic usage of MMSelfSup.
 
 We also provides tutorials for more details:
+
 - [config](docs/en/tutorials/0_config.md)
 - [add new dataset](docs/en/tutorials/1_new_dataset.md)
 - [data pipeline](docs/en/tutorials/2_data_pipeline.md)
@@ -147,6 +148,8 @@ We also provides tutorials for more details:
 - [customize schedules](docs/en/tutorials/4_schedule.md)
 - [customize runtime](docs/en/tutorials/5_runtime.md)
 - [benchmarks](docs/en/tutorials/6_benchmarks.md)
+
+Besides, we provide [colab tutorial](https://github.com/open-mmlab/mmselfsup/blob/master/demo/mmselfsup_colab_tutorial.ipynb) for basic usage.
 
 ## Citation
 
