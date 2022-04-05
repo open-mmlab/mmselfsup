@@ -17,9 +17,11 @@ from .simclr import SimCLR
 from .simmim import SimMIM
 from .simsiam import SimSiam
 from .swav import SwAV
+from .cae import CAE
 
 __all__ = [
     'BaseModel', 'BarlowTwins', 'BYOL', 'Classification', 'DeepCluster',
     'DenseCL', 'MoCo', 'NPID', 'ODC', 'RelativeLoc', 'RotationPred', 'SimCLR',
-    'SimSiam', 'SwAV', 'MAE', 'MoCoV3', 'SimMIM', 'MMClsImageClassifierWrapper'
+    'SimSiam', 'SwAV', 'MAE', 'MoCoV3', 'SimMIM',
+    'MMClsImageClassifierWrapper', 'CAE'
 ]

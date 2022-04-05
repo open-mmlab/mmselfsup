@@ -5,8 +5,9 @@ from .resnet import ResNet, ResNetV1d
 from .resnext import ResNeXt
 from .simmim_swin import SimMIMSwinTransformer
 from .vision_transformer import VisionTransformer
+from .cae_pretrain_vit import CAEViT
 
 __all__ = [
     'ResNet', 'ResNetV1d', 'ResNeXt', 'MAEViT', 'MIMVisionTransformer',
-    'VisionTransformer', 'SimMIMSwinTransformer'
+    'VisionTransformer', 'SimMIMSwinTransformer', 'CAEViT'
 ]

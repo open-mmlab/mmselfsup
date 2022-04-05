@@ -9,9 +9,10 @@ from .odc_neck import ODCNeck
 from .relative_loc_neck import RelativeLocNeck
 from .simmim_neck import SimMIMNeck
 from .swav_neck import SwAVNeck
+from .cae_neck import CAENeck
 
 __all__ = [
     'AvgPool2dNeck', 'DenseCLNeck', 'LinearNeck', 'MoCoV2Neck',
     'NonLinearNeck', 'ODCNeck', 'RelativeLocNeck', 'SwAVNeck',
-    'MAEPretrainDecoder', 'SimMIMNeck'
+    'MAEPretrainDecoder', 'SimMIMNeck', 'CAENeck'
 ]

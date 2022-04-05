@@ -100,7 +100,7 @@ class BlockwiseMaskGenerator(object):
 
         mask = torch.from_numpy(mask)  # H X W
 
-        return img, mask
+        return img[0], img[1], mask
 
 
 @PIPELINES.register_module()
