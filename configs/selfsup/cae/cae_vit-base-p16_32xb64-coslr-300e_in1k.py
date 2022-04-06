@@ -14,7 +14,8 @@ optimizer = dict(
     paramwise_options={
         'norm': dict(weight_decay=0.),
         'bias': dict(weight_decay=0.)
-    })
+    },
+    betas=(0.9, 0.999))
 
 # learning policy
 lr_config = dict(
