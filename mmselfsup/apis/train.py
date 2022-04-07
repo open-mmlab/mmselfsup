@@ -173,7 +173,7 @@ def train_model(model,
             if hook_cfg.type == 'DeepClusterHook':
                 common_params = dict(dist_mode=True, data_loaders=data_loaders)
             else:
-                common_params = dict(dist_mode=True)
+                common_params = dict()
             hook_cfg = hook_cfg.copy()
             priority = hook_cfg.pop('priority', 'NORMAL')
             hook = build_from_cfg(hook_cfg, HOOKS, common_params)
