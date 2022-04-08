@@ -1,4 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from turtle import forward
+from typing import Sequence
 import torch
 import torch.nn as nn
 from mmcv.cnn import build_norm_layer
@@ -82,6 +84,95 @@ class MultiheadAttention(_MultiheadAttention):
         return x
 
 
+class MultiheadAttentionWithRPE(MultiheadAttention):
+
+    def __init__(self,
+                 embed_dims,
+                 num_heads,
+                 window_size,
+                 input_dims=None,
+                 attn_drop=0,
+                 proj_drop=0,
+                 qkv_bias=True,
+                 qk_scale=None,
+                 proj_bias=True,
+                 init_cfg=None):
+        super().__init__(
+            embed_dims=embed_dims,
+            num_heads=num_heads,
+            input_dims=input_dims,
+            attn_drop=attn_drop,
+            proj_drop=proj_drop,
+            qkv_bias=qkv_bias,
+            qk_scale=qk_scale,
+            proj_bias=proj_bias,
+            init_cfg=init_cfg)
+
+        assert isinstance(window_size, Sequence)
+        self.window_size = window_size
+        self.num_relative_distance = (2 * window_size[0] -
+                                      1) * (2 * window_size[1] - 1) + 3
+        # relative_position_bias_table shape is (2*Wh-1 * 2*Ww-1 + 3, nH)
+        self.relative_position_bias_table = nn.Parameter(
+            torch.zeros(self.num_relative_distance, num_heads))
+
+        # get pair-wise relative position index for
+        # each token inside the window
+        coords_h = torch.arange(window_size[0])
+        coords_w = torch.arange(window_size[1])
+        # coords shape is (2, Wh, Ww)
+        coords = torch.stack(torch.meshgrid([coords_h, coords_w]))
+        # coords_flatten shape is (2, Wh*Ww)
+        coords_flatten = torch.flatten(coords, 1)
+        relative_coords = (
+            coords_flatten[:, :, None] - coords_flatten[:, None, :])
+        # relative_coords shape is (Wh*Ww, Wh*Ww, 2)
+        relative_coords = relative_coords.permute(1, 2, 0).contiguous()
+        # shift to start from 0
+        relative_coords[:, :, 0] += window_size[0] - 1
+        relative_coords[:, :, 1] += window_size[1] - 1
+        relative_coords[:, :, 0] *= 2 * window_size[1] - 1
+        relative_position_index = torch.zeros(
+            size=(window_size[0] * window_size[1] + 1, ) * 2,
+            dtype=relative_coords.dtype)
+
+        # relative_position_index shape is (Wh*Ww, Wh*Ww)
+        relative_position_index[1:, 1:] = relative_coords.sum(-1)
+        relative_position_index[0, 0:] = self.num_relative_distance - 3
+        relative_position_index[0:, 0] = self.num_relative_distance - 2
+        relative_position_index[0, 0] = self.num_relative_distance - 1
+
+        self.register_buffer('relative_position_index',
+                             relative_position_index)
+
+    def forward(self, x):
+        B, N, _ = x.shape
+        qkv = self.qkv(x).reshape(B, N, 3, self.num_heads,
+                                  self.head_dims).permute(2, 0, 3, 1, 4)
+        q, k, v = qkv[0], qkv[1], qkv[2]
+
+        q = q * self.scale
+        attn = (q @ k.transpose(-2, -1))
+
+        if self.relative_position_bias_table is not None:
+            relative_position_bias = \
+                self.relative_position_bias_table[
+                    self.relative_position_index.view(-1)].view(
+                        self.window_size[0] * self.window_size[1] + 1,
+                        self.window_size[0] * self.window_size[1] + 1, -1)
+            relative_position_bias = relative_position_bias.permute(
+                2, 0, 1).contiguous()  # nH, Wh*Ww, Wh*Ww
+            attn = attn + relative_position_bias.unsqueeze(0)
+
+        attn = attn.softmax(dim=-1)
+        attn = self.attn_drop(attn)
+
+        x = (attn @ v).transpose(1, 2).reshape(B, N, self.embed_dims)
+        x = self.proj(x)
+        x = self.proj_drop(x)
+        return x
+
+
 class TransformerEncoderLayer(_TransformerEncoderLayer):
     """Implements one encoder layer in Vision Transformer.
 
@@ -109,6 +200,7 @@ class TransformerEncoderLayer(_TransformerEncoderLayer):
                  embed_dims,
                  num_heads,
                  feedforward_channels,
+                 window_size=None,
                  drop_rate=0.,
                  attn_drop_rate=0.,
                  drop_path_rate=0.,
@@ -136,12 +228,21 @@ class TransformerEncoderLayer(_TransformerEncoderLayer):
             norm_cfg, self.embed_dims, postfix=1)
         self.add_module(self.norm1_name, norm1)
 
-        self.attn = MultiheadAttention(
-            embed_dims=embed_dims,
-            num_heads=num_heads,
-            attn_drop=attn_drop_rate,
-            proj_drop=drop_rate,
-            qkv_bias=qkv_bias)
+        if window_size is None:
+            self.attn = MultiheadAttention(
+                embed_dims=embed_dims,
+                num_heads=num_heads,
+                attn_drop=attn_drop_rate,
+                proj_drop=drop_rate,
+                qkv_bias=qkv_bias)
+        else:
+            self.attn = MultiheadAttentionWithRPE(
+                embed_dims=embed_dims,
+                num_heads=num_heads,
+                window_size=window_size,
+                attn_drop=attn_drop_rate,
+                proj_drop=drop_rate,
+                qkv_bias=qkv_bias)
 
         self.norm2_name, norm2 = build_norm_layer(
             norm_cfg, self.embed_dims, postfix=2)
