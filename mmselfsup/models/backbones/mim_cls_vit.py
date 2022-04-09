@@ -56,6 +56,7 @@ class MIMVisionTransformer(VisionTransformer):
                  final_norm=True,
                  output_cls_token=True,
                  interpolate_mode='bicubic',
+                 init_values=0.0,
                  patch_cfg=dict(),
                  layer_cfgs=dict(),
                  init_values=0.0,
@@ -90,6 +91,7 @@ class MIMVisionTransformer(VisionTransformer):
                 drop_path_rate=dpr[i],
                 init_values=init_values,
                 qkv_bias=qkv_bias,
+                init_values=init_values,
                 norm_cfg=norm_cfg)
             _layer_cfg.update(layer_cfgs[i])
             self.layers.append(TransformerEncoderLayer(**_layer_cfg))
