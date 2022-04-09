@@ -58,6 +58,7 @@ class MIMVisionTransformer(VisionTransformer):
                  interpolate_mode='bicubic',
                  patch_cfg=dict(),
                  layer_cfgs=dict(),
+                 init_values=0.0,
                  finetune=True,
                  init_cfg=None):
         super().__init__(
@@ -74,7 +75,6 @@ class MIMVisionTransformer(VisionTransformer):
             patch_cfg=patch_cfg,
             layer_cfgs=layer_cfgs,
             init_cfg=init_cfg)
-
         dpr = np.linspace(0, drop_path_rate, self.num_layers)
         self.layers = ModuleList()
         if isinstance(layer_cfgs, dict):
@@ -88,6 +88,7 @@ class MIMVisionTransformer(VisionTransformer):
                 window_size=self.patch_resolution if use_window else None,
                 drop_rate=drop_rate,
                 drop_path_rate=dpr[i],
+                init_values=init_values,
                 qkv_bias=qkv_bias,
                 norm_cfg=norm_cfg)
             _layer_cfg.update(layer_cfgs[i])

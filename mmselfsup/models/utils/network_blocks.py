@@ -108,6 +108,15 @@ class MultiheadAttentionWithRPE(MultiheadAttention):
             proj_bias=proj_bias,
             init_cfg=init_cfg)
 
+        self.qkv = nn.Linear(self.input_dims, embed_dims * 3, bias=False)
+        if qkv_bias:
+            self.q_bias = nn.Parameter(torch.zeros(embed_dims))
+            self.v_bias = nn.Parameter(torch.zeros(embed_dims))
+        else:
+            self.q_bias = None
+            self.k_bias = None
+            self.v_bias = None
+
         assert isinstance(window_size, Sequence)
         self.window_size = window_size
         self.num_relative_distance = (2 * window_size[0] -
@@ -146,9 +155,18 @@ class MultiheadAttentionWithRPE(MultiheadAttention):
                              relative_position_index)
 
     def forward(self, x):
+
+        qkv_bias = None
+        if self.q_bias is not None:
+            qkv_bias = torch.cat(
+                (self.q_bias,
+                 torch.zeros_like(self.v_bias,
+                                  requires_grad=False), self.v_bias))
         B, N, _ = x.shape
-        qkv = self.qkv(x).reshape(B, N, 3, self.num_heads,
-                                  self.head_dims).permute(2, 0, 3, 1, 4)
+        qkv = F.linear(
+            x, weight=self.qkv.weight,
+            bias=qkv_bias).reshape(B, N, 3, self.num_heads,
+                                   self.head_dims).permute(2, 0, 3, 1, 4)
         q, k, v = qkv[0], qkv[1], qkv[2]
 
         q = q * self.scale
@@ -227,7 +245,6 @@ class TransformerEncoderLayer(_TransformerEncoderLayer):
         self.norm1_name, norm1 = build_norm_layer(
             norm_cfg, self.embed_dims, postfix=1)
         self.add_module(self.norm1_name, norm1)
-
         if window_size is None:
             self.attn = MultiheadAttention(
                 embed_dims=embed_dims,
