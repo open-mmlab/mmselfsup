@@ -66,11 +66,27 @@ class MultiheadAttention(_MultiheadAttention):
             init_cfg=init_cfg)
 
         del self.out_drop
+        self.qkv = nn.Linear(self.input_dims, embed_dims * 3, bias=False)
+        if qkv_bias:
+            self.q_bias = nn.Parameter(torch.zeros(embed_dims))
+            self.v_bias = nn.Parameter(torch.zeros(embed_dims))
+        else:
+            self.q_bias = None
+            self.k_bias = None
+            self.v_bias = None
 
     def forward(self, x):
+        qkv_bias = None
+        if self.q_bias is not None:
+            qkv_bias = torch.cat(
+                (self.q_bias,
+                 torch.zeros_like(self.v_bias,
+                                  requires_grad=False), self.v_bias))
         B, N, _ = x.shape
-        qkv = self.qkv(x).reshape(B, N, 3, self.num_heads,
-                                  self.head_dims).permute(2, 0, 3, 1, 4)
+        qkv = F.linear(
+            x, weight=self.qkv.weight,
+            bias=qkv_bias).reshape(B, N, 3, self.num_heads,
+                                   self.head_dims).permute(2, 0, 3, 1, 4)
         q, k, v = qkv[0], qkv[1], qkv[2]
 
         attn = (q @ k.transpose(-2, -1)) * self.scale
