@@ -20,11 +20,11 @@ if not prefetch:
 
 train_pipeline.append(
     dict(
-        type='BlockwiseMaskGenerator',
-        input_size=224,
-        mask_patch_size=16,
-        model_patch_size=16,
-        mask_ratio=75 / 196))
+        type='MaskingGenerator',
+        input_size=(14, 14),
+        num_masking_patches=75,
+        max_num_patches=None,
+        min_num_patches=16))
 
 # dataset summary
 file_client_args = dict(
