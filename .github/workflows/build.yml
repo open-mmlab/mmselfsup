@@ -88,7 +88,7 @@ jobs:
         run: |
           coverage run --branch --source mmselfsup -m pytest tests/
           coverage xml
-          coverage report -m --omit="mmselfsup/apis/*"
+          coverage report -m
       # Only upload coverage report for python3.8 && pytorch1.9.0
       - name: Upload coverage to Codecov
         if: ${{matrix.torch == '1.9.0' && matrix.python-version == '3.8'}}
