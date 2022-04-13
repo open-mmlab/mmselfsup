@@ -53,6 +53,9 @@ def test_train_model():
         cfg.data.samples_per_gpu = 1
         cfg.data.workers_per_gpu = 2
 
+        cfg.data.val.data_source.data_prefix = 'tests/data/'
+        cfg.data.val.data_source.ann_file = 'tests/data/data_list.txt'
+
         # Specify the optimizer
         cfg.optimizer = dict(
             type='SGD', lr=0.005, momentum=0.9, weight_decay=0.0001)
@@ -82,6 +85,9 @@ def test_train_model():
 
         # Build the dataset
         datasets = [ExampleDataset()]
+
+        # evaluation
+        cfg.evaluation = dict(interval=10, topk=(1, 5))
 
         # Start pre-train
         train_model(
