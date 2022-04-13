@@ -8,7 +8,6 @@ from ..builder import BACKBONES
 from ..utils import build_2d_sincos_position_embedding
 from mmcv.cnn.utils.weight_init import trunc_normal_
 from mmcv.runner.base_module import ModuleList
-import math
 from ..utils import TransformerEncoderLayer
 
 

@@ -1,15 +1,51 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from turtle import forward
 from typing import Sequence
 import torch
 import torch.nn as nn
 from mmcv.cnn import build_norm_layer
-from mmcv.cnn.bricks.transformer import FFN
+from mmcv.cnn.bricks.transformer import FFN as _FFN
 from mmcv.runner.base_module import BaseModule
 from mmcls.models.backbones.vision_transformer import TransformerEncoderLayer as _TransformerEncoderLayer
 from mmcls.models.utils import MultiheadAttention as _MultiheadAttention
 from mmcv.cnn.bricks.drop import build_dropout
 from torch.nn import functional as F
+
+
+class FFN(_FFN):
+
+    def __init__(self,
+                 embed_dims=256,
+                 feedforward_channels=1024,
+                 num_fcs=2,
+                 act_cfg=dict(type='ReLU', inplace=True),
+                 ffn_drop=0,
+                 dropout_layer=None,
+                 add_identity=True,
+                 init_cfg=None,
+                 **kwargs):
+        super().__init__(
+            embed_dims=embed_dims,
+            feedforward_channels=feedforward_channels,
+            num_fcs=num_fcs,
+            act_cfg=act_cfg,
+            ffn_drop=ffn_drop,
+            dropout_layer=dropout_layer,
+            add_identity=add_identity,
+            init_cfg=init_cfg,
+            **kwargs)
+        del self.dropout_layer
+
+    def forward(self, x, identity=None):
+        """Forward function for `FFN`.
+
+        The function would add x to the output tensor if residue is None.
+        """
+        out = self.layers(x)
+        if not self.add_identity:
+            return out
+        if identity is None:
+            identity = x
+        return identity + self.dropout_layer(out)
 
 
 class MultiheadAttention(_MultiheadAttention):
@@ -287,7 +323,8 @@ class TransformerEncoderLayer(_TransformerEncoderLayer):
             num_fcs=num_fcs,
             ffn_drop=drop_rate,
             dropout_layer=dict(type='DropPath', drop_prob=drop_path_rate),
-            act_cfg=act_cfg)
+            act_cfg=act_cfg,
+            add_identity=False)
 
         dropout_layer = dict(type='DropPath', drop_prob=drop_path_rate)
         self.drop_path = build_dropout(
@@ -347,7 +384,8 @@ class CAETransformerDecoderLayer(BaseModule):
             num_fcs=num_fcs,
             ffn_drop=drop_rate,
             dropout_layer=dict(type='DropPath', drop_prob=drop_path_rate),
-            act_cfg=act_cfg)
+            act_cfg=act_cfg,
+            add_identity=False)
 
         dropout_layer = dict(type='DropPath', drop_prob=drop_path_rate)
         self.drop_path = build_dropout(

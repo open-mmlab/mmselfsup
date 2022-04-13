@@ -42,11 +42,11 @@ class CAEHead(BaseModule):
     def forward(self, img_target, outputs, latent_pred, latent_target,
                 mask) -> dict:
         losses = dict()
-
         target = self._generate_target(img_target)
         target = target[mask]
         loss_main = self.loss_cross_entropy(outputs, target)
-        loss_align = self.loss_mse(latent_pred, latent_target) * self.lamb
+        loss_align = self.loss_mse(latent_pred,
+                                   latent_target.detach()) * self.lamb
 
         losses['loss'] = loss_main + loss_align
         losses['main'] = loss_main
