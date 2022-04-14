@@ -197,6 +197,8 @@ class PrefetchLoader:
             torch.cuda.current_stream().wait_stream(stream)
             input_dict = next_input_dict
 
+        next_input_dict = None
+        torch.cuda.empty_cache()
         yield input_dict
 
     def __len__(self):
