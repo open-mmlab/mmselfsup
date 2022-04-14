@@ -37,7 +37,7 @@ optimizer_config = dict(grad_clip=dict(max_norm=3.0))
 fp16 = dict(loss_scale='dynamic')
 
 # runtime
-checkpoint_config = dict(interval=1, max_keep_ckpts=1, out_dir='')
+checkpoint_config = dict(interval=1, max_keep_ckpts=2, out_dir='')
 persistent_workers = True
 log_config = dict(
     interval=100, hooks=[
