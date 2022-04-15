@@ -24,7 +24,7 @@ test_pipeline = [
 data = dict(
     train=dict(pipeline=train_pipeline),
     val=dict(pipeline=test_pipeline),
-    samples_per_gpu=64)
+    samples_per_gpu=128)
 
 # optimizer
 optimizer = dict(lr=8e-3)
