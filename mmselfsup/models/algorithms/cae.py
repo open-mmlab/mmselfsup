@@ -25,7 +25,7 @@ class CAE(BaseModel):
                  backbone,
                  neck=None,
                  head=None,
-                 base_momentum=0.996,
+                 base_momentum=0.0,
                  init_cfg=None,
                  **kwargs):
         super(CAE, self).__init__(init_cfg)
