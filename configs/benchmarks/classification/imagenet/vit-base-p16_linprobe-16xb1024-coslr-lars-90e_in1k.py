@@ -6,12 +6,6 @@ _base_ = [
 ]
 
 # dataset
-file_client_args = dict(
-    backend='memcached',
-    server_list_cfg='/mnt/lustre/share/memcached_client/pcs_server_list.conf',
-    client_cfg='/mnt/lustre/share_data/zhangwenwei/software/pymc/mc.conf',
-    sys_path='/mnt/lustre/share_data/zhangwenwei/software/pymc',
-)
 img_norm_cfg = dict(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 train_pipeline = [
     dict(type='RandomResizedCrop', size=224, interpolation=3),
@@ -30,8 +24,7 @@ data = dict(
     drop_last=False,
     workers_per_gpu=32,
     train=dict(pipeline=train_pipeline),
-    val=dict(pipeline=test_pipeline),
-    file_client_args=file_client_args)
+    val=dict(pipeline=test_pipeline))
 
 # model
 model = dict(backbone=dict(init_values=0.1, use_window=False))
