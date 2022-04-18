@@ -45,5 +45,4 @@ data = dict(
             ann_file='data/imagenet/meta/train.txt',
             file_client_args=file_client_args),
         pipeline=train_pipeline,
-        prefetch=prefetch),
-    file_client_args=file_client_args)
+        prefetch=prefetch))
