@@ -16,6 +16,7 @@ model = dict(
         num_layers=3,
         with_last_bn=False,
         with_last_bn_affine=False,
-        with_avg_pool=True),
-    head=dict(
-        type='LatentCrossCorrelationHead', in_channels=8192, lambd=0.0015))
+        with_avg_pool=True,
+        init_cfg=dict(
+            type='Kaiming', distribution='uniform', layer=['Linear'])),
+    head=dict(type='LatentCrossCorrelationHead', in_channels=8192))
