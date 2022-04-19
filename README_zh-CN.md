@@ -96,6 +96,7 @@ MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibilit
 - [x] [SwAV (NeurIPS'2020)](https://arxiv.org/abs/2006.09882)
 - [x] [DenseCL (CVPR'2021)](https://arxiv.org/abs/2011.09157)
 - [x] [SimSiam (CVPR'2021)](https://arxiv.org/abs/2011.10566)
+- [x] [Barlow Twins (ICML'2021)](https://arxiv.org/abs/2103.03230)
 - [x] [MoCo v3 (ICCV'2021)](https://arxiv.org/abs/2104.02057)
 - [x] [MAE](https://arxiv.org/abs/2111.06377)
 - [x] [SimMIM](https://arxiv.org/abs/2111.09886)
