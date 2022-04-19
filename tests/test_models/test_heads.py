@@ -55,9 +55,9 @@ def test_latent_cls_head():
 
 
 def test_latent_cross_correlation_head():
-    head = LatentCrossCorrelationHead(2048, 0.0051)
-    fake_input = torch.rand(32, 2048)  # N, C
-    fake_traget = torch.rand(32, 2048)  # N, C
+    head = LatentCrossCorrelationHead(2, 0.0051)
+    fake_input = torch.rand(32, 2)  # N, C
+    fake_traget = torch.rand(32, 2)  # N, C
 
     loss = head.forward(fake_input, fake_traget)
     assert loss['loss'].item() > 0

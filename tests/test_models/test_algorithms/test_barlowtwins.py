@@ -15,14 +15,14 @@ backbone = dict(
 neck = dict(
     type='NonLinearNeck',
     in_channels=2048,
-    hid_channels=8192,
-    out_channels=8192,
+    hid_channels=2,
+    out_channels=2,
     num_layers=3,
     with_last_bn=False,
     with_last_bn_affine=False,
     with_avg_pool=True,
     norm_cfg=dict(type='BN1d'))
-head = dict(type='LatentCrossCorrelationHead', in_channels=8192, lambd=0.0015)
+head = dict(type='LatentCrossCorrelationHead', in_channels=2)
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
@@ -33,15 +33,12 @@ def test_barlowtwins():
         alg = BarlowTwins(backbone=backbone, neck=neck, head=None)
 
     alg = BarlowTwins(backbone=backbone, neck=neck, head=head)
-    fake_input = torch.randn((16, 3, 224, 224))
+    fake_input = torch.randn((2, 3, 224, 224))
     fake_backbone_out = alg.extract_feat(fake_input)
-    assert fake_backbone_out[0].size() == torch.Size([16, 2048, 7, 7])
+    assert fake_backbone_out[0].size() == torch.Size([2, 2048, 7, 7])
     with pytest.raises(AssertionError):
         fake_out = alg.forward_train(fake_input)
 
-    fake_input = [
-        torch.randn((16, 3, 224, 224)),
-        torch.randn((16, 3, 224, 224))
-    ]
+    fake_input = [torch.randn((2, 3, 224, 224)), torch.randn((2, 3, 224, 224))]
     fake_out = alg.forward_train(fake_input)
     assert fake_out['loss'].item() > 0.0
