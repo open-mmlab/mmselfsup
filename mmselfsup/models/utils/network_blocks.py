@@ -1,13 +1,15 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from typing import Sequence
+
 import torch
 import torch.nn as nn
+from mmcls.models.backbones.vision_transformer import \
+    TransformerEncoderLayer as _TransformerEncoderLayer
+from mmcls.models.utils import MultiheadAttention as _MultiheadAttention
 from mmcv.cnn import build_norm_layer
+from mmcv.cnn.bricks.drop import build_dropout
 from mmcv.cnn.bricks.transformer import FFN as _FFN
 from mmcv.runner.base_module import BaseModule
-from mmcls.models.backbones.vision_transformer import TransformerEncoderLayer as _TransformerEncoderLayer
-from mmcls.models.utils import MultiheadAttention as _MultiheadAttention
-from mmcv.cnn.bricks.drop import build_dropout
 from torch.nn import functional as F
 
 

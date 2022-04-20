@@ -1,10 +1,9 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from random import sample
 import torch
+from torchvision.transforms import Normalize
 
 from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
 from .base import BaseModel
-from torchvision.transforms import Normalize
 
 
 @ALGORITHMS.register_module()

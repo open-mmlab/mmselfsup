@@ -1,14 +1,13 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import numpy as np
 import torch
 from mmcls.models import VisionTransformer
-from torch import nn
-import numpy as np
-
-from ..builder import BACKBONES
-from ..utils import build_2d_sincos_position_embedding
 from mmcv.cnn.utils.weight_init import trunc_normal_
 from mmcv.runner.base_module import ModuleList
-from ..utils import TransformerEncoderLayer
+from torch import nn
+
+from ..builder import BACKBONES
+from ..utils import TransformerEncoderLayer, build_2d_sincos_position_embedding
 
 
 @BACKBONES.register_module()

@@ -2,6 +2,7 @@
 from .barlowtwins import BarlowTwins
 from .base import BaseModel
 from .byol import BYOL
+from .cae import CAE
 from .classification import Classification
 from .deepcluster import DeepCluster
 from .densecl import DenseCL
@@ -17,7 +18,6 @@ from .simclr import SimCLR
 from .simmim import SimMIM
 from .simsiam import SimSiam
 from .swav import SwAV
-from .cae import CAE
 
 __all__ = [
     'BaseModel', 'BarlowTwins', 'BYOL', 'Classification', 'DeepCluster',

@@ -1,13 +1,13 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-import torch
-import torch.nn as nn
-import math
-from mmcv.runner import BaseModule
-from mmcv.cnn.utils.weight_init import trunc_normal_
-from ..utils import CAETransformerDecoderLayer, TransformerEncoderLayer
 from functools import partial
 
+import torch
+import torch.nn as nn
+from mmcv.cnn.utils.weight_init import trunc_normal_
+from mmcv.runner import BaseModule
+
 from ..builder import NECKS
+from ..utils import CAETransformerDecoderLayer, TransformerEncoderLayer
 
 
 @NECKS.register_module()

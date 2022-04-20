@@ -1,14 +1,15 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from .accuracy import Accuracy, accuracy
+from .dall_e import Encoder
 from .extract_process import ExtractProcess, MultiExtractProcess
 from .gather_layer import GatherLayer
 from .knn_classifier import knn_classifier
 from .multi_pooling import MultiPooling
 from .multi_prototypes import MultiPrototypes
+from .network_blocks import (CAETransformerDecoderLayer, MultiheadAttention,
+                             TransformerEncoderLayer)
 from .position_embedding import build_2d_sincos_position_embedding
 from .sobel import Sobel
-from .network_blocks import MultiheadAttention, TransformerEncoderLayer, CAETransformerDecoderLayer
-from .dall_e import Encoder
 
 __all__ = [
     'Accuracy', 'accuracy', 'ExtractProcess', 'MultiExtractProcess',

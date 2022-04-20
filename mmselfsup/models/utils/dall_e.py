@@ -1,12 +1,12 @@
-import attr
+# Copyright (c) OpenMMLab. All rights reserved.
 import math
+from collections import OrderedDict
+from functools import partial
 
+import attr
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
-from collections import OrderedDict
-from functools import partial
 
 
 @attr.s(eq=False)
@@ -164,9 +164,8 @@ class Encoder(nn.Module):
         if len(x.shape) != 4:
             raise ValueError(f'input shape {x.shape} is not 4d')
         if x.shape[1] != self.input_channels:
-            raise ValueError(
-                f'input has {x.shape[1]} channels but model built for {self.input_channels}'
-            )
+            raise ValueError(f'input has {x.shape[1]} channels but model \
+                    built for {self.input_channels}')
         if x.dtype != torch.float32:
             raise ValueError('input must have dtype torch.float32')
 

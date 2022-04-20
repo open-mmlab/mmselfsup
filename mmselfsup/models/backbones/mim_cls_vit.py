@@ -1,12 +1,12 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import numpy as np
 import torch
 from mmcls.models import VisionTransformer
 from mmcv.cnn import build_norm_layer
-from ..utils import TransformerEncoderLayer
-from mmcv.runner.base_module import BaseModule, ModuleList
-import numpy as np
+from mmcv.runner.base_module import ModuleList
 
 from ..builder import BACKBONES
+from ..utils import TransformerEncoderLayer
 
 
 @BACKBONES.register_module()

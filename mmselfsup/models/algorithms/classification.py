@@ -1,6 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from mmcls.models.utils import Augments
-import torch
 
 from ..builder import ALGORITHMS, build_backbone, build_head
 from ..utils import Sobel
@@ -64,7 +63,8 @@ class Classification(BaseModel):
 
         Returns:
             dict[str, Tensor]: A dictionary of loss components.
-        # """
+        #
+        """
         # img = torch.ones((64, 3, 224, 224)) * 2
         # img = img.half().cuda()
         # label = torch.ones((64, ))

@@ -1,7 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import torch
 from mmcv.runner import BaseModule
-from torch.nn import functional as F
 from torch import nn
 
 from ..builder import HEADS

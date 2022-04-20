@@ -1,18 +1,17 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import inspect
-from typing import Tuple
+import math
+import random
+import warnings
+from typing import Sequence, Tuple
 
 import numpy as np
 import torch
+import torchvision.transforms.functional as F
 from mmcv.utils import build_from_cfg
 from PIL import Image, ImageFilter
 from timm.data import create_transform
 from torchvision import transforms as _transforms
-import torchvision.transforms.functional as F
-import random
-import math
-import warnings
-from typing import Sequence
 
 from ..builder import PIPELINES
 
@@ -121,13 +120,14 @@ class MaskingGenerator:
         self.num_masking_patches = num_masking_patches
 
         self.min_num_patches = min_num_patches
-        self.max_num_patches = num_masking_patches if max_num_patches is None else max_num_patches
+        self.max_num_patches = num_masking_patches if max_num_patches is None \
+            else max_num_patches
 
         max_aspect = max_aspect or 1 / min_aspect
         self.log_aspect_ratio = (math.log(min_aspect), math.log(max_aspect))
 
     def __repr__(self):
-        repr_str = "Generator(%d, %d -> [%d ~ %d], max = %d, %.3f ~ %.3f)" % (
+        repr_str = 'Generator(%d, %d -> [%d ~ %d], max = %d, %.3f ~ %.3f)' % (
             self.height, self.width, self.min_num_patches,
             self.max_num_patches, self.num_masking_patches,
             self.log_aspect_ratio[0], self.log_aspect_ratio[1])
@@ -176,12 +176,12 @@ class MaskingGenerator:
 
 @PIPELINES.register_module()
 class RandomResizedCropAndInterpolationWithTwoPic:
-    """Crop the given PIL Image to random size and aspect ratio with 
-       random interpolation.
+    """Crop the given PIL Image to random size and aspect ratio with random
+    interpolation.
 
-    A crop of random size (default: of 0.08 to 1.0) of the original size and a 
-    random aspect ratio (default: of 3/4 to 4/3) of the original aspect ratio 
-    is made. This crop is finally resized to given size. This is popularly used 
+    A crop of random size (default: of 0.08 to 1.0) of the original size and a
+    random aspect ratio (default: of 3/4 to 4/3) of the original aspect ratio
+    is made. This crop is finally resized to given size. This is popularly used
     to train the Inception networks.
 
     Args:
@@ -210,7 +210,7 @@ class RandomResizedCropAndInterpolationWithTwoPic:
         else:
             self.second_size = None
         if (scale[0] > scale[1]) or (ratio[0] > ratio[1]):
-            warnings.warn("range should be of kind (min, max)")
+            warnings.warn('range should be of kind (min, max)')
 
         if interpolation == 'random':
             self.interpolation = (Image.BILINEAR, Image.BICUBIC)
@@ -227,7 +227,8 @@ class RandomResizedCropAndInterpolationWithTwoPic:
         Args:
             img (PIL Image): Image to be cropped.
             scale (tuple): range of size of the origin size cropped
-            ratio (tuple): range of aspect ratio of the origin aspect ratio cropped
+            ratio (tuple): range of aspect ratio of the origin aspect
+                ratio cropped
 
         Returns:
             tuple: params (i, j, h, w) to be passed to ``crop`` for a random
