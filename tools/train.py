@@ -5,7 +5,6 @@ import os
 import os.path as osp
 import time
 import warnings
-import mc
 
 import mmcv
 import torch
