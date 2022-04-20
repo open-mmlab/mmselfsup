@@ -13,10 +13,7 @@ from rich.syntax import Syntax
 from rich.table import Table
 
 console = Console()
-METRICS_MAP = {
-    'Top 1 Accuracy': 'accuracy_top-1',
-    'Top 5 Accuracy': 'accuracy_top-5'
-}
+METRICS_MAP = {'Top 1 Accuracy': 'top1', 'Top 5 Accuracy': 'top5'}
 
 
 def parse_args():
@@ -265,7 +262,7 @@ def show_summary(summary_data):
 
 
 def summary(args):
-    models_cfg = load(str(Path(__file__).parent / 'bench_train.yml'))
+    models_cfg = load(str(Path(__file__).parent / 'benchmark_models.yml'))
     models = {model.name: model for model in models_cfg.models}
 
     work_dir = Path(args.work_dir)
@@ -299,12 +296,12 @@ def summary(args):
         # parse train log
         with open(log_file) as f:
             json_logs = [json.loads(s) for s in f.readlines()]
-            val_logs = [
+            val_mode_logs = [
                 log for log in json_logs
                 if 'mode' in log and log['mode'] == 'val'
             ]
 
-        if len(val_logs) == 0:
+        if len(val_mode_logs) == 0:
             continue
 
         expect_metrics = model_info.results[0].metrics
@@ -313,13 +310,16 @@ def summary(args):
         summary = {'log_file': log_file}
         for key_yml, key_res in METRICS_MAP.items():
             if key_yml in expect_metrics:
-                assert key_res in val_logs[-1], \
-                    f'{model_name}: No metric "{key_res}"'
-                expect_result = float(expect_metrics[key_yml])
-                last = float(val_logs[-1][key_res])
-                best_log = sorted(val_logs, key=lambda x: x[key_res])[-1]
-                best = float(best_log[key_res])
-                best_epoch = int(best_log['epoch'])
+                for key_log, _ in val_mode_logs[-1].items():
+                    if key_res in key_log:
+                        assert key_log in val_mode_logs[-1], \
+                            f'{model_name}: No metric "{key_log}"'
+                        expect_result = float(expect_metrics[key_yml])
+                        last = float(val_mode_logs[-1][key_log])
+                        best_log = sorted(
+                            val_mode_logs, key=lambda x: x[key_log])[-1]
+                        best = float(best_log[key_log])
+                        best_epoch = int(best_log['epoch'])
 
                 summary[key_yml] = dict(
                     expect=expect_result,
