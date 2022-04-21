@@ -17,7 +17,7 @@ class CAEHead(BaseModule):
     Args:
         tokenizer_path (str): The path of the tokenizer.
         lamb (float): The weight for the align loss.
-        init_cfg (dict, optional): Initialization config dict. 
+        init_cfg (dict, optional): Initialization config dict.
             Defaults to None.
     """
 

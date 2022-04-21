@@ -12,18 +12,18 @@ from .base import BaseModel
 class CAE(BaseModel):
     """CAE.
 
-    Implementation of `Context Autoencoder for Self-Supervised Representation 
+    Implementation of `Context Autoencoder for Self-Supervised Representation
     Learning <https://arxiv.org/abs/2202.03026>`_.
 
     Args:
         backbone (dict, optional): Config dict for module of backbone.
-        neck (dict, optional): Config dict for module of deep features to 
+        neck (dict, optional): Config dict for module of deep features to
             compact feature vectors. Defaults to None.
         head (dict, optional): Config dict for module of loss functions.
             Defaults to None.
         base_momentum (float): The base momentum coefficient for the target
             network. Defaults to 0.0.
-        init_cfg (dict, optional): the config to control the initialization. 
+        init_cfg (dict, optional): the config to control the initialization.
     """
 
     def __init__(self,

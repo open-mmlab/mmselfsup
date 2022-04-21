@@ -3,9 +3,9 @@ from typing import Tuple
 
 import torch
 import torch.nn as nn
+from mmcv.cnn import build_norm_layer
 from mmcv.cnn.utils.weight_init import trunc_normal_
 from mmcv.runner import BaseModule
-from mmcv.cnn import build_norm_layer
 
 from ..builder import NECKS
 from ..utils import CAETransformerDecoderLayer, TransformerEncoderLayer
@@ -22,21 +22,21 @@ class CAENeck(BaseModule):
         patch_size (int): The patch size of each token. Defaults to 16.
         num_classes (int): The number of classes for final prediction. Defaults
             to 8192.
-        embed_dims (int): The embed dims of latent feature in regressor and 
+        embed_dims (int): The embed dims of latent feature in regressor and
             decoder. Defaults to 768.
         regressor_depth (int): The number of regressor blocks. Defaults to 6.
         decoder_depth (int): The number of decoder blocks. Defaults to 8.
         num_heads (int): The number of head in multi-head attention. Defaults
             to 12.
-        mlp_ratio (int): The expand ratio of latent features in MLP. defaults 
+        mlp_ratio (int): The expand ratio of latent features in MLP. defaults
             to 4.
         qkv_bias (bool): Whether or not to use qkv bias. Defaults to True.
-        qk_scale (float, optional): The scale applied to the results of qk. 
+        qk_scale (float, optional): The scale applied to the results of qk.
             Defaults to None.
         drop_rate (float): The dropout rate. Defaults to 0.
         attn_drop_rate (float): The dropout rate in attention block. Defaults
             to 0.
-        norm_cfg (dict): The config of normalization layer. Defaults to 
+        norm_cfg (dict): The config of normalization layer. Defaults to
             dict(type='LN', eps=1e-6).
         init_values (float, optional): The init value of gamma. Defaults to
             None.
@@ -134,10 +134,10 @@ class CAENeck(BaseModule):
             pos_embed_unmasked: torch.Tensor
     ) -> Tuple[torch.Tensor, torch.Tensor]:
         """Get the latent prediction and final prediction.
-        
+
         Args:
             x_unmasked (torch.Tensor): Features of unmasked tokens.
-            pos_embed_masked (torch.Tensor): Position embedding of masked 
+            pos_embed_masked (torch.Tensor): Position embedding of masked
                 tokens.
             pos_embed_unmasked (torch.Tensor): Position embedding of unmasked
                 tokens.

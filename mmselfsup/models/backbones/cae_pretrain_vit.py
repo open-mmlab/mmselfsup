@@ -34,7 +34,7 @@ class CAEViT(VisionTransformer):
             `with_cls_token` must be True. Defaults to True.
         interpolate_mode (str): Select the interpolate mode for position
             embeding vector resize. Defaults to "bicubic".
-        init_values (float, optional): The init value of gamma in 
+        init_values (float, optional): The init value of gamma in
             TransformerEncoderLayer.
         patch_cfg (dict): Configs of patch embeding. Defaults to an empty dict.
         layer_cfgs (Sequence | dict): Configs of each transformer layer in
