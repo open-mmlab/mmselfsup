@@ -14,12 +14,11 @@ from ..utils import TransformerEncoderLayer, build_2d_sincos_position_embedding
 class CAEViT(VisionTransformer):
     """Vision Transformer for CAE pre-training.
 
-    A PyTorch implement of: `An Image is Worth 16x16 Words: Transformers
+    Rewritten version of: `An Image is Worth 16x16 Words: Transformers
     for Image Recognition at Scale <https://arxiv.org/abs/2010.11929>`_
 
     Args:
-        arch (str | dict): Vision Transformer architecture
-            Default: 'b'
+        arch (str | dict): Vision Transformer architecture. Default: 'b'
         img_size (int | tuple): Input image size
         patch_size (int | tuple): The patch size
         out_indices (Sequence | int): Output from which stages.
@@ -35,31 +34,31 @@ class CAEViT(VisionTransformer):
             `with_cls_token` must be True. Defaults to True.
         interpolate_mode (str): Select the interpolate mode for position
             embeding vector resize. Defaults to "bicubic".
+        init_values (float, optional): The init value of gamma in 
+            TransformerEncoderLayer.
         patch_cfg (dict): Configs of patch embeding. Defaults to an empty dict.
         layer_cfgs (Sequence | dict): Configs of each transformer layer in
             encoder. Defaults to an empty dict.
-        mask_ratio (bool): The ratio of total number of patches to be masked.
-            Defaults to 0.75.
         init_cfg (dict, optional): Initialization config dict.
             Defaults to None.
     """
 
     def __init__(self,
-                 arch='b',
-                 img_size=224,
-                 patch_size=16,
-                 out_indices=-1,
-                 drop_rate=0,
-                 drop_path_rate=0,
-                 qkv_bias=True,
-                 norm_cfg=dict(type='LN', eps=1e-6),
-                 final_norm=True,
-                 output_cls_token=True,
-                 interpolate_mode='bicubic',
-                 init_values=None,
-                 patch_cfg=dict(),
-                 layer_cfgs=dict(),
-                 init_cfg=None):
+                 arch: str = 'b',
+                 img_size: int = 224,
+                 patch_size: int = 16,
+                 out_indices: int = -1,
+                 drop_rate: float = 0,
+                 drop_path_rate: float = 0,
+                 qkv_bias: bool = True,
+                 norm_cfg: dict = dict(type='LN', eps=1e-6),
+                 final_norm: bool = True,
+                 output_cls_token: bool = True,
+                 interpolate_mode: str = 'bicubic',
+                 init_values: float = None,
+                 patch_cfg: dict = dict(),
+                 layer_cfgs: dict = dict(),
+                 init_cfg: dict = None) -> None:
         super().__init__(
             arch=arch,
             img_size=img_size,
@@ -77,6 +76,9 @@ class CAEViT(VisionTransformer):
         self.pos_embed.requires_grad = False
         self.num_patches = self.patch_resolution[0] * self.patch_resolution[1]
         dpr = np.linspace(0, drop_path_rate, self.num_layers)
+
+        # Replace original TransformerEncoderLayer with customized
+        # TransformerEncoderLayer
         self.layers = ModuleList()
         if isinstance(layer_cfgs, dict):
             layer_cfgs = [layer_cfgs] * self.num_layers
@@ -94,7 +96,7 @@ class CAEViT(VisionTransformer):
             _layer_cfg.update(layer_cfgs[i])
             self.layers.append(TransformerEncoderLayer(**_layer_cfg))
 
-    def init_weights(self):
+    def init_weights(self) -> None:
         super(CAEViT, self).init_weights()
         if not (isinstance(self.init_cfg, dict)
                 and self.init_cfg['type'] == 'Pretrained'):
@@ -121,8 +123,8 @@ class CAEViT(VisionTransformer):
             if m.bias is not None:
                 nn.init.constant_(m.bias, 0)
 
-    def forward(self, x, mask):
-        x, _ = self.patch_embed(x)
+    def forward(self, img: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
+        x, _ = self.patch_embed(img)
         batch_size, _, dim = x.size()
 
         cls_tokens = self.cls_token.expand(batch_size, -1, -1)
