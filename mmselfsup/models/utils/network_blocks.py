@@ -14,17 +14,39 @@ from torch.nn import functional as F
 
 
 class FFN(_FFN):
+    """Rewrite feed-forward networks (FFNs) in MMCV.
+
+    Delete the identity connection in FFN from MMCV.
+
+    Args:
+        embed_dims (int): The feature dimension. Same as
+            `MultiheadAttention`. Defaults: 256.
+        feedforward_channels (int): The hidden dimension of FFNs.
+            Defaults: 1024.
+        num_fcs (int, optional): The number of fully-connected layers in
+            FFNs. Default: 2.
+        act_cfg (dict, optional): The activation config for FFNs.
+            Default: dict(type='ReLU')
+        ffn_drop (float, optional): Probability of an element to be
+            zeroed in FFN. Default 0.0.
+        add_identity (bool, optional): Whether to add the
+            identity connection. Default: `True`.
+        dropout_layer (obj:`ConfigDict`): The dropout_layer used
+            when adding the shortcut.
+        init_cfg (obj:`mmcv.ConfigDict`): The Config for initialization.
+            Default: None.
+    """
 
     def __init__(self,
-                 embed_dims=256,
-                 feedforward_channels=1024,
-                 num_fcs=2,
-                 act_cfg=dict(type='ReLU', inplace=True),
-                 ffn_drop=0,
-                 dropout_layer=None,
-                 add_identity=True,
-                 init_cfg=None,
-                 **kwargs):
+                 embed_dims: int = 256,
+                 feedforward_channels: int = 1024,
+                 num_fcs: int = 2,
+                 act_cfg: dict = dict(type='ReLU', inplace=True),
+                 ffn_drop: float = 0.,
+                 dropout_layer: object = None,
+                 add_identity: bool = True,
+                 init_cfg: dict = None,
+                 **kwargs) -> None:
         super().__init__(
             embed_dims=embed_dims,
             feedforward_channels=feedforward_channels,
@@ -35,28 +57,19 @@ class FFN(_FFN):
             add_identity=add_identity,
             init_cfg=init_cfg,
             **kwargs)
-        del self.dropout_layer
 
-    def forward(self, x, identity=None):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward function for `FFN`.
-
-        The function would add x to the output tensor if residue is None.
         """
         out = self.layers(x)
-        if not self.add_identity:
-            return out
-        if identity is None:
-            identity = x
-        return identity + self.dropout_layer(out)
+        return out
 
 
 class MultiheadAttention(_MultiheadAttention):
     """Multi-head Attention Module.
 
-    This module implements multi-head attention that supports different input
-    dims and embed dims. And it also supports a shortcut from ``value``, which
-    is useful if input dims is not the same with embed dims. This module is
-    different from the ``MultiheadAttention`` by removing the out_drop layer.
+    This module rewrite the MultiheadAttention by replacing qkv bias with
+    customized qkv bias, in addition to removing the drop path layer.
 
     Args:
         embed_dims (int): The embedding dimension.
@@ -75,23 +88,20 @@ class MultiheadAttention(_MultiheadAttention):
             ``head_dim ** -0.5`` if set. Defaults to None.
         proj_bias (bool) If True, add a learnable bias to output projection.
             Defaults to True.
-        v_shortcut (bool): Add a shortcut from value to output. It's usually
-            used if ``input_dims`` is different from ``embed_dims``.
-            Defaults to False.
         init_cfg (dict, optional): The Config for initialization.
             Defaults to None.
     """
 
     def __init__(self,
-                 embed_dims,
-                 num_heads,
-                 input_dims=None,
-                 attn_drop=0.,
-                 proj_drop=0.,
-                 qkv_bias=True,
-                 qk_scale=None,
-                 proj_bias=True,
-                 init_cfg=None):
+                 embed_dims: int,
+                 num_heads: int,
+                 input_dims: int = None,
+                 attn_drop: float = 0.,
+                 proj_drop: float = 0.,
+                 qkv_bias: bool = True,
+                 qk_scale: float = None,
+                 proj_bias: bool = True,
+                 init_cfg: dict = None) -> None:
         super(MultiheadAttention, self).__init__(
             embed_dims,
             num_heads=num_heads,
@@ -113,7 +123,9 @@ class MultiheadAttention(_MultiheadAttention):
             self.k_bias = None
             self.v_bias = None
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+
+        # qkv bias is different from that in mmcls
         qkv_bias = None
         if self.q_bias is not None:
             qkv_bias = torch.cat(
@@ -139,18 +151,44 @@ class MultiheadAttention(_MultiheadAttention):
 
 
 class MultiheadAttentionWithRPE(MultiheadAttention):
+    """Multi-head Attention Module.
+
+    This module rewrite the MultiheadAttention in MMSelfSup by adding the
+    relative position bias.
+
+    Args:
+        embed_dims (int): The embedding dimension.
+        num_heads (int): Parallel attention heads.
+        window_size (int): The window size of the relative position bias.
+        input_dims (int, optional): The input dimension, and if None,
+            use ``embed_dims``. Defaults to None.
+        attn_drop (float): Dropout rate of the dropout layer after the
+            attention calculation of query and key. Defaults to 0.
+        proj_drop (float): Dropout rate of the dropout layer after the
+            output projection. Defaults to 0.
+        dropout_layer (dict): The dropout config before adding the shortcut.
+            Defaults to ``dict(type='Dropout', drop_prob=0.)``.
+        qkv_bias (bool): If True, add a learnable bias to q, k, v.
+            Defaults to True.
+        qk_scale (float, optional): Override default qk scale of
+            ``head_dim ** -0.5`` if set. Defaults to None.
+        proj_bias (bool) If True, add a learnable bias to output projection.
+            Defaults to True.
+        init_cfg (dict, optional): The Config for initialization.
+            Defaults to None.
+    """
 
     def __init__(self,
-                 embed_dims,
-                 num_heads,
-                 window_size,
-                 input_dims=None,
-                 attn_drop=0,
-                 proj_drop=0,
-                 qkv_bias=True,
-                 qk_scale=None,
-                 proj_bias=True,
-                 init_cfg=None):
+                 embed_dims: int,
+                 num_heads: int,
+                 window_size: int,
+                 input_dims: int = None,
+                 attn_drop: float = 0,
+                 proj_drop: float = 0,
+                 qkv_bias: bool = True,
+                 qk_scale: float = None,
+                 proj_bias: bool = True,
+                 init_cfg: dict = None) -> None:
         super().__init__(
             embed_dims=embed_dims,
             num_heads=num_heads,
@@ -208,7 +246,7 @@ class MultiheadAttentionWithRPE(MultiheadAttention):
         self.register_buffer('relative_position_index',
                              relative_position_index)
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
 
         qkv_bias = None
         if self.q_bias is not None:
@@ -248,8 +286,12 @@ class MultiheadAttentionWithRPE(MultiheadAttention):
 class TransformerEncoderLayer(_TransformerEncoderLayer):
     """Implements one encoder layer in Vision Transformer.
 
+    This module is the rewritten version of the TransformerEncoderLayer in
+    MMClassification by adding the gamma and relative position bias in 
+    Attention module.
+
     Args:
-        embed_dims (int): The feature dimension
+        embed_dims (int): The feature dimension.
         num_heads (int): Parallel attention heads
         feedforward_channels (int): The hidden dimension for FFNs
         drop_rate (float): Probability of an element to be zeroed
@@ -269,19 +311,19 @@ class TransformerEncoderLayer(_TransformerEncoderLayer):
     """
 
     def __init__(self,
-                 embed_dims,
-                 num_heads,
-                 feedforward_channels,
-                 window_size=None,
-                 drop_rate=0.,
-                 attn_drop_rate=0.,
-                 drop_path_rate=0.,
-                 num_fcs=2,
-                 qkv_bias=True,
-                 act_cfg=dict(type='GELU'),
-                 norm_cfg=dict(type='LN'),
-                 init_values=0.0,
-                 init_cfg=None):
+                 embed_dims: int,
+                 num_heads: int,
+                 feedforward_channels: int,
+                 window_size: int = None,
+                 drop_rate: float = 0.,
+                 attn_drop_rate: float = 0.,
+                 drop_path_rate: float = 0.,
+                 num_fcs: int = 2,
+                 qkv_bias: bool = True,
+                 act_cfg: dict = dict(type='GELU'),
+                 norm_cfg: dict = dict(type='LN'),
+                 init_values: float = 0.0,
+                 init_cfg: dict = None) -> None:
         super(TransformerEncoderLayer, self).__init__(
             embed_dims=embed_dims,
             num_heads=num_heads,
@@ -300,6 +342,7 @@ class TransformerEncoderLayer(_TransformerEncoderLayer):
             norm_cfg, self.embed_dims, postfix=1)
         self.add_module(self.norm1_name, norm1)
         if window_size is None:
+            # attention without relative position bias
             self.attn = MultiheadAttention(
                 embed_dims=embed_dims,
                 num_heads=num_heads,
@@ -307,6 +350,7 @@ class TransformerEncoderLayer(_TransformerEncoderLayer):
                 proj_drop=drop_rate,
                 qkv_bias=qkv_bias)
         else:
+            # attention with relative position bias
             self.attn = MultiheadAttentionWithRPE(
                 embed_dims=embed_dims,
                 num_heads=num_heads,
@@ -340,7 +384,7 @@ class TransformerEncoderLayer(_TransformerEncoderLayer):
         else:
             self.gamma_1, self.gamma_2 = None, None
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         if self.gamma_1 is not None:
             x = x + self.drop_path(self.gamma_1 * self.attn(self.norm1(x)))
             x = x + self.drop_path(self.gamma_2 * self.ffn(self.norm2(x)))
@@ -351,6 +395,27 @@ class TransformerEncoderLayer(_TransformerEncoderLayer):
 
 
 class CAETransformerDecoderLayer(BaseModule):
+    """Transformer decoder layer for the regressor of CAE.
+    
+    This module is different from conventional transformer encoder layer, for
+    its queries are the masked tokens, but its keys and values are the 
+    concatenation of the masked and unmasked tokens.
+
+    Args:
+        embed_dims (int): The feature dimension.
+        num_heads (int): The number of heads in multi-head attention.
+        feedforward_channels (int): The hidden dimension of FFNs.
+            Defaults: 1024.
+        num_fcs (int, optional): The number of fully-connected layers in
+            FFNs. Default: 2.
+        qkv_bias (bool): If True, add a learnable bias to q, k, v.
+            Defaults to True.
+        qk_scale (float, optional): Override default qk scale of
+            ``head_dim ** -0.5`` if set. Defaults to None.
+        drop_rate (float): The dropout rate. Defaults to 0.0.
+
+        
+    """
 
     def __init__(self,
                  embed_dims,
@@ -364,14 +429,17 @@ class CAETransformerDecoderLayer(BaseModule):
                  drop_path_rate=0.,
                  init_values=None,
                  act_cfg=dict(type='GELU'),
-                 norm_layer=nn.LayerNorm):
+                 norm_cfg=dict(type='LN', eps=1e-6)):
         super().__init__()
 
         # NOTE: cross attention
-        self.norm1_q_cross = norm_layer(embed_dims)
-        self.norm1_k_cross = norm_layer(embed_dims)
-        self.norm1_v_cross = norm_layer(embed_dims)
-        self.norm2_cross = norm_layer(embed_dims)
+        _, self.norm1_q_cross = build_norm_layer(
+            norm_cfg, embed_dims, postfix=2)
+        _, self.norm1_k_cross = build_norm_layer(
+            norm_cfg, embed_dims, postfix=2)
+        _, self.norm1_v_cross = build_norm_layer(
+            norm_cfg, embed_dims, postfix=2)
+        _, self.norm2_cross = build_norm_layer(norm_cfg, embed_dims, postfix=2)
         self.cross_attn = CrossMultiheadAttention(
             embed_dims,
             num_heads=num_heads,
