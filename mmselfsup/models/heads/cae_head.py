@@ -1,4 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import os
+import warnings
+
 import torch
 from mmcv.runner import BaseModule
 from torch import nn
@@ -34,8 +37,11 @@ class CAEHead(BaseModule):
 
     def _load_encoder(self) -> nn.Module:
         encoder = Encoder()
-        state_dict = torch.load(self.tokenizer_path)
-        encoder.load_state_dict(state_dict)
+        if os.path.exists(self.tokenizer_path):
+            state_dict = torch.load(self.tokenizer_path)
+            encoder.load_state_dict(state_dict)
+        else:
+            warnings.warn(f'Do not find {self.tokenizer_path}')
         return encoder
 
     @torch.no_grad()
