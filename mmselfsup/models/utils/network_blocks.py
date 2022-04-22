@@ -8,60 +8,9 @@ from mmcls.models.backbones.vision_transformer import \
 from mmcls.models.utils import MultiheadAttention as _MultiheadAttention
 from mmcv.cnn import build_norm_layer
 from mmcv.cnn.bricks.drop import build_dropout
-from mmcv.cnn.bricks.transformer import FFN as _FFN
+from mmcv.cnn.bricks.transformer import FFN
 from mmcv.runner.base_module import BaseModule
 from torch.nn import functional as F
-
-
-class FFN(_FFN):
-    """Rewrite feed-forward networks (FFNs) in MMCV.
-
-    Delete the identity connection in FFN from MMCV.
-
-    Args:
-        embed_dims (int): The feature dimension. Same as
-            `MultiheadAttention`. Defaults: 256.
-        feedforward_channels (int): The hidden dimension of FFNs.
-            Defaults: 1024.
-        num_fcs (int, optional): The number of fully-connected layers in
-            FFNs. Default: 2.
-        act_cfg (dict, optional): The activation config for FFNs.
-            Default: dict(type='ReLU')
-        ffn_drop (float, optional): Probability of an element to be
-            zeroed in FFN. Default 0.0.
-        add_identity (bool, optional): Whether to add the
-            identity connection. Default: `True`.
-        dropout_layer (obj:`ConfigDict`): The dropout_layer used
-            when adding the shortcut.
-        init_cfg (obj:`mmcv.ConfigDict`): The Config for initialization.
-            Default: None.
-    """
-
-    def __init__(self,
-                 embed_dims: int = 256,
-                 feedforward_channels: int = 1024,
-                 num_fcs: int = 2,
-                 act_cfg: dict = dict(type='ReLU', inplace=True),
-                 ffn_drop: float = 0.,
-                 dropout_layer: object = None,
-                 add_identity: bool = True,
-                 init_cfg: dict = None,
-                 **kwargs) -> None:
-        super().__init__(
-            embed_dims=embed_dims,
-            feedforward_channels=feedforward_channels,
-            num_fcs=num_fcs,
-            act_cfg=act_cfg,
-            ffn_drop=ffn_drop,
-            dropout_layer=dropout_layer,
-            add_identity=add_identity,
-            init_cfg=init_cfg,
-            **kwargs)
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """Forward function for `FFN`."""
-        out = self.layers(x)
-        return out
 
 
 class MultiheadAttention(_MultiheadAttention):
@@ -368,13 +317,12 @@ class TransformerEncoderLayer(_TransformerEncoderLayer):
             feedforward_channels=feedforward_channels,
             num_fcs=num_fcs,
             ffn_drop=drop_rate,
-            dropout_layer=dict(type='DropPath', drop_prob=drop_path_rate),
+            dropout_layer=None,
             act_cfg=act_cfg,
             add_identity=False)
 
-        dropout_layer = dict(type='DropPath', drop_prob=drop_path_rate)
         self.drop_path = build_dropout(
-            dropout_layer) if dropout_layer else nn.Identity()
+            dict(type='DropPath', drop_prob=drop_path_rate))
 
         if init_values > 0:
             self.gamma_1 = nn.Parameter(
@@ -461,13 +409,12 @@ class CAETransformerRegressorLayer(BaseModule):
             feedforward_channels=feedforward_channels,
             num_fcs=num_fcs,
             ffn_drop=drop_rate,
-            dropout_layer=dict(type='DropPath', drop_prob=drop_path_rate),
+            dropout_layer=None,
             act_cfg=act_cfg,
             add_identity=False)
 
-        dropout_layer = dict(type='DropPath', drop_prob=drop_path_rate)
         self.drop_path = build_dropout(
-            dropout_layer) if dropout_layer else nn.Identity()
+            dict(type='DropPath', drop_prob=drop_path_rate))
 
         if init_values > 0:
             self.gamma_1_cross = nn.Parameter(
