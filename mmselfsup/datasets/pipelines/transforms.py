@@ -3,7 +3,7 @@ import inspect
 import math
 import random
 import warnings
-from typing import Sequence, Tuple
+from typing import Sequence, Tuple, Union
 
 import numpy as np
 import torch
@@ -45,11 +45,16 @@ def _pil_interp(method):
 
 @PIPELINES.register_module(force=True)
 class ToTensor(object):
+    """Convert image or a sequence of images to tensor.
+    
+    This module can not only convert a single image to tensor, but also a
+    sequence of images.
+    """
 
     def __init__(self) -> None:
         self.transform = _transforms.ToTensor()
 
-    def __call__(self, imgs):
+    def __call__(self, imgs: Union[object, Sequence[object]]) -> torch.Tensor:
         if isinstance(imgs, Sequence):
             imgs = list(imgs)
             for i, img in enumerate(imgs):
@@ -156,7 +161,6 @@ class MaskingGenerator:
                             if mask[i, j] == 0:
                                 mask[i, j] = 1
                                 delta += 1
-
                 if delta > 0:
                     break
         return delta
