@@ -20,13 +20,18 @@ if not prefetch:
 
 train_pipeline.append(
     dict(
-        type='MaskingGenerator',
+        type='BEiTMaskGenerator',
         input_size=(14, 14),
         num_masking_patches=75,
         max_num_patches=None,
         min_num_patches=16))
 
 # dataset summary
+file_client_args = dict(
+    backend='memcached',
+    server_list_cfg='/mnt/lustre/share/memcached_client/pcs_server_list.conf',
+    client_cfg='/mnt/lustre/share_data/zhangwenwei/software/pymc/mc.conf',
+    sys_path='/mnt/lustre/share_data/zhangwenwei/software/pymc')
 data = dict(
     samples_per_gpu=256,
     workers_per_gpu=8,
@@ -35,6 +40,7 @@ data = dict(
         data_source=dict(
             type=data_source,
             data_prefix='data/imagenet/train',
-            ann_file='data/imagenet/meta/train.txt'),
+            ann_file='data/imagenet/meta/train.txt',
+            file_client_args=file_client_args),
         pipeline=train_pipeline,
         prefetch=prefetch))
