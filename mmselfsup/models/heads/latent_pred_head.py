@@ -18,11 +18,11 @@ class LatentPredictHead(BaseModule):
         predictor (dict): Config dict for module of predictor.
     """
 
-    def __init__(self, predictor):
+    def __init__(self, predictor: dict) -> None:
         super(LatentPredictHead, self).__init__()
         self.predictor = build_neck(predictor)
 
-    def forward(self, input, target):
+    def forward(self, input: torch.Tensor, target: torch.Tensor) -> dict:
         """Forward head.
 
         Args:
@@ -51,15 +51,21 @@ class LatentClsHead(BaseModule):
         init_cfg (dict or list[dict], optional): Initialization config dict.
     """
 
-    def __init__(self,
-                 in_channels,
-                 num_classes,
-                 init_cfg=dict(type='Normal', std=0.01, layer='Linear')):
+    def __init__(
+        self,
+        in_channels: int,
+        num_classes: int,
+        init_cfg: dict = dict(
+            type='Normal',
+            std=0.01,
+            layer='Linear',
+        )
+    ) -> None:
         super(LatentClsHead, self).__init__(init_cfg)
         self.predictor = nn.Linear(in_channels, num_classes)
         self.criterion = nn.CrossEntropyLoss()
 
-    def forward(self, input, target):
+    def forward(self, input: torch.Tensor, target: torch.Tensor) -> dict:
         """Forward head.
 
         Args:
@@ -86,13 +92,13 @@ class LatentCrossCorrelationHead(BaseModule):
         in_channels (int): Number of input channels.
     """
 
-    def __init__(self, in_channels, lambd=0.0051):
+    def __init__(self, in_channels: int, lambd: float = 0.0051) -> None:
         super(LatentCrossCorrelationHead, self).__init__()
         self.lambd = lambd
         _, self.world_size = get_dist_info()
         self.bn = nn.BatchNorm1d(in_channels, affine=False)
 
-    def forward(self, input, target):
+    def forward(self, input: torch.Tensor, target: torch.Tensor) -> dict:
         """Forward head.
 
         Args:
@@ -116,7 +122,7 @@ class LatentCrossCorrelationHead(BaseModule):
         loss = on_diag + self.lambd * off_diag
         return dict(loss=loss)
 
-    def off_diagonal(self, x):
+    def off_diagonal(self, x: torch.Tensor) -> torch.Tensor:
         """Rreturn a flattened view of the off-diagonal elements of a square
         matrix."""
         n, m = x.shape

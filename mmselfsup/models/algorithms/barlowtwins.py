@@ -1,4 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import List, Optional
+
+import torch
 import torch.nn as nn
 
 from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
@@ -20,14 +23,16 @@ class BarlowTwins(BaseModel):
             feature vectors. Defaults to None.
         head (dict): Config dict for module of loss functions.
             Defaults to None.
+        init_cfg (dict): Config dict for weight initialization.
+            Defaults to None.
     """
 
     def __init__(self,
-                 backbone,
-                 neck=None,
-                 head=None,
-                 init_cfg=None,
-                 **kwargs):
+                 backbone: object,
+                 neck: object = None,
+                 head: object = None,
+                 init_cfg: Optional[dict] = None,
+                 **kwargs) -> None:
         super(BarlowTwins, self).__init__(init_cfg)
         assert neck is not None
         self.encoder = nn.Sequential(
@@ -37,7 +42,7 @@ class BarlowTwins(BaseModel):
         assert head is not None
         self.head = build_head(head)
 
-    def extract_feat(self, img):
+    def extract_feat(self, img: torch.Tensor) -> torch.Tensor:
         """Function to extract features from backbone.
 
         Args:
@@ -50,7 +55,7 @@ class BarlowTwins(BaseModel):
         x = self.backbone(img)
         return x
 
-    def forward_train(self, img):
+    def forward_train(self, img: List[torch.Tensor]) -> dict:
         """Forward computation during training.
 
         Args:
