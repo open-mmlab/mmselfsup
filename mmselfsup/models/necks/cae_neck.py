@@ -8,7 +8,7 @@ from mmcv.cnn.utils.weight_init import trunc_normal_
 from mmcv.runner import BaseModule
 
 from ..builder import NECKS
-from ..utils import CAETransformerDecoderLayer, TransformerEncoderLayer
+from ..utils import CAETransformerRegressorLayer, TransformerEncoderLayer
 
 
 @NECKS.register_module()
@@ -74,7 +74,7 @@ class CAENeck(BaseModule):
             for x in torch.linspace(0, drop_path_rate, regressor_depth)
         ]
         self.regressors = nn.ModuleList([
-            CAETransformerDecoderLayer(
+            CAETransformerRegressorLayer(
                 embed_dims=embed_dims,
                 num_heads=num_heads,
                 feedforward_channels=mlp_ratio * embed_dims,
