@@ -1,6 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from .transforms import (BlockwiseMaskGenerator, GaussianBlur, Lighting,
-                         BEiTMaskGenerator, RandomAppliedTrans, RandomAug,
+from .transforms import (BEiTMaskGenerator, BlockwiseMaskGenerator,
+                         GaussianBlur, Lighting, RandomAppliedTrans, RandomAug,
                          Solarization, ToTensor)
 
 __all__ = [
