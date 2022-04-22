@@ -21,32 +21,11 @@ for m in inspect.getmembers(_transforms, inspect.isclass):
     if m[0] not in _EXCLUDED_TRANSFORMS:
         PIPELINES.register_module(m[1])
 
-_pil_interpolation_to_str = {
-    Image.NEAREST: 'PIL.Image.NEAREST',
-    Image.BILINEAR: 'PIL.Image.BILINEAR',
-    Image.BICUBIC: 'PIL.Image.BICUBIC',
-    Image.LANCZOS: 'PIL.Image.LANCZOS',
-    Image.HAMMING: 'PIL.Image.HAMMING',
-    Image.BOX: 'PIL.Image.BOX',
-}
-
-
-def _pil_interp(method):
-    if method == 'bicubic':
-        return Image.BICUBIC
-    elif method == 'lanczos':
-        return Image.LANCZOS
-    elif method == 'hamming':
-        return Image.HAMMING
-    else:
-        # default bilinear, do we want to allow nearest?
-        return Image.BILINEAR
-
 
 @PIPELINES.register_module(force=True)
 class ToTensor(object):
     """Convert image or a sequence of images to tensor.
-    
+
     This module can not only convert a single image to tensor, but also a
     sequence of images.
     """
@@ -108,7 +87,24 @@ class BlockwiseMaskGenerator(object):
 
 
 @PIPELINES.register_module()
-class MaskingGenerator:
+class BEiTMaskGenerator:
+    """Generate mask for image.
+
+    This module is borrowed from
+    https://github.com/microsoft/unilm/tree/master/beit
+
+    Args:
+        input_size (int): The size of input image.
+        num_masking_patches (int): The number of patches to be masked.
+        min_num_patches (int): The minimum number of patches to be masked
+            in the process of generating mask. Defaults to 4.
+        max_num_patches (int, optional): The maximum number of patches to be
+            masked in the process of generating mask. Defaults to None.
+        min_aspect (float): The minimum aspect ratio of mask blocks. Defaults
+            to 0.3.
+        min_aspect (float, optional): The minimum aspect ratio of mask blocks.
+            Defaults to None.
+    """
 
     def __init__(self,
                  input_size,
@@ -143,7 +139,7 @@ class MaskingGenerator:
 
     def _mask(self, mask, max_mask_patches):
         delta = 0
-        for attempt in range(10):
+        for _ in range(10):
             target_area = random.uniform(self.min_num_patches,
                                          max_mask_patches)
             aspect_ratio = math.exp(random.uniform(*self.log_aspect_ratio))
@@ -183,25 +179,43 @@ class RandomResizedCropAndInterpolationWithTwoPic:
     """Crop the given PIL Image to random size and aspect ratio with random
     interpolation.
 
+    This module is borrowed from
+    https://github.com/microsoft/unilm/tree/master/beit.
+
     A crop of random size (default: of 0.08 to 1.0) of the original size and a
     random aspect ratio (default: of 3/4 to 4/3) of the original aspect ratio
     is made. This crop is finally resized to given size. This is popularly used
-    to train the Inception networks.
+    to train the Inception networks. This module first crops the image and
+    resizes the crop to two different sizes.
 
     Args:
-        size: expected output size of each edge
-        scale: range of size of the origin size cropped
-        ratio: range of aspect ratio of the origin aspect ratio cropped
-        interpolation: Default: PIL.Image.BILINEAR
+        size (Union[tuple, int]): Expected output size of each edge of the
+            first image.
+        second_size (Union[tuple, int], optional): Expected output size of each
+            edge of the second image.
+        scale (tuple[float, float]): Range of size of the origin size cropped.
+            Defaults to (0.08, 1.0).
+        ratio (tuple[float, float]): Range of aspect ratio of the origin aspect
+            ratio cropped. Defaults to (3./4., 4./3.).
+        interpolation (str): The interpolation for the first image. Defaults
+            to ``bilinear``.
+        second_interpolation (str): The interpolation for the second image.
+            Defaults to ``lanczos``.
     """
 
+    interpolation_dict = {
+        'bicubic': Image.BICUBIC,
+        'lanczos': Image.LANCZOS,
+        'hamming': Image.HAMMING
+    }
+
     def __init__(self,
-                 size,
+                 size: Union[tuple, int],
                  second_size=None,
                  scale=(0.08, 1.0),
                  ratio=(3. / 4., 4. / 3.),
                  interpolation='bilinear',
-                 second_interpolation='lanczos'):
+                 second_interpolation='lanczos') -> None:
         if isinstance(size, tuple):
             self.size = size
         else:
@@ -219,17 +233,20 @@ class RandomResizedCropAndInterpolationWithTwoPic:
         if interpolation == 'random':
             self.interpolation = (Image.BILINEAR, Image.BICUBIC)
         else:
-            self.interpolation = _pil_interp(interpolation)
-        self.second_interpolation = _pil_interp(second_interpolation)
+            self.interpolation = self.interpolation_dict.get(
+                interpolation, Image.BILINEAR)
+        self.second_interpolation = self.interpolation_dict.get(
+            second_interpolation, Image.BILINEAR)
         self.scale = scale
         self.ratio = ratio
 
     @staticmethod
-    def get_params(img, scale, ratio):
+    def get_params(img: np.ndarray, scale: tuple,
+                   ratio: tuple) -> Sequence[int]:
         """Get parameters for ``crop`` for a random sized crop.
 
         Args:
-            img (PIL Image): Image to be cropped.
+            img (np.ndarray): Image to be cropped.
             scale (tuple): range of size of the origin size cropped
             ratio (tuple): range of aspect ratio of the origin aspect
                 ratio cropped
@@ -240,7 +257,7 @@ class RandomResizedCropAndInterpolationWithTwoPic:
         """
         area = img.size[0] * img.size[1]
 
-        for attempt in range(10):
+        for _ in range(10):
             target_area = random.uniform(*scale) * area
             log_ratio = (math.log(ratio[0]), math.log(ratio[1]))
             aspect_ratio = math.exp(random.uniform(*log_ratio))
@@ -268,14 +285,9 @@ class RandomResizedCropAndInterpolationWithTwoPic:
         j = (img.size[0] - w) // 2
         return i, j, h, w
 
-    def __call__(self, img):
-        """
-        Args:
-            img (PIL Image): Image to be cropped and resized.
-
-        Returns:
-            PIL Image: Randomly cropped and resized image.
-        """
+    def __call__(
+            self, img: np.ndarray
+    ) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
         i, j, h, w = self.get_params(img, self.scale, self.ratio)
         if isinstance(self.interpolation, (tuple, list)):
             interpolation = random.choice(self.interpolation)
@@ -288,25 +300,6 @@ class RandomResizedCropAndInterpolationWithTwoPic:
                                   interpolation), F.resized_crop(
                                       img, i, j, h, w, self.second_size,
                                       self.second_interpolation)
-
-    def __repr__(self):
-        if isinstance(self.interpolation, (tuple, list)):
-            interpolate_str = ' '.join(
-                [_pil_interpolation_to_str[x] for x in self.interpolation])
-        else:
-            interpolate_str = _pil_interpolation_to_str[self.interpolation]
-        format_string = self.__class__.__name__ + '(size={0}'.format(self.size)
-        format_string += ', scale={0}'.format(
-            tuple(round(s, 4) for s in self.scale))
-        format_string += ', ratio={0}'.format(
-            tuple(round(r, 4) for r in self.ratio))
-        format_string += ', interpolation={0}'.format(interpolate_str)
-        if self.second_size is not None:
-            format_string += ', second_size={0}'.format(self.second_size)
-            format_string += ', second_interpolation={0}'.format(
-                _pil_interpolation_to_str[self.second_interpolation])
-        format_string += ')'
-        return format_string
 
 
 @PIPELINES.register_module()
