@@ -3,7 +3,7 @@ import inspect
 import math
 import random
 import warnings
-from typing import Sequence, Tuple, Union
+from typing import Optional, Sequence, Tuple, Union
 
 import numpy as np
 import torch
@@ -107,12 +107,12 @@ class BEiTMaskGenerator:
     """
 
     def __init__(self,
-                 input_size,
-                 num_masking_patches,
-                 min_num_patches=4,
-                 max_num_patches=None,
-                 min_aspect=0.3,
-                 max_aspect=None):
+                 input_size: int,
+                 num_masking_patches: int,
+                 min_num_patches: int = 4,
+                 max_num_patches: Optional[int] = None,
+                 min_aspect: float = 0.3,
+                 max_aspect: Optional[float] = None) -> None:
         if not isinstance(input_size, tuple):
             input_size = (input_size, ) * 2
         self.height, self.width = input_size
@@ -127,17 +127,17 @@ class BEiTMaskGenerator:
         max_aspect = max_aspect or 1 / min_aspect
         self.log_aspect_ratio = (math.log(min_aspect), math.log(max_aspect))
 
-    def __repr__(self):
+    def __repr__(self) -> None:
         repr_str = 'Generator(%d, %d -> [%d ~ %d], max = %d, %.3f ~ %.3f)' % (
             self.height, self.width, self.min_num_patches,
             self.max_num_patches, self.num_masking_patches,
             self.log_aspect_ratio[0], self.log_aspect_ratio[1])
         return repr_str
 
-    def get_shape(self):
+    def get_shape(self) -> Tuple[int, int]:
         return self.height, self.width
 
-    def _mask(self, mask, max_mask_patches):
+    def _mask(self, mask: np.ndarray, max_mask_patches: int) -> int:
         delta = 0
         for _ in range(10):
             target_area = random.uniform(self.min_num_patches,
@@ -161,7 +161,9 @@ class BEiTMaskGenerator:
                     break
         return delta
 
-    def __call__(self, img):
+    def __call__(
+        self, img: Tuple[torch.Tensor, torch.Tensor]
+    ) -> Tuple[torch.Tensor, torch.Tensor, np.ndarray]:
         mask = np.zeros(shape=self.get_shape(), dtype=np.int)
         mask_count = 0
         while mask_count != self.num_masking_patches:
