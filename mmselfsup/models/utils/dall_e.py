@@ -1,4 +1,6 @@
-# Copyright (c) OpenMMLab. All rights reserved.
+# Copyright (c)
+# https://github.com/microsoft/unilm/blob/master/beit/dall_e/encoder.py
+# Copied from BEiT
 import math
 from collections import OrderedDict
 from functools import partial
