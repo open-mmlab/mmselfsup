@@ -63,11 +63,7 @@ class Classification(BaseModel):
 
         Returns:
             dict[str, Tensor]: A dictionary of loss components.
-        #
         """
-        # img = torch.ones((64, 3, 224, 224)) * 2
-        # img = img.half().cuda()
-        # label = torch.ones((64, ))
         if self.augments is not None:
             img, label = self.augments(img, label)
         x = self.extract_feat(img)
