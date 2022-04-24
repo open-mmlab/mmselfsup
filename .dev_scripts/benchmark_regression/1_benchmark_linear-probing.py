@@ -71,9 +71,9 @@ def create_train_job_batch(commands, model_info, args, port, script_name):
 
     assert 'GPUs' in model_info.data, \
         f"Haven't specify gpu numbers for {fname}"
-    gpus = model_info.data['GPUs']
+    gpus = model_info.data['LinearGPUs']
 
-    config_path = model_info.data.get('ConfigLinear', None)
+    config_path = model_info.data.get('LinearConfig', None)
     if config_path:
         config = Path(config_path)
         assert config.exists(), f'"{fname}": {config} not found.'
