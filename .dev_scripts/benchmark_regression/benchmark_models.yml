@@ -4,30 +4,33 @@ Models:
       - Dataset: ImageNet-1k
         Metrics:
           Top 1 Accuracy: 67.58
-    ConfigPretrain: configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py
-    ConfigLinear: configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-steplr-100e_in1k.py
+    PretrainConfig: configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py
+    LinearConfig: configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-steplr-100e_in1k.py
     Weights: https://download.openmmlab.com/mmselfsup/moco/mocov2_resnet50_8xb32-coslr-200e_in1k_20220225-89e03af4.pth
-    GPUs: 8
+    PretrainGPUs: 8
+    LinearGPUs: 8
 
   - Name: mae
     Results:
       - Dataset: ImageNet-1k
         Metrics:
           Top 1 Accuracy: 83.1
-    ConfigPretrain: configs/selfsup/mae/mae_vit-base-p16_8xb512-coslr-400e-fp16_in1k.py
-    ConfigFinetuning: configs/benchmarks/classification/imagenet/vit-base-p16_ft-8xb128-coslr-100e_in1k.py
+    PretrainConfig: configs/selfsup/mae/mae_vit-base-p16_8xb512-coslr-400e-fp16_in1k.py
+    FinetuningConfig: configs/benchmarks/classification/imagenet/vit-base-p16_ft-8xb128-coslr-100e_in1k.py
     Weights: https://download.openmmlab.com/mmselfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k-224_20220223-85be947b.pth
-    GPUs: 8
+    PretrainGPUs: 8
+    FinetuningGPUs: 8
 
   - Name: mocov3
     Results:
       - Dataset: ImageNet-1k
         Metrics:
           Top 1 Accuracy: 73.19
-    ConfigPretrain: configs/selfsup/mocov3/mocov3_vit-small-p16_32xb128-fp16-coslr-300e_in1k-224.py
-    ConfigLinear: configs/benchmarks/classification/imagenet/vit-small-p16_linear-8xb128-coslr-90e_in1k.py
+    PretrainConfig: configs/selfsup/mocov3/mocov3_vit-small-p16_16xb256-fp16-coslr-300e_in1k-224.py
+    LinearConfig: configs/benchmarks/classification/imagenet/vit-small-p16_linear-8xb128-coslr-90e_in1k.py
     Weights: https://download.openmmlab.com/mmselfsup/moco/mocov3_vit-small-p16_32xb128-fp16-coslr-300e_in1k-224_20220225-e31238dd.pth
-    GPUs: 8
+    PretrainGPUs: 16
+    LinearGPUs: 8
     Months:
       - 1
       - 4
@@ -39,10 +42,11 @@ Models:
       - Dataset: ImageNet-1k
         Metrics:
           Top 1 Accuracy: 82.9
-    ConfigPretrain: configs/selfsup/simmim/simmim_swin-base_16xb128-coslr-100e_in1k-192.py
-    ConfigFinetuning: configs/benchmarks/classification/imagenet/swin-base_ft-8xb256-coslr-100e_in1k.py
+    PretrainConfig: configs/selfsup/simmim/simmim_swin-base_16xb128-coslr-100e_in1k-192.py
+    FinetuningConfig: configs/benchmarks/classification/imagenet/swin-base_ft-8xb256-coslr-100e_in1k.py
     Weights: https://download.openmmlab.com/mmselfsup/simmim/simmim_swin-base_16xb128-coslr-100e_in1k-192_20220316-1d090125.pth
-    GPUs: 8
+    PretrainGPUs: 16
+    FinetuningGPUs: 8
     Months:
       - 1
       - 4
@@ -54,10 +58,11 @@ Models:
       - Dataset: ImageNet-1k
         Metrics:
           Top 1 Accuracy: 68.28
-    ConfigPretrain: configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py
-    ConfigLinear: configs/benchmarks/classification/imagenet/resnet50_linear-8xb512-coslr-90e_in1k.py
+    PretrainConfig: configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py
+    LinearConfig: configs/benchmarks/classification/imagenet/resnet50_linear-8xb512-coslr-90e_in1k.py
     Weights: https://download.openmmlab.com/mmselfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k_20220225-68a88ad8.pth
-    GPUs: 8
+    PretrainGPUs: 8
+    LinearGPUs: 8
     Months:
       - 2
       - 5
@@ -69,10 +74,11 @@ Models:
       - Dataset: ImageNet-1k
         Metrics:
           Top 1 Accuracy: 63.62
-    ConfigPretrain: configs/selfsup/densecl/densecl_resnet50_8xb32-coslr-200e_in1k.py
-    ConfigLinear: configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-steplr-100e_in1k.py
+    PretrainConfig: configs/selfsup/densecl/densecl_resnet50_8xb32-coslr-200e_in1k.py
+    LinearConfig: configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-steplr-100e_in1k.py
     Weights: https://download.openmmlab.com/mmselfsup/densecl/densecl_resnet50_8xb32-coslr-200e_in1k_20220225-8c7808fe.pth
-    GPUs: 8
+    PretrainGPUs: 8
+    LinearGPUs: 8
     Months:
       - 2
       - 5
@@ -84,10 +90,11 @@ Models:
       - Dataset: ImageNet-1k
         Metrics:
           Top 1 Accuracy: 57.28
-    ConfigPretrain: configs/selfsup/simclr/simclr_resnet50_8xb32-coslr-200e_in1k.py
-    ConfigLinear: configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-steplr-100e_in1k.py
+    PretrainConfig: configs/selfsup/simclr/simclr_resnet50_8xb32-coslr-200e_in1k.py
+    LinearConfig: configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-steplr-100e_in1k.py
     Weights: https://download.openmmlab.com/mmselfsup/simclr/simclr_resnet50_8xb32-coslr-200e_in1k_20220225-97d2abef.pth
-    GPUs: 8
+    PretrainGPUs: 8
+    LinearGPUs: 8
     Months:
       - 3
       - 6
@@ -99,10 +106,11 @@ Models:
       - Dataset: ImageNet-1k
         Metrics:
           Top 1 Accuracy: 67.55
-    ConfigPretrain: configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py
-    ConfigLinear: configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-steplr-100e_in1k.py
+    PretrainConfig: configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py
+    LinearConfig: configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-steplr-100e_in1k.py
     Weights: https://download.openmmlab.com/mmselfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k_20220225-5c8b2c2e.pth
-    GPUs: 8
+    PretrainGPUs: 8
+    LinearGPUs: 8
     Months:
       - 3
       - 6
@@ -114,10 +122,11 @@ Models:
       - Dataset: ImageNet-1k
         Metrics:
           Top 1 Accuracy: 70.47
-    ConfigPretrain: configs/selfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py
-    ConfigLinear: configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-coslr-100e_in1k.py
+    PretrainConfig: configs/selfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py
+    LinearConfig: configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-coslr-100e_in1k.py
     Weights: https://download.openmmlab.com/mmselfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96_20220225-0497dd5d.pth
-    GPUs: 8
+    PretrainGPUs: 8
+    LinearGPUs: 8
     Months:
       - 3
       - 6
