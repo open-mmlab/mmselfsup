@@ -19,7 +19,7 @@ neck = dict(
     init_values=0.1,
 )
 head = dict(
-    type='CAEHead', tokenizer_path='cae_ckpt/encoder_stat_dict.pth', lamb=2)
+    type='CAEHead', tokenizer_path='cae_ckpt/encoder_stat_dict.pth', lambd=2)
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')

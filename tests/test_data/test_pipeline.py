@@ -128,9 +128,9 @@ def test_randomaug():
     assert isinstance(str(module), str)
 
 
-def test_mask_gen():
+def test_simmim_mask_gen():
     transform = dict(
-        type='BlockwiseMaskGenerator',
+        type='SimMIMMaskGenerator',
         input_size=192,
         mask_patch_size=32,
         model_patch_size=4,
