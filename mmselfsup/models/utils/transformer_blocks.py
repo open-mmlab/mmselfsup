@@ -72,7 +72,6 @@ class MultiheadAttention(_MultiheadAttention):
             self.v_bias = None
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-
         # qkv bias is different from that in mmcls
         qkv_bias = None
         if self.q_bias is not None:
@@ -195,7 +194,6 @@ class MultiheadAttentionWithRPE(MultiheadAttention):
                              relative_position_index)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-
         qkv_bias = None
         if self.q_bias is not None:
             qkv_bias = torch.cat(
