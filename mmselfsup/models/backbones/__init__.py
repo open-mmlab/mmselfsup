@@ -1,6 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from .cae_pretrain_vit import CAEViT
-from .mae_pretrain_vit import MAEViT
+from .cae_vit import CAEViT
+from .mae_vit import MAEViT
 from .mim_cls_vit import MIMVisionTransformer
 from .resnet import ResNet, ResNetV1d
 from .resnext import ResNeXt
