@@ -15,5 +15,5 @@ model = dict(
     head=dict(
         type='CAEHead',
         tokenizer_path='cae_ckpt/encoder_stat_dict.pth',
-        lamb=2),
+        lambd=2),
     base_momentum=0.0)

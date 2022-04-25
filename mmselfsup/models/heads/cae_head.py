@@ -19,18 +19,18 @@ class CAEHead(BaseModule):
 
     Args:
         tokenizer_path (str): The path of the tokenizer.
-        lamb (float): The weight for the align loss.
+        lambd (float): The weight for the align loss.
         init_cfg (dict, optional): Initialization config dict.
             Defaults to None.
     """
 
     def __init__(self,
                  tokenizer_path: str,
-                 lamb: float,
+                 lambd: float,
                  init_cfg: dict = None) -> None:
         super(CAEHead, self).__init__(init_cfg=init_cfg)
         self.tokenizer_path = tokenizer_path
-        self.lamb = lamb
+        self.lambd = lambd
         self.encoder = self._load_encoder()
         self.loss_cross_entropy = nn.CrossEntropyLoss()
         self.loss_mse = nn.MSELoss()
@@ -58,7 +58,7 @@ class CAEHead(BaseModule):
         target = target[mask]
         loss_main = self.loss_cross_entropy(outputs, target)
         loss_align = self.loss_mse(latent_pred,
-                                   latent_target.detach()) * self.lamb
+                                   latent_target.detach()) * self.lambd
 
         losses['loss'] = loss_main + loss_align
         losses['main'] = loss_main
