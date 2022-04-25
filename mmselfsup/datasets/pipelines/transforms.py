@@ -87,7 +87,7 @@ class BlockwiseMaskGenerator(object):
 
 
 @PIPELINES.register_module()
-class BEiTMaskGenerator:
+class BEiTMaskGenerator(object):
     """Generate mask for image.
 
     This module is borrowed from
@@ -177,7 +177,7 @@ class BEiTMaskGenerator:
 
 
 @PIPELINES.register_module()
-class RandomResizedCropAndInterpolationWithTwoPic:
+class RandomResizedCropAndInterpolationWithTwoPic(object):
     """Crop the given PIL Image to random size and aspect ratio with random
     interpolation.
 
