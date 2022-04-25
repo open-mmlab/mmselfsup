@@ -1,7 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from .transforms import (BEiTMaskGenerator, SimMIMMaskGenerator, GaussianBlur,
-                         Lighting, RandomAppliedTrans, RandomAug, Solarization,
-                         ToTensor)
+from .transforms import (BEiTMaskGenerator, GaussianBlur, Lighting,
+                         RandomAppliedTrans, RandomAug, SimMIMMaskGenerator,
+                         Solarization, ToTensor)
 
 __all__ = [
     'GaussianBlur', 'Lighting', 'RandomAppliedTrans', 'Solarization',
