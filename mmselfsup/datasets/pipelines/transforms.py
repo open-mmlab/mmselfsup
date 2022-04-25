@@ -44,9 +44,11 @@ class ToTensor(object):
 
 
 @PIPELINES.register_module()
-class BlockwiseMaskGenerator(object):
+class SimMIMMaskGenerator(object):
     """Generate random block mask for each Image.
 
+    This module is used in SimMIM to generate masks.
+    
     Args:
         input_size (int): Size of input image. Defaults to 192.
         mask_patch_size (int): Size of each block mask. Defaults to 32.

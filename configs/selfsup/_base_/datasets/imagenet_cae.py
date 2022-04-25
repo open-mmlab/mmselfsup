@@ -20,7 +20,7 @@ if not prefetch:
 
 train_pipeline.append(
     dict(
-        type='BEiTMaskGenerator',
+        type='SimMIMMaskGenerator',
         input_size=(14, 14),
         num_masking_patches=75,
         max_num_patches=None,
