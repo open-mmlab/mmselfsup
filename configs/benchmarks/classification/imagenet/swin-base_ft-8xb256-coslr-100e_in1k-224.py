@@ -26,10 +26,9 @@ test_pipeline = [
     dict(type='ToTensor'),
     dict(type='Normalize', **img_norm_cfg)
 ]
-
 data = dict(
     samples_per_gpu=256,
     drop_last=False,
-    workers_per_gpu=8,
+    workers_per_gpu=32,
     train=dict(pipeline=train_pipeline),
     val=dict(pipeline=test_pipeline))
