@@ -15,7 +15,7 @@ class LatentPredictHead(BaseModule):
     It also implements similarity loss between two forward features.
 
     Args:
-        predictor (dict): Config dict for module of predictor.
+        predictor (dict): Config dict for the predictor.
     """
 
     def __init__(self, predictor: dict) -> None:
@@ -90,6 +90,7 @@ class LatentCrossCorrelationHead(BaseModule):
 
     Args:
         in_channels (int): Number of input channels.
+        lambd (float): Weight on off-diagonal terms. Defaults to 0.0051.
     """
 
     def __init__(self, in_channels: int, lambd: float = 0.0051) -> None:
