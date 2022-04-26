@@ -56,7 +56,6 @@
 | Barlow Twins        | [barlowtwins_resnet50_8xb256-coslr-300e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/barlowtwins/barlowtwins_resnet50_8xb256-coslr-300e_in1k.py)                | Barlow Twins 论文设置 | 71.66     |
 | MoCo v3             | [mocov3_vit-small-p16_32xb128-fp16-coslr-300e_in1k-224](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/mocov3/mocov3_vit-small-p16_32xb128-fp16-coslr-300e_in1k-224.py) | MoCo v3 论文设置      | 73.19     |
 
-
 ### ImageNet 微调
 | 算法   | 配置文件                                                                                                                                                                   | 备注 | Top-1 (%) |
 | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | --------- |
@@ -69,16 +68,15 @@
 
 | 算法                | 配置文件                                                                                                                                                                                 | mAP (Box) | mAP (Mask) |
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---------- |
-| BYOL                | [byol_resnet50_8xb32-accum16-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py)                   | 40.9      | 36.8       |
-| DenseCL             | [densecl_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/densecl/densecl_resnet50_8xb32-coslr-200e_in1k.py)                          |           |            |
-| MoCo v2             | [mocov2_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py)                             | 40.2      | 36.1       |
-| NPID                | [npid_resnet50_8xb32-steplr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py)                                 | 38.5      | 34.6       |
 | Relative Location   | [relative-loc_resnet50_8xb64-steplr-70e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k.py)           | 37.5      | 33.7       |
 | Rotation Prediction | [rotation-pred_resnet50_8xb16-steplr-70e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py)        | 37.9      | 34.2       |
+| NPID                | [npid_resnet50_8xb32-steplr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py)                                 | 38.5      | 34.6       |
 | SimCLR              | [simclr_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simclr/simclr_resnet50_8xb32-coslr-200e_in1k.py)                             | 38.7      | 34.9       |
+| MoCo v2             | [mocov2_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py)                             | 40.2      | 36.1       |
+| BYOL                | [byol_resnet50_8xb32-accum16-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py)                   | 40.9      | 36.8       |
+| SwAV                | [swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py) | 40.2      | 36.3       |
 | SimSiam             | [simsiam_resnet50_8xb32-coslr-100e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py)                          | 38.6      | 34.6       |
 |                     | [simsiam_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k.py)                          | 38.8      | 34.9       |
-| SwAV                | [swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py) | 40.2      | 36.3       |
 
 ### Pascal VOC12 Aug 语义分割
 
@@ -86,13 +84,13 @@
 
 | 算法                | 配置文件                                                                                                                                                                                 | mIOU  |
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| BYOL                | [byol_resnet50_8xb32-accum16-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py)                   | 67.16 |
-| DenseCL             | [densecl_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/densecl/densecl_resnet50_8xb32-coslr-200e_in1k.py)                          | 69.47 |
-| MoCo v2             | [mocov2_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py)                             | 67.55 |
-| NPID                | [npid_resnet50_8xb32-steplr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py)                                 | 65.45 |
 | Relative Location   | [relative-loc_resnet50_8xb64-steplr-70e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k.py)           | 63.49 |
 | Rotation Prediction | [rotation-pred_resnet50_8xb16-steplr-70e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py)        | 64.31 |
+| NPID                | [npid_resnet50_8xb32-steplr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py)                                 | 65.45 |
 | SimCLR              | [simclr_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simclr/simclr_resnet50_8xb32-coslr-200e_in1k.py)                             | 64.03 |
+| MoCo v2             | [mocov2_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py)                             | 67.55 |
+| BYOL                | [byol_resnet50_8xb32-accum16-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py)                   | 67.16 |
+| SwAV                | [swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py) | 63.73 |
+| DenseCL             | [densecl_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/densecl/densecl_resnet50_8xb32-coslr-200e_in1k.py)                          | 69.47 |
 | SimSiam             | [simsiam_resnet50_8xb32-coslr-100e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py)                          | 48.35 |
 |                     | [simsiam_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k.py)                          | 46.27 |
-| SwAV                | [swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py) | 63.73 |
