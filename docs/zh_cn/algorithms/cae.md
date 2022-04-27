@@ -30,7 +30,7 @@ for 300 epochs, the details are below:
 ```bibtex
 @article{CAE,
   title={Context Autoencoder for Self-Supervised Representation Learning},
-  author={Xiaokang Chen, Mingyu Ding, Xiaodi Wang, Ying Xin, Shentong Mo, 
+  author={Xiaokang Chen, Mingyu Ding, Xiaodi Wang, Ying Xin, Shentong Mo,
   Yunhao Wang, Shumin Han, Ping Luo, Gang Zeng, Jingdong Wang},
   journal={ArXiv},
   year={2022}
