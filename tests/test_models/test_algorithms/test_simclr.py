@@ -8,15 +8,15 @@ from mmselfsup.models.algorithms import SimCLR
 
 backbone = dict(
     type='ResNet',
-    depth=50,
+    depth=18,
     in_channels=3,
     out_indices=[4],  # 0: conv-1, x: stage-x
     norm_cfg=dict(type='BN'))
 neck = dict(
     type='NonLinearNeck',  # SimCLR non-linear neck
-    in_channels=2048,
-    hid_channels=4,
-    out_channels=4,
+    in_channels=512,
+    hid_channels=2,
+    out_channels=2,
     num_layers=2,
     with_avg_pool=True)
 head = dict(type='ContrastiveHead', temperature=0.1)
@@ -34,6 +34,6 @@ def test_simclr():
         fake_input = torch.randn((16, 3, 224, 224))
         alg.forward_train(fake_input)
 
-    fake_input = torch.randn((16, 3, 224, 224))
+    fake_input = torch.randn((2, 3, 224, 224))
     fake_backbone_out = alg.extract_feat(fake_input)
-    assert fake_backbone_out[0].size() == torch.Size([16, 2048, 7, 7])
+    assert fake_backbone_out[0].size() == torch.Size([2, 512, 7, 7])

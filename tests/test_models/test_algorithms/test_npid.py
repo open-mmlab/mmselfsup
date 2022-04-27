@@ -8,14 +8,14 @@ from mmselfsup.models.algorithms import NPID
 
 backbone = dict(
     type='ResNet',
-    depth=50,
+    depth=18,
     in_channels=3,
     out_indices=[4],  # 0: conv-1, x: stage-x
     norm_cfg=dict(type='BN'))
 neck = dict(
-    type='LinearNeck', in_channels=2048, out_channels=4, with_avg_pool=True)
+    type='LinearNeck', in_channels=512, out_channels=2, with_avg_pool=True)
 head = dict(type='ContrastiveHead', temperature=0.07)
-memory_bank = dict(type='SimpleMemory', length=8, feat_dim=4, momentum=0.5)
+memory_bank = dict(type='SimpleMemory', length=8, feat_dim=2, momentum=0.5)
 
 
 @pytest.mark.skipif(
@@ -30,6 +30,6 @@ def test_npid():
 
     alg = NPID(
         backbone=backbone, neck=neck, head=head, memory_bank=memory_bank)
-    fake_input = torch.randn((16, 3, 224, 224))
+    fake_input = torch.randn((2, 3, 224, 224))
     fake_backbone_out = alg.extract_feat(fake_input)
-    assert fake_backbone_out[0].size() == torch.Size([16, 2048, 7, 7])
+    assert fake_backbone_out[0].size() == torch.Size([2, 512, 7, 7])
