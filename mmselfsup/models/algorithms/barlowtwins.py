@@ -57,11 +57,11 @@ class BarlowTwins(BaseModel):
         """Forward computation during training.
 
         Args:
-            img (list[Tensor]): A list of input images with shape
+            img (List[Tensor]): A list of input images with shape
                 (N, C, H, W). Typically these should be mean centered
                 and std scaled.
         Returns:
-            loss[str, Tensor]: A dictionary of loss components
+            dict[str, Tensor]: A dictionary of loss components
         """
         assert isinstance(img, list)
         img_v1 = img[0]
