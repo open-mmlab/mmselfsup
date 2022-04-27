@@ -77,7 +77,8 @@ class CAE(BaseModel):
         img, img_target, mask = samples
 
         # normalize images and the images to get the target
-        img = self.img_norm(img)
+        img_list = [self.img_norm(x).unsqueeze(0) for x in img]
+        img = torch.cat(img_list)
         img_target = 0.8 * img_target + 0.1
 
         mask = mask.flatten(1).to(torch.bool)
