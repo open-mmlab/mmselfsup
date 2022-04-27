@@ -3,6 +3,7 @@ import torch
 import torch.nn.functional as F
 
 from mmselfsup.models.heads import (ClsHead, ContrastiveHead, LatentClsHead,
+                                    LatentCrossCorrelationHead,
                                     LatentPredictHead, MAEFinetuneHead,
                                     MAEPretrainHead, MultiClsHead, SwAVHead)
 
@@ -48,6 +49,15 @@ def test_latent_cls_head():
     head = LatentClsHead(64, 10)
     fake_input = torch.rand(32, 64)  # N, C
     fake_traget = torch.rand(32, 64)  # N, C
+
+    loss = head.forward(fake_input, fake_traget)
+    assert loss['loss'].item() > 0
+
+
+def test_latent_cross_correlation_head():
+    head = LatentCrossCorrelationHead(2, 0.0051)
+    fake_input = torch.rand(32, 2)  # N, C
+    fake_traget = torch.rand(32, 2)  # N, C
 
     loss = head.forward(fake_input, fake_traget)
     assert loss['loss'].item() > 0
