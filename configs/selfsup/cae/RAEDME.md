@@ -1,4 +1,4 @@
-# MAE
+# CAE
 
 > [Context Autoencoder for Self-Supervised Representation Learning](https://arxiv.org/abs/2202.03026)
 
