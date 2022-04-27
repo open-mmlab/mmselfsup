@@ -38,12 +38,6 @@ def parse_args():
         help='id of gpu to use '
         '(only applicable to non-distributed testing)')
     parser.add_argument(
-        '--local_rank',
-        type=int,
-        default=0,
-        help='(Deprecated, please use --local-rank)')
-    parser.add_argument('--local-rank', type=int, default=0)
-    parser.add_argument(
         '--cfg-options',
         nargs='+',
         action=DictAction,
@@ -53,6 +47,7 @@ def parse_args():
         'It also allows nested list/tuple values, e.g. key="[(a,b),(c,d)]" '
         'Note that the quotation marks are necessary and that no white space '
         'is allowed.')
+    parser.add_argument('--local_rank', type=int, default=0)
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
         os.environ['LOCAL_RANK'] = str(args.local_rank)
