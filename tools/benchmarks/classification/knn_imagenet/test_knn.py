@@ -31,7 +31,6 @@ def parse_args():
         choices=['none', 'pytorch', 'slurm', 'mpi'],
         default='none',
         help='job launcher')
-    parser.add_argument('--local-rank', type=int, default=0)
     parser.add_argument(
         '--cfg-options',
         nargs='+',
@@ -59,6 +58,7 @@ def parse_args():
         default=True,
         type=bool,
         help='Store the features on GPU. Set to False if you encounter OOM')
+    parser.add_argument('--local_rank', type=int, default=0)
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
         os.environ['LOCAL_RANK'] = str(args.local_rank)
