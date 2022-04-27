@@ -21,7 +21,7 @@ def test_mmcls_classifier_wrapper():
         neck=dict(type='mmcls.GlobalAveragePooling'),
         head=dict(
             type='mmcls.LinearClsHead',
-            num_classes=1000,
+            num_classes=2,
             in_channels=1024,
             init_cfg=None,  # suppress the default init_cfg of LinearClsHead.
             loss=dict(
@@ -34,8 +34,8 @@ def test_mmcls_classifier_wrapper():
             dict(type='Constant', layer='LayerNorm', val=1., bias=0.)
         ],
         train_cfg=dict(augments=[
-            dict(type='BatchMixup', alpha=0.8, num_classes=1000, prob=0.5),
-            dict(type='BatchCutMix', alpha=1.0, num_classes=1000, prob=0.5)
+            dict(type='BatchMixup', alpha=0.8, num_classes=2, prob=0.5),
+            dict(type='BatchCutMix', alpha=1.0, num_classes=2, prob=0.5)
         ]))
     model = ALGORITHMS.build(model_config)
     fake_inputs = torch.rand((2, 3, 192, 192))
@@ -47,7 +47,7 @@ def test_mmcls_classifier_wrapper():
 
     # test mode
     outputs = model(fake_inputs, mode='test')
-    assert list(outputs['head3'].shape) == [2, 1000]
+    assert list(outputs['head3'].shape) == [2, 2]
 
     # extract mode
     outputs = model(fake_inputs, mode='extract')

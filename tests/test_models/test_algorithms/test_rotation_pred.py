@@ -8,12 +8,11 @@ from mmselfsup.models.algorithms import RotationPred
 
 backbone = dict(
     type='ResNet',
-    depth=50,
+    depth=18,
     in_channels=3,
     out_indices=[4],  # 0: conv-1, x: stage-x
     norm_cfg=dict(type='BN'))
-head = dict(
-    type='ClsHead', with_avg_pool=True, in_channels=2048, num_classes=4)
+head = dict(type='ClsHead', with_avg_pool=True, in_channels=512, num_classes=4)
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
@@ -41,6 +40,6 @@ def test_rotation_pred():
     assert 'head4' in fake_out
 
     # extract
-    fake_input = torch.randn((16, 3, 224, 224))
+    fake_input = torch.randn((2, 3, 224, 224))
     fake_backbone_out = alg.forward(fake_input, mode='extract')
-    assert fake_backbone_out[0].size() == torch.Size([16, 2048, 7, 7])
+    assert fake_backbone_out[0].size() == torch.Size([2, 512, 7, 7])

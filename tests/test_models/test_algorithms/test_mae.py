@@ -30,8 +30,8 @@ def test_mae():
         alg = MAE(backbone=None, neck=neck, head=head)
     alg = MAE(backbone=backbone, neck=neck, head=head)
 
-    fake_input = torch.randn((16, 3, 224, 224))
+    fake_input = torch.randn((2, 3, 224, 224))
     fake_loss = alg.forward_train(fake_input)
     fake_feature = alg.extract_feat(fake_input)
     assert isinstance(fake_loss['loss'].item(), float)
-    assert list(fake_feature[0].shape) == [16, 50, 768]
+    assert list(fake_feature[0].shape) == [2, 50, 768]
