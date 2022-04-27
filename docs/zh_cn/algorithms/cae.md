@@ -13,6 +13,10 @@ We present a novel masked image modeling (MIM) approach, context autoencoder (CA
 </div>
 
 
+## Prerequisite
+
+Create a new folder ``cae_ckpt`` under the root directory and download the
+[weights](https://download.openmmlab.com/mmselfsup/cae/dalle_encoder.pth) for ``dalle`` encoder to that folder
 ## Models and Benchmarks
 
 Here, we report the results of the model, which is pre-trained on ImageNet-1k
