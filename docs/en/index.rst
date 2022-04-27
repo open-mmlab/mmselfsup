@@ -44,6 +44,7 @@ Welcome to MMSelfSup's documentation!
    algorithms/mae.md
    algorithms/simmim.md
    algorithms/barlowtwins.md
+   algorithms/cae.md
 
 
 .. toctree::
