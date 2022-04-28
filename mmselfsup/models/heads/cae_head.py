@@ -41,7 +41,9 @@ class CAEHead(BaseModule):
             state_dict = torch.load(self.tokenizer_path)
             encoder.load_state_dict(state_dict)
         else:
-            warnings.warn(f'Do not find {self.tokenizer_path}')
+            warnings.warn(
+                f'Do not find {self.tokenizer_path}, please download from https://download.openmmlab.com/mmselfsup/cae/dalle_encoder.pth'  # noqa: E501
+            )
         return encoder
 
     @torch.no_grad()
