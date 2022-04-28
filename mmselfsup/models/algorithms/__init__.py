@@ -2,6 +2,7 @@
 from .barlowtwins import BarlowTwins
 from .base import BaseModel
 from .byol import BYOL
+from .cae import CAE
 from .classification import Classification
 from .deepcluster import DeepCluster
 from .densecl import DenseCL
@@ -21,5 +22,6 @@ from .swav import SwAV
 __all__ = [
     'BaseModel', 'BarlowTwins', 'BYOL', 'Classification', 'DeepCluster',
     'DenseCL', 'MoCo', 'NPID', 'ODC', 'RelativeLoc', 'RotationPred', 'SimCLR',
-    'SimSiam', 'SwAV', 'MAE', 'MoCoV3', 'SimMIM', 'MMClsImageClassifierWrapper'
+    'SimSiam', 'SwAV', 'MAE', 'MoCoV3', 'SimMIM',
+    'MMClsImageClassifierWrapper', 'CAE'
 ]
