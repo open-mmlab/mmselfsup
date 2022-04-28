@@ -1,4 +1,4 @@
-_base_ = 'vit-b-p16_ft-8xb128-coslr-100e_in1k.py'
+_base_ = 'vit-base-p16_ft-8xb128-coslr-100e_in1k.py'
 
 # model
 model = dict(backbone=dict(use_window=True, init_values=0.1))
