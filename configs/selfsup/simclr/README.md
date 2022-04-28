@@ -38,9 +38,10 @@ The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map
 
 The **AvgPool** result is obtained from Linear Evaluation with GlobalAveragePooling. Please refer to [resnet50_linear-8xb32-steplr-100e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-steplr-100e_in1k.py) for details of config.
 
-| Self-Supervised Config                                                                                                                           | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 | AvgPool |
-| ------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | -------- | -------- | -------- | -------- | ------- |
-| [resnet50_8xb32-coslr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simclr/simclr_resnet50_8xb32-coslr-200e_in1k.py) | 14.43    | 30.97    | 41.02    | 53.92    | 61.24    | 57.28   |
+| Self-Supervised Config                                                                                                                               | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 | AvgPool |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- | ------- |
+| [resnet50_8xb32-coslr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simclr/simclr_resnet50_8xb32-coslr-200e_in1k.py)     | 16.29    | 31.11    | 39.99    | 55.06    | 62.91    | 62.56   |
+| [resnet50_16xb256-coslr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simclr/simclr_resnet50_16xb256-coslr-200e_in1k.py) | 15.44    | 31.47    | 41.83    | 59.44    | 66.41    | 66.66   |
 
 #### Places205 Linear Evaluation
 

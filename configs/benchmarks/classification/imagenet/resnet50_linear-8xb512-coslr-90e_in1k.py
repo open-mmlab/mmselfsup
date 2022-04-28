@@ -8,7 +8,9 @@ _base_ = [
 model = dict(backbone=dict(frozen_stages=4))
 
 # dataset summary
-data = dict(samples_per_gpu=512)  # total 512*8=4096, 8GPU linear cls
+data = dict(
+    samples_per_gpu=512,
+    workers_per_gpu=8)  # total 512*8=4096, 8GPU linear cls
 
 # simsiam setting
 # runtime settings
