@@ -13,7 +13,7 @@ Collections:
     README: configs/selfsup/cae/README.md
 
 Models:
-  - Name: mae_vit-base-p16_8xb512-coslr-400e_in1k
+  - Name: cae_vit-base-p16_8xb256-fp16-coslr-300e_in1k
     In Collection: CAE
     Metadata:
       Epochs: 300
