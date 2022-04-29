@@ -1,9 +1,12 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import numpy as np
 import torch
 from mmcls.models import VisionTransformer
 from mmcv.cnn import build_norm_layer
+from mmcv.runner.base_module import ModuleList
 
 from ..builder import BACKBONES
+from ..utils import TransformerEncoderLayer
 
 
 @BACKBONES.register_module()
@@ -45,12 +48,15 @@ class MIMVisionTransformer(VisionTransformer):
                  img_size=224,
                  patch_size=16,
                  out_indices=-1,
+                 use_window=False,
                  drop_rate=0,
                  drop_path_rate=0,
+                 qkv_bias=True,
                  norm_cfg=dict(type='LN', eps=1e-6),
                  final_norm=True,
                  output_cls_token=True,
                  interpolate_mode='bicubic',
+                 init_values=0.0,
                  patch_cfg=dict(),
                  layer_cfgs=dict(),
                  finetune=True,
@@ -69,6 +75,24 @@ class MIMVisionTransformer(VisionTransformer):
             patch_cfg=patch_cfg,
             layer_cfgs=layer_cfgs,
             init_cfg=init_cfg)
+        dpr = np.linspace(0, drop_path_rate, self.num_layers)
+        self.layers = ModuleList()
+        if isinstance(layer_cfgs, dict):
+            layer_cfgs = [layer_cfgs] * self.num_layers
+        for i in range(self.num_layers):
+            _layer_cfg = dict(
+                embed_dims=self.embed_dims,
+                num_heads=self.arch_settings['num_heads'],
+                feedforward_channels=self.
+                arch_settings['feedforward_channels'],
+                window_size=self.patch_resolution if use_window else None,
+                drop_rate=drop_rate,
+                drop_path_rate=dpr[i],
+                init_values=init_values,
+                qkv_bias=qkv_bias,
+                norm_cfg=norm_cfg)
+            _layer_cfg.update(layer_cfgs[i])
+            self.layers.append(TransformerEncoderLayer(**_layer_cfg))
 
         self.embed_dims = self.arch_settings['embed_dims']
         self.num_patches = self.patch_resolution[0] * self.patch_resolution[1]

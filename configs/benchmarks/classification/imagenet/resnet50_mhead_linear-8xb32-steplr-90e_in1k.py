@@ -4,6 +4,7 @@ _base_ = [
     '../_base_/schedules/sgd_steplr-100e.py',
     '../_base_/default_runtime.py',
 ]
+# Multi-head linear evaluation setting
 
 model = dict(backbone=dict(frozen_stages=4))
 
@@ -45,4 +46,8 @@ lr_config = dict(policy='step', step=[30, 60, 90])
 
 # runtime settings
 runner = dict(type='EpochBasedRunner', max_epochs=90)
-checkpoint_config = dict(interval=10)
+
+# the max_keep_ckpts controls the max number of ckpt file in your work_dirs
+# if it is 3, when CheckpointHook (in mmcv) saves the 4th ckpt
+# it will remove the oldest one to keep the number of total ckpts as 3
+checkpoint_config = dict(interval=10, max_keep_ckpts=3)

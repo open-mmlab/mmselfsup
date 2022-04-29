@@ -30,8 +30,7 @@ data = dict(
         data_source=dict(
             type=data_source,
             data_prefix='data/imagenet/train',
-            ann_file='data/imagenet/meta/train.txt',
-        ),
+            ann_file='data/imagenet/meta/train.txt'),
         pipeline=train_pipeline,
         prefetch=prefetch),
     val=dict(
@@ -39,8 +38,7 @@ data = dict(
         data_source=dict(
             type=data_source,
             data_prefix='data/imagenet/val',
-            ann_file='data/imagenet/meta/val.txt',
-        ),
+            ann_file='data/imagenet/meta/val.txt'),
         pipeline=test_pipeline,
         prefetch=prefetch))
 evaluation = dict(interval=10, topk=(1, 5))

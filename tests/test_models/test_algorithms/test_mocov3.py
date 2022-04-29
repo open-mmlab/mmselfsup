@@ -15,8 +15,8 @@ backbone = dict(
 neck = dict(
     type='NonLinearNeck',
     in_channels=384,
-    hid_channels=8,
-    out_channels=8,
+    hid_channels=2,
+    out_channels=2,
     num_layers=2,
     with_bias=False,
     with_last_bn=True,
@@ -28,9 +28,9 @@ head = dict(
     type='MoCoV3Head',
     predictor=dict(
         type='NonLinearNeck',
-        in_channels=8,
-        hid_channels=8,
-        out_channels=8,
+        in_channels=2,
+        hid_channels=2,
+        out_channels=2,
         num_layers=2,
         with_bias=False,
         with_last_bn=True,
@@ -51,7 +51,7 @@ def test_mocov3():
     alg.init_weights()
     alg.momentum_update()
 
-    fake_input = torch.randn((16, 3, 224, 224))
+    fake_input = torch.randn((2, 3, 224, 224))
     fake_backbone_out = alg.forward(fake_input, mode='extract')
-    assert fake_backbone_out[0][0].size() == torch.Size([16, 384, 14, 14])
-    assert fake_backbone_out[0][1].size() == torch.Size([16, 384])
+    assert fake_backbone_out[0][0].size() == torch.Size([2, 384, 14, 14])
+    assert fake_backbone_out[0][1].size() == torch.Size([2, 384])

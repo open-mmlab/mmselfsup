@@ -43,7 +43,7 @@ class ResNet(_ResNet):
         with_cp (bool): Use checkpoint or not. Using checkpoint will save some
             memory while slowing down the training speed. Defaults to False.
         zero_init_residual (bool): Whether to use zero init for last norm layer
-            in resblocks to let them behave as identity. Defaults to True.
+            in resblocks to let them behave as identity. Defaults to False.
         Probability of the path to be zeroed. Defaults to 0.1
     Example:
         >>> from mmselfsup.models import ResNet
@@ -86,7 +86,7 @@ class ResNet(_ResNet):
                  norm_cfg=dict(type='BN', requires_grad=True),
                  norm_eval=False,
                  with_cp=False,
-                 zero_init_residual=True,
+                 zero_init_residual=False,
                  init_cfg=[
                      dict(type='Kaiming', layer=['Conv2d']),
                      dict(

@@ -14,3 +14,4 @@ Import:
   - configs/selfsup/swav/metafile.yml
   - configs/selfsup/mae/metafile.yaml
   - configs/selfsup/simmim/metafile.yml
+  - configs/selfsup/barlowtwins/metafile.yml

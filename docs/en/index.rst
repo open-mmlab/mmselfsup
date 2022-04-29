@@ -43,6 +43,8 @@ Welcome to MMSelfSup's documentation!
    algorithms/mocov3.md
    algorithms/mae.md
    algorithms/simmim.md
+   algorithms/barlowtwins.md
+   algorithms/cae.md
 
 
 .. toctree::

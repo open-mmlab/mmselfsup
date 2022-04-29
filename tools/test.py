@@ -38,12 +38,6 @@ def parse_args():
         help='id of gpu to use '
         '(only applicable to non-distributed testing)')
     parser.add_argument(
-        '--local_rank',
-        type=int,
-        default=0,
-        help='(Deprecated, please use --local-rank)')
-    parser.add_argument('--local-rank', type=int, default=0)
-    parser.add_argument(
         '--cfg-options',
         nargs='+',
         action=DictAction,
@@ -53,6 +47,7 @@ def parse_args():
         'It also allows nested list/tuple values, e.g. key="[(a,b),(c,d)]" '
         'Note that the quotation marks are necessary and that no white space '
         'is allowed.')
+    parser.add_argument('--local_rank', type=int, default=0)
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
         os.environ['LOCAL_RANK'] = str(args.local_rank)
@@ -114,12 +109,30 @@ def main():
                 'Automatically set "samples_per_gpu"="imgs_per_gpu"='
                 f'{cfg.data.imgs_per_gpu} in this experiments')
         cfg.data.samples_per_gpu = cfg.data.imgs_per_gpu
-    data_loader = build_dataloader(
-        dataset,
-        samples_per_gpu=cfg.data.samples_per_gpu,
-        workers_per_gpu=cfg.data.workers_per_gpu,
+
+    # The default loader config
+    loader_cfg = dict(
+        # cfg.gpus will be ignored if distributed
+        num_gpus=len(cfg.gpu_ids),
         dist=distributed,
-        shuffle=False)
+        prefetch=getattr(cfg, 'prefetch', False),
+        img_norm_cfg=cfg.img_norm_cfg)
+
+    # The overall dataloader settings
+    loader_cfg.update({
+        k: v
+        for k, v in cfg.data.items() if k not in [
+            'train', 'val', 'test', 'train_dataloader', 'val_dataloader',
+            'test_dataloader'
+        ]
+    })
+    # The specific train dataloader settings
+    test_loader_cfg = {
+        **loader_cfg,
+        'shuffle': False,  # Not shuffle by default
+        **cfg.data.get('test_dataloader', {}),
+    }
+    data_loader = build_dataloader(dataset, **test_loader_cfg)
 
     # build the model and load checkpoint
     model = build_algorithm(cfg.model)

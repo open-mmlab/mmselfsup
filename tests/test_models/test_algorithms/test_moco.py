@@ -9,19 +9,19 @@ import mmselfsup
 from mmselfsup.models.algorithms import MoCo
 
 queue_len = 32
-feat_dim = 4
+feat_dim = 2
 momentum = 0.999
 backbone = dict(
     type='ResNet',
-    depth=50,
+    depth=18,
     in_channels=3,
     out_indices=[4],  # 0: conv-1, x: stage-x
     norm_cfg=dict(type='BN'))
 neck = dict(
     type='MoCoV2Neck',
-    in_channels=2048,
-    hid_channels=4,
-    out_channels=4,
+    in_channels=512,
+    hid_channels=2,
+    out_channels=2,
     with_avg_pool=True)
 head = dict(type='ContrastiveHead', temperature=0.2)
 
@@ -54,9 +54,9 @@ def test_moco():
         momentum=momentum)
     assert alg.queue.size() == torch.Size([feat_dim, queue_len])
 
-    fake_input = torch.randn((16, 3, 224, 224))
+    fake_input = torch.randn((2, 3, 224, 224))
     fake_backbone_out = alg.extract_feat(fake_input)
-    assert fake_backbone_out[0].size() == torch.Size([16, 2048, 7, 7])
+    assert fake_backbone_out[0].size() == torch.Size([2, 512, 7, 7])
     with pytest.raises(AssertionError):
         fake_backbone_out = alg.forward_train(fake_input)
 
@@ -68,4 +68,4 @@ def test_moco():
         side_effect=mock_concat_all_gather)
     fake_loss = alg.forward_train([fake_input, fake_input])
     assert fake_loss['loss'] > 0
-    assert alg.queue_ptr.item() == 16
+    assert alg.queue_ptr.item() == 2

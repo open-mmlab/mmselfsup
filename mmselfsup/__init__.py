@@ -1,6 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import warnings
 
+import mmcls
 import mmcv
 from packaging.version import parse
 
@@ -47,14 +48,21 @@ def digit_version(version_str: str, length: int = 4):
     return tuple(release)
 
 
-mmcv_minimum_version = '1.3.16'
-mmcv_maximum_version = '1.5.0'
+mmcv_minimum_version = '1.4.2'
+mmcv_maximum_version = '1.6.0'
 mmcv_version = digit_version(mmcv.__version__)
+
+mmcls_minimum_version = '0.21.0'
+mmcls_version = digit_version(mmcls.__version__)
 
 
 assert (mmcv_version >= digit_version(mmcv_minimum_version)
         and mmcv_version <= digit_version(mmcv_maximum_version)), \
     f'MMCV=={mmcv.__version__} is used but incompatible. ' \
     f'Please install mmcv>={mmcv_minimum_version}, <={mmcv_maximum_version}.'
+
+assert mmcls_version >= digit_version(mmcls_minimum_version), \
+    f'MMClassification=={mmcls.__version__} is used but incompatible. ' \
+    f'Please install mmcls>={mmcls_minimum_version}.'
 
 __all__ = ['__version__', 'digit_version']

@@ -1,17 +1,19 @@
 _base_ = [
     '../_base_/models/resnet50.py',
     '../_base_/datasets/imagenet.py',
-    '../_base_/schedules/sgd_steplr-100e.py',
+    '../_base_/schedules/lars_coslr-90e.py',
     '../_base_/default_runtime.py',
 ]
+# SimSiam linear evaluation setting
+# According to SimSiam paper, this setting can also be used to evaluate
+# other methods like SimCLR, MoCo, BYOL, SwAV
 
 model = dict(backbone=dict(frozen_stages=4))
 
-evaluation = dict(interval=1, topk=(1, 5))
-
-# moco setting
-# optimizer
-optimizer = dict(type='SGD', lr=30., momentum=0.9, weight_decay=0.)
+# dataset summary
+data = dict(
+    samples_per_gpu=512,
+    workers_per_gpu=8)  # total 512*8=4096, 8GPU linear cls
 
 # runtime settings
 # the max_keep_ckpts controls the max number of ckpt file in your work_dirs

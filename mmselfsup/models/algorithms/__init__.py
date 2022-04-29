@@ -1,6 +1,8 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from .barlowtwins import BarlowTwins
 from .base import BaseModel
 from .byol import BYOL
+from .cae import CAE
 from .classification import Classification
 from .deepcluster import DeepCluster
 from .densecl import DenseCL
@@ -18,7 +20,8 @@ from .simsiam import SimSiam
 from .swav import SwAV
 
 __all__ = [
-    'BaseModel', 'BYOL', 'Classification', 'DeepCluster', 'DenseCL', 'MoCo',
-    'NPID', 'ODC', 'RelativeLoc', 'RotationPred', 'SimCLR', 'SimSiam', 'SwAV',
-    'MAE', 'MoCoV3', 'SimMIM', 'MMClsImageClassifierWrapper'
+    'BaseModel', 'BarlowTwins', 'BYOL', 'Classification', 'DeepCluster',
+    'DenseCL', 'MoCo', 'NPID', 'ODC', 'RelativeLoc', 'RotationPred', 'SimCLR',
+    'SimSiam', 'SwAV', 'MAE', 'MoCoV3', 'SimMIM',
+    'MMClsImageClassifierWrapper', 'CAE'
 ]

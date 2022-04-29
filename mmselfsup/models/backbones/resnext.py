@@ -51,7 +51,7 @@ class ResNeXt(ResNet):
         with_cp (bool): Use checkpoint or not. Using checkpoint will save some
             memory while slowing down the training speed. Defaults to False.
         zero_init_residual (bool): Whether to use zero init for last norm layer
-            in resblocks to let them behave as identity. Defaults to True.
+            in resblocks to let them behave as identity. Defaults to False.
 
     Example:
         >>> from mmselfsup.models import ResNeXt

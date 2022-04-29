@@ -1,0 +1,27 @@
+Collections:
+  - Name: CAE
+    Metadata:
+      Training Data: ImageNet-1k
+      Training Techniques:
+        - AdamW
+      Training Resources: 8x A100-80G GPUs
+      Architecture:
+        - ViT
+    Paper:
+        URL: https://arxiv.org/abs/2202.03026
+        Title: "Context Autoencoder for Self-Supervised Representation Learning"
+    README: configs/selfsup/cae/README.md
+
+Models:
+  - Name: cae_vit-base-p16_8xb256-fp16-coslr-300e_in1k
+    In Collection: CAE
+    Metadata:
+      Epochs: 300
+      Batch Size: 2048
+    Results:
+      - Task: Self-Supervised Image Classification
+        Dataset: ImageNet-1k
+        Metrics:
+          Top 1 Accuracy: 83.2
+    Config: configs/selfsup/cae/cae_vit-base-p16_8xb256-fp16-coslr-300e_in1k.py
+    Weights: https://download.openmmlab.com/mmselfsup/cae/cae_vit-base-p16_16xb256-coslr-300e_in1k-224_20220427-4c786349.pth

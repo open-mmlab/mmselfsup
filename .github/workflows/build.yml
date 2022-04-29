@@ -32,11 +32,8 @@ jobs:
     strategy:
       matrix:
         python-version: [3.7]
-        torch: [1.5.0, 1.6.0, 1.7.0, 1.8.0, 1.9.0]
+        torch: [1.6.0, 1.7.0, 1.8.0, 1.9.0]
         include:
-          - torch: 1.5.0
-            torch_version: 1.5
-            torchvision: 0.6.0
           - torch: 1.6.0
             torch_version: 1.6
             torchvision: 0.7.0
@@ -88,7 +85,7 @@ jobs:
         run: |
           coverage run --branch --source mmselfsup -m pytest tests/
           coverage xml
-          coverage report -m --omit="mmselfsup/apis/*"
+          coverage report -m
       # Only upload coverage report for python3.8 && pytorch1.9.0
       - name: Upload coverage to Codecov
         if: ${{matrix.torch == '1.9.0' && matrix.python-version == '3.8'}}
