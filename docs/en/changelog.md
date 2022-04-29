@@ -2,6 +2,34 @@
 
 ## MMSelfSup
 
+### v0.9.0 (29/04/2022)
+
+#### Highlight
+* Support **CAE** ([#284](https://github.com/open-mmlab/mmselfsup/pull/284))
+* Support **Barlow Twins** ([#207](https://github.com/open-mmlab/mmselfsup/pull/207))
+
+#### New Features
+* Support CAE ([#284](https://github.com/open-mmlab/mmselfsup/pull/284))
+* Support Barlow twins ([#207](https://github.com/open-mmlab/mmselfsup/pull/207))
+* Add SimMIM 192 pretrain and 224 fine-tuning results ([#280](https://github.com/open-mmlab/mmselfsup/pull/280))
+* Add MAE pretrain with fp16 ([#271](https://github.com/open-mmlab/mmselfsup/pull/271))
+
+#### Bug Fixes
+* Fix args error ([#290](https://github.com/open-mmlab/mmselfsup/pull/290))
+* Change imgs_per_gpu to samples_per_gpu in MAE config ([#278](https://github.com/open-mmlab/mmselfsup/pull/278))
+* Avoid GPU memory leak with prefetch dataloader ([#277](https://github.com/open-mmlab/mmselfsup/pull/277))
+* Fix key error bug when registering custom hooks ([#273](https://github.com/open-mmlab/mmselfsup/pull/273))
+
+#### Improvements
+* Update SimCLR models and results ([#295](https://github.com/open-mmlab/mmselfsup/pull/295))
+* Reduce memory usage while running unit test ([#291](https://github.com/open-mmlab/mmselfsup/pull/291))
+* Remove pytorch1.5 test ([#288](https://github.com/open-mmlab/mmselfsup/pull/288))
+* Rename linear probing config file names ([#281](https://github.com/open-mmlab/mmselfsup/pull/281))
+* add unit test for apis ([#276](https://github.com/open-mmlab/mmselfsup/pull/276))
+
+#### Docs
+* Fix SimMIM config link, and add SimMIM to model_zoo ([#272](https://github.com/open-mmlab/mmselfsup/pull/272))
+
 ### v0.8.0 (31/03/2022)
 
 #### Highlight
