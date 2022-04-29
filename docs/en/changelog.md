@@ -6,7 +6,7 @@
 
 #### Highlight
 * Support **CAE** ([#284](https://github.com/open-mmlab/mmselfsup/pull/284))
-* Support **Barlow twins** ([#207](https://github.com/open-mmlab/mmselfsup/pull/207))
+* Support **Barlow Twins** ([#207](https://github.com/open-mmlab/mmselfsup/pull/207))
 
 #### New Features
 * Support CAE ([#284](https://github.com/open-mmlab/mmselfsup/pull/284))
