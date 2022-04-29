@@ -64,13 +64,12 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
 ## 更新日志
 
-最新的 **v0.8.0** 版本已经在 2022.03.31 发布。
+最新的 **v0.9.0** 版本已经在 2022.04.29 发布。
 
 新版本亮点：
 
-* 支持 **SimMIM**
-* 增加 **KNN** 基准测试，支持中间 checkpoint 和提取的 backbone 权重进行评估
-* 支持 ImageNet-21k 数据集
+* 支持 **CAE**
+* 支持 **Barlow Twins**
 
 请参考 [更新日志](docs/zh_cn/changelog.md) 获取更多细节和历史版本信息。
 
@@ -121,7 +120,7 @@ MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibilit
 
 ## 安装
 
-MMSelfSup 依赖 [PyTorch](https://pytorch.org/)], [MMCV](https://github.com/open-mmlab/mmcv) 和 [MMClassification](https://github.com/open-mmlab/mmclassification).
+MMSelfSup 依赖 [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open-mmlab/mmcv) 和 [MMClassification](https://github.com/open-mmlab/mmclassification).
 
 请参考 [安装文档](docs/zh_cn/install.md) 获取更详细的安装指南。
 

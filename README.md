@@ -66,13 +66,12 @@ This project is released under the [Apache 2.0 license](LICENSE).
 
 ## ChangeLog
 
-MMSelfSup **v0.8.0** was released in 31/03/2022.
+MMSelfSup **v0.9.0** was released in 29/04/2022.
 
 Highlights of the new version:
 
-* Support **SimMIM**
-* Add **KNN** benchmark, support KNN test with checkpoint and extracted backbone weights
-* Support ImageNet-21k dataset
+* Support **CAE**
+* Support **Barlow twins**
 
 Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
 
@@ -123,7 +122,7 @@ More algorithms are in our plan.
 
 ## Installation
 
-MMSelfSup depends on [PyTorch](https://pytorch.org/)], [MMCV](https://github.com/open-mmlab/mmcv) and [MMClassification](https://github.com/open-mmlab/mmclassification).
+MMSelfSup depends on [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open-mmlab/mmcv) and [MMClassification](https://github.com/open-mmlab/mmclassification).
 
 Please refer to [install.md](docs/en/install.md) for more detailed instruction.
 
