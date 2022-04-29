@@ -2,6 +2,34 @@
 
 ## MMSelfSup
 
+### v0.9.0 (29/04/2022)
+
+#### 亮点
+* 支持 **CAE** ([#284](https://github.com/open-mmlab/mmselfsup/pull/284))
+* 支持 **Barlow twins** ([#207](https://github.com/open-mmlab/mmselfsup/pull/207))
+
+#### 新特性
+* 支持 CAE ([#284](https://github.com/open-mmlab/mmselfsup/pull/284))
+* 支持 Barlow twins ([#207](https://github.com/open-mmlab/mmselfsup/pull/207))
+* 增加 SimMIM 192 预训练及 224 微调的结果 ([#280](https://github.com/open-mmlab/mmselfsup/pull/280))
+* 增加 MAE fp16 预训练设置 ([#271](https://github.com/open-mmlab/mmselfsup/pull/271))
+
+#### Bug 修复
+* 修复参数问题 ([#290](https://github.com/open-mmlab/mmselfsup/pull/290))
+* 在 MAE 配置中修改 imgs_per_gpu 为 samples_per_gpu ([#278](https://github.com/open-mmlab/mmselfsup/pull/278))
+* 使用 prefetch dataloader 时避免 GPU 内存溢出 ([#277](https://github.com/open-mmlab/mmselfsup/pull/277))
+* 修复在注册自定义钩子时键值错误的问题 ([#273](https://github.com/open-mmlab/mmselfsup/pull/273))
+
+#### 改进
+* 更新 SimCLR 模型和结果 ([#295](https://github.com/open-mmlab/mmselfsup/pull/295))
+* 单元测试减少内存使用 ([#291](https://github.com/open-mmlab/mmselfsup/pull/291))
+* 去除 pytorch 1.5 测试 ([#288](https://github.com/open-mmlab/mmselfsup/pull/288))
+* 重命名线性评估配置文件 ([#281](https://github.com/open-mmlab/mmselfsup/pull/281))
+* 为 api 增加单元测试 ([#276](https://github.com/open-mmlab/mmselfsup/pull/276))
+
+#### 文档
+* 在模型库增加 SimMIM 并修复链接 ([#272](https://github.com/open-mmlab/mmselfsup/pull/272))
+
 ### v0.8.0 (31/03/2022)
 
 #### 亮点
@@ -9,24 +37,24 @@
 * 增加 **KNN** 基准测试，支持中间 checkpoint 和提取的 backbone 权重进行评估 ([#243](https://github.com/open-mmlab/mmselfsup/pull/243))
 * 支持 ImageNet-21k 数据集 ([#225](https://github.com/open-mmlab/mmselfsup/pull/225))
 
-#### New Features
+#### 新特性
 * 支持 SimMIM ([#239](https://github.com/open-mmlab/mmselfsup/pull/239))
 * 增加 KNN 基准测试，支持中间 checkpoint 和提取的 backbone 权重进行评估 ([#243](https://github.com/open-mmlab/mmselfsup/pull/243))
 * 支持 ImageNet-21k 数据集 ([#225](https://github.com/open-mmlab/mmselfsup/pull/225))
 * 支持自动继续 checkpoint 文件的训练 ([#245](https://github.com/open-mmlab/mmselfsup/pull/245))
 
-#### Bug Fixes
+#### Bug 修复
 * 在分布式 sampler 中增加种子 ([#250](https://github.com/open-mmlab/mmselfsup/pull/250))
 * 修复 dist_test_svm_epoch.sh 中参数位置问题 ([#260](https://github.com/open-mmlab/mmselfsup/pull/260))
 * 修复 prepare_voc07_cls.sh 中 mkdir 潜在错误 ([#261](https://github.com/open-mmlab/mmselfsup/pull/261))
 
-#### Improvements
+#### 改进
 * 更新命令行参数模式 ([#253](https://github.com/open-mmlab/mmselfsup/pull/253))
 
-#### Docs
+#### 文档
 * 修复 6_benchmarks.md 中命令文档([#263](https://github.com/open-mmlab/mmselfsup/pull/263))
 * 翻译 6_benchmarks.md 到中文 ([#262](https://github.com/open-mmlab/mmselfsup/pull/262))
-*
+
 ### v0.7.0 (03/03/2022)
 
 #### 亮点
