@@ -4,12 +4,12 @@ _base_ = [
     '../_base_/schedules/sgd_steplr-100e.py',
     '../_base_/default_runtime.py',
 ]
+# MoCo v1/v2 linear evaluation setting
 
 model = dict(backbone=dict(frozen_stages=4))
 
 evaluation = dict(interval=1, topk=(1, 5))
 
-# moco setting
 # optimizer
 optimizer = dict(type='SGD', lr=30., momentum=0.9, weight_decay=0.)
 

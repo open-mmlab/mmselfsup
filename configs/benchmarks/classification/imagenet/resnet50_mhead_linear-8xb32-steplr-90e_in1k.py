@@ -4,6 +4,7 @@ _base_ = [
     '../_base_/schedules/sgd_steplr-100e.py',
     '../_base_/default_runtime.py',
 ]
+# Multi-head linear evaluation setting
 
 model = dict(backbone=dict(frozen_stages=4))
 
