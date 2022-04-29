@@ -71,7 +71,7 @@ MMSelfSup **v0.9.0** was released in 29/04/2022.
 Highlights of the new version:
 
 * Support **CAE**
-* Support **Barlow twins**
+* Support **Barlow Twins**
 
 Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
 
