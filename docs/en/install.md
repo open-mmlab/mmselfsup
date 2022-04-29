@@ -7,8 +7,8 @@
 - PyTorch 1.5+
 - CUDA 9.2+
 - GCC 5+
-- [mmcv](https://github.com/open-mmlab/mmcv) 1.3.16+
-- [mmcls](https://mmclassification.readthedocs.io/en/latest/install.html) 0.19.0+
+- [mmcv](https://github.com/open-mmlab/mmcv) 1.4.2+
+- [mmcls](https://mmclassification.readthedocs.io/en/latest/install.html) 0.21.0+
 - [mmdet](https://mmdetection.readthedocs.io/en/latest/get_started.html#installation) 2.16.0+
 - [mmseg](https://mmsegmentation.readthedocs.io/en/latest/get_started.html#installation) 0.20.2+
 
@@ -16,8 +16,8 @@ Compatible MMCV, MMClassification, MMDetection and MMSegmentation versions are s
 
 | MMSelfSup version |    MMCV version     |  MMClassification version  | MMSegmentation version | MMDetection version |
 | :---------------: | :-----------------: | :------------------------: | :--------------------: | :-----------------: |
-|  0.9.0 (master)   | mmcv-full >= 1.3.16 |      mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
-|       0.8.0       | mmcv-full >= 1.3.16 |      mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
+|  0.9.0 (master)   | mmcv-full >= 1.4.2  |      mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
+|       0.8.0       | mmcv-full >= 1.4.2  |      mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
 |       0.7.1       | mmcv-full >= 1.3.16 | mmcls >= 0.19.0, <= 0.20.1 |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
 |       0.6.0       | mmcv-full >= 1.3.16 |      mmcls >= 0.19.0       |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
 |       0.5.0       | mmcv-full >= 1.3.16 |             /              |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
