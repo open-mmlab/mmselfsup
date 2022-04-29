@@ -63,6 +63,6 @@ assert (mmcv_version >= digit_version(mmcv_minimum_version)
 
 assert mmcls_version >= digit_version(mmcls_minimum_version), \
     f'MMClassification=={mmcls.__version__} is used but incompatible. ' \
-    f'Please install mmcls>={mmcv_minimum_version}.'
+    f'Please install mmcls>={mmcls_minimum_version}.'
 
 __all__ = ['__version__', 'digit_version']
