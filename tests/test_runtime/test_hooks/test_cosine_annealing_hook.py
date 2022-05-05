@@ -1,6 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from mmselfsup.core.hooks import StepFixCosineAnnealingLrUpdaterHook, cosine_annealing_hook
 from unittest.mock import MagicMock
+
+from mmselfsup.core.hooks import StepFixCosineAnnealingLrUpdaterHook
 
 
 def test_cosine_annealing_hook():
