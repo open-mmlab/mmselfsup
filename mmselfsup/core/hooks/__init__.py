@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from .cosineAnnealing_hook import StepFixCosineAnnealingLrUpdaterHook
+from .cosine_annealing_hook import StepFixCosineAnnealingLrUpdaterHook
 from .deepcluster_hook import DeepClusterHook
 from .densecl_hook import DenseCLHook
 from .momentum_update_hook import MomentumUpdateHook
