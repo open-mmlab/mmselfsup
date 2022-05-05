@@ -61,29 +61,30 @@ class MultiheadAttention(_MultiheadAttention):
             proj_bias=proj_bias,
             init_cfg=init_cfg)
 
-        del self.out_drop
-        self.qkv = nn.Linear(self.input_dims, embed_dims * 3, bias=False)
-        if qkv_bias:
-            self.q_bias = nn.Parameter(torch.zeros(embed_dims))
-            self.v_bias = nn.Parameter(torch.zeros(embed_dims))
-        else:
-            self.q_bias = None
-            self.k_bias = None
-            self.v_bias = None
+        self.qkv_bias = qkv_bias
+
+        if not self.qkv_bias:
+            self._init_qv_bias()
+
+        self.qkv = nn.Linear(
+            self.input_dims, embed_dims * 3, bias=self.qkv_bias)
+
+    def _init_qv_bias(self):
+        self.q_bias = nn.Parameter(torch.zeros(self.embed_dims))
+        self.v_bias = nn.Parameter(torch.zeros(self.embed_dims))
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # qkv bias is different from that in mmcls
-        qkv_bias = None
-        if self.q_bias is not None:
-            qkv_bias = torch.cat(
-                (self.q_bias,
-                 torch.zeros_like(self.v_bias,
-                                  requires_grad=False), self.v_bias))
         B, N, _ = x.shape
-        qkv = F.linear(
-            x, weight=self.qkv.weight,
-            bias=qkv_bias).reshape(B, N, 3, self.num_heads,
-                                   self.head_dims).permute(2, 0, 3, 1, 4)
+
+        if not self.qkv_bias:
+            k_bias = torch.zeros_like(self.v_bias, requires_grad=False)
+            qkv_bias = torch.cat((self.q_bias, k_bias, self.v_bias))
+            qkv = F.linear(x, weight=self.qkv.weight, bias=qkv_bias)
+        else:
+            qkv = self.qkv(x)
+
+        qkv = qkv.reshape(B, N, 3, self.num_heads, -1).permute(2, 0, 3, 1, 4)
         q, k, v = qkv[0], qkv[1], qkv[2]
 
         attn = (q @ k.transpose(-2, -1)) * self.scale
