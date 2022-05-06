@@ -13,151 +13,10 @@ from mmcv.runner.base_module import BaseModule
 from torch.nn import functional as F
 
 
-class MultiheadAttention(_MultiheadAttention):
-    """Multi-head Attention Module.
+class RelativePositionBias(nn.Module):
 
-    This module rewrite the MultiheadAttention by replacing qkv bias with
-    customized qkv bias, in addition to removing the drop path layer.
-
-    Args:
-        embed_dims (int): The embedding dimension.
-        num_heads (int): Parallel attention heads.
-        input_dims (int, optional): The input dimension, and if None,
-            use ``embed_dims``. Defaults to None.
-        attn_drop (float): Dropout rate of the dropout layer after the
-            attention calculation of query and key. Defaults to 0.
-        proj_drop (float): Dropout rate of the dropout layer after the
-            output projection. Defaults to 0.
-        dropout_layer (dict): The dropout config before adding the shortcut.
-            Defaults to ``dict(type='Dropout', drop_prob=0.)``.
-        qkv_bias (bool): If True, add a learnable bias to q, k, v.
-            Defaults to True.
-        qk_scale (float, optional): Override default qk scale of
-            ``head_dim ** -0.5`` if set. Defaults to None.
-        proj_bias (bool) If True, add a learnable bias to output projection.
-            Defaults to True.
-        init_cfg (dict, optional): The Config for initialization.
-            Defaults to None.
-    """
-
-    def __init__(self,
-                 embed_dims: int,
-                 num_heads: int,
-                 input_dims: int = None,
-                 attn_drop: float = 0.,
-                 proj_drop: float = 0.,
-                 qkv_bias: bool = True,
-                 qk_scale: float = None,
-                 proj_bias: bool = True,
-                 init_cfg: dict = None) -> None:
-        super(MultiheadAttention, self).__init__(
-            embed_dims,
-            num_heads=num_heads,
-            input_dims=input_dims,
-            attn_drop=attn_drop,
-            proj_drop=proj_drop,
-            qkv_bias=qkv_bias,
-            qk_scale=qk_scale,
-            proj_bias=proj_bias,
-            init_cfg=init_cfg)
-
-        self.qkv_bias = qkv_bias
-
-        if not self.qkv_bias:
-            self._init_qv_bias()
-
-        self.qkv = nn.Linear(
-            self.input_dims, embed_dims * 3, bias=self.qkv_bias)
-
-    def _init_qv_bias(self):
-        self.q_bias = nn.Parameter(torch.zeros(self.embed_dims))
-        self.v_bias = nn.Parameter(torch.zeros(self.embed_dims))
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        # qkv bias is different from that in mmcls
-        B, N, _ = x.shape
-
-        if not self.qkv_bias:
-            k_bias = torch.zeros_like(self.v_bias, requires_grad=False)
-            qkv_bias = torch.cat((self.q_bias, k_bias, self.v_bias))
-            qkv = F.linear(x, weight=self.qkv.weight, bias=qkv_bias)
-        else:
-            qkv = self.qkv(x)
-
-        qkv = qkv.reshape(B, N, 3, self.num_heads, -1).permute(2, 0, 3, 1, 4)
-        q, k, v = qkv[0], qkv[1], qkv[2]
-
-        attn = (q @ k.transpose(-2, -1)) * self.scale
-        attn = attn.softmax(dim=-1)
-        attn = self.attn_drop(attn)
-
-        x = (attn @ v).transpose(1, 2).reshape(B, N, self.embed_dims)
-        x = self.proj(x)
-        x = self.proj_drop(x)
-
-        return x
-
-
-class MultiheadAttentionWithRPE(MultiheadAttention):
-    """Multi-head Attention Module.
-
-    This module rewrite the MultiheadAttention in MMSelfSup by adding the
-    relative position bias.
-
-    Args:
-        embed_dims (int): The embedding dimension.
-        num_heads (int): Parallel attention heads.
-        window_size (int): The window size of the relative position bias.
-        input_dims (int, optional): The input dimension, and if None,
-            use ``embed_dims``. Defaults to None.
-        attn_drop (float): Dropout rate of the dropout layer after the
-            attention calculation of query and key. Defaults to 0.
-        proj_drop (float): Dropout rate of the dropout layer after the
-            output projection. Defaults to 0.
-        dropout_layer (dict): The dropout config before adding the shortcut.
-            Defaults to ``dict(type='Dropout', drop_prob=0.)``.
-        qkv_bias (bool): If True, add a learnable bias to q, k, v.
-            Defaults to True.
-        qk_scale (float, optional): Override default qk scale of
-            ``head_dim ** -0.5`` if set. Defaults to None.
-        proj_bias (bool) If True, add a learnable bias to output projection.
-            Defaults to True.
-        init_cfg (dict, optional): The Config for initialization.
-            Defaults to None.
-    """
-
-    def __init__(self,
-                 embed_dims: int,
-                 num_heads: int,
-                 window_size: int,
-                 input_dims: int = None,
-                 attn_drop: float = 0,
-                 proj_drop: float = 0,
-                 qkv_bias: bool = True,
-                 qk_scale: float = None,
-                 proj_bias: bool = True,
-                 init_cfg: dict = None) -> None:
-        super().__init__(
-            embed_dims=embed_dims,
-            num_heads=num_heads,
-            input_dims=input_dims,
-            attn_drop=attn_drop,
-            proj_drop=proj_drop,
-            qkv_bias=qkv_bias,
-            qk_scale=qk_scale,
-            proj_bias=proj_bias,
-            init_cfg=init_cfg)
-
-        self.qkv = nn.Linear(self.input_dims, embed_dims * 3, bias=False)
-        if qkv_bias:
-            self.q_bias = nn.Parameter(torch.zeros(embed_dims))
-            self.v_bias = nn.Parameter(torch.zeros(embed_dims))
-        else:
-            self.q_bias = None
-            self.k_bias = None
-            self.v_bias = None
-
-        assert isinstance(window_size, Sequence)
+    def __init__(self, window_size, num_heads):
+        super().__init__()
         self.window_size = window_size
         self.num_relative_distance = (2 * window_size[0] -
                                       1) * (2 * window_size[1] - 1) + 3
@@ -194,32 +53,114 @@ class MultiheadAttentionWithRPE(MultiheadAttention):
         self.register_buffer('relative_position_index',
                              relative_position_index)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        qkv_bias = None
-        if self.q_bias is not None:
-            qkv_bias = torch.cat(
-                (self.q_bias,
-                 torch.zeros_like(self.v_bias,
-                                  requires_grad=False), self.v_bias))
+    def forward(self):
+        # relative_position_bias shape is (Wh*Ww, Wh*Ww, nH)
+        relative_position_bias = \
+            self.relative_position_bias_table[
+                self.relative_position_index.view(-1)].view(
+                    self.window_size[0] * self.window_size[1] + 1,
+                    self.window_size[0] * self.window_size[1] + 1, -1)
+        # relative_position_bias shape is (nH, Wh*Ww, Wh*Ww)
+        relative_position_bias = relative_position_bias.permute(
+            2, 0, 1).contiguous()
+        return relative_position_bias
+
+
+class MultiheadAttention(_MultiheadAttention):
+    """Multi-head Attention Module.
+
+    This module rewrite the MultiheadAttention by replacing qkv bias with
+    customized qkv bias, and adding the relative position bias.
+
+    Args:
+        embed_dims (int): The embedding dimension.
+        num_heads (int): Parallel attention heads.
+        window_size (int, optional): The window size of the relative position
+            bias. Defaults to None.
+        input_dims (int, optional): The input dimension, and if None,
+            use ``embed_dims``. Defaults to None.
+        attn_drop (float): Dropout rate of the dropout layer after the
+            attention calculation of query and key. Defaults to 0.
+        proj_drop (float): Dropout rate of the dropout layer after the
+            output projection. Defaults to 0.
+        dropout_layer (dict): The dropout config before adding the shortcut.
+            Defaults to ``dict(type='Dropout', drop_prob=0.)``.
+        qkv_bias (bool): If True, add a learnable bias to q, k, v.
+            Defaults to True.
+        qk_scale (float, optional): Override default qk scale of
+            ``head_dim ** -0.5`` if set. Defaults to None.
+        proj_bias (bool) If True, add a learnable bias to output projection.
+            Defaults to True.
+        init_cfg (dict, optional): The Config for initialization.
+            Defaults to None.
+    """
+
+    def __init__(self,
+                 embed_dims: int,
+                 num_heads: int,
+                 window_size: int = None,
+                 input_dims: int = None,
+                 attn_drop: float = 0.,
+                 proj_drop: float = 0.,
+                 qkv_bias: bool = True,
+                 qk_scale: float = None,
+                 proj_bias: bool = True,
+                 init_cfg: dict = None) -> None:
+        super(MultiheadAttention, self).__init__(
+            embed_dims,
+            num_heads=num_heads,
+            input_dims=input_dims,
+            attn_drop=attn_drop,
+            proj_drop=proj_drop,
+            qkv_bias=qkv_bias,
+            qk_scale=qk_scale,
+            proj_bias=proj_bias,
+            init_cfg=init_cfg)
+
+        self.qkv_bias = qkv_bias
+
+        if not self.qkv_bias:
+            self._init_qv_bias()
+
+        self.qkv = nn.Linear(
+            self.input_dims, embed_dims * 3, bias=self.qkv_bias)
+
+        if isinstance(window_size, Sequence):
+            self.relative_position_bias = RelativePositionBias(
+                window_size, num_heads)
+
+    def _init_qv_bias(self):
+        self.q_bias = nn.Parameter(torch.zeros(self.embed_dims))
+        self.v_bias = nn.Parameter(torch.zeros(self.embed_dims))
+
+    def forward(self,
+                x: torch.Tensor,
+                rel_pos_bias: torch.Tensor = None) -> torch.Tensor:
+        # qkv bias is different from that in mmcls
         B, N, _ = x.shape
-        qkv = F.linear(
-            x, weight=self.qkv.weight,
-            bias=qkv_bias).reshape(B, N, 3, self.num_heads,
-                                   self.head_dims).permute(2, 0, 3, 1, 4)
+
+        if not self.qkv_bias:
+            k_bias = torch.zeros_like(self.v_bias, requires_grad=False)
+            qkv_bias = torch.cat((self.q_bias, k_bias, self.v_bias))
+            qkv = F.linear(x, weight=self.qkv.weight, bias=qkv_bias)
+        else:
+            qkv = self.qkv(x)
+
+        qkv = qkv.reshape(B, N, 3, self.num_heads, -1).permute(2, 0, 3, 1, 4)
         q, k, v = qkv[0], qkv[1], qkv[2]
 
-        q = q * self.scale
-        attn = (q @ k.transpose(-2, -1))
+        attn = (q @ k.transpose(-2, -1)) * self.scale
 
-        if self.relative_position_bias_table is not None:
-            relative_position_bias = \
-                self.relative_position_bias_table[
-                    self.relative_position_index.view(-1)].view(
-                        self.window_size[0] * self.window_size[1] + 1,
-                        self.window_size[0] * self.window_size[1] + 1, -1)
-            relative_position_bias = relative_position_bias.permute(
-                2, 0, 1).contiguous()  # nH, Wh*Ww, Wh*Ww
+        assert not (
+            hasattr(self, 'relative_position_bias') and rel_pos_bias
+        ), 'self.relative_position_bias and rel_pos_bias have the same role \
+            and should not both exist.'
+
+        if hasattr(self, 'relative_position_bias'):
+            relative_position_bias = self.relative_position_bias()
             attn = attn + relative_position_bias.unsqueeze(0)
+        elif rel_pos_bias is not None:
+            attn = attn + rel_pos_bias.unsqueeze(0)
 
         attn = attn.softmax(dim=-1)
         attn = self.attn_drop(attn)
@@ -227,6 +168,7 @@ class MultiheadAttentionWithRPE(MultiheadAttention):
         x = (attn @ v).transpose(1, 2).reshape(B, N, self.embed_dims)
         x = self.proj(x)
         x = self.proj_drop(x)
+
         return x
 
 
@@ -289,23 +231,14 @@ class TransformerEncoderLayer(_TransformerEncoderLayer):
         self.norm1_name, norm1 = build_norm_layer(
             norm_cfg, self.embed_dims, postfix=1)
         self.add_module(self.norm1_name, norm1)
-        if window_size is None:
-            # attention without relative position bias
-            self.attn = MultiheadAttention(
-                embed_dims=embed_dims,
-                num_heads=num_heads,
-                attn_drop=attn_drop_rate,
-                proj_drop=drop_rate,
-                qkv_bias=qkv_bias)
-        else:
-            # attention with relative position bias
-            self.attn = MultiheadAttentionWithRPE(
-                embed_dims=embed_dims,
-                num_heads=num_heads,
-                window_size=window_size,
-                attn_drop=attn_drop_rate,
-                proj_drop=drop_rate,
-                qkv_bias=qkv_bias)
+
+        self.attn = MultiheadAttention(
+            embed_dims=embed_dims,
+            num_heads=num_heads,
+            window_size=window_size,
+            attn_drop=attn_drop_rate,
+            proj_drop=drop_rate,
+            qkv_bias=qkv_bias)
 
         self.norm2_name, norm2 = build_norm_layer(
             norm_cfg, self.embed_dims, postfix=2)
