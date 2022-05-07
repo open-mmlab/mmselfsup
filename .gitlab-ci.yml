@@ -1,0 +1,37 @@
+variables:
+  PYTORCH_IMAGE: registry.sensetime.com/openmmlab/pytorch18-cu102-mmcv-transforms:latest
+
+stages:
+  - linting
+  - test
+  - deploy
+
+before_script:
+  - echo $PATH
+  - gcc --version
+  - nvcc --version
+  - python --version
+  - pip --version
+  - python -c "import torch; print(torch.__version__)"
+  - python -c "import mmcv; print(mmcv.__version__)"
+
+linting:
+  image: $PYTORCH_IMAGE
+  stage: linting
+  script:
+    - pre-commit run --all-files
+
+.test_template: &test_template_def
+  stage: test
+  script:
+    - echo "Start building..."
+    - pip install -e .[all] -i https://pypi.tuna.tsinghua.edu.cn/simple/
+    - python -c "import mmselfsup; print(mmselfsup.__version__)"
+    - echo "Start testing..."
+    - coverage run --branch --source mmselfsup -m pytest tests/
+    - coverage report -m
+    - interrogate -v --ignore-init-method --ignore-module --ignore-nested-functions --ignore-regex "__repr__" --fail-under 60
+
+test:pytorch1.8-cuda10:
+  image: $PYTORCH_IMAGE
+  <<: *test_template_def
