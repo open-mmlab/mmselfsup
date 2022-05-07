@@ -30,7 +30,7 @@ linting:
     - echo "Start testing..."
     - coverage run --branch --source mmselfsup -m pytest tests/
     - coverage report -m
-    - interrogate -v --ignore-init-method --ignore-module --ignore-nested-functions --ignore-regex "__repr__" --fail-under 60
+    - interrogate -v --ignore-init-method --ignore-module --ignore-nested-functions --ignore-regex "__repr__" --fail-under 50
 
 test:pytorch1.8-cuda10:
   image: $PYTORCH_IMAGE
