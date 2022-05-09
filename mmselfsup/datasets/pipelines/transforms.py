@@ -3,26 +3,27 @@ import inspect
 import math
 import random
 import warnings
-from typing import Optional, Sequence, Tuple, Union
+from typing import Dict, Optional, Sequence, Tuple, Union
 
 import numpy as np
 import torch
 import torchvision.transforms.functional as F
+from mmcv.transforms.base import BaseTransform
 from mmcv.utils import build_from_cfg
 from PIL import Image, ImageFilter
 from timm.data import create_transform
 from torchvision import transforms as _transforms
 
-from ..builder import PIPELINES
+from mmselfsup.registry import TRANSFORMS
 
 # register all existing transforms in torchvision
 _EXCLUDED_TRANSFORMS = ['GaussianBlur']
 for m in inspect.getmembers(_transforms, inspect.isclass):
     if m[0] not in _EXCLUDED_TRANSFORMS:
-        PIPELINES.register_module(m[1])
+        TRANSFORMS.register_module(m[1])
 
 
-@PIPELINES.register_module(force=True)
+@TRANSFORMS.register_module(force=True)
 class ToTensor(object):
     """Convert image or a sequence of images to tensor.
 
@@ -43,9 +44,13 @@ class ToTensor(object):
         return imgs
 
 
-@PIPELINES.register_module()
-class SimMIMMaskGenerator(object):
+@TRANSFORMS.register_module()
+class SimMIMMaskGenerator(BaseTransform):
     """Generate random block mask for each Image.
+
+    Added Keys:
+
+    - mask
 
     This module is used in SimMIM to generate masks.
 
@@ -75,7 +80,7 @@ class SimMIMMaskGenerator(object):
         self.token_count = self.rand_size**2
         self.mask_count = int(np.ceil(self.token_count * self.mask_ratio))
 
-    def __call__(self, img: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+    def transform(self, results: Dict) -> Dict:
         mask_idx = np.random.permutation(self.token_count)[:self.mask_count]
         mask = np.zeros(self.token_count, dtype=int)
         mask[mask_idx] = 1
@@ -85,12 +90,26 @@ class SimMIMMaskGenerator(object):
 
         mask = torch.from_numpy(mask)  # H X W
 
-        return img, mask
+        results.update({'mask': mask})
+
+        return results
+
+    def __repr__(self) -> str:
+        repr_str = self.__class__.__name__
+        repr_str += f'(input_size={self.input_size}, '
+        repr_str += f'mask_patch_size={self.mask_patch_size}, '
+        repr_str += f'model_patch_size={self.model_patch_size}, '
+        repr_str += f'mask_ratio={self.mask_ratio})'
+        return repr_str
 
 
-@PIPELINES.register_module()
-class BEiTMaskGenerator(object):
+@TRANSFORMS.register_module()
+class BEiTMaskGenerator(BaseTransform):
     """Generate mask for image.
+
+    Added Keys:
+
+    - mask
 
     This module is borrowed from
     https://github.com/microsoft/unilm/tree/master/beit
@@ -120,21 +139,14 @@ class BEiTMaskGenerator(object):
         self.height, self.width = input_size
 
         self.num_patches = self.height * self.width
-        self.num_masking_patches = num_masking_patches
 
+        self.num_masking_patches = num_masking_patches
         self.min_num_patches = min_num_patches
         self.max_num_patches = num_masking_patches if max_num_patches is None \
             else max_num_patches
 
         max_aspect = max_aspect or 1 / min_aspect
         self.log_aspect_ratio = (math.log(min_aspect), math.log(max_aspect))
-
-    def __repr__(self) -> None:
-        repr_str = 'Generator(%d, %d -> [%d ~ %d], max = %d, %.3f ~ %.3f)' % (
-            self.height, self.width, self.min_num_patches,
-            self.max_num_patches, self.num_masking_patches,
-            self.log_aspect_ratio[0], self.log_aspect_ratio[1])
-        return repr_str
 
     def get_shape(self) -> Tuple[int, int]:
         return self.height, self.width
@@ -163,9 +175,7 @@ class BEiTMaskGenerator(object):
                     break
         return delta
 
-    def __call__(
-        self, img: Tuple[torch.Tensor, torch.Tensor]
-    ) -> Tuple[torch.Tensor, torch.Tensor, np.ndarray]:
+    def transform(self, results: Dict) -> Dict:
         mask = np.zeros(shape=self.get_shape(), dtype=np.int)
         mask_count = 0
         while mask_count != self.num_masking_patches:
@@ -174,14 +184,38 @@ class BEiTMaskGenerator(object):
 
             delta = self._mask(mask, max_mask_patches)
             mask_count += delta
+        results.update({'mask': mask})
 
-        return img[0], img[1], mask
+        return results
+
+    def __repr__(self) -> str:
+        repr_str = self.__class__.__name__
+        repr_str += f'(height={self.height}, '
+        repr_str += f'width={self.width}, '
+        repr_str += f'num_patches={self.num_patches}, '
+        repr_str += f'num_masking_patches={self.num_masking_patches}, '
+        repr_str += f'min_num_patches={self.min_num_patches}, '
+        repr_str += f'max_num_patches={self.max_num_patches}, '
+        repr_str += f'log_aspect_ratio={self.log_aspect_ratio})'
+        return repr_str
 
 
-@PIPELINES.register_module()
-class RandomResizedCropAndInterpolationWithTwoPic(object):
+@TRANSFORMS.register_module()
+class RandomResizedCropAndInterpolationWithTwoPic(BaseTransform):
     """Crop the given PIL Image to random size and aspect ratio with random
     interpolation.
+
+    Required Keys:
+
+    - img
+
+    Modified Keys:
+
+    - img
+
+    Added Keys:
+
+    - target_img
 
     This module is borrowed from
     https://github.com/microsoft/unilm/tree/master/beit.
@@ -289,24 +323,36 @@ class RandomResizedCropAndInterpolationWithTwoPic(object):
         j = (img.size[0] - w) // 2
         return i, j, h, w
 
-    def __call__(
-            self, img: np.ndarray
-    ) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
+    def transform(self, results: Dict) -> Dict:
+        img = results['img']
         i, j, h, w = self.get_params(img, self.scale, self.ratio)
         if isinstance(self.interpolation, (tuple, list)):
             interpolation = random.choice(self.interpolation)
         else:
             interpolation = self.interpolation
         if self.second_size is None:
-            return F.resized_crop(img, i, j, h, w, self.size, interpolation)
+            img = F.resized_crop(img, i, j, h, w, self.size, interpolation)
+            results.update({'img': img})
+
         else:
-            return F.resized_crop(img, i, j, h, w, self.size,
-                                  interpolation), F.resized_crop(
-                                      img, i, j, h, w, self.second_size,
-                                      self.second_interpolation)
+            img = F.resized_crop(img, i, j, h, w, self.size, interpolation)
+            img_target = F.resized_crop(img, i, j, h, w, self.second_size,
+                                        self.second_interpolation)
+            results.update({'img': img, 'target_img': img_target})
+        return results
+
+    def __repr__(self) -> str:
+        repr_str = self.__class__.__name__
+        repr_str += f'(size={self.size}, '
+        repr_str += f'second_size={self.second_size}, '
+        repr_str += f'interpolation={self.interpolation}, '
+        repr_str += f'second_interpolation={self.second_interpolation}, '
+        repr_str += f'scale={self.scale}, '
+        repr_str += f'ratio={self.ratio})'
+        return repr_str
 
 
-@PIPELINES.register_module()
+@TRANSFORMS.register_module()
 class RandomAug(object):
     """RandAugment data augmentation method based on
     `"RandAugment: Practical automated data augmentation
@@ -348,7 +394,7 @@ class RandomAug(object):
         return repr_str
 
 
-@PIPELINES.register_module()
+@TRANSFORMS.register_module()
 class RandomAppliedTrans(object):
     """Randomly applied transformations.
 
@@ -358,7 +404,7 @@ class RandomAppliedTrans(object):
     """
 
     def __init__(self, transforms, p=0.5):
-        t = [build_from_cfg(t, PIPELINES) for t in transforms]
+        t = [build_from_cfg(t, TRANSFORMS) for t in transforms]
         self.trans = _transforms.RandomApply(t, p=p)
         self.prob = p
 
@@ -372,7 +418,7 @@ class RandomAppliedTrans(object):
 
 
 # custom transforms
-@PIPELINES.register_module()
+@TRANSFORMS.register_module()
 class Lighting(object):
     """Lighting noise(AlexNet - style PCA - based noise).
 
@@ -417,7 +463,7 @@ class Lighting(object):
         return repr_str
 
 
-@PIPELINES.register_module()
+@TRANSFORMS.register_module()
 class GaussianBlur(object):
     """GaussianBlur augmentation refers to `SimCLR.
 
@@ -451,7 +497,7 @@ class GaussianBlur(object):
         return repr_str
 
 
-@PIPELINES.register_module()
+@TRANSFORMS.register_module()
 class Solarization(object):
     """Solarization augmentation refers to `BYOL.
 
