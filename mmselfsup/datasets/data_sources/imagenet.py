@@ -4,7 +4,6 @@ import os.path as osp
 
 import numpy as np
 
-from ..builder import DATASOURCES
 from .base import BaseDataSource
 
 
@@ -60,7 +59,6 @@ def get_samples(root, folder_to_idx, extensions):
     return samples
 
 
-@DATASOURCES.register_module()
 class ImageNet(BaseDataSource):
     """`ImageNet <http://www.image-net.org>`_ Dataset.
 

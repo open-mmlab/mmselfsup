@@ -6,12 +6,10 @@ import numpy as np
 import torch.distributed as dist
 from mmcv.runner import get_dist_info
 
-from ..builder import DATASOURCES
 from ..utils import check_integrity, download_and_extract_archive
 from .base import BaseDataSource
 
 
-@DATASOURCES.register_module()
 class CIFAR10(BaseDataSource):
     """`CIFAR10 <https://www.cs.toronto.edu/~kriz/cifar.html>`_ Dataset.
 
@@ -109,7 +107,6 @@ class CIFAR10(BaseDataSource):
         return True
 
 
-@DATASOURCES.register_module()
 class CIFAR100(CIFAR10):
     """`CIFAR100 <https://www.cs.toronto.edu/~kriz/cifar.html>`_ Dataset."""
 

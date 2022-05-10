@@ -1,47 +1,18 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-import inspect
 import math
 import random
 import warnings
-from typing import Dict, Optional, Sequence, Tuple, Union
+from typing import Dict, List, Optional, Sequence, Tuple, Union
 
 import numpy as np
 import torch
 import torchvision.transforms.functional as F
-from mmcv.transforms.base import BaseTransform
-from mmcv.utils import build_from_cfg
+from mmcv.image import adjust_lighting, solarize
+from mmcv.transforms import BaseTransform
 from PIL import Image, ImageFilter
 from timm.data import create_transform
-from torchvision import transforms as _transforms
 
 from mmselfsup.registry import TRANSFORMS
-
-# register all existing transforms in torchvision
-_EXCLUDED_TRANSFORMS = ['GaussianBlur']
-for m in inspect.getmembers(_transforms, inspect.isclass):
-    if m[0] not in _EXCLUDED_TRANSFORMS:
-        TRANSFORMS.register_module(m[1])
-
-
-@TRANSFORMS.register_module(force=True)
-class ToTensor(object):
-    """Convert image or a sequence of images to tensor.
-
-    This module can not only convert a single image to tensor, but also a
-    sequence of images.
-    """
-
-    def __init__(self) -> None:
-        self.transform = _transforms.ToTensor()
-
-    def __call__(self, imgs: Union[object, Sequence[object]]) -> torch.Tensor:
-        if isinstance(imgs, Sequence):
-            imgs = list(imgs)
-            for i, img in enumerate(imgs):
-                imgs[i] = self.transform(img)
-        else:
-            imgs = self.transform(imgs)
-        return imgs
 
 
 @TRANSFORMS.register_module()
@@ -394,102 +365,110 @@ class RandomAug(object):
         return repr_str
 
 
-@TRANSFORMS.register_module()
-class RandomAppliedTrans(object):
-    """Randomly applied transformations.
-
-    Args:
-        transforms (list[dict]): List of transformations in dictionaries.
-        p (float, optional): Probability. Defaults to 0.5.
-    """
-
-    def __init__(self, transforms, p=0.5):
-        t = [build_from_cfg(t, TRANSFORMS) for t in transforms]
-        self.trans = _transforms.RandomApply(t, p=p)
-        self.prob = p
-
-    def __call__(self, img):
-        return self.trans(img)
-
-    def __repr__(self):
-        repr_str = self.__class__.__name__
-        repr_str += f'prob = {self.prob}'
-        return repr_str
-
-
 # custom transforms
 @TRANSFORMS.register_module()
-class Lighting(object):
-    """Lighting noise(AlexNet - style PCA - based noise).
+class Lighting(BaseTransform):
+    """Adjust images lighting using AlexNet-style PCA jitter.
+
+    Required Keys:
+
+    - img
+
+    Modified Keys:
+
+    - img
 
     Args:
-        alphastd (float, optional): The parameter for Lighting.
-            Defaults to 0.1.
+        eigval (list): the eigenvalue of the convariance matrix of pixel
+            values, respectively.
+        eigvec (list[list]): the eigenvector of the convariance matrix of pixel
+            values, respectively.
+        alphastd (float): The standard deviation for distribution of alpha.
+            Defaults to 0.1
+        to_rgb (bool): Whether to convert img to rgb.
     """
 
-    _IMAGENET_PCA = {
-        'eigval':
-        torch.Tensor([0.2175, 0.0188, 0.0045]),
-        'eigvec':
-        torch.Tensor([
-            [-0.5675, 0.7192, 0.4009],
-            [-0.5808, -0.0045, -0.8140],
-            [-0.5836, -0.6948, 0.4203],
-        ])
-    }
-
-    def __init__(self, alphastd=0.1):
+    def __init__(self,
+                 eigval: Optional[List] = [0.2175, 0.0188, 0.0045],
+                 eigvec: Optional[List[List]] = [
+                     [-0.5675, 0.7192, 0.4009],
+                     [-0.5808, -0.0045, -0.8140],
+                     [-0.5836, -0.6948, 0.4203],
+                 ],
+                 alphastd: Optional[float] = 0.1,
+                 to_rgb: Optional[bool] = True) -> None:
+        assert isinstance(eigval, list), \
+            f'eigval must be of type list, got {type(eigval)} instead.'
+        assert isinstance(eigvec, list), \
+            f'eigvec must be of type list, got {type(eigvec)} instead.'
+        for vec in eigvec:
+            assert isinstance(vec, list) and len(vec) == len(eigvec[0]), \
+                'eigvec must contains lists with equal length.'
+        self.eigval = np.array(eigval)
+        self.eigvec = np.array(eigvec)
         self.alphastd = alphastd
-        self.eigval = self._IMAGENET_PCA['eigval']
-        self.eigvec = self._IMAGENET_PCA['eigvec']
+        self.to_rgb = to_rgb
 
-    def __call__(self, img):
-        assert isinstance(img, torch.Tensor), \
-            f'Expect torch.Tensor, got {type(img)}'
-        if self.alphastd == 0:
-            return img
+    def transform(self, results: Dict) -> Dict:
+        img = results['img']
+        results['img'] = adjust_lighting(
+            img,
+            self.eigval,
+            self.eigvec,
+            alphastd=self.alphastd,
+            to_rgb=self.to_rgb)
+        return results
 
-        alpha = img.new().resize_(3).normal_(0, self.alphastd)
-        rgb = self.eigvec.type_as(img).clone()\
-            .mul(alpha.view(1, 3).expand(3, 3))\
-            .mul(self.eigval.view(1, 3).expand(3, 3))\
-            .sum(1).squeeze()
-
-        return img.add(rgb.view(3, 1, 1).expand_as(img))
-
-    def __repr__(self):
+    def __repr__(self) -> str:
         repr_str = self.__class__.__name__
-        repr_str += f'alphastd = {self.alphastd}'
+        repr_str += f'(eigval={self.eigval.tolist()}, '
+        repr_str += f'eigvec={self.eigvec.tolist()}, '
+        repr_str += f'alphastd={self.alphastd}, '
+        repr_str += f'to_rgb={self.to_rgb})'
         return repr_str
 
 
 @TRANSFORMS.register_module()
-class GaussianBlur(object):
+class RandomGaussianBlur(BaseTransform):
     """GaussianBlur augmentation refers to `SimCLR.
 
     <https://arxiv.org/abs/2002.05709>`_.
 
+    Required Keys:
+
+    - img
+
+    Modified Keys:
+
+    - img
+
     Args:
         sigma_min (float): The minimum parameter of Gaussian kernel std.
         sigma_max (float): The maximum parameter of Gaussian kernel std.
-        p (float, optional): Probability. Defaults to 0.5.
+        prob (float, optional): Probability. Defaults to 0.5.
     """
 
-    def __init__(self, sigma_min, sigma_max, p=0.5):
-        assert 0 <= p <= 1.0, \
-            f'The prob should be in range [0,1], got {p} instead.'
+    def __init__(self,
+                 sigma_min: float,
+                 sigma_max: float,
+                 prob: Optional[float] = 0.5) -> None:
+        super().__init__()
+        assert 0 <= prob <= 1.0, \
+            f'The prob should be in range [0,1], got {prob} instead.'
         self.sigma_min = sigma_min
         self.sigma_max = sigma_max
-        self.prob = p
+        self.prob = prob
 
-    def __call__(self, img):
+    def transform(self, results: Dict) -> Dict:
         if np.random.rand() > self.prob:
-            return img
+            return results
+        img_pil = Image.fromarray(results['img'])
         sigma = np.random.uniform(self.sigma_min, self.sigma_max)
-        img = img.filter(ImageFilter.GaussianBlur(radius=sigma))
-        return img
+        img_pil_res = img_pil.filter(ImageFilter.GaussianBlur(radius=sigma))
+        results['img'] = np.array(img_pil_res)
+        return results
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         repr_str = self.__class__.__name__
         repr_str += f'sigma_min = {self.sigma_min}, '
         repr_str += f'sigma_max = {self.sigma_max}, '
@@ -498,32 +477,43 @@ class GaussianBlur(object):
 
 
 @TRANSFORMS.register_module()
-class Solarization(object):
+class RandomSolarize(BaseTransform):
     """Solarization augmentation refers to `BYOL.
 
     <https://arxiv.org/abs/2006.07733>`_.
 
+    Required Keys:
+
+    - img
+
+    Modified Keys:
+
+    - img
+
     Args:
         threshold (float, optional): The solarization threshold.
             Defaults to 128.
-        p (float, optional): Probability. Defaults to 0.5.
+        prob (float, optional): Probability. Defaults to 0.5.
     """
 
-    def __init__(self, threshold=128, p=0.5):
-        assert 0 <= p <= 1.0, \
-            f'The prob should be in range [0, 1], got {p} instead.'
+    def __init__(self,
+                 threshold: Optional[int] = 128,
+                 prob: Optional[float] = 0.5) -> None:
+        super().__init__()
+        assert 0 <= prob <= 1.0, \
+            f'The prob should be in range [0, 1], got {prob} instead.'
 
         self.threshold = threshold
-        self.prob = p
+        self.prob = prob
 
-    def __call__(self, img):
+    def transform(self, results: Dict) -> Dict:
         if np.random.rand() > self.prob:
-            return img
-        img = np.array(img)
-        img = np.where(img < self.threshold, img, 255 - img)
-        return Image.fromarray(img.astype(np.uint8))
+            return results
+        img = results['img']
+        results['img'] = solarize(img, thr=self.threshold)
+        return results
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         repr_str = self.__class__.__name__
         repr_str += f'threshold = {self.threshold}, '
         repr_str += f'prob = {self.prob}'

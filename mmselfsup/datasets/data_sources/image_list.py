@@ -1,11 +1,9 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import numpy as np
 
-from ..builder import DATASOURCES
 from .base import BaseDataSource
 
 
-@DATASOURCES.register_module
 class ImageList(BaseDataSource):
     """The implementation for loading any image list file.
 
