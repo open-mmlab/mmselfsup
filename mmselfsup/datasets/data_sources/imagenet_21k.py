@@ -5,12 +5,10 @@ import warnings
 import numpy as np
 from mmcv.utils import scandir
 
-from ..builder import DATASOURCES
 from .base import BaseDataSource
 from .imagenet import find_folders
 
 
-@DATASOURCES.register_module()
 class ImageNet21k(BaseDataSource):
     """ImageNet21k Dataset. Since the dataset ImageNet21k is extremely big,
     cantains 21k+ classes and 1.4B files. This class has improved the following

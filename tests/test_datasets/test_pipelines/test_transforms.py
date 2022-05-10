@@ -1,10 +1,12 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import numpy as np
+import pytest
 import torch
 from PIL import Image
 
 from mmselfsup.datasets.pipelines import (
-    BEiTMaskGenerator, RandomResizedCropAndInterpolationWithTwoPic,
+    BEiTMaskGenerator, Lighting, RandomGaussianBlur,
+    RandomResizedCropAndInterpolationWithTwoPic, RandomSolarize,
     SimMIMMaskGenerator)
 
 
@@ -64,3 +66,55 @@ def test_random_resize_crop_with_two_pic():
 
     # test repr
     assert isinstance(str(module), str)
+
+
+def test_lighting():
+    with pytest.raises(AssertionError):
+        transform = Lighting(eigval=1)
+
+    with pytest.raises(AssertionError):
+        transform = Lighting(eigvec=1)
+
+    with pytest.raises(AssertionError):
+        transform = Lighting(eigvec=[1])
+
+    original_img = np.ones((8, 8, 3), dtype=np.uint8)
+    results = dict(img=original_img)
+
+    transform = Lighting()
+    assert isinstance(str(transform), str)
+
+    results = transform(results)
+    assert results['img'].shape == original_img.shape
+
+    transform = Lighting(alphastd=0., to_rgb=False)
+    results = transform(dict(img=original_img))
+    assert np.equal(results['img'], original_img).all()
+
+
+def test_random_gaussiablur():
+    with pytest.raises(AssertionError):
+        transform = RandomGaussianBlur(sigma_min=0.1, sigma_max=1.0, prob=-1)
+
+    original_img = np.ones((8, 8, 3), dtype=np.uint8)
+    results = dict(img=original_img)
+
+    transform = RandomGaussianBlur(sigma_min=0.1, sigma_max=1.0)
+    assert isinstance(str(transform), str)
+
+    results = transform(results)
+    assert results['img'].shape == original_img.shape
+
+
+def test_random_solarize():
+    with pytest.raises(AssertionError):
+        transform = RandomSolarize(prob=-1)
+
+    original_img = np.ones((8, 8, 3), dtype=np.uint8)
+    results = dict(img=original_img)
+
+    transform = RandomSolarize()
+    assert isinstance(str(transform), str)
+
+    results = transform(results)
+    assert results['img'].shape == original_img.shape
