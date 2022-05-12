@@ -5,9 +5,9 @@ import torch
 from PIL import Image
 
 from mmselfsup.datasets.pipelines import (
-    BEiTMaskGenerator, Lighting, RandomGaussianBlur,
-    RandomResizedCropAndInterpolationWithTwoPic, RandomSolarize,
-    SimMIMMaskGenerator)
+    BEiTMaskGenerator, Lighting, RandomGaussianBlur, RandomPatchWithLabels,
+    RandomResizedCropAndInterpolationWithTwoPic, RandomRotationWithLabels,
+    RandomSolarize, SimMIMMaskGenerator)
 
 
 def test_simmim_mask_gen():
@@ -118,3 +118,27 @@ def test_random_solarize():
 
     results = transform(results)
     assert results['img'].shape == original_img.shape
+
+
+def test_random_rotation():
+    transform = dict()
+    module = RandomRotationWithLabels(**transform)
+    image = torch.rand((224, 224, 3)).numpy().astype(np.uint8)
+    results = {'img': image}
+    results = module(results)
+
+    # test transform
+    assert list(results['img'].shape) == [4, 3, 224, 224]
+    assert list(results['rot_label'].shape) == [4]
+
+
+def test_random_patch():
+    transform = dict()
+    module = RandomPatchWithLabels(**transform)
+    image = torch.rand((224, 224, 3)).numpy().astype(np.uint8)
+    results = {'img': image}
+    results = module(results)
+
+    # test transform
+    assert list(results['img'].shape) == [8, 6, 53, 53]
+    assert list(results['patch_label'].shape) == [8]
