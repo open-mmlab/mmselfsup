@@ -470,9 +470,9 @@ class RandomGaussianBlur(BaseTransform):
 
     def __repr__(self) -> str:
         repr_str = self.__class__.__name__
-        repr_str += f'sigma_min = {self.sigma_min}, '
+        repr_str += f'(sigma_min = {self.sigma_min}, '
         repr_str += f'sigma_max = {self.sigma_max}, '
-        repr_str += f'prob = {self.prob}'
+        repr_str += f'prob = {self.prob})'
         return repr_str
 
 
@@ -515,6 +515,6 @@ class RandomSolarize(BaseTransform):
 
     def __repr__(self) -> str:
         repr_str = self.__class__.__name__
-        repr_str += f'threshold = {self.threshold}, '
-        repr_str += f'prob = {self.prob}'
+        repr_str += f'(threshold = {self.threshold}, '
+        repr_str += f'prob = {self.prob})'
         return repr_str

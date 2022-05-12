@@ -30,9 +30,8 @@ class MultiView(BaseTransform):
     Examples:
         >>> # Example 1: MultiViews 1 pipeline with 2 views
         >>> pipeline = [
-        >>>     dict(type='MultiViews',
+        >>>     dict(type='MultiView',
         >>>         num_views=2,
-        >>>         mapping={'img': 'img'},
         >>>         transforms=[
         >>>             [
         >>>                dict(type='Resize', scale=224))],
@@ -40,9 +39,8 @@ class MultiView(BaseTransform):
         >>> ]
         >>> # Example 2: MultiViews 2 pipeline with 6 views
         >>> pipeline = [
-        >>>     dict(type='MultiViews',
+        >>>     dict(type='MultiView',
         >>>         num_views=[2, 6],
-        >>>         mapping={'img': 'img'},
         >>>         transforms=[
         >>>             [
         >>>                dict(type='Resize', scale=224)],
@@ -60,6 +58,7 @@ class MultiView(BaseTransform):
             num_views = [num_views]
         assert isinstance(num_views, List)
         assert len(num_views) == len(transforms)
+        self.num_views = num_views
 
         self.pipelines = []
         for trans in transforms:
@@ -82,7 +81,9 @@ class MultiView(BaseTransform):
         return results
 
     def __repr__(self) -> str:
-        repr_str = self.__class__.__name__
-        for t in self.transforms:
-            repr_str += str(t)
+        repr_str = self.__class__.__name__ + '('
+        for i, p in enumerate(self.pipelines):
+            repr_str += f'\nPipeline {i + 1} with {self.num_views[i]} views:\n'
+            repr_str += str(p)
+        repr_str += ')'
         return repr_str
