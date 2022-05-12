@@ -5,6 +5,7 @@ import warnings
 
 import mmcv
 import numpy as np
+import torch
 
 
 def tensor2imgs(tensor, mean=(0, 0, 0), std=(1, 1, 1), to_rgb=True):
@@ -53,3 +54,23 @@ def find_latest_checkpoint(path, suffix='pth'):
             latest = count
             latest_path = checkpoint
     return latest_path
+
+
+def get_module_device(module):
+    """Get the device of a module.
+
+    Args:
+        module (nn.Module): A module contains the parameters.
+
+    Returns:
+        torch.device: The device of the module.
+    """
+    try:
+        next(module.parameters())
+    except StopIteration:
+        raise ValueError('The input module should contain parameters.')
+
+    if next(module.parameters()).is_cuda:
+        return next(module.parameters()).get_device()
+
+    return torch.device('cpu')
