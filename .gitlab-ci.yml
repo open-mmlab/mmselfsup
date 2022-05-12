@@ -1,5 +1,5 @@
 variables:
-  PYTORCH_IMAGE: registry.sensetime.com/openmmlab/pytorch18-cu102-mmcv-transforms:latest
+  PYTORCH_IMAGE: registry.sensetime.com/openmmlab/pytorch18-cu102-mmcv-transforms:update-repo
 
 stages:
   - linting
@@ -7,13 +7,16 @@ stages:
   - deploy
 
 before_script:
+  - . /root/scripts/set_envs.sh
   - echo $PATH
   - gcc --version
   - nvcc --version
+  - ruby --version
   - python --version
   - pip --version
   - python -c "import torch; print(torch.__version__)"
   - python -c "import mmcv; print(mmcv.__version__)"
+
 
 linting:
   image: $PYTORCH_IMAGE
@@ -24,8 +27,14 @@ linting:
 .test_template: &test_template_def
   stage: test
   script:
+    - echo "Configurating git..."
+    - git config --local core.sshCommand "/usr/bin/ssh -i /root/.ssh/id_gitlab"
+    - echo "Installing mmcls..."
+    - git clone --branch refactor_dev -c core.sshCommand="/usr/bin/ssh -i /root/.ssh/id_gitlab" git@gitlab.sh.sensetime.com:openmmlab-enterprise/openmmlab-ce/mmclassification.git /mmcls
+    - pip install -e /mmcls
+    - python -c "import mmcls; print(mmcls.__version__)"
     - echo "Start building..."
-    - pip install -e .[all] -i https://pypi.tuna.tsinghua.edu.cn/simple/
+    - pip install -e .[all]
     - python -c "import mmselfsup; print(mmselfsup.__version__)"
     - echo "Start testing..."
     - coverage run --branch --source mmselfsup -m pytest tests/
