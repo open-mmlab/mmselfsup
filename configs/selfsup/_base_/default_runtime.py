@@ -1,25 +1,28 @@
-# checkpoint saving
-checkpoint_config = dict(interval=10)
+default_scope = 'mmselfsup'
 
-# yapf:disable
-log_config = dict(
-    interval=50,
-    hooks=[
-        dict(type='TextLoggerHook'),
-        # dict(type='TensorboardLoggerHook'),
-    ])
-# yapf:enable
+default_hooks = dict(
+    optimizer=dict(type='OptimizerHook', grad_clip=None),
+    timer=dict(type='IterTimerHook'),
+    logger=dict(type='LoggerHook', interval=50),
+    param_scheduler=dict(type='ParamSchedulerHook'),
+    checkpoint=dict(type='CheckpointHook', interval=10),
+    sampler_seed=dict(type='DistSamplerSeedHook'),
+)
 
-# runtime settings
-dist_params = dict(backend='nccl')
-cudnn_benchmark = True
+env_cfg = dict(
+    cudnn_benchmark=False,
+    mp_cfg=dict(mp_start_method='fork', opencv_num_threads=0),
+    dist_cfg=dict(backend='nccl'),
+)
+
+# vis_backends = [dict(type='LocalVisBackend')]
+# visualizer = dict(
+#     type='SelfSupLocalVisualizer',
+#     vis_backends=vis_backends,
+#     name='visualizer')
+
+# custom_hooks = [dict(type='SelfSupVisualizationHook', interval=10)]
+
 log_level = 'INFO'
 load_from = None
-resume_from = None
-workflow = [('train', 1)]
-persistent_workers = True
-
-# disable opencv multithreading to avoid system being overloaded
-opencv_num_threads = 0
-# set multi-process start method as `fork` to speed up the training
-mp_start_method = 'fork'
+resume = False
