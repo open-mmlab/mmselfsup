@@ -41,7 +41,7 @@ class LatentPredictHead(BaseModule):
         return dict(loss=loss)
 
 
-@HEADS.register_module
+@HEADS.register_module()
 class LatentClsHead(BaseModule):
     """Head for latent feature classification.
 
