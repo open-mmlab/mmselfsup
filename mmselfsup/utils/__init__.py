@@ -9,7 +9,7 @@ from .extractor import Extractor
 from .gather import concat_all_gather, gather_tensors, gather_tensors_batch
 from .logger import get_root_logger
 from .misc import find_latest_checkpoint, get_module_device
-from .setup_env import setup_multi_processes
+from .setup_env import register_all_modules
 from .test_helper import multi_gpu_test, single_gpu_test
 
 __all__ = [
@@ -18,5 +18,5 @@ __all__ = [
     'sync_random_seed', 'distributed_sinkhorn', 'Extractor',
     'concat_all_gather', 'gather_tensors', 'gather_tensors_batch',
     'get_root_logger', 'find_latest_checkpoint', 'multi_gpu_test',
-    'single_gpu_test', 'setup_multi_processes', 'get_module_device'
+    'single_gpu_test', 'register_all_modules', 'get_module_device'
 ]
