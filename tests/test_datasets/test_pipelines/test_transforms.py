@@ -2,7 +2,6 @@
 import numpy as np
 import pytest
 import torch
-from PIL import Image
 
 from mmselfsup.datasets.pipelines import (
     BEiTMaskGenerator, Lighting, RandomGaussianBlur, RandomPatchWithLabels,
@@ -55,14 +54,12 @@ def test_random_resize_crop_with_two_pic():
         scale=(0.08, 1.0))
     module = RandomResizedCropAndInterpolationWithTwoPic(**transform)
     fake_input = torch.rand((224, 224, 3)).numpy().astype(np.uint8)
-    fake_input = Image.fromarray(fake_input)
 
     results = {'img': fake_input}
     results = module(results)
-
     # test transform
-    assert list(results['img'].size) == [224, 224]
-    assert list(results['target_img'].size) == [112, 112]
+    assert list(results['img'][0].shape) == [224, 224, 3]
+    assert list(results['img'][1].shape) == [112, 112, 3]
 
     # test repr
     assert isinstance(str(module), str)
