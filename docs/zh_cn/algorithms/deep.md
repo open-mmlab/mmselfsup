@@ -1,19 +1,56 @@
 # DeepCluster
 
-## Deep Clustering for Unsupervised Learning of Visual Features
+> [Deep Clustering for Unsupervised Learning of Visual Features](https://arxiv.org/abs/1807.05520)
 
-<!-- [ABSTRACT] -->
+<!-- [ALGORITHM] -->
+
+## Abstract
 
 Clustering is a class of unsupervised learning methods that has been extensively applied and studied in computer vision. Little work has been done to adapt it to the end-to-end training of visual features on large scale datasets. In this work, we present DeepCluster, a clustering method that jointly learns the parameters of a neural network and the cluster assignments of the resulting features. DeepCluster iteratively groups the features with a standard clustering algorithm, k-means, and uses the subsequent assignments as supervision to update the weights of the network.
 
-<!-- [IMAGE] -->
 <div align="center">
-<img  />
+<img src="https://user-images.githubusercontent.com/36138628/149720586-5bfd213e-0638-47fc-b48a-a16689190e17.png" width="700" />
 </div>
 
-## Citation
+## Results and Models
 
-<!-- [ALGORITHM] -->
+**Back to [model_zoo.md](https://github.com/open-mmlab/mmselfsup/blob/master/docs/en/model_zoo.md) to download models.**
+
+In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models are pre-trained on ImageNet-1k dataset.
+
+### Classification
+
+The classification benchmarks includes 4 downstream task datasets, **VOC**, **ImageNet**,  **iNaturalist2018** and **Places205**. If not specified, the results are Top-1 (%).
+
+#### VOC SVM / Low-shot SVM
+
+The **Best Layer** indicates that the best results are obtained from which layers feature map. For example, if the **Best Layer** is **feature3**, its best result is obtained from the second stage of ResNet (1 for stem layer, 2-5 for 4 stage layers).
+
+Besides, k=1 to 96 indicates the hyper-parameter of Low-shot SVM.
+
+| Self-Supervised Config                                                                                                                                                   | Best Layer | SVM   | k=1   | k=2   | k=4   | k=8   | k=16  | k=32  | k=64  | k=96  |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
+| [sobel_resnet50_8xb64-steplr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/deepcluster/deepcluster-sobel_resnet50_8xb64-steplr-200e_in1k.py) | feature5   | 74.26 | 29.37 | 37.99 | 45.85 | 55.57 | 62.48 | 66.15 | 70.00 | 71.37 |
+
+#### ImageNet Linear Evaluation
+
+The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map is pooled to the specific dimensions and then follows a Linear layer to do the classification. Please refer to [resnet50_mhead_linear-8xb32-steplr-90e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/imagenet/resnet50_mhead_linear-8xb32-steplr-90e_in1k.py) for details of config.
+
+The **AvgPool** result is obtained from Linear Evaluation with GlobalAveragePooling. Please refer to [resnet50_linear-8xb32-steplr-100e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-steplr-100e_in1k.py) for details of config.
+
+| Self-Supervised Config                                                                                                                                                   | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 | AvgPool |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | -------- | -------- | -------- | -------- | ------- |
+| [sobel_resnet50_8xb64-steplr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/deepcluster/deepcluster-sobel_resnet50_8xb64-steplr-200e_in1k.py) | 12.78    | 30.81    | 43.88    | 57.71    | 51.68    | 46.92   |
+
+#### Places205 Linear Evaluation
+
+The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map is pooled to the specific dimensions and then follows a Linear layer to do the classification. Please refer to [resnet50_mhead_8xb32-steplr-28e_places205.py](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/places205/resnet50_mhead_8xb32-steplr-28e_places205.py) for details of config.
+
+| Self-Supervised Config                                                                                                                                                   | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | -------- | -------- | -------- | -------- |
+| [sobel_resnet50_8xb64-steplr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/deepcluster/deepcluster-sobel_resnet50_8xb64-steplr-200e_in1k.py) | 18.80    | 33.93    | 41.44    | 47.22    | 42.61    |
+
+## Citation
 
 ```bibtex
 @inproceedings{caron2018deep,
@@ -23,99 +60,3 @@ Clustering is a class of unsupervised learning methods that has been extensively
   year={2018}
 }
 ```
-
-## Models and Benchmarks
-
-[Back to model_zoo.md](../../../docs/model_zoo.md)
-
-In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models were trained on ImageNet1k dataset.
-
-
-### VOC SVM / Low-shot SVM
-
-The **Best Layer** indicates that the best results are obtained from which layers feature map. For example, if the **Best Layer** is **feature3**, its best result is obtained from the second stage of ResNet (1 for stem layer, 2-5 for 4 stage layers).
-
-Besides, k=1 to 96 indicates the hyper-parameter of Low-shot SVM.
-
-| Model     | Config                                                                       | Best Layer | SVM | k=1 | k=2 | k=4 | k=8 | k=16 | k=32 | k=64 | k=96 |
-| --------- | ---------------------------------------------------------------------------- | ---------- | --- | --- | --- | --- | --- | ---- | ---- | ---- | ---- |
-| [model]() | [resnet50_8xb64-steplr-200e](deepcluster_resnet50_8xb64-steplr-200e_in1k.py) |            |     |     |     |     |     |      |      |      |      |
-
-### ImageNet Linear Evaluation
-
-The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map is pooled to the specific dimensions and then follows a Linear layer to do the classification. Please refer to [resnet50_mhead_8xb32-steplr-90e.py](../../benchmarks/classification/imagenet/resnet50_mhead_8xb32-steplr-90e_in1k.py) for details of config.
-
-The **AvgPool** result is obtained from Linear Evaluation with GlobalAveragePooling. Please refer to [file name]() for details of config.
-
-| Model     | Config                                                                       | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 | AvgPool |
-| --------- | ---------------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- | ------- |
-| [model]() | [resnet50_8xb64-steplr-200e](deepcluster_resnet50_8xb64-steplr-200e_in1k.py) |          |          |          |          |          |         |
-
-### iNaturalist2018 Linear Evaluation
-
-Please refer to [resnet50_mhead_8xb32-steplr-84e_inat18.py](../../benchmarks/classification/inaturalist2018/resnet50_mhead_8xb32-steplr-84e_inat18.py) and [file name]() for details of config.
-
-| Model     | Config                                                                       | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 | AvgPool |
-| --------- | ---------------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- | ------- |
-| [model]() | [resnet50_8xb64-steplr-200e](deepcluster_resnet50_8xb64-steplr-200e_in1k.py) |          |          |          |          |          |         |
-
-### Places205 Linear Evaluation
-
-Please refer to [resnet50_mhead_8xb32-steplr-28e_places205.py](../../benchmarks/classification/inaturalist2018/resnet50_mhead_8xb32-steplr-28e_places205.py) and [file name]() for details of config.
-
-| Model     | Config                                                                       | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 | AvgPool |
-| --------- | ---------------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- | ------- |
-| [model]() | [resnet50_8xb64-steplr-200e](deepcluster_resnet50_8xb64-steplr-200e_in1k.py) |          |          |          |          |          |         |
-
-#### Semi-Supervised Classification
-
-- In this benchmark, the necks or heads are removed and only the backbone CNN is evaluated by appending a linear classification head. All parameters are fine-tuned.
-- When training with 1% ImageNet, we find hyper-parameters especially the learning rate greatly influence the performance. Hence, we prepare a list of settings with the base learning rate from `{0.001, 0.01, 0.1}` and the learning rate multiplier for the head from `{1, 10, 100}`. We choose the best performing setting for each method. The setting of parameters are indicated in the file name. The learning rate is indicated like `1e-1`, `1e-2`, `1e-3` and the learning rate multiplier is indicated like `head1`, `head10`, `head100`.
-- Please use --deterministic in this benchmark.
-
-Please refer to the directories `configs/benchmarks/classification/imagenet/imagenet_1percent/` of 1% data and `configs/benchmarks/classification/imagenet/imagenet_10percent/` 10% data for details.
-
-| Model     | Pretrain Config                                                              | Fine-tuned Config | Top-1 (%) | Top-5 (%) |
-| --------- | ---------------------------------------------------------------------------- | ----------------- | --------- | --------- |
-| [model]() | [resnet50_8xb64-steplr-200e](deepcluster_resnet50_8xb64-steplr-200e_in1k.py) |                   |           |           |
-
-### Detection
-
-The detection benchmarks includes 2 downstream task datasets, **Pascal VOC 2007 + 2012** and **COCO2017**. This benchmark follows the evluation protocols set up by MoCo.
-
-#### Pascal VOC 2007 + 2012
-
-Please refer to [faster_rcnn_r50_c4_mstrain_24k.py](../../benchmarks/mmdetection/voc0712/faster_rcnn_r50_c4_mstrain_24k.py) for details of config.
-
-| Model     | Config                                                                       | mAP | AP50 |
-| --------- | ---------------------------------------------------------------------------- | --- | ---- |
-| [model]() | [resnet50_8xb64-steplr-200e](deepcluster_resnet50_8xb64-steplr-200e_in1k.py) |     |      |
-
-#### COCO2017
-
-Please refer to [mask_rcnn_r50_fpn_mstrain_1x.py](../../benchmarks/mmdetection/coco/mask_rcnn_r50_fpn_mstrain_1x.py) for details of config.
-
-| Model     | Config                                                                       | mAP(Box) | AP50(Box) | AP75(Box) | mAP(Mask) | AP50(Mask) | AP75(Mask) |
-| --------- | ---------------------------------------------------------------------------- | -------- | --------- | --------- | --------- | ---------- | ---------- |
-| [model]() | [resnet50_8xb64-steplr-200e](deepcluster_resnet50_8xb64-steplr-200e_in1k.py) |          |           |           |           |            |            |
-
-### Segmentation
-
-The segmentation benchmarks includes 2 downstream task datasets, **Cityscapes** and **Pascal VOC 2012 + Aug**. It follows the evluation protocols set up by MMSegmentation.
-
-#### Pascal VOC 2012 + Aug
-
-Please refer to [file]() for details of config.
-
-| Model     | Config                                                                       | mIOU |
-| --------- | ---------------------------------------------------------------------------- | ---- |
-| [model]() | [resnet50_8xb64-steplr-200e](deepcluster_resnet50_8xb64-steplr-200e_in1k.py) |      |
-
-
-#### Cityscapes
-
-Please refer to [file]() for details of config.
-
-| Model     | Config                                                                       | mIOU |
-| --------- | ---------------------------------------------------------------------------- | ---- |
-| [model]() | [resnet50_8xb64-steplr-200e](deepcluster_resnet50_8xb64-steplr-200e_in1k.py) |      |
