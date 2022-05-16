@@ -1,6 +1,9 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-import torch.nn as nn
+from typing import Dict, List, Optional, Tuple
 
+import torch
+
+from mmselfsup.core import SelfSupDataSample
 from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
 from .base import BaseModel
 
@@ -15,57 +18,64 @@ class SimSiam(BaseModel):
     `core/hooks/simsiam_hook.py`.
 
     Args:
-        backbone (dict): Config dict for module of backbone.
-        neck (dict): Config dict for module of deep features to compact
+        backbone (Dict): Config dict for module of backbone. Defaults to None.
+        neck (Dict): Config dict for module of deep features to compact
             feature vectors. Defaults to None.
-        head (dict): Config dict for module of loss functions.
+        head (Dict): Config dict for module of loss functions.
+            Defaults to None.
+        preprocess_cfg (Dict, optional): Config to preprocess images.
+            Defaults to None.
+        init_cfg (Dict, optional): Config dict for weight initialization.
             Defaults to None.
     """
 
     def __init__(self,
-                 backbone,
-                 neck=None,
-                 head=None,
-                 init_cfg=None,
-                 **kwargs):
-        super(SimSiam, self).__init__(init_cfg)
+                 backbone: Optional[Dict] = None,
+                 neck: Optional[Dict] = None,
+                 head: Optional[Dict] = None,
+                 preprocess_cfg: Optional[Dict] = None,
+                 init_cfg: Optional[Dict] = None) -> None:
+        super().__init__(preprocess_cfg=preprocess_cfg, init_cfg=init_cfg)
+        assert backbone is not None
+        self.backbone = build_backbone(backbone)
         assert neck is not None
-        self.encoder = nn.Sequential(
-            build_backbone(backbone), build_neck(neck))
-        self.backbone = self.encoder[0]
-        self.neck = self.encoder[1]
+        self.neck = build_neck(neck)
         assert head is not None
         self.head = build_head(head)
 
-    def extract_feat(self, img):
+    def extract_feat(self, inputs: List[torch.Tensor],
+                     data_samples: List[SelfSupDataSample],
+                     **kwarg) -> Tuple[torch.Tensor]:
         """Function to extract features from backbone.
 
         Args:
-            img (Tensor): Input images of shape (N, C, H, W).
-                Typically these should be mean centered and std scaled.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            tuple[Tensor]: backbone outputs.
+            Tuple[torch.Tensor]: backbone outputs.
         """
-        x = self.backbone(img)
-        return x
+        return self.backbone(inputs[0])
 
-    def forward_train(self, img):
-        """Forward computation during training.
+    def forward_train(self, inputs: List[torch.Tensor],
+                      data_samples: List[SelfSupDataSample],
+                      **kwargs) -> Dict[str, torch.Tensor]:
+        """The forward function in training.
 
         Args:
-            img (list[Tensor]): A list of input images with shape
-                (N, C, H, W). Typically these should be mean centered
-                and std scaled.
-        Returns:
-            loss[str, Tensor]: A dictionary of loss components
-        """
-        assert isinstance(img, list)
-        img_v1 = img[0]
-        img_v2 = img[1]
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
-        z1 = self.encoder(img_v1)[0]  # NxC
-        z2 = self.encoder(img_v2)[0]  # NxC
+        Returns:
+            Dict[str, Tensor]: A dictionary of loss components.
+        """
+        img_v1 = inputs[0]
+        img_v2 = inputs[1]
+
+        z1 = self.neck(self.backbone(img_v1))[0]  # NxC
+        z2 = self.neck(self.backbone(img_v2))[0]  # NxC
 
         losses = 0.5 * (self.head(z1, z2)['loss'] + self.head(z2, z1)['loss'])
         return dict(loss=losses)
