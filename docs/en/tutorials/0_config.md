@@ -36,43 +36,53 @@ We follow the below convention to name config files. Contributors are advised to
 - `data info`：Data information, dataset name, input size and so on, such as imagenet, cifar, etc.;
 
 ### Algorithm information
+
 ```
 {algorithm}-{misc}
 ```
 
 `Algorithm` means the abbreviation from the paper and its version. E.g:
+
 - `relative-loc` : The different word is concatenated by dashes `'-'`
 - `simclr`
 - `mocov2`
 
 `misc` offers some other algorithm related information. E.g.
+
 - `npid-ensure-neg`
 - `deepcluster-sobel`
 
 ### Module information
+
 ```
 {backbone setting}-{neck setting}-{head_setting}
 ```
 
 The module information mainly includes the backbone information. E.g:
+
 - `resnet50`
 - `vit`（will be used in mocov3）
 
 Or there are some special settings which is needed to be mentioned in the config name. E.g:
+
 - `resnet50-nofrz`: In some downstream tasks，the backbone will not froze stages while training
 
 ### Training information
 
 Training related settings，including batch size, lr schedule, data augment, etc.
+
 - Batch size, the format is `{gpu x batch_per_gpu}`，like `8xb32`;
 - Training recipe，the methods will be arranged in the order `{pipeline aug}-{train aug}-{loss trick}-{scheduler}-{epochs}`.
 
 E.g:
+
 - `8xb32-mcrop-2-6-coslr-200e` : `mcrop` is proposed in SwAV named multi-crop，part of pipeline. 2 and 6 means that 2 pipelines will output 2 and 6 crops correspondingly，the crop size is recorded in data information;
 - `8xb32-accum16-coslr-200e` : `accum16` means the gradient will accumulate for 16 iterations，then the weights will be updated.
 
 ### Data information
+
 Data information contains the dataset, input size, etc. E.g:
+
 - `in1k` : `ImageNet1k` dataset, default to use the input image size of 224x224
 - `in1k-384px` : Indicates that the input image size is 384x384
 - `cifar10`
@@ -80,17 +90,19 @@ Data information contains the dataset, input size, etc. E.g:
 - `places205`
 
 ### Config File Name Example
+
 ```
 swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py
 ```
-  - `swav`: Algorithm information
-  - `resnet50`: Module information
-  - `8xb32-mcrop-2-6-coslr-200e`: Training information
-    - `8xb32`: Use 8 GPUs in total，and the batch size is 32 per GPU
-    - `mcrop-2-6`:Use multi-crop data augment method
-    - `coslr`: Use cosine learning rate scheduler
-    - `200e`: Train the model for 200 epoch
-  - `in1k-224-96`: Data information，train on ImageNet1k dataset，the input sizes are 224x224 and 96x96
+
+- `swav`: Algorithm information
+- `resnet50`: Module information
+- `8xb32-mcrop-2-6-coslr-200e`: Training information
+  - `8xb32`: Use 8 GPUs in total，and the batch size is 32 per GPU
+  - `mcrop-2-6`:Use multi-crop data augment method
+  - `coslr`: Use cosine learning rate scheduler
+  - `200e`: Train the model for 200 epoch
+- `in1k-224-96`: Data information，train on ImageNet1k dataset，the input sizes are 224x224 and 96x96
 
 ### Checkpoint Naming Convention
 
@@ -114,6 +126,7 @@ You can easily build your own training config file by inherit some base config f
 For easy understanding, we use MoCo v2 as a example and comment the meaning of each line. For more detaile, please refer to the API documentation.
 
 The config file `configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py` is displayed below.
+
 ```python
 _base_ = [
     '../_base_/models/mocov2.py',                  # model
@@ -134,6 +147,7 @@ The 'type' in the configuration file is not a constructed parameter, but a class
 ```
 
 `../_base_/models/mocov2.py` is the base model config for MoCo v2.
+
 ```python
 model = dict(
     type='MoCo',  # Algorithm name
@@ -158,6 +172,7 @@ model = dict(
 ```
 
 `../_base_/datasets/imagenet_mocov2.py` is the base dataset config for MoCo v2.
+
 ```python
 # dataset settings
 data_source = 'ImageNet'  # data source name
@@ -210,6 +225,7 @@ data = dict(
 ```
 
 `../_base_/schedules/sgd_coslr-200e_in1k.py` is the base schedule config for MoCo v2.
+
 ```python
 # optimizer
 optimizer = dict(
@@ -232,7 +248,9 @@ runner = dict(
     max_epochs=200) # Runner that runs the workflow in total max_epochs. For IterBasedRunner use `max_iters`
 
 ```
+
 `../_base_/default_runtime.py` is the default runtime settings.
+
 ```python
 # checkpoint saving
 checkpoint_config = dict(interval=10)  # The save interval is 10
@@ -300,7 +318,6 @@ data = dict(
     ))
 ```
 
-
 ### Ignore some fields in the base configs
 
 Sometimes, you need to set `_delete_=True` to ignore some domain content in the basic configuration file. You can refer to [mmcv](https://mmcv.readthedocs.io/en/latest/understand_mmcv/config.html#inherit-from-base-config-with-ignored-fields) for more instructions.
@@ -319,6 +336,7 @@ model = dict(
         out_channels=128,
         with_avg_pool=True))
 ```
+
 ### Use some fields in the base configs
 
 Sometimes, you may refer to some fields in the `_base_` config, so as to avoid duplication of definitions. You can refer to [mmcv](https://mmcv.readthedocs.io/en/latest/understand_mmcv/config.html#reference-variables-from-base) for some more instructions.
@@ -376,9 +394,8 @@ When users use the script "tools/train.py" or "tools/test.py" to submit tasks or
 - Update values of list/tuples.
 
   If the value to be updated is a list or a tuple. For example, the config file normally sets `workflow=[('train', 1)]`. If you want to
-  change this key, you may specify `--cfg-options workflow="[(train,1),(val,1)]"`. Note that the quotation mark \" is necessary to
+  change this key, you may specify `--cfg-options workflow="[(train,1),(val,1)]"`. Note that the quotation mark " is necessary to
   support list/tuple data types, and that **NO** white space is allowed inside the quotation marks in the specified value.
-
 
 ## Import user-defined modules
 
@@ -386,7 +403,7 @@ When users use the script "tools/train.py" or "tools/test.py" to submit tasks or
 This part may only be used when using other MM-codebase, like mmcls as a third party library to build your own project, and beginners can skip it.
 ```
 
- You may use other MM-codebase to complete your project and create new classes of datasets, models, data enhancements, etc. in the project. In order to streamline the code, you can use MM-codebase as a third-party library, you just need to keep your own extra code and import your own custom module in the configuration files. For examples, you may refer to [OpenMMLab Algorithm Competition Project](https://github.com/zhangrui-wolf/openmmlab-competition-2021) .
+You may use other MM-codebase to complete your project and create new classes of datasets, models, data enhancements, etc. in the project. In order to streamline the code, you can use MM-codebase as a third-party library, you just need to keep your own extra code and import your own custom module in the configuration files. For examples, you may refer to [OpenMMLab Algorithm Competition Project](https://github.com/zhangrui-wolf/openmmlab-competition-2021) .
 
 Add the following code to your own configuration files:
 

@@ -12,17 +12,13 @@ This paper presents SimMIM, a simple framework for masked image modeling. We sim
 <img src="https://user-images.githubusercontent.com/30762564/159404597-ac6d3a44-ee59-4cdc-8f6f-506a7d1b18b6.png" width="40%"/>
 </div>
 
-
 ## Models and Benchmarks
 
 Here, we report the results of the model, and more results will be coming soon.
 
-
-
-| Backbone | Pre-train epoch | Fine-tuning Top-1 |                  Pre-train Config                   |                                    Fine-tuning Config                                     |                                                                                                                        Download                                                                                                                         |
-| :------: | :-------------: | :---------------: | :-------------------------------------------------: | :---------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| Swin-Base |       100       |       82.9        | [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simmim/simmim_swin-base_16xb128-coslr-100e_in1k-192) | [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/imagenet/swin-base_ft-8xb256-coslr-100e_in1k) | [model](https://download.openmmlab.com/mmselfsup/simmim/simmim_swin-base_16xb128-coslr-100e_in1k-192_20220316-1d090125.pth) &#124; [log](https://download.openmmlab.com/mmselfsup/simmim/simmim_swin-base_16xb128-coslr-100e_in1k-192_20220316-1d090125.log.json) |
-
+| Backbone  | Pre-train epoch | Fine-tuning Top-1 |                                                         Pre-train Config                                                          |                                                              Fine-tuning Config                                                              |                                                                                                                           Download                                                                                                                            |
+| :-------: | :-------------: | :---------------: | :-------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| Swin-Base |       100       |       82.9        | [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simmim/simmim_swin-base_16xb128-coslr-100e_in1k-192) | [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/imagenet/swin-base_ft-8xb256-coslr-100e_in1k) | [model](https://download.openmmlab.com/mmselfsup/simmim/simmim_swin-base_16xb128-coslr-100e_in1k-192_20220316-1d090125.pth) \| [log](https://download.openmmlab.com/mmselfsup/simmim/simmim_swin-base_16xb128-coslr-100e_in1k-192_20220316-1d090125.log.json) |
 
 ## Citation
 

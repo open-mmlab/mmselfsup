@@ -143,7 +143,6 @@ Some hooks have been already implemented in MMCV and MMClassification, they are:
 - [ProfilerHook](https://github.com/open-mmlab/mmcv/blob/master/mmcv/runner/hooks/profiler.py)
 - ......
 
-
 If the hook is already implemented in MMCV, you can directly modify the config to use the hook as below
 
 ```python

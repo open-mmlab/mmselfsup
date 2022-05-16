@@ -151,7 +151,6 @@ Before you publish a model, you may want to
 python tools/model_converters/publish_model.py ${INPUT_FILENAME} ${OUTPUT_FILENAME}
 ```
 
-
 ### Use t-SNE
 
 We provide an off-the-shelf tool to visualize the quality of image representations by t-SNE.
@@ -166,7 +165,6 @@ Arguments:
 - `CKPT_PATH`: the path of model's checkpoint.
 - `WORK_DIR`: the directory to save the results of visualization.
 - `[optional arguments]`: for optional arguments, you can refer to [visualize_tsne.py](https://github.com/open-mmlab/mmselfsup/blob/master/tools/analysis_tools/visualize_tsne.py)
-
 
 ### Reproducibility
 

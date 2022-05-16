@@ -12,22 +12,19 @@ We present a novel masked image modeling (MIM) approach, context autoencoder (CA
 <img src="https://user-images.githubusercontent.com/30762564/165459947-6c6ef13c-0593-4765-b44e-6da0a079802a.png" width="40%"/>
 </div>
 
-
 ## Prerequisite
 
-Create a new folder ``cae_ckpt`` under the root directory and download the
-[weights](https://download.openmmlab.com/mmselfsup/cae/dalle_encoder.pth) for ``dalle`` encoder to that folder
+Create a new folder `cae_ckpt` under the root directory and download the
+[weights](https://download.openmmlab.com/mmselfsup/cae/dalle_encoder.pth) for `dalle` encoder to that folder
+
 ## Models and Benchmarks
 
 Here, we report the results of the model, which is pre-trained on ImageNet-1k
 for 300 epochs, the details are below:
 
-
-
-| Backbone | Pre-train epoch | Fine-tuning Top-1 |                  Pre-train Config                   |                                    Fine-tuning Config                                     |                                                                                                                        Download                                                                                                                         |
-| :------: | :-------------: | :---------------: | :-------------------------------------------------: | :---------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| ViT-B/16 |       300       |       83.2        | [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/cae/cae_vit-base-p16_8xb256-fp16-coslr-300e_in1k.py) | [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/imagenet/vit-base-p16_ft-8xb128-coslr-100e-rpe_in1k.py) | [model](https://download.openmmlab.com/mmselfsup/cae/cae_vit-base-p16_16xb256-coslr-300e_in1k-224_20220427-4c786349.pth) &#124; [log](https://download.openmmlab.com/mmselfsup/cae/cae_vit-base-p16_16xb256-coslr-300e_in1k-224_20220427-4c786349.log.json) |
-
+| Backbone | Pre-train epoch | Fine-tuning Top-1 |                                                         Pre-train Config                                                          |                                                                   Fine-tuning Config                                                                   |                                                                                                                        Download                                                                                                                         |
+| :------: | :-------------: | :---------------: | :-------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| ViT-B/16 |       300       |       83.2        | [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/cae/cae_vit-base-p16_8xb256-fp16-coslr-300e_in1k.py) | [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/imagenet/vit-base-p16_ft-8xb128-coslr-100e-rpe_in1k.py) | [model](https://download.openmmlab.com/mmselfsup/cae/cae_vit-base-p16_16xb256-coslr-300e_in1k-224_20220427-4c786349.pth) \| [log](https://download.openmmlab.com/mmselfsup/cae/cae_vit-base-p16_16xb256-coslr-300e_in1k-224_20220427-4c786349.log.json) |
 
 ## Citation
 

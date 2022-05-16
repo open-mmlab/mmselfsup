@@ -14,13 +14,13 @@
 
 Compatible MMCV, MMClassification, MMDetection and MMSegmentation versions are shown below. Please install the correct version of them to avoid installation issues.
 
-| MMSelfSup version |    MMCV version     |  MMClassification version  | MMSegmentation version | MMDetection version |
-| :---------------: | :-----------------: | :------------------------: | :--------------------: | :-----------------: |
-|  0.9.0 (master)   | mmcv-full >= 1.4.2  |      mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
-|       0.8.0       | mmcv-full >= 1.4.2  |      mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
-|       0.7.1       | mmcv-full >= 1.3.16 | mmcls >= 0.19.0, <= 0.20.1 |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
-|       0.6.0       | mmcv-full >= 1.3.16 |      mmcls >= 0.19.0       |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
-|       0.5.0       | mmcv-full >= 1.3.16 |             /              |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
+| MMSelfSup version |    MMCV version     |  MMClassification version   | MMSegmentation version | MMDetection version |
+| :---------------: | :-----------------: | :-------------------------: | :--------------------: | :-----------------: |
+|  0.9.0 (master)   | mmcv-full >= 1.4.2  |       mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
+|       0.8.0       | mmcv-full >= 1.4.2  |       mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
+|       0.7.1       | mmcv-full >= 1.3.16 | mmcls >= 0.19.0, \<= 0.20.1 |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
+|       0.6.0       | mmcv-full >= 1.3.16 |       mmcls >= 0.19.0       |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
+|       0.5.0       | mmcv-full >= 1.3.16 |              /              |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
 
 **Note:**
 
@@ -32,80 +32,80 @@ Compatible MMCV, MMClassification, MMDetection and MMSegmentation versions are s
 
 1. Create a conda virtual environment and activate it.
 
-    ```shell
-    conda create -n openmmlab python=3.7 -y
-    conda activate openmmlab
-    ```
+   ```shell
+   conda create -n openmmlab python=3.7 -y
+   conda activate openmmlab
+   ```
 
 2. Install PyTorch and torchvision following the [official instructions](https://pytorch.org/), e.g.,
 
-    ```shell
-    conda install pytorch torchvision -c pytorch
-    ```
+   ```shell
+   conda install pytorch torchvision -c pytorch
+   ```
 
-    Make sure that your compilation CUDA version and runtime CUDA version match. You can check the supported CUDA version for precompiled packages on the [PyTorch website](https://pytorch.org/).
+   Make sure that your compilation CUDA version and runtime CUDA version match. You can check the supported CUDA version for precompiled packages on the [PyTorch website](https://pytorch.org/).
 
-    `E.g.1` If you have CUDA 10.1 installed under `/usr/local/cuda` and would like to install PyTorch 1.7, you need to install the prebuilt PyTorch with CUDA 10.1.
+   `E.g.1` If you have CUDA 10.1 installed under `/usr/local/cuda` and would like to install PyTorch 1.7, you need to install the prebuilt PyTorch with CUDA 10.1.
 
-    ```shell
-    conda install pytorch==1.7.0 torchvision==0.8.0 cudatoolkit=10.1 -c pytorch
-    ```
+   ```shell
+   conda install pytorch==1.7.0 torchvision==0.8.0 cudatoolkit=10.1 -c pytorch
+   ```
 
-    If you build PyTorch from source instead of installing the prebuilt package, you can use more CUDA versions such as 9.0.
-
+   If you build PyTorch from source instead of installing the prebuilt package, you can use more CUDA versions such as 9.0.
 
 ## Install MMSelfSup
 
 1. Install MMCV and MMClassification
 
-    ```shell
-    pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/{cu_version}/{torch_version}/index.html
-    ```
+   ```shell
+   pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/{cu_version}/{torch_version}/index.html
+   ```
 
-    Please replace `{cu_version}` and `{torch_version}` in the url to your desired one. For example, to install the latest `mmcv-full` with `CUDA 11.0` and `PyTorch 1.7.x`, use the following command:
+   Please replace `{cu_version}` and `{torch_version}` in the url to your desired one. For example, to install the latest `mmcv-full` with `CUDA 11.0` and `PyTorch 1.7.x`, use the following command:
 
-    ```shell
-    pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/cu110/torch1.7/index.html
-    ```
+   ```shell
+   pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/cu110/torch1.7/index.html
+   ```
 
-    - mmcv-full is only compiled on PyTorch 1.x.0 because the compatibility usually holds between 1.x.0 and 1.x.1. If your PyTorch version is 1.x.1, you can install mmcv-full compiled with PyTorch 1.x.0 and it usually works well.
+   - mmcv-full is only compiled on PyTorch 1.x.0 because the compatibility usually holds between 1.x.0 and 1.x.1. If your PyTorch version is 1.x.1, you can install mmcv-full compiled with PyTorch 1.x.0 and it usually works well.
 
-    See [here](https://github.com/open-mmlab/mmcv#installation) for different versions of MMCV compatible to different PyTorch and CUDA versions.
+   See [here](https://github.com/open-mmlab/mmcv#installation) for different versions of MMCV compatible to different PyTorch and CUDA versions.
 
-    Optionally you can compile mmcv from source if you need to develop both mmcv and mmselfsup. Refer to the [guide](https://github.com/open-mmlab/mmcv#installation) for details.
+   Optionally you can compile mmcv from source if you need to develop both mmcv and mmselfsup. Refer to the [guide](https://github.com/open-mmlab/mmcv#installation) for details.
 
-    You can simply install MMClassification with the following command:
+   You can simply install MMClassification with the following command:
 
-    ```shell
-    pip install mmcls
-    ```
+   ```shell
+   pip install mmcls
+   ```
 
 2. Clone MMSelfSup repository and install
 
-    ```shell
-    git clone https://github.com/open-mmlab/mmselfsup.git
-    cd mmselfsup
-    pip install -v -e .
-    ```
+   ```shell
+   git clone https://github.com/open-mmlab/mmselfsup.git
+   cd mmselfsup
+   pip install -v -e .
+   ```
 
-    **Note:**
-    - When specifying `-e` or `develop`, MMSelfSup is installed on dev mode, any local modifications made to the code will take effect without reinstallation.
+   **Note:**
+
+   - When specifying `-e` or `develop`, MMSelfSup is installed on dev mode, any local modifications made to the code will take effect without reinstallation.
 
 3. Install MMSegmentation and MMDetection
 
-    You can simply install MMSegmentation and MMDetection with the following command:
+   You can simply install MMSegmentation and MMDetection with the following command:
 
-    ```shell
-    pip install mmsegmentation mmdet
-    ```
+   ```shell
+   pip install mmsegmentation mmdet
+   ```
 
-    In addition to installing MMSegmentation and MMDetection by pip, user can also install them by [mim](https://github.com/open-mmlab/mim).
+   In addition to installing MMSegmentation and MMDetection by pip, user can also install them by [mim](https://github.com/open-mmlab/mim).
 
-    ```shell
-    pip install openmim
-    mim install mmdet
-    mim install mmsegmentation
-    ```
+   ```shell
+   pip install openmim
+   mim install mmdet
+   mim install mmsegmentation
+   ```
 
 ## A from-scratch setup script
 

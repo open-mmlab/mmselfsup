@@ -2,14 +2,14 @@
 
 MMSelfSup 支持多个数据集。请遵循相应的数据准备指南。建议将您的数据集根目录软链接到 `$MMSELFSUP/data`。如果您的文件夹结构不同，您可能需要更改配置文件中的相应路径。
 
-- [准备 ImageNet 数据集](#准备-imagenet-数据集)
-- [准备 Places205 数据集](#准备-places205-数据集)
-- [准备 iNaturalist2018 数据集](#准备-inaturalist2018-数据集)
-- [准备 PASCAL VOC 数据集](#准备-pascal-voc-数据集)
-- [准备 CIFAR10 数据集](#准备-cifar10-数据集)
-- [准备检测和分割数据集](#准备检测和分割数据集)
-  - [检测](#检测)
-  - [分割](#分割)
+- [准备 ImageNet 数据集](#%E5%87%86%E5%A4%87-imagenet-%E6%95%B0%E6%8D%AE%E9%9B%86)
+- [准备 Places205 数据集](#%E5%87%86%E5%A4%87-places205-%E6%95%B0%E6%8D%AE%E9%9B%86)
+- [准备 iNaturalist2018 数据集](#%E5%87%86%E5%A4%87-inaturalist2018-%E6%95%B0%E6%8D%AE%E9%9B%86)
+- [准备 PASCAL VOC 数据集](#%E5%87%86%E5%A4%87-pascal-voc-%E6%95%B0%E6%8D%AE%E9%9B%86)
+- [准备 CIFAR10 数据集](#%E5%87%86%E5%A4%87-cifar10-%E6%95%B0%E6%8D%AE%E9%9B%86)
+- [准备检测和分割数据集](#%E5%87%86%E5%A4%87%E6%A3%80%E6%B5%8B%E5%92%8C%E5%88%86%E5%89%B2%E6%95%B0%E6%8D%AE%E9%9B%86)
+  - [检测](#%E6%A3%80%E6%B5%8B)
+  - [分割](#%E5%88%86%E5%89%B2)
 
 ```
 mmselfsup
@@ -43,8 +43,8 @@ mmselfsup
 
 1. 注册账号并登录 [下载页面](http://www.image-net.org/download-images)
 2. 找到 ILSVRC2012 的下载链接，下载以下两个文件
-    - ILSVRC2012_img_train.tar (~138GB)
-    - ILSVRC2012_img_val.tar (~6.3GB)
+   - ILSVRC2012_img_train.tar (~138GB)
+   - ILSVRC2012_img_val.tar (~6.3GB)
 3. 解压下载的文件
 4. 使用这个 [脚本](https://github.com/BVLC/caffe/blob/master/data/ilsvrc12/get_ilsvrc_aux.sh) 下载元数据
 

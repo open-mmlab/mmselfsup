@@ -27,18 +27,14 @@ methods that use only ImageNet-1K data. Transfer performance in downstream tasks
 <img src="https://user-images.githubusercontent.com/30762564/150733959-2959852a-c7bd-4d3f-911f-3e8d8839fe67.png" width="40%"/>
 </div>
 
-
 ## Models and Benchmarks
 
 Here, we report the results of the model, which is pre-trained on ImageNet1K
 for 400 epochs, the details are below:
 
-
-
-| Backbone | Pre-train epoch | Fine-tuning Top-1 |                  Pre-train Config                   |                                    Fine-tuning Config                                     |                                                                                                                        Download                                                                                                                         |
-| :------: | :-------------: | :---------------: | :-------------------------------------------------: | :---------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| ViT-B/16 |       400       |       83.1        | [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/mae/mae_vit-b-p16_8xb512-coslr-400e_in1k.py) | [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/imagenet/vit-b-p16_ft-8xb128-coslr-100e_in1k.py) | [model](https://download.openmmlab.com/mmselfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k-224_20220223-85be947b.pth) &#124; [log](https://download.openmmlab.com/mmselfsup/mae/mae_vit-base-p16_8xb512-coslr-300e_in1k-224_20220210_140925.log.json) |
-
+| Backbone | Pre-train epoch | Fine-tuning Top-1 |                                                     Pre-train Config                                                      |                                                               Fine-tuning Config                                                                |                                                                                                                      Download                                                                                                                       |
+| :------: | :-------------: | :---------------: | :-----------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| ViT-B/16 |       400       |       83.1        | [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/mae/mae_vit-b-p16_8xb512-coslr-400e_in1k.py) | [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/imagenet/vit-b-p16_ft-8xb128-coslr-100e_in1k.py) | [model](https://download.openmmlab.com/mmselfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k-224_20220223-85be947b.pth) \| [log](https://download.openmmlab.com/mmselfsup/mae/mae_vit-base-p16_8xb512-coslr-300e_in1k-224_20220210_140925.log.json) |
 
 ## Citation
 

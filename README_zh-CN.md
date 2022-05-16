@@ -30,6 +30,7 @@
 [👀模型库](https://github.com/open-mmlab/mmselfsup/blob/master/docs/zh_cn/model_zoo.md) |
 [🆕更新日志](https://mmselfsup.readthedocs.io/zh_CN/latest/changelog.html) |
 [🤔报告问题](https://github.com/open-mmlab/mmselfsup/issues/new/choose)
+
 </div>
 
 ## 介绍
@@ -68,8 +69,8 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
 新版本亮点：
 
-* 支持 **CAE**
-* 支持 **Barlow Twins**
+- 支持 **CAE**
+- 支持 **Barlow Twins**
 
 请参考 [更新日志](docs/zh_cn/changelog.md) 获取更多细节和历史版本信息。
 
@@ -105,7 +106,7 @@ MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibilit
 
 ### 基准测试
 
-| 基准测试方法                                       | 参考设置                                                                                                                                                             |
+| 基准测试方法                                             | 参考设置                                                                                                                                                                 |
 | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ImageNet Linear Classification (Multi-head)        | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
 | ImageNet Linear Classification (Last)              |                                                                                                                                                                      |
@@ -152,6 +153,7 @@ MMSelfSup 是一款由不同学校和公司共同贡献的开源项目，我们�
 我们希望该工具箱和基准测试可以为社区提供灵活的代码工具，供用户复现现有算法并开发自己的新模型，从而不断为开源社区提供贡献。
 
 ## 引用
+
 如果您发现此项目对您的研究有用，请考虑引用：
 
 ```bibtex
