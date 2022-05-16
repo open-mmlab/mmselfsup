@@ -74,9 +74,9 @@ Please refer to [faster_rcnn_r50_c4_mstrain_24k_voc0712.py](https://github.com/o
 
 Please refer to [mask_rcnn_r50_fpn_mstrain_1x_coco.py](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/mmdetection/coco/mask_rcnn_r50_fpn_mstrain_1x_coco.py) for details of config.
 
-| Self-Supervised Config                                                                                                                                                                                         | mAP(Box) | AP50(Box) | AP75(Box) | mAP(Mask) | AP50(Mask) | AP75(Mask) |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------- | --------- | --------- | ---------- | ---------- |
-| [resnet50_8xb64-steplr-70e]([relative-loc_resnet50_8xb64-steplr-70e_in1k.py](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k.py)) | 37.5     | 56.2      | 41.3      | 33.7      | 53.3       | 36.1       |
+| Self-Supervised Config                                                                                                                                       | mAP(Box) | AP50(Box) | AP75(Box) | mAP(Mask) | AP50(Mask) | AP75(Mask) |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | --------- | --------- | --------- | ---------- | ---------- |
+| [resnet50_8xb64-steplr-70e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k.py) | 37.5     | 56.2      | 41.3      | 33.7      | 53.3       | 36.1       |
 
 ### Segmentation
 

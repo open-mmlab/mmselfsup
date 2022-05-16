@@ -1,8 +1,8 @@
 # 教程 2：自定义数据管道
 
-- [教程 2：自定义数据管道](#教程-2-自定义数据管道)
-  - [`Pipeline` 概览](#Pipeline-概览)
-  - [在 `Pipeline` 中创建新的数据增强](#在-Pipeline-中创建新的数据增强)
+- [教程 2：自定义数据管道](#%E6%95%99%E7%A8%8B-2-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%95%B0%E6%8D%AE%E7%AE%A1%E9%81%93)
+  - [`Pipeline` 概览](#Pipeline-%E6%A6%82%E8%A7%88)
+  - [在 `Pipeline` 中创建新的数据增强](#%E5%9C%A8-Pipeline-%E4%B8%AD%E5%88%9B%E5%BB%BA%E6%96%B0%E7%9A%84%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%BC%BA)
 
 ## `Pipeline` 概览
 

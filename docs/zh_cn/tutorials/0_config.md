@@ -4,21 +4,21 @@ MMSelfSup 主要使用python文件作为配置。我们设计的配置文件系�
 
 <!-- TOC -->
 
-- [教程 0: 学习配置](#教程-0-学习配置)
-  - [配置文件与检查点命名约定](#配置文件与检查点命名约定)
-    - [算法信息](#算法信息)
-    - [模块信息](#模块信息)
-    - [训练信息](#训练信息)
-    - [数据信息](#数据信息)
-    - [配置文件命名示例](#配置文件命名示例)
-    - [检查点命名约定](#检查点命名约定)
-  - [配置文件结构](#配置文件结构)
-  - [继承和修改配置文件](#继承和修改配置文件)
-    - [使用配置中的中间变量](#使用配置中的中间变量)
-    - [忽略基础配置中的字段](#忽略基础配置中的字段)
-    - [使用基础配置中的字段](#使用基础配置中的字段)
-  - [通过脚本参数修改配置](#通过脚本参数修改配置)
-  - [导入用户定义模块](#导入用户定义模块)
+- [教程 0: 学习配置](#%E6%95%99%E7%A8%8B-0-%E5%AD%A6%E4%B9%A0%E9%85%8D%E7%BD%AE)
+  - [配置文件与检查点命名约定](#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%B8%8E%E6%A3%80%E6%9F%A5%E7%82%B9%E5%91%BD%E5%90%8D%E7%BA%A6%E5%AE%9A)
+    - [算法信息](#%E7%AE%97%E6%B3%95%E4%BF%A1%E6%81%AF)
+    - [模块信息](#%E6%A8%A1%E5%9D%97%E4%BF%A1%E6%81%AF)
+    - [训练信息](#%E8%AE%AD%E7%BB%83%E4%BF%A1%E6%81%AF)
+    - [数据信息](#%E6%95%B0%E6%8D%AE%E4%BF%A1%E6%81%AF)
+    - [配置文件命名示例](#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%91%BD%E5%90%8D%E7%A4%BA%E4%BE%8B)
+    - [检查点命名约定](#%E6%A3%80%E6%9F%A5%E7%82%B9%E5%91%BD%E5%90%8D%E7%BA%A6%E5%AE%9A)
+  - [配置文件结构](#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84)
+  - [继承和修改配置文件](#%E7%BB%A7%E6%89%BF%E5%92%8C%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6)
+    - [使用配置中的中间变量](#%E4%BD%BF%E7%94%A8%E9%85%8D%E7%BD%AE%E4%B8%AD%E7%9A%84%E4%B8%AD%E9%97%B4%E5%8F%98%E9%87%8F)
+    - [忽略基础配置中的字段](#%E5%BF%BD%E7%95%A5%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE%E4%B8%AD%E7%9A%84%E5%AD%97%E6%AE%B5)
+    - [使用基础配置中的字段](#%E4%BD%BF%E7%94%A8%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE%E4%B8%AD%E7%9A%84%E5%AD%97%E6%AE%B5)
+  - [通过脚本参数修改配置](#%E9%80%9A%E8%BF%87%E8%84%9A%E6%9C%AC%E5%8F%82%E6%95%B0%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE)
+  - [导入用户定义模块](#%E5%AF%BC%E5%85%A5%E7%94%A8%E6%88%B7%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9D%97)
 
 <!-- TOC -->
 
@@ -36,43 +36,53 @@ MMSelfSup 主要使用python文件作为配置。我们设计的配置文件系�
 - `data info`：数据信息：数据集名字，输入大小等，例如 imagenet，cifar 等。
 
 ### 算法信息
+
 ```
 {algorithm}-{misc}
 ```
 
 `Algorithm` 表示论文中的算法缩写和版本。例如：
+
 - `relative-loc`：不同单词之间使用破折线连接 `'-'`
 - `simclr`
 - `mocov2`
 
 `misc` 提供一些其他算法相关信息。例如：
+
 - `npid-ensure-neg`
 - `deepcluster-sobel`
 
 ### 模块信息
+
 ```
 {backbone setting}-{neck setting}-{head_setting}
 ```
 
 模块信息主要包含 backboe 信息。例如：
+
 - `resnet50`
 - `vit`（将会用在mocov3中）
 
 或者其他一些需要在配置名字中强调的特殊的设置。例如：
+
 - `resnet50-nofrz`：在一些下游任务的训练中，该 backbone 不会冻结 stages
 
 ### 训练信息
 
 训练相关的配置，包括 batch size, lr schedule, data augment 等。
+
 - Batch size，格式是 `{gpu x batch_per_gpu}` ，例如 `8xb32`；
 - Training recipe，该方法以如下顺序组织：`{pipeline aug}-{train aug}-{loss trick}-{scheduler}-{epochs}`
 
 例如：
+
 - `8xb32-mcrop-2-6-coslr-200e`：`mcrop` 是 SwAV 提出的 pipeline 中的名为 multi-crop 的一部分。2 和 6 表示 2 个 pipeline 分别输出 2 个和 6 个裁剪图，而且裁剪信息记录在数据信息中；
 - `8xb32-accum16-coslr-200e`：`accum16` 表示权重会在梯度累积16个迭代之后更新。
 
 ### 数据信息
+
 数据信息包含数据集，输入大小等。例如：
+
 - `in1k`：`ImageNet1k` 数据集，默认使用的输入图像大小是 224x224
 - `in1k-384px`：表示输入图像大小是384x384
 - `cifar10`
@@ -80,17 +90,19 @@ MMSelfSup 主要使用python文件作为配置。我们设计的配置文件系�
 - `places205`
 
 ### 配置文件命名示例
+
 ```
 swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py
 ```
-  - `swav`：算法信息
-  - `resnet50`：模块信息
-  - `8xb32-mcrop-2-6-coslr-200e`：训练信息
-    - `8xb32`：共使用 8 张 GPU，每张 GPU 上的 batch size 是 32
-    - `mcrop-2-6`：使用 multi-crop 数据增强方法
-    - `coslr`：使用余弦学习率调度器
-    - `200e`：训练模型200个周期
-  - `in1k-224-96`：数据信息，在 ImageNet1k 数据集上训练，输入大小是 224x224 和 96x96
+
+- `swav`：算法信息
+- `resnet50`：模块信息
+- `8xb32-mcrop-2-6-coslr-200e`：训练信息
+  - `8xb32`：共使用 8 张 GPU，每张 GPU 上的 batch size 是 32
+  - `mcrop-2-6`：使用 multi-crop 数据增强方法
+  - `coslr`：使用余弦学习率调度器
+  - `200e`：训练模型200个周期
+- `in1k-224-96`：数据信息，在 ImageNet1k 数据集上训练，输入大小是 224x224 和 96x96
 
 ### 检查点命名约定
 
@@ -114,6 +126,7 @@ swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py
 为了易于理解，我们使用 MoCo v2 作为一个例子，并对它的每一行做出注释。若想了解更多细节，请参考 API 文档。
 
 配置文件 `configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py` 如下所述。
+
 ```python
 _base_ = [
     '../_base_/models/mocov2.py',                  # 模型
@@ -134,6 +147,7 @@ checkpoint_config = dict(interval=10, max_keep_ckpts=3)
 ```
 
 `../_base_/models/mocov2.py` 是 MoCo v2 的基础模型配置。
+
 ```python
 model = dict(
     type='MoCo',  # 算法名字
@@ -158,6 +172,7 @@ model = dict(
 ```
 
 `../_base_/datasets/imagenet_mocov2.py` 是 MoCo v2 的基础数据集配置。
+
 ```python
 # 数据集配置
 data_source = 'ImageNet'  # 数据源名字
@@ -210,6 +225,7 @@ data = dict(
 ```
 
 `../_base_/schedules/sgd_coslr-200e_in1k.py` 是 MoCo v2 的基础调度配置。
+
 ```python
 # 优化器
 optimizer = dict(
@@ -232,7 +248,9 @@ runner = dict(
     max_epochs=200) # 运行工作流周期总数的 Runner 的 max_epochs，对于IterBasedRunner 使用 `max_iters`
 
 ```
+
 `../_base_/default_runtime.py` 是运行时的默认配置。
+
 ```python
 # 保存检查点
 checkpoint_config = dict(interval=10)  # 保存间隔是10
@@ -300,7 +318,6 @@ data = dict(
     ))
 ```
 
-
 ### 忽略基础配置中的字段
 
 有时候，你需要设置 `_delete_=True` 来忽略基础配置文件中一些域的内容。 你可以参考 [mmcv](https://mmcv.readthedocs.io/zh_CN/latest/understand_mmcv/config.html#inherit-from-base-config-with-ignored-fields) 获得更多说明。
@@ -319,6 +336,7 @@ model = dict(
         out_channels=128,
         with_avg_pool=True))
 ```
+
 ### 使用基础配置中的字段
 
 有时候，你可能引用 `_base_` 配置中一些字段，以避免重复定义。你可以参考[mmcv](https://mmcv.readthedocs.io/zh_CN/latest/understand_mmcv/config.html#reference-variables-from-base) 获取更多的说明。
@@ -372,8 +390,7 @@ checkpoint_config = dict(interval=10, max_keep_ckpts=3)
 
 - 更新 list/tuples 中的值
 
-  如果想要更新的值是一个列表或者元组，例如：配置文件通常设置 `workflow=[('train', 1)]`。如果你想要改变这个键，你可以指定 `--cfg-options workflow="[(train,1),(val,1)]"`。注意：对于 list/tuple 数据类型，引号\" 是必须的，并且在指定值的时候，在引号中 **NO** 空白字符。
-
+  如果想要更新的值是一个列表或者元组，例如：配置文件通常设置 `workflow=[('train', 1)]`。如果你想要改变这个键，你可以指定 `--cfg-options workflow="[(train,1),(val,1)]"`。注意：对于 list/tuple 数据类型，引号" 是必须的，并且在指定值的时候，在引号中 **NO** 空白字符。
 
 ## 导入用户定义模块
 
@@ -381,7 +398,7 @@ checkpoint_config = dict(interval=10, max_keep_ckpts=3)
 这部分内容初学者可以跳过，只在使用其他 MM-codebase 时会用到，例如使用 mmcls 作为第三方库来构建你的工程。
 ```
 
- 你可能使用其他的 MM-codebase 来完成你的工程，并在工程中创建新的数据集类，模型类，数据增强类等。为了简化代码，你可以使用 MM-codebase 作为第三方库，只需要保存你自己额外的代码，并在配置文件中导入自定义模块。你可以参考 [OpenMMLab Algorithm Competition Project](https://github.com/zhangrui-wolf/openmmlab-competition-2021) 中的例子。
+你可能使用其他的 MM-codebase 来完成你的工程，并在工程中创建新的数据集类，模型类，数据增强类等。为了简化代码，你可以使用 MM-codebase 作为第三方库，只需要保存你自己额外的代码，并在配置文件中导入自定义模块。你可以参考 [OpenMMLab Algorithm Competition Project](https://github.com/zhangrui-wolf/openmmlab-competition-2021) 中的例子。
 
 在你自己的配置文件中添加如下所述的代码：
 

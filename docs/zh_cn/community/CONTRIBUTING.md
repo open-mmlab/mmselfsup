@@ -31,8 +31,7 @@
 yapf 和 isort 的格式设置位于 [setup.cfg](../setup.cfg)
 
 我们使用 [pre-commit hook](https://pre-commit.com/) 来保证每次提交时自动进行代
-码检查和格式化，启用的功能包括 `flake8`, `yapf`, `isort`, `trailing
-whitespaces`, `markdown files`, 修复 `end-of-files`, `double-quoted-strings`,
+码检查和格式化，启用的功能包括 `flake8`, `yapf`, `isort`, `trailing whitespaces`, `markdown files`, 修复 `end-of-files`, `double-quoted-strings`,
 `python-encoding-pragma`, `mixed-line-ending`, 对 `requirments.txt`的排序等。
 pre-commit hook 的配置文件位于 [.pre-commit-config](../.pre-commit-config.yaml)
 
@@ -64,7 +63,7 @@ rvm install 2.7.1
 
 在此之后，每次提交，代码规范检查和格式化工具都将被强制执行。
 
->在创建 PR 之前，请确保你的代码完成了代码规范检查，并经过了 yapf 的格式化。
+> 在创建 PR 之前，请确保你的代码完成了代码规范检查，并经过了 yapf 的格式化。
 
 ### C++ 和 CUDA
 
