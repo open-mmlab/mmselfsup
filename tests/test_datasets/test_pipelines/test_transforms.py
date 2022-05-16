@@ -4,9 +4,9 @@ import pytest
 import torch
 
 from mmselfsup.datasets.pipelines import (
-    BEiTMaskGenerator, Lighting, RandomGaussianBlur, RandomPatchWithLabels,
-    RandomResizedCropAndInterpolationWithTwoPic, RandomRotationWithLabels,
-    RandomSolarize, SimMIMMaskGenerator)
+    BEiTMaskGenerator, ColorJitter, Lighting, RandomGaussianBlur,
+    RandomPatchWithLabels, RandomResizedCropAndInterpolationWithTwoPic,
+    RandomRotationWithLabels, RandomSolarize, SimMIMMaskGenerator)
 
 
 def test_simmim_mask_gen():
@@ -139,3 +139,27 @@ def test_random_patch():
     # test transform
     assert list(results['img'].shape) == [8, 6, 53, 53]
     assert list(results['patch_label'].shape) == [8]
+
+
+def test_color_jitter():
+    with pytest.raises(ValueError):
+        transform = ColorJitter(-1, 0, 0, 0)
+
+    with pytest.raises(ValueError):
+        transform = ColorJitter(0, 0, 0, [0, 1])
+
+    with pytest.raises(TypeError):
+        transform = ColorJitter('test', 0, 0, 0)
+
+    original_img = torch.rand((224, 224, 3)).numpy().astype(np.uint8)
+    results = {'img': original_img}
+
+    transform = ColorJitter(0, 0, 0, 0)
+    results = transform(results)
+    assert np.equal(results['img'], original_img).all()
+
+    transform = ColorJitter(0.4, 0.4, 0.2, 0.1)
+    results = transform(results)
+    assert results['img'].shape == original_img.shape
+
+    assert isinstance(str(transform), str)
