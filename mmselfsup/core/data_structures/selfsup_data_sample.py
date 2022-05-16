@@ -2,7 +2,7 @@
 # TODO: will use real PixelData once it is added in mmengine
 from mmengine.data import BaseDataElement
 from mmengine.data import BaseDataElement as PixelData
-from mmengine.data import InstanceData
+from mmengine.data import InstanceData, LabelData
 
 
 class SelfSupDataSample(BaseDataElement):
@@ -11,10 +11,10 @@ class SelfSupDataSample(BaseDataElement):
 
     The attributes in ``SelfSupDataSample`` are divided into several parts:
 
-        - ``gt_label``(InstanceData): The ground truth label of an image.
+        - ``gt_label``(LabelData): The ground truth label of an image.
         - ``idx``(InstanceData): The idx of an image in the dataset.
         - ``mask``(PixelData): Mask used in masks image modeling.
-        - ``pred_label``(InstanceData): Label used in pretext task,
+        - ``pred_label``(LabelData): Label used in pretext task,
         e.g. Relative Location.
 
     Examples:
@@ -24,7 +24,7 @@ class SelfSupDataSample(BaseDataElement):
          >>> from mmselfsup.core import SelfSupDataSample
 
          >>> data_sample = SelfSupDataSample()
-         >>> gt_label = InstanceData()
+         >>> gt_label = LabelData()
          >>> gt_label.value = [1]
          >>> data_sample.gt_label = gt_label
          >>> len(data_sample.gt_label)
@@ -64,7 +64,7 @@ class SelfSupDataSample(BaseDataElement):
 
          >>> data_sample = SelfSupDataSample()
          >>> pred_label = dict(pred_label=[3])
-         >>> pred_label = InstanceData(**pred_label)
+         >>> pred_label = LabelData(**pred_label)
          >>> data_sample.pred_label = pred_label
          >>> print(data_sample)
         <SelfSupDataSample(
@@ -90,12 +90,12 @@ class SelfSupDataSample(BaseDataElement):
     """
 
     @property
-    def gt_label(self) -> InstanceData:
+    def gt_label(self) -> LabelData:
         return self._gt_label
 
     @gt_label.setter
-    def gt_label(self, value: InstanceData):
-        self.set_field(value, '_gt_label', dtype=InstanceData)
+    def gt_label(self, value: LabelData):
+        self.set_field(value, '_gt_label', dtype=LabelData)
 
     @gt_label.deleter
     def gt_label(self):
@@ -126,12 +126,12 @@ class SelfSupDataSample(BaseDataElement):
         del self._mask
 
     @property
-    def pred_label(self) -> InstanceData:
+    def pred_label(self) -> LabelData:
         return self._pred_label
 
     @pred_label.setter
-    def pred_label(self, value: InstanceData):
-        self.set_field(value, '_pred_label', dtype=InstanceData)
+    def pred_label(self, value: LabelData):
+        self.set_field(value, '_pred_label', dtype=LabelData)
 
     @pred_label.deleter
     def pred_label(self):

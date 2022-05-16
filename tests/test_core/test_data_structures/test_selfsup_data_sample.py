@@ -4,7 +4,7 @@ from unittest import TestCase
 import numpy as np
 import torch
 # TODO: will use real PixelData once it is added in mmengine
-from mmengine.data import InstanceData
+from mmengine.data import InstanceData, LabelData
 
 from mmselfsup.core import SelfSupDataSample
 
@@ -29,7 +29,7 @@ class TestSelfSupDataSample(TestCase):
         selfsup_data_sample = SelfSupDataSample()
         # test gt_label
         gt_label_data = dict(value=[1])
-        gt_label = InstanceData(**gt_label_data)
+        gt_label = LabelData(**gt_label_data)
         selfsup_data_sample.gt_label = gt_label
         assert 'gt_label' in selfsup_data_sample
         assert _equal(selfsup_data_sample.gt_label.value,
@@ -51,7 +51,7 @@ class TestSelfSupDataSample(TestCase):
 
         # test pred_label
         pred_label_data = dict(value=[1])
-        pred_label_instances = InstanceData(**pred_label_data)
+        pred_label_instances = LabelData(**pred_label_data)
         selfsup_data_sample.pred_label = pred_label_instances
         assert 'pred_label' in selfsup_data_sample
         assert _equal(selfsup_data_sample.pred_label.value,
@@ -61,7 +61,7 @@ class TestSelfSupDataSample(TestCase):
 
         gt_label_data = dict(value=[1])
         selfsup_data_sample = SelfSupDataSample()
-        gt_label = InstanceData(value=gt_label_data)
+        gt_label = LabelData(value=gt_label_data)
         selfsup_data_sample.gt_label = gt_label
         assert 'gt_label' in selfsup_data_sample
         del selfsup_data_sample.gt_label
@@ -85,7 +85,7 @@ class TestSelfSupDataSample(TestCase):
 
         pred_label_data = dict(value=[1])
         selfsup_data_sample = SelfSupDataSample()
-        pred_label = InstanceData(value=pred_label_data)
+        pred_label = LabelData(value=pred_label_data)
         selfsup_data_sample.pred_label = pred_label
         assert 'pred_label' in selfsup_data_sample
         del selfsup_data_sample.pred_label
