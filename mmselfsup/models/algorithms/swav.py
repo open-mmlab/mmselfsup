@@ -1,6 +1,9 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import Dict, List, Optional, Tuple, Union
+
 import torch
 
+from mmselfsup.core import SelfSupDataSample
 from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
 from .base import BaseModel
 
@@ -14,63 +17,75 @@ class SwAV(BaseModel):
     The queue is built in `core/hooks/swav_hook.py`.
 
     Args:
-        backbone (dict): Config dict for module of backbone.
-        neck (dict): Config dict for module of deep features to compact
+        backbone (Dict, optional): Config dict for module of backbone.
+        neck (Dict, optional): Config dict for module of deep features
+            to compact
             feature vectors. Defaults to None.
-        head (dict): Config dict for module of loss functions.
+        head (Dict, optional): Config dict for module of loss functions.
             Defaults to None.
+        preprocess_cfg (Dict, optional): Config dict to preprocess images.
+            Defaults to None.
+        init_cfg (Dict or List[Dict], optional): Config dict for weight
+            initialization. Defaults to None.
     """
 
     def __init__(self,
-                 backbone,
-                 neck=None,
-                 head=None,
-                 init_cfg=None,
-                 **kwargs):
-        super(SwAV, self).__init__(init_cfg)
+                 backbone: Optional[Dict] = None,
+                 neck: Optional[Dict] = None,
+                 head: Optional[Dict] = None,
+                 preprocess_cfg: Optional[Dict] = None,
+                 init_cfg: Optional[Union[Dict, List[Dict]]] = None,
+                 **kwargs) -> None:
+        super().__init__(preprocess_cfg=preprocess_cfg, init_cfg=init_cfg)
+        assert backbone is not None
         self.backbone = build_backbone(backbone)
         assert neck is not None
         self.neck = build_neck(neck)
         assert head is not None
         self.head = build_head(head)
 
-    def extract_feat(self, img):
+    def extract_feat(self, inputs: List[torch.Tensor],
+                     data_samples: List[SelfSupDataSample],
+                     **kwargs) -> Tuple[torch.Tensor]:
         """Function to extract features from backbone.
 
         Args:
-            img (Tensor): Input images of shape (N, C, H, W).
-                Typically these should be mean centered and std scaled.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            tuple[Tensor]: Backbone outputs.
+            Tuple[torch.Tensor]: backbone outputs.
         """
-        x = self.backbone(img)
+        x = self.backbone(inputs[0])
         return x
 
-    def forward_train(self, img, **kwargs):
+    def forward_train(self, inputs: List[torch.Tensor],
+                      data_samples: List[SelfSupDataSample],
+                      **kwargs) -> Dict[str, torch.Tensor]:
         """Forward computation during training.
 
         Args:
-            img (list[Tensor]): A list of input images with shape
-                (N, C, H, W). Typically these should be mean centered
-                and std scaled.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            dict[str, Tensor]: A dictionary of loss components.
+            Dict[str, torch.Tensor]: A dictionary of loss components.
         """
-        assert isinstance(img, list)
+        assert isinstance(inputs, list)
         # multi-res forward passes
         idx_crops = torch.cumsum(
             torch.unique_consecutive(
-                torch.tensor([i.shape[-1] for i in img]),
+                torch.tensor([input.shape[-1] for input in inputs]),
                 return_counts=True)[1], 0)
         start_idx = 0
         output = []
         for end_idx in idx_crops:
-            _out = self.backbone(torch.cat(img[start_idx:end_idx]))
+            _out = self.backbone(torch.cat(inputs[start_idx:end_idx]))
             output.append(_out)
             start_idx = end_idx
         output = self.neck(output)[0]
 
-        loss = self.head(output)
-        return loss
+        loss_dict = self.head(output)
+        return loss_dict

@@ -1,7 +1,11 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import Dict, List, Optional, Tuple, Union
+
 import torch
 import torch.nn as nn
+from mmengine.data import BaseDataElement
 
+from mmselfsup.core import SelfSupDataSample
 from mmselfsup.utils import (batch_shuffle_ddp, batch_unshuffle_ddp,
                              concat_all_gather)
 from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
@@ -30,19 +34,25 @@ class DenseCL(BaseModel):
             encoder. Defaults to 0.999.
         loss_lambda (float): Loss weight for the single and dense contrastive
             loss. Defaults to 0.5.
+        preprocess_cfg (Dict, optional): Config dict to preprocess images.
+            Defaults to None.
+        init_cfg (Dict or List[Dict], optional): Config dict for weight
+            initialization. Defaults to None.
     """
 
     def __init__(self,
                  backbone,
-                 neck=None,
-                 head=None,
-                 queue_len=65536,
-                 feat_dim=128,
-                 momentum=0.999,
-                 loss_lambda=0.5,
-                 init_cfg=None,
+                 neck: Optional[Dict] = None,
+                 head: Optional[Dict] = None,
+                 queue_len: int = 65536,
+                 feat_dim: int = 128,
+                 momentum: float = 0.999,
+                 loss_lambda: float = 0.5,
+                 preprocess_cfg: Optional[Dict] = None,
+                 init_cfg: Optional[Union[Dict, List[Dict]]] = None,
                  **kwargs):
-        super(DenseCL, self).__init__(init_cfg)
+        super().__init__(preprocess_cfg=preprocess_cfg, init_cfg=init_cfg)
+        assert backbone is not None
         assert neck is not None
         self.encoder_q = nn.Sequential(
             build_backbone(backbone), build_neck(neck))
@@ -113,33 +123,38 @@ class DenseCL(BaseModel):
 
         self.queue2_ptr[0] = ptr
 
-    def extract_feat(self, img):
+    def extract_feat(self, inputs: List[torch.Tensor],
+                     data_samples: List[SelfSupDataSample],
+                     **kwargs) -> Tuple[torch.Tensor]:
         """Function to extract features from backbone.
 
         Args:
-            img (Tensor): Input images of shape (N, C, H, W).
-                Typically these should be mean centered and std scaled.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            tuple[Tensor]: backbone outputs.
+            Tuple[torch.Tensor]: backbone outputs.
         """
-        x = self.backbone(img)
+        x = self.backbone(inputs[0])
         return x
 
-    def forward_train(self, img, **kwargs):
+    def forward_train(self, inputs: List[torch.Tensor],
+                      data_samples: List[SelfSupDataSample],
+                      **kwargs) -> Dict[str, torch.Tensor]:
         """Forward computation during training.
 
         Args:
-            img (list[Tensor]): A list of input images with shape
-                (N, C, H, W). Typically these should be mean centered
-                and std scaled.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            dict[str, Tensor]: A dictionary of loss components.
+            Dict[str, torch.Tensor]: A dictionary of loss components.
         """
-        assert isinstance(img, list)
-        im_q = img[0]
-        im_k = img[1]
+        assert isinstance(inputs, list)
+        im_q = inputs[0]
+        im_k = inputs[1]
         # compute query features
         q_b = self.encoder_q[0](im_q)  # backbone features
         q, q_grid, q2 = self.encoder_q[1](q_b)  # queries: NxC; NxCxS^2
@@ -212,21 +227,22 @@ class DenseCL(BaseModel):
 
         return losses
 
-    def forward_test(self, img, **kwargs):
-        """Forward computation during test.
-
+    def forward_test(self, inputs: List[torch.Tensor],
+                     data_samples: List[SelfSupDataSample],
+                     **kwargs) -> object:
+        """The forward function in testing
         Args:
-            img (Tensor): Input of two concatenated images of shape
-                (N, 2, C, H, W). Typically these should be mean centered
-                and std scaled.
-
-        Returns:
-            dict(Tensor): A dictionary of normalized output features.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
         """
-        im_q = img.contiguous()
-        # compute query features
-        # _, q_grid, _ = self.encoder_q(im_q)
-        q_grid = self.extract_feat(im_q)[0]
+        q_grid = self.extract_feat(inputs, data_samples)[0]
         q_grid = q_grid.view(q_grid.size(0), q_grid.size(1), -1)
         q_grid = nn.functional.normalize(q_grid, dim=1)
-        return None, q_grid, None
+
+        test_results = SelfSupDataSample()
+        q_grid = dict(value=q_grid)
+        q_grid = BaseDataElement(**q_grid)
+        test_results.q_grid = q_grid
+
+        return test_results

@@ -1,6 +1,9 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import Dict, List, Optional, Tuple, Union
+
 import torch
 
+from mmselfsup.core import SelfSupDataSample
 from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
 from ..utils import GatherLayer
 from .base import BaseModel
@@ -14,15 +17,27 @@ class SimCLR(BaseModel):
     of Visual Representations <https://arxiv.org/abs/2002.05709>`_.
 
     Args:
-        backbone (dict): Config dict for module of backbone.
-        neck (dict): Config dict for module of deep features to compact feature
-            vectors. Defaults to None.
-        head (dict): Config dict for module of loss functions.
+        backbone (Dict, optional): Config dict for module of backbone.
             Defaults to None.
+        neck (Dict, optional): Config dict for module of deep features
+            to compact feature vectors. Defaults to None.
+        head (Dict, optional): Config dict for module of loss functions.
+            Defaults to None.
+        preprocess_cfg (Dict, optional): Config dict to preprocess images.
+            Defaults to None.
+        init_cfg (Dict or List[Dict], optional): Config dict for weight
+            initialization. Defaults to None.
     """
 
-    def __init__(self, backbone, neck=None, head=None, init_cfg=None):
-        super(SimCLR, self).__init__(init_cfg)
+    def __init__(self,
+                 backbone: Optional[Dict] = None,
+                 neck: Optional[Dict] = None,
+                 head: Optional[Dict] = None,
+                 preprocess_cfg: Optional[Dict] = None,
+                 init_cfg: Optional[Union[Dict, List[Dict]]] = None,
+                 **kwargs) -> None:
+        super().__init__(preprocess_cfg=preprocess_cfg, init_cfg=init_cfg)
+        assert backbone is not None
         self.backbone = build_backbone(backbone)
         assert neck is not None
         self.neck = build_neck(neck)
@@ -30,7 +45,7 @@ class SimCLR(BaseModel):
         self.head = build_head(head)
 
     @staticmethod
-    def _create_buffer(N):
+    def _create_buffer(N: int):
         """Compute the mask and the index of positive samples.
 
         Args:
@@ -44,35 +59,40 @@ class SimCLR(BaseModel):
         neg_mask[pos_ind] = 0
         return mask, pos_ind, neg_mask
 
-    def extract_feat(self, img):
+    def extract_feat(self, inputs: List[torch.Tensor],
+                     data_samples: List[SelfSupDataSample],
+                     **kwargs) -> Tuple[torch.Tensor]:
         """Function to extract features from backbone.
 
         Args:
-            img (Tensor): Input images of shape (N, C, H, W).
-                Typically these should be mean centered and std scaled.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            tuple[Tensor]: backbone outputs.
+            Tuple[torch.Tensor]: backbone outputs.
         """
-        x = self.backbone(img)
+        x = self.backbone(inputs[0])
         return x
 
-    def forward_train(self, img, **kwargs):
+    def forward_train(self, inputs: List[torch.Tensor],
+                      data_samples: List[SelfSupDataSample],
+                      **kwargs) -> Dict[str, torch.Tensor]:
         """Forward computation during training.
 
         Args:
-            img (list[Tensor]): A list of input images with shape
-                (N, C, H, W). Typically these should be mean centered
-                and std scaled.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            dict[str, Tensor]: A dictionary of loss components.
+            Dict[str, torch.Tensor]: A dictionary of loss components.
         """
-        assert isinstance(img, list)
-        img = torch.stack(img, 1)
-        img = img.reshape(
-            (img.size(0) * 2, img.size(2), img.size(3), img.size(4)))
-        x = self.extract_feat(img)  # 2n
+        assert isinstance(inputs, list)
+        inputs = torch.stack(inputs, 1)
+        inputs = inputs.reshape((inputs.size(0) * 2, inputs.size(2),
+                                 inputs.size(3), inputs.size(4)))
+        x = self.backbone(inputs)
         z = self.neck(x)[0]  # (2n)xd
         z = z / (torch.norm(z, p=2, dim=1, keepdim=True) + 1e-10)
         z = torch.cat(GatherLayer.apply(z), dim=0)  # (2N)xd
@@ -85,5 +105,5 @@ class SimCLR(BaseModel):
         positive = s[pos_ind].unsqueeze(1)  # (2N)x1
         # select negative, (2N)x(2N-2)
         negative = torch.masked_select(s, neg_mask == 1).reshape(s.size(0), -1)
-        losses = self.head(positive, negative)
-        return losses
+        loss_dict = self.head(positive, negative)
+        return loss_dict
