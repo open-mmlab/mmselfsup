@@ -1,7 +1,10 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import Dict, List, Optional, Tuple, Union
+
 import torch
 import torch.nn as nn
 
+from mmselfsup.core import SelfSupDataSample
 from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
 from .base import BaseModel
 
@@ -14,25 +17,27 @@ class MoCoV3(BaseModel):
     Transformers <https://arxiv.org/abs/2104.02057>`_.
 
     Args:
-        backbone (dict): Config dict for module of backbone.
-        neck (dict): Config dict for module of deep features to compact
-            feature vectors. Defaults to None.
-        head (dict): Config dict for module of loss functions.
+        backbone (Dict): Config dict for module of backbone
+        neck (Dict): Config dict for module of deep features to compact feature
+            vectors.
+        head (Dict): Config dict for module of loss functions.
+        base_momentum (float, , optional): Momentum coefficient for the
+            momentum-updated encoder. Defaults to 0.99.
+        preprocess_cfg (Dict, optional): Config to preprocess images.
             Defaults to None.
-        base_momentum (float): Momentum coefficient for the momentum-updated
-            encoder. Defaults to 0.99.
-        init_cfg (dict or list[dict], optional): Initialization config dict.
+        init_cfg (Dict or list[Dict], optional): Initialization config dict.
             Defaults to None
     """
 
     def __init__(self,
-                 backbone,
-                 neck,
-                 head,
-                 base_momentum=0.99,
-                 init_cfg=None,
-                 **kwargs):
-        super(MoCoV3, self).__init__(init_cfg)
+                 backbone: Dict,
+                 neck: Dict,
+                 head: Dict,
+                 base_momentum: Optional[float] = 0.99,
+                 preprocess_cfg: Optional[Dict] = None,
+                 init_cfg: Optional[Union[List[Dict], Dict]] = None) -> None:
+        super().__init__(preprocess_cfg=preprocess_cfg, init_cfg=init_cfg)
+        assert backbone is not None
         assert neck is not None
         self.base_encoder = nn.Sequential(
             build_backbone(backbone), build_neck(neck))
@@ -46,9 +51,9 @@ class MoCoV3(BaseModel):
         self.base_momentum = base_momentum
         self.momentum = base_momentum
 
-    def init_weights(self):
+    def init_weights(self) -> None:
         """Initialize base_encoder with init_cfg defined in backbone."""
-        super(MoCoV3, self).init_weights()
+        super().init_weights()
 
         for param_b, param_m in zip(self.base_encoder.parameters(),
                                     self.momentum_encoder.parameters()):
@@ -56,39 +61,44 @@ class MoCoV3(BaseModel):
             param_m.requires_grad = False
 
     @torch.no_grad()
-    def momentum_update(self):
+    def momentum_update(self) -> None:
         """Momentum update of the momentum encoder."""
         for param_b, param_m in zip(self.base_encoder.parameters(),
                                     self.momentum_encoder.parameters()):
             param_m.data = param_m.data * self.momentum + param_b.data * (
                 1. - self.momentum)
 
-    def extract_feat(self, img):
+    def extract_feat(self, inputs: List[torch.Tensor],
+                     data_samples: List[SelfSupDataSample],
+                     **kwarg) -> Tuple[torch.Tensor]:
         """Function to extract features from backbone.
 
         Args:
-            img (Tensor): Input images. Typically these should be mean centered
-                and std scaled.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            tuple[Tensor]: backbone outputs.
+            Tuple[torch.Tensor]: backbone outputs.
         """
-        x = self.backbone(img)
+        x = self.backbone(inputs[0])
         return x
 
-    def forward_train(self, img, **kwargs):
-        """Forward computation during training.
+    def forward_train(self, inputs: List[torch.Tensor],
+                      data_samples: List[SelfSupDataSample],
+                      **kwargs) -> Dict[str, torch.Tensor]:
+        """The forward function in training.
 
         Args:
-            img (list[Tensor]): A list of input images. Typically these should
-                be mean centered and std scaled.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            dict[str, Tensor]: A dictionary of loss components.
+            Dict[str, torch.Tensor]: A dictionary of loss components.
         """
-        assert isinstance(img, list)
-        view_1 = img[0].cuda(non_blocking=True)
-        view_2 = img[1].cuda(non_blocking=True)
+        view_1 = inputs[0]
+        view_2 = inputs[1]
 
         # compute query features, [N, C] each
         q1 = self.base_encoder(view_1)[0]
