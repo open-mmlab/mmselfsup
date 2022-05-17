@@ -1,8 +1,16 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import os.path as osp
+import random
+
 import numpy as np
 import pytest
 import torch
+import torchvision
+from mmcv import imread
+from mmcv.transforms import Compose
+from PIL import Image
 
+import mmselfsup.datasets.pipelines.transforms as mmselfsup_transforms
 from mmselfsup.datasets.pipelines import (
     BEiTMaskGenerator, ColorJitter, Lighting, RandomGaussianBlur,
     RandomPatchWithLabels, RandomResizedCropAndInterpolationWithTwoPic,
@@ -128,6 +136,8 @@ def test_random_rotation():
     assert list(results['img'].shape) == [4, 3, 224, 224]
     assert list(results['rot_label'].shape) == [4]
 
+    assert isinstance(str(module), str)
+
 
 def test_random_patch():
     transform = dict()
@@ -139,6 +149,8 @@ def test_random_patch():
     # test transform
     assert list(results['img'].shape) == [8, 6, 53, 53]
     assert list(results['patch_label'].shape) == [8]
+
+    assert isinstance(str(module), str)
 
 
 def test_color_jitter():
@@ -163,3 +175,199 @@ def test_color_jitter():
     assert results['img'].shape == original_img.shape
 
     assert isinstance(str(transform), str)
+
+
+def test_randomresizedcrop():
+    ori_img = imread(
+        osp.join(osp.dirname(__file__), '../../data/color.jpg'), 'color')
+    ori_img_pil = Image.open(
+        osp.join(osp.dirname(__file__), '../../data/color.jpg'))
+
+    seed = random.randint(0, 100)
+
+    # test when scale is not of kind (min, max)
+    with pytest.raises(ValueError):
+        kwargs = dict(
+            size=(200, 300), scale=(1.0, 0.08), ratio=(3. / 4., 4. / 3.))
+        aug = []
+        aug.extend([mmselfsup_transforms.RandomResizedCrop(**kwargs)])
+        composed_transform = Compose(aug)
+        results = dict()
+        results['img'] = ori_img
+        composed_transform(results)['img']
+
+    # test when ratio is not of kind (min, max)
+    with pytest.raises(ValueError):
+        kwargs = dict(
+            size=(200, 300), scale=(0.08, 1.0), ratio=(4. / 3., 3. / 4.))
+        aug = []
+        aug.extend([mmselfsup_transforms.RandomResizedCrop(**kwargs)])
+        composed_transform = Compose(aug)
+        results = dict()
+        results['img'] = ori_img
+        composed_transform(results)['img']
+
+    # test crop size is int
+    kwargs = dict(size=200, scale=(0.08, 1.0), ratio=(3. / 4., 4. / 3.))
+    random.seed(seed)
+    np.random.seed(seed)
+    aug = []
+    aug.extend([torchvision.transforms.RandomResizedCrop(**kwargs)])
+    composed_transform = Compose(aug)
+    baseline = composed_transform(ori_img_pil)
+
+    random.seed(seed)
+    np.random.seed(seed)
+    aug = []
+    aug.extend([mmselfsup_transforms.RandomResizedCrop(**kwargs)])
+    composed_transform = Compose(aug)
+
+    # test __repr__()
+    print(composed_transform)
+    results = dict()
+    results['img'] = ori_img
+    img = composed_transform(results)['img']
+    assert np.array(img).shape == (200, 200, 3)
+    assert np.array(baseline).shape == (200, 200, 3)
+    nonzero = len((ori_img - np.array(ori_img_pil)[:, :, ::-1]).nonzero())
+    nonzero_transform = len((img - np.array(baseline)[:, :, ::-1]).nonzero())
+    assert nonzero == nonzero_transform
+
+    # test crop size < image size
+    kwargs = dict(size=(200, 300), scale=(0.08, 1.0), ratio=(3. / 4., 4. / 3.))
+    random.seed(seed)
+    np.random.seed(seed)
+    aug = []
+    aug.extend([torchvision.transforms.RandomResizedCrop(**kwargs)])
+    composed_transform = Compose(aug)
+    baseline = composed_transform(ori_img_pil)
+
+    random.seed(seed)
+    np.random.seed(seed)
+    aug = []
+    aug.extend([mmselfsup_transforms.RandomResizedCrop(**kwargs)])
+    composed_transform = Compose(aug)
+    results = dict()
+    results['img'] = ori_img
+    img = composed_transform(results)['img']
+    assert np.array(img).shape == (200, 300, 3)
+    assert np.array(baseline).shape == (200, 300, 3)
+    nonzero = len((ori_img - np.array(ori_img_pil)[:, :, ::-1]).nonzero())
+    nonzero_transform = len((img - np.array(baseline)[:, :, ::-1]).nonzero())
+    assert nonzero == nonzero_transform
+
+    # test crop size > image size
+    kwargs = dict(size=(600, 700), scale=(0.08, 1.0), ratio=(3. / 4., 4. / 3.))
+    random.seed(seed)
+    np.random.seed(seed)
+    aug = []
+    aug.extend([torchvision.transforms.RandomResizedCrop(**kwargs)])
+    composed_transform = Compose(aug)
+    baseline = composed_transform(ori_img_pil)
+
+    random.seed(seed)
+    np.random.seed(seed)
+    aug = []
+    aug.extend([mmselfsup_transforms.RandomResizedCrop(**kwargs)])
+    composed_transform = Compose(aug)
+    results = dict()
+    results['img'] = ori_img
+    img = composed_transform(results)['img']
+    assert np.array(img).shape == (600, 700, 3)
+    assert np.array(baseline).shape == (600, 700, 3)
+    nonzero = len((ori_img - np.array(ori_img_pil)[:, :, ::-1]).nonzero())
+    nonzero_transform = len((img - np.array(baseline)[:, :, ::-1]).nonzero())
+    assert nonzero == nonzero_transform
+
+    # test cropping the whole image
+    kwargs = dict(
+        size=(ori_img.shape[0], ori_img.shape[1]),
+        scale=(1.0, 2.0),
+        ratio=(1.0, 2.0))
+    random.seed(seed)
+    np.random.seed(seed)
+    aug = []
+    aug.extend([torchvision.transforms.RandomResizedCrop(**kwargs)])
+    composed_transform = Compose(aug)
+    baseline = composed_transform(ori_img_pil)
+
+    random.seed(seed)
+    np.random.seed(seed)
+    aug = []
+    aug.extend([mmselfsup_transforms.RandomResizedCrop(**kwargs)])
+    composed_transform = Compose(aug)
+    results = dict()
+    results['img'] = ori_img
+    img = composed_transform(results)['img']
+    assert np.array(img).shape == (ori_img.shape[0], ori_img.shape[1], 3)
+    assert np.array(baseline).shape == (ori_img.shape[0], ori_img.shape[1], 3)
+    nonzero = len((ori_img - np.array(ori_img_pil)[:, :, ::-1]).nonzero())
+    nonzero_transform = len((img - np.array(baseline)[:, :, ::-1]).nonzero())
+    assert nonzero == nonzero_transform
+
+    # test central crop when in_ratio < min(ratio)
+    kwargs = dict(
+        size=(ori_img.shape[0], ori_img.shape[1]),
+        scale=(1.0, 2.0),
+        ratio=(2., 3.))
+    random.seed(seed)
+    np.random.seed(seed)
+    aug = []
+    aug.extend([torchvision.transforms.RandomResizedCrop(**kwargs)])
+    composed_transform = Compose(aug)
+    baseline = composed_transform(ori_img_pil)
+
+    random.seed(seed)
+    np.random.seed(seed)
+    aug = []
+    aug.extend([mmselfsup_transforms.RandomResizedCrop(**kwargs)])
+    composed_transform = Compose(aug)
+    results = dict()
+    results['img'] = ori_img
+    img = composed_transform(results)['img']
+    assert np.array(img).shape == (ori_img.shape[0], ori_img.shape[1], 3)
+    assert np.array(baseline).shape == (ori_img.shape[0], ori_img.shape[1], 3)
+    nonzero = len((ori_img - np.array(ori_img_pil)[:, :, ::-1]).nonzero())
+    nonzero_transform = len((img - np.array(baseline)[:, :, ::-1]).nonzero())
+    assert nonzero == nonzero_transform
+
+    # test central crop when in_ratio > max(ratio)
+    kwargs = dict(
+        size=(ori_img.shape[0], ori_img.shape[1]),
+        scale=(1.0, 2.0),
+        ratio=(3. / 4., 1))
+    random.seed(seed)
+    np.random.seed(seed)
+    aug = []
+    aug.extend([torchvision.transforms.RandomResizedCrop(**kwargs)])
+    composed_transform = Compose(aug)
+    baseline = composed_transform(ori_img_pil)
+
+    random.seed(seed)
+    np.random.seed(seed)
+    aug = []
+    aug.extend([mmselfsup_transforms.RandomResizedCrop(**kwargs)])
+    composed_transform = Compose(aug)
+    results = dict()
+    results['img'] = ori_img
+    img = composed_transform(results)['img']
+    assert np.array(img).shape == (ori_img.shape[0], ori_img.shape[1], 3)
+    assert np.array(baseline).shape == (ori_img.shape[0], ori_img.shape[1], 3)
+    nonzero = len((ori_img - np.array(ori_img_pil)[:, :, ::-1]).nonzero())
+    nonzero_transform = len((img - np.array(baseline)[:, :, ::-1]).nonzero())
+    assert nonzero == nonzero_transform
+
+    # test different interpolation types
+    for mode in ['nearest', 'bilinear', 'bicubic', 'area', 'lanczos']:
+        kwargs = dict(
+            size=(600, 700),
+            scale=(0.08, 1.0),
+            ratio=(3. / 4., 4. / 3.),
+            interpolation=mode)
+        aug = []
+        aug.extend([mmselfsup_transforms.RandomResizedCrop(**kwargs)])
+        composed_transform = Compose(aug)
+        results = dict()
+        results['img'] = ori_img
+        img = composed_transform(results)['img']
+        assert img.shape == (600, 700, 3)
