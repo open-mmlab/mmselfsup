@@ -3,7 +3,8 @@ import re
 
 import torch.distributed as dist
 from mmcv.runner.optimizer.builder import OPTIMIZER_BUILDERS, OPTIMIZERS
-from mmcv.utils import build_from_cfg, print_log
+from mmcv.utils import build_from_cfg
+from mmengine.logging import print_log
 
 
 @OPTIMIZER_BUILDERS.register_module(force=True)

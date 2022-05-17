@@ -15,6 +15,10 @@ env_cfg = dict(
     dist_cfg=dict(backend='nccl'),
 )
 
+log_processor = dict(
+    interval=50,
+    custom_keys=[dict(data_src='', method='mean', windows_size='global')])
+
 # vis_backends = [dict(type='LocalVisBackend')]
 # visualizer = dict(
 #     type='SelfSupLocalVisualizer',
