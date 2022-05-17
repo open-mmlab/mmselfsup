@@ -1,7 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import numpy as np
 from mmcv.runner import HOOKS, Hook
-from mmcv.utils import print_log
+from mmengine.logging import print_log
 
 
 @HOOKS.register_module()
