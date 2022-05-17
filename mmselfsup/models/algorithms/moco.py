@@ -1,7 +1,10 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import Dict, List, Optional, Tuple, Union
+
 import torch
 import torch.nn as nn
 
+from mmselfsup.core import SelfSupDataSample
 from mmselfsup.utils import (batch_shuffle_ddp, batch_unshuffle_ddp,
                              concat_all_gather)
 from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
@@ -18,28 +21,33 @@ class MoCo(BaseModel):
     `<https://github.com/facebookresearch/moco/blob/master/moco/builder.py>`_.
 
     Args:
-        backbone (dict): Config dict for module of backbone.
-        neck (dict): Config dict for module of deep features to compact
-            feature vectors. Defaults to None.
-        head (dict): Config dict for module of loss functions.
+        backbone (Dict): Config dict for module of backbone.
+        neck (Dict): Config dict for module of deep features to compact feature
+            vectors.
+        head (Dict): Config dict for module of loss functions.
+        queue_len (int, optional): Number of negative keys maintained in the
+            queue. Defaults to 65536.
+        feat_dim (int, optional): Dimension of compact feature vectors.
+            Defaults to 128.
+        momentum (float, optional): Momentum coefficient for the
+            momentum-updated encoder. Defaults to 0.999.
+        preprocess_cfg (Dict, optional): Config to preprocess images.
             Defaults to None.
-        queue_len (int): Number of negative keys maintained in the queue.
-            Defaults to 65536.
-        feat_dim (int): Dimension of compact feature vectors. Defaults to 128.
-        momentum (float): Momentum coefficient for the momentum-updated
-            encoder. Defaults to 0.999.
+        init_cfg (Dict or list[Dict], optional): Initialization config dict.
+            Defaults to None
     """
 
     def __init__(self,
-                 backbone,
-                 neck=None,
-                 head=None,
-                 queue_len=65536,
-                 feat_dim=128,
-                 momentum=0.999,
-                 init_cfg=None,
-                 **kwargs):
-        super(MoCo, self).__init__(init_cfg)
+                 backbone: Dict,
+                 neck: Dict,
+                 head: Dict,
+                 queue_len: Optional[int] = 65536,
+                 feat_dim: Optional[int] = 128,
+                 momentum: Optional[float] = 0.999,
+                 preprocess_cfg: Optional[Dict] = None,
+                 init_cfg: Optional[Union[List[Dict], Dict]] = None) -> None:
+        super().__init__(preprocess_cfg=preprocess_cfg, init_cfg=init_cfg)
+        assert backbone is not None
         assert neck is not None
         self.encoder_q = nn.Sequential(
             build_backbone(backbone), build_neck(neck))
@@ -65,7 +73,7 @@ class MoCo(BaseModel):
         self.register_buffer('queue_ptr', torch.zeros(1, dtype=torch.long))
 
     @torch.no_grad()
-    def _momentum_update_key_encoder(self):
+    def _momentum_update_key_encoder(self) -> None:
         """Momentum update of the key encoder."""
         for param_q, param_k in zip(self.encoder_q.parameters(),
                                     self.encoder_k.parameters()):
@@ -73,7 +81,7 @@ class MoCo(BaseModel):
                            param_q.data * (1. - self.momentum)
 
     @torch.no_grad()
-    def _dequeue_and_enqueue(self, keys):
+    def _dequeue_and_enqueue(self, keys: torch.Tensor) -> None:
         """Update queue."""
         # gather keys before updating queue
         keys = concat_all_gather(keys)
@@ -89,33 +97,37 @@ class MoCo(BaseModel):
 
         self.queue_ptr[0] = ptr
 
-    def extract_feat(self, img):
+    def extract_feat(self, inputs: List[torch.Tensor],
+                     data_samples: List[SelfSupDataSample],
+                     **kwarg) -> Tuple[torch.Tensor]:
         """Function to extract features from backbone.
 
         Args:
-            img (Tensor): Input images of shape (N, C, H, W).
-                Typically these should be mean centered and std scaled.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            tuple[Tensor]: backbone outputs.
+            Tuple[torch.Tensor]: backbone outputs.
         """
-        x = self.backbone(img)
+        x = self.backbone(inputs[0])
         return x
 
-    def forward_train(self, img, **kwargs):
-        """Forward computation during training.
+    def forward_train(self, inputs: List[torch.Tensor],
+                      data_samples: List[SelfSupDataSample],
+                      **kwargs) -> Dict[str, torch.Tensor]:
+        """The forward function in training.
 
         Args:
-            img (list[Tensor]): A list of input images with shape
-                (N, C, H, W). Typically these should be mean centered
-                and std scaled.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            dict[str, Tensor]: A dictionary of loss components.
+            Dict[str, torch.Tensor]: A dictionary of loss components.
         """
-        assert isinstance(img, list)
-        im_q = img[0]
-        im_k = img[1]
+        im_q = inputs[0]
+        im_k = inputs[1]
         # compute query features
         q = self.encoder_q(im_q)[0]  # queries: NxC
         q = nn.functional.normalize(q, dim=1)
