@@ -1,7 +1,10 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import Dict, List, Optional, Tuple, Union
+
 import torch
 import torch.nn as nn
 
+from mmselfsup.core import SelfSupDataSample
 from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
 from .base import BaseModel
 
@@ -15,23 +18,29 @@ class BYOL(BaseModel):
     The momentum adjustment is in `core/hooks/byol_hook.py`.
 
     Args:
-        backbone (dict): Config dict for module of backbone.
-        neck (dict): Config dict for module of deep features to compact
-            feature vectors. Defaults to None.
-        head (dict): Config dict for module of loss functions.
+        backbone (Dict, optional): Config dict for module of backbone.
+        neck (Dict, optional): Config dict for module of deep features
+            to compact feature vectors. Defaults to None.
+        head (Dict, optional): Config dict for module of loss functions.
             Defaults to None.
         base_momentum (float): The base momentum coefficient for the target
             network. Defaults to 0.996.
+        preprocess_cfg (Dict, optional): Config dict to preprocess images.
+            Defaults to None.
+        init_cfg (Dict or List[Dict], optional): Config dict for weight
+            initialization. Defaults to None.
     """
 
     def __init__(self,
-                 backbone,
-                 neck=None,
-                 head=None,
-                 base_momentum=0.996,
-                 init_cfg=None,
-                 **kwargs):
-        super(BYOL, self).__init__(init_cfg)
+                 backbone: Optional[Dict] = None,
+                 neck: Optional[Dict] = None,
+                 head: Optional[Dict] = None,
+                 base_momentum: float = 0.996,
+                 preprocess_cfg: Optional[Dict] = None,
+                 init_cfg: Optional[Union[Dict, List[Dict]]] = None,
+                 **kwargs) -> None:
+        super().__init__(preprocess_cfg=preprocess_cfg, init_cfg=init_cfg)
+        assert backbone is not None
         assert neck is not None
         self.online_net = nn.Sequential(
             build_backbone(backbone), build_neck(neck))
@@ -59,33 +68,38 @@ class BYOL(BaseModel):
             param_tgt.data = param_tgt.data * self.momentum + \
                              param_ol.data * (1. - self.momentum)
 
-    def extract_feat(self, img):
+    def extract_feat(self, inputs: List[torch.Tensor],
+                     data_samples: List[SelfSupDataSample],
+                     **kwargs) -> Tuple[torch.Tensor]:
         """Function to extract features from backbone.
 
         Args:
-            img (Tensor): Input images of shape (N, C, H, W).
-                Typically these should be mean centered and std scaled.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            tuple[Tensor]: backbone outputs.
+            Tuple[torch.Tensor]: backbone outputs.
         """
-        x = self.backbone(img)
+        x = self.backbone(inputs[0])
         return x
 
-    def forward_train(self, img, **kwargs):
+    def forward_train(self, inputs: List[torch.Tensor],
+                      data_samples: List[SelfSupDataSample],
+                      **kwargs) -> Dict[str, torch.Tensor]:
         """Forward computation during training.
 
         Args:
-            img (list[Tensor]): A list of input images with shape
-                (N, C, H, W). Typically these should be mean centered
-                and std scaled.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            dict[str, Tensor]: A dictionary of loss components.
+            Dict[str, torch.Tensor]: A dictionary of loss components.
         """
-        assert isinstance(img, list)
-        img_v1 = img[0]
-        img_v2 = img[1]
+        assert isinstance(inputs, list)
+        img_v1 = inputs[0]
+        img_v2 = inputs[1]
         # compute online features
         proj_online_v1 = self.online_net(img_v1)[0]
         proj_online_v2 = self.online_net(img_v2)[0]
