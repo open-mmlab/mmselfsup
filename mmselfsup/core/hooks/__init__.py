@@ -1,5 +1,4 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from .cosine_annealing_hook import StepFixCosineAnnealingLrUpdaterHook
 from .deepcluster_hook import DeepClusterHook
 from .densecl_hook import DenseCLHook
 from .momentum_update_hook import MomentumUpdateHook
@@ -11,5 +10,5 @@ from .swav_hook import SwAVHook
 __all__ = [
     'MomentumUpdateHook', 'DeepClusterHook', 'DenseCLHook', 'ODCHook',
     'DistOptimizerHook', 'GradAccumFp16OptimizerHook', 'SimSiamHook',
-    'SwAVHook', 'StepFixCosineAnnealingLrUpdaterHook'
+    'SwAVHook'
 ]
