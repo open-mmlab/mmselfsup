@@ -20,7 +20,24 @@ optimizer = dict(
     })
 optimizer_config = dict()
 
-# learning policy
+# learning rate scheduler
+scheduler = [
+    dict(
+        type='LinearLR',
+        start_factor=1e-4,
+        by_epoch=False,
+        begin=0,
+        end=40,
+        convert_to_iter_based=True),
+    dict(
+        type='CosineAnnealingLR',
+        T_max=360,
+        by_epoch=False,
+        begin=40,
+        end=400,
+        convert_to_iter_based=True)
+]
+
 lr_config = dict(
     policy='StepFixCosineAnnealing',
     min_lr=0.0,

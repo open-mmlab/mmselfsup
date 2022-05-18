@@ -3,13 +3,22 @@ optimizer = dict(type='AdamW', lr=1.5e-4, betas=(0.9, 0.95), weight_decay=0.05)
 optimizer_config = dict()  # grad_clip, coalesce, bucket_size_mb
 
 # learning policy
-lr_config = dict(
-    policy='CosineAnnealing',
-    min_lr=0.,
-    warmup='linear',
-    warmup_iters=40,
-    warmup_ratio=1e-4,  # cannot be 0
-    warmup_by_epoch=True)
+scheduler = [
+    dict(
+        type='LinearLR',
+        start_factor=1e-4,
+        by_epoch=False,
+        begin=0,
+        end=40,
+        convert_to_iter_based=True),
+    dict(
+        type='CosineAnnealingLR',
+        T_max=260,
+        by_epoch=False,
+        begin=40,
+        end=300,
+        convert_to_iter_based=True)
+]
 
 # runtime settings
 runner = dict(type='EpochBasedRunner', max_epochs=300)
