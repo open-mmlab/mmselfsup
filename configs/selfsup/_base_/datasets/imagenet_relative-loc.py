@@ -1,45 +1,43 @@
 # dataset settings
-data_source = 'ImageNet'
-dataset_type = 'RelativeLocDataset'
-img_norm_cfg = dict(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+dataset_type = 'mmcls.ImageNet'
+data_root = 'data/imagenet/'
+file_client_args = dict(backend='disk')
+
 train_pipeline = [
+    dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(type='Resize', size=292),
     dict(type='RandomCrop', size=255),
-    dict(type='RandomGrayscale', p=0.66),
+    dict(type='RandomGrayscale', prob=0.66),
+    dict(type='RandomPatchWithLabels'),
+    dict(type='PackSelfSupInputs')
 ]
-test_pipeline = [
+val_pipeline = [
+    dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(type='Resize', size=292),
     dict(type='CenterCrop', size=255),
-]
-format_pipeline = [
-    dict(type='ToTensor'),
-    dict(type='Normalize', **img_norm_cfg),
+    dict(type='RandomPatchWithLabels'),
+    dict(type='PackSelfSupInputs')
 ]
 
-# prefetch
-prefetch = False
-
-# dataset summary
-data = dict(
-    samples_per_gpu=64,  # 64 x 8 = 512
-    workers_per_gpu=4,
-    train=dict(
+train_dataloader = dict(
+    batch_size=64,
+    num_workers=4,
+    persistent_workers=True,
+    sampler=dict(type='DefaultSampler', shuffle=True),
+    dataset=dict(
         type=dataset_type,
-        data_source=dict(
-            type=data_source,
-            data_prefix='data/imagenet/train',
-            ann_file='data/imagenet/meta/train.txt',
-        ),
-        pipeline=train_pipeline,
-        format_pipeline=format_pipeline,
-        prefetch=prefetch),
-    val=dict(
+        data_root=data_root,
+        ann_file='meta/train.txt',
+        data_prefix=dict(img='train/'),
+        pipeline=train_pipeline))
+val_dataloader = dict(
+    batch_size=64,
+    num_workers=4,
+    persistent_workers=True,
+    sampler=dict(type='DefaultSampler', shuffle=True),
+    dataset=dict(
         type=dataset_type,
-        data_source=dict(
-            type=data_source,
-            data_prefix='data/imagenet/val',
-            ann_file='data/imagenet/meta/val.txt',
-        ),
-        pipeline=test_pipeline,
-        format_pipeline=format_pipeline,
-        prefetch=prefetch))
+        data_root=data_root,
+        ann_file='meta/val.txt',
+        data_prefix=dict(img='val/'),
+        pipeline=val_pipeline))

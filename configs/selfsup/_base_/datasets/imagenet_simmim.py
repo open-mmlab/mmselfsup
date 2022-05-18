@@ -1,41 +1,32 @@
 # dataset settings
-data_source = 'ImageNet'
-dataset_type = 'SingleViewDataset'
-img_norm_cfg = dict(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+dataset_type = 'mmcls.ImageNet'
+data_root = 'data/imagenet/'
+file_client_args = dict(backend='disk')
+
 train_pipeline = [
     dict(
         type='RandomResizedCrop',
         size=192,
         scale=(0.67, 1.0),
         ratio=(3. / 4., 4. / 3.)),
-    dict(type='RandomHorizontalFlip')
-]
-
-# prefetch
-prefetch = False
-if not prefetch:
-    train_pipeline.extend(
-        [dict(type='ToTensor'),
-         dict(type='Normalize', **img_norm_cfg)])
-
-train_pipeline.append(
+    dict(type='RandomFlip', prob=0.5),
     dict(
         type='BlockwiseMaskGenerator',
         input_size=192,
         mask_patch_size=32,
         model_patch_size=4,
-        mask_ratio=0.6))
+        mask_ratio=0.6),
+    dict(type='PackSelfSupInputs')
+]
 
-# dataset summary
-data = dict(
-    samples_per_gpu=256,
-    workers_per_gpu=8,
-    train=dict(
+train_dataloader = dict(
+    batch_size=256,
+    num_workers=8,
+    persistent_workers=True,
+    sampler=dict(type='DefaultSampler', shuffle=True),
+    dataset=dict(
         type=dataset_type,
-        data_source=dict(
-            type=data_source,
-            data_prefix='data/imagenet/train',
-            ann_file='data/imagenet/meta/train.txt',
-        ),
-        pipeline=train_pipeline,
-        prefetch=prefetch))
+        data_root=data_root,
+        ann_file='meta/train.txt',
+        data_prefix=dict(img='train/'),
+        pipeline=train_pipeline))
