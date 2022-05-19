@@ -6,16 +6,14 @@ import warnings
 from typing import Dict, List, Optional, Sequence, Tuple, Union
 
 import cv2
+import mmcv
 import numpy as np
 import torch
-import torchvision.transforms.functional as F
 from mmcv.image import (adjust_brightness, adjust_color, adjust_contrast,
-                        adjust_hue, adjust_lighting, imcrop, imresize,
-                        solarize)
+                        adjust_hue, adjust_lighting)
 from mmcv.transforms import BaseTransform
 from PIL import Image, ImageFilter
 from timm.data import create_transform
-from torchvision.transforms import RandomCrop
 
 from mmselfsup.registry import TRANSFORMS
 
@@ -519,7 +517,7 @@ class RandomSolarize(BaseTransform):
         if np.random.rand() > self.prob:
             return results
         img = results['img']
-        results['img'] = solarize(img, thr=self.threshold)
+        results['img'] = mmcv.solarize(img, thr=self.threshold)
         return results
 
     def __repr__(self) -> str:
@@ -604,18 +602,18 @@ class RandomPatchWithLabels(BaseTransform):
     def __init__(self) -> None:
         pass
 
-    def _image_to_patches(self, img: Image):
+    def _image_to_patches(self, img: np.ndarray) -> List[np.ndarray]:
         """Crop split_per_side x split_per_side patches from input image.
 
         Args:
-            img (PIL Image): input image.
+            img (np.ndarray): input image.
 
         Returns:
-            list[PIL Image]: A list of cropped patches.
+            patches (List[np.ndarray]): A list of cropped patches.
         """
         split_per_side = 3  # split of patches per image side
         patch_jitter = 21  # jitter of each patch from each grid
-        h, w = img.size
+        h, w, _ = img.shape
         h_grid = h // split_per_side
         w_grid = w // split_per_side
         h_patch = h_grid - patch_jitter
@@ -624,25 +622,40 @@ class RandomPatchWithLabels(BaseTransform):
         patches = []
         for i in range(split_per_side):
             for j in range(split_per_side):
-                p = F.crop(img, i * h_grid, j * w_grid, h_grid, w_grid)
-                p = RandomCrop((h_patch, w_patch))(p)
-                patches.append(np.transpose(np.asarray(p), (2, 0, 1)))
+                # get a patch of the image
+                patch_box = np.array([
+                    i * h_grid, j * w_grid, (i + 1) * h_grid, (j + 1) * w_grid
+                ])
+                p = mmcv.imcrop(img, bboxes=patch_box)
+
+                # random crop sub-patch in the patch
+                ymin, xmin, height, width = RandomCrop.get_params(
+                    p, (h_patch, w_patch))
+                p = mmcv.imcrop(
+                    img,
+                    np.array([
+                        xmin,
+                        ymin,
+                        xmin + width - 1,
+                        ymin + height - 1,
+                    ]))
+                patches.append(p)
         return patches
 
     def transform(self, results: Dict) -> Dict:
-        img = Image.fromarray(results['img'])
+        img = results['img']
         patches = self._image_to_patches(img)
         perms = []
         # create a list of patch pairs
         [
-            perms.append(np.concatenate((patches[i], patches[4]), axis=0))
+            perms.append(np.concatenate((patches[i], patches[4]), axis=2))
             for i in range(9) if i != 4
         ]
         # create corresponding labels for patch pairs
         patch_labels = np.array([0, 1, 2, 3, 4, 5, 6, 7])
         results = dict(
             img=np.stack(perms, axis=0),
-            patch_label=patch_labels)  # 8(2C)HW, 8
+            patch_label=patch_labels)  # 8HW(2C), 8
         return results
 
     def __repr__(self) -> str:
@@ -926,8 +939,8 @@ class RandomResizedCrop(BaseTransform):
             ratio=self.ratio,
             max_attempts=self.max_attempts)
         ymin, xmin, ymax, xmax = self.get_params(**get_params_args)
-        img = imcrop(img, bboxes=np.array([xmin, ymin, xmax, ymax]))
-        results['img'] = imresize(
+        img = mmcv.imcrop(img, bboxes=np.array([xmin, ymin, xmax, ymax]))
+        results['img'] = mmcv.imresize(
             img,
             tuple(self.size[::-1]),
             interpolation=self.interpolation,
@@ -942,3 +955,125 @@ class RandomResizedCrop(BaseTransform):
         repr_str += f', interpolation={self.interpolation}'
         repr_str += f', backend={self.backend})'
         return repr_str
+
+
+@TRANSFORMS.register_module()
+class RandomCrop(BaseTransform):
+    """Crop the given Image at a random location.
+
+    Required Keys:
+
+    - img
+
+    Modified Keys:
+
+    - img
+
+    Args:
+        size (int or Sequence): Desired output size of the crop. If size is an
+            int instead of sequence like (h, w), a square crop (size, size) is
+            made.
+        padding (int or Sequence, optional): Optional padding on each border
+            of the image. If a sequence of length 4 is provided, it is used to
+            pad left, top, right, bottom borders respectively.  If a sequence
+            of length 2 is provided, it is used to pad left/right, top/bottom
+            borders, respectively. Default: None, which means no padding.
+        pad_if_needed (boolean): It will pad the image if smaller than the
+            desired size to avoid raising an exception. Since cropping is done
+            after padding, the padding seems to be done at a random offset.
+            Default: False.
+        pad_val (Number | Sequence[Number]): Pixel pad_val value for constant
+            fill. If a tuple of length 3, it is used to pad_val R, G, B
+            channels respectively. Default: 0.
+        padding_mode (str): Type of padding. Defaults to "constant". Should
+            be one of the following:
+
+            - constant: Pads with a constant value, this value is specified \
+                with pad_val.
+            - edge: pads with the last value at the edge of the image.
+            - reflect: Pads with reflection of image without repeating the \
+                last value on the edge. For example, padding [1, 2, 3, 4] \
+                with 2 elements on both sides in reflect mode will result \
+                in [3, 2, 1, 2, 3, 4, 3, 2].
+            - symmetric: Pads with reflection of image repeating the last \
+                value on the edge. For example, padding [1, 2, 3, 4] with \
+                2 elements on both sides in symmetric mode will result in \
+                [2, 1, 1, 2, 3, 4, 4, 3].
+    """
+
+    def __init__(self,
+                 size: Union[int, Sequence[int]],
+                 padding: Optional[Union[int, Sequence[int]]] = None,
+                 pad_if_needed: Optional[bool] = False,
+                 pad_val: Optional[Union[numbers.Number,
+                                         Sequence[numbers.Number]]] = 0,
+                 padding_mode: Optional[str] = 'constant') -> None:
+        if isinstance(size, (tuple, list)):
+            self.size = size
+        else:
+            self.size = (size, size)
+        # check padding mode
+        assert padding_mode in ['constant', 'edge', 'reflect', 'symmetric']
+        self.padding = padding
+        self.pad_if_needed = pad_if_needed
+        self.pad_val = pad_val
+        self.padding_mode = padding_mode
+
+    @staticmethod
+    def get_params(img: np.ndarray, output_size: Tuple) -> Tuple:
+        """Get parameters for ``crop`` for a random crop.
+
+        Args:
+            img (np.ndarray): Image to be cropped.
+            output_size (Tuple): Expected output size of the crop.
+
+        Returns:
+            tuple: Params (xmin, ymin, target_height, target_width) to be
+                passed to ``crop`` for random crop.
+        """
+        height = img.shape[0]
+        width = img.shape[1]
+        target_height, target_width = output_size
+        if width == target_width and height == target_height:
+            return 0, 0, height, width
+
+        ymin = random.randint(0, height - target_height)
+        xmin = random.randint(0, width - target_width)
+        return ymin, xmin, target_height, target_width
+
+    def transform(self, results: Dict) -> Dict:
+        img = results['img']
+        if self.padding is not None:
+            img = mmcv.impad(img, padding=self.padding, pad_val=self.pad_val)
+
+        # pad the height if needed
+        if self.pad_if_needed and img.shape[0] < self.size[0]:
+            img = mmcv.impad(
+                img,
+                padding=(0, self.size[0] - img.shape[0], 0,
+                         self.size[0] - img.shape[0]),
+                pad_val=self.pad_val,
+                padding_mode=self.padding_mode)
+
+        # pad the width if needed
+        if self.pad_if_needed and img.shape[1] < self.size[1]:
+            img = mmcv.impad(
+                img,
+                padding=(self.size[1] - img.shape[1], 0,
+                         self.size[1] - img.shape[1], 0),
+                pad_val=self.pad_val,
+                padding_mode=self.padding_mode)
+
+        ymin, xmin, height, width = self.get_params(img, self.size)
+        results['img'] = mmcv.imcrop(
+            img, np.array([
+                xmin,
+                ymin,
+                xmin + width - 1,
+                ymin + height - 1,
+            ]))
+        return results
+
+    def __repr__(self):
+        return (self.__class__.__name__ +
+                f'(size={self.size}, padding={self.padding})')
