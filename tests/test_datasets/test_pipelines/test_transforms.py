@@ -9,12 +9,13 @@ import torchvision
 from mmcv import imread
 from mmcv.transforms import Compose
 from PIL import Image
+from torchvision.transforms.functional import InterpolationMode
 
 import mmselfsup.datasets.pipelines.transforms as mmselfsup_transforms
 from mmselfsup.datasets.pipelines import (
     BEiTMaskGenerator, ColorJitter, Lighting, RandomGaussianBlur,
     RandomPatchWithLabels, RandomResizedCropAndInterpolationWithTwoPic,
-    RandomRotationWithLabels, RandomSolarize, SimMIMMaskGenerator)
+    RandomSolarize, RotationWithLabels, SimMIMMaskGenerator)
 
 
 def test_simmim_mask_gen():
@@ -127,7 +128,7 @@ def test_random_solarize():
 
 def test_random_rotation():
     transform = dict()
-    module = RandomRotationWithLabels(**transform)
+    module = RotationWithLabels(**transform)
     image = torch.rand((224, 224, 3)).numpy().astype(np.uint8)
     results = {'img': image}
     results = module(results)
@@ -511,6 +512,90 @@ def test_randomcrop():
         img = composed_transform(results)['img']
         assert np.array(img).shape == (500, 600, 3)
         assert np.array(baseline).shape == (500, 600, 3)
+        nonzero = len((ori_img - np.array(ori_img_pil)[:, :, ::-1]).nonzero())
+        nonzero_transform = len(
+            (img - np.array(baseline)[:, :, ::-1]).nonzero())
+        assert nonzero == nonzero_transform
+
+
+def test_randomrotation():
+    ori_img = torch.rand((224, 224, 3)).numpy().astype(np.uint8)
+    ori_img_pil = Image.fromarray(ori_img, mode='RGB')
+
+    inverse_modes_mapping = {
+        'nearest': InterpolationMode.NEAREST,
+        'bilinear': InterpolationMode.BILINEAR,
+        'bicubic': InterpolationMode.BICUBIC,
+    }
+
+    seed = random.randint(0, 100)
+
+    # test when degrees is negative
+    with pytest.raises(ValueError):
+        kwargs = dict(degrees=(-30))
+        aug = []
+        aug.extend([mmselfsup_transforms.RandomRotation(**kwargs)])
+        composed_transform = Compose(aug)
+        results = dict()
+        results['img'] = ori_img
+        composed_transform(results)['img']
+
+    # test when center is not None and expand=True
+    with pytest.raises(ValueError):
+        kwargs = dict(degrees=(30, 60), expand=True, center=(5, 3))
+        aug = []
+        aug.extend([mmselfsup_transforms.RandomRotation(**kwargs)])
+        composed_transform = Compose(aug)
+        results = dict()
+        results['img'] = ori_img
+        composed_transform(results)['img']
+
+    kwargs_list = [
+        # test degrees
+        dict(degrees=(30, 60)),
+        dict(degrees=(30, 30)),
+        dict(degrees=(60, 370)),
+        # test different interpolation types
+        dict(degrees=(30, 60), interpolation='nearest'),
+        dict(degrees=(30, 60), interpolation='bilinear'),
+        dict(degrees=(30, 60), interpolation='bicubic'),
+        # test center
+        dict(degrees=(30, 60), center=(5, 3)),
+        # test fill
+        dict(degrees=(30, 60), fill=5)
+    ]
+
+    for kwargs in kwargs_list:
+        # RandomRotation in mmselfsup
+        random.seed(seed)
+        np.random.seed(seed)
+
+        aug = []
+        aug.extend([mmselfsup_transforms.RandomRotation(**kwargs)])
+        composed_transform = Compose(aug)
+
+        # test __repr__()
+        print(composed_transform)
+
+        results = dict()
+        results['img'] = ori_img
+        img = composed_transform(results)['img']
+
+        # RandomRotation in torchvision
+        random.seed(seed)
+        np.random.seed(seed)
+
+        if 'interpolation' in kwargs:
+            mode = kwargs['interpolation']
+            kwargs['interpolation'] = inverse_modes_mapping[mode]
+
+        aug = []
+        aug.extend([torchvision.transforms.RandomRotation(**kwargs)])
+        composed_transform = Compose(aug)
+        baseline = composed_transform(ori_img_pil)
+
+        # compare the outputs of RandomRotation in mmselfsup and torchvision
+        assert np.array(img).shape == np.array(baseline).shape
         nonzero = len((ori_img - np.array(ori_img_pil)[:, :, ::-1]).nonzero())
         nonzero_transform = len(
             (img - np.array(baseline)[:, :, ::-1]).nonzero())

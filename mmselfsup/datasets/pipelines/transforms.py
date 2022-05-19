@@ -18,6 +18,17 @@ from timm.data import create_transform
 from mmselfsup.registry import TRANSFORMS
 
 
+def check_sequence_input(x: Sequence, name: str, req_sizes: Tuple) -> None:
+    msg = req_sizes[0] if len(req_sizes) < 2 else ' or '.join(
+        [str(s) for s in req_sizes])
+    if not isinstance(x, Sequence):
+        raise TypeError('{} should be a sequence of length {}.'.format(
+            name, msg))
+    if len(x) not in req_sizes:
+        raise ValueError('{} should be sequence of length {}.'.format(
+            name, msg))
+
+
 @TRANSFORMS.register_module()
 class SimMIMMaskGenerator(BaseTransform):
     """Generate random block mask for each Image.
@@ -528,7 +539,7 @@ class RandomSolarize(BaseTransform):
 
 
 @TRANSFORMS.register_module()
-class RandomRotationWithLabels(BaseTransform):
+class RotationWithLabels(BaseTransform):
     """Rotation prediction.
 
     Required Keys:
@@ -1077,3 +1088,118 @@ class RandomCrop(BaseTransform):
     def __repr__(self):
         return (self.__class__.__name__ +
                 f'(size={self.size}, padding={self.padding})')
+
+
+@TRANSFORMS.register_module()
+class RandomRotation(BaseTransform):
+    """Rotate the image by angle.
+
+    Required Keys:
+
+    - img
+
+    Modified Keys:
+
+    - img
+
+    Args:
+        degrees (sequence | int): Range of degrees to select from. If degrees
+            is an int instead of sequence like (min, max), the range of degrees
+            will be (-degrees, +degrees).
+        interpolation (str, optional): Interpolation method, accepted values
+            are 'nearest', 'bilinear', 'bicubic', 'area', 'lanczos'. Defaults
+            to 'nearest'.
+        expand (bool, optional): Optional expansion flag. If true, expands the
+            output to make it large enough to hold the entire rotated image.
+            If false or omitted, make the output image the same size as the
+            input image. Note that the expand flag assumes rotation around the
+            center and no translation. Defaults to False.
+        center (Tuple[float], optional): Center point (w, h) of the rotation in
+            the source image. If not specified, the center of the image will be
+            used. Defaults to None.
+        fill (int, optional): Pixel fill value for the area outside the rotated
+            image. Default to 0.
+    """
+
+    def __init__(self,
+                 degrees: Union[int, Sequence[int]],
+                 interpolation: Optional[str] = 'nearest',
+                 expand: Optional[bool] = False,
+                 center: Optional[Tuple[float]] = None,
+                 fill: Optional[int] = 0) -> None:
+        super().__init__()
+
+        assert interpolation in ('nearest', 'bilinear', 'bicubic', 'area',
+                                 'lanczos')
+
+        if not isinstance(expand, bool):
+            raise TypeError('expand should be bool.')
+
+        if center is not None:
+            check_sequence_input(center, 'center', req_sizes=(2, ))
+            if expand:
+                raise ValueError('`expand` conflicts with `center`')
+
+        if not isinstance(fill, int):
+            raise TypeError('fill should be int.')
+
+        degrees = self._setup_angle(degrees, name='degrees', req_sizes=(2, ))
+
+        self.degrees = degrees
+        self.interpolation = interpolation
+        self.expand = expand
+        self.center = center
+        self.fill = fill
+
+    def _setup_angle(self,
+                     x: Union[int, Sequence[int]],
+                     name: str,
+                     req_sizes: Tuple = (2, )) -> List[float]:
+        if isinstance(x, int):
+            if x < 0:
+                raise ValueError(
+                    'If {} is a single number, it must be positive.'.format(
+                        name))
+            x = [-x, x]
+        else:
+            check_sequence_input(x, name, req_sizes)
+
+        return [float(d) for d in x]
+
+    @staticmethod
+    def get_params(degrees: List[float]) -> float:
+        """Get parameters for ``rotate`` for a random rotation.
+
+        Args:
+            degrees (List[float]): Range of degrees to select from.
+
+        Returns:
+            float: angle parameter to be passed to ``rotate`` for
+                random rotation.
+        """
+        angle = float(
+            torch.empty(1).uniform_(float(degrees[0]),
+                                    float(degrees[1])).item())
+        return angle
+
+    def transform(self, results: Dict) -> Dict:
+        img = results['img']
+        angle = self.get_params(self.degrees)
+        results['img'] = mmcv.imrotate(
+            img,
+            angle,
+            center=self.center,
+            border_value=self.fill,
+            interpolation=self.interpolation,
+            auto_bound=self.expand)
+        return results
+
+    def __repr__(self) -> str:
+        repr_str = self.__class__.__name__ + f'(degrees={self.degrees}'
+        repr_str += f', interpolation={self.interpolation}'
+        repr_str += f', expand={self.expand}'
+        if self.center is not None:
+            repr_str += f', center={self.center}'
+        if self.fill is not None:
+            repr_str += f', fill={self.fill})'
+        return repr_str

@@ -7,14 +7,14 @@ train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(type='RandomResizedCrop', size=224),
     dict(type='RandomFlip', prob=0.5),
-    dict(type='RandomRotationWithLabels'),
+    dict(type='RotationWithLabels'),
     dict(type='PackSelfSupInputs')
 ]
 val_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(type='Resize', size=256),
     dict(type='CenterCrop', size=224),
-    dict(type='RandomRotationWithLabels'),
+    dict(type='RotationWithLabels'),
     dict(type='PackSelfSupInputs')
 ]
 
