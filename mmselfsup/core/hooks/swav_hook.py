@@ -1,9 +1,12 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import os.path as osp
+from typing import List, Optional
 
 import torch
 import torch.distributed as dist
-from mmcv.runner import HOOKS, Hook
+from mmengine.hooks import Hook
+
+from mmselfsup.registry import HOOKS
 
 
 @HOOKS.register_module()
@@ -29,13 +32,12 @@ class SwAVHook(Hook):
     """
 
     def __init__(self,
-                 batch_size,
-                 epoch_queue_starts=15,
-                 crops_for_assign=[0, 1],
-                 feat_dim=128,
-                 queue_length=0,
-                 interval=1,
-                 **kwargs):
+                 batch_size: int,
+                 epoch_queue_starts: Optional[int] = 15,
+                 crops_for_assign: Optional[List[int]] = [0, 1],
+                 feat_dim: Optional[int] = 128,
+                 queue_length: Optional[int] = 0,
+                 interval: Optional[int] = 1):
         self.batch_size = batch_size * dist.get_world_size()\
             if dist.is_initialized() else batch_size
         self.epoch_queue_starts = epoch_queue_starts
@@ -45,7 +47,7 @@ class SwAVHook(Hook):
         self.interval = interval
         self.queue = None
 
-    def before_run(self, runner):
+    def before_run(self, runner) -> None:
         if dist.is_initialized():
             self.queue_path = osp.join(runner.work_dir,
                                        'queue' + str(dist.get_rank()) + '.pth')
@@ -58,7 +60,7 @@ class SwAVHook(Hook):
         # the queue needs to be divisible by the batch size
         self.queue_length -= self.queue_length % self.batch_size
 
-    def before_train_epoch(self, runner):
+    def before_train_epoch(self, runner) -> None:
         # optionally starts a queue
         if self.queue_length > 0 \
             and runner.epoch >= self.epoch_queue_starts \
@@ -73,7 +75,7 @@ class SwAVHook(Hook):
         runner.model.module.head.queue = self.queue
         runner.model.module.head.use_queue = False
 
-    def after_train_epoch(self, runner):
+    def after_train_epoch(self, runner) -> None:
         self.queue = runner.model.module.head.queue
 
         if self.queue is not None and self.every_n_epochs(

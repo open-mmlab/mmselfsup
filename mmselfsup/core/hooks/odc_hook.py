@@ -1,7 +1,11 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import Optional
+
 import numpy as np
-from mmcv.runner import HOOKS, Hook
+from mmengine.hooks import Hook
 from mmengine.logging import print_log
+
+from mmselfsup.registry import HOOKS
 
 
 @HOOKS.register_module()
@@ -22,12 +26,12 @@ class ODCHook(Hook):
     """
 
     def __init__(self,
-                 centroids_update_interval,
-                 deal_with_small_clusters_interval,
-                 evaluate_interval,
-                 reweight,
-                 reweight_pow,
-                 dist_mode=True):
+                 centroids_update_interval: int,
+                 deal_with_small_clusters_interval: int,
+                 evaluate_interval: int,
+                 reweight: bool,
+                 reweight_pow: float,
+                 dist_mode: Optional[bool] = True) -> None:
         assert dist_mode, 'non-dist mode is not implemented'
         self.centroids_update_interval = centroids_update_interval
         self.deal_with_small_clusters_interval = \
@@ -36,7 +40,7 @@ class ODCHook(Hook):
         self.reweight = reweight
         self.reweight_pow = reweight_pow
 
-    def after_train_iter(self, runner):
+    def after_train_iter(self, runner) -> None:
         # centroids update
         if self.every_n_iters(runner, self.centroids_update_interval):
             runner.model.module.memory_bank.update_centroids_memory()
@@ -55,7 +59,7 @@ class ODCHook(Hook):
                 new_labels = new_labels.cpu()
             self.evaluate(runner, new_labels.numpy())
 
-    def after_train_epoch(self, runner):
+    def after_train_epoch(self, runner) -> None:
         # save cluster
         if self.every_n_epochs(runner, 10) and runner.rank == 0:
             new_labels = runner.model.module.memory_bank.label_bank
@@ -64,7 +68,7 @@ class ODCHook(Hook):
             np.save(f'{runner.work_dir}/cluster_epoch_{runner.epoch + 1}.npy',
                     new_labels.numpy())
 
-    def evaluate(self, runner, new_labels):
+    def evaluate(self, runner, new_labels: np.ndarray) -> None:
         histogram = np.bincount(
             new_labels, minlength=runner.model.module.memory_bank.num_classes)
         empty_cls = (histogram == 0).sum()
