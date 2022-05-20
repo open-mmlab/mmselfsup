@@ -1,5 +1,9 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from mmcv.runner import HOOKS, Hook
+from typing import Optional
+
+from mmengine.hooks import Hook
+
+from mmselfsup.registry import HOOKS
 
 
 @HOOKS.register_module()
@@ -14,15 +18,15 @@ class DenseCLHook(Hook):
             ``loss_lambda=0``. Defaults to 1000.
     """
 
-    def __init__(self, start_iters=1000, **kwargs):
+    def __init__(self, start_iters: Optional[int] = 1000) -> None:
         self.start_iters = start_iters
 
-    def before_run(self, runner):
+    def before_run(self, runner) -> None:
         assert hasattr(runner.model.module, 'loss_lambda'), \
             "The runner must have attribute \"loss_lambda\" in DenseCL."
         self.loss_lambda = runner.model.module.loss_lambda
 
-    def before_train_iter(self, runner):
+    def before_train_iter(self, runner) -> None:
         assert hasattr(runner.model.module, 'loss_lambda'), \
             "The runner must have attribute \"loss_lambda\" in DenseCL."
         cur_iter = runner.iter

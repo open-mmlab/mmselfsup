@@ -1,5 +1,9 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from mmcv.runner import HOOKS, Hook
+from typing import Optional
+
+from mmengine.hooks import Hook
+
+from mmselfsup.registry import HOOKS
 
 
 @HOOKS.register_module()
@@ -15,12 +19,16 @@ class SimSiamHook(Hook):
             Defaults to True.
     """
 
-    def __init__(self, fix_pred_lr, lr, adjust_by_epoch=True, **kwargs):
+    def __init__(self,
+                 fix_pred_lr: bool,
+                 lr: float,
+                 adjust_by_epoch: Optional[bool] = True) -> None:
         self.fix_pred_lr = fix_pred_lr
         self.lr = lr
         self.adjust_by_epoch = adjust_by_epoch
 
-    def before_train_iter(self, runner):
+    def before_train_iter(self, runner) -> None:
+        """fix lr of predictor by iter."""
         if self.adjust_by_epoch:
             return
         else:
@@ -29,8 +37,8 @@ class SimSiamHook(Hook):
                     if 'fix_lr' in param_group and param_group['fix_lr']:
                         param_group['lr'] = self.lr
 
-    def before_train_epoch(self, runner):
-        """fix lr of predictor."""
+    def before_train_epoch(self, runner) -> None:
+        """fix lr of predictor by epoch."""
         if self.fix_pred_lr:
             for param_group in runner.optimizer.param_groups:
                 if 'fix_lr' in param_group and param_group['fix_lr']:

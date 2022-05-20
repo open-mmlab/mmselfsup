@@ -1,13 +1,16 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import Dict, Optional
+
 import numpy as np
 import torch
 import torch.distributed as dist
-from mmcv.runner import HOOKS, Hook
+from mmengine.hooks import Hook
 from mmengine.logging import print_log
+from torch.utils.data import DataLoader
 
+from mmselfsup.registry import HOOKS
 from mmselfsup.utils import Extractor
 from mmselfsup.utils import clustering as _clustering
-from mmselfsup.utils import get_root_logger
 
 
 @HOOKS.register_module()
@@ -32,33 +35,16 @@ class DeepClusterHook(Hook):
 
     def __init__(
             self,
-            extractor,
-            clustering,
-            unif_sampling,
-            reweight,
-            reweight_pow,
-            init_memory=False,  # for ODC
-            initial=True,
-            interval=1,
-            dist_mode=True,
-            data_loaders=None):
-
-        logger = get_root_logger()
-        if 'imgs_per_gpu' in extractor:
-            logger.warning('"imgs_per_gpu" is deprecated. '
-                           'Please use "samples_per_gpu" instead')
-            if 'samples_per_gpu' in extractor:
-                logger.warning(
-                    f'Got "imgs_per_gpu"={extractor["imgs_per_gpu"]} and '
-                    f'"samples_per_gpu"={extractor["samples_per_gpu"]}, '
-                    f'"imgs_per_gpu"={extractor["imgs_per_gpu"]} is used in '
-                    f'this experiments')
-            else:
-                logger.warning(
-                    'Automatically set "samples_per_gpu"="imgs_per_gpu"='
-                    f'{extractor["imgs_per_gpu"]} in this experiments')
-            extractor['samples_per_gpu'] = extractor['imgs_per_gpu']
-
+            extractor: Dict,
+            clustering: Dict,
+            unif_sampling: bool,
+            reweight: bool,
+            reweight_pow: float,
+            init_memory: Optional[bool] = False,  # for ODC
+            initial: Optional[bool] = True,
+            interval: Optional[int] = 1,
+            dist_mode: Optional[bool] = True,
+            data_loaders: Optional[DataLoader] = None) -> None:
         self.extractor = Extractor(dist_mode=dist_mode, **extractor)
         self.clustering_type = clustering.pop('type')
         self.clustering_cfg = clustering
@@ -71,16 +57,16 @@ class DeepClusterHook(Hook):
         self.dist_mode = dist_mode
         self.data_loaders = data_loaders
 
-    def before_run(self, runner):
+    def before_run(self, runner) -> None:
         if self.initial:
             self.deepcluster(runner)
 
-    def after_train_epoch(self, runner):
+    def after_train_epoch(self, runner) -> None:
         if not self.every_n_epochs(runner, self.interval):
             return
         self.deepcluster(runner)
 
-    def deepcluster(self, runner):
+    def deepcluster(self, runner) -> None:
         # step 1: get features
         runner.model.eval()
         features = self.extractor(runner)
@@ -130,7 +116,7 @@ class DeepClusterHook(Hook):
         if self.init_memory:
             runner.model.module.memory_bank.init_memory(features, new_labels)
 
-    def evaluate(self, runner, new_labels):
+    def evaluate(self, runner, new_labels: np.ndarray) -> None:
         histogram = np.bincount(new_labels, minlength=self.clustering_cfg.k)
         empty_cls = (histogram == 0).sum()
         minimal_cls_size, maximal_cls_size = histogram.min(), histogram.max()
