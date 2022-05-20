@@ -29,6 +29,7 @@ The **Linear Evaluation** result is obtained by training a linear head upon the 
 | Self-Supervised Config                                                                                                                                                                              | Linear Evaluation |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
 | [vit-small-p16_linear-32xb128-fp16-coslr-300e_in1k-224](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/mocov3/mocov3_vit-small-p16_linear-32xb128-fp16-coslr-300e_in1k-224.py) | 73.19             |
+| [mocov3_resnet50_8xb512-coslr-100e_in1k](configs/selfsup/mocov3/mocov3_resnet50_8xb512-coslr-100e_in1k.py) | 69.10             |
 
 ## Citation
 
