@@ -1,6 +1,11 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-import torch
+from typing import Dict, List, Optional, Tuple, Union
 
+import torch
+from mmengine.data import InstanceData
+
+from mmselfsup.core import SelfSupDataSample
+from mmselfsup.utils import get_module_device
 from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
 from .base import BaseModel
 
@@ -13,94 +18,157 @@ class RelativeLoc(BaseModel):
     by Context Prediction <https://arxiv.org/abs/1505.05192>`_.
 
     Args:
-        backbone (dict): Config dict for module of backbone.
-        neck (dict): Config dict for module of deep features to compact feature
-            vectors. Defaults to None.
-        head (dict): Config dict for module of loss functions.
+        backbone (Dict, optional): Config dict for module of backbone.
             Defaults to None.
+        neck (Dict, optional): Config dict for module of deep features
+            to compact feature vectors. Defaults to None.
+        head (Dict, optional): Config dict for module of loss functions.
+            Defaults to None.
+        preprocess_cfg (Dict, optional): Config dict to preprocess images.
+            Defaults to None.
+        init_cfg (Dict or List[Dict], optional): Config dict for weight
+            initialization. Defaults to None.
     """
 
-    def __init__(self, backbone, neck=None, head=None, init_cfg=None):
-        super(RelativeLoc, self).__init__(init_cfg)
+    def __init__(self,
+                 backbone: Optional[Dict] = None,
+                 neck: Optional[Dict] = None,
+                 head: Optional[Dict] = None,
+                 preprocess_cfg: Optional[Dict] = None,
+                 init_cfg: Optional[Union[Dict, List[Dict]]] = None,
+                 **kwargs) -> None:
+        super().__init__(preprocess_cfg=preprocess_cfg, init_cfg=init_cfg)
+        assert backbone is not None
         self.backbone = build_backbone(backbone)
         assert neck is not None
         self.neck = build_neck(neck)
         assert head is not None
         self.head = build_head(head)
 
-    def extract_feat(self, img):
+    def extract_feat(self, inputs: List[torch.Tensor],
+                     data_samples: List[SelfSupDataSample],
+                     **kwargs) -> Tuple[torch.Tensor]:
         """Function to extract features from backbone.
 
         Args:
-            img (Tensor): Input images of shape (N, C, H, W).
-                Typically these should be mean centered and std scaled.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            tuple[Tensor]: backbone outputs.
+            Tuple[torch.Tensor]: backbone outputs.
         """
-        x = self.backbone(img)
+
+        x = self.backbone(inputs[0])
         return x
 
-    def forward_train(self, img, patch_label, **kwargs):
+    def forward_train(self, inputs: List[torch.Tensor],
+                      data_samples: List[SelfSupDataSample],
+                      **kwargs) -> Dict[str, torch.Tensor]:
         """Forward computation during training.
 
         Args:
-            img (Tensor): Input images of shape (N, C, H, W).
-                Typically these should be mean centered and std scaled.
-            patch_label (Tensor): Labels for the relative patch locations.
-            kwargs: Any keyword arguments to be used to forward.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            dict[str, Tensor]: A dictionary of loss components.
+            Dict[str, torch.Tensor]: A dictionary of loss components.
         """
-        img1, img2 = torch.chunk(img, 2, dim=1)
-        x1 = self.extract_feat(img1)  # tuple
-        x2 = self.extract_feat(img2)  # tuple
+
+        x1 = self.backbone(inputs[0])
+        x2 = self.backbone(inputs[1])
         x = (torch.cat((x1[0], x2[0]), dim=1), )
         x = self.neck(x)
         outs = self.head(x)
-        loss_inputs = (outs, patch_label)
-        losses = self.head.loss(*loss_inputs)
-        return losses
 
-    def forward_test(self, img, **kwargs):
-        """Forward computation during training.
+        patch_label = [
+            data_sample.patch_label.value for data_sample in data_samples
+        ]
+        patch_label = torch.flatten(torch.stack(patch_label, 0))
+        loss_inputs = (outs, patch_label)
+        loss_dict = self.head.loss(*loss_inputs)
+        return loss_dict
+
+    def forward_test(self, inputs: List[torch.Tensor],
+                     data_samples: List[SelfSupDataSample],
+                     **kwargs) -> List[SelfSupDataSample]:
+        """The forward function in testing.
 
         Args:
-            img (Tensor): Input images of shape (N, C, H, W).
-                Typically these should be mean centered and std scaled.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            dict[str, Tensor]: A dictionary of output features.
+            List[SelfSupDataSample]: The prediction from model.
         """
-        img1, img2 = torch.chunk(img, 2, dim=1)
-        x1 = self.extract_feat(img1)  # tuple
-        x2 = self.extract_feat(img2)  # tuple
+
+        x1 = self.backbone(inputs[0])
+        x2 = self.backbone(inputs[1])
         x = (torch.cat((x1[0], x2[0]), dim=1), )
         x = self.neck(x)
         outs = self.head(x)
         keys = [f'head{i}' for i in self.backbone.out_indices]
-        out_tensors = [out.cpu() for out in outs]
-        return dict(zip(keys, out_tensors))
+        outs = [torch.chunk(out, len(outs[0]) // 8, 0) for out in outs]
 
-    def forward(self, img, patch_label=None, mode='train', **kwargs):
-        """Forward function to select mode and modify the input image shape.
+        for i in range(len(outs[0])):
+            prediction_data = {key: out[i] for key, out in zip(keys, outs)}
+            prediction = InstanceData(**prediction_data)
+            data_samples[i].prediction = prediction
+        return data_samples
+
+    def preprocss_data(
+            self,
+            data: List[Dict]) -> Tuple[List[torch.Tensor], SelfSupDataSample]:
+        """Process input data during training, testing or extracting.
 
         Args:
-            img (Tensor): Input images, the shape depends on mode.
-                Typically these should be mean centered and std scaled.
+            data (List[Dict]): The data to be processed, which
+                comes from dataloader.
+
+        Returns:
+            tuple:  It should contain 2 item.
+            - batch_images (List[torch.Tensor]): The batch image tensor.
+            - data_samples (List[SelfSupDataSample], Optional): The Data
+            Samples. It usually includes information such as
+            `gt_label`. Return None If the input data does not
+            contain `data_sample`.
         """
-        if mode != 'extract' and img.dim() == 5:  # Nx8x(2C)xHxW
-            assert patch_label.dim() == 2  # Nx8
-            img = img.view(
-                img.size(0) * img.size(1), img.size(2), img.size(3),
-                img.size(4))  # (8N)x(2C)xHxW
-            patch_label = torch.flatten(patch_label)  # (8N)
-        if mode == 'train':
-            return self.forward_train(img, patch_label, **kwargs)
-        elif mode == 'test':
-            return self.forward_test(img, **kwargs)
-        elif mode == 'extract':
-            return self.extract_feat(img)
-        else:
-            raise Exception(f'No such mode: {mode}')
+
+        # data_['inputs] is a list
+        images = [data_['inputs'] for data_ in data]
+        data_samples = [data_['data_sample'] for data_ in data]
+
+        device = get_module_device(self)
+        data_samples = [data_sample.to(device) for data_sample in data_samples]
+        images = [[img_.to(device) for img_ in img] for img in images]
+
+        # convert images to rgb
+        if self.to_rgb and images[0][0].size(0) == 3:
+            images = [[img_[[2, 1, 0], ...] for img_ in img] for img in images]
+
+        # normalize images
+        images = [[(img_ - self.mean_norm) / self.std_norm for img_ in img]
+                  for img in images]
+
+        # reconstruct images into several batches. RelativeLoc needs
+        # nine crops for each image, and this code snippet will convert images
+        # into nine batches, each containing one crop of an image.
+        batch_images = []
+        for i in range(len(images[0])):
+            cur_batch = [img[i] for img in images]
+            batch_images.append(torch.stack(cur_batch))
+
+        img1 = torch.stack(batch_images[1:], 1)  # Nx8xCxHxW
+        img1 = img1.view(
+            img1.size(0) * img1.size(1), img1.size(2), img1.size(3),
+            img1.size(4))  # (8N)xCxHxW
+        img2 = torch.unsqueeze(batch_images[0], 1).repeat(1, 8, 1, 1,
+                                                          1)  # Nx8xCxHxW
+        img2 = img2.view(
+            img2.size(0) * img2.size(1), img2.size(2), img2.size(3),
+            img2.size(4))  # (8N)xCxHxW
+        batch_images = [img1, img2]
+
+        return batch_images, data_samples
