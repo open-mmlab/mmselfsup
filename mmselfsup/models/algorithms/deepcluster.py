@@ -1,8 +1,12 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import Dict, List, Optional, Tuple, Union
+
 import numpy as np
 import torch
 import torch.nn as nn
+from mmengine.data import InstanceData
 
+from mmselfsup.core import SelfSupDataSample
 from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
 from ..utils import Sobel
 from .base import BaseModel
@@ -17,22 +21,26 @@ class DeepCluster(BaseModel):
     The clustering operation is in `core/hooks/deepcluster_hook.py`.
 
     Args:
-        backbone (dict): Config dict for module of backbone.
+        backbone (Dict): Config dict for module of backbone.
         with_sobel (bool): Whether to apply a Sobel filter on images.
             Defaults to True.
-        neck (dict): Config dict for module of deep features to compact feature
-            vectors. Defaults to None.
-        head (dict): Config dict for module of loss functions.
+        neck (Dict, optional): Config dict for module of deep features to
+            compact feature vectors. Defaults to None.
+        head (Dict, optional): Config dict for module of loss functions.
             Defaults to None.
+        preprocess_cfg (Dict): Config to preprocess images.
+        init_cfg (Union[List[Dict], Dict], optional): Config dict for weight
+            initialization. Defaults to None.
     """
 
     def __init__(self,
-                 backbone,
-                 with_sobel=True,
-                 neck=None,
-                 head=None,
-                 init_cfg=None):
-        super(DeepCluster, self).__init__(init_cfg)
+                 backbone: Dict,
+                 with_sobel: Optional[bool] = True,
+                 neck: Optional[Dict] = None,
+                 head: Optional[Dict] = None,
+                 preprocess_cfg: Optional[Dict] = None,
+                 init_cfg: Optional[Union[List[Dict], Dict]] = None) -> None:
+        super().__init__(preprocess_cfg=preprocess_cfg, init_cfg=init_cfg)
         self.with_sobel = with_sobel
         if with_sobel:
             self.sobel_layer = Sobel()
@@ -48,34 +56,40 @@ class DeepCluster(BaseModel):
                                       dtype=torch.float32)
         self.loss_weight /= self.loss_weight.sum()
 
-    def extract_feat(self, img):
-        """Function to extract features from backbone.
+    def extract_feat(self, inputs: List[torch.Tensor],
+                     data_samples: List[SelfSupDataSample],
+                     **kwarg) -> Tuple[torch.Tensor]:
+        """The forward function to extract features.
 
         Args:
-            img (Tensor): Input images of shape (N, C, H, W).
-                Typically these should be mean centered and std scaled.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            tuple[Tensor]: backbone outputs.
+            Tuple[torch.Tensor]: backbone outputs.
         """
         if self.with_sobel:
-            img = self.sobel_layer(img)
+            img = self.sobel_layer(inputs[0])
         x = self.backbone(img)
         return x
 
-    def forward_train(self, img, pseudo_label, **kwargs):
+    def forward_train(self, inputs: List[torch.Tensor],
+                      data_samples: List[SelfSupDataSample],
+                      **kwargs) -> Dict[str, torch.Tensor]:
         """Forward computation during training.
 
         Args:
-            img (Tensor): Input images of shape (N, C, H, W).
-                Typically these should be mean centered and std scaled.
-            pseudo_label (Tensor): Label assignments.
-            kwargs: Any keyword arguments to be used to forward.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            dict[str, Tensor]: A dictionary of loss components.
+            Dict[str, torch.Tensor]: A dictionary of loss components.
         """
-        x = self.extract_feat(img)
+        pseudo_label = torch.cat(
+            [data_sample.pred_label.value for data_sample in data_samples])
+        x = self.extract_feat(inputs, data_samples)
         if self.with_neck:
             x = self.neck(x)
         outs = self.head(x)
@@ -83,29 +97,33 @@ class DeepCluster(BaseModel):
         losses = self.head.loss(*loss_inputs)
         return losses
 
-    def forward_test(self, img, **kwargs):
-        """Forward computation during test.
-
+    def forward_test(self, inputs: List[torch.Tensor],
+                     data_samples: List[SelfSupDataSample],
+                     **kwargs) -> List[SelfSupDataSample]:
+        """The forward function in testing
         Args:
-            img (Tensor): Input images of shape (N, C, H, W).
-                Typically these should be mean centered and std scaled.
-
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
         Returns:
-            dict[str, Tensor]: A dictionary of output features.
+            List[SelfSupDataSample]: The prediction from model.
         """
-        x = self.extract_feat(img)  # tuple
+        x = self.extract_feat(inputs, data_samples)  # tuple
         if self.with_neck:
             x = self.neck(x)
         outs = self.head(x)
         keys = [f'head{i}' for i in range(len(outs))]
-        out_tensors = [out.cpu() for out in outs]  # NxC
-        return dict(zip(keys, out_tensors))
+
+        for i in range(x[0].shape[0]):
+            prediction_data = {key: out[i] for key, out in zip(keys, outs)}
+            prediction = InstanceData(**prediction_data)
+            data_samples[i].prediction = prediction
+        return data_samples
 
     def set_reweight(self, labels, reweight_pow=0.5):
         """Loss re-weighting.
 
         Re-weighting the loss according to the number of samples in each class.
-
         Args:
             labels (numpy.ndarray): Label assignments.
             reweight_pow (float): The power of re-weighting. Defaults to 0.5.
