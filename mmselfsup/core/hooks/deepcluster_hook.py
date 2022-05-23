@@ -6,7 +6,6 @@ import torch
 import torch.distributed as dist
 from mmengine.hooks import Hook
 from mmengine.logging import print_log
-from torch.utils.data import DataLoader
 
 from mmselfsup.registry import HOOKS
 from mmselfsup.utils import Extractor
@@ -35,7 +34,7 @@ class DeepClusterHook(Hook):
 
     def __init__(
             self,
-            extractor: Dict,
+            extract_dataloader: Dict,
             clustering: Dict,
             unif_sampling: bool,
             reweight: bool,
@@ -43,9 +42,12 @@ class DeepClusterHook(Hook):
             init_memory: Optional[bool] = False,  # for ODC
             initial: Optional[bool] = True,
             interval: Optional[int] = 1,
-            dist_mode: Optional[bool] = True,
-            data_loaders: Optional[DataLoader] = None) -> None:
-        self.extractor = Extractor(dist_mode=dist_mode, **extractor)
+            seed: Optional[int] = None,
+            dist_mode: Optional[bool] = True) -> None:
+        self.extractor = Extractor(
+            extract_dataloader=extract_dataloader,
+            seed=seed,
+            dist_mode=dist_mode)
         self.clustering_type = clustering.pop('type')
         self.clustering_cfg = clustering
         self.unif_sampling = unif_sampling
@@ -55,9 +57,9 @@ class DeepClusterHook(Hook):
         self.initial = initial
         self.interval = interval
         self.dist_mode = dist_mode
-        self.data_loaders = data_loaders
 
     def before_run(self, runner) -> None:
+        self.data_loader = runner.train_dataloader
         if self.initial:
             self.deepcluster(runner)
 
@@ -84,7 +86,7 @@ class DeepClusterHook(Hook):
                     new_labels)
             self.evaluate(runner, new_labels)
         else:
-            new_labels = np.zeros((len(self.data_loaders[0].dataset), ),
+            new_labels = np.zeros((len(self.data_loader.dataset), ),
                                   dtype=np.int64)
 
         if self.dist_mode:
@@ -94,11 +96,11 @@ class DeepClusterHook(Hook):
         new_labels_list = list(new_labels)
 
         # step 3: assign new labels
-        self.data_loaders[0].dataset.assign_labels(new_labels_list)
+        self.data_loader.dataset.assign_labels(new_labels_list)
 
         # step 4 (a): set uniform sampler
         if self.unif_sampling:
-            self.data_loaders[0].sampler.set_uniform_indices(
+            self.data_loader.sampler.set_uniform_indices(
                 new_labels_list, self.clustering_cfg.k)
 
         # step 4 (b): set loss reweight
