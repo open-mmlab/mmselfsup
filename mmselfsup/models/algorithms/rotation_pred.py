@@ -1,7 +1,11 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-import torch
-from mmcv.runner import auto_fp16
+from typing import Dict, List, Optional, Tuple, Union
 
+import torch
+from mmengine.data import InstanceData
+
+from mmselfsup.core import SelfSupDataSample
+from mmselfsup.utils import get_module_device
 from ..builder import ALGORITHMS, build_backbone, build_head
 from .base import BaseModel
 
@@ -14,83 +18,140 @@ class RotationPred(BaseModel):
     by Predicting Image Rotations <https://arxiv.org/abs/1803.07728>`_.
 
     Args:
-        backbone (dict): Config dict for module of backbone.
-        head (dict): Config dict for module of loss functions.
+        backbone (Dict, optional): Config dict for module of backbone.
             Defaults to None.
+        head (Dict, optional): Config dict for module of loss functions.
+            Defaults to None.
+        preprocess_cfg (Dict, optional): Config dict to preprocess images.
+            Defaults to None.
+        init_cfg (Dict or List[Dict], optional): Config dict for weight
+            initialization. Defaults to None.
     """
 
-    def __init__(self, backbone, head=None, init_cfg=None):
-        super(RotationPred, self).__init__(init_cfg)
+    def __init__(self,
+                 backbone: Optional[Dict] = None,
+                 head: Optional[Dict] = None,
+                 preprocess_cfg: Optional[Dict] = None,
+                 init_cfg: Optional[Union[Dict, List[Dict]]] = None,
+                 **kwargs) -> None:
+        super().__init__(preprocess_cfg=preprocess_cfg, init_cfg=init_cfg)
+        assert backbone is not None
         self.backbone = build_backbone(backbone)
         assert head is not None
         self.head = build_head(head)
 
-    def extract_feat(self, img):
+    def extract_feat(self, inputs: List[torch.Tensor],
+                     data_samples: List[SelfSupDataSample],
+                     **kwargs) -> Tuple[torch.Tensor]:
         """Function to extract features from backbone.
 
         Args:
-            img (Tensor): Input images of shape (N, C, H, W).
-                Typically these should be mean centered and std scaled.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            tuple[Tensor]: backbone outputs.
+            Tuple[torch.Tensor]: backbone outputs.
         """
-        x = self.backbone(img)
+
+        x = self.backbone(inputs[0])
         return x
 
-    def forward_train(self, img, rot_label, **kwargs):
+    def forward_train(self, inputs: List[torch.Tensor],
+                      data_samples: List[SelfSupDataSample],
+                      **kwargs) -> Dict[str, torch.Tensor]:
         """Forward computation during training.
 
         Args:
-            img (Tensor): Input images of shape (N, C, H, W).
-                Typically these should be mean centered and std scaled.
-            rot_label (Tensor): Labels for the rotations.
-            kwargs: Any keyword arguments to be used to forward.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            dict[str, Tensor]: A dictionary of loss components.
+            Dict[str, torch.Tensor]: A dictionary of loss components.
         """
-        x = self.extract_feat(img)
+
+        x = self.backbone(inputs[0])
         outs = self.head(x)
-        loss_inputs = (outs, rot_label)
-        losses = self.head.loss(*loss_inputs)
-        return losses
 
-    def forward_test(self, img, **kwargs):
-        """Forward computation during training.
+        rot_label = [
+            data_sample.rot_label.value for data_sample in data_samples
+        ]
+        rot_label = torch.flatten(torch.stack(rot_label, 0))  # (4N, )
+        loss_inputs = (outs, rot_label)
+        loss_dict = self.head.loss(*loss_inputs)
+        return loss_dict
+
+    def forward_test(self, inputs: List[torch.Tensor],
+                     data_samples: List[SelfSupDataSample],
+                     **kwargs) -> List[SelfSupDataSample]:
+        """The forward function in testing.
 
         Args:
-            img (Tensor): Input images of shape (N, C, H, W).
-                Typically these should be mean centered and std scaled.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            dict[str, Tensor]: A dictionary of output features.
+            List[SelfSupDataSample]: The prediction from model.
         """
-        x = self.extract_feat(img)  # tuple
+
+        x = self.backbone(inputs[0])  # tuple
         outs = self.head(x)
         keys = [f'head{i}' for i in self.backbone.out_indices]
-        out_tensors = [out.cpu() for out in outs]  # NxC
-        return dict(zip(keys, out_tensors))
+        outs = [torch.chunk(out, len(outs[0]) // 4, 0) for out in outs]
 
-    @auto_fp16(apply_to=('img', ))
-    def forward(self, img, rot_label=None, mode='train', **kwargs):
-        """Forward function to select mode and modify the input image shape.
+        for i in range(len(outs[0])):
+            prediction_data = {key: out[i] for key, out in zip(keys, outs)}
+            prediction = InstanceData(**prediction_data)
+            data_samples[i].prediction = prediction
+        return data_samples
+
+    def preprocss_data(
+            self,
+            data: List[Dict]) -> Tuple[List[torch.Tensor], SelfSupDataSample]:
+        """Process input data during training, testing or extracting.
 
         Args:
-            img (Tensor): Input images, the shape depends on mode.
-                Typically these should be mean centered and std scaled.
+            data (List[Dict]): The data to be processed, which
+                comes from dataloader.
+
+        Returns:
+            tuple:  It should contain 2 item.
+            - batch_images (List[torch.Tensor]): The batch image tensor.
+            - data_samples (List[SelfSupDataSample], Optional): The Data
+            Samples. It usually includes information such as
+            `gt_label`. Return None If the input data does not
+            contain `data_sample`.
         """
-        if mode != 'extract' and img.dim() == 5:  # Nx4xCxHxW
-            assert rot_label.dim() == 2  # Nx4
-            img = img.view(
-                img.size(0) * img.size(1), img.size(2), img.size(3),
-                img.size(4))  # (4N)xCxHxW
-            rot_label = torch.flatten(rot_label)  # (4N)
-        if mode == 'train':
-            return self.forward_train(img, rot_label, **kwargs)
-        elif mode == 'test':
-            return self.forward_test(img, **kwargs)
-        elif mode == 'extract':
-            return self.extract_feat(img)
-        else:
-            raise Exception(f'No such mode: {mode}')
+        # data_['inputs] is a list
+        images = [data_['inputs'] for data_ in data]
+        data_samples = [data_['data_sample'] for data_ in data]
+
+        device = get_module_device(self)
+        data_samples = [data_sample.to(device) for data_sample in data_samples]
+        images = [[img_.to(device) for img_ in img] for img in images]
+
+        # convert images to rgb
+        if self.to_rgb and images[0][0].size(0) == 3:
+            images = [[img_[[2, 1, 0], ...] for img_ in img] for img in images]
+
+        # normalize images
+        images = [[(img_ - self.mean_norm) / self.std_norm for img_ in img]
+                  for img in images]
+
+        # reconstruct images into several batches. RotationPred needs
+        # four views for each image, and this code snippet will convert images
+        # into four batches, each containing one view of an image.
+        batch_images = []
+        for i in range(len(images[0])):
+            cur_batch = [img[i] for img in images]
+            batch_images.append(torch.stack(cur_batch))
+
+        img = torch.stack(batch_images, 1)  # Nx4xCxHxW
+        img = img.view(
+            img.size(0) * img.size(1), img.size(2), img.size(3),
+            img.size(4))  # (4N)xCxHxW
+        batch_images = [img]
+
+        return batch_images, data_samples
