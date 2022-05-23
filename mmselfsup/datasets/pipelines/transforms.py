@@ -561,28 +561,26 @@ class RotationWithLabels(BaseTransform):
     def __init__(self) -> None:
         pass
 
-    def _rotate(self, img: torch.Tensor):
+    def _rotate(self, img: np.ndarray) -> List[np.ndarray]:
         """Rotate input image with 0, 90, 180, and 270 degrees.
 
         Args:
-            img (Tensor): input image of shape (C, H, W).
+            img (np.ndarray: input image of shape (H, W, C).
 
         Returns:
-            list[Tensor]: A list of four rotated images.
+            List[np.ndarray]: A list of four rotated images.
         """
         return [
             img,
-            torch.flip(img.transpose(1, 2), [1]),
-            torch.flip(img, [1, 2]),
-            torch.flip(img, [1]).transpose(1, 2)
+            mmcv.imrotate(img, 90),
+            mmcv.imrotate(img, 180),
+            mmcv.imrotate(img, 270),
         ]
 
     def transform(self, results: Dict) -> Dict:
-        img = np.transpose(results['img'], (2, 0, 1))
-        img = torch.from_numpy(img)
-        img = torch.stack(self._rotate(img), dim=0)
+        img = self._rotate(results['img'])
         rotation_labels = np.array([0, 1, 2, 3])
-        results = dict(img=img.numpy(), rot_label=rotation_labels)
+        results = dict(img=img, rot_label=rotation_labels)
         return results
 
     def __repr__(self) -> str:

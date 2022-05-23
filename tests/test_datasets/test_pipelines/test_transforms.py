@@ -134,7 +134,8 @@ def test_random_rotation():
     results = module(results)
 
     # test transform
-    assert list(results['img'].shape) == [4, 3, 224, 224]
+    assert len(results['img']) == 4
+    assert list(results['img'][0].shape) == [224, 224, 3]
     assert list(results['rot_label'].shape) == [4]
 
     assert isinstance(str(module), str)
