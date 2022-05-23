@@ -654,17 +654,16 @@ class RandomPatchWithLabels(BaseTransform):
     def transform(self, results: Dict) -> Dict:
         img = results['img']
         patches = self._image_to_patches(img)
-        perms = []
-        # create a list of patch pairs
-        [
-            perms.append(np.concatenate((patches[i], patches[4]), axis=2))
-            for i in range(9) if i != 4
-        ]
+
+        multi_views = []
+        multi_views.append(patches[4])
+        for i in range(9):
+            if i != 4:
+                multi_views.append(patches[i])
+
         # create corresponding labels for patch pairs
         patch_labels = np.array([0, 1, 2, 3, 4, 5, 6, 7])
-        results = dict(
-            img=np.stack(perms, axis=0),
-            patch_label=patch_labels)  # 8HW(2C), 8
+        results = dict(img=multi_views, patch_label=patch_labels)  # 8HWC, 8
         return results
 
     def __repr__(self) -> str:
