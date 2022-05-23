@@ -1,5 +1,5 @@
 # dataset settings
-dataset_type = 'mmcls.ImageNet'
+dataset_type = 'DeepClusterImageNet'
 data_root = 'data/imagenet/'
 file_client_args = dict(backend='disk')
 
@@ -38,14 +38,15 @@ train_dataloader = dict(
         data_prefix=dict(img='train/'),
         pipeline=train_pipeline))
 
-# TODO: refactor the hook and modify the config
 num_classes = 10000
 custom_hooks = [
     dict(
         type='DeepClusterHook',
-        extractor=dict(
-            samples_per_gpu=128,
-            workers_per_gpu=8,
+        extract_dataloader=dict(
+            batch_size=128,
+            num_workers=8,
+            persistent_workers=True,
+            sampler=dict(type='DefaultSampler', shuffle=False),
             dataset=dict(
                 type=dataset_type,
                 data_root=data_root,
