@@ -142,6 +142,8 @@ We also provides tutorials for more details:
 
 Besides, we provide [colab tutorial](https://github.com/open-mmlab/mmselfsup/blob/master/demo/mmselfsup_colab_tutorial.ipynb) for basic usage.
 
+Please refer to [FAQ](docs/en/faq.md) for frequently asked questions.
+
 ## Citation
 
 If you use this toolbox or benchmark in your research, please cite this project.
@@ -161,13 +163,9 @@ We appreciate all contributions improving MMSelfSup. Please refer to [CONTRIBUTI
 
 ## Acknowledgement
 
-Remarks:
+MMSelfSup is an open source project that is contributed by researchers and engineers from various colleges and companies. We appreciate all the contributors who implement their methods or add new features, as well as users who give valuable feedbacks. We wish that the toolbox and benchmark could serve the growing research community by providing a flexible toolkit to reimplement existing methods and develop their own new algorithms.
 
-- MMSelfSup originates from OpenSelfSup, and we appreciate all early contributions made to OpenSelfSup. A few contributors are listed here: Xiaohang Zhan, Jiahao Xie, Enze Xie, Xiangxiang Chu, Zijian He.
-- The implementation of MoCo and the detection benchmark borrow the code from [MoCo](https://github.com/facebookresearch/moco).
-- The implementation of SwAV borrows the code from [SwAV](https://github.com/facebookresearch/swav).
-- The SVM benchmark borrows the code from [fair_self_supervision_benchmark](https://github.com/facebookresearch/fair_self_supervision_benchmark).
-- `mmselfsup/utils/clustering.py` is borrowed from [deepcluster](https://github.com/facebookresearch/deepcluster/blob/master/clustering.py).
+MMSelfSup originates from OpenSelfSup, and we appreciate all early contributions made to OpenSelfSup. A few contributors are listed here: Xiaohang Zhan, Jiahao Xie, Enze Xie, Xiangxiang Chu, Zijian He.
 
 ## Projects in OpenMMLab
 
