@@ -4,9 +4,9 @@
 
 MMselfSup 可在 Linux 上运行 (Windows 和 macOS 平台不完全支持)。 要求 Python 3.6+, CUDA 9.2+ 和 PyTorch 1.5+。
 
-如果您对 PyTorch 很熟悉，或者已经安装了它，可以忽略这部分并转到[下一节](#%E5%AE%89%E8%A3%85)， 不然你可以按照下列步骤进行准备。
+如果您对 PyTorch 很熟悉，或者已经安装了它，可以忽略这部分并转到 [下一节](#%E5%AE%89%E8%A3%85)， 不然你可以按照下列步骤进行准备。
 
-**Step 0.** 从[官方网址](https://docs.conda.io/en/latest/miniconda.html)下载并安装 Miniconda。
+**Step 0.** 从 [官方网址](https://docs.conda.io/en/latest/miniconda.html)下载并安装 Miniconda。
 
 **Step 1.** 创建 conda 环境并激活
 
@@ -15,7 +15,7 @@ conda create --name openmmlab python=3.8 -y
 conda activate openmmlab
 ```
 
-**Step 2.** 按照 [official instructions](https://pytorch.org/get-started/locally/) 安装 PyTorch， 例如
+**Step 2.** 按照 [官方教程](https://pytorch.org/get-started/locally/) 安装 PyTorch， 例如
 
 GPU 平台:
 
@@ -31,7 +31,7 @@ conda install pytorch torchvision cpuonly -c pytorch
 
 # 安装
 
-我们推荐用户按照我们的最优方案来安装 MMSelfSup，不过整体流程也可以是自定义的， 可参考[自定义安装](#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AE%89%E8%A3%85)章节
+我们推荐用户按照我们的最优方案来安装 MMSelfSup，不过整体流程也可以是自定义的， 可参考 [自定义安装](#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AE%89%E8%A3%85)章节
 
 ## 最优方案
 
@@ -100,7 +100,7 @@ loss = model.forward_train(image, label)
 
 ### 基准测试
 
-依照[最优方案](#%E6%9C%80%E4%BC%98%E6%96%B9%E6%A1%88)可以保证基本功能, 如果您需要一些下游任务来对您的预训练模型进行评测，例如检测或者分割， 请安装 [MMDetection](https://github.com/open-mmlab/mmdetection) 和 [MMSegmentation](https://github.com/open-mmlab/mmsegmentation)。
+依照 [最优方案](#%E6%9C%80%E4%BC%98%E6%96%B9%E6%A1%88) 可以保证基本功能, 如果您需要一些下游任务来对您的预训练模型进行评测，例如检测或者分割， 请安装 [MMDetection](https://github.com/open-mmlab/mmdetection) 和 [MMSegmentation](https://github.com/open-mmlab/mmsegmentation)。
 
 如果您不运行 MMDetection 和 MMSegmentation 基准测试， 可以不进行安装。
 
@@ -117,9 +117,9 @@ pip install mmdet mmsegmentation
 在安装 PyTorch 时， 您需要确认 CUDA 版本。 若您对此不清楚，可以按照我们的建议：
 
 - 对于安培架构的 NVIDIA GPUs， 例如 GeForce 30 系列或者 NVIDIA A100, CUDA 11 是必须的。
-- 对于较老版本的 NVIDIA GPUs， CUDA 11 is 兼容的， 但是 CUDA 10.2 具有更好的兼容性以及更加轻量化。
+- 对于较老版本的 NVIDIA GPUs， CUDA 11 是兼容的， 但是 CUDA 10.2 具有更好的兼容性以及更加轻量化。
 
-请确认您的 GPU 驱动满足最小版本需求。 请参考[此表](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html#cuda-major-component-versions__table-cuda-toolkit-driver-versions)获取更多信息。
+请确认您的 GPU 驱动满足最小版本需求。 请参考 [此表](https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html#cuda-major-component-versions__table-cuda-toolkit-driver-versions) 获取更多信息。
 
 ```{note}
 如果您按照我们的最优方案安装 CUDA runtime 库是足够的，因为本地不会编译 CUDA 代码。但是如果您希望从源编译 MMCV 或开发其它 CUDA 算子， 您需要安装完整的 CUDA 工具包， 从 NVIDIA 的网站，https://developer.nvidia.com/cuda-downloads，并它的版本需要和 PyTorch 的 CUDA 版本相匹配。如准确的 cudatoolkit 版本 在 `conda install` 命令中。
@@ -155,8 +155,6 @@ docker run --gpus all --shm-size=8g -it -v {DATA_DIR}:/workspace/mmselfsup/data 
 ```
 
 `{DATA_DIR}` 是保存你所有数据集的根目录。
-
-`{DATA_DIR}` is your local folder containing all these datasets.
 
 ### 在 Google Colab 上安装
 
