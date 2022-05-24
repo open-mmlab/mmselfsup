@@ -6,7 +6,7 @@ MMselfSup 可在 Linux 上运行 (Windows 和 macOS 平台不完全支持)。 �
 
 如果您对 PyTorch 很熟悉，或者已经安装了它，可以忽略这部分并转到 [下一节](#%E5%AE%89%E8%A3%85)， 不然你可以按照下列步骤进行准备。
 
-**Step 0.** 从 [官方网址](https://docs.conda.io/en/latest/miniconda.html)下载并安装 Miniconda。
+**Step 0.** 从 [官方网址](https://docs.conda.io/en/latest/miniconda.html) 下载并安装 Miniconda。
 
 **Step 1.** 创建 conda 环境并激活
 
@@ -31,7 +31,7 @@ conda install pytorch torchvision cpuonly -c pytorch
 
 # 安装
 
-我们推荐用户按照我们的最优方案来安装 MMSelfSup，不过整体流程也可以是自定义的， 可参考 [自定义安装](#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AE%89%E8%A3%85)章节
+我们推荐用户按照我们的最优方案来安装 MMSelfSup，不过整体流程也可以是自定义的， 可参考 [自定义安装](#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AE%89%E8%A3%85) 章节
 
 ## 最优方案
 
