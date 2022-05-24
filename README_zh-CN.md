@@ -142,6 +142,8 @@ MMSelfSup 依赖 [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open
 
 另外，我们提供了 [colab 教程](https://github.com/open-mmlab/mmselfsup/blob/master/demo/mmselfsup_colab_tutorial.ipynb)。
 
+请参考 [常见问题解答](docs/zh_cn/faq.md) 获取更详细的信息。
+
 ## 参与贡献
 
 我们非常欢迎任何有助于提升 MMSelfSup 的贡献，请参考 [贡献指南](docs/zh_cn/community/CONTRIBUTING.md) 来了解如何参与贡献。
