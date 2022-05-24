@@ -31,7 +31,7 @@ conda install pytorch torchvision cpuonly -c pytorch
 
 # Installation
 
-We recommend that users follow our best practices to install MMSelfSup. However, the whole process is highly customizable. See [Customize Installation](#customize-installation) section for more information.
+We recommend that users follow our best practices to install MMSelfSup. However, the whole process is highly customizable. See [Customize Installation](#customized-installation) section for more information.
 
 ## Best Practices
 
