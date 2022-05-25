@@ -15,4 +15,5 @@ model = dict(
         in_channels=2048,
         out_channels=128,
         with_avg_pool=True),
-    head=dict(type='ContrastiveHead', temperature=0.07))
+    head=dict(type='ContrastiveHead', temperature=0.07),
+    loss=dict(type='mmcls.CrossEntropyLoss'))

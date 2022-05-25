@@ -2,7 +2,6 @@
 import copy
 import platform
 
-import numpy as np
 import pytest
 import torch
 from mmengine.data import LabelData
@@ -24,6 +23,7 @@ head = dict(
     with_avg_pool=False,  # already has avgpool in the neck
     in_channels=512,
     num_classes=num_classes)
+loss = dict(type='mmcls.CrossEntropyLoss')
 preprocess_cfg = {
     'mean': [0.5, 0.5, 0.5],
     'std': [0.5, 0.5, 0.5],
@@ -39,12 +39,14 @@ def test_deepcluster():
             with_sobel=with_sobel,
             neck=neck,
             head=None,
+            loss=loss,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     alg = DeepCluster(
         backbone=backbone,
         with_sobel=with_sobel,
         neck=neck,
         head=head,
+        loss=loss,
         preprocess_cfg=copy.deepcopy(preprocess_cfg))
     assert alg.num_classes == num_classes
     assert hasattr(alg, 'sobel_layer')
@@ -64,5 +66,4 @@ def test_deepcluster():
     assert fake_out[0].prediction.head0.size() == torch.Size([num_classes])
 
     fake_out = alg(fake_input, return_loss=True)
-    alg.set_reweight(np.array([1, 1]))
     assert fake_out['loss'].item() > 0

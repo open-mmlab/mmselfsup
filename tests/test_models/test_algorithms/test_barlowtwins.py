@@ -26,6 +26,7 @@ neck = dict(
     with_avg_pool=True,
     norm_cfg=dict(type='BN1d'))
 head = dict(type='LatentCrossCorrelationHead', in_channels=2)
+loss = dict(type='CrossCorrelationLoss')
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
@@ -40,23 +41,34 @@ def test_barlowtwins():
             backbone=backbone,
             neck=None,
             head=head,
+            loss=loss,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     with pytest.raises(AssertionError):
         alg = BarlowTwins(
             backbone=backbone,
             neck=neck,
             head=None,
+            loss=loss,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     with pytest.raises(AssertionError):
         alg = BarlowTwins(
             backbone=None,
             neck=neck,
             head=head,
+            loss=loss,
+            preprocess_cfg=copy.deepcopy(preprocess_cfg))
+    with pytest.raises(AssertionError):
+        alg = BarlowTwins(
+            backbone=backbone,
+            neck=neck,
+            head=head,
+            loss=None,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     alg = BarlowTwins(
         backbone=backbone,
         neck=neck,
         head=head,
+        loss=loss,
         preprocess_cfg=copy.deepcopy(preprocess_cfg))
 
     fake_data = [{

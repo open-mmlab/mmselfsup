@@ -2,8 +2,8 @@
 import torch
 import torch.nn as nn
 
-from ..builder import (ALGORITHMS, build_backbone, build_head, build_memory,
-                       build_neck)
+from ..builder import (ALGORITHMS, build_backbone, build_head, build_loss,
+                       build_memory, build_neck)
 from .base import BaseModel
 
 
@@ -18,7 +18,9 @@ class NPID(BaseModel):
         backbone (dict): Config dict for module of backbone.
         neck (dict): Config dict for module of deep features to compact feature
             vectors. Defaults to None.
-        head (dict): Config dict for module of loss functions.
+        head (dict): Config dict for module of head functions.
+            Defaults to None.
+        loss (dict): Config dict for module of loss functions.
             Defaults to None.
         memory_bank (dict): Config dict for module of memory banks.
             Defaults to None.
@@ -32,6 +34,7 @@ class NPID(BaseModel):
                  backbone,
                  neck=None,
                  head=None,
+                 loss=None,
                  memory_bank=None,
                  neg_num=65536,
                  ensure_neg=False,
@@ -42,6 +45,8 @@ class NPID(BaseModel):
             self.neck = build_neck(neck)
         assert head is not None
         self.head = build_head(head)
+        assert loss is not None
+        self.loss = build_loss(loss)
         assert memory_bank is not None
         self.memory_bank = build_memory(memory_bank)
 
@@ -101,8 +106,9 @@ class NPID(BaseModel):
                                   [pos_feat, feature]).unsqueeze(-1)
         neg_logits = torch.bmm(neg_feat, feature.unsqueeze(2)).squeeze(2)
 
-        losses = self.head(pos_logits, neg_logits)
-
+        logits, labels = self.head(pos_logits, neg_logits)
+        loss = self.loss(logits, labels)
+        losses = dict(loss=loss)
         # update memory bank
         with torch.no_grad():
             self.memory_bank.update(idx, feature.detach())

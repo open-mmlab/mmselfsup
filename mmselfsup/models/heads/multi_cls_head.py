@@ -1,4 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import Dict, List, Optional, Sequence, Union
+
+import torch
 import torch.nn as nn
 from mmcv.cnn import build_norm_layer
 from mmcv.runner import BaseModule
@@ -22,29 +25,28 @@ class MultiClsHead(BaseModule):
         with_last_layer_unpool (bool): Whether to unpool the features from
             last layer. Defaults to False.
         backbone (str): Specify which backbone to use. Defaults to 'resnet50'.
-        norm_cfg (dict): dictionary to construct and config norm layer.
+        norm_cfg (Dict): dictionary to construct and config norm layer.
         num_classes (int): Number of classes. Defaults to 1000.
-        init_cfg (dict or list[dict], optional): Initialization config dict.
+        init_cfg (Dict or List[Dict], optional): Initialization config dict.
     """
 
     FEAT_CHANNELS = {'resnet50': [64, 256, 512, 1024, 2048]}
     FEAT_LAST_UNPOOL = {'resnet50': 2048 * 7 * 7}
 
-    def __init__(self,
-                 pool_type='adaptive',
-                 in_indices=(0, ),
-                 with_last_layer_unpool=False,
-                 backbone='resnet50',
-                 norm_cfg=dict(type='BN'),
-                 num_classes=1000,
-                 init_cfg=[
-                     dict(type='Normal', std=0.01, layer='Linear'),
-                     dict(
-                         type='Constant',
-                         val=1,
-                         layer=['_BatchNorm', 'GroupNorm'])
-                 ]):
-        super(MultiClsHead, self).__init__(init_cfg)
+    def __init__(
+        self,
+        pool_type: str = 'adaptive',
+        in_indices: Sequence[int] = (0, ),
+        with_last_layer_unpool: bool = False,
+        backbone: str = 'resnet50',
+        norm_cfg: Dict = dict(type='BN'),
+        num_classes: int = 1000,
+        init_cfg: Optional[Union[Dict, List[Dict]]] = [
+            dict(type='Normal', std=0.01, layer='Linear'),
+            dict(type='Constant', val=1, layer=['_BatchNorm', 'GroupNorm'])
+        ]
+    ) -> None:
+        super().__init__(init_cfg)
         assert norm_cfg['type'] in ['BN', 'SyncBN', 'GN', 'null']
         self.with_last_layer_unpool = with_last_layer_unpool
         self.with_norm = norm_cfg['type'] != 'null'
@@ -67,15 +69,15 @@ class MultiClsHead(BaseModule):
             self.fcs.append(
                 nn.Linear(self.FEAT_LAST_UNPOOL[backbone], num_classes))
 
-    def forward(self, x):
+    def forward(self, x: Sequence[torch.Tensor]) -> List[torch.Tensor]:
         """Forward head.
 
         Args:
-            x (list[Tensor] | tuple[Tensor]): Feature maps of backbone,
+            x (Sequence[torch.Tensor]): Feature maps of backbone,
                 each tensor has shape (N, C, H, W).
 
         Returns:
-            list[Tensor]: A list of class scores.
+            List[torch.Tensor]: A list of class scores.
         """
         assert isinstance(x, (list, tuple))
         if self.with_last_layer_unpool:
@@ -89,7 +91,8 @@ class MultiClsHead(BaseModule):
         x = [fc(xx) for fc, xx in zip(self.fcs, x)]
         return x
 
-    def loss(self, cls_score, labels):
+    def loss(self, cls_score: List[torch.Tensor],
+             labels: torch.Tensor) -> Dict:
         """Compute the loss."""
         losses = dict()
         for i, s in enumerate(cls_score):

@@ -7,7 +7,8 @@ import torch.nn as nn
 from mmselfsup.core import SelfSupDataSample
 from mmselfsup.utils import (batch_shuffle_ddp, batch_unshuffle_ddp,
                              concat_all_gather)
-from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
+from ..builder import (ALGORITHMS, build_backbone, build_head, build_loss,
+                       build_neck)
 from .base import BaseModel
 
 
@@ -24,7 +25,8 @@ class MoCo(BaseModel):
         backbone (Dict): Config dict for module of backbone.
         neck (Dict): Config dict for module of deep features to compact feature
             vectors.
-        head (Dict): Config dict for module of loss functions.
+        head (Dict): Config dict for module of head functions.
+        loss (Dict): Config dict for module of loss functions.
         queue_len (int, optional): Number of negative keys maintained in the
             queue. Defaults to 65536.
         feat_dim (int, optional): Dimension of compact feature vectors.
@@ -41,6 +43,7 @@ class MoCo(BaseModel):
                  backbone: Dict,
                  neck: Dict,
                  head: Dict,
+                 loss: Dict,
                  queue_len: Optional[int] = 65536,
                  feat_dim: Optional[int] = 128,
                  momentum: Optional[float] = 0.999,
@@ -63,6 +66,8 @@ class MoCo(BaseModel):
         self.neck = self.encoder_q[1]
         assert head is not None
         self.head = build_head(head)
+        assert loss is not None
+        self.loss = build_loss(loss)
 
         self.queue_len = queue_len
         self.momentum = momentum
@@ -153,9 +158,10 @@ class MoCo(BaseModel):
         # negative logits: NxK
         l_neg = torch.einsum('nc,ck->nk', [q, self.queue.clone().detach()])
 
-        losses = self.head(l_pos, l_neg)
+        logits, labels = self.head(l_pos, l_neg)
+        loss = self.loss(logits, labels)
 
         # update the queue
         self._dequeue_and_enqueue(k)
-
+        losses = dict(loss=loss)
         return losses

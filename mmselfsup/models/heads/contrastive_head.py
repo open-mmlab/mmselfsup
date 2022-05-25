@@ -1,6 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import Tuple
+
 import torch
-import torch.nn as nn
 from mmcv.runner import BaseModule
 
 from ..builder import HEADS
@@ -19,25 +20,25 @@ class ContrastiveHead(BaseModule):
             Defaults to 0.1.
     """
 
-    def __init__(self, temperature=0.1):
-        super(ContrastiveHead, self).__init__()
-        self.criterion = nn.CrossEntropyLoss()
+    def __init__(self, temperature: float = 0.1) -> None:
+        super().__init__()
         self.temperature = temperature
 
-    def forward(self, pos, neg):
+    def forward(self, pos: torch.Tensor,
+                neg: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
         """Forward function to compute contrastive loss.
 
         Args:
-            pos (Tensor): Nx1 positive similarity.
-            neg (Tensor): Nxk negative similarity.
+            pos (torch.Tensor): Nx1 positive similarity.
+            neg (torch.Tensor): Nxk negative similarity.
 
         Returns:
-            dict[str, Tensor]: A dictionary of loss components.
+            Tuple[torch.Tensor, torch.Tensor]: A tuple containing the logits
+                and labels.
         """
         N = pos.size(0)
         logits = torch.cat((pos, neg), dim=1)
         logits /= self.temperature
         labels = torch.zeros((N, ), dtype=torch.long).to(pos.device)
-        losses = dict()
-        losses['loss'] = self.criterion(logits, labels)
-        return losses
+
+        return logits, labels

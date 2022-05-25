@@ -30,6 +30,7 @@ head = dict(
         dict(type='Normal', std=0.005, layer='Linear'),
         dict(type='Constant', val=1, layer=['_BatchNorm', 'GroupNorm'])
     ])
+loss = dict(type='mmcls.CrossEntropyLoss')
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
@@ -44,12 +45,14 @@ def test_relative_loc():
             backbone=backbone,
             neck=None,
             head=head,
+            loss=loss,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     with pytest.raises(AssertionError):
         alg = RelativeLoc(
             backbone=backbone,
             neck=neck,
             head=None,
+            loss=loss,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     with pytest.raises(AssertionError):
         alg = RelativeLoc(
@@ -57,10 +60,19 @@ def test_relative_loc():
             neck=neck,
             head=head,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
+    with pytest.raises(AssertionError):
+        alg = RelativeLoc(
+            backbone=backbone,
+            neck=neck,
+            head=head,
+            loss=None,
+            preprocess_cfg=copy.deepcopy(preprocess_cfg))
+
     alg = RelativeLoc(
         backbone=backbone,
         neck=neck,
         head=head,
+        loss=loss,
         preprocess_cfg=copy.deepcopy(preprocess_cfg))
     alg.init_weights()
 

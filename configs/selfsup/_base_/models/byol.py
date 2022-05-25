@@ -27,4 +27,5 @@ model = dict(
             num_layers=2,
             with_bias=True,
             with_last_bn=False,
-            with_avg_pool=False)))
+            with_avg_pool=False)),
+    loss=dict(type='CosineSimilarityLoss'))

@@ -4,7 +4,7 @@ from typing import Dict, List, Optional, Tuple, Union
 import torch
 
 from mmselfsup.core import SelfSupDataSample
-from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
+from ..builder import ALGORITHMS, build_backbone, build_loss, build_neck
 from .base import BaseModel
 
 
@@ -21,7 +21,7 @@ class SwAV(BaseModel):
         neck (Dict, optional): Config dict for module of deep features
             to compact
             feature vectors. Defaults to None.
-        head (Dict, optional): Config dict for module of loss functions.
+        loss (Dict, optional): Config dict for module of loss functions.
             Defaults to None.
         preprocess_cfg (Dict, optional): Config dict to preprocess images.
             Defaults to None.
@@ -32,7 +32,7 @@ class SwAV(BaseModel):
     def __init__(self,
                  backbone: Optional[Dict] = None,
                  neck: Optional[Dict] = None,
-                 head: Optional[Dict] = None,
+                 loss: Optional[Dict] = None,
                  preprocess_cfg: Optional[Dict] = None,
                  init_cfg: Optional[Union[Dict, List[Dict]]] = None,
                  **kwargs) -> None:
@@ -41,8 +41,8 @@ class SwAV(BaseModel):
         self.backbone = build_backbone(backbone)
         assert neck is not None
         self.neck = build_neck(neck)
-        assert head is not None
-        self.head = build_head(head)
+        assert loss is not None
+        self.loss = build_loss(loss)
 
     def extract_feat(self, inputs: List[torch.Tensor],
                      data_samples: List[SelfSupDataSample],
@@ -87,5 +87,6 @@ class SwAV(BaseModel):
             start_idx = end_idx
         output = self.neck(output)[0]
 
-        loss_dict = self.head(output)
-        return loss_dict
+        loss = self.loss(output)
+        losses = dict(loss=loss)
+        return losses

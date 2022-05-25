@@ -14,5 +14,6 @@ model = dict(
         out_channels=128,
         with_avg_pool=True),
     head=dict(type='ContrastiveHead', temperature=0.07),
+    loss=dict(type='mmcls.CrossEntropyLoss'),
     memory_bank=dict(
         type='SimpleMemory', length=1281167, feat_dim=128, momentum=0.5))

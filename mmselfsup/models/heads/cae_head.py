@@ -1,6 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import os
 import warnings
+from typing import Dict, List, Optional, Union
 
 import torch
 from mmcv.runner import BaseModule
@@ -19,21 +20,16 @@ class CAEHead(BaseModule):
 
     Args:
         tokenizer_path (str): The path of the tokenizer.
-        lambd (float): The weight for the align loss.
-        init_cfg (dict, optional): Initialization config dict.
+        init_cfg (Dict or List[Dict], optional): Initialization config dict.
             Defaults to None.
     """
 
     def __init__(self,
                  tokenizer_path: str,
-                 lambd: float,
-                 init_cfg: dict = None) -> None:
-        super(CAEHead, self).__init__(init_cfg=init_cfg)
+                 init_cfg: Optional[Union[Dict, List[Dict]]] = None) -> None:
+        super().__init__(init_cfg=init_cfg)
         self.tokenizer_path = tokenizer_path
-        self.lambd = lambd
         self.encoder = self._load_encoder()
-        self.loss_cross_entropy = nn.CrossEntropyLoss()
-        self.loss_mse = nn.MSELoss()
 
     def _load_encoder(self) -> nn.Module:
         encoder = Encoder()
@@ -52,18 +48,10 @@ class CAEHead(BaseModule):
         target = torch.argmax(logits, dim=1)
         return target.flatten(1)
 
-    def forward(self, img_target: torch.Tensor, outputs: torch.Tensor,
-                latent_pred: torch.Tensor, latent_target: torch.Tensor,
-                mask: torch.Tensor) -> dict:
-        losses = dict()
+    def forward(self, img_target: torch.Tensor,
+                mask: torch.Tensor) -> torch.Tensor:
+
         target = self._generate_target(img_target)
         target = target[mask]
-        loss_main = self.loss_cross_entropy(outputs, target)
-        loss_align = self.loss_mse(latent_pred,
-                                   latent_target.detach()) * self.lambd
 
-        losses['loss'] = loss_main + loss_align
-        losses['main'] = loss_main
-        losses['align'] = loss_align
-
-        return losses
+        return target.detach()

@@ -35,6 +35,7 @@ head = dict(
         with_last_bn=False,
         with_last_bias=True,
         norm_cfg=dict(type='BN1d')))
+loss = dict(type='CosineSimilarityLoss')
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
@@ -49,24 +50,35 @@ def test_simsiam():
             backbone=backbone,
             neck=neck,
             head=None,
+            loss=loss,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     with pytest.raises(AssertionError):
         alg = SimSiam(
             backbone=backbone,
             neck=None,
             head=head,
+            loss=loss,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     with pytest.raises(AssertionError):
         alg = SimSiam(
             backbone=None,
             neck=neck,
             head=head,
+            loss=loss,
+            preprocess_cfg=copy.deepcopy(preprocess_cfg))
+    with pytest.raises(AssertionError):
+        alg = SimSiam(
+            backbone=backbone,
+            neck=neck,
+            head=head,
+            loss=None,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
 
     alg = SimSiam(
         backbone=backbone,
         neck=neck,
         head=head,
+        loss=loss,
         preprocess_cfg=copy.deepcopy(preprocess_cfg))
 
     fake_data = [{

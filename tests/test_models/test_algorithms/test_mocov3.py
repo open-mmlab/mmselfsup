@@ -42,6 +42,7 @@ head = dict(
         with_avg_pool=False,
         norm_cfg=dict(type='BN1d')),
     temperature=0.2)
+loss = dict(type='mmcls.CrossEntropyLoss', loss_weight=2 * 0.2)
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
@@ -56,24 +57,35 @@ def test_mocov3():
             backbone=None,
             neck=neck,
             head=head,
+            loss=loss,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     with pytest.raises(AssertionError):
         alg = MoCoV3(
             backbone=backbone,
             neck=None,
             head=head,
+            loss=loss,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     with pytest.raises(AssertionError):
         alg = MoCoV3(
             backbone=backbone,
             neck=neck,
             head=None,
+            loss=loss,
+            preprocess_cfg=copy.deepcopy(preprocess_cfg))
+    with pytest.raises(AssertionError):
+        alg = MoCoV3(
+            backbone=backbone,
+            neck=neck,
+            head=head,
+            loss=None,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
 
     alg = MoCoV3(
         backbone=backbone,
         neck=neck,
         head=head,
+        loss=loss,
         preprocess_cfg=copy.deepcopy(preprocess_cfg))
     alg.init_weights()
     alg.momentum_update()

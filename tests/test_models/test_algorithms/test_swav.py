@@ -24,8 +24,8 @@ neck = dict(
     out_channels=2,
     norm_cfg=dict(type='BN1d'),
     with_avg_pool=True)
-head = dict(
-    type='SwAVHead',
+loss = dict(
+    type='SwAVLoss',
     feat_dim=2,  # equal to neck['out_channels']
     epsilon=0.05,
     temperature=0.1,
@@ -43,24 +43,24 @@ def test_swav():
         alg = SwAV(
             backbone=backbone,
             neck=neck,
-            head=None,
+            loss=None,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     with pytest.raises(AssertionError):
         alg = SwAV(
             backbone=backbone,
             neck=None,
-            head=head,
+            loss=loss,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     with pytest.raises(AssertionError):
         alg = SwAV(
             backbone=None,
             neck=neck,
-            head=head,
+            loss=loss,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     alg = SwAV(
         backbone=backbone,
         neck=neck,
-        head=head,
+        loss=loss,
         preprocess_cfg=copy.deepcopy(preprocess_cfg))
 
     fake_data = [{

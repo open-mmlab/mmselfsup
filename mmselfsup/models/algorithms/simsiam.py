@@ -4,7 +4,8 @@ from typing import Dict, List, Optional, Tuple
 import torch
 
 from mmselfsup.core import SelfSupDataSample
-from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
+from ..builder import (ALGORITHMS, build_backbone, build_head, build_loss,
+                       build_neck)
 from .base import BaseModel
 
 
@@ -21,7 +22,9 @@ class SimSiam(BaseModel):
         backbone (Dict): Config dict for module of backbone. Defaults to None.
         neck (Dict): Config dict for module of deep features to compact
             feature vectors. Defaults to None.
-        head (Dict): Config dict for module of loss functions.
+        head (Dict): Config dict for module of head functions.
+            Defaults to None.
+        loss (Dict): Config dict for module of loss functions.
             Defaults to None.
         preprocess_cfg (Dict, optional): Config to preprocess images.
             Defaults to None.
@@ -33,6 +36,7 @@ class SimSiam(BaseModel):
                  backbone: Optional[Dict] = None,
                  neck: Optional[Dict] = None,
                  head: Optional[Dict] = None,
+                 loss: Optional[Dict] = None,
                  preprocess_cfg: Optional[Dict] = None,
                  init_cfg: Optional[Dict] = None) -> None:
         super().__init__(preprocess_cfg=preprocess_cfg, init_cfg=init_cfg)
@@ -42,6 +46,8 @@ class SimSiam(BaseModel):
         self.neck = build_neck(neck)
         assert head is not None
         self.head = build_head(head)
+        assert loss is not None
+        self.loss = build_loss(loss)
 
     def extract_feat(self, inputs: List[torch.Tensor],
                      data_samples: List[SelfSupDataSample],
@@ -77,5 +83,10 @@ class SimSiam(BaseModel):
         z1 = self.neck(self.backbone(img_v1))[0]  # NxC
         z2 = self.neck(self.backbone(img_v2))[0]  # NxC
 
-        losses = 0.5 * (self.head(z1, z2)['loss'] + self.head(z2, z1)['loss'])
-        return dict(loss=losses)
+        pred_1, target_1 = self.head(z1, z2)
+        pred_2, target_2 = self.head(z2, z1)
+
+        loss_1 = self.loss(pred_1, target_1)
+        loss_2 = self.loss(pred_2, target_2)
+        losses = dict(loss=0.5 * (loss_1 + loss_2))
+        return losses

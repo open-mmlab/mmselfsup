@@ -23,6 +23,7 @@ neck = dict(
     num_layers=2,
     with_avg_pool=True)
 head = dict(type='ContrastiveHead', temperature=0.1)
+loss = dict(type='mmcls.CrossEntropyLoss')
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
@@ -37,17 +38,27 @@ def test_simclr():
             backbone=backbone,
             neck=None,
             head=head,
+            loss=loss,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     with pytest.raises(AssertionError):
         alg = SimCLR(
             backbone=backbone,
             neck=neck,
             head=None,
+            loss=loss,
+            preprocess_cfg=copy.deepcopy(preprocess_cfg))
+    with pytest.raises(AssertionError):
+        alg = SimCLR(
+            backbone=backbone,
+            neck=neck,
+            head=head,
+            loss=None,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     alg = SimCLR(
         backbone=backbone,
         neck=neck,
         head=head,
+        loss=loss,
         preprocess_cfg=copy.deepcopy(preprocess_cfg))
 
     fake_data = [{

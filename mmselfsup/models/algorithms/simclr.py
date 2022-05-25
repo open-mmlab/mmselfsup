@@ -4,7 +4,8 @@ from typing import Dict, List, Optional, Tuple, Union
 import torch
 
 from mmselfsup.core import SelfSupDataSample
-from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
+from ..builder import (ALGORITHMS, build_backbone, build_head, build_loss,
+                       build_neck)
 from ..utils import GatherLayer
 from .base import BaseModel
 
@@ -21,7 +22,9 @@ class SimCLR(BaseModel):
             Defaults to None.
         neck (Dict, optional): Config dict for module of deep features
             to compact feature vectors. Defaults to None.
-        head (Dict, optional): Config dict for module of loss functions.
+        head (Dict, optional): Config dict for module of head functions.
+            Defaults to None.
+        loss (Dict, optional): Config dict for module of loss functions.
             Defaults to None.
         preprocess_cfg (Dict, optional): Config dict to preprocess images.
             Defaults to None.
@@ -33,6 +36,7 @@ class SimCLR(BaseModel):
                  backbone: Optional[Dict] = None,
                  neck: Optional[Dict] = None,
                  head: Optional[Dict] = None,
+                 loss: Optional[Dict] = None,
                  preprocess_cfg: Optional[Dict] = None,
                  init_cfg: Optional[Union[Dict, List[Dict]]] = None,
                  **kwargs) -> None:
@@ -43,6 +47,8 @@ class SimCLR(BaseModel):
         self.neck = build_neck(neck)
         assert head is not None
         self.head = build_head(head)
+        assert loss is not None
+        self.loss = build_loss(loss)
 
     @staticmethod
     def _create_buffer(N: int):
@@ -105,5 +111,7 @@ class SimCLR(BaseModel):
         positive = s[pos_ind].unsqueeze(1)  # (2N)x1
         # select negative, (2N)x(2N-2)
         negative = torch.masked_select(s, neg_mask == 1).reshape(s.size(0), -1)
-        loss_dict = self.head(positive, negative)
-        return loss_dict
+        logits, labels = self.head(positive, negative)
+        loss = self.loss(logits, labels)
+        losses = dict(loss=loss)
+        return losses

@@ -17,6 +17,7 @@ backbone = dict(
     out_indices=[4],  # 0: conv-1, x: stage-x
     norm_cfg=dict(type='BN'))
 head = dict(type='ClsHead', with_avg_pool=True, in_channels=512, num_classes=4)
+loss = dict(type='mmcls.CrossEntropyLoss')
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
@@ -30,15 +31,24 @@ def test_relative_loc():
         alg = RotationPred(
             backbone=backbone,
             head=None,
+            loss=loss,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     with pytest.raises(AssertionError):
         alg = RotationPred(
             backbone=None,
             head=head,
+            loss=loss,
+            preprocess_cfg=copy.deepcopy(preprocess_cfg))
+    with pytest.raises(AssertionError):
+        alg = RotationPred(
+            backbone=backbone,
+            head=head,
+            loss=None,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     alg = RotationPred(
         backbone=backbone,
         head=head,
+        loss=loss,
         preprocess_cfg=copy.deepcopy(preprocess_cfg))
     alg.init_weights()
 

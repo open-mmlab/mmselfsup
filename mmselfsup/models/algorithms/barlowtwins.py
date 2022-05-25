@@ -4,7 +4,8 @@ from typing import Dict, List, Optional, Tuple, Union
 import torch
 
 from mmselfsup.core import SelfSupDataSample
-from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
+from ..builder import (ALGORITHMS, build_backbone, build_head, build_loss,
+                       build_neck)
 from .base import BaseModel
 
 
@@ -22,7 +23,9 @@ class BarlowTwins(BaseModel):
             Defaults to None.
         neck (Dict, optional): Config dict for module of deep features
             to compact feature vectors. Defaults to None.
-        head (Dict, optional): Config dict for module of loss functions.
+        head (Dict, optional): Config dict for module of head functions.
+            Defaults to None.
+        loss (Dict, optional): Config dict for module of loss functions.
             Defaults to None.
         preprocess_cfg (Dict, optional): Config dict to preprocess images.
             Defaults to None.
@@ -34,6 +37,7 @@ class BarlowTwins(BaseModel):
                  backbone: Optional[Dict] = None,
                  neck: Optional[Dict] = None,
                  head: Optional[Dict] = None,
+                 loss: Optional[Dict] = None,
                  preprocess_cfg: Optional[Dict] = None,
                  init_cfg: Optional[Union[Dict, List[Dict]]] = None,
                  **kwargs) -> None:
@@ -44,6 +48,8 @@ class BarlowTwins(BaseModel):
         self.neck = build_neck(neck)
         assert head is not None
         self.head = build_head(head)
+        assert loss is not None
+        self.loss = build_loss(loss)
 
     def extract_feat(self, inputs: List[torch.Tensor],
                      data_samples: List[SelfSupDataSample],
@@ -81,5 +87,7 @@ class BarlowTwins(BaseModel):
         z1 = self.neck(self.backbone(img_v1))[0]  # NxC
         z2 = self.neck(self.backbone(img_v2))[0]  # NxC
 
-        loss_dict = self.head(z1, z2)
-        return loss_dict
+        cross_correlation_matrix = self.head(z1, z2)
+        loss = self.loss(cross_correlation_matrix)
+        losses = dict(loss=loss)
+        return losses

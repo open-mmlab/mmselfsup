@@ -5,7 +5,8 @@ import torch
 import torch.nn as nn
 
 from mmselfsup.core import SelfSupDataSample
-from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
+from ..builder import (ALGORITHMS, build_backbone, build_head, build_loss,
+                       build_neck)
 from .base import BaseModel
 
 
@@ -20,7 +21,8 @@ class MoCoV3(BaseModel):
         backbone (Dict): Config dict for module of backbone
         neck (Dict): Config dict for module of deep features to compact feature
             vectors.
-        head (Dict): Config dict for module of loss functions.
+        head (Dict): Config dict for module of head functions.
+        loss (Dict): Config dict for module of loss functions.
         base_momentum (float, , optional): Momentum coefficient for the
             momentum-updated encoder. Defaults to 0.99.
         preprocess_cfg (Dict, optional): Config to preprocess images.
@@ -33,6 +35,7 @@ class MoCoV3(BaseModel):
                  backbone: Dict,
                  neck: Dict,
                  head: Dict,
+                 loss: Dict,
                  base_momentum: Optional[float] = 0.99,
                  preprocess_cfg: Optional[Dict] = None,
                  init_cfg: Optional[Union[List[Dict], Dict]] = None) -> None:
@@ -47,6 +50,8 @@ class MoCoV3(BaseModel):
         self.neck = self.base_encoder[1]
         assert head is not None
         self.head = build_head(head)
+        assert loss is not None
+        self.loss = build_loss(loss)
 
         self.base_momentum = base_momentum
         self.momentum = base_momentum
@@ -112,5 +117,11 @@ class MoCoV3(BaseModel):
             k1 = self.momentum_encoder(view_1)[0]
             k2 = self.momentum_encoder(view_2)[0]
 
-        losses = self.head(q1, k2)['loss'] + self.head(q2, k1)['loss']
-        return dict(loss=losses)
+        logits_1, labels_1 = self.head(q1, k2)
+        logits_2, labels_2 = self.head(q2, k1)
+
+        loss_1 = self.loss(logits_1, labels_1)
+        loss_2 = self.loss(logits_2, labels_2)
+
+        losses = dict(loss=loss_1 + loss_2)
+        return losses

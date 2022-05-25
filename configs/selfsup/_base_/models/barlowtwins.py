@@ -19,4 +19,5 @@ model = dict(
         with_avg_pool=True,
         init_cfg=dict(
             type='Kaiming', distribution='uniform', layer=['Linear'])),
-    head=dict(type='LatentCrossCorrelationHead', in_channels=8192))
+    head=dict(type='LatentCrossCorrelationHead', in_channels=8192),
+    loss=dict(type='CrossCorrelationLoss'))

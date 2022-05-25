@@ -12,4 +12,5 @@ model = dict(
         type='ClsHead',
         with_avg_pool=False,  # already has avgpool in the neck
         in_channels=2048,
-        num_classes=10000))
+        num_classes=10000),
+    loss=dict(type='mmcls.CrossEntropyLoss'))
