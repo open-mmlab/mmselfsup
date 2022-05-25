@@ -6,7 +6,7 @@ from mmengine.data import InstanceData
 
 from mmselfsup.core import SelfSupDataSample
 from mmselfsup.utils import get_module_device
-from ..builder import ALGORITHMS, build_backbone, build_head
+from ..builder import ALGORITHMS, build_backbone, build_head, build_loss
 from .base import BaseModel
 
 
@@ -19,8 +19,9 @@ class RotationPred(BaseModel):
 
     Args:
         backbone (Dict, optional): Config dict for module of backbone.
-            Defaults to None.
         head (Dict, optional): Config dict for module of loss functions.
+            Defaults to None.
+        loss (Dict, optional): Config dict for module of loss functions.
             Defaults to None.
         preprocess_cfg (Dict, optional): Config dict to preprocess images.
             Defaults to None.
@@ -31,6 +32,7 @@ class RotationPred(BaseModel):
     def __init__(self,
                  backbone: Optional[Dict] = None,
                  head: Optional[Dict] = None,
+                 loss: Optional[Dict] = None,
                  preprocess_cfg: Optional[Dict] = None,
                  init_cfg: Optional[Union[Dict, List[Dict]]] = None,
                  **kwargs) -> None:
@@ -39,6 +41,8 @@ class RotationPred(BaseModel):
         self.backbone = build_backbone(backbone)
         assert head is not None
         self.head = build_head(head)
+        assert loss is not None
+        self.loss = build_loss(loss)
 
     def extract_feat(self, inputs: List[torch.Tensor],
                      data_samples: List[SelfSupDataSample],
@@ -78,9 +82,9 @@ class RotationPred(BaseModel):
             data_sample.rot_label.value for data_sample in data_samples
         ]
         rot_label = torch.flatten(torch.stack(rot_label, 0))  # (4N, )
-        loss_inputs = (outs, rot_label)
-        loss_dict = self.head.loss(*loss_inputs)
-        return loss_dict
+        loss = self.loss(outs[0], rot_label)
+        losses = dict(loss=loss)
+        return losses
 
     def forward_test(self, inputs: List[torch.Tensor],
                      data_samples: List[SelfSupDataSample],

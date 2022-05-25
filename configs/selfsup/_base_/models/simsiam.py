@@ -25,4 +25,5 @@ model = dict(
             out_channels=2048,
             with_avg_pool=False,
             with_last_bn=False,
-            with_last_bias=True)))
+            with_last_bias=True)),
+    loss=dict(type='CosineSimilarityLoss'))

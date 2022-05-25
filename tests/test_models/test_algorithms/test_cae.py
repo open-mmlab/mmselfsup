@@ -34,8 +34,9 @@ neck = dict(
     mlp_ratio=4,
     init_values=0.1,
 )
-head = dict(
-    type='CAEHead', tokenizer_path='cae_ckpt/encoder_stat_dict.pth', lambd=2)
+head = dict(type='CAEHead', tokenizer_path='cae_ckpt/encoder_stat_dict.pth')
+
+loss = dict(type='CAELoss', lambd=2)
 
 preprocess_cfg = {
     'mean': [0.5, 0.5, 0.5],
@@ -51,24 +52,35 @@ def test_cae():
             backbone=None,
             neck=neck,
             head=head,
+            loss=loss,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     with pytest.raises(AssertionError):
         model = CAE(
             backbone=backbone,
             neck=None,
             head=head,
+            loss=loss,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     with pytest.raises(AssertionError):
         model = CAE(
             backbone=backbone,
             neck=neck,
             head=None,
+            loss=loss,
+            preprocess_cfg=copy.deepcopy(preprocess_cfg))
+    with pytest.raises(AssertionError):
+        model = CAE(
+            backbone=backbone,
+            neck=neck,
+            head=head,
+            loss=None,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
 
     model = CAE(
         backbone=backbone,
         neck=neck,
         head=head,
+        loss=loss,
         preprocess_cfg=copy.deepcopy(preprocess_cfg))
     model.init_weights()
 

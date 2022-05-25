@@ -1,4 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import Dict, List, Optional, Union
+
 import numpy as np
 import torch
 import torch.distributed as dist
@@ -6,15 +8,15 @@ import torch.nn as nn
 from mmcv.runner import BaseModule
 
 from mmselfsup.utils import distributed_sinkhorn
-from ..builder import HEADS
+from ..builder import LOSSES
 from ..utils import MultiPrototypes
 
 
-@HEADS.register_module()
-class SwAVHead(BaseModule):
-    """The head for SwAV.
+@LOSSES.register_module()
+class SwAVLoss(BaseModule):
+    """The Loss for SwAV.
 
-    This head contains clustering and sinkhorn algorithms to compute Q codes.
+    This Loss contains clustering and sinkhorn algorithms to compute Q codes.
     Part of the code is borrowed from:
     `<https://github.com/facebookresearch/swav`_.
     The queue is built in `core/hooks/swav_hook.py`.
@@ -27,24 +29,24 @@ class SwAVHead(BaseModule):
             Defaults to 0.05.
         temperature (float): temperature parameter in training loss.
             Defaults to 0.1.
-        crops_for_assign (list[int]): list of crops id used for computing
+        crops_for_assign (List[int]): list of crops id used for computing
             assignments. Defaults to [0, 1].
-        num_crops (list[int]): list of number of crops. Defaults to [2].
+        num_crops (List[int]): list of number of crops. Defaults to [2].
         num_prototypes (int): number of prototypes. Defaults to 3000.
-        init_cfg (dict or list[dict], optional): Initialization config dict.
+        init_cfg (Dict or List[Dict], optional): Initialization config dict.
             Defaults to None.
     """
 
     def __init__(self,
-                 feat_dim,
-                 sinkhorn_iterations=3,
-                 epsilon=0.05,
-                 temperature=0.1,
-                 crops_for_assign=[0, 1],
-                 num_crops=[2],
-                 num_prototypes=3000,
-                 init_cfg=None):
-        super(SwAVHead, self).__init__(init_cfg)
+                 feat_dim: int,
+                 sinkhorn_iterations: int = 3,
+                 epsilon: float = 0.05,
+                 temperature: float = 0.1,
+                 crops_for_assign: List[int] = [0, 1],
+                 num_crops: List[int] = [2],
+                 num_prototypes: int = 3000,
+                 init_cfg: Optional[Union[List[Dict], Dict]] = None):
+        super().__init__(init_cfg)
         self.sinkhorn_iterations = sinkhorn_iterations
         self.epsilon = epsilon
         self.temperature = temperature
@@ -62,13 +64,13 @@ class SwAVHead(BaseModule):
             self.prototypes = nn.Linear(feat_dim, num_prototypes, bias=False)
         assert self.prototypes is not None
 
-    def forward(self, x):
-        """Forward head of swav to compute the loss.
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Forward function of SwAV loss.
 
         Args:
-            x (Tensor): NxC input features.
+            x (torch.Tensor): NxC input features.
         Returns:
-            dict[str, Tensor]: A dictionary of loss components.
+            torch.Tensor: The returned loss.
         """
         # normalize the prototypes
         with torch.no_grad():
@@ -109,4 +111,4 @@ class SwAVHead(BaseModule):
                     torch.sum(q * nn.functional.log_softmax(x, dim=1), dim=1))
             loss += subloss / (np.sum(self.num_crops) - 1)
         loss /= len(self.crops_for_assign)
-        return dict(loss=loss)
+        return loss

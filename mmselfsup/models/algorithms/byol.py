@@ -5,7 +5,8 @@ import torch
 import torch.nn as nn
 
 from mmselfsup.core import SelfSupDataSample
-from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
+from ..builder import (ALGORITHMS, build_backbone, build_head, build_loss,
+                       build_neck)
 from .base import BaseModel
 
 
@@ -21,7 +22,9 @@ class BYOL(BaseModel):
         backbone (Dict, optional): Config dict for module of backbone.
         neck (Dict, optional): Config dict for module of deep features
             to compact feature vectors. Defaults to None.
-        head (Dict, optional): Config dict for module of loss functions.
+        head (Dict, optional): Config dict for module of head functions.
+            Defaults to None.
+        loss (Dict, optional): Config dict for module of loss functions.
             Defaults to None.
         base_momentum (float): The base momentum coefficient for the target
             network. Defaults to 0.996.
@@ -35,6 +38,7 @@ class BYOL(BaseModel):
                  backbone: Optional[Dict] = None,
                  neck: Optional[Dict] = None,
                  head: Optional[Dict] = None,
+                 loss: Optional[Dict] = None,
                  base_momentum: float = 0.996,
                  preprocess_cfg: Optional[Dict] = None,
                  init_cfg: Optional[Union[Dict, List[Dict]]] = None,
@@ -56,6 +60,8 @@ class BYOL(BaseModel):
         self.neck = self.online_net[1]
         assert head is not None
         self.head = build_head(head)
+        assert loss is not None
+        self.loss = build_loss(loss)
 
         self.base_momentum = base_momentum
         self.momentum = base_momentum
@@ -108,7 +114,11 @@ class BYOL(BaseModel):
             proj_target_v1 = self.target_net(img_v1)[0]
             proj_target_v2 = self.target_net(img_v2)[0]
 
-        losses = 2. * (
-            self.head(proj_online_v1, proj_target_v2)['loss'] +
-            self.head(proj_online_v2, proj_target_v1)['loss'])
-        return dict(loss=losses)
+        pred_1, target_1 = self.head(proj_online_v1, proj_target_v2)
+        pred_2, target_2 = self.head(proj_online_v2, proj_target_v1)
+
+        loss_1 = self.loss(pred_1, target_1)
+        loss_2 = self.loss(pred_2, target_2)
+
+        losses = dict(loss=2. * (loss_1 + loss_2))
+        return losses

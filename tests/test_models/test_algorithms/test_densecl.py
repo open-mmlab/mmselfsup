@@ -28,6 +28,7 @@ neck = dict(
     out_channels=2,
     num_grid=None)
 head = dict(type='ContrastiveHead', temperature=0.2)
+loss = dict(type='mmcls.CrossEntropyLoss')
 
 
 def mock_batch_shuffle_ddp(img):
@@ -54,18 +55,28 @@ def test_densecl():
             backbone=backbone,
             neck=None,
             head=head,
+            loss=loss,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     with pytest.raises(AssertionError):
         alg = DenseCL(
             backbone=backbone,
             neck=neck,
             head=None,
+            loss=loss,
+            preprocess_cfg=copy.deepcopy(preprocess_cfg))
+    with pytest.raises(AssertionError):
+        alg = DenseCL(
+            backbone=backbone,
+            neck=neck,
+            head=head,
+            loss=None,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
 
     alg = DenseCL(
         backbone=backbone,
         neck=neck,
         head=head,
+        loss=loss,
         queue_len=queue_len,
         feat_dim=feat_dim,
         momentum=momentum,

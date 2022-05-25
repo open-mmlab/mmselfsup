@@ -1,13 +1,12 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from typing import Dict, List, Optional, Tuple, Union
 
-import numpy as np
 import torch
-import torch.nn as nn
 from mmengine.data import InstanceData
 
 from mmselfsup.core import SelfSupDataSample
-from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
+from ..builder import (ALGORITHMS, build_backbone, build_head, build_loss,
+                       build_neck)
 from ..utils import Sobel
 from .base import BaseModel
 
@@ -27,6 +26,7 @@ class DeepCluster(BaseModel):
         neck (Dict, optional): Config dict for module of deep features to
             compact feature vectors. Defaults to None.
         head (Dict, optional): Config dict for module of loss functions.
+        loss (Dict, optional): Config dict for module of loss functions.
             Defaults to None.
         preprocess_cfg (Dict): Config to preprocess images.
         init_cfg (Union[List[Dict], Dict], optional): Config dict for weight
@@ -38,6 +38,7 @@ class DeepCluster(BaseModel):
                  with_sobel: Optional[bool] = True,
                  neck: Optional[Dict] = None,
                  head: Optional[Dict] = None,
+                 loss: Optional[Dict] = None,
                  preprocess_cfg: Optional[Dict] = None,
                  init_cfg: Optional[Union[List[Dict], Dict]] = None) -> None:
         super().__init__(preprocess_cfg=preprocess_cfg, init_cfg=init_cfg)
@@ -49,6 +50,8 @@ class DeepCluster(BaseModel):
             self.neck = build_neck(neck)
         assert head is not None
         self.head = build_head(head)
+        assert loss is not None
+        self.loss = build_loss(loss)
 
         # re-weight
         self.num_classes = self.head.num_classes
@@ -93,8 +96,9 @@ class DeepCluster(BaseModel):
         if self.with_neck:
             x = self.neck(x)
         outs = self.head(x)
-        loss_inputs = (outs, pseudo_label)
-        losses = self.head.loss(*loss_inputs)
+        self.loss.class_weight = self.loss_weight
+        loss = self.loss(outs[0], pseudo_label)
+        losses = dict(loss=loss)
         return losses
 
     def forward_test(self, inputs: List[torch.Tensor],
@@ -119,18 +123,3 @@ class DeepCluster(BaseModel):
             prediction = InstanceData(**prediction_data)
             data_samples[i].prediction = prediction
         return data_samples
-
-    def set_reweight(self, labels, reweight_pow=0.5):
-        """Loss re-weighting.
-
-        Re-weighting the loss according to the number of samples in each class.
-        Args:
-            labels (numpy.ndarray): Label assignments.
-            reweight_pow (float): The power of re-weighting. Defaults to 0.5.
-        """
-        histogram = np.bincount(
-            labels, minlength=self.num_classes).astype(np.float32)
-        inv_histogram = (1. / (histogram + 1e-10))**reweight_pow
-        weight = inv_histogram / inv_histogram.sum()
-        self.loss_weight.copy_(torch.from_numpy(weight))
-        self.head.criterion = nn.CrossEntropyLoss(weight=self.loss_weight)

@@ -17,6 +17,6 @@ model = dict(
         mlp_ratio=4,
         init_values=0.1,
     ),
-    head=dict(
-        type='CAEHead', tokenizer_path='cae_ckpt/dalle_encoder.pth', lambd=2),
+    head=dict(type='CAEHead', tokenizer_path='cae_ckpt/dalle_encoder.pth'),
+    loss=dict(type='CAELoss', lambd=2),
     base_momentum=0.0)

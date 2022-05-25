@@ -4,7 +4,8 @@ from typing import Dict, List, Optional, Tuple, Union
 import torch
 
 from mmselfsup.core import SelfSupDataSample
-from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
+from ..builder import (ALGORITHMS, build_backbone, build_head, build_loss,
+                       build_neck)
 from .base import BaseModel
 
 
@@ -18,7 +19,8 @@ class SimMIM(BaseModel):
     Args:
         backbone (Dict): Config dict for encoder. Defaults to None.
         neck (Dict): Config dict for encoder. Defaults to None.
-        head (Dict): Config dict for loss functions. Defaults to None.
+        head (Dict): Config dict for head functions. Defaults to None.
+        loss (Dict): Config dict for loss functions. Defaults to None.
         preprocess_cfg (Dict): Config to preprocess images.
         init_cfg (Union[List[Dict], Dict], optional): Config dict for weight
             initialization. Defaults to None.
@@ -28,6 +30,7 @@ class SimMIM(BaseModel):
                  backbone: Dict,
                  neck: Dict,
                  head: Dict,
+                 loss: Dict,
                  preprocess_cfg: Dict,
                  init_cfg: Optional[Union[List[Dict], Dict]] = None) -> None:
         super().__init__(preprocess_cfg=preprocess_cfg, init_cfg=init_cfg)
@@ -37,6 +40,8 @@ class SimMIM(BaseModel):
         self.neck = build_neck(neck)
         assert head is not None
         self.head = build_head(head)
+        assert loss is not None
+        self.loss = build_loss(loss)
 
     def extract_feat(self, inputs: List[torch.Tensor],
                      data_samples: List[SelfSupDataSample],
@@ -74,6 +79,8 @@ class SimMIM(BaseModel):
 
         img_latent = self.backbone(img, mask)
         img_rec = self.neck(img_latent[0])
-        losses = self.head(img, img_rec, mask)
+        mask = self.head(mask)
+        loss = self.loss(img_rec, img, mask)
+        losses = dict(loss=loss)
 
         return losses

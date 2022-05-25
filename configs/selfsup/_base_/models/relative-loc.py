@@ -20,4 +20,5 @@ model = dict(
         init_cfg=[
             dict(type='Normal', std=0.005, layer='Linear'),
             dict(type='Constant', val=1, layer=['_BatchNorm', 'GroupNorm'])
-        ]))
+        ]),
+    loss=dict(type='mmcls.CrossEntropyLoss'))

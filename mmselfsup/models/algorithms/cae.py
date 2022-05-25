@@ -5,7 +5,8 @@ import torch
 
 from mmselfsup.core import SelfSupDataSample
 from mmselfsup.utils import get_module_device
-from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
+from ..builder import (ALGORITHMS, build_backbone, build_head, build_loss,
+                       build_neck)
 from .base import BaseModel
 
 
@@ -19,8 +20,8 @@ class CAE(BaseModel):
     Args:
         backbone (Dict, optional): Config dict for encoder. Defaults to None.
         neck (Dict, optional): Config dict for encoder. Defaults to None.
-        head (Dict, optional): Config dict for loss functions.
-            Defaults to None.
+        head (Dict, optional): Config dict for head. Defaults to None.
+        loss (Dict, optional): Config dict for loss. Defaults to None.
         base_momentum (float): The base momentum coefficient for the target
             network. Defaults to 0.0.
         preprocess_cfg (Dict, optional): Config to preprocess images.
@@ -33,6 +34,7 @@ class CAE(BaseModel):
                  backbone: Optional[Dict] = None,
                  neck: Optional[Dict] = None,
                  head: Optional[Dict] = None,
+                 loss: Optional[Dict] = None,
                  base_momentum: float = 0.0,
                  preprocess_cfg: Optional[Dict] = None,
                  init_cfg: Optional[Union[List[Dict], Dict]] = None) -> None:
@@ -44,6 +46,8 @@ class CAE(BaseModel):
         self.neck = build_neck(neck)
         assert head is not None
         self.head = build_head(head)
+        assert loss is not None
+        self.loss = build_loss(loss)
 
         self.momentum = base_momentum
 
@@ -112,8 +116,14 @@ class CAE(BaseModel):
                                         pos_embed_unmasked)
 
         logits = logits.view(-1, logits.shape[-1])
+        target = self.head(inputs[1], mask)
+        loss_main, loss_align = self.loss(logits, target, latent_pred,
+                                          latent_target)
+        losses = dict()
 
-        losses = self.head(inputs[1], logits, latent_pred, latent_target, mask)
+        losses['loss'] = loss_main + loss_align
+        losses['main'] = loss_main
+        losses['align'] = loss_align
         return losses
 
     def preprocss_data(

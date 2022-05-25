@@ -6,7 +6,8 @@ from mmengine.data import InstanceData
 
 from mmselfsup.core import SelfSupDataSample
 from mmselfsup.utils import get_module_device
-from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
+from ..builder import (ALGORITHMS, build_backbone, build_head, build_loss,
+                       build_neck)
 from .base import BaseModel
 
 
@@ -22,8 +23,9 @@ class RelativeLoc(BaseModel):
             Defaults to None.
         neck (Dict, optional): Config dict for module of deep features
             to compact feature vectors. Defaults to None.
-        head (Dict, optional): Config dict for module of loss functions.
+        head (Dict, optional): Config dict for module of head function.
             Defaults to None.
+        loss (Dict): Config dict for module of loss function. Defaults to None.
         preprocess_cfg (Dict, optional): Config dict to preprocess images.
             Defaults to None.
         init_cfg (Dict or List[Dict], optional): Config dict for weight
@@ -34,6 +36,7 @@ class RelativeLoc(BaseModel):
                  backbone: Optional[Dict] = None,
                  neck: Optional[Dict] = None,
                  head: Optional[Dict] = None,
+                 loss: Optional[Dict] = None,
                  preprocess_cfg: Optional[Dict] = None,
                  init_cfg: Optional[Union[Dict, List[Dict]]] = None,
                  **kwargs) -> None:
@@ -44,6 +47,8 @@ class RelativeLoc(BaseModel):
         self.neck = build_neck(neck)
         assert head is not None
         self.head = build_head(head)
+        assert loss is not None
+        self.loss = build_loss(loss)
 
     def extract_feat(self, inputs: List[torch.Tensor],
                      data_samples: List[SelfSupDataSample],
@@ -86,9 +91,9 @@ class RelativeLoc(BaseModel):
             data_sample.patch_label.value for data_sample in data_samples
         ]
         patch_label = torch.flatten(torch.stack(patch_label, 0))
-        loss_inputs = (outs, patch_label)
-        loss_dict = self.head.loss(*loss_inputs)
-        return loss_dict
+        loss = self.loss(outs[0], patch_label)
+        losses = dict(loss=loss)
+        return losses
 
     def forward_test(self, inputs: List[torch.Tensor],
                      data_samples: List[SelfSupDataSample],

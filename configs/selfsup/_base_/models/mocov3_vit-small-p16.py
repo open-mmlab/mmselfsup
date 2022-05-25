@@ -1,4 +1,5 @@
 # model settings
+temperature = 0.2
 model = dict(
     type='MoCoV3',
     base_momentum=0.99,
@@ -33,4 +34,5 @@ model = dict(
             with_last_bn_affine=False,
             with_last_bias=False,
             with_avg_pool=False),
-        temperature=0.2))
+        temperature=temperature),
+    loss=dict(type='mmcls.CrossEntropyLoss', loss_weight=2 * temperature))

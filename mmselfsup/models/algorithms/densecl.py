@@ -8,7 +8,8 @@ from mmengine.data import BaseDataElement
 from mmselfsup.core import SelfSupDataSample
 from mmselfsup.utils import (batch_shuffle_ddp, batch_unshuffle_ddp,
                              concat_all_gather)
-from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
+from ..builder import (ALGORITHMS, build_backbone, build_head, build_loss,
+                       build_neck)
 from .base import BaseModel
 
 
@@ -25,7 +26,9 @@ class DenseCL(BaseModel):
         backbone (dict): Config dict for module of backbone.
         neck (dict): Config dict for module of deep features to compact
             feature vectors. Defaults to None.
-        head (dict): Config dict for module of loss functions.
+        head (dict): Config dict for module of head functions.
+            Defaults to None.
+        loss (dict): Config dict for module of loss functions.
             Defaults to None.
         queue_len (int): Number of negative keys maintained in the queue.
             Defaults to 65536.
@@ -44,6 +47,7 @@ class DenseCL(BaseModel):
                  backbone,
                  neck: Optional[Dict] = None,
                  head: Optional[Dict] = None,
+                 loss: Optional[Dict] = None,
                  queue_len: int = 65536,
                  feat_dim: int = 128,
                  momentum: float = 0.999,
@@ -67,6 +71,8 @@ class DenseCL(BaseModel):
         self.backbone = self.encoder_q[0]
         assert head is not None
         self.head = build_head(head)
+        assert loss is not None
+        self.loss = build_loss(loss)
 
         self.queue_len = queue_len
         self.momentum = momentum
@@ -215,8 +221,10 @@ class DenseCL(BaseModel):
         l_neg_dense = torch.einsum(
             'nc,ck->nk', [q_grid, self.queue2.clone().detach()])
 
-        loss_single = self.head(l_pos, l_neg)['loss']
-        loss_dense = self.head(l_pos_dense, l_neg_dense)['loss']
+        logits, labels = self.head(l_pos, l_neg)
+        logits_dense, labels_dense = self.head(l_pos_dense, l_neg_dense)
+        loss_single = self.loss(logits, labels)
+        loss_dense = self.loss(logits_dense, labels_dense)
 
         losses = dict()
         losses['loss_single'] = loss_single * (1 - self.loss_lambda)

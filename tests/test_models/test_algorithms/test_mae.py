@@ -21,6 +21,7 @@ neck = dict(
     mlp_ratio=4.,
 )
 head = dict(type='MAEPretrainHead', norm_pix=False, patch_size=16)
+loss = dict(type='MAEReconstructionLoss')
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
@@ -35,23 +36,27 @@ def test_mae():
             backbone=backbone,
             neck=None,
             head=head,
+            loss=loss,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     with pytest.raises(AssertionError):
         alg = MAE(
             backbone=backbone,
             neck=neck,
             head=None,
+            loss=loss,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     with pytest.raises(AssertionError):
         alg = MAE(
             backbone=None,
             neck=neck,
             head=head,
+            loss=loss,
             preprocess_cfg=copy.deepcopy(preprocess_cfg))
     alg = MAE(
         backbone=backbone,
         neck=neck,
         head=head,
+        loss=loss,
         preprocess_cfg=copy.deepcopy(preprocess_cfg))
     alg.init_weights()
 

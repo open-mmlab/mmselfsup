@@ -1,10 +1,8 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-import numpy as np
 import torch
-import torch.nn as nn
 
-from ..builder import (ALGORITHMS, build_backbone, build_head, build_memory,
-                       build_neck)
+from ..builder import (ALGORITHMS, build_backbone, build_head, build_loss,
+                       build_memory, build_neck)
 from ..utils import Sobel
 from .base import BaseModel
 
@@ -24,7 +22,9 @@ class ODC(BaseModel):
             Defaults to False.
         neck (dict): Config dict for module of deep features to compact feature
             vectors. Defaults to None.
-        head (dict): Config dict for module of loss functions.
+        head (dict): Config dict for module of head functions.
+            Defaults to None.
+        loss (dict): Config dict for module of loss functions.
             Defaults to None.
         memory_bank (dict): Module of memory banks. Defaults to None.
     """
@@ -34,6 +34,7 @@ class ODC(BaseModel):
                  with_sobel=False,
                  neck=None,
                  head=None,
+                 loss=None,
                  memory_bank=None,
                  init_cfg=None):
         super(ODC, self).__init__(init_cfg)
@@ -45,6 +46,8 @@ class ODC(BaseModel):
             self.neck = build_neck(neck)
         assert head is not None
         self.head = build_head(head)
+        assert loss is not None
+        self.loss = build_loss(loss)
         assert memory_bank is not None
         self.memory_bank = build_memory(memory_bank)
 
@@ -90,7 +93,9 @@ class ODC(BaseModel):
             loss_inputs = (outs, self.memory_bank.label_bank[idx])
         else:
             loss_inputs = (outs, self.memory_bank.label_bank[idx.cpu()].cuda())
-        losses = self.head.loss(*loss_inputs)
+        self.loss.class_weight = self.loss_weight
+        loss = self.loss(loss_inputs[0][0], loss_inputs[1])
+        losses = dict(loss=loss)
 
         # update samples memory
         change_ratio = self.memory_bank.update_samples_memory(
@@ -116,24 +121,3 @@ class ODC(BaseModel):
         keys = [f'head{i}' for i in range(len(outs))]
         out_tensors = [out.cpu() for out in outs]  # NxC
         return dict(zip(keys, out_tensors))
-
-    def set_reweight(self, labels=None, reweight_pow=0.5):
-        """Loss re-weighting.
-
-        Re-weighting the loss according to the number of samples in each class.
-
-        Args:
-            labels (numpy.ndarray): Label assignments. Defaults to None.
-            reweight_pow (float): The power of re-weighting. Defaults to 0.5.
-        """
-        if labels is None:
-            if self.memory_bank.label_bank.is_cuda:
-                labels = self.memory_bank.label_bank.cpu().numpy()
-            else:
-                labels = self.memory_bank.label_bank.numpy()
-        histogram = np.bincount(
-            labels, minlength=self.num_classes).astype(np.float32)
-        inv_histogram = (1. / (histogram + 1e-10))**reweight_pow
-        weight = inv_histogram / inv_histogram.sum()
-        self.loss_weight.copy_(torch.from_numpy(weight))
-        self.head.criterion = nn.CrossEntropyLoss(weight=self.loss_weight)

@@ -19,6 +19,7 @@ model = dict(
         with_avg_pool=False,
         in_channels=256,
         num_classes=10000),
+    loss=dict(type='mmcls.CrossEntropyLoss'),
     memory_bank=dict(
         type='ODCMemory',
         length=1281167,
