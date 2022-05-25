@@ -25,12 +25,11 @@ extract_pipeline = [
     dict(type='PackSelfSupInputs')
 ]
 
-# TODO: replace=getattr(cfg.data, 'sampling_replace'), sampler need 'replace'
 train_dataloader = dict(
     batch_size=64,
     num_workers=4,
     persistent_workers=True,
-    sampler=dict(type='DefaultSampler', shuffle=True),
+    sampler=dict(type='DeepClusterSampler', shuffle=True, replace=True),
     dataset=dict(
         type=dataset_type,
         data_root=data_root,

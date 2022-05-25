@@ -1,9 +1,4 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from .distributed_sampler import (DistributedGivenIterationSampler,
-                                  DistributedSampler)
-from .group_sampler import DistributedGroupSampler, GroupSampler
+from .deepcluster_sampler import DeepClusterSampler
 
-__all__ = [
-    'DistributedSampler', 'DistributedGivenIterationSampler',
-    'DistributedGroupSampler', 'GroupSampler'
-]
+__all__ = ['DeepClusterSampler']
