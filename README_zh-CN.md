@@ -106,7 +106,7 @@ MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibilit
 
 ### 基准测试
 
-| 基准测试方法                                       | 参考设置                                                                                                                                                             |
+| 基准测试方法                                             | 参考设置                                                                                                                                                                 |
 | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ImageNet Linear Classification (Multi-head)        | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
 | ImageNet Linear Classification (Last)              |                                                                                                                                                                      |
