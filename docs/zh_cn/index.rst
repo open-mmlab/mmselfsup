@@ -13,7 +13,7 @@ Welcome to MMSelfSup's documentation!
    :caption: 开始你的第一步
 
    install.md
-   getting_started.md
+   get_started.md
 
 .. toctree::
    :maxdepth: 1
