@@ -15,6 +15,7 @@ Welcome to MMSelfSup's documentation!
    install.md
    prepare_data.md
    get_started.md
+   model_zoo.md
 
 .. toctree::
    :maxdepth: 1
