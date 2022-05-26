@@ -11,6 +11,7 @@ Welcome to MMSelfSup's documentation!
    :caption: Get Started
 
    install.md
+   prepare_data.md
    get_started.md
 
 .. toctree::
@@ -51,8 +52,8 @@ Welcome to MMSelfSup's documentation!
    :maxdepth: 1
    :caption: Notes
 
-   community/CONTRIBUTING.md
    changelog.md
+   compatibility.md
 
 .. toctree::
    :caption: Switch Language
