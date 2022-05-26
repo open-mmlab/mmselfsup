@@ -59,7 +59,6 @@ The master branch works with **PyTorch 1.5** or higher.
 
   Since MMSelfSup adopts similar design of modulars and interfaces as those in other OpenMMLab projects, it supports smooth evaluation on downstream tasks with other OpenMMLab projects like object detection and segmentation.
 
-
 ## News
 
 MMSelfSup **v0.9.0** was released in 29/04/2022.
