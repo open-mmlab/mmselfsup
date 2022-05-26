@@ -33,7 +33,11 @@
 
 </div>
 
+<div align="center">
+
 [English](README.md) | 简体中文
+
+</div>
 
 ## 介绍
 
@@ -59,7 +63,7 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
   兼容 OpenMMLab 各大算法库，拥有丰富的下游评测任务和预训练模型的应用。
 
-## 更新日志
+## 更新
 
 最新的 **v0.9.0** 版本已经在 2022.04.29 发布。
 
@@ -80,7 +84,7 @@ MMSelfSup 依赖 [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open
 
 ## 快速入门
 
-请参考 [准备数据](docs/zh_cn/prepare_data.md) 准备数据集和 [入门指南](docs/zh_cn/getting_started.md) 获取 MMSelfSup 的基本使用方法.
+请参考 [准备数据](docs/zh_cn/prepare_data.md) 准备数据集和 [入门指南](docs/zh_cn/get_started.md) 获取 MMSelfSup 的基本使用方法.
 
 我们也提供了更加全面的教程，包括:
 
@@ -124,7 +128,7 @@ MMSelfSup 依赖 [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open
 
 ## 基准测试
 
-| 基准测试方法                                             | 参考设置                                                                                                                                                                 |
+| 基准测试方法                                       | 参考设置                                                                                                                                                             |
 | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ImageNet Linear Classification (Multi-head)        | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
 | ImageNet Linear Classification (Last)              |                                                                                                                                                                      |

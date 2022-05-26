@@ -33,7 +33,11 @@
 
 </div>
 
+<div align="center">
+
 English | [简体中文](README_zh-CN.md)
+
+</div>
 
 ## Introduction
 
@@ -59,7 +63,7 @@ The master branch works with **PyTorch 1.5** or higher.
 
   Since MMSelfSup adopts similar design of modulars and interfaces as those in other OpenMMLab projects, it supports smooth evaluation on downstream tasks with other OpenMMLab projects like object detection and segmentation.
 
-## News
+## What's New
 
 MMSelfSup **v0.9.0** was released in 29/04/2022.
 
@@ -80,7 +84,7 @@ Please refer to [install.md](docs/en/install.md) for more detailed instruction.
 
 ## Get Started
 
-Please refer to [prepare_data.md](docs/en/prepare_data.md) for dataset preparation and [getting_started.md](docs/en/getting_started.md) for the basic usage of MMSelfSup.
+Please refer to [prepare_data.md](docs/en/prepare_data.md) for dataset preparation and [get_started.md](docs/en/get_started.md) for the basic usage of MMSelfSup.
 
 We also provides tutorials for more details:
 
