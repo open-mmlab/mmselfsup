@@ -106,7 +106,7 @@ MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibilit
 
 ### 基准测试
 
-| 基准测试方法                                             | 参考设置                                                                                                                                                                 |
+| 基准测试方法                                       | 参考设置                                                                                                                                                             |
 | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ImageNet Linear Classification (Multi-head)        | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
 | ImageNet Linear Classification (Last)              |                                                                                                                                                                      |
@@ -141,8 +141,6 @@ MMSelfSup 依赖 [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open
 - [基准测试](docs/zh_cn/tutorials/6_benchmarks.md)
 
 另外，我们提供了 [colab 教程](https://github.com/open-mmlab/mmselfsup/blob/master/demo/mmselfsup_colab_tutorial.ipynb)。
-
-请参考 [常见问题解答](docs/zh_cn/faq.md) 获取更详细的信息。
 
 ## 参与贡献
 
