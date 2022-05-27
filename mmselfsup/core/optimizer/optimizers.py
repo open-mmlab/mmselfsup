@@ -1,8 +1,8 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import torch
-from mmcv.runner.optimizer.builder import OPTIMIZERS
-from torch.optim import *  # noqa: F401,F403
-from torch.optim.optimizer import Optimizer, required
+from torch.optim.optimizer import Optimizer
+
+from mmselfsup.registry import OPTIMIZERS
 
 
 @OPTIMIZERS.register_module()
@@ -37,14 +37,14 @@ class LARS(Optimizer):
 
     def __init__(self,
                  params,
-                 lr=required,
+                 lr=float,
                  momentum=0,
                  weight_decay=0,
                  dampening=0,
                  eta=0.001,
                  nesterov=False,
                  eps=1e-8):
-        if lr is not required and lr < 0.0:
+        if not isinstance(lr, float) and lr < 0.0:
             raise ValueError(f'Invalid learning rate: {lr}')
         if momentum < 0.0:
             raise ValueError(f'Invalid momentum value: {momentum}')
