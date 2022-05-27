@@ -108,7 +108,7 @@ Supported algorithms:
 
 - [x] [Relative Location (ICCV'2015)](https://arxiv.org/abs/1505.05192)
 - [x] [Rotation Prediction (ICLR'2018)](https://arxiv.org/abs/1803.07728)
-- [x] [DeepCLuster (ECCV'2018)](https://arxiv.org/abs/1807.05520)
+- [x] [DeepCluster (ECCV'2018)](https://arxiv.org/abs/1807.05520)
 - [x] [NPID (CVPR'2018)](https://arxiv.org/abs/1805.01978)
 - [x] [ODC (CVPR'2020)](https://arxiv.org/abs/2006.10645)
 - [x] [MoCo v1 (CVPR'2020)](https://arxiv.org/abs/1911.05722)
@@ -151,7 +151,7 @@ We appreciate all contributions improving MMSelfSup. Please refer to [CONTRIBUTI
 MMSelfSup is an open source project that is contributed by researchers and engineers from various colleges and companies. We appreciate all the contributors who implement their methods or add new features, as well as users who give valuable feedbacks.
 We wish that the toolbox and benchmark could serve the growing research community by providing a flexible toolkit to reimplement existing methods and develop their own new algorithms.
 
-MMSelfSup originates from OpenSelfSup, and we appreciate all early contributions made to OpenSelfSup. A few contributors are listed here: Xiaohang Zhan, Jiahao Xie, Enze Xie, Xiangxiang Chu, Zijian He.
+MMSelfSup originates from OpenSelfSup, and we appreciate all early contributions made to OpenSelfSup. A few contributors are listed here: Xiaohang Zhan ([@XiaohangZhan](http://github.com/XiaohangZhan)), Jiahao Xie ([@Jiahao000](https://github.com/Jiahao000)), Enze Xie ([@xieenze](https://github.com/xieenze)), Xiangxiang Chu ([@cxxgtxy](https://github.com/cxxgtxy)), Zijian He ([@scnuhealthy](https://github.com/scnuhealthy)).
 
 ## Citation
 
