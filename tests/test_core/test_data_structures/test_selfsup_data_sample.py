@@ -38,9 +38,9 @@ class TestSelfSupDataSample(TestCase):
         # test idx
         idx_data = dict(value=[1])
         idx_instances = InstanceData(**idx_data)
-        selfsup_data_sample.idx = idx_instances
-        assert 'idx' in selfsup_data_sample
-        assert _equal(selfsup_data_sample.idx.value, idx_data['value'])
+        selfsup_data_sample.sample_idx = idx_instances
+        assert 'sample_idx' in selfsup_data_sample
+        assert _equal(selfsup_data_sample.sample_idx.value, idx_data['value'])
 
         # test mask
         mask_data = dict(value=torch.rand(4, 4))
@@ -57,6 +57,14 @@ class TestSelfSupDataSample(TestCase):
         assert _equal(selfsup_data_sample.pred_label.value,
                       pred_label_data['value'])
 
+        # test pseudo_label
+        pseudo_label_data = dict(value=[1])
+        pseudo_label_instances = InstanceData(**pseudo_label_data)
+        selfsup_data_sample.pseudo_label = pseudo_label_instances
+        assert 'pseudo_label' in selfsup_data_sample
+        assert _equal(selfsup_data_sample.pseudo_label.value,
+                      pseudo_label_data['value'])
+
     def test_deleter(self):
 
         gt_label_data = dict(value=[1])
@@ -69,15 +77,15 @@ class TestSelfSupDataSample(TestCase):
 
         idx_data = dict(value=[1])
         selfsup_data_sample = SelfSupDataSample()
-        idx = InstanceData(value=idx_data)
-        selfsup_data_sample.idx = idx
-        assert 'idx' in selfsup_data_sample
-        del selfsup_data_sample.idx
-        assert 'idx' not in selfsup_data_sample
+        sample_idx = InstanceData(value=idx_data)
+        selfsup_data_sample.sample_idx = sample_idx
+        assert 'sample_idx' in selfsup_data_sample
+        del selfsup_data_sample.sample_idx
+        assert 'sample_idx' not in selfsup_data_sample
 
         mask_data = dict(value=torch.rand(4, 4))
         selfsup_data_sample = SelfSupDataSample()
-        mask = InstanceData(value=mask_data)
+        mask = InstanceData(**mask_data)
         selfsup_data_sample.mask = mask
         assert 'mask' in selfsup_data_sample
         del selfsup_data_sample.mask
@@ -90,3 +98,11 @@ class TestSelfSupDataSample(TestCase):
         assert 'pred_label' in selfsup_data_sample
         del selfsup_data_sample.pred_label
         assert 'pred_label' not in selfsup_data_sample
+
+        pseudo_label_data = dict(value=[1])
+        selfsup_data_sample = SelfSupDataSample()
+        pseudo_label = InstanceData(value=pseudo_label_data)
+        selfsup_data_sample.pseudo_label = pseudo_label
+        assert 'pseudo_label' in selfsup_data_sample
+        del selfsup_data_sample.pseudo_label
+        assert 'pseudo_label' not in selfsup_data_sample
