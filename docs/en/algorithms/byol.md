@@ -36,11 +36,12 @@ Besides, k=1 to 96 indicates the hyper-parameter of Low-shot SVM.
 
 The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map is pooled to the specific dimensions and then follows a Linear layer to do the classification. Please refer to [resnet50_mhead_linear-8xb32-steplr-90e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/imagenet/resnet50_mhead_linear-8xb32-steplr-90e_in1k.py) for details of config.
 
-The **AvgPool** result is obtained from Linear Evaluation with GlobalAveragePooling. Please refer to [resnet50_linear-8xb32-steplr-100e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-steplr-100e_in1k.py) for details of config.
+The **AvgPool** result is obtained from Linear Evaluation with GlobalAveragePooling. Please refer to [resnet50_linear-8xb512-coslr-90e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/imagenet/resnet50_linear-8xb512-coslr-90e_in1k.py) for details of config.
 
 | Self-Supervised Config                                                                                                                                       | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 | AvgPool |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | -------- | -------- | -------- | -------- | ------- |
-| [resnet50_8xb32-accum16-coslr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py) | 15.59    | 35.16    | 47.37    | 62.86    | 71.62    | 67.55   |
+| [resnet50_8xb32-accum16-coslr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py) | 15.16    | 35.26    | 47.77    | 63.10    | 71.21    | 71.72   |
+| [resnet50_16xb256-coslr-200e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/byol/byol_resnet50_16xb256-coslr-200e_in1k.py)             | 15.41    | 35.15    | 47.77    | 62.59    | 71.85    | 71.88   |
 
 #### Places205 Linear Evaluation
 
