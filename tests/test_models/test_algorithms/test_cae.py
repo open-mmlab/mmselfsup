@@ -1,21 +1,12 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-<<<<<<< HEAD
-=======
 import copy
->>>>>>> 6491042 ([Refactor]: Refactor CAE)
 import platform
 
 import pytest
 import torch
-<<<<<<< HEAD
-
 from mmselfsup.models.algorithms import CAE
 
-# model settings
-backbone = dict(
-    type='CAEViT', arch='b', patch_size=16, init_values=0.1, qkv_bias=False)
-=======
-from mmengine.data import BaseDataElement as PixelData
+from mmengine.data import InstanceData
 
 from mmselfsup.core.data_structures.selfsup_data_sample import \
     SelfSupDataSample
@@ -23,7 +14,6 @@ from mmselfsup.models.algorithms.cae import CAE
 
 # model settings
 backbone = dict(type='CAEViT', arch='b', patch_size=16, init_values=0.1)
->>>>>>> 6491042 ([Refactor]: Refactor CAE)
 neck = dict(
     type='CAENeck',
     patch_size=16,
@@ -82,14 +72,14 @@ def test_cae():
         head=head,
         loss=loss,
         preprocess_cfg=copy.deepcopy(preprocess_cfg))
-    model.init_weights()
+    # model.init_weights()
 
     fake_img = torch.rand((3, 224, 224))
     fake_target_img = torch.rand((3, 112, 112))
     fake_mask = torch.zeros((196)).bool()
     fake_mask[75:150] = 1
     fake_data_sample = SelfSupDataSample()
-    fake_mask = PixelData(value=fake_mask)
+    fake_mask = InstanceData(value=fake_mask)
     fake_data_sample.mask = fake_mask
 
     fake_data = [{

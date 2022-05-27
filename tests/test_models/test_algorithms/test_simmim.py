@@ -3,7 +3,7 @@ import platform
 
 import pytest
 import torch
-from mmengine.data import BaseDataElement as PixelData
+from mmengine.data import InstanceData
 
 from mmselfsup.core import SelfSupDataSample
 from mmselfsup.models.algorithms import SimMIM
@@ -32,7 +32,7 @@ def test_simmim():
 
     # test forward_train
     fake_data_sample = SelfSupDataSample()
-    fake_mask = PixelData(value=torch.rand((48, 48)))
+    fake_mask = InstanceData(value=torch.rand((48, 48)))
     fake_data_sample.mask = fake_mask
     fake_data = [{
         'inputs': [torch.randn((3, 192, 192))],

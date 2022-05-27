@@ -1,20 +1,25 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 # TODO: will use real PixelData once it is added in mmengine
-from mmengine.data import BaseDataElement
-from mmengine.data import BaseDataElement as PixelData
-from mmengine.data import InstanceData, LabelData
+from mmengine.data import BaseDataElement, InstanceData, LabelData
 
 
 class SelfSupDataSample(BaseDataElement):
     """A data structure interface of MMSelfSup. They are used as interfaces
     between different components.
 
-    The attributes in ``SelfSupDataSample`` are divided into several parts:
+    Meta field:
+        - ``img_shape`` (Tuple): The shape of the corresponding input image.
+            Used for visualization.
+        - ``ori_shape`` (Tuple): The original shape of the corresponding image.
+            Used for visualization.
+        - ``img_path`` (str): The path of original image.
 
+    Data field:
         - ``gt_label``(LabelData): The ground truth label of an image.
-        - ``idx``(InstanceData): The idx of an image in the dataset.
-        - ``mask``(PixelData): Mask used in masks image modeling.
-        - ``pred_label``(LabelData): Label used in pretext task,
+        - ``sample_idx``(InstanceData): The idx of an image in the dataset.
+        - ``mask``(BaseDataElement): Mask used in masks image modeling.
+        - ``pred_label`` (LabelData): The predicted label.
+        - ``pseudo_label``(InstanceData): Label used in pretext task,
         e.g. Relative Location.
 
     Examples:
@@ -102,24 +107,24 @@ class SelfSupDataSample(BaseDataElement):
         del self._gt_label
 
     @property
-    def idx(self) -> InstanceData:
+    def sample_idx(self) -> InstanceData:
         return self._idx
 
-    @idx.setter
-    def idx(self, value: InstanceData):
+    @sample_idx.setter
+    def sample_idx(self, value: InstanceData):
         self.set_field(value, '_idx', dtype=InstanceData)
 
-    @idx.deleter
-    def idx(self):
+    @sample_idx.deleter
+    def sample_idx(self):
         del self._idx
 
     @property
-    def mask(self) -> PixelData:
+    def mask(self) -> BaseDataElement:
         return self._mask
 
     @mask.setter
-    def mask(self, value: PixelData):
-        self.set_field(value, '_mask', dtype=PixelData)
+    def mask(self, value: BaseDataElement):
+        self.set_field(value, '_mask', dtype=BaseDataElement)
 
     @mask.deleter
     def mask(self):
@@ -136,3 +141,15 @@ class SelfSupDataSample(BaseDataElement):
     @pred_label.deleter
     def pred_label(self):
         del self._pred_label
+
+    @property
+    def pseudo_label(self) -> InstanceData:
+        return self._pseudo_label
+
+    @pseudo_label.setter
+    def pseudo_label(self, value: InstanceData):
+        self.set_field(value, '_pseudo_label', dtype=InstanceData)
+
+    @pseudo_label.deleter
+    def pseudo_label(self):
+        del self._pseudo_label

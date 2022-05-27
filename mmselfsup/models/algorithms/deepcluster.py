@@ -91,7 +91,7 @@ class DeepCluster(BaseModel):
             Dict[str, torch.Tensor]: A dictionary of loss components.
         """
         pseudo_label = torch.cat(
-            [data_sample.pred_label.value for data_sample in data_samples])
+            [data_sample.pseudo_label.label for data_sample in data_samples])
         x = self.extract_feat(inputs, data_samples)
         if self.with_neck:
             x = self.neck(x)

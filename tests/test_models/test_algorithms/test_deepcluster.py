@@ -4,7 +4,7 @@ import platform
 
 import pytest
 import torch
-from mmengine.data import LabelData
+from mmengine.data import InstanceData
 
 from mmselfsup.core import SelfSupDataSample
 from mmselfsup.models.algorithms import DeepCluster
@@ -54,8 +54,8 @@ def test_deepcluster():
     assert hasattr(alg, 'head')
 
     fake_data_sample = SelfSupDataSample()
-    fake_label = LabelData(value=torch.tensor([1]))
-    fake_data_sample.pred_label = fake_label
+    fake_label = InstanceData(label=torch.tensor([1]))
+    fake_data_sample.pseudo_label = fake_label
     fake_input = [{
         'inputs': [torch.randn(3, 224, 224)],
         'data_sample': fake_data_sample
