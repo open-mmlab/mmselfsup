@@ -2,6 +2,35 @@
 
 ## MMSelfSup
 
+### v0.9.1 (31/05/2022)
+
+#### Highlight
+
+- Update **BYOL** model and results ([#319](https://github.com/open-mmlab/mmselfsup/pull/319))
+- Refine some documentation
+
+#### New Features
+
+- Update **BYOL** models and results ([#319](https://github.com/open-mmlab/mmselfsup/pull/319))
+
+#### Bug Fixes
+
+- Set qkv bias to False for cae and True for mae ([#303](https://github.com/open-mmlab/mmselfsup/pull/303))
+- Fix spelling errors in MAE config ([#307](https://github.com/open-mmlab/mmselfsup/pull/307))
+
+#### Improvements
+
+- Change the file name of cosine annealing hook ([#304](https://github.com/open-mmlab/mmselfsup/pull/304))
+- Replace markdownlint with mdformat ([#311](https://github.com/open-mmlab/mmselfsup/pull/311))
+
+#### Docs
+
+- Fix typo in tutotial ([#308](https://github.com/open-mmlab/mmselfsup/pull/308))
+- Configure Myst-parser to parse anchor tag ([#309](https://github.com/open-mmlab/mmselfsup/pull/309))
+- Update readthedocs algorithm README ([#310](https://github.com/open-mmlab/mmselfsup/pull/310))
+- Rewrite install.md ([#317](https://github.com/open-mmlab/mmselfsup/pull/317))
+- refine README.md file ([#318](https://github.com/open-mmlab/mmselfsup/pull/318))
+
 ### v0.9.0 (29/04/2022)
 
 #### Highlight

@@ -2,6 +2,35 @@
 
 ## MMSelfSup
 
+### v0.9.1 (31/05/2022)
+
+#### 亮点
+
+- 更新 **BYOL** 模型和结果 ([#319](https://github.com/open-mmlab/mmselfsup/pull/319))
+- 改进部分文档
+
+#### 新特性
+
+- 更新 **BYOL** 模型和结果 ([#319](https://github.com/open-mmlab/mmselfsup/pull/319))
+
+#### Bug 修复
+
+- 对于 CAE 和 MAE 设置 qkv 偏置参数 ([#303](https://github.com/open-mmlab/mmselfsup/pull/303))
+- 修复 MAE 配置文件拼写错误 ([#307](https://github.com/open-mmlab/mmselfsup/pull/307))
+
+#### 改进
+
+- 修改文件名 ([#304](https://github.com/open-mmlab/mmselfsup/pull/304))
+- 应用 mdformat ([#311](https://github.com/open-mmlab/mmselfsup/pull/311))
+
+#### 文档
+
+- 改正教程中的打字错误 ([#308](https://github.com/open-mmlab/mmselfsup/pull/308))
+- 配置 Myst-parser ([#309](https://github.com/open-mmlab/mmselfsup/pull/309))
+- 更新文档算法简介 ([#310](https://github.com/open-mmlab/mmselfsup/pull/310))
+- 改进安装文档 ([#317](https://github.com/open-mmlab/mmselfsup/pull/317))
+- 改进首页 README ([#318](https://github.com/open-mmlab/mmselfsup/pull/318))
+
 ### v0.9.0 (29/04/2022)
 
 #### 亮点
