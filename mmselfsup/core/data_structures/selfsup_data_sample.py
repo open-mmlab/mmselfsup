@@ -108,15 +108,15 @@ class SelfSupDataSample(BaseDataElement):
 
     @property
     def sample_idx(self) -> InstanceData:
-        return self._idx
+        return self._sample_idx
 
     @sample_idx.setter
     def sample_idx(self, value: InstanceData):
-        self.set_field(value, '_idx', dtype=InstanceData)
+        self.set_field(value, '_sample_idx', dtype=InstanceData)
 
     @sample_idx.deleter
     def sample_idx(self):
-        del self._idx
+        del self._sample_idx
 
     @property
     def mask(self) -> BaseDataElement:

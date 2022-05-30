@@ -5,6 +5,7 @@ import numpy as np
 import torch
 from mmcv.transforms import to_tensor
 from mmcv.transforms.base import BaseTransform
+from mmengine.data import InstanceData, LabelData
 
 from mmselfsup.core.data_structures import SelfSupDataSample
 from mmselfsup.registry import TRANSFORMS
@@ -25,18 +26,25 @@ class PackSelfSupInputs(BaseTransform):
 
     Args:
         key (str): The key of image inputted into the model. Defaults to 'img'.
-        training_related_keys (List[str]): Keys of elements related
-            to the training, e.g. mask. Defaults to [].
+        algorithm_keys (List[str]): Keys of elements related
+            to algorithms, e.g. mask. Defaults to [].
+        pseudo_label_keys (List[str]): Keys set to be the attributes of
+            pseudo_label. Defaults to [].
         meta_keys (List[str]): The keys of meta info of an image.
             Defaults to [].
     """
 
     def __init__(self,
                  key: Optional[str] = 'img',
-                 training_related_keys: Optional[List[str]] = [],
+                 algorithm_keys: Optional[List[str]] = [],
+                 pseudo_label_keys: Optional[List[str]] = [],
                  meta_keys: Optional[List[str]] = []) -> None:
+        assert isinstance(key, str), f'key should be the type of str, instead \
+            of {type(key)}.'
+
         self.key = key
-        self.training_related_keys = training_related_keys
+        self.algorithm_keys = algorithm_keys
+        self.pseudo_label_keys = pseudo_label_keys
         self.meta_keys = meta_keys
 
     def transform(self,
@@ -67,9 +75,20 @@ class PackSelfSupInputs(BaseTransform):
             packed_results['inputs'] = img
 
         data_sample = SelfSupDataSample()
+        if len(self.pseudo_label_keys) > 0:
+            pseudo_label = InstanceData()
+            data_sample.pseudo_label = pseudo_label
 
-        for key in self.training_related_keys:
-            setattr(data_sample, key, results[key])
+        # gt_label, sample_idx, mask, pred_label will be set here
+        for key in self.algorithm_keys:
+            self.set_algorithm_keys(data_sample, key, results)
+
+        # keys, except for gt_label, sample_idx, mask, pred_label, will be
+        # set as the attributes of pseudo_label
+        for key in self.pseudo_label_keys:
+            # convert data to torch.Tensor
+            value = to_tensor(results[key])
+            setattr(data_sample.pseudo_label, key, value)
 
         img_meta = {}
         for key in self.meta_keys:
@@ -79,7 +98,29 @@ class PackSelfSupInputs(BaseTransform):
 
         return packed_results
 
+    @classmethod
+    def set_algorithm_keys(self, data_sample: SelfSupDataSample, key: str,
+                           results: Dict) -> None:
+        """Set the algorithm keys of SelfSupDataSample."""
+        value = to_tensor(results[key])
+        if key == 'sample_idx':
+            sample_idx = InstanceData(value=value)
+            setattr(data_sample, 'sample_idx', sample_idx)
+        elif key == 'mask':
+            mask = InstanceData(value=value)
+            setattr(data_sample, 'mask', mask)
+        elif key == 'gt_label':
+            gt_label = LabelData(value=value)
+            setattr(data_sample, 'gt_label', gt_label)
+        elif key == 'pred_label':
+            pred_label = LabelData(value=value)
+            setattr(data_sample, 'pred_label', pred_label)
+        else:
+            raise AttributeError(f'{key} is not a attribute of \
+                SelfSupDataSample')
+
     def __repr__(self) -> str:
         return self.__class__.__name__ + (f'(keys={self.key}, \
-            training_related_keys={self.training_related_keys}, \
+            algorithm_keys={self.algorithm_keys}, \
+            pseudo_label_keys={self.pseudo_label_keys}, \
             meta_keys={self.meta_keys})')
