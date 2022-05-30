@@ -1,13 +1,29 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import Optional, Sequence, Union
+
 import torch
 
 
-def build_2d_sincos_position_embedding(patches_resolution,
-                                       embed_dims,
-                                       temperature=10000.,
-                                       cls_token=False):
+def build_2d_sincos_position_embedding(
+        patches_resolution: Union[int, Sequence[int]],
+        embed_dims: int,
+        temperature: Optional[int] = 10000.,
+        cls_token: Optional[bool] = False) -> torch.Tensor:
     """The function is to build position embedding for model to obtain the
-    position information of the image patches."""
+    position information of the image patches.
+
+    Args:
+        patches_resolution (Union[int, Sequence[int]]): The resolution of each
+            patch.
+        embed_dims (int): The dimension of the embedding vector.
+        temperature (int, optional): The temperature parameter. Defaults to
+            10000.
+        cls_token (bool, optional): Whether to concatenate class token.
+            Defaults to False.
+
+    Returns:
+        torch.Tensor: The position embedding vector.
+    """
 
     if isinstance(patches_resolution, int):
         patches_resolution = (patches_resolution, patches_resolution)

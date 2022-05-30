@@ -7,8 +7,8 @@ from mmcv.runner import BaseModule
 class Sobel(BaseModule):
     """Sobel layer."""
 
-    def __init__(self):
-        super(Sobel, self).__init__()
+    def __init__(self) -> None:
+        super().__init__()
         grayscale = nn.Conv2d(3, 1, kernel_size=1, stride=1, padding=0)
         grayscale.weight.data.fill_(1.0 / 3.0)
         grayscale.bias.data.zero_()
@@ -22,5 +22,5 @@ class Sobel(BaseModule):
         for p in self.sobel.parameters():
             p.requires_grad = False
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         return self.sobel(x)

@@ -3,11 +3,12 @@ from typing import Dict, List, Optional, Sequence, Union
 
 import torch
 import torch.nn as nn
+from mmcls.metrics import Accuracy
 from mmcv.cnn import build_norm_layer
 from mmcv.runner import BaseModule
 
 from ..builder import HEADS
-from ..utils import MultiPooling, accuracy
+from ..utils import MultiPooling
 
 
 @HEADS.register_module()
@@ -98,5 +99,5 @@ class MultiClsHead(BaseModule):
         for i, s in enumerate(cls_score):
             # keys must contain "loss"
             losses[f'loss.{i + 1}'] = self.criterion(s, labels)
-            losses[f'acc.{i + 1}'] = accuracy(s, labels)
+            losses[f'acc.{i + 1}'] = Accuracy.calculate(s, labels)
         return losses
