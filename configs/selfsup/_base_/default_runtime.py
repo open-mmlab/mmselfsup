@@ -1,6 +1,7 @@
 default_scope = 'mmselfsup'
 
 default_hooks = dict(
+    runtime_info=dict(type='RuntimeInfoHook'),
     optimizer=dict(type='OptimizerHook', grad_clip=None),
     timer=dict(type='IterTimerHook'),
     logger=dict(type='LoggerHook', interval=50),
