@@ -4,7 +4,7 @@ Collections:
       Training Data: ImageNet-1k
       Training Techniques:
         - LARS
-      Training Resources: 8x V100 GPUs
+      Training Resources: 8x V100 GPUs (b256), 16x A100-80G GPUs (b4096)
       Architecture:
         - ResNet
         - BYOL
@@ -23,9 +23,21 @@ Models:
       - Task: Self-Supervised Image Classification
         Dataset: ImageNet-1k
         Metrics:
-          Top 1 Accuracy: 67.55
+          Top 1 Accuracy: 71.72
     Config: configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py
     Weights: https://download.openmmlab.com/mmselfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k_20220225-5c8b2c2e.pth
+  - Name: byol_resnet50_16xb256-coslr-200e_in1k
+    In Collection: BYOL
+    Metadata:
+      Epochs: 200
+      Batch Size: 4096
+    Results:
+      - Task: Self-Supervised Image Classification
+        Dataset: ImageNet-1k
+        Metrics:
+          Top 1 Accuracy: 71.88
+    Config: configs/selfsup/byol/byol_resnet50_16xb256-coslr-200e_in1k.py
+    Weights: https://download.openmmlab.com/mmselfsup/byol/byol_resnet50_16xb256-coslr-200e_in1k_20220527-b6f8eedd.pth
   - Name: byol_resnet50_8xb32-accum16-coslr-300e_in1k
     In Collection: BYOL
     Metadata:
@@ -35,6 +47,6 @@ Models:
       - Task: Self-Supervised Image Classification
         Dataset: ImageNet-1k
         Metrics:
-          Top 1 Accuracy: 68.55
-    Config: configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py
+          Top 1 Accuracy: 72.93
+    Config: configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-300e_in1k.py
     Weights: https://download.openmmlab.com/mmselfsup/byol/byol_resnet50_8xb32-accum16-coslr-300e_in1k_20220225-a0daa54a.pth
