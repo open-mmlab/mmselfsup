@@ -1,20 +1,20 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
-
 # This file is borrowed from
 # https://github.com/facebookresearch/dino/blob/main/eval_knn.py
+from typing import Optional, Tuple
 
 import torch
 import torch.nn as nn
 
 
 @torch.no_grad()
-def knn_classifier(train_features,
-                   train_labels,
-                   test_features,
-                   test_labels,
-                   k,
-                   T,
-                   num_classes=1000):
+def knn_classifier(train_features: torch.Tensor,
+                   train_labels: torch.Tensor,
+                   test_features: torch.Tensor,
+                   test_labels: torch.Tensor,
+                   k: int,
+                   T: float,
+                   num_classes: Optional[int] = 1000) -> Tuple[float, float]:
     """Compute accuracy of knn classifier predictions.
 
     Args:
@@ -25,6 +25,9 @@ def knn_classifier(train_features,
         k (int): Number of NN to use.
         T (float): Temperature used in the voting coefficient.
         num_classes (int): Number of classes. Defaults to 1000.
+
+    Returns:
+        Tuple[float, float]: The top1 and top5 accuracy.
     """
     top1, top5, total = 0.0, 0.0, 0
     train_features = nn.functional.normalize(train_features, dim=1)

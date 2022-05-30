@@ -9,9 +9,21 @@ import torch.distributed as dist
 
 
 @torch.no_grad()
-def distributed_sinkhorn(out, sinkhorn_iterations, world_size, epsilon):
+def distributed_sinkhorn(out: torch.Tensor, sinkhorn_iterations: int,
+                         world_size: int, epsilon: float) -> torch.Tensor:
     """Apply the distributed sinknorn optimization on the scores matrix to find
-    the assignments."""
+    the assignments.
+
+    Args:
+        out (torch.Tensor): The scores matrix
+        sinkhorn_iterations (int): Number of iterations in Sinkhorn-Knopp
+            algorithm.
+        world_size (int): The world size of the process group.
+        epsilon (float): regularization parameter for Sinkhorn-Knopp algorithm.
+
+    Returns:
+        torch.Tensor: Output of sinkhorn algorithm.
+    """
     eps_num_stab = 1e-12
     Q = torch.exp(out / epsilon).t(
     )  # Q is K-by-B for consistency with notations from our paper

@@ -7,8 +7,8 @@ import torch.distributed as dist
 from mmengine.hooks import Hook
 from mmengine.logging import print_log
 
+from mmselfsup.models.utils import Extractor
 from mmselfsup.registry import HOOKS
-from mmselfsup.utils import Extractor
 from mmselfsup.utils import clustering as _clustering
 
 
@@ -71,7 +71,7 @@ class DeepClusterHook(Hook):
     def deepcluster(self, runner) -> None:
         # step 1: get features
         runner.model.eval()
-        features = self.extractor(runner)
+        features = self.extractor(runner.model)['feat5']
         runner.model.train()
 
         # step 2: get labels

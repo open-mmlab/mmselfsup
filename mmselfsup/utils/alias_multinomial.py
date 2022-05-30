@@ -2,17 +2,16 @@
 import torch
 
 
-class AliasMethod(object):
+class AliasMethod():
     """The alias method for sampling.
 
     From: https://hips.seas.harvard.edu/blog/2013/03/03/the-alias-method-efficient-sampling-with-many-discrete-outcomes/
 
     Args:
-        probs (Tensor): Sampling probabilities.
+        probs (torch.Tensor): Sampling probabilities.
     """  # noqa: E501
 
-    def __init__(self, probs):
-
+    def __init__(self, probs: torch.Tensor) -> None:
         if probs.sum() > 1:
             probs.div_(probs.sum())
         K = len(probs)
@@ -48,18 +47,18 @@ class AliasMethod(object):
         for last_one in smaller + larger:
             self.prob[last_one] = 1
 
-    def cuda(self):
+    def cuda(self) -> None:
         self.prob = self.prob.cuda()
         self.alias = self.alias.cuda()
 
-    def draw(self, N):
+    def draw(self, N: int) -> None:
         """Draw N samples from multinomial.
 
         Args:
             N (int): Number of samples.
 
         Returns:
-            Tensor: Samples.
+            torch.Tensor: Samples.
         """
         assert N > 0
         K = self.alias.size(0)
