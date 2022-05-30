@@ -7,6 +7,7 @@ import torch.nn as nn
 from mmselfsup.core import SelfSupDataSample
 from ..builder import (ALGORITHMS, build_backbone, build_head, build_loss,
                        build_neck)
+from ..utils import CosineEMA
 from .base import BaseModel
 
 
@@ -44,8 +45,6 @@ class MoCoV3(BaseModel):
         assert neck is not None
         self.base_encoder = nn.Sequential(
             build_backbone(backbone), build_neck(neck))
-        self.momentum_encoder = nn.Sequential(
-            build_backbone(backbone), build_neck(neck))
         self.backbone = self.base_encoder[0]
         self.neck = self.base_encoder[1]
         assert head is not None
@@ -53,25 +52,11 @@ class MoCoV3(BaseModel):
         assert loss is not None
         self.loss = build_loss(loss)
 
-        self.base_momentum = base_momentum
-        self.momentum = base_momentum
-
-    def init_weights(self) -> None:
-        """Initialize base_encoder with init_cfg defined in backbone."""
-        super().init_weights()
-
-        for param_b, param_m in zip(self.base_encoder.parameters(),
-                                    self.momentum_encoder.parameters()):
-            param_m.data.copy_(param_b.data)
+        # create momentum model
+        self.momentum_encoder = CosineEMA(
+            self.base_encoder, momentum=base_momentum)
+        for param_m in self.momentum_encoder.module.parameters():
             param_m.requires_grad = False
-
-    @torch.no_grad()
-    def momentum_update(self) -> None:
-        """Momentum update of the momentum encoder."""
-        for param_b, param_m in zip(self.base_encoder.parameters(),
-                                    self.momentum_encoder.parameters()):
-            param_m.data = param_m.data * self.momentum + param_b.data * (
-                1. - self.momentum)
 
     def extract_feat(self, inputs: List[torch.Tensor],
                      data_samples: List[SelfSupDataSample],
@@ -111,9 +96,9 @@ class MoCoV3(BaseModel):
 
         # compute key features, [N, C] each, no gradient
         with torch.no_grad():
-            # here we use hook to update momentum encoder, which is a little
-            # bit different with the official version but it has negligible
-            # influence on the results
+            # update momentum encoder
+            self.momentum_encoder.update_parameters(self.base_encoder)
+
             k1 = self.momentum_encoder(view_1)[0]
             k2 = self.momentum_encoder(view_2)[0]
 

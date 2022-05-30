@@ -87,8 +87,6 @@ def test_mocov3():
         head=head,
         loss=loss,
         preprocess_cfg=copy.deepcopy(preprocess_cfg))
-    alg.init_weights()
-    alg.momentum_update()
 
     fake_data = [{
         'inputs': [torch.randn((3, 224, 224)),

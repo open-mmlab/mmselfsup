@@ -3,6 +3,7 @@ from typing import Dict, List, Optional, Tuple, Union
 
 import torch
 import torch.nn as nn
+from mmengine.model import ExponentialMovingAverage
 
 from mmselfsup.core import SelfSupDataSample
 from mmselfsup.utils import (batch_shuffle_ddp, batch_unshuffle_ddp,
@@ -54,13 +55,6 @@ class MoCo(BaseModel):
         assert neck is not None
         self.encoder_q = nn.Sequential(
             build_backbone(backbone), build_neck(neck))
-        self.encoder_k = nn.Sequential(
-            build_backbone(backbone), build_neck(neck))
-
-        for param_q, param_k in zip(self.encoder_q.parameters(),
-                                    self.encoder_k.parameters()):
-            param_k.data.copy_(param_q.data)
-            param_k.requires_grad = False
 
         self.backbone = self.encoder_q[0]
         self.neck = self.encoder_q[1]
@@ -69,21 +63,16 @@ class MoCo(BaseModel):
         assert loss is not None
         self.loss = build_loss(loss)
 
-        self.queue_len = queue_len
-        self.momentum = momentum
+        # create momentum model
+        self.encoder_k = ExponentialMovingAverage(self.encoder_q, 1 - momentum)
+        for param_k in self.encoder_k.module.parameters():
+            param_k.requires_grad = False
 
         # create the queue
+        self.queue_len = queue_len
         self.register_buffer('queue', torch.randn(feat_dim, queue_len))
         self.queue = nn.functional.normalize(self.queue, dim=0)
         self.register_buffer('queue_ptr', torch.zeros(1, dtype=torch.long))
-
-    @torch.no_grad()
-    def _momentum_update_key_encoder(self) -> None:
-        """Momentum update of the key encoder."""
-        for param_q, param_k in zip(self.encoder_q.parameters(),
-                                    self.encoder_k.parameters()):
-            param_k.data = param_k.data * self.momentum + \
-                           param_q.data * (1. - self.momentum)
 
     @torch.no_grad()
     def _dequeue_and_enqueue(self, keys: torch.Tensor) -> None:
@@ -140,7 +129,7 @@ class MoCo(BaseModel):
         # compute key features
         with torch.no_grad():  # no gradient to keys
             # update the key encoder
-            self._momentum_update_key_encoder()
+            self.encoder_k.update_parameters(self.encoder_q)
 
             # shuffle for making use of BN
             im_k, idx_unshuffle = batch_shuffle_ddp(im_k)

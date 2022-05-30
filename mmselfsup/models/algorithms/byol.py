@@ -7,6 +7,7 @@ import torch.nn as nn
 from mmselfsup.core import SelfSupDataSample
 from ..builder import (ALGORITHMS, build_backbone, build_head, build_loss,
                        build_neck)
+from ..utils import CosineEMA
 from .base import BaseModel
 
 
@@ -48,14 +49,6 @@ class BYOL(BaseModel):
         assert neck is not None
         self.online_net = nn.Sequential(
             build_backbone(backbone), build_neck(neck))
-        self.target_net = nn.Sequential(
-            build_backbone(backbone), build_neck(neck))
-
-        for param_ol, param_tgt in zip(self.online_net.parameters(),
-                                       self.target_net.parameters()):
-            param_tgt.data.copy_(param_ol.data)
-            param_tgt.requires_grad = False
-
         self.backbone = self.online_net[0]
         self.neck = self.online_net[1]
         assert head is not None
@@ -63,16 +56,10 @@ class BYOL(BaseModel):
         assert loss is not None
         self.loss = build_loss(loss)
 
-        self.base_momentum = base_momentum
-        self.momentum = base_momentum
-
-    @torch.no_grad()
-    def momentum_update(self):
-        """Momentum update of the target network."""
-        for param_ol, param_tgt in zip(self.online_net.parameters(),
-                                       self.target_net.parameters()):
-            param_tgt.data = param_tgt.data * self.momentum + \
-                             param_ol.data * (1. - self.momentum)
+        # create momentum model
+        self.target_net = CosineEMA(self.online_net, momentum=base_momentum)
+        for param_tgt in self.target_net.module.parameters():
+            param_tgt.requires_grad = False
 
     def extract_feat(self, inputs: List[torch.Tensor],
                      data_samples: List[SelfSupDataSample],
@@ -111,6 +98,9 @@ class BYOL(BaseModel):
         proj_online_v2 = self.online_net(img_v2)[0]
         # compute target features
         with torch.no_grad():
+            # update the target net
+            self.target_net.update_parameters(self.online_net)
+
             proj_target_v1 = self.target_net(img_v1)[0]
             proj_target_v2 = self.target_net(img_v2)[0]
 
