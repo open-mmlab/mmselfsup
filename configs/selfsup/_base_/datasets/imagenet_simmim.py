@@ -4,6 +4,7 @@ data_root = 'data/imagenet/'
 file_client_args = dict(backend='disk')
 
 train_pipeline = [
+    dict(dict(type='LoadImageFromFile'), ),
     dict(
         type='RandomResizedCrop',
         size=192,
@@ -11,12 +12,15 @@ train_pipeline = [
         ratio=(3. / 4., 4. / 3.)),
     dict(type='RandomFlip', prob=0.5),
     dict(
-        type='BlockwiseMaskGenerator',
+        type='SimMIMMaskGenerator',
         input_size=192,
         mask_patch_size=32,
         model_patch_size=4,
         mask_ratio=0.6),
-    dict(type='PackSelfSupInputs')
+    dict(
+        type='PackSelfSupInputs',
+        algorithm_keys=['mask'],
+        meta_keys=['img_path'])
 ]
 
 train_dataloader = dict(
@@ -28,5 +32,5 @@ train_dataloader = dict(
         type=dataset_type,
         data_root=data_root,
         ann_file='meta/train.txt',
-        data_prefix=dict(img='train/'),
+        data_prefix=dict(img_path='train/'),
         pipeline=train_pipeline))

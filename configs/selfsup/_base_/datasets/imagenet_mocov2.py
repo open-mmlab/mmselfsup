@@ -17,7 +17,7 @@ view_pipeline = [
                 hue=0.1)
         ],
         prob=0.8),
-    dict(type='RandomGrayscale', prob=0.2),
+    dict(type='RandomGrayscale', prob=0.2, keep_channels=True),
     dict(type='RandomGaussianBlur', sigma_min=0.1, sigma_max=2.0, prob=0.5),
     dict(type='RandomFlip', prob=0.5),
 ]
@@ -25,7 +25,7 @@ view_pipeline = [
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(type='MultiView', num_views=2, transforms=[view_pipeline]),
-    dict(type='PackSelfSupInputs')
+    dict(type='PackSelfSupInputs', meta_keys=['img_path'])
 ]
 
 train_dataloader = dict(
@@ -37,5 +37,5 @@ train_dataloader = dict(
         type=dataset_type,
         data_root=data_root,
         ann_file='meta/train.txt',
-        data_prefix=dict(img='train/'),
+        data_prefix=dict(img_path='train/'),
         pipeline=train_pipeline))

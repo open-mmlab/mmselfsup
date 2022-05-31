@@ -13,7 +13,7 @@ custom_hooks = [
     dict(
         type='SwAVHook',
         priority='VERY_HIGH',
-        batch_size={{_base_.data.samples_per_gpu}},
+        batch_size={{_base_.train_dataloader.batch_size}},
         epoch_queue_starts=15,
         crops_for_assign=[0, 1],
         feat_dim=128,
@@ -21,7 +21,7 @@ custom_hooks = [
 ]
 
 # dataset summary
-data = dict(train=dict(num_views={{_base_.num_crops}}))
+data = dict(num_views={{_base_.num_crops}})
 
 # optimizer
 optimizer = dict(type='LARS', lr=0.6)

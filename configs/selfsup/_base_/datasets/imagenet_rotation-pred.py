@@ -8,14 +8,20 @@ train_pipeline = [
     dict(type='RandomResizedCrop', size=224),
     dict(type='RandomFlip', prob=0.5),
     dict(type='RotationWithLabels'),
-    dict(type='PackSelfSupInputs')
+    dict(
+        type='PackSelfSupInputs',
+        pseudo_label_keys=['rot_label'],
+        meta_keys=['img_path'])
 ]
 val_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
-    dict(type='Resize', size=256),
-    dict(type='CenterCrop', size=224),
+    dict(type='Resize', scale=256),
+    dict(type='CenterCrop', crop_size=224),
     dict(type='RotationWithLabels'),
-    dict(type='PackSelfSupInputs')
+    dict(
+        type='PackSelfSupInputs',
+        pseudo_label_keys=['rot_label'],
+        meta_keys=['img_path'])
 ]
 
 train_dataloader = dict(
@@ -27,7 +33,7 @@ train_dataloader = dict(
         type=dataset_type,
         data_root=data_root,
         ann_file='meta/train.txt',
-        data_prefix=dict(img='train/'),
+        data_prefix=dict(img_path='train/'),
         pipeline=train_pipeline))
 val_dataloader = dict(
     batch_size=16,
@@ -38,5 +44,5 @@ val_dataloader = dict(
         type=dataset_type,
         data_root=data_root,
         ann_file='meta/val.txt',
-        data_prefix=dict(img='val/'),
+        data_prefix=dict(img_path='val/'),
         pipeline=val_pipeline))

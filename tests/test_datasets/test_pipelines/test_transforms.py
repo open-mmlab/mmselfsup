@@ -151,7 +151,9 @@ def test_random_patch():
     # test transform
     assert len(results['img']) == 9
     assert list(results['img'][0].shape) == [53, 53, 3]
-    assert list(results['patch_label'].shape) == [8]
+    assert list(results['patch_label'].shape) == [1, 8]
+    assert list(results['patch_box'].shape) == [1, 9, 4]
+    assert list(results['unpatched_img'].shape) == [1, 224, 224, 3]
 
     assert isinstance(str(module), str)
 

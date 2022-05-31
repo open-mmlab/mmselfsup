@@ -73,8 +73,6 @@ class SimMIMMaskGenerator(BaseTransform):
         mask = mask.reshape((self.rand_size, self.rand_size))
         mask = mask.repeat(self.scale, axis=0).repeat(self.scale, axis=1)
 
-        mask = torch.from_numpy(mask)  # H X W
-
         results.update({'mask': mask})
 
         return results
@@ -480,7 +478,7 @@ class RandomGaussianBlur(BaseTransform):
     def transform(self, results: Dict) -> Dict:
         if np.random.rand() > self.prob:
             return results
-        img_pil = Image.fromarray(results['img'])
+        img_pil = Image.fromarray(results['img'].astype('uint8'))
         sigma = np.random.uniform(self.sigma_min, self.sigma_max)
         img_pil_res = img_pil.filter(ImageFilter.GaussianBlur(radius=sigma))
         results['img'] = np.array(img_pil_res)
@@ -580,7 +578,8 @@ class RotationWithLabels(BaseTransform):
     def transform(self, results: Dict) -> Dict:
         img = self._rotate(results['img'])
         rotation_labels = np.array([0, 1, 2, 3])
-        results = dict(img=img, rot_label=rotation_labels)
+        results['img'] = img
+        results['rot_label'] = rotation_labels
         return results
 
     def __repr__(self) -> str:
@@ -603,9 +602,12 @@ class RandomPatchWithLabels(BaseTransform):
     Added Keys:
 
     - patch_label
+    - patch_box
+    - unpatched_img
 
     Crops image into several patches and concatenates every surrounding patch
-    with center one. Finally gives labels `0, 1, 2, 3, 4, 5, 6, 7`.
+    with center one. Finally gives labels `0, 1, 2, 3, 4, 5, 6, 7` and patch
+    positions.
     """
 
     def __init__(self) -> None:
@@ -629,31 +631,40 @@ class RandomPatchWithLabels(BaseTransform):
         w_patch = w_grid - patch_jitter
         assert h_patch > 0 and w_patch > 0
         patches = []
+        patches_pos = []
         for i in range(split_per_side):
             for j in range(split_per_side):
                 # get a patch of the image
                 patch_box = np.array([
                     i * h_grid, j * w_grid, (i + 1) * h_grid, (j + 1) * w_grid
                 ])
-                p = mmcv.imcrop(img, bboxes=patch_box)
+                patch = mmcv.imcrop(img, bboxes=patch_box)
 
                 # random crop sub-patch in the patch
                 ymin, xmin, height, width = RandomCrop.get_params(
-                    p, (h_patch, w_patch))
-                p = mmcv.imcrop(
-                    img,
+                    patch, (h_patch, w_patch))
+                patch = mmcv.imcrop(
+                    patch,
                     np.array([
                         xmin,
                         ymin,
                         xmin + width - 1,
                         ymin + height - 1,
                     ]))
-                patches.append(p)
-        return patches
+                patches.append(patch)
+                patches_pos.append(
+                    np.array([
+                        i * h_grid + xmin,
+                        j * w_grid + ymin,
+                        i * h_grid + xmin + width - 1,
+                        j * w_grid + ymin + height - 1,
+                    ]))
+        return patches, patches_pos
 
     def transform(self, results: Dict) -> Dict:
         img = results['img']
-        patches = self._image_to_patches(img)
+        patches, patches_pos = self._image_to_patches(img)
+        patches_pos = np.stack(patches_pos, axis=0)
 
         multi_views = []
         multi_views.append(patches[4])
@@ -663,7 +674,10 @@ class RandomPatchWithLabels(BaseTransform):
 
         # create corresponding labels for patch pairs
         patch_labels = np.array([0, 1, 2, 3, 4, 5, 6, 7])
-        results = dict(img=multi_views, patch_label=patch_labels)  # 8HWC, 8
+        results['img'] = multi_views  # 8HWC
+        results['patch_label'] = np.expand_dims(patch_labels, axis=0)
+        results['patch_box'] = np.expand_dims(patches_pos, axis=0)
+        results['unpatched_img'] = np.expand_dims(img, axis=0)
         return results
 
     def __repr__(self) -> str:
@@ -797,7 +811,7 @@ class ColorJitter(BaseTransform):
             order = self.get_params(
                 self.brightness, self.contrast, self.saturation, self.hue)
 
-        img = results['img']
+        img = results['img'].astype('uint8')
         for fn_id in order:
             if fn_id == 0 and brightness_factor is not None:
                 img = adjust_brightness(img, brightness_factor)
@@ -834,6 +848,7 @@ class RandomResizedCrop(BaseTransform):
     Modified Keys:
 
     - img
+    - img_shape
 
     Args:
         size (Sequence | int): Desired output size of the crop. If size is an
@@ -953,6 +968,7 @@ class RandomResizedCrop(BaseTransform):
             tuple(self.size[::-1]),
             interpolation=self.interpolation,
             backend=self.backend)
+        results['img_shape'] = results['img'].shape[:2]
         return results
 
     def __repr__(self) -> str:
@@ -976,6 +992,7 @@ class RandomCrop(BaseTransform):
     Modified Keys:
 
     - img
+    - img_shape
 
     Args:
         size (int or Sequence): Desired output size of the crop. If size is an
@@ -1080,6 +1097,7 @@ class RandomCrop(BaseTransform):
                 xmin + width - 1,
                 ymin + height - 1,
             ]))
+        results['img_shape'] = results['img'].shape[:2]
         return results
 
     def __repr__(self):
