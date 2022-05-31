@@ -11,7 +11,7 @@ train_pipeline = [
         scale=(0.2, 1.0),
         interpolation='bicubic'),
     dict(type='RandomFlip', prob=0.5),
-    dict(type='PackSelfSupInputs')
+    dict(type='PackSelfSupInputs', meta_keys=['img_path'])
 ]
 
 train_dataloader = dict(
@@ -23,5 +23,5 @@ train_dataloader = dict(
         type=dataset_type,
         data_root=data_root,
         ann_file='meta/train.txt',
-        data_prefix=dict(img='train/'),
+        data_prefix=dict(img_path='train/'),
         pipeline=train_pipeline))

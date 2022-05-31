@@ -19,7 +19,10 @@ train_pipeline = [
         num_masking_patches=75,
         max_num_patches=None,
         min_num_patches=16),
-    dict(type='PackSelfSupInputs')
+    dict(
+        type='PackSelfSupInputs',
+        algorithm_keys=['mask'],
+        meta_keys=['img_path'])
 ]
 
 train_dataloader = dict(
@@ -31,5 +34,5 @@ train_dataloader = dict(
         type=dataset_type,
         data_root=data_root,
         ann_file='meta/train.txt',
-        data_prefix=dict(img='train/'),
+        data_prefix=dict(img_path='train/'),
         pipeline=train_pipeline))

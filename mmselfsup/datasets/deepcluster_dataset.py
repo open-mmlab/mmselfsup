@@ -3,7 +3,10 @@ from typing import Any, List, Optional, Union
 
 from mmcls.datasets import ImageNet
 
+from mmselfsup.registry import DATASETS
 
+
+@DATASETS.register_module()
 class DeepClusterImageNet(ImageNet):
     """`ImageNet <http://www.image-net.org>`_ Dataset.
 

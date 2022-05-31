@@ -14,15 +14,18 @@ train_pipeline = [
         contrast=0.4,
         saturation=1.0,
         hue=0.5),
-    dict(type='RandomGrayscale', prob=0.2),
-    dict(type='PackSelfSupInputs')
+    dict(type='RandomGrayscale', prob=0.2, keep_channels=True),
+    dict(
+        type='PackSelfSupInputs',
+        pseudo_label_keys=['clustering_label'],
+        meta_keys=['img_path'])
 ]
 
 extract_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
-    dict(type='Resize', size=256),
-    dict(type='CenterCrop', size=224),
-    dict(type='PackSelfSupInputs')
+    dict(type='Resize', scale=256),
+    dict(type='CenterCrop', crop_size=224),
+    dict(type='PackSelfSupInputs', meta_keys=['img_path'])
 ]
 
 train_dataloader = dict(
@@ -34,7 +37,7 @@ train_dataloader = dict(
         type=dataset_type,
         data_root=data_root,
         ann_file='meta/train.txt',
-        data_prefix=dict(img='train/'),
+        data_prefix=dict(img_path='train/'),
         pipeline=train_pipeline))
 
 num_classes = 10000
@@ -50,7 +53,7 @@ custom_hooks = [
                 type=dataset_type,
                 data_root=data_root,
                 ann_file='meta/train.txt',
-                data_prefix=dict(img='train/'),
+                data_prefix=dict(img_path='train/'),
                 pipeline=extract_pipeline)),
         clustering=dict(type='Kmeans', k=num_classes, pca_dim=256),
         unif_sampling=True,
