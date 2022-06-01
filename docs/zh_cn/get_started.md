@@ -1,17 +1,17 @@
 # 基础教程
 
-- [基础教程](#基础教程)
-  - [训练已有的算法](#训练已有的算法)
-    - [使用 CPU 训练](#使用-cpu-训练)
-    - [使用 单张/多张 显卡训练](#使用-单张多张-显卡训练)
-    - [使用多台机器训练](#使用多台机器训练)
-    - [在一台机器上启动多个任务](#在一台机器上启动多个任务)
-  - [基准测试](#基准测试)
-  - [工具和建议](#工具和建议)
-    - [统计模型的参数](#统计模型的参数)
-    - [发布模型](#发布模型)
-    - [使用 t-SNE 来做模型可视化](#使用-t-sne-来做模型可视化)
-    - [可复现性](#可复现性)
+- [基础教程](#%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B)
+  - [训练已有的算法](#%E8%AE%AD%E7%BB%83%E5%B7%B2%E6%9C%89%E7%9A%84%E7%AE%97%E6%B3%95)
+    - [使用 CPU 训练](#%E4%BD%BF%E7%94%A8-cpu-%E8%AE%AD%E7%BB%83)
+    - [使用 单张/多张 显卡训练](#%E4%BD%BF%E7%94%A8-%E5%8D%95%E5%BC%A0%E5%A4%9A%E5%BC%A0-%E6%98%BE%E5%8D%A1%E8%AE%AD%E7%BB%83)
+    - [使用多台机器训练](#%E4%BD%BF%E7%94%A8%E5%A4%9A%E5%8F%B0%E6%9C%BA%E5%99%A8%E8%AE%AD%E7%BB%83)
+    - [在一台机器上启动多个任务](#%E5%9C%A8%E4%B8%80%E5%8F%B0%E6%9C%BA%E5%99%A8%E4%B8%8A%E5%90%AF%E5%8A%A8%E5%A4%9A%E4%B8%AA%E4%BB%BB%E5%8A%A1)
+  - [基准测试](#%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95)
+  - [工具和建议](#%E5%B7%A5%E5%85%B7%E5%92%8C%E5%BB%BA%E8%AE%AE)
+    - [统计模型的参数](#%E7%BB%9F%E8%AE%A1%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8F%82%E6%95%B0)
+    - [发布模型](#%E5%8F%91%E5%B8%83%E6%A8%A1%E5%9E%8B)
+    - [使用 t-SNE 来做模型可视化](#%E4%BD%BF%E7%94%A8-t-sne-%E6%9D%A5%E5%81%9A%E6%A8%A1%E5%9E%8B%E5%8F%AF%E8%A7%86%E5%8C%96)
+    - [可复现性](#%E5%8F%AF%E5%A4%8D%E7%8E%B0%E6%80%A7)
 
 本文档提供 MMSelfSup 相关用法的基础教程。 如果您对如何安装 MMSelfSup 以及其相关依赖库有疑问, 请参考 [安装文档](install.md).
 
@@ -149,7 +149,6 @@ python tools/analysis_tools/count_parameters.py ${CONFIG_FILE}
 python tools/model_converters/publish_model.py ${INPUT_FILENAME} ${OUTPUT_FILENAME}
 ```
 
-
 ### 使用 t-SNE 来做模型可视化
 
 我们提供了一个开箱即用的来做图片向量可视化的方法:
@@ -165,6 +164,6 @@ python tools/analysis_tools/visualize_tsne.py ${CONFIG_FILE} --checkpoint ${CKPT
 - `WORK_DIR`: 保存可视化结果的路径.
 - `[optional arguments]`: 可选参数，具体可以参考 [visualize_tsne.py](../../tools/analysis_tools/visualize_tsne.py)
 
-
 ### 可复现性
+
 如果您想确保模型精度的可复现性，您可以设置 `--deterministic` 参数。但是，开启 `--deterministic` 意味着关闭 `torch.backends.cudnn.benchmark`, 所以会使模型的训练速度变慢。

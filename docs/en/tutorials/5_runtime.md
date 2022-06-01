@@ -79,7 +79,7 @@ Some common hooks are not registered through `custom_hooks`, they are
 |      `EvalHook`       |     LOW (70)      |
 |    `LoggerHook(s)`    |   VERY_LOW (90)   |
 
-`OptimizerHook`, `MomentumUpdaterHook` and `LrUpdaterHook` have been introduced in [sehedule strategy](./4_schedule.md). `IterTimerHook` is used to record elapsed time and does not support modification.
+`OptimizerHook`, `MomentumUpdaterHook` and `LrUpdaterHook` have been introduced in [schedule strategy](./4_schedule.md). `IterTimerHook` is used to record elapsed time and does not support modification.
 
 Here we reveal how to customize `CheckpointHook`, `LoggerHooks`, and `EvalHook`.
 
@@ -142,7 +142,6 @@ Some hooks have been already implemented in MMCV and MMClassification, they are:
 - [EmptyCacheHook](https://github.com/open-mmlab/mmcv/blob/master/mmcv/runner/hooks/memory.py)
 - [ProfilerHook](https://github.com/open-mmlab/mmcv/blob/master/mmcv/runner/hooks/profiler.py)
 - ......
-
 
 If the hook is already implemented in MMCV, you can directly modify the config to use the hook as below
 

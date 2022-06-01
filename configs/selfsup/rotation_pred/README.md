@@ -66,17 +66,17 @@ The detection benchmarks includes 2 downstream task datasets, **Pascal VOC 2007 
 
 Please refer to [faster_rcnn_r50_c4_mstrain_24k_voc0712.py](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/mmdetection/voc0712/faster_rcnn_r50_c4_mstrain_24k_voc0712.py) for details of config.
 
-| Self-Supervised Config                                                                                                                                                                                            | AP50  |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| [resnet50_8xb16-steplr-70e]([rotation-pred_resnet50_8xb16-steplr-70e_in1k.py](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py)) | 79.67 |
+| Self-Supervised Config                                                                                                                                         | AP50  |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| [resnet50_8xb16-steplr-70e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py) | 79.67 |
 
 #### COCO2017
 
 Please refer to [mask_rcnn_r50_fpn_mstrain_1x_coco.py](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/mmdetection/coco/mask_rcnn_r50_fpn_mstrain_1x_coco.py) for details of config.
 
-| Self-Supervised Config                                                                                                                                                                                            | mAP(Box) | AP50(Box) | AP75(Box) | mAP(Mask) | AP50(Mask) | AP75(Mask) |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------- | --------- | --------- | ---------- | ---------- |
-| [resnet50_8xb16-steplr-70e]([rotation-pred_resnet50_8xb16-steplr-70e_in1k.py](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py)) | 37.9     | 56.5      | 41.5      | 34.2      | 53.9       | 36.7       |
+| Self-Supervised Config                                                                                                                                         | mAP(Box) | AP50(Box) | AP75(Box) | mAP(Mask) | AP50(Mask) | AP75(Mask) |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------- | --------- | --------- | ---------- | ---------- |
+| [resnet50_8xb16-steplr-70e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py) | 37.9     | 56.5      | 41.5      | 34.2      | 53.9       | 36.7       |
 
 ### Segmentation
 
@@ -86,9 +86,9 @@ The segmentation benchmarks includes 2 downstream task datasets, **Cityscapes** 
 
 Please refer to [fcn_r50-d8_512x512_20k_voc12aug.py](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/mmsegmentation/voc12aug/fcn_r50-d8_512x512_20k_voc12aug.py) for details of config.
 
-| Self-Supervised Config                                                                                                                                                                                            | mIOU  |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| [resnet50_8xb16-steplr-70e]([rotation-pred_resnet50_8xb16-steplr-70e_in1k.py](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py)) | 64.31 |
+| Self-Supervised Config                                                                                                                                         | mIOU  |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| [resnet50_8xb16-steplr-70e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py) | 64.31 |
 
 ## Citation
 

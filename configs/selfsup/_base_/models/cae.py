@@ -1,7 +1,12 @@
 # model settings
 model = dict(
     type='CAE',
-    backbone=dict(type='CAEViT', arch='b', patch_size=16, init_values=0.1),
+    backbone=dict(
+        type='CAEViT',
+        arch='b',
+        patch_size=16,
+        init_values=0.1,
+        qkv_bias=False),
     neck=dict(
         type='CAENeck',
         patch_size=16,

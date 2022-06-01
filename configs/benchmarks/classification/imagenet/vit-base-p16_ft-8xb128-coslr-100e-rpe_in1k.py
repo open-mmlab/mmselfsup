@@ -1,7 +1,7 @@
 _base_ = 'vit-base-p16_ft-8xb128-coslr-100e_in1k.py'
 
 # model
-model = dict(backbone=dict(use_window=True, init_values=0.1))
+model = dict(backbone=dict(use_window=True, init_values=0.1, qkv_bias=False))
 
 # optimizer
 optimizer = dict(lr=8e-3)

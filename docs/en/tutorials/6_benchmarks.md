@@ -12,14 +12,15 @@ In MMSelfSup, we provide many benchmarks, thus the models can be evaluated on di
   - [Segmentation](#segmentation)
 
 First, you are supposed to extract your backbone weights by `tools/model_converters/extract_backbone_weights.py`
+
 ```shell
 python ./tools/model_converters/extract_backbone_weights.py {CHECKPOINT} {MODEL_FILE}
 ```
 
 Arguments:
-- `CHECKPOINT`: the checkpoint file of a selfsup method named as epoch_*.pth.
-- `MODEL_FILE`: the output backbone weights file. If not mentioned, the `PRETRAIN` below uses this extracted model file.
 
+- `CHECKPOINT`: the checkpoint file of a selfsup method named as epoch\_\*.pth.
+- `MODEL_FILE`: the output backbone weights file. If not mentioned, the `PRETRAIN` below uses this extracted model file.
 
 ## Classification
 
@@ -49,9 +50,10 @@ bash tools/benchmarks/classification/svm_voc07/dist_test_svm_epoch.sh ${SELFSUP_
 bash tools/benchmarks/classification/svm_voc07/slurm_test_svm_epoch.sh ${PARTITION} ${JOB_NAME} ${SELFSUP_CONFIG} ${EPOCH} ${FEATURE_LIST}
 ```
 
-**To test with ckpt, the code uses the epoch_*.pth file, there is no need to extract weights.**
+**To test with ckpt, the code uses the epoch\_\*.pth file, there is no need to extract weights.**
 
 Remarks:
+
 - `${SELFSUP_CONFIG}` is the config file of the self-supervised experiment.
 - `${FEATURE_LIST}` is a string to specify features from layer1 to layer5 to evaluate; e.g., if you want to evaluate layer5 only, then `FEATURE_LIST` is "feat5", if you want to evaluate all features, then `FEATURE_LIST` is "feat1 feat2 feat3 feat4 feat5" (separated by space). If left empty, the default `FEATURE_LIST` is "feat5".
 - `PRETRAIN`: the pre-trained model file.
@@ -71,6 +73,7 @@ bash tools/benchmarks/classification/slurm_train_linear.sh ${PARTITION} ${JOB_NA
 ```
 
 Remarks:
+
 - The default GPU number is 8. When changing GPUS, please also change `samples_per_gpu` in the config file accordingly to ensure the total batch size is 256.
 - `CONFIG`: Use config files under `configs/benchmarks/classification/`. Specifically, `imagenet` (excluding `imagenet_*percent` folders), `places205` and `inaturalist2018`.
 - `PRETRAIN`: the pre-trained model file.
@@ -88,6 +91,7 @@ bash tools/benchmarks/classification/slurm_train_semi.sh ${PARTITION} ${JOB_NAME
 ```
 
 Remarks:
+
 - The default GPU number is 4.
 - `CONFIG`: Use config files under `configs/benchmarks/classification/imagenet/`, named `imagenet_*percent` folders.
 - `PRETRAIN`: the pre-trained model file.
@@ -114,9 +118,10 @@ bash tools/benchmarks/classification/knn_imagenet/dist_test_knn_epoch.sh ${SELFS
 bash tools/benchmarks/classification/knn_imagenet/slurm_test_knn_epoch.sh ${PARTITION} ${JOB_NAME} ${SELFSUP_CONFIG} ${EPOCH}
 ```
 
-**To test with ckpt, the code uses the epoch_*.pth file, there is no need to extract weights.**
+**To test with ckpt, the code uses the epoch\_\*.pth file, there is no need to extract weights.**
 
 Remarks:
+
 - `${SELFSUP_CONFIG}` is the config file of the self-supervised experiment.
 - `PRETRAIN`: the pre-trained model file.
 - if you want to change GPU numbers, you could add `GPUS_PER_NODE=4 GPUS=4` at the beginning of the command.
@@ -145,6 +150,7 @@ bash tools/benchmarks/mmdetection/mim_slurm_train.sh ${PARTITION} ${CONFIG} ${PR
 ```
 
 Remarks:
+
 - `CONFIG`: Use config files under `configs/benchmarks/mmdetection/` or write your own config files
 - `PRETRAIN`: the pre-trained model file.
 
@@ -181,5 +187,6 @@ bash tools/benchmarks/mmsegmentation/mim_slurm_train.sh ${PARTITION} ${CONFIG} $
 ```
 
 Remarks:
+
 - `CONFIG`: Use config files under `configs/benchmarks/mmsegmentation/` or write your own config files
 - `PRETRAIN`: the pre-trained model file.

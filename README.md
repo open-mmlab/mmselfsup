@@ -30,16 +30,20 @@
 [👀Model Zoo](https://github.com/open-mmlab/mmselfsup/blob/master/docs/en/model_zoo.md) |
 [🆕Update News](https://mmselfsup.readthedocs.io/en/latest/changelog.html) |
 [🤔Reporting Issues](https://github.com/open-mmlab/mmselfsup/issues/new/choose)
+
+</div>
+
+<div align="center">
+
+English | [简体中文](README_zh-CN.md)
+
 </div>
 
 ## Introduction
 
-English | [简体中文](README_zh-CN.md)
-
 MMSelfSup is an open source self-supervised representation learning toolbox based on PyTorch. It is a part of the [OpenMMLab](https://openmmlab.com/) project.
 
 The master branch works with **PyTorch 1.5** or higher.
-
 
 ### Major features
 
@@ -59,34 +63,52 @@ The master branch works with **PyTorch 1.5** or higher.
 
   Since MMSelfSup adopts similar design of modulars and interfaces as those in other OpenMMLab projects, it supports smooth evaluation on downstream tasks with other OpenMMLab projects like object detection and segmentation.
 
+## What's New
 
-## License
-
-This project is released under the [Apache 2.0 license](LICENSE).
-
-## ChangeLog
-
-MMSelfSup **v0.9.0** was released in 29/04/2022.
+MMSelfSup **v0.9.1** was released in 31/05/2022.
 
 Highlights of the new version:
 
-* Support **CAE**
-* Support **Barlow Twins**
+- Update **BYOL** model and results
+- Refine some documentation
 
 Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
 
 Differences between MMSelfSup and OpenSelfSup codebases can be found in [compatibility.md](docs/en/compatibility.md).
 
-## Model Zoo and Benchmark
+## Installation
 
-### Model Zoo
+MMSelfSup depends on [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open-mmlab/mmcv) and [MMClassification](https://github.com/open-mmlab/mmclassification).
+
+Please refer to [install.md](docs/en/install.md) for more detailed instruction.
+
+## Get Started
+
+Please refer to [prepare_data.md](docs/en/prepare_data.md) for dataset preparation and [get_started.md](docs/en/get_started.md) for the basic usage of MMSelfSup.
+
+We also provides tutorials for more details:
+
+- [config](docs/en/tutorials/0_config.md)
+- [add new dataset](docs/en/tutorials/1_new_dataset.md)
+- [data pipeline](docs/en/tutorials/2_data_pipeline.md)
+- [add new module](docs/en/tutorials/3_new_module.md)
+- [customize schedules](docs/en/tutorials/4_schedule.md)
+- [customize runtime](docs/en/tutorials/5_runtime.md)
+- [benchmarks](docs/en/tutorials/6_benchmarks.md)
+
+Besides, we provide [colab tutorial](https://github.com/open-mmlab/mmselfsup/blob/master/demo/mmselfsup_colab_tutorial.ipynb) for basic usage.
+
+Please refer to [FAQ](docs/en/faq.md) for frequently asked questions.
+
+## Model Zoo
+
 Please refer to [model_zoo.md](docs/en/model_zoo.md) for a comprehensive set of pre-trained models and benchmarks.
 
 Supported algorithms:
 
 - [x] [Relative Location (ICCV'2015)](https://arxiv.org/abs/1505.05192)
 - [x] [Rotation Prediction (ICLR'2018)](https://arxiv.org/abs/1803.07728)
-- [x] [DeepCLuster (ECCV'2018)](https://arxiv.org/abs/1807.05520)
+- [x] [DeepCluster (ECCV'2018)](https://arxiv.org/abs/1807.05520)
 - [x] [NPID (CVPR'2018)](https://arxiv.org/abs/1805.01978)
 - [x] [ODC (CVPR'2020)](https://arxiv.org/abs/2006.10645)
 - [x] [MoCo v1 (CVPR'2020)](https://arxiv.org/abs/1911.05722)
@@ -104,43 +126,32 @@ Supported algorithms:
 
 More algorithms are in our plan.
 
-### Benchmark
+## Benchmark
 
-  | Benchmarks                                         | Setting                                                                                                                                                              |
-  | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-  | ImageNet Linear Classification (Multi-head)        | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
-  | ImageNet Linear Classification (Last)              |                                                                                                                                                                      |
-  | ImageNet Semi-Sup Classification                   |                                                                                                                                                                      |
-  | Places205 Linear Classification (Multi-head)       | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
-  | iNaturalist2018 Linear Classification (Multi-head) | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
-  | PASCAL VOC07 SVM                                   | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
-  | PASCAL VOC07 Low-shot SVM                          | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
-  | PASCAL VOC07+12 Object Detection                   | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)               |
-  | COCO17 Object Detection                            | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)               |
-  | Cityscapes Segmentation                            | [MMSeg](configs/benchmarks/mmsegmentation/cityscapes/fcn_r50-d8_769x769_40k_cityscapes.py)                                                                           |
-  | PASCAL VOC12 Aug Segmentation                      | [MMSeg](configs/benchmarks/mmsegmentation/voc12aug/fcn_r50-d8_512x512_20k_voc12aug.py)                                                                               |
+| Benchmarks                                         | Setting                                                                                                                                                              |
+| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ImageNet Linear Classification (Multi-head)        | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
+| ImageNet Linear Classification (Last)              |                                                                                                                                                                      |
+| ImageNet Semi-Sup Classification                   |                                                                                                                                                                      |
+| Places205 Linear Classification (Multi-head)       | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
+| iNaturalist2018 Linear Classification (Multi-head) | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
+| PASCAL VOC07 SVM                                   | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
+| PASCAL VOC07 Low-shot SVM                          | [Goyal2019](http://openaccess.thecvf.com/content_ICCV_2019/papers/Goyal_Scaling_and_Benchmarking_Self-Supervised_Visual_Representation_Learning_ICCV_2019_paper.pdf) |
+| PASCAL VOC07+12 Object Detection                   | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)               |
+| COCO17 Object Detection                            | [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf)               |
+| Cityscapes Segmentation                            | [MMSeg](configs/benchmarks/mmsegmentation/cityscapes/fcn_r50-d8_769x769_40k_cityscapes.py)                                                                           |
+| PASCAL VOC12 Aug Segmentation                      | [MMSeg](configs/benchmarks/mmsegmentation/voc12aug/fcn_r50-d8_512x512_20k_voc12aug.py)                                                                               |
 
-## Installation
+## Contributing
 
-MMSelfSup depends on [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open-mmlab/mmcv) and [MMClassification](https://github.com/open-mmlab/mmclassification).
+We appreciate all contributions improving MMSelfSup. Please refer to [CONTRIBUTING.md](.github/CONTRIBUTING.md) for more details about the contributing guideline.
 
-Please refer to [install.md](docs/en/install.md) for more detailed instruction.
+## Acknowledgement
 
-## Get Started
+MMSelfSup is an open source project that is contributed by researchers and engineers from various colleges and companies. We appreciate all the contributors who implement their methods or add new features, as well as users who give valuable feedbacks.
+We wish that the toolbox and benchmark could serve the growing research community by providing a flexible toolkit to reimplement existing methods and develop their own new algorithms.
 
-Please refer to [prepare_data.md](docs/en/prepare_data.md) for dataset preparation and [getting_started.md](docs/en/getting_started.md) for the basic usage of MMSelfSup.
-
-We also provides tutorials for more details:
-
-- [config](docs/en/tutorials/0_config.md)
-- [add new dataset](docs/en/tutorials/1_new_dataset.md)
-- [data pipeline](docs/en/tutorials/2_data_pipeline.md)
-- [add new module](docs/en/tutorials/3_new_module.md)
-- [customize schedules](docs/en/tutorials/4_schedule.md)
-- [customize runtime](docs/en/tutorials/5_runtime.md)
-- [benchmarks](docs/en/tutorials/6_benchmarks.md)
-
-Besides, we provide [colab tutorial](https://github.com/open-mmlab/mmselfsup/blob/master/demo/mmselfsup_colab_tutorial.ipynb) for basic usage.
+MMSelfSup originates from OpenSelfSup, and we appreciate all early contributions made to OpenSelfSup. A few contributors are listed here: Xiaohang Zhan ([@XiaohangZhan](http://github.com/XiaohangZhan)), Jiahao Xie ([@Jiahao000](https://github.com/Jiahao000)), Enze Xie ([@xieenze](https://github.com/xieenze)), Xiangxiang Chu ([@cxxgtxy](https://github.com/cxxgtxy)), Zijian He ([@scnuhealthy](https://github.com/scnuhealthy)).
 
 ## Citation
 
@@ -155,19 +166,9 @@ If you use this toolbox or benchmark in your research, please cite this project.
 }
 ```
 
-## Contributing
+## License
 
-We appreciate all contributions improving MMSelfSup. Please refer to [CONTRIBUTING.md](docs/en/community/CONTRIBUTING.md) for more details about the contributing guideline.
-
-## Acknowledgement
-
-Remarks:
-
-- MMSelfSup originates from OpenSelfSup, and we appreciate all early contributions made to OpenSelfSup. A few contributors are listed here: Xiaohang Zhan, Jiahao Xie, Enze Xie, Xiangxiang Chu, Zijian He.
-- The implementation of MoCo and the detection benchmark borrow the code from [MoCo](https://github.com/facebookresearch/moco).
-- The implementation of SwAV borrows the code from [SwAV](https://github.com/facebookresearch/swav).
-- The SVM benchmark borrows the code from [fair_self_supervision_benchmark](https://github.com/facebookresearch/fair_self_supervision_benchmark).
-- `mmselfsup/utils/clustering.py` is borrowed from [deepcluster](https://github.com/facebookresearch/deepcluster/blob/master/clustering.py).
+This project is released under the [Apache 2.0 license](LICENSE).
 
 ## Projects in OpenMMLab
 

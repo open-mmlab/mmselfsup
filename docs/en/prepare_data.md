@@ -43,8 +43,8 @@ For ImageNet, it has multiple versions, but the most commonly used one is [ILSVR
 
 1. Register an account and login to the [download page](http://www.image-net.org/download-images)
 2. Find download links for ILSVRC2012 and download the following two files
-    - ILSVRC2012_img_train.tar (~138GB)
-    - ILSVRC2012_img_val.tar (~6.3GB)
+   - ILSVRC2012_img_train.tar (~138GB)
+   - ILSVRC2012_img_val.tar (~6.3GB)
 3. Untar the downloaded files
 4. Download meta data using this [script](https://github.com/BVLC/caffe/blob/master/data/ilsvrc12/get_ilsvrc_aux.sh)
 
