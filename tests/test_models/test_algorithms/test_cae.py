@@ -4,13 +4,11 @@ import platform
 
 import pytest
 import torch
-from mmselfsup.models.algorithms import CAE
-
 from mmengine.data import InstanceData
 
 from mmselfsup.core.data_structures.selfsup_data_sample import \
     SelfSupDataSample
-from mmselfsup.models.algorithms.cae import CAE
+from mmselfsup.models.algorithms import CAE
 
 # model settings
 backbone = dict(type='CAEViT', arch='b', patch_size=16, init_values=0.1)
