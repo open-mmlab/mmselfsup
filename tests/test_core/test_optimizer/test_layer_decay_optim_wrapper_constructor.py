@@ -4,7 +4,7 @@ import torch
 from mmcls.models import SwinTransformer
 from torch import nn
 
-from mmselfsup.core import LearningRateDecayOptimizerConstructor
+from mmselfsup.core import LearningRateDecayOptimWrapperConstructor
 
 
 class ToyViTBackbone(nn.Module):
@@ -76,43 +76,45 @@ def check_optimizer_lr_wd(optimizer, gt_lr_wd):
         assert param_dict['lr_scale'] == param_dict['lr']
 
 
-def test_learning_rate_decay_optimizer_constructor():
+def test_learning_rate_decay_optimizer_wrapper_constructor():
     model = ToyViT()
-    optimizer_config = dict(
-        type='AdamW',
-        lr=base_lr,
-        betas=(0.9, 0.999),
-        weight_decay=base_wd,
-        model_type='vit',
-        layer_decay_rate=2.0)
+    optim_wrapper_cfg = dict(
+        type='OptimWrapper',
+        optimizer=dict(
+            type='AdamW',
+            lr=base_lr,
+            betas=(0.9, 0.999),
+            weight_decay=base_wd,
+            model_type='vit',
+            layer_decay_rate=2.0))
 
     # test when model_type is None
     with pytest.raises(AssertionError):
-        optimizer_constructor = LearningRateDecayOptimizerConstructor(
-            optimizer_cfg=optimizer_config)
-        optimizer_config['model_type'] = None
-        optimizer = optimizer_constructor(model)
+        optimizer_wrapper_constructor = LearningRateDecayOptimWrapperConstructor(  # noqa
+            optim_wrapper_cfg=optim_wrapper_cfg)
+        optim_wrapper_cfg['optimizer']['model_type'] = None
+        optimizer_wrapper = optimizer_wrapper_constructor(model)
 
     # test when model_type is invalid
     with pytest.raises(AssertionError):
-        optimizer_constructor = LearningRateDecayOptimizerConstructor(
-            optimizer_cfg=optimizer_config)
-        optimizer_config['model_type'] = 'invalid'
-        optimizer = optimizer_constructor(model)
+        optimizer_wrapper_constructor = LearningRateDecayOptimWrapperConstructor(  # noqa
+            optim_wrapper_cfg=optim_wrapper_cfg)
+        optim_wrapper_cfg['optimizer']['model_type'] = 'invalid'
+        optimizer_wrapper = optimizer_wrapper_constructor(model)
 
     # test vit
-    optimizer_constructor = LearningRateDecayOptimizerConstructor(
-        optimizer_cfg=optimizer_config)
-    optimizer_config['model_type'] = 'vit'
-    optimizer = optimizer_constructor(model)
-    check_optimizer_lr_wd(optimizer, expected_layer_wise_wd_lr_vit)
+    optimizer_wrapper_constructor = LearningRateDecayOptimWrapperConstructor(
+        optim_wrapper_cfg=optim_wrapper_cfg)
+    optim_wrapper_cfg['optimizer']['model_type'] = 'vit'
+    optimizer_wrapper = optimizer_wrapper_constructor(model)
+    check_optimizer_lr_wd(optimizer_wrapper, expected_layer_wise_wd_lr_vit)
 
     # test swin
     model = ToySwin()
-    optimizer_constructor = LearningRateDecayOptimizerConstructor(
-        optimizer_cfg=optimizer_config)
-    optimizer_config['model_type'] = 'swin'
-    optimizer = optimizer_constructor(model)
-    assert optimizer.param_groups[-1]['lr_scale'] == 1.0
-    assert optimizer.param_groups[-3]['lr_scale'] == 2.0
-    assert optimizer.param_groups[-5]['lr_scale'] == 4.0
+    optimizer_wrapper_constructor = LearningRateDecayOptimWrapperConstructor(
+        optim_wrapper_cfg=optim_wrapper_cfg)
+    optim_wrapper_cfg['optimizer']['model_type'] = 'swin'
+    optimizer_wrapper = optimizer_wrapper_constructor(model)
+    assert optimizer_wrapper.param_groups[-1]['lr_scale'] == 1.0
+    assert optimizer_wrapper.param_groups[-3]['lr_scale'] == 2.0
+    assert optimizer_wrapper.param_groups[-5]['lr_scale'] == 4.0

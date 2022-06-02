@@ -4,10 +4,10 @@ from typing import Dict, List, Optional, Union
 
 import torch
 from mmengine.dist import get_dist_info
-from mmengine.optim import DefaultOptimizerConstructor
+from mmengine.optim import DefaultOptimWrapperConstructor
 from torch import nn
 
-from mmselfsup.registry import OPTIMIZER_CONSTRUCTORS, OPTIMIZERS
+from mmselfsup.registry import OPTIM_WRAPPER_CONSTRUCTORS, OPTIMIZERS
 from mmselfsup.utils import get_root_logger
 
 
@@ -59,8 +59,8 @@ def get_layer_id_for_swin(var_name: str, max_layer_id: int,
         return max_layer_id - 1
 
 
-@OPTIMIZER_CONSTRUCTORS.register_module()
-class LearningRateDecayOptimizerConstructor(DefaultOptimizerConstructor):
+@OPTIM_WRAPPER_CONSTRUCTORS.register_module()
+class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
     """Different learning rates are set for different layers of backbone.
 
     Note: Currently, this optimizer constructor is built for ViT and Swin.
