@@ -34,35 +34,40 @@ class DeepClusterSampler(DefaultSampler):
         super().__init__(
             dataset=dataset, shuffle=shuffle, seed=seed, round_up=round_up)
         self.replace = replace
+        self.unif_sampling_flag = False
 
     def __iter__(self) -> Iterator[int]:
         """Iterate the indices."""
         # deterministically shuffle based on epoch and seed
-        if self.shuffle:
-            g = torch.Generator()
-            g.manual_seed(self.seed + self.epoch)
-            if self.replace:
-                indices = torch.randint(
-                    low=0,
-                    high=len(self.dataset),
-                    size=(len(self.dataset), ),
-                    generator=g).tolist()
+        if not self.unif_sampling_flag:
+            if self.shuffle:
+                g = torch.Generator()
+                g.manual_seed(self.seed + self.epoch)
+                if self.replace:
+                    indices = torch.randint(
+                        low=0,
+                        high=len(self.dataset),
+                        size=(len(self.dataset), ),
+                        generator=g).tolist()
+                else:
+                    indices = torch.randperm(
+                        len(self.dataset), generator=g).tolist()
             else:
-                indices = torch.randperm(
-                    len(self.dataset), generator=g).tolist()
-        else:
-            indices = torch.arange(len(self.dataset)).tolist()
+                indices = torch.arange(len(self.dataset)).tolist()
 
-        # add extra samples to make it evenly divisible
-        if self.round_up:
-            indices = (
-                indices *
-                int(self.total_size / len(indices) + 1))[:self.total_size]
+            # add extra samples to make it evenly divisible
+            if self.round_up:
+                indices = (
+                    indices *
+                    int(self.total_size / len(indices) + 1))[:self.total_size]
+            self.indices = indices
+        else:
+            self.unif_sampling_flag = False
 
         # subsample
-        indices = indices[self.rank:self.total_size:self.world_size]
+        self.indices = self.indices[self.rank:self.total_size:self.world_size]
 
-        return iter(indices)
+        return iter(self.indices)
 
     def set_uniform_indices(self, labels: List, num_classes: int) -> None:
         """The function is applied in DeepClusterHook for uniform sampling.

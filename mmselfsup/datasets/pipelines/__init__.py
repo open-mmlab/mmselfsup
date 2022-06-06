@@ -1,7 +1,8 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from .formatting import PackSelfSupInputs
 from .transforms import (BEiTMaskGenerator, ColorJitter, Lighting, RandomAug,
-                         RandomGaussianBlur, RandomPatchWithLabels,
+                         RandomCrop, RandomGaussianBlur, RandomPatchWithLabels,
+                         RandomResizedCrop,
                          RandomResizedCropAndInterpolationWithTwoPic,
                          RandomRotation, RandomSolarize, RotationWithLabels,
                          SimMIMMaskGenerator)
@@ -12,5 +13,5 @@ __all__ = [
     'SimMIMMaskGenerator', 'BEiTMaskGenerator', 'ColorJitter',
     'RandomResizedCropAndInterpolationWithTwoPic', 'PackSelfSupInputs',
     'MultiView', 'RotationWithLabels', 'RandomPatchWithLabels',
-    'RandomRotation'
+    'RandomRotation', 'RandomResizedCrop', 'RandomCrop'
 ]
