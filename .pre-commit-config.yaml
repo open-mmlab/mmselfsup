@@ -39,7 +39,7 @@ repos:
     rev: 0.7.9
     hooks:
       - id: mdformat
-        args: ["--number", "--table-width", "200"]
+        args: ["--number"]
         additional_dependencies:
           - mdformat-openmmlab
           - mdformat_frontmatter
