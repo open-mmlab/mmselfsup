@@ -25,27 +25,18 @@ scheduler = [
     dict(
         type='LinearLR',
         start_factor=1e-4,
-        by_epoch=False,
+        by_epoch=True,
         begin=0,
         end=40,
         convert_to_iter_based=True),
     dict(
         type='CosineAnnealingLR',
         T_max=360,
-        by_epoch=False,
+        by_epoch=True,
         begin=40,
         end=400,
         convert_to_iter_based=True)
 ]
-
-lr_config = dict(
-    policy='StepFixCosineAnnealing',
-    min_lr=0.0,
-    warmup='linear',
-    warmup_iters=40,
-    warmup_ratio=1e-4,
-    warmup_by_epoch=True,
-    by_epoch=False)
 
 # schedule
 runner = dict(max_epochs=400)

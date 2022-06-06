@@ -77,15 +77,24 @@ optimizer = dict(
     model_type='vit',
     layer_decay=0.65)
 
-# learning policy
-lr_config = dict(
-    policy='StepFixCosineAnnealing',
-    min_lr=1e-6,
-    warmup='linear',
-    warmup_iters=5,
-    warmup_ratio=1e-4,
-    warmup_by_epoch=True,
-    by_epoch=False)
+# learning rate scheduler
+param_scheduler = [
+    dict(
+        type='LinearLR',
+        start_factor=1e-4,
+        by_epoch=True,
+        begin=0,
+        end=5,
+        convert_to_iter_based=True),
+    dict(
+        type='CosineAnnealingLR',
+        T_max=95,
+        eta_min=1e-6,
+        by_epoch=True,
+        begin=5,
+        end=100,
+        convert_to_iter_based=True)
+]
 
 # runtime
 checkpoint_config = dict(interval=1, max_keep_ckpts=3, out_dir='')

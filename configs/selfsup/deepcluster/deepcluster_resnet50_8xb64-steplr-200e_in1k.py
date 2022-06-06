@@ -15,8 +15,10 @@ optimizer = dict(
     weight_decay=1e-5,
     paramwise_options={'\\Ahead.': dict(momentum=0.)})
 
-# learning policy
-lr_config = dict(policy='step', step=[400])
+# learning rate scheduler
+param_scheduler = [
+    dict(type='MultiStepLR', by_epoch=True, milestones=[400], gamma=0.1)
+]
 
 # runtime settings
 # the max_keep_ckpts controls the max number of ckpt file in your work_dirs

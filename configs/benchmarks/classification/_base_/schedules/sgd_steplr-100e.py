@@ -1,8 +1,10 @@
 # optimizer
 optimizer = dict(type='SGD', lr=0.1, momentum=0.9, weight_decay=1e-4)
 
-# learning policy
-lr_config = dict(policy='step', step=[60, 80])
+# learning rate scheduler
+param_scheduler = [
+    dict(type='MultiStepLR', by_epoch=True, milestones=[60, 80], gamma=0.1)
+]
 
 # runtime settings
 runner = dict(type='EpochBasedRunner', max_epochs=100)

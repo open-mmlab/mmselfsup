@@ -23,15 +23,23 @@ optimizer = dict(
         dict(weight_decay=0, lr_mult=0.024, lars_exclude=True),
     })
 
-# learning policy
-lr_config = dict(
-    policy='CosineAnnealing',
-    by_epoch=False,
-    min_lr=0.0016,
-    warmup='linear',
-    warmup_iters=10,
-    warmup_ratio=1.6e-4,  # cannot be 0
-    warmup_by_epoch=True)
+# learning rate scheduler
+param_scheduler = [
+    dict(
+        type='LinearLR',
+        start_factor=1.6e-4,
+        by_epoch=True,
+        begin=0,
+        end=10,
+        convert_to_iter_based=True),
+    dict(
+        type='CosineAnnealingLR',
+        T_max=190,
+        eta_min=0.0016,
+        by_epoch=True,
+        begin=10,
+        end=200)
+]
 
 # runtime settings
 # the max_keep_ckpts controls the max number of ckpt file in your work_dirs

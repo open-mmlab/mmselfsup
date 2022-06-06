@@ -83,15 +83,24 @@ optimizer = dict(
 # clip gradient
 optimizer_config = dict(grad_clip=dict(max_norm=5.0))
 
-# learning policy
-lr_config = dict(
-    policy='CosineAnnealing',
-    min_lr=2.5e-7 * 2048 / 512,
-    warmup='linear',
-    warmup_iters=20,
-    warmup_ratio=2.5e-7 / 1.25e-3,
-    warmup_by_epoch=True,
-    by_epoch=False)
+# learning rate scheduler
+param_scheduler = [
+    dict(
+        type='LinearLR',
+        start_factor=2.5e-7 / 1.25e-3,
+        by_epoch=True,
+        begin=0,
+        end=20,
+        convert_to_iter_based=True),
+    dict(
+        type='CosineAnnealingLR',
+        T_max=80,
+        eta_min=2.5e-7 * 2048 / 512,
+        by_epoch=True,
+        begin=20,
+        end=100,
+        convert_to_iter_based=True)
+]
 
 # mixed precision
 fp16 = dict(loss_scale='dynamic')
