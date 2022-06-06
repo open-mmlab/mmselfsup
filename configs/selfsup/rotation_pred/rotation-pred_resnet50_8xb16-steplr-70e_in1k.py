@@ -8,14 +8,17 @@ _base_ = [
 # optimizer
 optimizer = dict(type='SGD', lr=0.2, momentum=0.9, weight_decay=1e-4)
 
-# learning policy
-lr_config = dict(
-    policy='step',
-    step=[30, 50],
-    warmup='linear',
-    warmup_iters=5,  # 5 ep
-    warmup_ratio=0.1,
-    warmup_by_epoch=True)
+# learning rate scheduler
+scheduler = [
+    dict(
+        type='LinearLR',
+        start_factor=0.1,
+        by_epoch=True,
+        begin=0,
+        end=5,
+        convert_to_iter_based=True),
+    dict(type='MultiStepLR', by_epoch=True, milestones=[30, 50], gamma=0.1)
+]
 
 # runtime settings
 runner = dict(type='EpochBasedRunner', max_epochs=70)

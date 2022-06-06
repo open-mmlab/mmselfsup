@@ -19,8 +19,10 @@ optimizer = dict(
     weight_decay=1e-5,
     paramwise_options={'\\Ahead.': dict(momentum=0.)})
 
-# learning policy
-lr_config = dict(policy='step', step=[400], gamma=0.4)
+# learning rate scheduler
+param_scheduler = [
+    dict(type='MultiStepLR', by_epoch=True, milestones=[400], gamma=0.4)
+]
 
 # runtime settings
 runner = dict(type='EpochBasedRunner', max_epochs=440)

@@ -8,8 +8,11 @@ _base_ = [
 # model settings
 model = dict(backbone=dict(norm_cfg=dict(type='SyncBN')))
 
-# learning policy
-lr_config = dict(step=[30, 60, 90])
+# learning rate scheduler
+param_scheduler = [
+    dict(
+        type='MultiStepLR', by_epoch=True, milestones=[30, 60, 90], gamma=0.1)
+]
 
 # runtime settings
 runner = dict(type='EpochBasedRunner', max_epochs=90)

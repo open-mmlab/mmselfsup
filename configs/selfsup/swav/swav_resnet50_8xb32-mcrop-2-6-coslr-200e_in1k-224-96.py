@@ -28,7 +28,15 @@ optimizer = dict(type='LARS', lr=0.6)
 optimizer_config = dict(frozen_layers_cfg=dict(prototypes=5005))
 
 # learning policy
-lr_config = dict(_delete_=True, policy='CosineAnnealing', min_lr=6e-4)
+param_scheduler = [
+    dict(
+        type='CosineAnnealingLR',
+        T_max=200,
+        eta_min=6e-4,
+        by_epoch=True,
+        begin=0,
+        end=200)
+]
 
 # runtime settings
 # the max_keep_ckpts controls the max number of ckpt file in your work_dirs

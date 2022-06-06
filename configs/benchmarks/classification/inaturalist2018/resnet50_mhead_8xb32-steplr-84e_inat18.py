@@ -21,8 +21,11 @@ optimizer = dict(
     paramwise_options=dict(norm_decay_mult=0.),
     nesterov=True)
 
-# learning policy
-lr_config = dict(policy='step', step=[24, 48, 72])
+# learning rate scheduler
+param_scheduler = [
+    dict(
+        type='MultiStepLR', by_epoch=True, milestones=[24, 48, 72], gamma=0.1)
+]
 
 # runtime settings
 runner = dict(type='EpochBasedRunner', max_epochs=84)

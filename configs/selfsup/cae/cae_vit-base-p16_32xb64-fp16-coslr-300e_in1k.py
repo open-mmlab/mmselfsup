@@ -18,15 +18,24 @@ optimizer = dict(
     },
     betas=(0.9, 0.999))
 
-# learning policy
-lr_config = dict(
-    policy='StepFixCosineAnnealing',
-    min_lr=1e-5,
-    warmup='linear',
-    warmup_iters=10,
-    warmup_ratio=1e-4,
-    warmup_by_epoch=True,
-    by_epoch=False)
+# learning rate scheduler
+param_scheduler = [
+    dict(
+        type='LinearLR',
+        start_factor=1e-4,
+        by_epoch=True,
+        begin=0,
+        end=10,
+        convert_to_iter_based=True),
+    dict(
+        type='CosineAnnealingLR',
+        T_max=290,
+        eta_min=1e-5,
+        by_epoch=True,
+        begin=10,
+        end=300,
+        convert_to_iter_based=True)
+]
 
 # schedule
 runner = dict(max_epochs=300)
