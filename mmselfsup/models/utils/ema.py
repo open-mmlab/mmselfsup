@@ -55,8 +55,8 @@ class CosineEMA(ExponentialMovingAverage):
         self.end_momentum = end_momentum
 
     def avg_func(self, averaged_param: torch.Tensor,
-                 source_param: torch.Tensor, steps: int) -> torch.Tensor:
-        """Compute the moving average of the parameters using the linear
+                 source_param: torch.Tensor, steps: int) -> None:
+        """Compute the moving average of the parameters using the cosine
         momentum strategy.
 
         Args:
@@ -71,4 +71,4 @@ class CosineEMA(ExponentialMovingAverage):
         max_iters = message_hub.get_info('max_iters')
         momentum = self.end_momentum - (self.end_momentum - self.momentum) * (
             cos(pi * steps / float(max_iters)) + 1) / 2
-        return averaged_param * momentum + source_param * (1 - momentum)
+        averaged_param.mul_(momentum).add_(source_param, alpha=(1 - momentum))
