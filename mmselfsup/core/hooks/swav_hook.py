@@ -1,6 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import os.path as osp
-from typing import List, Optional
+from typing import Dict, List, Optional, Sequence
 
 import torch
 import torch.distributed as dist
@@ -29,15 +29,21 @@ class SwAVHook(Hook):
             Defaults to 0.
         interval (int, optional): the interval to save the queue.
             Defaults to 1.
+        frozen_layers_cfg (dict, optional): Dict to config frozen layers.
+            The key-value pair is layer name and its frozen iters. If frozen,
+            the layers don't need gradient. Defaults to dict().
     """
 
-    def __init__(self,
-                 batch_size: int,
-                 epoch_queue_starts: Optional[int] = 15,
-                 crops_for_assign: Optional[List[int]] = [0, 1],
-                 feat_dim: Optional[int] = 128,
-                 queue_length: Optional[int] = 0,
-                 interval: Optional[int] = 1):
+    def __init__(
+        self,
+        batch_size: int,
+        epoch_queue_starts: Optional[int] = 15,
+        crops_for_assign: Optional[List[int]] = [0, 1],
+        feat_dim: Optional[int] = 128,
+        queue_length: Optional[int] = 0,
+        interval: Optional[int] = 1,
+        frozen_layers_cfg: Optional[Dict] = dict()
+    ) -> None:
         self.batch_size = batch_size * dist.get_world_size()\
             if dist.is_initialized() else batch_size
         self.epoch_queue_starts = epoch_queue_starts
@@ -45,6 +51,8 @@ class SwAVHook(Hook):
         self.feat_dim = feat_dim
         self.queue_length = queue_length
         self.interval = interval
+        self.frozen_layers_cfg = frozen_layers_cfg
+        self.requires_grad = True
         self.queue = None
 
     def before_run(self, runner) -> None:
@@ -59,6 +67,22 @@ class SwAVHook(Hook):
             runner.model.module.head.queue = self.queue
         # the queue needs to be divisible by the batch size
         self.queue_length -= self.queue_length % self.batch_size
+
+    def before_train_iter(self,
+                          runner,
+                          batch_idx: int,
+                          data_batch: Optional[Sequence[dict]] = None) -> None:
+        for layer, frozen_iters in self.frozen_layers_cfg.items():
+            if runner.iter < frozen_iters and self.requires_grad:
+                self.requires_grad = False
+                for name, p in runner.model.module.named_parameters():
+                    if layer in name:
+                        p.requires_grad = False
+            elif runner.iter >= frozen_iters and not self.requires_grad:
+                self.requires_grad = True
+                for name, p in runner.model.module.named_parameters():
+                    if layer in name:
+                        p.requires_grad = True
 
     def before_train_epoch(self, runner) -> None:
         # optionally starts a queue
