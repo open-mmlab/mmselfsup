@@ -4,26 +4,31 @@ from typing import Dict, List
 import torch
 from mmcls.models import LabelSmoothLoss
 from mmcv.cnn.utils.weight_init import trunc_normal_
-from mmcv.runner import BaseModule
+from mmengine.model import BaseModule
 from torch import nn
 
-from ..builder import HEADS
+from ..builder import MODELS
 
 
-@HEADS.register_module()
+@MODELS.register_module()
 class MAEPretrainHead(BaseModule):
     """Pre-training head for MAE.
 
     Args:
+        loss (dict): Config of loss.
         norm_pix_loss (bool): Whether or not normalize target.
             Defaults to False.
         patch_size (int): Patch size. Defaults to 16.
     """
 
-    def __init__(self, norm_pix: bool = False, patch_size: int = 16) -> None:
+    def __init__(self,
+                 loss: dict,
+                 norm_pix: bool = False,
+                 patch_size: int = 16) -> None:
         super().__init__()
         self.norm_pix = norm_pix
         self.patch_size = patch_size
+        self.loss = MODELS.build(loss)
 
     def patchify(self, imgs: torch.Tensor) -> torch.Tensor:
 
@@ -36,9 +41,19 @@ class MAEPretrainHead(BaseModule):
         x = x.reshape(shape=(imgs.shape[0], h * w, p**2 * 3))
         return x
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def construct_target(self, target: torch.Tensor) -> torch.Tensor:
+        """Construct the reconstruction target.
 
-        target = self.patchify(x)
+        In addition to splitting images into tokens, this module will also
+        normalize the image according to ``norm_pix``.
+
+        Args:
+            target (torch.Tensor): Image with the shape of B x 3 x H x W
+
+        Returns:
+            torch.Tensor: Tokenized images with the shape of B x L x C
+        """
+        target = self.patchify(target)
         if self.norm_pix:
             mean = target.mean(dim=-1, keepdim=True)
             var = target.var(dim=-1, keepdim=True)
@@ -46,8 +61,25 @@ class MAEPretrainHead(BaseModule):
 
         return target
 
+    def forward(self, pred: torch.Tensor, target: torch.Tensor,
+                mask: torch.Tensor) -> torch.Tensor:
+        """Forward function of MAE head.
 
-@HEADS.register_module()
+        Args:
+            pred (torch.Tensor): The reconstructed image.
+            target (torch.Tensor): The target image.
+            mask (torch.Tensor): The mask of the target image.
+
+        Returns:
+            torch.Tensor: The reconstruction loss.
+        """
+        target = self.construct_target(target)
+        loss = self.loss(pred, target, mask)
+
+        return loss
+
+
+@MODELS.register_module()
 class MAEFinetuneHead(BaseModule):
     """Fine-tuning head for MAE.
 
@@ -83,7 +115,7 @@ class MAEFinetuneHead(BaseModule):
         return losses
 
 
-@HEADS.register_module()
+@MODELS.register_module()
 class MAELinprobeHead(BaseModule):
     """Linear probing head for MAE.
 

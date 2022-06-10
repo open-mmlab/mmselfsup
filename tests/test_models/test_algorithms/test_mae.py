@@ -20,54 +20,32 @@ neck = dict(
     decoder_num_heads=16,
     mlp_ratio=4.,
 )
-head = dict(type='MAEPretrainHead', norm_pix=False, patch_size=16)
 loss = dict(type='MAEReconstructionLoss')
+head = dict(type='MAEPretrainHead', norm_pix=False, patch_size=16, loss=loss)
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_mae():
-    preprocess_cfg = {
+    data_preprocessor = {
         'mean': [0.5, 0.5, 0.5],
         'std': [0.5, 0.5, 0.5],
-        'to_rgb': True
+        'bgr_to_rgb': True
     }
-    with pytest.raises(AssertionError):
-        alg = MAE(
-            backbone=backbone,
-            neck=None,
-            head=head,
-            loss=loss,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
-    with pytest.raises(AssertionError):
-        alg = MAE(
-            backbone=backbone,
-            neck=neck,
-            head=None,
-            loss=loss,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
-    with pytest.raises(AssertionError):
-        alg = MAE(
-            backbone=None,
-            neck=neck,
-            head=head,
-            loss=loss,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
+
     alg = MAE(
         backbone=backbone,
         neck=neck,
         head=head,
-        loss=loss,
-        preprocess_cfg=copy.deepcopy(preprocess_cfg))
-    alg.init_weights()
+        data_preprocessor=copy.deepcopy(data_preprocessor))
 
     fake_data = [{
         'inputs': [torch.randn((3, 224, 224))],
         'data_sample': SelfSupDataSample()
     } for _ in range(2)]
-    fake_outputs = alg(fake_data, return_loss=True)
+
+    fake_batch_inputs, fake_data_samples = alg.data_preprocessor(fake_data)
+    fake_outputs = alg(fake_batch_inputs, fake_data_samples, mode='loss')
     assert isinstance(fake_outputs['loss'].item(), float)
 
-    fake_inputs, fake_data_samples = alg.preprocss_data(fake_data)
-    fake_feat = alg.extract_feat(
-        inputs=fake_inputs, data_samples=fake_data_samples)
-    assert list(fake_feat[0].shape) == [2, 50, 768]
+    fake_feats = alg(fake_batch_inputs, fake_data_samples, mode='tensor')
+    assert list(fake_feats.shape) == [2, 196, 768]

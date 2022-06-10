@@ -5,23 +5,26 @@ _base_ = [
     '../_base_/default_runtime.py',
 ]
 
-# dataset
-data = dict(samples_per_gpu=512, workers_per_gpu=32)
+# dataset 8 x 512
+train_dataloader = dict(batch_size=512, num_workers=16)
 
-# optimizer
+# optimizer wrapper
 optimizer = dict(
-    lr=1.5e-4 * 4096 / 256,
-    paramwise_options={
-        'norm': dict(weight_decay=0.),
-        'bias': dict(weight_decay=0.),
-        'pos_embed': dict(weight_decay=0.),
-        'mask_token': dict(weight_decay=0.),
-        'cls_token': dict(weight_decay=0.)
-    })
-optimizer_config = dict()
+    type='AdamW', lr=1.5e-4 * 4096 / 256, betas=(0.9, 0.95), weight_decay=0.05)
+optim_wrapper = dict(
+    type='OptimWrapper',
+    optimizer=optimizer,
+    paramwise_cfg=dict(
+        custom_keys={
+            'ln': dict(decay_mult=0.0),
+            'bias': dict(decay_mult=0.0),
+            'pos_embed': dict(decay_mult=0.),
+            'mask_token': dict(decay_mult=0.),
+            'cls_token': dict(decay_mult=0.)
+        }))
 
 # learning rate scheduler
-scheduler = [
+param_scheduler = [
     dict(
         type='LinearLR',
         start_factor=1e-4,
@@ -38,13 +41,6 @@ scheduler = [
         convert_to_iter_based=True)
 ]
 
-# schedule
-runner = dict(max_epochs=400)
-
-# runtime
-checkpoint_config = dict(interval=1, max_keep_ckpts=3, out_dir='')
-persistent_workers = True
-log_config = dict(
-    interval=100, hooks=[
-        dict(type='TextLoggerHook'),
-    ])
+# runtime settings
+# pre-train for 400 epochs
+train_cfg = dict(max_epochs=400)
