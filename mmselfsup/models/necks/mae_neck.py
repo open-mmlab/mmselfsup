@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 from mmcls.models.backbones.vision_transformer import TransformerEncoderLayer
 from mmcv.cnn import build_norm_layer
-from mmcv.runner import BaseModule
+from mmengine.model import BaseModule
 
 from ..builder import NECKS
 from ..utils import build_2d_sincos_position_embedding

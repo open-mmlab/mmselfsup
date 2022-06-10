@@ -1,6 +1,8 @@
 # model settings
 model = dict(
     type='MAE',
+    data_preprocessor=dict(
+        mean=[124, 117, 104], std=[59, 58, 58], bgr_to_rgb=True),
     backbone=dict(type='MAEViT', arch='b', patch_size=16, mask_ratio=0.75),
     neck=dict(
         type='MAEPretrainDecoder',
@@ -12,5 +14,8 @@ model = dict(
         decoder_num_heads=16,
         mlp_ratio=4.,
     ),
-    head=dict(type='MAEPretrainHead', norm_pix=True, patch_size=16),
-    loss=dict(type='MAEReconstructionLoss'))
+    head=dict(
+        type='MAEPretrainHead',
+        norm_pix=True,
+        patch_size=16,
+        loss=dict(type='MAEReconstructionLoss')))

@@ -1,5 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from .dall_e import Encoder
+from .data_preprocessor import SelfSupDataPreprocessor
 from .ema import CosineEMA
 from .extractor import Extractor
 from .gather_layer import GatherLayer
@@ -14,5 +15,5 @@ __all__ = [
     'Extractor', 'GatherLayer', 'MultiPooling', 'MultiPrototypes',
     'build_2d_sincos_position_embedding', 'Sobel', 'MultiheadAttention',
     'TransformerEncoderLayer', 'CAETransformerRegressorLayer', 'Encoder',
-    'CosineEMA'
+    'CosineEMA', 'SelfSupDataPreprocessor'
 ]

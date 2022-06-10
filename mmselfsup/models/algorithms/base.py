@@ -1,40 +1,66 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from abc import ABCMeta, abstractmethod
-from collections import OrderedDict
-from typing import Dict, List, Optional, Tuple
+from typing import List, Optional, Union
 
 import torch
-import torch.distributed as dist
-from mmcv.runner import BaseModule, auto_fp16
+from mmengine.model import BaseModel as _BaseModel
+from torch import nn
 
 from mmselfsup.core import SelfSupDataSample
-from mmselfsup.utils import get_module_device
+from mmselfsup.registry import MODELS
 
 
-class BaseModel(BaseModule, metaclass=ABCMeta):
-    """Base model class for self-supervised learning.
+class BaseModel(_BaseModel):
+    """BaseModel for SelfSup.
+
+    All algorithms should inherit this module.
 
     Args:
-        preprocess_cfg (Dict): Config to preprocess images.
-        init_cfg (Dict, optional): Config to initialize models.
+        backbone (dict): The backbone module. See
+            :mod:`mmcls.models.backbones`.
+        neck (dict, optional): The neck module to process features from
+            backbone. See :mod:`mmcls.models.necks`. Defaults to None.
+        head (dict, optional): The head module to do prediction and calculate
+            loss from processed features. See :mod:`mmcls.models.heads`.
+            Notice that if the head is not set, almost all methods cannot be
+            used except :meth:`extract_feat`. Defaults to None.
+        pretrained (str, optional): The pretrained checkpoint path, support
+            local path and remote path. Defaults to None.
+        data_preprocessor (Union[dict, nn.Module], optional): The config for
+            preprocessing input data. If None or no specified type, it will use
+            "SelfSupDataPreprocessor" as type.
+            See :class:`SelfSupDataPreprocessor` for more details.
+            Defaults to None.
+        init_cfg (dict, optional): the config to control the initialization.
             Defaults to None.
     """
 
     def __init__(self,
-                 preprocess_cfg: Dict,
-                 init_cfg: Optional[Dict] = None) -> None:
-        super(BaseModel, self).__init__(init_cfg)
-        self.fp16_enabled = False
-        assert 'mean' in preprocess_cfg
-        self.register_buffer(
-            'mean_norm',
-            torch.tensor(preprocess_cfg.pop('mean')).view(3, 1, 1))
-        assert 'std' in preprocess_cfg
-        self.register_buffer(
-            'std_norm',
-            torch.tensor(preprocess_cfg.pop('std')).view(3, 1, 1))
-        assert 'to_rgb' in preprocess_cfg
-        self.to_rgb = preprocess_cfg.pop('to_rgb')
+                 backbone: dict,
+                 neck: Optional[dict] = None,
+                 head: Optional[dict] = None,
+                 pretrained: Optional[str] = None,
+                 data_preprocessor: Optional[Union[dict, nn.Module]] = None,
+                 init_cfg: Optional[dict] = None):
+
+        if pretrained is not None:
+            init_cfg = dict(type='Pretrained', checkpoint=pretrained)
+
+        if data_preprocessor is None:
+            data_preprocessor = {}
+        # The build process is in MMEngine, so we need to add scope here.
+        data_preprocessor.setdefault('type',
+                                     'mmselfsup.SelfSupDataPreprocessor')
+
+        super().__init__(
+            init_cfg=init_cfg, data_preprocessor=data_preprocessor)
+
+        self.backbone = MODELS.build(backbone)
+
+        if neck is not None:
+            self.neck = MODELS.build(neck)
+
+        if head is not None:
+            self.head = MODELS.build(head)
 
     @property
     def with_neck(self) -> bool:
@@ -44,156 +70,98 @@ class BaseModel(BaseModule, metaclass=ABCMeta):
     def with_head(self) -> bool:
         return hasattr(self, 'head') and self.head is not None
 
-    @abstractmethod
-    def extract_feat(self, inputs: List[torch.Tensor],
-                     data_samples: List[SelfSupDataSample],
-                     **kwargs) -> object:
-        """The forward function to extract features.
-
-        Args:
-            inputs (List[torch.Tensor]): The input images.
-            data_samples (List[SelfSupDataSample]): All elements required
-                during the forward function.
-        """
-        raise NotImplementedError('``extract_feat`` should be implemented')
-
-    @abstractmethod
-    def forward_train(self, inputs: List[torch.Tensor],
-                      data_samples: List[SelfSupDataSample],
-                      **kwargs) -> object:
-        """The forward function in training
-        Args:
-            inputs (List[torch.Tensor]): The input images.
-            data_samples (List[SelfSupDataSample]): All elements required
-                during the forward function.
-        """
-        raise NotImplementedError('``forward_train`` should be implemented')
-
-    def forward_test(self, inputs: List[torch.Tensor],
-                     data_samples: List[SelfSupDataSample],
-                     **kwargs) -> object:
-        """The forward function in testing
-        Args:
-            inputs (List[torch.Tensor]): The input images.
-            data_samples (List[SelfSupDataSample]): All elements required
-                during the forward function.
-        """
-        raise NotImplementedError('``forward_test`` should be implemented')
-
-    @auto_fp16(apply_to=('data', ))
     def forward(self,
-                data: List[Dict],
-                return_loss: bool = False,
-                extract: bool = False,
-                **kwargs) -> object:
-        """Forward function of model.
+                batch_inputs: torch.Tensor,
+                data_samples: Optional[List[SelfSupDataSample]] = None,
+                mode: str = 'tensor'):
+        """Returns losses or predictions of training, validation, testing, and
+        simple inference process.
 
-        Calls either forward_train, forward_test or extract_feat function
-        according to the mode.
+        This module overwrites the abstract method in ``BaseModel``.
 
         Args:
-            data (List[Dict]): The input data for model.
-            return_loss (bool): Train mode or test mode. Defaults to False.
-            extract (bool): Whether or not only extract features from model.
-                If set to True, the ``return_loss`` will be ignored. Defaults
-                to False.
+            batch_inputs (torch.Tensor): batch input tensor collated by
+                :attr:`data_preprocessor`.
+            data_samples (List[BaseDataElement], optional):
+                data samples collated by :attr:`data_preprocessor`.
+            mode (str): mode should be one of ``loss``, ``predict`` and
+                ``tensor``
+                - ``loss``: Called by ``train_step`` and return loss ``dict``
+                  used for logging
+                - ``predict``: Called by ``val_step`` and ``test_step``
+                  and return list of ``BaseDataElement`` results used for
+                  computing metric.
+                - ``tensor``: Called by custom use to get ``Tensor`` type
+                  results.
+        Returns:
+            ForwardResults:
+                - If ``mode == loss``, return a ``dict`` of loss tensor used
+                  for backward and logging.
+                - If ``mode == predict``, return a ``list`` of
+                  :obj:`BaseDataElement` for computing metric
+                  and getting inference result.
+                - If ``mode == tensor``, return a tensor or ``tuple`` of tensor
+                  or ``dict of tensor for custom use.
         """
-        # preprocess images
-        inputs, data_samples = self.preprocss_data(data)
-
-        # Whether or not extract features. If set to True, the ``return_loss``
-        # will be ignored.
-        if extract:
-            return self.extract_feat(
-                inputs=inputs, data_samples=data_samples, **kwargs)
-
-        if return_loss:
-            losses = self.forward_train(
-                inputs=inputs, data_samples=data_samples, **kwargs)
-            loss, log_vars = self._parse_losses(losses)
-            outputs = dict(loss=loss, log_vars=log_vars)
-            return outputs
+        if mode == 'tensor':
+            feats = self.extract_feat(batch_inputs)
+            return feats
+        elif mode == 'loss':
+            return self.loss(batch_inputs, data_samples)
+        elif mode == 'predict':
+            return self.predict(batch_inputs, data_samples)
         else:
-            # should be a list of SelfSupDataSample
-            return self.forward_test(
-                inputs=inputs, data_samples=data_samples, **kwargs)
+            raise RuntimeError(f'Invalid mode "{mode}".')
 
-    def _parse_losses(self, losses: Dict) -> Tuple[torch.Tensor, Dict]:
-        """Parse the raw outputs (losses) of the network.
+    def extract_feat(self, batch_inputs):
+        """Extract features from the input tensor with shape (N, C, ...).
 
-        Args:
-            losses (Dict): Raw output of the network, which usually contain
-                losses and other necessary information.
-        Returns:
-            tuple[torch.Tensor, Dict]: (loss, log_vars), loss is the loss
-                tensor which may be a weighted sum of all losses, log_vars
-                contains all the variables to be sent to the logger.
-        """
-        log_vars = OrderedDict()
-        for loss_name, loss_value in losses.items():
-            if isinstance(loss_value, torch.Tensor):
-                log_vars[loss_name] = loss_value.mean()
-            elif isinstance(loss_value, list):
-                log_vars[loss_name] = sum(_loss.mean() for _loss in loss_value)
-            elif isinstance(loss_value, dict):
-                for name, value in loss_value.items():
-                    log_vars[name] = value
-            else:
-                raise TypeError(
-                    f'{loss_name} is not a tensor or list of tensors')
-
-        loss = sum(_value for _key, _value in log_vars.items()
-                   if 'loss' in _key)
-
-        log_vars['loss'] = loss
-        for loss_name, loss_value in log_vars.items():
-            # reduce loss when distributed training
-            if dist.is_available() and dist.is_initialized():
-                loss_value = loss_value.data.clone()
-                dist.all_reduce(loss_value.div_(dist.get_world_size()))
-            log_vars[loss_name] = loss_value.item()
-
-        return loss, log_vars
-
-    def preprocss_data(
-            self,
-            data: List[Dict]) -> Tuple[List[torch.Tensor], SelfSupDataSample]:
-        """Process input data during training, testing or extracting.
+        This is a abstract method, and subclass should overwrite this methods
+        if needed.
 
         Args:
-            data (List[Dict]): The data to be processed, which
-                comes from dataloader.
+            batch_inputs (Tensor): A batch of inputs. The shape of it should be
+                ``(num_samples, num_channels, *img_shape)``.
 
         Returns:
-            tuple:  It should contain 2 item.
-            - batch_images (List[torch.Tensor]): The batch image tensor.
-            - data_samples (List[SelfSupDataSample], Optional): The Data
-            Samples. It usually includes information such as
-            `gt_label`. Return None If the input data does not
-            contain `data_sample`.
+            tuple | Tensor: The output of specified stage.
+            The output depends on detailed implementation.
         """
-        # data_['inputs] is a list
-        images = [data_['inputs'] for data_ in data]
-        data_samples = [data_['data_sample'] for data_ in data]
+        raise NotImplementedError
 
-        device = get_module_device(self)
-        data_samples = [data_sample.to(device) for data_sample in data_samples]
-        images = [[img_.to(device) for img_ in img] for img in images]
+    def loss(self, batch_inputs: torch.Tensor,
+             data_samples: List[SelfSupDataSample]) -> dict:
+        """Calculate losses from a batch of inputs and data samples.
 
-        # convert images to rgb
-        if self.to_rgb and images[0][0].size(0) == 3:
-            images = [[img_[[2, 1, 0], ...] for img_ in img] for img in images]
+        This is a abstract method, and subclass should overwrite this methods
+        if needed.
 
-        # normalize images
-        images = [[(img_ - self.mean_norm) / self.std_norm for img_ in img]
-                  for img in images]
+        Args:
+            batch_inputs (torch.Tensor): The input tensor with shape
+                (N, C, ...) in general.
+            data_samples (List[SelfSupDataSample]): The annotation data of
+                every samples.
 
-        # reconstruct images into several batches. For example, SimCLR needs
-        # two crops for each image, and this code snippet will convert images
-        # into two batches, each containing one crop of an image.
-        batch_images = []
-        for i in range(len(images[0])):
-            cur_batch = [img[i] for img in images]
-            batch_images.append(torch.stack(cur_batch))
+        Returns:
+            dict[str, Tensor]: a dictionary of loss components
+        """
+        raise NotImplementedError
 
-        return batch_images, data_samples
+    def predict(self,
+                batch_inputs: tuple,
+                data_samples: Optional[List[SelfSupDataSample]] = None,
+                **kwargs) -> List[SelfSupDataSample]:
+        """Predict results from the extracted features.
+
+        This module returns the logits before loss, which are used to compute
+        all kinds of metrics. This is a abstract method, and subclass should
+        overwrite this methods if needed.
+
+        Args:
+            feats (tuple): The features extracted from the backbone.
+            data_samples (List[BaseDataElement], optional): The annotation
+                data of every samples. Defaults to None.
+            **kwargs: Other keyword arguments accepted by the ``predict``
+                method of :attr:`head`.
+        """
+        raise NotImplementedError
