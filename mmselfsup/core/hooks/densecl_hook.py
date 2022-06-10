@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Optional
+from typing import Optional, Sequence
 
 from mmengine.hooks import Hook
 
@@ -26,7 +26,10 @@ class DenseCLHook(Hook):
             "The runner must have attribute \"loss_lambda\" in DenseCL."
         self.loss_lambda = runner.model.module.loss_lambda
 
-    def before_train_iter(self, runner) -> None:
+    def before_train_iter(self,
+                          runner,
+                          batch_idx: int,
+                          data_batch: Optional[Sequence[dict]] = None) -> None:
         assert hasattr(runner.model.module, 'loss_lambda'), \
             "The runner must have attribute \"loss_lambda\" in DenseCL."
         cur_iter = runner.iter

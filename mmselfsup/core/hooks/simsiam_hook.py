@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Optional
+from typing import Optional, Sequence
 
 from mmengine.hooks import Hook
 
@@ -27,19 +27,22 @@ class SimSiamHook(Hook):
         self.lr = lr
         self.adjust_by_epoch = adjust_by_epoch
 
-    def before_train_iter(self, runner) -> None:
+    def before_train_iter(self,
+                          runner,
+                          batch_idx: int,
+                          data_batch: Optional[Sequence[dict]] = None) -> None:
         """fix lr of predictor by iter."""
         if self.adjust_by_epoch:
             return
         else:
             if self.fix_pred_lr:
-                for param_group in runner.optimizer.param_groups:
+                for param_group in runner.optim_wrapper.optimizer.param_groups:
                     if 'fix_lr' in param_group and param_group['fix_lr']:
                         param_group['lr'] = self.lr
 
     def before_train_epoch(self, runner) -> None:
         """fix lr of predictor by epoch."""
         if self.fix_pred_lr:
-            for param_group in runner.optimizer.param_groups:
+            for param_group in runner.optim_wrapper.optimizer.param_groups:
                 if 'fix_lr' in param_group and param_group['fix_lr']:
                     param_group['lr'] = self.lr
