@@ -1,6 +1,6 @@
 # optimizer
 optimizer = dict(type='SGD', lr=0.03, weight_decay=1e-4, momentum=0.9)
-optimizer_config = dict()  # grad_clip, coalesce, bucket_size_mb
+optim_wrapper = dict(type='OptimWrapper', optimizer=optimizer)
 
 # learning rate scheduler
 param_scheduler = [
@@ -8,4 +8,4 @@ param_scheduler = [
 ]
 
 # runtime settings
-runner = dict(type='EpochBasedRunner', max_epochs=200)
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=200)
