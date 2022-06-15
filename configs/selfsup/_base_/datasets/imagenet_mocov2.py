@@ -1,4 +1,5 @@
 # dataset settings
+custom_imports = dict(imports='mmcls.datasets', allow_failed_imports=False)
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
 file_client_args = dict(backend='disk')
@@ -30,7 +31,8 @@ train_pipeline = [
 
 train_dataloader = dict(
     batch_size=32,
-    num_workers=4,
+    num_workers=8,
+    drop_last=True,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
     dataset=dict(

@@ -2,12 +2,12 @@
 from typing import Tuple
 
 import torch
-from mmcv.runner import BaseModule
+from mmengine.model import BaseModule
 
-from ..builder import HEADS
+from mmselfsup.registry import MODELS
 
 
-@HEADS.register_module()
+@MODELS.register_module()
 class ContrastiveHead(BaseModule):
     """Head for contrastive learning.
 
@@ -15,13 +15,15 @@ class ContrastiveHead(BaseModule):
     MoCo, DenseCL, etc.
 
     Args:
+        loss (dict): Config dict for module of loss functions.
         temperature (float): The temperature hyper-parameter that
             controls the concentration level of the distribution.
             Defaults to 0.1.
     """
 
-    def __init__(self, temperature: float = 0.1) -> None:
+    def __init__(self, loss: dict, temperature: float = 0.1) -> None:
         super().__init__()
+        self.loss = MODELS.build(loss)
         self.temperature = temperature
 
     def forward(self, pos: torch.Tensor,
@@ -33,12 +35,12 @@ class ContrastiveHead(BaseModule):
             neg (torch.Tensor): Nxk negative similarity.
 
         Returns:
-            Tuple[torch.Tensor, torch.Tensor]: A tuple containing the logits
-                and labels.
+            torch.Tensor: The contrastive loss.
         """
         N = pos.size(0)
         logits = torch.cat((pos, neg), dim=1)
         logits /= self.temperature
         labels = torch.zeros((N, ), dtype=torch.long).to(pos.device)
 
-        return logits, labels
+        loss = self.loss(logits, labels)
+        return loss
