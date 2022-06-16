@@ -1,10 +1,9 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-import copy
 import platform
 
 import pytest
 import torch
-from mmengine.data import LabelData
+from mmengine.data import InstanceData
 
 from mmselfsup.core.data_structures.selfsup_data_sample import \
     SelfSupDataSample
@@ -23,6 +22,7 @@ neck = dict(
     with_avg_pool=True)
 head = dict(
     type='ClsHead',
+    loss=dict(type='mmcls.CrossEntropyLoss'),
     with_avg_pool=False,
     in_channels=32,
     num_classes=8,
@@ -30,51 +30,22 @@ head = dict(
         dict(type='Normal', std=0.005, layer='Linear'),
         dict(type='Constant', val=1, layer=['_BatchNorm', 'GroupNorm'])
     ])
-loss = dict(type='mmcls.CrossEntropyLoss')
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_relative_loc():
-    preprocess_cfg = {
+    data_preprocessor = {
+        'type': 'mmselfsup.RelativeLocDataPreprocessor',
         'mean': [0.5, 0.5, 0.5],
         'std': [0.5, 0.5, 0.5],
-        'to_rgb': True
+        'bgr_to_rgb': True
     }
-    with pytest.raises(AssertionError):
-        alg = RelativeLoc(
-            backbone=backbone,
-            neck=None,
-            head=head,
-            loss=loss,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
-    with pytest.raises(AssertionError):
-        alg = RelativeLoc(
-            backbone=backbone,
-            neck=neck,
-            head=None,
-            loss=loss,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
-    with pytest.raises(AssertionError):
-        alg = RelativeLoc(
-            backbone=None,
-            neck=neck,
-            head=head,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
-    with pytest.raises(AssertionError):
-        alg = RelativeLoc(
-            backbone=backbone,
-            neck=neck,
-            head=head,
-            loss=None,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
 
     alg = RelativeLoc(
         backbone=backbone,
         neck=neck,
         head=head,
-        loss=loss,
-        preprocess_cfg=copy.deepcopy(preprocess_cfg))
-    alg.init_weights()
+        data_preprocessor=data_preprocessor)
 
     batch_size = 5
     fake_data = [{
@@ -89,19 +60,19 @@ def test_relative_loc():
         SelfSupDataSample()
     } for _ in range(batch_size)]
 
-    patch_label = LabelData()
-    patch_label.value = torch.tensor([0, 1, 2, 3, 4, 5, 6, 7])
+    pseudo_label = InstanceData()
+    pseudo_label.patch_label = torch.tensor([0, 1, 2, 3, 4, 5, 6, 7])
     for i in range(batch_size):
-        fake_data[i]['data_sample'].patch_label = patch_label
+        fake_data[i]['data_sample'].pseudo_label = pseudo_label
 
-    fake_outputs = alg(fake_data, return_loss=True)
+    fake_batch_inputs, fake_data_samples = alg.data_preprocessor(fake_data)
+
+    fake_outputs = alg(fake_batch_inputs, fake_data_samples, mode='loss')
     assert isinstance(fake_outputs['loss'].item(), float)
 
-    test_results = alg(fake_data, return_loss=False)
+    test_results = alg(fake_batch_inputs, fake_data_samples, mode='predict')
     assert len(test_results) == len(fake_data)
-    assert list(test_results[0].prediction.head4.shape) == [8, 8]
+    assert list(test_results[0].pred_label.head4.shape) == [8, 8]
 
-    fake_inputs, fake_data_samples = alg.preprocss_data(fake_data)
-    fake_feat = alg.extract_feat(
-        inputs=fake_inputs, data_samples=fake_data_samples)
+    fake_feat = alg(fake_batch_inputs, fake_data_samples, mode='tensor')
     assert list(fake_feat[0].shape) == [batch_size * 8, 512, 1, 1]

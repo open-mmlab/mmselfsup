@@ -91,3 +91,58 @@ class SelfSupDataPreprocessor(ImgDataPreprocessor):
             batch_inputs.append(torch.stack(cur_batch))
 
         return batch_inputs, batch_data_samples
+
+
+@MODELS.register_module()
+class RelativeLocDataPreprocessor(SelfSupDataPreprocessor):
+    """Image pre-processor for Relative Location."""
+
+    def forward(
+            self,
+            data: Sequence[dict],
+            training: bool = False
+    ) -> Tuple[List[torch.Tensor], Optional[list]]:
+        """Performs normalization、padding and bgr2rgb conversion based on
+        ``BaseDataPreprocessor``.
+
+        Args:
+            data (Sequence[dict]): data sampled from dataloader.
+            training (bool): Whether to enable training time augmentation. If
+                subclasses override this method, they can perform different
+                preprocessing strategies for training and testing based on the
+                value of ``training``.
+        Returns:
+            Tuple[torch.Tensor, Optional[list]]: Data in the same format as the
+            model input.
+        """
+        inputs, batch_data_samples = self.collate_data(data)
+        # channel transform
+        if self.channel_conversion:
+            inputs = [[img_[[2, 1, 0], ...] for img_ in _input]
+                      for _input in inputs]
+
+        # Normalization. Here is what is different from
+        # :class:`mmengine.ImgDataPreprocessor`. Since there are multiple views
+        # for an image for some  algorithms, e.g. SimCLR, each item in inputs
+        # is a list, containing multi-views for an image.
+        inputs = [[(img_ - self.mean) / self.std for img_ in _input]
+                  for _input in inputs]
+
+        batch_inputs = []
+        for i in range(len(inputs[0])):
+            cur_batch = [img[i] for img in inputs]
+            batch_inputs.append(torch.stack(cur_batch))
+
+        # This part is unique to Relative Loc
+        img1 = torch.stack(batch_inputs[1:], 1)  # Nx8xCxHxW
+        img1 = img1.view(
+            img1.size(0) * img1.size(1), img1.size(2), img1.size(3),
+            img1.size(4))  # (8N)xCxHxW
+        img2 = torch.unsqueeze(batch_inputs[0], 1).repeat(1, 8, 1, 1,
+                                                          1)  # Nx8xCxHxW
+        img2 = img2.view(
+            img2.size(0) * img2.size(1), img2.size(2), img2.size(3),
+            img2.size(4))  # (8N)xCxHxW
+        batch_inputs = [img1, img2]
+
+        return batch_inputs, batch_data_samples

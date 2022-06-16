@@ -14,16 +14,6 @@ train_pipeline = [
         pseudo_label_keys=['patch_box', 'patch_label', 'unpatched_img'],
         meta_keys=['img_path'])
 ]
-val_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
-    dict(type='Resize', scale=292),
-    dict(type='CenterCrop', crop_size=255),
-    dict(type='RandomPatchWithLabels'),
-    dict(
-        type='PackSelfSupInputs',
-        pseudo_label_keys=['patch_label'],
-        meta_keys=['img_path'])
-]
 
 train_dataloader = dict(
     batch_size=64,
@@ -36,14 +26,3 @@ train_dataloader = dict(
         ann_file='meta/train.txt',
         data_prefix=dict(img_path='train/'),
         pipeline=train_pipeline))
-val_dataloader = dict(
-    batch_size=64,
-    num_workers=4,
-    persistent_workers=True,
-    sampler=dict(type='DefaultSampler', shuffle=True),
-    dataset=dict(
-        type=dataset_type,
-        data_root=data_root,
-        ann_file='meta/val.txt',
-        data_prefix=dict(img_path='val/'),
-        pipeline=val_pipeline))

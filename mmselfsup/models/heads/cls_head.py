@@ -5,14 +5,15 @@ import torch
 import torch.nn as nn
 from mmcv.runner import BaseModule
 
-from ..builder import HEADS
+from ..builder import MODELS
 
 
-@HEADS.register_module()
+@MODELS.register_module()
 class ClsHead(BaseModule):
     """Simplest classifier head, with only one fc layer.
 
     Args:
+        loss (dict): Config of the loss.
         with_avg_pool (bool): Whether to apply the average pooling
             after neck. Defaults to False.
         in_channels (int): Number of input channels. Defaults to 2048.
@@ -22,6 +23,7 @@ class ClsHead(BaseModule):
 
     def __init__(
         self,
+        loss: dict,
         with_avg_pool: Optional[bool] = False,
         in_channels: Optional[int] = 2048,
         num_classes: Optional[int] = 1000,
@@ -32,6 +34,7 @@ class ClsHead(BaseModule):
         ]
     ) -> None:
         super().__init__(init_cfg)
+        self.loss = MODELS.build(loss)
         self.with_avg_pool = with_avg_pool
         self.in_channels = in_channels
         self.num_classes = num_classes
@@ -41,10 +44,12 @@ class ClsHead(BaseModule):
             self.avg_pool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc_cls = nn.Linear(in_channels, num_classes)
 
-    def forward(
+    def logits(
         self, x: Union[List[torch.Tensor],
                        Tuple[torch.Tensor]]) -> List[torch.Tensor]:
-        """Forward head.
+        """Get the logits before the cross_entropy loss.
+
+        This module is used to obtain the logits before the loss.
 
         Args:
             x (List[Tensor] | Tuple[Tensor]): Feature maps of backbone,
@@ -64,3 +69,16 @@ class ClsHead(BaseModule):
         x = x.view(x.size(0), -1)
         cls_score = self.fc_cls(x)
         return [cls_score]
+
+    def forward(self, x: Union[List[torch.Tensor], Tuple[torch.Tensor]],
+                label: torch.Tensor) -> torch.Tensor:
+        """Get the loss.
+
+        Args:
+            x (List[Tensor] | Tuple[Tensor]): Feature maps of backbone,
+                each tensor has shape (N, C, H, W).
+            label (torch.Tensor): The label for cross entropy loss.
+        """
+        outs = self.logits(x)
+        loss = self.loss(outs[0], label)
+        return loss
