@@ -6,10 +6,10 @@ import torch.nn as nn
 from mmcls.models import SwinTransformer
 from mmcv.cnn.utils.weight_init import trunc_normal_
 
-from ..builder import BACKBONES
+from mmselfsup.registry import MODELS
 
 
-@BACKBONES.register_module()
+@MODELS.register_module()
 class SimMIMSwinTransformer(SwinTransformer):
     """Swin Transformer for SimMIM.
 
