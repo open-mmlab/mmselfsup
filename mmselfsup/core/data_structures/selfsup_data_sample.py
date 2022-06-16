@@ -143,12 +143,12 @@ class SelfSupDataSample(BaseDataElement):
         del self._pred_label
 
     @property
-    def pseudo_label(self) -> InstanceData:
+    def pseudo_label(self) -> BaseDataElement:
         return self._pseudo_label
 
     @pseudo_label.setter
-    def pseudo_label(self, value: InstanceData):
-        self.set_field(value, '_pseudo_label', dtype=InstanceData)
+    def pseudo_label(self, value: BaseDataElement):
+        self.set_field(value, '_pseudo_label', dtype=BaseDataElement)
 
     @pseudo_label.deleter
     def pseudo_label(self):
