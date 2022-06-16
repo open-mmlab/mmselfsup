@@ -6,7 +6,7 @@ _base_ = [
 ]
 
 # dataset 8 x 512
-train_dataloader = dict(batch_size=512, num_workers=16)
+train_dataloader = dict(batch_size=512, num_workers=8)
 
 # optimizer wrapper
 optimizer = dict(
@@ -44,3 +44,4 @@ param_scheduler = [
 # runtime settings
 # pre-train for 400 epochs
 train_cfg = dict(max_epochs=400)
+default_hooks = dict(logger=dict(type='LoggerHook', interval=100))

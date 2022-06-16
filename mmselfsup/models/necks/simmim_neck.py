@@ -1,12 +1,12 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import torch
 import torch.nn as nn
-from mmcv.runner import BaseModule
+from mmengine.model import BaseModule
 
-from ..builder import NECKS
+from mmselfsup.registry import MODELS
 
 
-@NECKS.register_module()
+@MODELS.register_module()
 class SimMIMNeck(BaseModule):
     """Pre-train Neck For SimMIM.
 

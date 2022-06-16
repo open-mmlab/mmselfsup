@@ -4,10 +4,10 @@ import torch
 from mmcv.runner import BaseModule
 from torch.nn import functional as F
 
-from ..builder import LOSSES
+from mmselfsup.registry import MODELS
 
 
-@LOSSES.register_module()
+@MODELS.register_module()
 class SimMIMReconstructionLoss(BaseModule):
     """Loss function for MAE.
 
