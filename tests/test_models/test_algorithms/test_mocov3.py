@@ -41,52 +41,21 @@ head = dict(
         with_last_bias=False,
         with_avg_pool=False,
         norm_cfg=dict(type='BN1d')),
+    loss=dict(type='mmcls.CrossEntropyLoss', loss_weight=2 * 0.2),
     temperature=0.2)
-loss = dict(type='mmcls.CrossEntropyLoss', loss_weight=2 * 0.2)
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_mocov3():
-    preprocess_cfg = {
-        'mean': [0.485, 0.456, 0.406],
-        'std': [0.229, 0.224, 0.225],
-        'to_rgb': True
-    }
-    with pytest.raises(AssertionError):
-        alg = MoCoV3(
-            backbone=None,
-            neck=neck,
-            head=head,
-            loss=loss,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
-    with pytest.raises(AssertionError):
-        alg = MoCoV3(
-            backbone=backbone,
-            neck=None,
-            head=head,
-            loss=loss,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
-    with pytest.raises(AssertionError):
-        alg = MoCoV3(
-            backbone=backbone,
-            neck=neck,
-            head=None,
-            loss=loss,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
-    with pytest.raises(AssertionError):
-        alg = MoCoV3(
-            backbone=backbone,
-            neck=neck,
-            head=head,
-            loss=None,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
-
+    data_preprocessor = dict(
+        mean=(123.675, 116.28, 103.53),
+        std=(58.395, 57.12, 57.375),
+        bgr_to_rgb=True)
     alg = MoCoV3(
         backbone=backbone,
         neck=neck,
         head=head,
-        loss=loss,
-        preprocess_cfg=copy.deepcopy(preprocess_cfg))
+        data_preprocessor=copy.deepcopy(data_preprocessor))
 
     fake_data = [{
         'inputs': [torch.randn((3, 224, 224)),
@@ -96,8 +65,7 @@ def test_mocov3():
     } for _ in range(2)]
 
     # test extract
-    fake_inputs, fake_data_samples = alg.preprocss_data(fake_data)
-    fake_backbone_out = alg.extract_feat(
-        inputs=fake_inputs, data_samples=fake_data_samples)
-    assert fake_backbone_out[0][0].size() == torch.Size([2, 384, 14, 14])
-    assert fake_backbone_out[0][1].size() == torch.Size([2, 384])
+    fake_inputs, fake_data_samples = alg.data_preprocessor(fake_data)
+    fake_feats = alg(fake_inputs, fake_data_samples, mode='tensor')
+    assert fake_feats[0][0].size() == torch.Size([2, 384, 14, 14])
+    assert fake_feats[0][1].size() == torch.Size([2, 384])
