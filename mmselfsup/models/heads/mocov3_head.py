@@ -1,15 +1,13 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Dict, Tuple
-
 import torch
 import torch.nn as nn
-from mmcv.runner import BaseModule
+from mmengine.model import BaseModule
 
+from mmselfsup.registry import MODELS
 from mmselfsup.utils import concat_all_gather
-from ..builder import HEADS, build_neck
 
 
-@HEADS.register_module()
+@MODELS.register_module()
 class MoCoV3Head(BaseModule):
     """Head for MoCo v3 algorithms.
 
@@ -19,20 +17,24 @@ class MoCoV3Head(BaseModule):
     `<https://github.com/facebookresearch/moco-v3/blob/main/moco/builder.py>`_.
 
     Args:
-        predictor (Dict): Config dict for module of predictor.
+        predictor (dict): Config dict for module of predictor.
+        loss (dict): Config dict for module of loss functions.
         temperature (float): The temperature hyper-parameter that
             controls the concentration level of the distribution.
             Defaults to 1.0.
     """
 
-    def __init__(self, predictor: Dict, temperature: float = 1.0) -> None:
+    def __init__(self,
+                 predictor: dict,
+                 loss: dict,
+                 temperature: float = 1.0) -> None:
         super().__init__()
-        self.predictor = build_neck(predictor)
+        self.predictor = MODELS.build(predictor)
+        self.loss = MODELS.build(loss)
         self.temperature = temperature
 
-    def forward(
-            self, base_out: torch.Tensor,
-            momentum_out: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+    def forward(self, base_out: torch.Tensor,
+                momentum_out: torch.Tensor) -> torch.Tensor:
         """Forward head.
 
         Args:
@@ -40,7 +42,7 @@ class MoCoV3Head(BaseModule):
             momentum_out (torch.Tensor): NxC features from momentum_encoder.
 
         Returns:
-            Tuple[torch.Tensor, torch.Tensor]: A dictionary of loss components.
+            torch.Tensor: The loss tensor.
         """
         # predictor computation
         pred = self.predictor([base_out])[0]
@@ -60,4 +62,5 @@ class MoCoV3Head(BaseModule):
         labels = (torch.arange(batch_size, dtype=torch.long) +
                   batch_size * torch.distributed.get_rank()).cuda()
 
-        return logits, labels
+        loss = self.loss(logits, labels)
+        return loss

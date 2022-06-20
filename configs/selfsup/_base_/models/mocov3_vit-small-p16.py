@@ -3,6 +3,10 @@ temperature = 0.2
 model = dict(
     type='MoCoV3',
     base_momentum=0.99,
+    data_preprocessor=dict(
+        mean=(123.675, 116.28, 103.53),
+        std=(58.395, 57.12, 57.375),
+        bgr_to_rgb=True),
     backbone=dict(
         type='VisionTransformer',
         arch='mocov3-small',  # embed_dim = 384
@@ -34,5 +38,5 @@ model = dict(
             with_last_bn_affine=False,
             with_last_bias=False,
             with_avg_pool=False),
-        temperature=temperature),
-    loss=dict(type='mmcls.CrossEntropyLoss', loss_weight=2 * temperature))
+        loss=dict(type='mmcls.CrossEntropyLoss', loss_weight=2 * temperature),
+        temperature=temperature))
