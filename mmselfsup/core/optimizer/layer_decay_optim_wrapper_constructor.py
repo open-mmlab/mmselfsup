@@ -7,7 +7,8 @@ from mmengine.dist import get_dist_info
 from mmengine.optim import DefaultOptimWrapperConstructor
 from torch import nn
 
-from mmselfsup.registry import OPTIM_WRAPPER_CONSTRUCTORS, OPTIMIZERS
+from mmselfsup.registry import (OPTIM_WRAPPER_CONSTRUCTORS, OPTIM_WRAPPERS,
+                                OPTIMIZERS)
 from mmselfsup.utils import get_root_logger
 
 
@@ -161,6 +162,8 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
         if hasattr(model, 'module'):
             model = model.module
 
+        optim_wrapper_cfg = self.optim_wrapper_cfg.copy()
+        optim_wrapper_cfg.setdefault('type', 'OptimWrapper')
         optimizer_cfg = self.optimizer_cfg.copy()
 
         # set param-wise lr and weight decay recursively
@@ -168,4 +171,8 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
         self.add_params(params, model, optimizer_cfg)
         optimizer_cfg['params'] = params
 
-        return OPTIMIZERS.build(optimizer_cfg)
+        optimizer = OPTIMIZERS.build(optimizer_cfg)
+        optim_wrapper = OPTIM_WRAPPERS.build(
+            optim_wrapper_cfg, default_args=dict(optimizer=optimizer))
+
+        return optim_wrapper

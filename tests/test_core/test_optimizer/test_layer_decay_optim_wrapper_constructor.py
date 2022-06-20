@@ -64,11 +64,11 @@ base_lr = 1.0
 base_wd = 0.05
 
 
-def check_optimizer_lr_wd(optimizer, gt_lr_wd):
-    assert isinstance(optimizer, torch.optim.AdamW)
-    assert optimizer.defaults['lr'] == base_lr
-    assert optimizer.defaults['weight_decay'] == base_wd
-    param_groups = optimizer.param_groups
+def check_optimizer_lr_wd(optimizer_wrapper, gt_lr_wd):
+    assert isinstance(optimizer_wrapper.optimizer, torch.optim.AdamW)
+    assert optimizer_wrapper.optimizer.defaults['lr'] == base_lr
+    assert optimizer_wrapper.optimizer.defaults['weight_decay'] == base_wd
+    param_groups = optimizer_wrapper.optimizer.param_groups
     assert len(param_groups) == len(gt_lr_wd)
     for i, param_dict in enumerate(param_groups):
         assert param_dict['weight_decay'] == gt_lr_wd[i]['weight_decay']
@@ -115,6 +115,6 @@ def test_learning_rate_decay_optimizer_wrapper_constructor():
         optim_wrapper_cfg=optim_wrapper_cfg)
     optim_wrapper_cfg['optimizer']['model_type'] = 'swin'
     optimizer_wrapper = optimizer_wrapper_constructor(model)
-    assert optimizer_wrapper.param_groups[-1]['lr_scale'] == 1.0
-    assert optimizer_wrapper.param_groups[-3]['lr_scale'] == 2.0
-    assert optimizer_wrapper.param_groups[-5]['lr_scale'] == 4.0
+    assert optimizer_wrapper.optimizer.param_groups[-1]['lr_scale'] == 1.0
+    assert optimizer_wrapper.optimizer.param_groups[-3]['lr_scale'] == 2.0
+    assert optimizer_wrapper.optimizer.param_groups[-5]['lr_scale'] == 4.0
