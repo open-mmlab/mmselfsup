@@ -1,5 +1,6 @@
 # optimizer
 optimizer = dict(type='AdamW', lr=1e-3, betas=(0.9, 0.999), weight_decay=0.05)
+optim_wrapper = dict(type='OptimWrapper', optimizer=optimizer)
 
 # learning rate scheduler
 param_scheduler = [
@@ -14,4 +15,6 @@ param_scheduler = [
 ]
 
 # runtime settings
-runner = dict(type='EpochBasedRunner', max_epochs=100)
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=100)
+val_cfg = dict(interval=1)
+test_cfg = dict()

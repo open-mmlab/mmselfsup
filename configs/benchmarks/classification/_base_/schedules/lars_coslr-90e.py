@@ -1,5 +1,6 @@
 # optimizer
-optimizer = dict(type='LARS', lr=1.6, momentum=0.9, weight_decay=0.)
+optimizer = dict(type='mmselfsup.LARS', lr=1.6, momentum=0.9, weight_decay=0.)
+optim_wrapper = dict(type='OptimWrapper', optimizer=optimizer)
 
 # learning rate scheduler
 param_scheduler = [
@@ -7,4 +8,6 @@ param_scheduler = [
 ]
 
 # runtime settings
-runner = dict(type='EpochBasedRunner', max_epochs=90)
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=90)
+val_cfg = dict(interval=1)
+test_cfg = dict()
