@@ -1,12 +1,28 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Sequence, Union
 
+import torch
 import torch.nn as nn
 from mmengine import Runner
 from mmengine.dist import get_rank
+from mmengine.model import BaseModel
+from torch.utils.data import DataLoader
 
 from mmselfsup.utils import dist_forward_collect, nondist_forward_collect
 from .multi_pooling import MultiPooling
+
+
+class AvgPool2d(nn.Module):
+    """The wrapper for AdaptiveAvgPool2d, which supports tuple input."""
+
+    def __init__(self, output_size: int = 1) -> None:
+        super().__init__()
+        self.avgpool = nn.AdaptiveAvgPool2d(output_size)
+
+    def forward(self, x: Sequence[torch.Tensor]) -> List[torch.Tensor]:
+        """Forward function."""
+        assert len(x) == 1
+        return [self.avgpool(x[-1])]
 
 
 class Extractor():
@@ -16,26 +32,25 @@ class Extractor():
     pooling type. It also has distributed and non-distributed mode.
 
     Args:
-        extract_dataloader (Dict): A dict to build DataLoader object.
+        extract_dataloader (dict): A dict to build DataLoader object.
         seed (int, optional): Random seed. Defaults to None.
-        dist_mode (bool, optional): Use distributed extraction or not.
-            Defaults to False.
-        pool_cfg (Dict, optional): The configs of pooling. Defaults to
+        dist_mode (bool): Use distributed extraction or not. Defaults to False.
+        pool_cfg (dict): The configs of pooling. Defaults to
             dict(type='AvgPool2d', output_size=1).
     """
 
     POOL_MAP = {
-        'AvgPool2d': nn.AdaptiveAvgPool2d,
+        'AvgPool2d': AvgPool2d,
         'MultiPooling': MultiPooling,
     }
 
     def __init__(self,
-                 extract_dataloader: Dict,
+                 extract_dataloader: Union[DataLoader, dict],
                  seed: Optional[int] = None,
                  dist_mode: Optional[bool] = False,
-                 pool_cfg: Optional[Dict] = dict(
+                 pool_cfg: Optional[dict] = dict(
                      type='AvgPool2d', output_size=1),
-                 **kwargs):
+                 **kwargs) -> None:
         self.data_loader = Runner.build_dataloader(
             dataloader=extract_dataloader, seed=seed)
         self.dist_mode = dist_mode
@@ -44,35 +59,38 @@ class Extractor():
         self.pool_cfg = pool_cfg
         if pool_cfg is not None:
             self.pool = self.POOL_MAP[pool_cfg.pop('type')](**pool_cfg)
-            self.layer_indices = pool_cfg.get('layer_indices', [4])
+            self.feature_indices = pool_cfg.get('in_indices', [4])
 
-    def _forward_func(self, model: nn.Module, packed_data: List[Dict]) -> Dict:
+    def _forward_func(self, model: BaseModel,
+                      packed_data: List[dict]) -> Dict[str, torch.Tensor]:
         """The forward function to extract features.
 
         Args:
-            model (nn.Module): The model used for extracting.
+            model (BaseModel): The model used for extracting features.
             packed_data (List[Dict]): The input data for model.
 
         Returns:
-            Tuple[torch.Tensor]: The output features.
+            Dict[str, torch.Tensor]: The output features.
         """
+        # preprocess data
+        batch_inputs, batch_data_samples = model.data_preprocessor(packed_data)
+
         # backbone features
-        features = model(packed_data, extract=True)
+        features = model(batch_inputs, batch_data_samples, mode='tensor')
 
         # pooling features
         if self.pool_cfg is not None:
-            features = self.pool([features[-1]])
+            features = self.pool(features)
 
         # flat features
-        if not isinstance(features, (tuple, list)):
-            features = [features]
         flat_features = [feat.view(feat.size(0), -1) for feat in features]
 
+        feature_dict = dict()
         for i, feat in enumerate(flat_features):
-            feature_dict = {f'feat{self.layer_indices[i] + 1}': feat.cpu()}
+            feature_dict[f'feat{self.feature_indices[i] + 1}'] = feat.cpu()
         return feature_dict
 
-    def __call__(self, model):
+    def __call__(self, model: BaseModel) -> Dict[str, torch.Tensor]:
         model.eval()
 
         # the function sent to collect function
@@ -82,8 +100,12 @@ class Extractor():
         if self.dist_mode:
             rank = get_rank()
             feats = dist_forward_collect(
-                func, self.data_loader, rank, len(self.dataset), ret_rank=-1)
+                func,
+                self.data_loader,
+                rank,
+                len(self.data_loader.dataset),
+                ret_rank=-1)
         else:
             feats = nondist_forward_collect(func, self.data_loader,
-                                            len(self.dataset))
+                                            len(self.data_loader.dataset))
         return feats
