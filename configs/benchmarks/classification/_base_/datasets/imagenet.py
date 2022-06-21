@@ -1,44 +1,48 @@
 # dataset settings
-data_source = 'ImageNet'
-dataset_type = 'SingleViewDataset'
-img_norm_cfg = dict(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+dataset_type = 'ImageNet'
+data_root = 'data/imagenet/'
+file_client_args = dict(backend='disk')
+
 train_pipeline = [
-    dict(type='RandomResizedCrop', size=224),
-    dict(type='RandomHorizontalFlip'),
+    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='RandomResizedCrop', scale=224),
+    dict(type='RandomFlip', prob=0.5, direction='horizontal'),
+    dict(type='PackClsInputs'),
 ]
 test_pipeline = [
-    dict(type='Resize', size=256),
-    dict(type='CenterCrop', size=224),
+    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='ResizeEdge', scale=256, edge='short'),
+    dict(type='CenterCrop', crop_size=224),
+    dict(type='PackClsInputs'),
 ]
 
-# prefetch
-prefetch = False
-if not prefetch:
-    train_pipeline.extend(
-        [dict(type='ToTensor'),
-         dict(type='Normalize', **img_norm_cfg)])
-    test_pipeline.extend(
-        [dict(type='ToTensor'),
-         dict(type='Normalize', **img_norm_cfg)])
+train_dataloader = dict(
+    batch_size=32,
+    num_workers=4,
+    dataset=dict(
+        type=dataset_type,
+        data_root='data/imagenet',
+        ann_file='meta/train.txt',
+        data_prefix='train',
+        pipeline=train_pipeline),
+    sampler=dict(type='DefaultSampler', shuffle=True),
+    persistent_workers=True,
+)
 
-# dataset summary
-data = dict(
-    samples_per_gpu=32,  # total 32x8=256, 8GPU linear cls
-    workers_per_gpu=4,
-    train=dict(
+val_dataloader = dict(
+    batch_size=32,
+    num_workers=4,
+    dataset=dict(
         type=dataset_type,
-        data_source=dict(
-            type=data_source,
-            data_prefix='data/imagenet/train',
-            ann_file='data/imagenet/meta/train.txt'),
-        pipeline=train_pipeline,
-        prefetch=prefetch),
-    val=dict(
-        type=dataset_type,
-        data_source=dict(
-            type=data_source,
-            data_prefix='data/imagenet/val',
-            ann_file='data/imagenet/meta/val.txt'),
-        pipeline=test_pipeline,
-        prefetch=prefetch))
-evaluation = dict(interval=10, topk=(1, 5))
+        data_root='data/imagenet',
+        ann_file='meta/val.txt',
+        data_prefix='val',
+        pipeline=test_pipeline),
+    sampler=dict(type='DefaultSampler', shuffle=False),
+    persistent_workers=True,
+)
+val_evaluator = dict(type='mmcls.Accuracy', topk=(1, 5))
+
+# If you want standard test, please manually configure the test dataset
+test_dataloader = val_dataloader
+test_evaluator = val_evaluator
