@@ -1,12 +1,16 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import Dict, Optional
+
 import mmcv
 import numpy as np
 import torch
+from torch.utils.data import DataLoader
 
 from .gather import gather_tensors_batch
 
 
-def nondist_forward_collect(func, data_loader, length):
+def nondist_forward_collect(func: object, data_loader: DataLoader,
+                            length: int) -> Dict:
     """Forward and collect network outputs.
 
     This function performs forward propagation and collects outputs.
@@ -15,18 +19,17 @@ def nondist_forward_collect(func, data_loader, length):
     Args:
         func (function): The function to process data. The output must be
             a dictionary of CPU tensors.
-        data_loader (Dataloader): the torch Dataloader to yield data.
+        data_loader (DataLoader): the torch DataLoader to yield data.
         length (int): Expected length of output arrays.
 
     Returns:
-        results_all (dict(np.ndarray)): The concatenated outputs.
+        results_all (Dict(np.ndarray)): The concatenated outputs.
     """
     results = []
     prog_bar = mmcv.ProgressBar(len(data_loader))
-    for i, data in enumerate(data_loader):
-        input_data = dict(img=data['img'])
+    for _, data in enumerate(data_loader):
         with torch.no_grad():
-            result = func(**input_data)  # feat_dict
+            result = func(data)  # output: feat_dict
         results.append(result)  # list of feat_dict
         prog_bar.update()
 
@@ -38,7 +41,11 @@ def nondist_forward_collect(func, data_loader, length):
     return results_all
 
 
-def dist_forward_collect(func, data_loader, rank, length, ret_rank=-1):
+def dist_forward_collect(func: object,
+                         data_loader: DataLoader,
+                         rank: int,
+                         length: int,
+                         ret_rank: Optional[int] = -1) -> Dict:
     """Forward and collect network outputs in a distributed manner.
 
     This function performs forward propagation and collects outputs.
@@ -47,7 +54,7 @@ def dist_forward_collect(func, data_loader, rank, length, ret_rank=-1):
     Args:
         func (function): The function to process data. The output must be
             a dictionary of CPU tensors.
-        data_loader (Dataloader): the torch Dataloader to yield data.
+        data_loader (DataLoader): the torch DataLoader to yield data.
         rank (int): This process id.
         length (int): Expected length of output arrays.
         ret_rank (int): The process that returns.
@@ -59,9 +66,9 @@ def dist_forward_collect(func, data_loader, rank, length, ret_rank=-1):
     results = []
     if rank == 0:
         prog_bar = mmcv.ProgressBar(len(data_loader))
-    for idx, data in enumerate(data_loader):
+    for _, data in enumerate(data_loader):
         with torch.no_grad():
-            result = func(**data)  # dict{key: tensor}
+            result = func(data)  # dict{key: tensor}
         results.append(result)
 
         if rank == 0:
