@@ -3,12 +3,13 @@ from typing import Dict, List, Optional, Tuple, Union
 
 import torch
 import torch.nn as nn
-from mmcv.runner import BaseModule, get_dist_info
+from mmengine.dist import get_dist_info
+from mmengine.model import BaseModule
 
-from ..builder import HEADS, build_neck
+from mmselfsup.registry import MODELS
 
 
-@HEADS.register_module()
+@MODELS.register_module()
 class LatentPredictHead(BaseModule):
     """Head for latent feature prediction.
 
@@ -17,12 +18,14 @@ class LatentPredictHead(BaseModule):
     It also implements similarity loss between two forward features.
 
     Args:
-        predictor (Dict): Config dict for the predictor.
+        loss (dict): Config dict for the loss.
+        predictor (dict): Config dict for the predictor.
     """
 
-    def __init__(self, predictor: Dict) -> None:
+    def __init__(self, loss: dict, predictor: dict) -> None:
         super().__init__()
-        self.predictor = build_neck(predictor)
+        self.loss = MODELS.build(loss)
+        self.predictor = MODELS.build(predictor)
 
     def forward(self, input: torch.Tensor,
                 target: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
@@ -33,16 +36,17 @@ class LatentPredictHead(BaseModule):
             target (torch.Tensor): NxC target features.
 
         Returns:
-            Tuple[torch.Tensor, torch.Tensor]: The predicted features and
-                target features.
+            torch.Tensor: The latent predict loss.
         """
         pred = self.predictor([input])[0]
         target = target.detach()
 
-        return pred, target
+        loss = self.loss(pred, target)
+
+        return loss
 
 
-@HEADS.register_module()
+@MODELS.register_module()
 class LatentClsHead(BaseModule):
     """Head for latent feature classification.
 
@@ -84,7 +88,7 @@ class LatentClsHead(BaseModule):
         return dict(loss=loss)
 
 
-@HEADS.register_module()
+@MODELS.register_module()
 class LatentCrossCorrelationHead(BaseModule):
     """Head for latent feature cross correlation. Part of the code is borrowed
     from:

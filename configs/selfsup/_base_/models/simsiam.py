@@ -1,6 +1,10 @@
 # model settings
 model = dict(
     type='SimSiam',
+    data_preprocessor=dict(
+        mean=(123.675, 116.28, 103.53),
+        std=(58.395, 57.12, 57.375),
+        bgr_to_rgb=True),
     backbone=dict(
         type='ResNet',
         depth=50,
@@ -18,6 +22,7 @@ model = dict(
         with_avg_pool=True),
     head=dict(
         type='LatentPredictHead',
+        loss=dict(type='CosineSimilarityLoss'),
         predictor=dict(
             type='NonLinearNeck',
             in_channels=2048,
@@ -26,4 +31,4 @@ model = dict(
             with_avg_pool=False,
             with_last_bn=False,
             with_last_bias=True)),
-    loss=dict(type='CosineSimilarityLoss'))
+)
