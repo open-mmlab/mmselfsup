@@ -1,12 +1,15 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import List, Optional, Tuple, Union
+
+import torch
 import torch.nn as nn
 from mmcv.cnn import build_norm_layer
-from mmcv.runner import BaseModule
+from mmengine.model import BaseModule
 
-from ..builder import NECKS
+from mmselfsup.registry import MODELS
 
 
-@NECKS.register_module()
+@MODELS.register_module()
 class NonLinearNeck(BaseModule):
     """The non-linear neck.
 
@@ -34,24 +37,23 @@ class NonLinearNeck(BaseModule):
         init_cfg (dict or list[dict], optional): Initialization config dict.
     """
 
-    def __init__(self,
-                 in_channels,
-                 hid_channels,
-                 out_channels,
-                 num_layers=2,
-                 with_bias=False,
-                 with_last_bn=True,
-                 with_last_bn_affine=True,
-                 with_last_bias=False,
-                 with_avg_pool=True,
-                 vit_backbone=False,
-                 norm_cfg=dict(type='SyncBN'),
-                 init_cfg=[
-                     dict(
-                         type='Constant',
-                         val=1,
-                         layer=['_BatchNorm', 'GroupNorm'])
-                 ]):
+    def __init__(
+        self,
+        in_channels: int,
+        hid_channels: int,
+        out_channels: int,
+        num_layers: int = 2,
+        with_bias: bool = False,
+        with_last_bn: bool = True,
+        with_last_bn_affine: bool = True,
+        with_last_bias: bool = False,
+        with_avg_pool: bool = True,
+        vit_backbone: bool = False,
+        norm_cfg: dict = dict(type='SyncBN'),
+        init_cfg: Optional[Union[dict, List[dict]]] = [
+            dict(type='Constant', val=1, layer=['_BatchNorm', 'GroupNorm'])
+        ]
+    ) -> None:
         super(NonLinearNeck, self).__init__(init_cfg)
         self.with_avg_pool = with_avg_pool
         self.vit_backbone = vit_backbone
@@ -89,7 +91,7 @@ class NonLinearNeck(BaseModule):
                     self.bn_names.append(None)
             self.fc_names.append(f'fc{i}')
 
-    def forward(self, x):
+    def forward(self, x: Tuple[torch.Tensor]) -> List[torch.Tensor]:
         assert len(x) == 1
         x = x[0]
         if self.vit_backbone:

@@ -14,10 +14,15 @@ custom_hooks = [
 ]
 
 # optimizer
-optimizer = dict(lr=lr, paramwise_options={'predictor': dict(fix_lr=True)})
+optimizer = dict(type='SGD', lr=lr, weight_decay=1e-4, momentum=0.9)
+
+optim_wrapper = dict(
+    type='OptimWrapper',
+    optimizer=optimizer,
+    paramwise_cfg=dict(custom_keys={'predictor': dict(fix_lr=True)}))
 
 # runtime settings
-# the max_keep_ckpts controls the max number of ckpt file in your work_dirs
-# if it is 3, when CheckpointHook (in mmcv) saves the 4th ckpt
-# it will remove the oldest one to keep the number of total ckpts as 3
-checkpoint_config = dict(interval=10, max_keep_ckpts=3)
+default_hooks = dict(
+    logger=dict(type='LoggerHook', interval=50),
+    # only keeps the latest 3 checkpoints
+    checkpoint=dict(type='CheckpointHook', interval=10, max_keep_ckpts=3))

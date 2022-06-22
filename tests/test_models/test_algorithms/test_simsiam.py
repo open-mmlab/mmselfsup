@@ -26,6 +26,7 @@ neck = dict(
     norm_cfg=dict(type='BN1d'))
 head = dict(
     type='LatentPredictHead',
+    loss=dict(type='CosineSimilarityLoss'),
     predictor=dict(
         type='NonLinearNeck',
         in_channels=2,
@@ -35,51 +36,21 @@ head = dict(
         with_last_bn=False,
         with_last_bias=True,
         norm_cfg=dict(type='BN1d')))
-loss = dict(type='CosineSimilarityLoss')
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_simsiam():
-    preprocess_cfg = {
-        'mean': [0.485, 0.456, 0.406],
-        'std': [0.229, 0.224, 0.225],
-        'to_rgb': True
+    data_preprocessor = {
+        'mean': (123.675, 116.28, 103.53),
+        'std': (58.395, 57.12, 57.375),
+        'bgr_to_rgb': True,
     }
-    with pytest.raises(AssertionError):
-        alg = SimSiam(
-            backbone=backbone,
-            neck=neck,
-            head=None,
-            loss=loss,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
-    with pytest.raises(AssertionError):
-        alg = SimSiam(
-            backbone=backbone,
-            neck=None,
-            head=head,
-            loss=loss,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
-    with pytest.raises(AssertionError):
-        alg = SimSiam(
-            backbone=None,
-            neck=neck,
-            head=head,
-            loss=loss,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
-    with pytest.raises(AssertionError):
-        alg = SimSiam(
-            backbone=backbone,
-            neck=neck,
-            head=head,
-            loss=None,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
 
     alg = SimSiam(
         backbone=backbone,
         neck=neck,
         head=head,
-        loss=loss,
-        preprocess_cfg=copy.deepcopy(preprocess_cfg))
+        data_preprocessor=copy.deepcopy(data_preprocessor))
 
     fake_data = [{
         'inputs': [torch.randn((3, 224, 224)),
@@ -87,11 +58,10 @@ def test_simsiam():
         'data_sample':
         SelfSupDataSample()
     } for _ in range(2)]
-    fake_out = alg(fake_data, return_loss=True)
-    assert fake_out['loss'].item() > -1
+    fake_inputs, fake_data_samples = alg.data_preprocessor(fake_data)
+    fake_loss = alg(fake_inputs, fake_data_samples, mode='loss')
+    assert fake_loss['loss'] > -1
 
     # test extract
-    fake_inputs, fake_data_samples = alg.preprocss_data(fake_data)
-    fake_feat = alg.extract_feat(
-        inputs=fake_inputs, data_samples=fake_data_samples)
+    fake_feat = alg(fake_inputs, fake_data_samples, mode='tensor')
     assert fake_feat[0].size() == torch.Size([2, 512, 7, 7])
