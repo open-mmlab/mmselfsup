@@ -1,13 +1,28 @@
 _base_ = 'barlowtwins_resnet50_8xb256-coslr-300e_in1k.py'
 
-data = dict(samples_per_gpu=32)
-
-# additional hooks
-# interval for accumulate gradient, total 8*32*8(interval)=2048
-update_interval = 8
+train_dataloader = dict(batch_size=32)
 
 # optimizer
-optimizer_config = dict(update_interval=update_interval)
+optim_wrapper = dict(accumulative_iters=8)
+
+# learning rate scheduler
+param_scheduler = [
+    dict(
+        type='LinearLR',
+        start_factor=1.6e-4,
+        by_epoch=True,
+        begin=0,
+        end=10,
+        convert_to_iter_based=True),
+    dict(
+        type='CosineAnnealingLR',
+        T_max=90,
+        eta_min=0.0016,
+        by_epoch=True,
+        begin=10,
+        end=100,
+        convert_to_iter_based=True)
+]
 
 # runtime settings
-runner = dict(type='EpochBasedRunner', max_epochs=100)
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=100)

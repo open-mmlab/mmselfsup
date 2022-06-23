@@ -1,6 +1,10 @@
 # model settings
 model = dict(
     type='BarlowTwins',
+    data_preprocessor=dict(
+        mean=(123.675, 116.28, 103.53),
+        std=(58.395, 57.12, 57.375),
+        bgr_to_rgb=True),
     backbone=dict(
         type='ResNet',
         depth=50,
@@ -19,5 +23,7 @@ model = dict(
         with_avg_pool=True,
         init_cfg=dict(
             type='Kaiming', distribution='uniform', layer=['Linear'])),
-    head=dict(type='LatentCrossCorrelationHead', in_channels=8192),
-    loss=dict(type='CrossCorrelationLoss'))
+    head=dict(
+        type='LatentCrossCorrelationHead',
+        in_channels=8192,
+        loss=dict(type='CrossCorrelationLoss')))
