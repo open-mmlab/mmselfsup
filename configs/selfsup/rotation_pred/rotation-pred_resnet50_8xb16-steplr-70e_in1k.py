@@ -7,9 +7,10 @@ _base_ = [
 
 # optimizer
 optimizer = dict(type='SGD', lr=0.2, momentum=0.9, weight_decay=1e-4)
+optim_wrapper = dict(type='OptimWrapper', optimizer=optimizer)
 
 # learning rate scheduler
-scheduler = [
+param_scheduler = [
     dict(
         type='LinearLR',
         start_factor=0.1,
@@ -21,8 +22,4 @@ scheduler = [
 ]
 
 # runtime settings
-runner = dict(type='EpochBasedRunner', max_epochs=70)
-# the max_keep_ckpts controls the max number of ckpt file in your work_dirs
-# if it is 3, when CheckpointHook (in mmcv) saves the 4th ckpt
-# it will remove the oldest one to keep the number of total ckpts as 3
-checkpoint_config = dict(interval=10, max_keep_ckpts=3)
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=70)
