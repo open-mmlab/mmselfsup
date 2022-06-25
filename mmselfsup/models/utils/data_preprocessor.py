@@ -146,3 +146,53 @@ class RelativeLocDataPreprocessor(SelfSupDataPreprocessor):
         batch_inputs = [img1, img2]
 
         return batch_inputs, batch_data_samples
+
+
+@MODELS.register_module()
+class RotationPredDataPreprocessor(SelfSupDataPreprocessor):
+    """Image pre-processor for Relative Location."""
+
+    def forward(
+            self,
+            data: Sequence[dict],
+            training: bool = False
+    ) -> Tuple[List[torch.Tensor], Optional[list]]:
+        """Performs normalization、padding and bgr2rgb conversion based on
+        ``BaseDataPreprocessor``.
+
+        Args:
+            data (Sequence[dict]): data sampled from dataloader.
+            training (bool): Whether to enable training time augmentation. If
+                subclasses override this method, they can perform different
+                preprocessing strategies for training and testing based on the
+                value of ``training``.
+        Returns:
+            Tuple[torch.Tensor, Optional[list]]: Data in the same format as the
+            model input.
+        """
+        inputs, batch_data_samples = self.collate_data(data)
+        # channel transform
+        if self.channel_conversion:
+            inputs = [[img_[[2, 1, 0], ...] for img_ in _input]
+                      for _input in inputs]
+
+        # Normalization. Here is what is different from
+        # :class:`mmengine.ImgDataPreprocessor`. Since there are multiple views
+        # for an image for some  algorithms, e.g. SimCLR, each item in inputs
+        # is a list, containing multi-views for an image.
+        inputs = [[(img_ - self.mean) / self.std for img_ in _input]
+                  for _input in inputs]
+
+        batch_inputs = []
+        for i in range(len(inputs[0])):
+            cur_batch = [img[i] for img in inputs]
+            batch_inputs.append(torch.stack(cur_batch))
+
+        # This part is unique to Rotation Pred
+        img = torch.stack(batch_inputs, 1)  # Nx4xCxHxW
+        img = img.view(
+            img.size(0) * img.size(1), img.size(2), img.size(3),
+            img.size(4))  # (4N)xCxHxW
+        batch_inputs = [img]
+
+        return batch_inputs, batch_data_samples
