@@ -9,7 +9,7 @@ from mmselfsup.core import SelfSupDataSample
 from mmselfsup.models import MoCoV3
 
 backbone = dict(
-    type='VisionTransformer',
+    type='MoCoV3ViT',
     arch='mocov3-small',  # embed_dim = 384
     img_size=224,
     patch_size=16,
