@@ -2,6 +2,7 @@
 import math
 from functools import reduce
 from operator import mul
+from typing import List, Optional, Union
 
 import torch.nn as nn
 from mmcls.models.backbones import VisionTransformer as _VisionTransformer
@@ -10,11 +11,11 @@ from mmcv.cnn.bricks.transformer import PatchEmbed
 from torch.nn.modules.batchnorm import _BatchNorm
 
 from mmselfsup.models.utils import build_2d_sincos_position_embedding
-from ..builder import BACKBONES
+from mmselfsup.registry import MODELS
 
 
-@BACKBONES.register_module()
-class VisionTransformer(_VisionTransformer):
+@MODELS.register_module()
+class MoCoV3ViT(_VisionTransformer):
     """Vision Transformer.
 
     A pytorch implement of: `An Images is Worth 16x16 Words: Transformers for
@@ -24,7 +25,7 @@ class VisionTransformer(_VisionTransformer):
     `<https://github.com/facebookresearch/moco-v3/blob/main/vits.py>`_.
 
     Args:
-        stop_grad_conv1 (bool, optional): whether to stop the gradient of
+        stop_grad_conv1 (bool): whether to stop the gradient of
             convolution layer in `PatchEmbed`. Defaults to False.
         frozen_stages (int): Stages to be frozen (stop grad and set eval mode).
             -1 means not freezing any parameters. Defaults to -1.
@@ -53,12 +54,12 @@ class VisionTransformer(_VisionTransformer):
     }
 
     def __init__(self,
-                 stop_grad_conv1=False,
-                 frozen_stages=-1,
-                 norm_eval=False,
-                 init_cfg=None,
-                 **kwargs):
-        super(VisionTransformer, self).__init__(init_cfg=init_cfg, **kwargs)
+                 stop_grad_conv1: bool = False,
+                 frozen_stages: int = -1,
+                 norm_eval: bool = False,
+                 init_cfg: Optional[Union[dict, List[dict]]] = None,
+                 **kwargs) -> None:
+        super().__init__(init_cfg=init_cfg, **kwargs)
         self.patch_size = kwargs['patch_size']
         self.frozen_stages = frozen_stages
         self.norm_eval = norm_eval
@@ -71,8 +72,8 @@ class VisionTransformer(_VisionTransformer):
 
         self._freeze_stages()
 
-    def init_weights(self):
-        super(VisionTransformer, self).init_weights()
+    def init_weights(self) -> None:
+        super().init_weights()
 
         if not (isinstance(self.init_cfg, dict)
                 and self.init_cfg['type'] == 'Pretrained'):
@@ -107,7 +108,7 @@ class VisionTransformer(_VisionTransformer):
                     nn.init.zeros_(m.bias)
             nn.init.normal_(self.cls_token, std=1e-6)
 
-    def _freeze_stages(self):
+    def _freeze_stages(self) -> None:
         """Freeze patch_embed layer, some parameters and stages."""
         if self.frozen_stages >= 0:
             self.patch_embed.eval()
@@ -127,8 +128,8 @@ class VisionTransformer(_VisionTransformer):
                 for param in getattr(self, 'norm1').parameters():
                     param.requires_grad = False
 
-    def train(self, mode=True):
-        super(VisionTransformer, self).train(mode)
+    def train(self, mode: bool = True) -> None:
+        super().train(mode)
         self._freeze_stages()
         if mode and self.norm_eval:
             for m in self.modules():

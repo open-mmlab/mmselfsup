@@ -8,7 +8,7 @@ model = dict(
         std=(58.395, 57.12, 57.375),
         bgr_to_rgb=True),
     backbone=dict(
-        type='VisionTransformer',
+        type='MoCoV3ViT',
         arch='mocov3-small',  # embed_dim = 384
         img_size=224,
         patch_size=16,
