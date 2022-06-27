@@ -1,7 +1,6 @@
 default_scope = 'mmcls'
 custom_imports = dict(
-    imports=['mmselfsup.models', 'mmselfsup.core.optimizer'],
-    allow_failed_imports=False)
+    imports=['mmselfsup.models', 'mmselfsup.core'], allow_failed_imports=False)
 
 default_hooks = dict(
     runtime_info=dict(type='RuntimeInfoHook'),
