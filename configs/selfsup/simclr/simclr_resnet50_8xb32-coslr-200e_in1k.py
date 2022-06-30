@@ -6,37 +6,19 @@ _base_ = [
 ]
 
 # optimizer
-optimizer = dict(
-    type='LARS',
-    lr=0.3,
-    momentum=0.9,
-    weight_decay=1e-6,
-    paramwise_options={
-        '(bn|gn)(\\d+)?.(weight|bias)':
-        dict(weight_decay=0., lars_exclude=True),
-        'bias': dict(weight_decay=0., lars_exclude=True)
-    })
-
-# learning rate scheduler
-param_scheduler = [
-    dict(
-        type='LinearLR',
-        start_factor=1e-4,
-        by_epoch=True,
-        begin=0,
-        end=10,
-        convert_to_iter_based=True),
-    dict(
-        type='CosineAnnealingLR',
-        T_max=190,
-        eta_min=0.,
-        by_epoch=True,
-        begin=10,
-        end=200)
-]
+optimizer = dict(type='LARS', lr=0.3, momentum=0.9, weight_decay=1e-6)
+optim_wrapper = dict(
+    type='OptimWrapper',
+    optimizer=optimizer,
+    paramwise_cfg=dict(
+        custom_keys={
+            'bn': dict(decay_mult=0, lars_exclude=True),
+            'bias': dict(decay_mult=0, lars_exclude=True),
+            # bn layer in ResNet block downsample module
+            'downsample.1': dict(decay_mult=0, lars_exclude=True),
+        }))
 
 # runtime settings
-# the max_keep_ckpts controls the max number of ckpt file in your work_dirs
-# if it is 3, when CheckpointHook (in mmcv) saves the 4th ckpt
-# it will remove the oldest one to keep the number of total ckpts as 3
-checkpoint_config = dict(interval=10, max_keep_ckpts=3)
+default_hooks = dict(
+    # only keeps the latest 3 checkpoints
+    checkpoint=dict(type='CheckpointHook', interval=10, max_keep_ckpts=3))

@@ -1,6 +1,10 @@
 # model settings
 model = dict(
     type='SimCLR',
+    data_preprocessor=dict(
+        mean=(123.675, 116.28, 103.53),
+        std=(58.395, 57.12, 57.375),
+        bgr_to_rgb=True),
     backbone=dict(
         type='ResNet',
         depth=50,
@@ -15,5 +19,8 @@ model = dict(
         out_channels=128,
         num_layers=2,
         with_avg_pool=True),
-    head=dict(type='ContrastiveHead', temperature=0.1),
-    loss=dict(type='mmcls.CrossEntropyLoss'))
+    head=dict(
+        type='ContrastiveHead',
+        loss=dict(type='mmcls.CrossEntropyLoss'),
+        temperature=0.1),
+)

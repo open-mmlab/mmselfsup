@@ -22,44 +22,25 @@ neck = dict(
     out_channels=2,
     num_layers=2,
     with_avg_pool=True)
-head = dict(type='ContrastiveHead', temperature=0.1)
-loss = dict(type='mmcls.CrossEntropyLoss')
+head = dict(
+    type='ContrastiveHead',
+    loss=dict(type='mmcls.CrossEntropyLoss'),
+    temperature=0.1)
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_simclr():
-    preprocess_cfg = {
-        'mean': [0.5, 0.5, 0.5],
-        'std': [0.5, 0.5, 0.5],
-        'to_rgb': True
+    data_preprocessor = {
+        'mean': (123.675, 116.28, 103.53),
+        'std': (58.395, 57.12, 57.375),
+        'bgr_to_rgb': True,
     }
-    with pytest.raises(AssertionError):
-        alg = SimCLR(
-            backbone=backbone,
-            neck=None,
-            head=head,
-            loss=loss,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
-    with pytest.raises(AssertionError):
-        alg = SimCLR(
-            backbone=backbone,
-            neck=neck,
-            head=None,
-            loss=loss,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
-    with pytest.raises(AssertionError):
-        alg = SimCLR(
-            backbone=backbone,
-            neck=neck,
-            head=head,
-            loss=None,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
+
     alg = SimCLR(
         backbone=backbone,
         neck=neck,
         head=head,
-        loss=loss,
-        preprocess_cfg=copy.deepcopy(preprocess_cfg))
+        data_preprocessor=copy.deepcopy(data_preprocessor))
 
     fake_data = [{
         'inputs': [torch.randn((3, 224, 224)),
@@ -68,7 +49,8 @@ def test_simclr():
         SelfSupDataSample()
     } for _ in range(2)]
 
-    fake_inputs, fake_data_samples = alg.preprocss_data(fake_data)
-    fake_feat = alg.extract_feat(
-        inputs=fake_inputs, data_samples=fake_data_samples)
-    assert list(fake_feat[0].shape) == [2, 512, 7, 7]
+    fake_inputs, fake_data_samples = alg.data_preprocessor(fake_data)
+
+    # test extract
+    fake_feat = alg(fake_inputs, fake_data_samples, mode='tensor')
+    assert fake_feat[0].size() == torch.Size([2, 512, 7, 7])
