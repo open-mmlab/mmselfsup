@@ -4,7 +4,7 @@ data_root = 'data/imagenet/'
 file_client_args = dict(backend='disk')
 
 view_pipeline = [
-    dict(type='RandomResizedCrop', size=224),
+    dict(type='RandomResizedCrop', size=224, backend='pillow'),
     dict(type='RandomFlip', prob=0.5),
     dict(
         type='RandomApply',
@@ -17,7 +17,11 @@ view_pipeline = [
                 hue=0.2)
         ],
         prob=0.8),
-    dict(type='RandomGrayscale', prob=0.2, keep_channels=True),
+    dict(
+        type='RandomGrayscale',
+        prob=0.2,
+        keep_channels=True,
+        channel_weights=(0.114, 0.587, 0.2989)),
     dict(type='RandomGaussianBlur', sigma_min=0.1, sigma_max=2.0, prob=0.5),
 ]
 
