@@ -1,32 +1,65 @@
 _base_ = [
-    '../_base_/models/vit-base-p16_ft.py', '../_base_/datasets/imagenet.py',
-    '../_base_/schedules/adamw_coslr-100e_in1k.py',
-    '../_base_/default_runtime.py', '../_base_/datasets/pipelines/rand_aug.py'
+    'mmcls::_base_/datasets/imagenet_bs64_swin_224.py',
+    'mmcls::_base_/schedules/imagenet_bs1024_adamw_swin.py',
+    'mmcls::_base_/default_runtime.py'
 ]
 
-# dataset
-custom_imports = dict(imports='mmcls.datasets', allow_failed_imports=False)
+# model settings
+model = dict(
+    type='ImageClassifier',
+    backbone=dict(
+        type='VisionTransformer',
+        arch='base',
+        img_size=224,
+        patch_size=16,
+        drop_path_rate=0.1,
+        avg_token=True,
+        final_norm=False,
+        init_cfg=dict(type='Pretrained', checkpoint='')),
+    neck=None,
+    head=dict(
+        type='VisionTransformerClsHead',
+        num_classes=1000,
+        in_channels=768,
+        loss=dict(
+            type='LabelSmoothLoss', label_smooth_val=0.1, mode='original'),
+        init_cfg=[
+            dict(type='TruncNormal', layer='Linear', std=2e-5),
+            dict(type='Constant', layer='LayerNorm', val=1., bias=0.)
+        ]),
+    train_cfg=dict(augments=[
+        dict(type='Mixup', alpha=0.8, num_classes=1000),
+        dict(type='CutMix', alpha=1.0, num_classes=1000)
+    ]))
+
+# dataset settings
 preprocess_cfg = dict(
-    pixel_mean=[123.675, 116.28, 103.53],
-    pixel_std=[58.395, 57.12, 57.375],
+    # RGB format normalization parameters
+    mean=[123.675, 116.28, 103.53],
+    std=[58.395, 57.12, 57.375],
+    # convert image from BGR to RGB
     to_rgb=True,
 )
+train_dataloader = dict(batch_size=128)
 
-bgr_mean = preprocess_cfg['pixel_mean'][::-1]
-bgr_std = preprocess_cfg['pixel_std'][::-1]
-
-# train pipeline
+bgr_mean = preprocess_cfg['mean'][::-1]
+bgr_std = preprocess_cfg['std'][::-1]
+file_client_args = dict(
+    backend='memcached',
+    server_list_cfg='/mnt/lustre/share/memcached_client/pcs_server_list.conf',
+    client_cfg='/mnt/lustre/share_data/zhangwenwei/software/pymc/mc.conf',
+    sys_path='/mnt/lustre/share_data/zhangwenwei/software/pymc')
 train_pipeline = [
-    dict(type='LoadImageFromFile'),
+    dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(
-        type='mmcls.RandomResizedCrop',
+        type='RandomResizedCrop',
         scale=224,
         backend='pillow',
         interpolation='bicubic'),
     dict(type='RandomFlip', prob=0.5, direction='horizontal'),
     dict(
-        type='mmcls.RandAugment',
-        policies={{_base_.rand_increasing_policies}},
+        type='RandAugment',
+        policies='timm_increasing',
         num_policies=2,
         total_level=10,
         magnitude_level=9,
@@ -34,48 +67,47 @@ train_pipeline = [
         hparams=dict(
             pad_val=[round(x) for x in bgr_mean], interpolation='bicubic')),
     dict(
-        type='mmcls.RandomErasing',
+        type='RandomErasing',
         erase_prob=0.25,
         mode='rand',
         min_area_ratio=0.02,
         max_area_ratio=1 / 3,
         fill_color=bgr_mean,
         fill_std=bgr_std),
-    dict(type='PackSelfSupInputs', algorithm_keys=['gt_label']),
+    dict(type='PackClsInputs'),
 ]
 
-# test pipeline
 test_pipeline = [
-    dict(type='LoadImageFromFile'),
+    dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(
-        type='mmcls.ResizeEdge',
+        type='ResizeEdge',
         scale=256,
         edge='short',
         backend='pillow',
         interpolation='bicubic'),
     dict(type='CenterCrop', crop_size=224),
-    dict(type='PackSelfSupInputs', algorithm_keys=['gt_label']),
+    dict(type='PackClsInputs'),
 ]
 
-data = dict(
-    samples_per_gpu=128,
-    drop_last=False,
-    workers_per_gpu=32,
-    train=dict(pipeline=train_pipeline),
-    val=dict(pipeline=test_pipeline))
-
-# optimizer
-optimizer = dict(
-    lr=1e-3 * 1024 / 256,
-    paramwise_options={
-        'norm': dict(weight_decay=0.),
-        'bias': dict(weight_decay=0.),
-        'pos_embed': dict(weight_decay=0.),
-        'cls_token': dict(weight_decay=0.)
-    },
-    constructor='TransformerFinetuneConstructor',
-    model_type='vit',
-    layer_decay=0.65)
+# optimizer wrapper
+custom_imports = dict(imports='mmselfsup.core', allow_failed_imports=False)
+optim_wrapper = dict(
+    optimizer=dict(
+        type='AdamW',
+        lr=4e-3,
+        weight_decay=0.05,
+        eps=1e-8,
+        betas=(0.9, 0.999),
+        model_type='vit',  # layer-wise lr decay type
+        layer_decay_rate=0.65),  # layer-wise lr decay factor
+    constructor='mmselfsup.LearningRateDecayOptimWrapperConstructor',
+    paramwise_cfg=dict(
+        norm_decay_mult=0.0,
+        bias_decay_mult=0.0,
+        custom_keys={
+            '.cls_token': dict(decay_mult=0.0),
+            '.pos_embed': dict(decay_mult=0.0)
+        }))
 
 # learning rate scheduler
 param_scheduler = [
@@ -89,17 +121,18 @@ param_scheduler = [
     dict(
         type='CosineAnnealingLR',
         T_max=95,
-        eta_min=1e-6,
         by_epoch=True,
         begin=5,
         end=100,
+        eta_min=1e-6,
         convert_to_iter_based=True)
 ]
 
-# runtime
-checkpoint_config = dict(interval=1, max_keep_ckpts=3, out_dir='')
-persistent_workers = True
-log_config = dict(
-    interval=100, hooks=[
-        dict(type='TextLoggerHook'),
-    ])
+# runtime settings
+default_hooks = dict(
+    # save checkpoint per epoch.
+    checkpoint=dict(type='CheckpointHook', interval=1, max_keep_ckpts=3))
+
+train_cfg = dict(by_epoch=True, max_epochs=100)
+
+randomness = dict(seed=0)
