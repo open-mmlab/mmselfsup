@@ -1,4 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from .cae_data_preprocessor import CAEDataPreprocessor
 from .dall_e import Encoder
 from .data_preprocessor import (RelativeLocDataPreprocessor,
                                 RotationPredDataPreprocessor,
@@ -18,5 +19,5 @@ __all__ = [
     'build_2d_sincos_position_embedding', 'Sobel', 'MultiheadAttention',
     'TransformerEncoderLayer', 'CAETransformerRegressorLayer', 'Encoder',
     'CosineEMA', 'SelfSupDataPreprocessor', 'RelativeLocDataPreprocessor',
-    'RotationPredDataPreprocessor'
+    'RotationPredDataPreprocessor', 'CAEDataPreprocessor'
 ]

@@ -5,18 +5,23 @@ _base_ = [
     '../_base_/default_runtime.py',
 ]
 
-# dataset
-data = dict(samples_per_gpu=64, workers_per_gpu=8)
+# dataset 32GPUs x
+train_dataloader = dict(batch_size=64, num_workers=8)
 
-# optimizer
-optimizer = dict(
-    lr=1.5e-3,
-    paramwise_options={
-        'norm': dict(weight_decay=0.),
-        'bias': dict(weight_decay=0.),
-        'gamma': dict(weight_decay=0.)
-    },
-    betas=(0.9, 0.999))
+# optimizer wrapper
+optimizer = dict(type='AdamW', lr=1.5e-3, betas=(0.9, 0.999))
+
+optim_wrapper = dict(
+    type='AmpOptimWrapper',
+    loss_scale='dynamic',
+    optimizer=optimizer,
+    clip_grad=dict(max_norm=3.0),
+    paramwise_cfg=dict(
+        custom_keys={
+            'norm': dict(decay_mult=0.0),
+            'bias': dict(decay_mult=0.0),
+            'gamma': dict(decay_mult=0.0)
+        }))
 
 # learning rate scheduler
 param_scheduler = [
@@ -37,21 +42,15 @@ param_scheduler = [
         convert_to_iter_based=True)
 ]
 
-# schedule
-runner = dict(max_epochs=300)
+# runtime settings
+# pre-train for 300 epochs
+train_cfg = dict(max_epochs=300)
+default_hooks = dict(
+    logger=dict(type='LoggerHook', interval=100),
+    # only keeps the latest 3 checkpoints
+    checkpoint=dict(type='CheckpointHook', interval=10, max_keep_ckpts=3))
 
-# clip gradient
-optimizer_config = dict(grad_clip=dict(max_norm=3.0))
-
-# mixed precision
-fp16 = dict(loss_scale='dynamic')
-
-# runtime
-checkpoint_config = dict(interval=1, max_keep_ckpts=2, out_dir='')
-persistent_workers = True
-log_config = dict(
-    interval=100, hooks=[
-        dict(type='TextLoggerHook'),
-    ])
+# randomness
+randomness = dict(seed=0, diff_rank_seed=True)
 
 find_unused_parameters = True

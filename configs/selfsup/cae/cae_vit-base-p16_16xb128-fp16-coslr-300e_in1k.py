@@ -1,4 +1,4 @@
 _base_ = 'cae_vit-base-p16_32xb64-fp16-coslr-300e_in1k.py'
 
-# dataset
-data = dict(samples_per_gpu=128, workers_per_gpu=8)
+# dataset 128 x 16
+train_dataloader = dict(batch_size=128, num_workers=16)
