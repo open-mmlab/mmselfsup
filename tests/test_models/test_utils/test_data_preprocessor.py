@@ -6,7 +6,8 @@ from mmselfsup.models.utils import SelfSupDataPreprocessor
 
 
 def test_selfsup_data_preprocessor():
-    data_preprocessor = SelfSupDataPreprocessor(rgb_to_bgr=True)
+    data_preprocessor = SelfSupDataPreprocessor(
+        rgb_to_bgr=True, mean=[124, 117, 104], std=[59, 58, 58])
     fake_data = [{
         'inputs': [torch.randn((3, 224, 224))],
         'data_sample': SelfSupDataSample()
