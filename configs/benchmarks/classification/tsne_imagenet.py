@@ -1,21 +1,27 @@
-data_source = 'ImageNet'
-dataset_type = 'SingleViewDataset'
+custom_imports = dict(imports='mmcls.datasets', allow_failed_imports=False)
+dataset_type = 'mmcls.ImageNet'
+data_root = 'data/imagenet/'
+file_client_args = dict(backend='disk')
 name = 'imagenet_val'
-img_norm_cfg = dict(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 
-data = dict(
-    samples_per_gpu=8,
-    workers_per_gpu=4,
-    extract=dict(
-        type='SingleViewDataset',
-        data_source=dict(
-            type=data_source,
-            data_prefix='data/imagenet/val',
-            ann_file='data/imagenet/meta/val.txt',
-        ),
-        pipeline=[
-            dict(type='Resize', size=256),
-            dict(type='CenterCrop', size=224),
-            dict(type='ToTensor'),
-            dict(type='Normalize', **img_norm_cfg),
-        ]))
+extract_pipeline = [
+    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='mmcls.ResizeEdge', scale=256, edge='short'),
+    dict(type='CenterCrop', crop_size=224),
+    dict(type='PackSelfSupInputs'),
+]
+
+extract_dataloader = dict(
+    batch_size=8,
+    num_workers=4,
+    dataset=dict(
+        type=dataset_type,
+        data_root='data/imagenet',
+        ann_file='meta/val.txt',
+        data_prefix='val',
+        pipeline=extract_pipeline),
+    sampler=dict(type='DefaultSampler', shuffle=False),
+)
+
+# pooling cfg
+pool_cfg = dict(type='MultiPooling', in_indices=(1, 2, 3, 4))
