@@ -1,7 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from .cae_data_preprocessor import CAEDataPreprocessor
 from .dall_e import Encoder
-from .data_preprocessor import (RelativeLocDataPreprocessor,
+from .data_preprocessor import (CAEDataPreprocessor,
+                                RelativeLocDataPreprocessor,
                                 RotationPredDataPreprocessor,
                                 SelfSupDataPreprocessor)
 from .ema import CosineEMA
