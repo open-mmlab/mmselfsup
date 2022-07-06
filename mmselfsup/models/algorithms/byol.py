@@ -5,13 +5,12 @@ import torch
 import torch.nn as nn
 
 from mmselfsup.core import SelfSupDataSample
-from ..builder import (ALGORITHMS, build_backbone, build_head, build_loss,
-                       build_neck)
+from mmselfsup.registry import MODELS
 from ..utils import CosineEMA
 from .base import BaseModel
 
 
-@ALGORITHMS.register_module()
+@MODELS.register_module()
 class BYOL(BaseModel):
     """BYOL.
 
@@ -20,95 +19,83 @@ class BYOL(BaseModel):
     The momentum adjustment is in `core/hooks/byol_hook.py`.
 
     Args:
-        backbone (Dict, optional): Config dict for module of backbone.
-        neck (Dict, optional): Config dict for module of deep features
-            to compact feature vectors. Defaults to None.
-        head (Dict, optional): Config dict for module of head functions.
-            Defaults to None.
-        loss (Dict, optional): Config dict for module of loss functions.
-            Defaults to None.
+        backbone (dict): Config dict for module of backbone.
+        neck (dict): Config dict for module of deep features
+            to compact feature vectors.
+        head (dict): Config dict for module of head functions.
         base_momentum (float): The base momentum coefficient for the target
             network. Defaults to 0.996.
-        preprocess_cfg (Dict, optional): Config dict to preprocess images.
+        pretrained (str, optional): The pretrained checkpoint path, support
+            local path and remote path. Defaults to None.
+        data_preprocessor (dict, optional): Config dict to preprocess images.
             Defaults to None.
-        init_cfg (Dict or List[Dict], optional): Config dict for weight
+        init_cfg (dict or List[dict], optional): Config dict for weight
             initialization. Defaults to None.
     """
 
     def __init__(self,
-                 backbone: Optional[Dict] = None,
-                 neck: Optional[Dict] = None,
-                 head: Optional[Dict] = None,
-                 loss: Optional[Dict] = None,
+                 backbone: dict,
+                 neck: dict,
+                 head: dict,
                  base_momentum: float = 0.996,
-                 preprocess_cfg: Optional[Dict] = None,
-                 init_cfg: Optional[Union[Dict, List[Dict]]] = None,
-                 **kwargs) -> None:
-        super().__init__(preprocess_cfg=preprocess_cfg, init_cfg=init_cfg)
-        assert backbone is not None
-        assert neck is not None
-        self.online_net = nn.Sequential(
-            build_backbone(backbone), build_neck(neck))
-        self.backbone = self.online_net[0]
-        self.neck = self.online_net[1]
-        assert head is not None
-        self.head = build_head(head)
-        assert loss is not None
-        self.loss = build_loss(loss)
+                 pretrained: Optional[str] = None,
+                 data_preprocessor: Optional[dict] = None,
+                 init_cfg: Optional[Union[dict, List[dict]]] = None) -> None:
+        super().__init__(
+            backbone=backbone,
+            neck=neck,
+            head=head,
+            pretrained=pretrained,
+            data_preprocessor=data_preprocessor,
+            init_cfg=init_cfg)
 
         # create momentum model
-        self.target_net = CosineEMA(self.online_net, momentum=base_momentum)
-        for param_tgt in self.target_net.module.parameters():
-            param_tgt.requires_grad = False
+        self.target_net = CosineEMA(
+            nn.Sequential(self.backbone, self.neck), momentum=base_momentum)
 
-    def extract_feat(self, inputs: List[torch.Tensor],
-                     data_samples: List[SelfSupDataSample],
+    def extract_feat(self, batch_inputs: List[torch.Tensor],
                      **kwargs) -> Tuple[torch.Tensor]:
         """Function to extract features from backbone.
 
         Args:
             inputs (List[torch.Tensor]): The input images.
-            data_samples (List[SelfSupDataSample]): All elements required
-                during the forward function.
 
         Returns:
             Tuple[torch.Tensor]: backbone outputs.
         """
-        x = self.backbone(inputs[0])
+        x = self.backbone(batch_inputs[0])
         return x
 
-    def forward_train(self, inputs: List[torch.Tensor],
-                      data_samples: List[SelfSupDataSample],
-                      **kwargs) -> Dict[str, torch.Tensor]:
+    def loss(self, batch_inputs: List[torch.Tensor],
+             data_samples: List[SelfSupDataSample],
+             **kwargs) -> Dict[str, torch.Tensor]:
         """Forward computation during training.
 
         Args:
-            inputs (List[torch.Tensor]): The input images.
+            batch_inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
         Returns:
             Dict[str, torch.Tensor]: A dictionary of loss components.
         """
-        assert isinstance(inputs, list)
-        img_v1 = inputs[0]
-        img_v2 = inputs[1]
+        assert isinstance(batch_inputs, list)
+        img_v1 = batch_inputs[0]
+        img_v2 = batch_inputs[1]
         # compute online features
-        proj_online_v1 = self.online_net(img_v1)[0]
-        proj_online_v2 = self.online_net(img_v2)[0]
+        proj_online_v1 = self.neck(self.backbone(img_v1))[0]
+        proj_online_v2 = self.neck(self.backbone(img_v2))[0]
         # compute target features
         with torch.no_grad():
             # update the target net
-            self.target_net.update_parameters(self.online_net)
+            self.target_net.update_parameters(
+                nn.Sequential(self.backbone, self.neck))
 
             proj_target_v1 = self.target_net(img_v1)[0]
             proj_target_v2 = self.target_net(img_v2)[0]
 
-        pred_1, target_1 = self.head(proj_online_v1, proj_target_v2)
-        pred_2, target_2 = self.head(proj_online_v2, proj_target_v1)
-
-        loss_1 = self.loss(pred_1, target_1)
-        loss_2 = self.loss(pred_2, target_2)
+        loss_1 = self.head(proj_online_v1, proj_target_v2)
+        loss_2 = self.head(proj_online_v2, proj_target_v1)
 
         losses = dict(loss=2. * (loss_1 + loss_2))
         return losses

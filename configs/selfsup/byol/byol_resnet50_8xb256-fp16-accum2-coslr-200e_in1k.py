@@ -6,33 +6,23 @@ _base_ = [
 ]
 
 # dataset summary
-data = dict(samples_per_gpu=256)
-
-# additional hooks
-# interval for accumulate gradient, total 8*256*2(interval)=4096
-update_interval = 2
-custom_hooks = [
-    dict(type='BYOLHook', end_momentum=1., update_interval=update_interval)
-]
+train_dataloader = dict(batch_size=256)
 
 # optimizer
-optimizer = dict(
-    type='LARS',
-    lr=4.8,
-    momentum=0.9,
-    weight_decay=1e-6,
-    paramwise_options={
-        '(bn|gn)(\\d+)?.(weight|bias)':
-        dict(weight_decay=0., lars_exclude=True),
-        'bias': dict(weight_decay=0., lars_exclude=True)
-    })
-optimizer_config = dict(update_interval=update_interval)
-
-# fp16
-fp16 = dict(loss_scale=512.)
+optimizer = dict(type='LARS', lr=4.8, momentum=0.9, weight_decay=1e-6)
+optim_wrapper = dict(
+    type='AmpOptimWrapper',
+    loss_scale=512.,
+    optimizer=optimizer,
+    accumulative_iters=2,
+    paramwise_cfg=dict(
+        custom_keys={
+            'bn': dict(decay_mult=0, lars_exclude=True),
+            'bias': dict(decay_mult=0, lars_exclude=True),
+            # bn layer in ResNet block downsample module
+            'downsample.1': dict(decay_mult=0, lars_exclude=True),
+        }),
+)
 
 # runtime settings
-# the max_keep_ckpts controls the max number of ckpt file in your work_dirs
-# if it is 3, when CheckpointHook (in mmcv) saves the 4th ckpt
-# it will remove the oldest one to keep the number of total ckpts as 3
-checkpoint_config = dict(interval=10, max_keep_ckpts=3)
+default_hooks = dict(checkpoint=dict(max_keep_ckpts=3))

@@ -1,4 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import Iterable
+
 import torch
 from torch.optim.optimizer import Optimizer
 
@@ -9,23 +11,20 @@ from mmselfsup.registry import OPTIMIZERS
 class LARS(Optimizer):
     """Implements layer-wise adaptive rate scaling for SGD.
 
-    Args:
-        params (iterable): Iterable of parameters to optimize or dicts defining
-            parameter groups.
-        lr (float): Base learning rate.
-        momentum (float, optional): Momentum factor. Defaults to 0 ('m')
-        weight_decay (float, optional): Weight decay (L2 penalty).
-            Defaults to 0. ('beta')
-        dampening (float, optional): Dampening for momentum. Defaults to 0.
-        eta (float, optional): LARS coefficient. Defaults to 0.001.
-        nesterov (bool, optional): Enables Nesterov momentum.
-            Defaults to False.
-        eps (float, optional): A small number to avoid dviding zero.
-            Defaults to 1e-8.
-
     Based on Algorithm 1 of the following paper by You, Gitman, and Ginsburg.
     `Large Batch Training of Convolutional Networks:
         <https://arxiv.org/abs/1708.03888>`_.
+
+    Args:
+        params (Iterable): Iterable of parameters to optimize or dicts defining
+            parameter groups.
+        lr (float): Base learning rate.
+        momentum (float): Momentum factor. Defaults to 0.
+        weight_decay (float): Weight decay (L2 penalty). Defaults to 0.
+        dampening (float): Dampening for momentum. Defaults to 0.
+        eta (float): LARS coefficient. Defaults to 0.001.
+        nesterov (bool): Enables Nesterov momentum. Defaults to False.
+        eps (float): A small number to avoid dviding zero. Defaults to 1e-8.
 
     Example:
         >>> optimizer = LARS(model.parameters(), lr=0.1, momentum=0.9,
@@ -36,14 +35,14 @@ class LARS(Optimizer):
     """
 
     def __init__(self,
-                 params,
-                 lr=float,
-                 momentum=0,
-                 weight_decay=0,
-                 dampening=0,
-                 eta=0.001,
-                 nesterov=False,
-                 eps=1e-8):
+                 params: Iterable,
+                 lr: float,
+                 momentum: float = 0,
+                 weight_decay: float = 0,
+                 dampening: float = 0,
+                 eta: float = 0.001,
+                 nesterov: bool = False,
+                 eps: float = 1e-8) -> None:
         if not isinstance(lr, float) and lr < 0.0:
             raise ValueError(f'Invalid learning rate: {lr}')
         if momentum < 0.0:
@@ -65,15 +64,15 @@ class LARS(Optimizer):
                 'Nesterov momentum requires a momentum and zero dampening')
 
         self.eps = eps
-        super(LARS, self).__init__(params, defaults)
+        super().__init__(params, defaults)
 
-    def __setstate__(self, state):
-        super(LARS, self).__setstate__(state)
+    def __setstate__(self, state) -> None:
+        super().__setstate__(state)
         for group in self.param_groups:
             group.setdefault('nesterov', False)
 
     @torch.no_grad()
-    def step(self, closure=None):
+    def step(self, closure=None) -> torch.Tensor:
         """Performs a single optimization step.
 
         Args:
