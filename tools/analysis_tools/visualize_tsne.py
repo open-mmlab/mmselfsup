@@ -2,31 +2,30 @@
 import argparse
 import os.path as osp
 import time
+from functools import partial
+from typing import Optional
 
 import matplotlib.pyplot as plt
-import mmcv
 import numpy as np
 import torch
-from mmcv import Config, DictAction
-from mmcv.parallel import MMDataParallel, MMDistributedDataParallel
-from mmcv.runner import get_dist_info, init_dist, load_checkpoint
+from mmengine.config import Config, DictAction
+from mmengine.data import pseudo_collate, worker_init_fn
+from mmengine.dist import get_rank, init_dist
+from mmengine.model.wrappers import MMDistributedDataParallel, is_model_wrapper
+from mmengine.runner import load_checkpoint
+from mmengine.utils import mkdir_or_exist
 from sklearn.manifold import TSNE
+from torch.utils.data import DataLoader
 
-from mmselfsup.apis import set_random_seed
-from mmselfsup.datasets import build_dataloader, build_dataset
-from mmselfsup.models import build_algorithm
-from mmselfsup.models.utils import MultiExtractProcess
-from mmselfsup.utils import get_root_logger
+from mmselfsup.models.utils import Extractor
+from mmselfsup.registry import DATA_SAMPLERS, DATASETS, MODELS
+from mmselfsup.utils import get_root_logger, register_all_modules
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description='t-SNE visualization')
     parser.add_argument('config', help='train config file path')
     parser.add_argument('--checkpoint', default=None, help='checkpoint file')
-    parser.add_argument(
-        '--work_dir',
-        help='(Deprecated, please use --work-dir) the dir to save logs and '
-        'models')
     parser.add_argument('--work-dir', help='the dir to save logs and models')
     parser.add_argument(
         '--launcher',
@@ -34,43 +33,9 @@ def parse_args():
         default='none',
         help='job launcher')
     parser.add_argument(
-        '--dataset_config',
-        default='configs/benchmarks/classification/tsne_imagenet.py',
-        help='(Deprecated, please use --dataset-config) '
-        'extract dataset config file path')
-    parser.add_argument(
         '--dataset-config',
         default='configs/benchmarks/classification/tsne_imagenet.py',
         help='extract dataset config file path')
-    parser.add_argument(
-        '--layer_ind',
-        type=str,
-        default='0,1,2,3,4',
-        help='(Deprecated, please use --layer-ind) layer indices, '
-        'separated by comma, e.g., "0,1,2,3,4"')
-    parser.add_argument(
-        '--layer-ind',
-        type=str,
-        default='0,1,2,3,4',
-        help='layer indices, separated by comma, e.g., "0,1,2,3,4"')
-    parser.add_argument(
-        '--pool_type',
-        choices=['specified', 'adaptive'],
-        default='specified',
-        help='(Deprecated, please use --pool-type) Pooling type in '
-        ':class:`MultiPooling`')
-    parser.add_argument(
-        '--pool-type',
-        choices=['specified', 'adaptive'],
-        default='specified',
-        help='Pooling type in :class:`MultiPooling`')
-    parser.add_argument(
-        '--max_num_class',
-        type=int,
-        default=20,
-        help='(Deprecated, please use --max-num-class) the maximum number '
-        'of classes to apply t-SNE algorithms, now the function supports '
-        'maximum 20 classes')
     parser.add_argument(
         '--max-num-class',
         type=int,
@@ -95,12 +60,6 @@ def parse_args():
 
     # t-SNE settings
     parser.add_argument(
-        '--n_components',
-        type=int,
-        default=2,
-        help='(Deprecated, please use --n-components) the dimension of results'
-    )
-    parser.add_argument(
         '--n-components', type=int, default=2, help='the dimension of results')
     parser.add_argument(
         '--perplexity',
@@ -109,28 +68,11 @@ def parse_args():
         help='The perplexity is related to the number of nearest neighbors'
         'that is used in other manifold learning algorithms.')
     parser.add_argument(
-        '--early_exaggeration',
-        type=float,
-        default=12.0,
-        help='(Deprecated, please use --early-exaggeration) Controls how '
-        'tight natural clusters in the original space are in the embedded '
-        'space and how much space will be between them.')
-    parser.add_argument(
         '--early-exaggeration',
         type=float,
         default=12.0,
         help='Controls how tight natural clusters in the original space are in'
         'the embedded space and how much space will be between them.')
-    parser.add_argument(
-        '--learning_rate',
-        type=float,
-        default=200.0,
-        help='(Deprecated, please use --learning-rate) The learning rate '
-        'for t-SNE is usually in the range [10.0, 1000.0]. '
-        'If the learning rate is too high, the data may look'
-        'like a ball with any point approximately equidistant from its nearest'
-        'neighbours. If the learning rate is too low, most points may look'
-        'compressed in a dense cloud with few outliers.')
     parser.add_argument(
         '--learning-rate',
         type=float,
@@ -141,24 +83,11 @@ def parse_args():
         'neighbours. If the learning rate is too low, most points may look'
         'compressed in a dense cloud with few outliers.')
     parser.add_argument(
-        '--n_iter',
-        type=int,
-        default=1000,
-        help='(Deprecated, please use --n-iter) Maximum number of iterations '
-        'for the optimization. Should be at least 250.')
-    parser.add_argument(
         '--n-iter',
         type=int,
         default=1000,
         help='Maximum number of iterations for the optimization. Should be at'
         'least 250.')
-    parser.add_argument(
-        '--n_iter_without_progress',
-        type=int,
-        default=300,
-        help='(Deprecated, please use --n-iter-without-progress) Maximum '
-        'number of iterations without progress before we abort the '
-        'optimization.')
     parser.add_argument(
         '--n-iter-without-progress',
         type=int,
@@ -173,6 +102,9 @@ def parse_args():
 
 def main():
     args = parse_args()
+
+    # register all modules in mmselfsup into the registries
+    register_all_modules()
 
     cfg = Config.fromfile(args.config)
     if args.cfg_options is not None:
@@ -190,63 +122,70 @@ def main():
         cfg.work_dir = osp.join('./work_dirs', work_type,
                                 osp.splitext(osp.basename(args.config))[0])
 
-    # get out_indices from args
-    layer_ind = [int(idx) for idx in args.layer_ind.split(',')]
-    cfg.model.backbone.out_indices = layer_ind
-
     # init distributed env first, since logger depends on the dist info.
     if args.launcher == 'none':
         distributed = False
     else:
         distributed = True
-        init_dist(args.launcher, **cfg.dist_params)
+        init_dist(args.launcher)
 
-    # create work_dir and init the logger before other steps
+    # create work_dir
     timestamp = time.strftime('%Y%m%d_%H%M%S', time.localtime())
     tsne_work_dir = osp.join(cfg.work_dir, f'tsne_{timestamp}/')
-    mmcv.mkdir_or_exist(osp.abspath(tsne_work_dir))
+    mkdir_or_exist(osp.abspath(tsne_work_dir))
+
+    # init the logger before other steps
     log_file = osp.join(tsne_work_dir, 'extract.log')
     logger = get_root_logger(log_file=log_file, log_level=cfg.log_level)
 
-    # set random seeds
-    if args.seed is not None:
-        logger.info(f'Set random seed to {args.seed}, '
-                    f'deterministic: {args.deterministic}')
-        set_random_seed(args.seed, deterministic=args.deterministic)
+    # build the dataset
+    dataset_cfg = Config.fromfile(args.dataset_config)
+    extract_dataloader_cfg = dataset_cfg.get('extract_dataloader')
+    extract_dataset_cfg = extract_dataloader_cfg.pop('dataset')
+    if isinstance(extract_dataset_cfg, dict):
+        dataset = DATASETS.build(extract_dataset_cfg)
+        if hasattr(dataset, 'full_init'):
+            dataset.full_init()
 
-    # build the dataloader
-    dataset_cfg = mmcv.Config.fromfile(args.dataset_config)
-    dataset = build_dataset(dataset_cfg.data.extract)
     # compress dataset, select that the label is less then max_num_class
-    tmp_infos = []
+    subset_idx_list = []
     for i in range(len(dataset)):
-        if dataset.data_source.data_infos[i]['gt_label'] < args.max_num_class:
-            tmp_infos.append(dataset.data_source.data_infos[i])
-    dataset.data_source.data_infos = tmp_infos
-    logger.info(f'Apply t-SNE to visualize {len(dataset)} samples.')
+        if dataset.get_data_info(i)['gt_label'] < args.max_num_class:
+            subset_idx_list.append(i)
+    dataset.get_subset_(subset_idx_list)
+    logger.info(f'Apply t-SNE to visualize {len(subset_idx_list)} samples.')
 
-    if 'imgs_per_gpu' in cfg.data:
-        logger.warning('"imgs_per_gpu" is deprecated. '
-                       'Please use "samples_per_gpu" instead')
-        if 'samples_per_gpu' in cfg.data:
-            logger.warning(
-                f'Got "imgs_per_gpu"={cfg.data.imgs_per_gpu} and '
-                f'"samples_per_gpu"={cfg.data.samples_per_gpu}, "imgs_per_gpu"'
-                f'={cfg.data.imgs_per_gpu} is used in this experiments')
-        else:
-            logger.warning(
-                'Automatically set "samples_per_gpu"="imgs_per_gpu"='
-                f'{cfg.data.imgs_per_gpu} in this experiments')
-        cfg.data.samples_per_gpu = cfg.data.imgs_per_gpu
-    data_loader = build_dataloader(
-        dataset,
-        samples_per_gpu=dataset_cfg.data.samples_per_gpu,
-        workers_per_gpu=dataset_cfg.data.workers_per_gpu,
-        dist=distributed,
-        shuffle=False)
+    # build sampler
+    sampler_cfg = extract_dataloader_cfg.pop('sampler')
+    if isinstance(sampler_cfg, dict):
+        sampler = DATA_SAMPLERS.build(
+            sampler_cfg, default_args=dict(dataset=dataset, seed=args.seed))
+
+    # build dataloader
+    init_fn: Optional[partial]
+    if args.seed is not None:
+        init_fn = partial(
+            worker_init_fn,
+            num_workers=extract_dataloader_cfg.get('num_workers'),
+            rank=get_rank(),
+            seed=args.seed)
+    else:
+        init_fn = None
+
+    tsne_dataloader = DataLoader(
+        dataset=dataset,
+        sampler=sampler,
+        collate_fn=pseudo_collate,
+        worker_init_fn=init_fn,
+        **extract_dataloader_cfg)
 
     # build the model
-    model = build_algorithm(cfg.model)
+    # get backbone out_indices from pool_cfg in tsne_dataset_config
+    cfg.model.backbone.out_indices = dataset_cfg.pool_cfg.get(
+        'in_indices', [4])
+    logger.info(
+        f'The output indices of backbone is {cfg.model.backbone.out_indices}.')
+    model = MODELS.build(cfg.model)
     model.init_weights()
 
     # model is determined in this priority: init_cfg > checkpoint > random
@@ -262,25 +201,32 @@ def main():
     else:
         logger.info('No pretrained or checkpoint is given, use random init.')
 
-    if not distributed:
-        model = MMDataParallel(model, device_ids=[0])
-    else:
+    if torch.cuda.is_available():
+        model = model.cuda()
+
+    if distributed:
         model = MMDistributedDataParallel(
-            model.cuda(),
+            module=model.cuda(),
             device_ids=[torch.cuda.current_device()],
             broadcast_buffers=False)
 
-    # build extraction processor and run
-    extractor = MultiExtractProcess(
-        pool_type=args.pool_type, backbone='resnet50', layer_indices=layer_ind)
-    features = extractor.extract(model, data_loader, distributed=distributed)
-    labels = dataset.data_source.get_gt_labels()
+    if is_model_wrapper(model):
+        model = model.module
+
+    # build extractor and extract features
+    extractor = Extractor(
+        extract_dataloader=tsne_dataloader,
+        seed=args.seed,
+        pool_cfg=dataset_cfg.pool_cfg,
+        dist_mode=distributed)
+    features = extractor(model)
+    labels = tsne_dataloader.dataset.get_gt_labels()
 
     # save features
-    mmcv.mkdir_or_exist(f'{tsne_work_dir}features/')
+    mkdir_or_exist(f'{tsne_work_dir}features/')
     logger.info(f'Save features to {tsne_work_dir}features/')
     if distributed:
-        rank, _ = get_dist_info()
+        rank = get_rank()
         if rank == 0:
             for key, val in features.items():
                 output_file = \
@@ -303,7 +249,7 @@ def main():
         init=args.init)
 
     # run and get results
-    mmcv.mkdir_or_exist(f'{tsne_work_dir}saved_pictures/')
+    mkdir_or_exist(f'{tsne_work_dir}saved_pictures/')
     logger.info('Running t-SNE......')
     for key, val in features.items():
         result = tsne_model.fit_transform(val)
