@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Dict, List, Optional, Sequence, Union
+from typing import Dict, List, Sequence, Tuple, Union
 
 import torch
 import torch.nn as nn
@@ -22,20 +22,29 @@ class MultiClsHead(ClsHead):
     linear classifier at each stage to predict corresponding class scores.
 
     Args:
-        backbone (str, optional): Specify which backbone to use, only support
+        backbone (str): Specify which backbone to use, only support
             ResNet50. Defaults to 'resnet50'.
-        in_indices (Sequence[int], optional): Input from which stages.
+        in_indices (Sequence[int]): Input from which stages.
             Defaults to (0, 1, 2, 3, 4).
-        pool_type (str, optional): 'adaptive' or 'specified'. If set to
+        pool_type (str): 'adaptive' or 'specified'. If set to
             'adaptive', use adaptive average pooling, otherwise use specified
             pooling params. Defaults to 'adaptive'.
-        num_classes (int, optional): Number of classes. Defaults to 1000.
-        loss (Dict, optional): The Dict of loss information. Defaults to
-            'mmcls.models.CrossEntropyLoss'
-        with_last_layer_unpool (bool, optional): Whether to unpool the features
+        num_classes (int): Number of classes. Defaults to 1000.
+        loss (dict): The Dict of loss information. Defaults to
+            'mmcls.models.CrossEntro): Whether to unpool the features
             from last layer. Defaults to False.
-        norm_cfg (Dict, optional): Dict to construct and config norm layer.
-        init_cfg (Dict or List[Dict], optional): Initialization config dict.
+        cal_acc (bool): Whether to calculate accuracy during training.
+            If you use batch augmentations like Mixup and CutMix during
+            training, it is pointless to calculate accuracy.
+            Defaults to False.
+        topk (int | Tuple[int]): Top-k accuracy. Defaults to ``(1, )``.
+        norm_cfg (dict): Dict to construct and config norm layer.
+            Defaults to ``dict(type='BN')``.
+        init_cfg (dict or List[dict]): Initialization config dict.
+            Defaults to ``[
+            dict(type='Normal', std=0.01, layer='Linear'),
+            dict(type='Constant', val=1, layer=['_BatchNorm', 'GroupNorm'])
+            ]``
     """
 
     FEAT_CHANNELS = {'resnet50': [64, 256, 512, 1024, 2048]}
@@ -43,15 +52,16 @@ class MultiClsHead(ClsHead):
 
     def __init__(
         self,
-        backbone: Optional[str] = 'resnet50',
-        in_indices: Optional[Sequence[int]] = (0, 1, 2, 3, 4),
-        pool_type: Optional[str] = 'adaptive',
-        num_classes: Optional[int] = 1000,
-        loss: Optional[Dict] = dict(
-            type='mmcls.CrossEntropyLoss', loss_weight=1.0),
-        with_last_layer_unpool: Optional[bool] = False,
-        norm_cfg: Optional[Dict] = dict(type='BN'),
-        init_cfg: Optional[Union[Dict, List[Dict]]] = [
+        backbone: str = 'resnet50',
+        in_indices: Sequence[int] = (0, 1, 2, 3, 4),
+        pool_type: str = 'adaptive',
+        num_classes: int = 1000,
+        loss: dict = dict(type='mmcls.CrossEntropyLoss', loss_weight=1.0),
+        with_last_layer_unpool: bool = False,
+        cal_acc: bool = False,
+        topk: Union[int, Tuple[int]] = (1, ),
+        norm_cfg: dict = dict(type='BN'),
+        init_cfg: Union[Dict, List[Dict]] = [
             dict(type='Normal', std=0.01, layer='Linear'),
             dict(type='Constant', val=1, layer=['_BatchNorm', 'GroupNorm'])
         ]
@@ -80,10 +90,12 @@ class MultiClsHead(ClsHead):
             for i in in_indices
         ])
 
+        self.cal_acc = cal_acc
+        self.topk = topk
         # build loss
         self.loss_module = MODELS.build(loss)
 
-    def forward(self, feats):
+    def forward(self, feats: Union[list, tuple]) -> list:
         """Compute multi-head scores.
 
         Args:
@@ -96,6 +108,7 @@ class MultiClsHead(ClsHead):
         assert isinstance(feats, (list, tuple))
         if self.with_last_layer_unpool:
             last_feats = feats[-1]
+
         feats = self.multi_pooling(feats)
 
         if self.with_norm:
@@ -109,7 +122,7 @@ class MultiClsHead(ClsHead):
         return cls_score
 
     def loss(self, feats: Sequence[torch.Tensor],
-             data_samples: List[ClsDataSample], **kwargs) -> Dict:
+             data_samples: List[ClsDataSample], **kwargs) -> dict:
         """Calculate losses from the extracted features.
 
         Args:
@@ -131,11 +144,17 @@ class MultiClsHead(ClsHead):
             target = torch.hstack(
                 [data_sample.gt_label.label for data_sample in data_samples])
 
-        # compute loss
+        # compute loss and accuracy
         losses = dict()
         for i, score in zip(self.in_indices, cls_score):
             losses[f'loss.{i + 1}'] = self.loss_module(score, target)
-            losses[f'accuracy.{i + 1}'] = Accuracy.calculate(score, target)
+            if self.cal_acc:
+                acc = Accuracy.calculate(score, target, topk=self.topk)
+                losses.update({
+                    f'accuracy.{i+1}.top-{k}': a
+                    for k, a in zip(self.topk, acc)
+                })
+
         return losses
 
     def predict(self, feats: Sequence[torch.Tensor],

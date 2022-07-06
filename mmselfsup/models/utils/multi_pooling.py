@@ -1,6 +1,8 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import List, Tuple, Union
+
 import torch.nn as nn
-from mmcv.runner import BaseModule
+from mmengine.model import BaseModule
 
 
 class MultiPooling(BaseModule):
@@ -27,12 +29,13 @@ class MultiPooling(BaseModule):
     POOL_DIMS = {'resnet50': [9216, 9216, 8192, 9216, 8192]}
 
     def __init__(self,
-                 pool_type='adaptive',
-                 in_indices=(0, ),
-                 backbone='resnet50'):
-        super(MultiPooling, self).__init__()
+                 pool_type: str = 'adaptive',
+                 in_indices: tuple = (0, ),
+                 backbone: str = 'resnet50') -> None:
+        super().__init__()
         assert pool_type in ['adaptive', 'specified']
         assert backbone == 'resnet50', 'Now only support resnet50.'
+
         if pool_type == 'adaptive':
             self.pools = nn.ModuleList([
                 nn.AdaptiveAvgPool2d(self.POOL_SIZES[backbone][i])
@@ -44,6 +47,6 @@ class MultiPooling(BaseModule):
                 for i in in_indices
             ])
 
-    def forward(self, x):
+    def forward(self, x: Union[List, Tuple]) -> None:
         assert isinstance(x, (list, tuple))
         return [p(xx) for p, xx in zip(self.pools, x)]

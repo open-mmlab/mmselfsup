@@ -18,7 +18,7 @@ class TestMultiClsHead(TestCase):
         fake_data_samples = [ClsDataSample().set_gt_label(1) for _ in range(2)]
         losses = head.loss(fake_in, fake_data_samples)
         print(losses)
-        self.assertEqual(len(losses.keys()), 4)
+        self.assertEqual(len(losses.keys()), 2)
         for k in losses.keys():
             assert k.startswith('loss') or k.startswith('accuracy')
             if k.startswith('loss'):

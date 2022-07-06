@@ -1,5 +1,10 @@
 model = dict(
-    type='Classification',
+    type='ImageClassifier',
+    data_preprocessor=dict(
+        mean=[123.675, 116.28, 103.53],
+        std=[58.395, 57.12, 57.375],
+        to_rgb=True,
+    ),
     backbone=dict(
         type='ResNet',
         depth=50,
@@ -8,7 +13,7 @@ model = dict(
         norm_cfg=dict(type='BN'),
         frozen_stages=-1),
     head=dict(
-        type='MultiClsHead',
+        type='mmselfsup.MultiClsHead',
         pool_type='specified',
         in_indices=[0, 1, 2, 3, 4],
         with_last_layer_unpool=False,
