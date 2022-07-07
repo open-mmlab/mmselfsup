@@ -1,11 +1,14 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import List, Optional, Union
+
+import torch
 import torch.nn as nn
-from mmcv.runner import BaseModule
+from mmengine.model import BaseModule
 
-from ..builder import NECKS
+from mmselfsup.registry import MODELS
 
 
-@NECKS.register_module()
+@MODELS.register_module()
 class DenseCLNeck(BaseModule):
     """The non-linear neck of DenseCL.
 
@@ -22,11 +25,11 @@ class DenseCLNeck(BaseModule):
     """
 
     def __init__(self,
-                 in_channels,
-                 hid_channels,
-                 out_channels,
-                 num_grid=None,
-                 init_cfg=None):
+                 in_channels: int,
+                 hid_channels: int,
+                 out_channels: int,
+                 num_grid: Optional[int] = None,
+                 init_cfg: Optional[Union[dict, List[dict]]] = None) -> None:
         super(DenseCLNeck, self).__init__(init_cfg)
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.mlp = nn.Sequential(
@@ -41,7 +44,7 @@ class DenseCLNeck(BaseModule):
             nn.Conv2d(hid_channels, out_channels, 1))
         self.avgpool2 = nn.AdaptiveAvgPool2d((1, 1))
 
-    def forward(self, x):
+    def forward(self, x: List[torch.Tensor]) -> List[torch.Tensor]:
         """Forward function of neck.
 
         Args:

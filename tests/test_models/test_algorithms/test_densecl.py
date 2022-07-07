@@ -27,8 +27,10 @@ neck = dict(
     hid_channels=2,
     out_channels=2,
     num_grid=None)
-head = dict(type='ContrastiveHead', temperature=0.2)
-loss = dict(type='mmcls.CrossEntropyLoss')
+head = dict(
+    type='ContrastiveHead',
+    loss=dict(type='mmcls.CrossEntropyLoss'),
+    temperature=0.2)
 
 
 def mock_batch_shuffle_ddp(img):
@@ -45,43 +47,21 @@ def mock_concat_all_gather(img):
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_densecl():
-    preprocess_cfg = {
-        'mean': [0.5, 0.5, 0.5],
-        'std': [0.5, 0.5, 0.5],
-        'to_rgb': True
+    data_preprocessor = {
+        'mean': (123.675, 116.28, 103.53),
+        'std': (58.395, 57.12, 57.375),
+        'bgr_to_rgb': True
     }
-    with pytest.raises(AssertionError):
-        alg = DenseCL(
-            backbone=backbone,
-            neck=None,
-            head=head,
-            loss=loss,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
-    with pytest.raises(AssertionError):
-        alg = DenseCL(
-            backbone=backbone,
-            neck=neck,
-            head=None,
-            loss=loss,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
-    with pytest.raises(AssertionError):
-        alg = DenseCL(
-            backbone=backbone,
-            neck=neck,
-            head=head,
-            loss=None,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
 
     alg = DenseCL(
         backbone=backbone,
         neck=neck,
         head=head,
-        loss=loss,
         queue_len=queue_len,
         feat_dim=feat_dim,
         momentum=momentum,
         loss_lambda=loss_lambda,
-        preprocess_cfg=copy.deepcopy(preprocess_cfg))
+        data_preprocessor=copy.deepcopy(data_preprocessor))
 
     assert alg.queue.size() == torch.Size([feat_dim, queue_len])
     assert alg.queue2.size() == torch.Size([feat_dim, queue_len])
@@ -100,21 +80,19 @@ def test_densecl():
         SelfSupDataSample(),
     } for _ in range(2)]
 
-    fake_outputs = alg(fake_data, return_loss=True)
-    assert isinstance(fake_outputs['loss'].item(), float)
-    assert isinstance(fake_outputs['log_vars']['loss_single'], float)
-    assert isinstance(fake_outputs['log_vars']['loss_dense'], float)
-    assert fake_outputs['log_vars']['loss_single'] > 0
-    assert fake_outputs['log_vars']['loss_dense'] > 0
+    fake_inputs, fake_data_samples = alg.data_preprocessor(fake_data)
+    fake_loss = alg(fake_inputs, fake_data_samples, mode='loss')
+    assert isinstance(fake_loss['loss_single'].item(), float)
+    assert isinstance(fake_loss['loss_dense'].item(), float)
+    assert fake_loss['loss_single'].item() > 0
+    assert fake_loss['loss_dense'].item() > 0
     assert alg.queue_ptr.item() == 2
     assert alg.queue2_ptr.item() == 2
 
-    fake_inputs, fake_data_samples = alg.preprocss_data(fake_data)
-    fake_feat = alg.extract_feat(
-        inputs=fake_inputs, data_samples=fake_data_samples)
+    fake_feat = alg(fake_inputs, fake_data_samples, mode='tensor')
     assert list(fake_feat[0].shape) == [2, 512, 7, 7]
 
-    fake_outputs = alg(fake_data, return_loss=False)
+    fake_outputs = alg(fake_inputs, fake_data_samples, mode='predict')
     assert 'q_grid' in fake_outputs
     assert 'value' in fake_outputs.q_grid
     assert list(fake_outputs.q_grid.value.shape) == [2, 512, 49]
