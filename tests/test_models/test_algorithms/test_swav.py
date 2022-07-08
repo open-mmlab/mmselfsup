@@ -24,44 +24,29 @@ neck = dict(
     out_channels=2,
     norm_cfg=dict(type='BN1d'),
     with_avg_pool=True)
-loss = dict(
-    type='SwAVLoss',
-    feat_dim=2,  # equal to neck['out_channels']
-    epsilon=0.05,
-    temperature=0.1,
-    num_crops=nmb_crops)
+head = dict(
+    type='SwAVHead',
+    loss=dict(
+        type='SwAVLoss',
+        feat_dim=2,  # equal to neck['out_channels']
+        epsilon=0.05,
+        temperature=0.1,
+        num_crops=nmb_crops))
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_swav():
-    preprocess_cfg = {
-        'mean': [0.5, 0.5, 0.5],
-        'std': [0.5, 0.5, 0.5],
-        'to_rgb': True
+    data_preprocessor = {
+        'mean': (123.675, 116.28, 103.53),
+        'std': (58.395, 57.12, 57.375),
+        'bgr_to_rgb': True
     }
-    with pytest.raises(AssertionError):
-        alg = SwAV(
-            backbone=backbone,
-            neck=neck,
-            loss=None,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
-    with pytest.raises(AssertionError):
-        alg = SwAV(
-            backbone=backbone,
-            neck=None,
-            loss=loss,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
-    with pytest.raises(AssertionError):
-        alg = SwAV(
-            backbone=None,
-            neck=neck,
-            loss=loss,
-            preprocess_cfg=copy.deepcopy(preprocess_cfg))
+
     alg = SwAV(
         backbone=backbone,
         neck=neck,
-        loss=loss,
-        preprocess_cfg=copy.deepcopy(preprocess_cfg))
+        head=head,
+        data_preprocessor=copy.deepcopy(data_preprocessor))
 
     fake_data = [{
         'inputs': [
@@ -78,10 +63,9 @@ def test_swav():
         SelfSupDataSample()
     } for _ in range(2)]
 
-    fake_outputs = alg(fake_data, return_loss=True)
+    fake_batch_inputs, fake_data_samples = alg.data_preprocessor(fake_data)
+    fake_outputs = alg(fake_batch_inputs, fake_data_samples, mode='loss')
     assert isinstance(fake_outputs['loss'].item(), float)
 
-    fake_inputs, fake_data_samples = alg.preprocss_data(fake_data)
-    fake_feat = alg.extract_feat(
-        inputs=fake_inputs, data_samples=fake_data_samples)
+    fake_feat = alg(fake_batch_inputs, fake_data_samples, mode='tensor')
     assert list(fake_feat[0].shape) == [2, 512, 7, 7]

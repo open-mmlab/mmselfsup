@@ -7,9 +7,11 @@ from .mae_head import MAEFinetuneHead, MAELinprobeHead, MAEPretrainHead
 from .mocov3_head import MoCoV3Head
 from .multi_cls_head import MultiClsHead
 from .simmim_head import SimMIMHead
+from .swav_head import SwAVHead
 
 __all__ = [
     'ContrastiveHead', 'ClsHead', 'LatentPredictHead',
     'LatentCrossCorrelationHead', 'MultiClsHead', 'MAEFinetuneHead',
-    'MAEPretrainHead', 'MoCoV3Head', 'SimMIMHead', 'CAEHead', 'MAELinprobeHead'
+    'MAEPretrainHead', 'MoCoV3Head', 'SimMIMHead', 'CAEHead',
+    'MAELinprobeHead', 'SwAVHead'
 ]

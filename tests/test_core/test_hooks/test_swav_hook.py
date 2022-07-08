@@ -14,7 +14,7 @@ from torch.utils.data import Dataset
 from mmselfsup.core.data_structures import SelfSupDataSample
 from mmselfsup.core.hooks import SwAVHook
 from mmselfsup.models.algorithms import BaseModel
-from mmselfsup.models.losses import SwAVLoss
+from mmselfsup.models.heads import SwAVHead
 from mmselfsup.registry import MODELS
 
 
@@ -53,7 +53,12 @@ class ToyModel(BaseModel):
     def __init__(self):
         super().__init__(backbone=dict(type='SwAVDummyLayer'))
         self.prototypes_test = nn.Linear(1, 1)
-        self.head = SwAVLoss(feat_dim=2, num_crops=[2, 6], num_prototypes=3)
+        self.head = SwAVHead(
+            loss=dict(
+                type='SwAVLoss',
+                feat_dim=2,
+                num_crops=[2, 6],
+                num_prototypes=3))
 
     def loss(self, batch_inputs, data_samples):
         labels = []
@@ -119,4 +124,4 @@ class TestSwAVHook(TestCase):
             if isinstance(hook, SwAVHook):
                 assert hook.queue_length == 300
 
-        assert runner.model.module.head.use_queue is False
+        assert runner.model.module.head.loss.use_queue is False

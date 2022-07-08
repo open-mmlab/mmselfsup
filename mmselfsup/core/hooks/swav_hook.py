@@ -5,6 +5,7 @@ from typing import Dict, List, Optional, Sequence
 import torch
 import torch.distributed as dist
 from mmengine.hooks import Hook
+from mmengine.logging import MMLogger
 
 from mmselfsup.registry import HOOKS
 
@@ -64,7 +65,10 @@ class SwAVHook(Hook):
         # build the queue
         if osp.isfile(self.queue_path):
             self.queue = torch.load(self.queue_path)['queue']
-            runner.model.module.head.queue = self.queue
+            runner.model.module.head.loss.queue = self.queue
+            MMLogger.get_current_instance().info(
+                f'Load queue from file: {self.queue_path}')
+
         # the queue needs to be divisible by the batch size
         self.queue_length -= self.queue_length % self.batch_size
 
@@ -96,11 +100,11 @@ class SwAVHook(Hook):
             ).cuda()
 
         # set the boolean type of use_the_queue
-        runner.model.module.head.queue = self.queue
-        runner.model.module.head.use_queue = False
+        runner.model.module.head.loss.queue = self.queue
+        runner.model.module.head.loss.use_queue = False
 
     def after_train_epoch(self, runner) -> None:
-        self.queue = runner.model.module.head.queue
+        self.queue = runner.model.module.head.loss.queue
 
         if self.queue is not None and self.every_n_epochs(
                 runner, self.interval):
