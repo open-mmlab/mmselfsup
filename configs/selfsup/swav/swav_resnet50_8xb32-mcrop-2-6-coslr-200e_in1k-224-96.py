@@ -6,7 +6,7 @@ _base_ = [
 ]
 
 # model settings
-model = dict(head=dict(num_crops={{_base_.num_crops}}))
+model = dict(head=dict(loss=dict(num_crops={{_base_.num_crops}})))
 
 # additional hooks
 custom_hooks = [
@@ -17,7 +17,8 @@ custom_hooks = [
         epoch_queue_starts=15,
         crops_for_assign=[0, 1],
         feat_dim=128,
-        queue_length=3840)
+        queue_length=3840,
+        frozen_layers_cfg=dict(prototypes=5005))
 ]
 
 # dataset summary
@@ -25,7 +26,7 @@ data = dict(num_views={{_base_.num_crops}})
 
 # optimizer
 optimizer = dict(type='LARS', lr=0.6)
-optimizer_config = dict(frozen_layers_cfg=dict(prototypes=5005))
+optim_wrapper = dict(type='OptimWrapper', optimizer=optimizer)
 
 # learning policy
 param_scheduler = [
@@ -35,11 +36,14 @@ param_scheduler = [
         eta_min=6e-4,
         by_epoch=True,
         begin=0,
-        end=200)
+        end=200,
+        convert_to_iter_based=True)
 ]
 
 # runtime settings
-# the max_keep_ckpts controls the max number of ckpt file in your work_dirs
-# if it is 3, when CheckpointHook (in mmcv) saves the 4th ckpt
-# it will remove the oldest one to keep the number of total ckpts as 3
-checkpoint_config = dict(interval=10, max_keep_ckpts=3)
+default_hooks = dict(
+    logger=dict(type='LoggerHook', interval=50),
+    # only keeps the latest 3 checkpoints
+    checkpoint=dict(type='CheckpointHook', interval=10, max_keep_ckpts=3))
+
+find_unused_parameters = True

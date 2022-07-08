@@ -8,11 +8,11 @@ import torch.nn as nn
 from mmcv.runner import BaseModule
 
 from mmselfsup.utils import distributed_sinkhorn
-from ..builder import LOSSES
+from ..builder import MODELS
 from ..utils import MultiPrototypes
 
 
-@LOSSES.register_module()
+@MODELS.register_module()
 class SwAVLoss(BaseModule):
     """The Loss for SwAV.
 
