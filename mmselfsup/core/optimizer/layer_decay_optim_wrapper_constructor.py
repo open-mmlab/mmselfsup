@@ -114,7 +114,7 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
             if not param.requires_grad:
                 continue  # frozen weights
             if len(param.shape) == 1 or name.endswith('.bias') or name in (
-                    'pos_embed', 'cls_token'):
+                    'backbone.pos_embed', 'backbone.cls_token'):
                 group_name = 'no_decay'
                 this_weight_decay = 0.
             else:
