@@ -40,7 +40,6 @@ preprocess_cfg = dict(
     # convert image from BGR to RGB
     to_rgb=True,
 )
-train_dataloader = dict(batch_size=128)
 
 bgr_mean = preprocess_cfg['mean'][::-1]
 bgr_std = preprocess_cfg['std'][::-1]
@@ -88,6 +87,9 @@ test_pipeline = [
     dict(type='CenterCrop', crop_size=224),
     dict(type='PackClsInputs'),
 ]
+
+train_dataloader = dict(dataset=dict(pipeline=train_pipeline), batch_size=128)
+val_dataloader = dict(dataset=dict(pipeline=test_pipeline), batch_size=128)
 
 # optimizer wrapper
 custom_imports = dict(imports='mmselfsup.core', allow_failed_imports=False)
