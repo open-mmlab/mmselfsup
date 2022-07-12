@@ -2,15 +2,15 @@
 from typing import Tuple
 
 import torch
-import torch.distributed as dist
 import torch.nn as nn
 from mmcv.runner import BaseModule, get_dist_info
+from mmengine.dist import all_gather
 
+from mmselfsup.registry import MODELS
 from mmselfsup.utils import AliasMethod
-from ..builder import MEMORIES
 
 
-@MEMORIES.register_module()
+@MODELS.register_module()
 class SimpleMemory(BaseModule):
     """Simple memory bank (e.g., for NPID).
 
@@ -27,11 +27,10 @@ class SimpleMemory(BaseModule):
                  **kwargs) -> None:
         super().__init__()
         self.rank, self.num_replicas = get_dist_info()
-        self.feature_bank = torch.randn(length, feat_dim).cuda()
-        self.feature_bank = nn.functional.normalize(self.feature_bank).cuda()
+        self.register_buffer('feature_bank', torch.randn(length, feat_dim))
+        self.feature_bank = nn.functional.normalize(self.feature_bank)
         self.momentum = momentum
         self.multinomial = AliasMethod(torch.ones(length))
-        self.multinomial.cuda()
 
     def update(self, idx: torch.Tensor, feature: torch.Tensor) -> None:
         """Update features in memory bank.
@@ -61,14 +60,8 @@ class SimpleMemory(BaseModule):
                 - idx_gathered: Gathered indices.
                 - feature_gathered: Gathered features.
         """
-        idx_gathered = [
-            torch.ones_like(idx).cuda() for _ in range(self.num_replicas)
-        ]
-        feature_gathered = [
-            torch.ones_like(feature).cuda() for _ in range(self.num_replicas)
-        ]
-        dist.all_gather(idx_gathered, idx)
-        dist.all_gather(feature_gathered, feature)
+        idx_gathered = all_gather(idx)
+        feature_gathered = all_gather(feature)
         idx_gathered = torch.cat(idx_gathered, dim=0)
         feature_gathered = torch.cat(feature_gathered, dim=0)
         return idx_gathered, feature_gathered

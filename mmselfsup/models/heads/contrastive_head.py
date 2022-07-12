@@ -1,6 +1,4 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Tuple
-
 import torch
 from mmengine.model import BaseModule
 
@@ -26,8 +24,7 @@ class ContrastiveHead(BaseModule):
         self.loss = MODELS.build(loss)
         self.temperature = temperature
 
-    def forward(self, pos: torch.Tensor,
-                neg: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+    def forward(self, pos: torch.Tensor, neg: torch.Tensor) -> torch.Tensor:
         """Forward function to compute contrastive loss.
 
         Args:
