@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import List, Optional, Union
+from typing import List, Optional, Tuple, Union
 
 import torch
 import torch.nn as nn
@@ -134,3 +134,36 @@ class MAEPretrainDecoder(BaseModule):
         x = x[:, 1:, :]
 
         return x
+
+
+@MODELS.register_module()
+class ClsBatchNormNeck(BaseModule):
+    """Normalize cls token across batch before head.
+
+    This module is proposed by MAE, when running linear probing.
+
+    Args:
+        input_features (int): The dimension of features.
+        affine (bool): a boolean value that when set to ``True``, this module
+            has learnable affine parameters. Defaults to False.
+        eps (float): a value added to the denominator for numerical stability.
+            Defaults to 1e-6.
+        init_cfg (Dict or List[Dict], optional): Config dict for weight
+            initialization. Defaults to None.
+    """
+
+    def __init__(self,
+                 input_features: int,
+                 affine: bool = False,
+                 eps: float = 1e-6,
+                 init_cfg: Optional[Union[dict, List[dict]]] = None) -> None:
+        super().__init__(init_cfg)
+        self.bn = nn.BatchNorm1d(input_features, affine=affine, eps=eps)
+
+    def forward(
+            self,
+            inputs: Tuple[List[torch.Tensor]]) -> Tuple[List[torch.Tensor]]:
+        # Only apply batch norm to cls token, which is the second tensor in
+        # each item of the tuple
+        inputs = [[input_[0], self.bn(input_[1])] for input_ in inputs]
+        return tuple(inputs)
