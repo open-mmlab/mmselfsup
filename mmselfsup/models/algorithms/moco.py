@@ -26,25 +26,27 @@ class MoCo(BaseModel):
         neck (dict): Config dict for module of deep features to compact feature
             vectors.
         head (dict): Config dict for module of head functions.
-        queue_len (int, optional): Number of negative keys maintained in the
+        queue_len (int): Number of negative keys maintained in the
             queue. Defaults to 65536.
-        feat_dim (int, optional): Dimension of compact feature vectors.
+        feat_dim (int): Dimension of compact feature vectors.
             Defaults to 128.
-        momentum (float, optional): Momentum coefficient for the
-            momentum-updated encoder. Defaults to 0.999.
-        preprocess_cfg (Dict, optional): Config to preprocess images.
+        momentum (float): Momentum coefficient for the momentum-updated
+            encoder. Defaults to 0.999.
+        pretrained (str, optional): The pretrained checkpoint path, support
+            local path and remote path. Defaults to None.
+        data_preprocessor (Dict, optional): Config to preprocess images.
             Defaults to None.
-        init_cfg (Dict or list[Dict], optional): Initialization config dict.
-            Defaults to None
+        init_cfg (dict or list[dict], optional): Config dict for weight
+            initialization. Defaults to None.
     """
 
     def __init__(self,
                  backbone: dict,
                  neck: dict,
                  head: dict,
-                 queue_len: Optional[int] = 65536,
-                 feat_dim: Optional[int] = 128,
-                 momentum: Optional[float] = 0.999,
+                 queue_len: int = 65536,
+                 feat_dim: int = 128,
+                 momentum: float = 0.999,
                  pretrained: Optional[str] = None,
                  data_preprocessor: Optional[Union[dict, nn.Module]] = None,
                  init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
@@ -56,12 +58,9 @@ class MoCo(BaseModel):
             data_preprocessor=data_preprocessor,
             init_cfg=init_cfg)
 
-        self.encoder_q = nn.Sequential(self.backbone, self.neck)
-
         # create momentum model
-        self.encoder_k = ExponentialMovingAverage(self.encoder_q, 1 - momentum)
-        for param_k in self.encoder_k.module.parameters():
-            param_k.requires_grad = False
+        self.encoder_k = ExponentialMovingAverage(
+            nn.Sequential(self.backbone, self.neck), 1 - momentum)
 
         # create the queue
         self.queue_len = queue_len
@@ -116,14 +115,15 @@ class MoCo(BaseModel):
         """
         im_q = batch_inputs[0]
         im_k = batch_inputs[1]
-        # compute query features
-        q = self.encoder_q(im_q)[0]  # queries: NxC
+        # compute query features from encoder_q
+        q = self.neck(self.backbone(im_q))[0]  # queries: NxC
         q = nn.functional.normalize(q, dim=1)
 
         # compute key features
         with torch.no_grad():  # no gradient to keys
             # update the key encoder
-            self.encoder_k.update_parameters(self.encoder_q)
+            self.encoder_k.update_parameters(
+                nn.Sequential(self.backbone, self.neck))
 
             # shuffle for making use of BN
             im_k, idx_unshuffle = batch_shuffle_ddp(im_k)
