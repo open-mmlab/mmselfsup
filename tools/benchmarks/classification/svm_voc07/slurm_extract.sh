@@ -22,5 +22,5 @@ srun -p ${PARTITION} \
     --kill-on-bad-exit=1 \
     ${SRUN_ARGS} \
     python -u tools/benchmarks/classification/svm_voc07/extract.py ${CFG} \
-        --layer-ind "0,1,2,3,4" --work_dir ${WORK_DIR} \
+        --layer-ind "0,1,2,3,4" --work-dir ${WORK_DIR} \
         --launcher="slurm" ${PY_ARGS}
