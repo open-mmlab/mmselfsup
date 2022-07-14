@@ -4,7 +4,8 @@ from typing import List, Optional, Tuple
 import numpy as np
 import torch
 import torch.distributed as dist
-from mmcv.runner import BaseModule, get_dist_info
+from mmengine.dist import get_dist_info
+from mmengine.model import BaseModule
 from sklearn.cluster import KMeans
 
 from ..builder import MEMORIES

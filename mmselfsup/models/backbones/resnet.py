@@ -3,6 +3,7 @@ from mmcls.models.backbones import ResNet as _ResNet
 from mmcls.models.backbones.resnet import BasicBlock, Bottleneck
 
 from ..builder import BACKBONES
+from ..utils import Sobel
 
 
 @BACKBONES.register_module()
@@ -135,6 +136,40 @@ class ResNet(_ResNet):
         feature map from the 'stem' layer, which we will use for downstream
         evaluation.
         """
+        if self.deep_stem:
+            x = self.stem(x)
+        else:
+            x = self.conv1(x)
+            x = self.norm1(x)
+            x = self.relu(x)  # r50: 64x128x128
+        outs = []
+        if 0 in self.out_indices:
+            outs.append(x)
+        x = self.maxpool(x)  # r50: 64x56x56
+        for i, layer_name in enumerate(self.res_layers):
+            res_layer = getattr(self, layer_name)
+            x = res_layer(x)
+            if i + 1 in self.out_indices:
+                outs.append(x)
+        # r50: 1-256x56x56; 2-512x28x28; 3-1024x14x14; 4-2048x7x7
+        return tuple(outs)
+
+
+@BACKBONES.register_module()
+class ResNetSobel(ResNet):
+    """ResNet with Sobel layer.
+
+    This variant is used in clustering-based methods like DeepCluster to avoid
+    color shortcut.
+    """
+
+    def __init__(self, **kwargs):
+        super(ResNetSobel, self).__init__(in_channels=2, **kwargs)
+        self.sobel_layer = Sobel()
+
+    def forward(self, x):
+        """Forward function."""
+        x = self.sobel_layer(x)
         if self.deep_stem:
             x = self.stem(x)
         else:

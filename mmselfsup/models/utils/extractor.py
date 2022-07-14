@@ -1,6 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from typing import Dict, List, Optional, Sequence, Union
 
+import numpy as np
 import torch
 import torch.nn as nn
 from mmengine import Runner
@@ -35,7 +36,7 @@ class Extractor():
         extract_dataloader (dict): A dict to build DataLoader object.
         seed (int, optional): Random seed. Defaults to None.
         dist_mode (bool): Use distributed extraction or not. Defaults to False.
-        pool_cfg (dict): The configs of pooling. Defaults to
+        pool_cfg (dict, optional): The configs of pooling. Defaults to
             dict(type='AvgPool2d', output_size=1).
     """
 
@@ -47,9 +48,8 @@ class Extractor():
     def __init__(self,
                  extract_dataloader: Union[DataLoader, dict],
                  seed: Optional[int] = None,
-                 dist_mode: Optional[bool] = False,
-                 pool_cfg: Optional[dict] = dict(
-                     type='AvgPool2d', output_size=1),
+                 dist_mode: bool = False,
+                 pool_cfg: Optional[dict] = None,
                  **kwargs) -> None:
         self.data_loader = Runner.build_dataloader(
             dataloader=extract_dataloader, seed=seed)
@@ -79,18 +79,23 @@ class Extractor():
         features = model(batch_inputs, batch_data_samples, mode='tensor')
 
         # pooling features
-        if self.pool_cfg is not None:
+        if self.pool_cfg is None:
+            features = model.neck([features[-1]])
+        else:
             features = self.pool(features)
 
         # flat features
         flat_features = [feat.view(feat.size(0), -1) for feat in features]
 
         feature_dict = dict()
-        for i, feat in enumerate(flat_features):
-            feature_dict[f'feat{self.feature_indices[i] + 1}'] = feat.cpu()
+        if self.pool_cfg is None:
+            feature_dict['feat'] = flat_features[0].cpu()
+        else:
+            for i, feat in enumerate(flat_features):
+                feature_dict[f'feat{self.feature_indices[i] + 1}'] = feat.cpu()
         return feature_dict
 
-    def __call__(self, model: BaseModel) -> Dict[str, torch.Tensor]:
+    def __call__(self, model: BaseModel) -> Dict[str, np.ndarray]:
         model.eval()
 
         # the function sent to collect function

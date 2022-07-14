@@ -1,4 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import copy
 import platform
 
 import pytest
@@ -23,10 +24,10 @@ neck = dict(
     with_avg_pool=True)
 head = dict(
     type='ClsHead',
+    loss=dict(type='mmcls.CrossEntropyLoss'),
     with_avg_pool=False,
     in_channels=2,
     num_classes=num_classes)
-loss = dict(type='CrossEntropyLoss')
 memory_bank = dict(
     type='ODCMemory',
     length=8,
@@ -35,54 +36,35 @@ memory_bank = dict(
     num_classes=num_classes,
     min_cluster=2,
     debug=False)
-preprocess_cfg = {
-    'mean': [0.5, 0.5, 0.5],
-    'std': [0.5, 0.5, 0.5],
-    'to_rgb': True
-}
 
 
 @pytest.mark.skipif(
     not torch.cuda.is_available() or platform.system() == 'Windows',
     reason='CUDA is not available or Windows mem limit')
 def test_odc():
-    with pytest.raises(AssertionError):
-        alg = ODC(
-            backbone=backbone,
-            neck=neck,
-            head=head,
-            loss=loss,
-            memory_bank=None,
-            preprocess_cfg=preprocess_cfg)
-    with pytest.raises(AssertionError):
-        alg = ODC(
-            backbone=backbone,
-            neck=neck,
-            head=None,
-            memory_bank=memory_bank,
-            preprocess_cfg=preprocess_cfg)
-    with pytest.raises(AssertionError):
-        alg = ODC(
-            backbone=backbone,
-            neck=neck,
-            head=head,
-            loss=loss,
-            memory_bank=memory_bank,
-            preprocess_cfg=preprocess_cfg)
+    data_preprocessor = {
+        'mean': (123.675, 116.28, 103.53),
+        'std': (58.395, 57.12, 57.375),
+        'bgr_to_rgb': True
+    }
 
     alg = ODC(
         backbone=backbone,
         neck=neck,
         head=head,
-        loss=loss,
         memory_bank=memory_bank,
-        preprocess_cfg=preprocess_cfg)
+        data_preprocessor=copy.deepcopy(data_preprocessor))
     alg.set_reweight()
 
     fake_data = [{
-        'inputs': torch.randn((3, 224, 224)),
+        'inputs': [torch.randn((3, 224, 224))],
         'data_sample': SelfSupDataSample()
     } for _ in range(2)]
-    fake_out = alg(fake_data, return_loss=False)
-    assert hasattr(fake_out[0].prediction, 'head0')
-    assert fake_out[0].prediction.head0.size() == torch.Size([num_classes])
+
+    fake_inputs, fake_data_samples = alg.data_preprocessor(fake_data)
+    fake_loss = alg(fake_inputs, fake_data_samples, mode='loss')
+    assert fake_loss['loss'] > 0
+
+    # test extract
+    fake_feats = alg(fake_inputs, fake_data_samples, mode='tensor')
+    assert fake_feats[0].size() == torch.Size([2, 512, 7, 7])

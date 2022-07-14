@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Optional
+from typing import Optional, Sequence
 
 import numpy as np
 import torch
@@ -32,7 +32,7 @@ class ODCHook(Hook):
                  evaluate_interval: int,
                  reweight: bool,
                  reweight_pow: float,
-                 dist_mode: Optional[bool] = True) -> None:
+                 dist_mode: bool = True) -> None:
         assert dist_mode, 'non-dist mode is not implemented'
         self.centroids_update_interval = centroids_update_interval
         self.deal_with_small_clusters_interval = \
@@ -41,20 +41,25 @@ class ODCHook(Hook):
         self.reweight = reweight
         self.reweight_pow = reweight_pow
 
-    def after_train_iter(self, runner) -> None:
+    def after_train_iter(self,
+                         runner,
+                         batch_idx: int,
+                         data_batch: Optional[Sequence[dict]] = None,
+                         outputs: Optional[dict] = None) -> None:
         # centroids update
-        if self.every_n_iters(runner, self.centroids_update_interval):
+        if self.every_n_train_iters(runner, self.centroids_update_interval):
             runner.model.module.memory_bank.update_centroids_memory()
 
         # deal with small clusters
-        if self.every_n_iters(runner, self.deal_with_small_clusters_interval):
+        if self.every_n_train_iters(runner,
+                                    self.deal_with_small_clusters_interval):
             runner.model.module.memory_bank.deal_with_small_clusters()
 
         # reweight
         self.set_reweight(runner)
 
         # evaluate
-        if self.every_n_iters(runner, self.evaluate_interval):
+        if self.every_n_train_iters(runner, self.evaluate_interval):
             new_labels = runner.model.module.memory_bank.label_bank
             if new_labels.is_cuda:
                 new_labels = new_labels.cpu()
@@ -79,7 +84,7 @@ class ODCHook(Hook):
                 f'empty_num: {empty_cls.item()}\t'
                 f'min_cluster: {minimal_cls_size.item()}\t'
                 f'max_cluster:{maximal_cls_size.item()}',
-                logger='root')
+                logger='current')
 
     def set_reweight(self,
                      runner,
@@ -96,12 +101,16 @@ class ODCHook(Hook):
                 to 0.5.
         """
         if labels is None:
-            if self.memory_bank.label_bank.is_cuda:
-                labels = self.memory_bank.label_bank.cpu().numpy()
+            if runner.model.module.memory_bank.label_bank.is_cuda:
+                labels = runner.model.module.memory_bank.label_bank.cpu(
+                ).numpy()
             else:
-                labels = self.memory_bank.label_bank.numpy()
+                labels = runner.model.module.memory_bank.label_bank.numpy()
         histogram = np.bincount(
-            labels, minlength=self.num_classes).astype(np.float32)
+            labels,
+            minlength=runner.model.module.memory_bank.num_classes).astype(
+                np.float32)
         inv_histogram = (1. / (histogram + 1e-10))**reweight_pow
         weight = inv_histogram / inv_histogram.sum()
         runner.model.module.loss_weight.copy_(torch.from_numpy(weight))
+        runner.model.module.head.loss.class_weight = self.loss_weight

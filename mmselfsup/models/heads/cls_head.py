@@ -1,9 +1,9 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Dict, List, Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union
 
 import torch
 import torch.nn as nn
-from mmcv.runner import BaseModule
+from mmengine.model import BaseModule
 
 from ..builder import MODELS
 
@@ -24,11 +24,11 @@ class ClsHead(BaseModule):
     def __init__(
         self,
         loss: dict,
-        with_avg_pool: Optional[bool] = False,
-        in_channels: Optional[int] = 2048,
-        num_classes: Optional[int] = 1000,
-        vit_backbone: Optional[bool] = False,
-        init_cfg: Optional[Union[Dict, List[Dict]]] = [
+        with_avg_pool: bool = False,
+        in_channels: int = 2048,
+        num_classes: int = 1000,
+        vit_backbone: bool = False,
+        init_cfg: Optional[Union[dict, List[dict]]] = [
             dict(type='Normal', std=0.01, layer='Linear'),
             dict(type='Constant', val=1, layer=['_BatchNorm', 'GroupNorm'])
         ]

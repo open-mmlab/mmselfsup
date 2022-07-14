@@ -69,8 +69,7 @@ class TestDeepClusterHook(TestCase):
             reweight=False,
             reweight_pow=0.5,
             initial=True,
-            interval=1,
-            dist_mode=False)
+            interval=1)
 
         # test DeepClusterHook
         assert deepcluster_hook.clustering_type == 'Kmeans'

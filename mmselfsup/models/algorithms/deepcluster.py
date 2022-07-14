@@ -2,16 +2,15 @@
 from typing import Dict, List, Optional, Tuple, Union
 
 import torch
-from mmengine.data import InstanceData
+import torch.nn as nn
+from mmengine.data import LabelData
 
 from mmselfsup.core import SelfSupDataSample
-from ..builder import (ALGORITHMS, build_backbone, build_head, build_loss,
-                       build_neck)
-from ..utils import Sobel
+from mmselfsup.registry import MODELS
 from .base import BaseModel
 
 
-@ALGORITHMS.register_module()
+@MODELS.register_module()
 class DeepCluster(BaseModel):
     """DeepCluster.
 
@@ -20,106 +19,98 @@ class DeepCluster(BaseModel):
     The clustering operation is in `core/hooks/deepcluster_hook.py`.
 
     Args:
-        backbone (Dict): Config dict for module of backbone.
-        with_sobel (bool): Whether to apply a Sobel filter on images.
-            Defaults to True.
-        neck (Dict, optional): Config dict for module of deep features to
-            compact feature vectors. Defaults to None.
-        head (Dict, optional): Config dict for module of loss functions.
-        loss (Dict, optional): Config dict for module of loss functions.
-            Defaults to None.
-        preprocess_cfg (Dict): Config to preprocess images.
-        init_cfg (Union[List[Dict], Dict], optional): Config dict for weight
+        backbone (dict): Config dict for module of backbone.
+        neck (dict): Config dict for module of deep features to compact
+            feature vectors.
+        head (dict): Config dict for module of head functions.
+        data_preprocessor (dict or nn.Module, optional): Config to preprocess
+            images. Defaults to None.
+        init_cfg (dict or List[dict], optional): Config dict for weight
             initialization. Defaults to None.
     """
 
     def __init__(self,
-                 backbone: Dict,
-                 with_sobel: Optional[bool] = True,
-                 neck: Optional[Dict] = None,
-                 head: Optional[Dict] = None,
-                 loss: Optional[Dict] = None,
-                 preprocess_cfg: Optional[Dict] = None,
-                 init_cfg: Optional[Union[List[Dict], Dict]] = None) -> None:
-        super().__init__(preprocess_cfg=preprocess_cfg, init_cfg=init_cfg)
-        self.with_sobel = with_sobel
-        if with_sobel:
-            self.sobel_layer = Sobel()
-        self.backbone = build_backbone(backbone)
-        if neck is not None:
-            self.neck = build_neck(neck)
-        assert head is not None
-        self.head = build_head(head)
-        assert loss is not None
-        self.loss = build_loss(loss)
+                 backbone: dict,
+                 neck: dict,
+                 head: dict,
+                 pretrained: Optional[str] = None,
+                 data_preprocessor: Optional[Union[dict, nn.Module]] = None,
+                 init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
+        super().__init__(
+            backbone=backbone,
+            neck=neck,
+            head=head,
+            pretrained=pretrained,
+            data_preprocessor=data_preprocessor,
+            init_cfg=init_cfg)
 
         # re-weight
         self.num_classes = self.head.num_classes
         self.loss_weight = torch.ones((self.num_classes, ),
-                                      dtype=torch.float32)
+                                      dtype=torch.float32).cuda()
         self.loss_weight /= self.loss_weight.sum()
 
-    def extract_feat(self, inputs: List[torch.Tensor],
-                     data_samples: List[SelfSupDataSample],
+    def extract_feat(self, batch_inputs: List[torch.Tensor],
                      **kwarg) -> Tuple[torch.Tensor]:
-        """The forward function to extract features.
+        """Function to extract features from backbone.
 
         Args:
-            inputs (List[torch.Tensor]): The input images.
+            batch_inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
         Returns:
             Tuple[torch.Tensor]: backbone outputs.
         """
-        if self.with_sobel:
-            img = self.sobel_layer(inputs[0])
-        x = self.backbone(img)
+        x = self.backbone(batch_inputs[0])
         return x
 
-    def forward_train(self, inputs: List[torch.Tensor],
-                      data_samples: List[SelfSupDataSample],
-                      **kwargs) -> Dict[str, torch.Tensor]:
-        """Forward computation during training.
+    def loss(self, batch_inputs: List[torch.Tensor],
+             data_samples: List[SelfSupDataSample],
+             **kwargs) -> Dict[str, torch.Tensor]:
+        """The forward function in training.
 
         Args:
-            inputs (List[torch.Tensor]): The input images.
+            batch_inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
         Returns:
             Dict[str, torch.Tensor]: A dictionary of loss components.
         """
-        pseudo_label = torch.cat(
-            [data_sample.pseudo_label.label for data_sample in data_samples])
-        x = self.extract_feat(inputs, data_samples)
+        pseudo_label = torch.cat([
+            data_sample.pseudo_label.clustering_label
+            for data_sample in data_samples
+        ])
+        x = self.extract_feat(batch_inputs)
         if self.with_neck:
             x = self.neck(x)
-        outs = self.head(x)
-        self.loss.class_weight = self.loss_weight
-        loss = self.loss(outs[0], pseudo_label)
+        self.head.loss.class_weight = self.loss_weight
+        loss = self.head(x, pseudo_label)
         losses = dict(loss=loss)
         return losses
 
-    def forward_test(self, inputs: List[torch.Tensor],
-                     data_samples: List[SelfSupDataSample],
-                     **kwargs) -> List[SelfSupDataSample]:
-        """The forward function in testing
+    def predict(self, batch_inputs: List[torch.Tensor],
+                data_samples: List[SelfSupDataSample],
+                **kwargs) -> List[SelfSupDataSample]:
+        """The forward function in testing.
+
         Args:
-            inputs (List[torch.Tensor]): The input images.
+            batch_inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
+
         Returns:
             List[SelfSupDataSample]: The prediction from model.
         """
-        x = self.extract_feat(inputs, data_samples)  # tuple
+        x = self.extract_feat(batch_inputs)  # tuple
         if self.with_neck:
             x = self.neck(x)
-        outs = self.head(x)
-        keys = [f'head{i}' for i in range(len(outs))]
+        outs = self.head.logits(x)
+        keys = [f'head{i}' for i in self.backbone.out_indices]
 
-        for i in range(x[0].shape[0]):
-            prediction_data = {key: out[i] for key, out in zip(keys, outs)}
-            prediction = InstanceData(**prediction_data)
-            data_samples[i].prediction = prediction
+        for i in range(len(outs)):
+            prediction_data = {key: out for key, out in zip(keys, outs)}
+            prediction = LabelData(**prediction_data)
+            data_samples[i].pred_label = prediction
         return data_samples

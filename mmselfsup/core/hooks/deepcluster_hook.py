@@ -1,9 +1,10 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Dict, Optional
+from typing import Optional
 
 import numpy as np
 import torch
 import torch.distributed as dist
+from mmengine.dist import is_distributed
 from mmengine.hooks import Hook
 from mmengine.logging import print_log
 
@@ -28,26 +29,26 @@ class DeepClusterHook(Hook):
             Defaults to False.
         initial (bool): Whether to call the hook initially. Defaults to True.
         interval (int): Frequency of epochs to call the hook. Defaults to 1.
-        dist_mode (bool): Use distributed training or not. Defaults to True.
-        data_loaders (DataLoader): A PyTorch dataloader. Defaults to None.
+        seed (int, optional): Random seed. Defaults to None.
     """
 
     def __init__(
             self,
-            extract_dataloader: Dict,
-            clustering: Dict,
+            extract_dataloader: dict,
+            clustering: dict,
             unif_sampling: bool,
             reweight: bool,
             reweight_pow: float,
-            init_memory: Optional[bool] = False,  # for ODC
-            initial: Optional[bool] = True,
-            interval: Optional[int] = 1,
-            seed: Optional[int] = None,
-            dist_mode: Optional[bool] = True) -> None:
+            init_memory: bool = False,  # for ODC
+            initial: bool = True,
+            interval: int = 1,
+            seed: Optional[int] = None) -> None:
+        self.dist_mode = is_distributed()
         self.extractor = Extractor(
             extract_dataloader=extract_dataloader,
             seed=seed,
-            dist_mode=dist_mode)
+            dist_mode=self.dist_mode,
+            pool_cfg=None)
         self.clustering_type = clustering.pop('type')
         self.clustering_cfg = clustering
         self.unif_sampling = unif_sampling
@@ -56,9 +57,8 @@ class DeepClusterHook(Hook):
         self.init_memory = init_memory
         self.initial = initial
         self.interval = interval
-        self.dist_mode = dist_mode
 
-    def before_run(self, runner) -> None:
+    def before_train(self, runner) -> None:
         self.data_loader = runner.train_dataloader
         if self.initial:
             self.deepcluster(runner)
@@ -71,7 +71,7 @@ class DeepClusterHook(Hook):
     def deepcluster(self, runner) -> None:
         # step 1: get features
         runner.model.eval()
-        features = self.extractor(runner.model)['feat5']
+        features = self.extractor(runner.model.module)['feat']
         runner.model.train()
 
         # step 2: get labels
@@ -128,7 +128,7 @@ class DeepClusterHook(Hook):
                 f'empty_num: {empty_cls.item()}\t'
                 f'min_cluster: {minimal_cls_size.item()}\t'
                 f'max_cluster:{maximal_cls_size.item()}',
-                logger='root')
+                logger='current')
 
     def set_reweight(self,
                      runner,
@@ -145,7 +145,9 @@ class DeepClusterHook(Hook):
                 to 0.5.
         """
         histogram = np.bincount(
-            labels, minlength=self.num_classes).astype(np.float32)
+            labels,
+            minlength=runner.model.module.memory_bank.num_classes).astype(
+                np.float32)
         inv_histogram = (1. / (histogram + 1e-10))**reweight_pow
         weight = inv_histogram / inv_histogram.sum()
         runner.model.module.loss_weight.copy_(torch.from_numpy(weight))
