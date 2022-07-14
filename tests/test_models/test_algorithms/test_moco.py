@@ -1,12 +1,10 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import copy
 import platform
-from unittest.mock import MagicMock
 
 import pytest
 import torch
 
-import mmselfsup
 from mmselfsup.core import SelfSupDataSample
 from mmselfsup.models.algorithms import MoCo
 
@@ -29,18 +27,6 @@ head = dict(
     type='ContrastiveHead',
     loss=dict(type='mmcls.CrossEntropyLoss'),
     temperature=0.2)
-
-
-def mock_batch_shuffle_ddp(img):
-    return img, 0
-
-
-def mock_batch_unshuffle_ddp(img, mock_input):
-    return img
-
-
-def mock_concat_all_gather(img):
-    return img
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
@@ -68,12 +54,6 @@ def test_moco():
         SelfSupDataSample()
     } for _ in range(2)]
 
-    mmselfsup.models.algorithms.moco.batch_shuffle_ddp = MagicMock(
-        side_effect=mock_batch_shuffle_ddp)
-    mmselfsup.models.algorithms.moco.batch_unshuffle_ddp = MagicMock(
-        side_effect=mock_batch_unshuffle_ddp)
-    mmselfsup.models.algorithms.moco.concat_all_gather = MagicMock(
-        side_effect=mock_concat_all_gather)
     fake_inputs, fake_data_samples = alg.data_preprocessor(fake_data)
     fake_loss = alg(fake_inputs, fake_data_samples, mode='loss')
     assert fake_loss['loss'] > 0

@@ -4,6 +4,7 @@ from typing import List, Optional
 import numpy as np
 import torch
 import torch.distributed as dist
+from mmengine.dist import all_gather
 
 
 def gather_tensors(input_array: np.ndarray) -> np.ndarray:
@@ -99,18 +100,13 @@ def gather_tensors_batch(input_array: np.ndarray,
 def concat_all_gather(tensor: torch.Tensor) -> torch.Tensor:
     """Performs all_gather operation on the provided tensors.
 
-    *** Warning ***: torch.distributed.all_gather has no gradient.
-
     Args:
         tensor (torch.Tensor): Tensor to be broadcast from current process.
 
     Returns:
         torch.Tensor: The concatnated tensor.
     """
-    tensors_gather = [
-        torch.ones_like(tensor) for _ in range(dist.get_world_size())
-    ]
-    dist.all_gather(tensors_gather, tensor, async_op=False)
+    tensors_gather = all_gather(tensor)
 
     output = torch.cat(tensors_gather, dim=0)
     return output
