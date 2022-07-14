@@ -2,16 +2,15 @@
 from typing import Dict, List, Optional, Tuple, Union
 
 import torch
-from mmengine.data import InstanceData
+import torch.nn as nn
+from mmengine.data import LabelData
 
 from mmselfsup.core import SelfSupDataSample
-from ..builder import (ALGORITHMS, build_backbone, build_head, build_loss,
-                       build_memory, build_neck)
-from ..utils import Sobel
+from mmselfsup.registry import MODELS
 from .base import BaseModel
 
 
-@ALGORITHMS.register_module()
+@MODELS.register_module()
 class ODC(BaseModel):
     """ODC.
 
@@ -21,43 +20,36 @@ class ODC(BaseModel):
      `core/hooks/odc_hook.py`.
 
     Args:
-        backbone (Dict): Config dict for module of backbone.
-        with_sobel (bool): Whether to apply a Sobel filter on images.
-            Defaults to False.
-        neck (Dict, optional): Config dict for module of deep features to
-            compact feature vectors. Defaults to None.
-        head (Dict, optional): Config dict for module of head functions.
-            Defaults to None.
-        loss (Dict, optional): Config dict for module of loss functions.
-        memory_bank (Dict, optional): Module of memory banks. Defaults to None.
-        preprocess_cfg (Dict, optional): Config to preprocess images.
-            Defaults to None.
-        init_cfg (Dict or List[Dict], optional): Config dict for weight
+        backbone (dict): Config dict for module of backbone.
+        neck (dict): Config dict for module of deep features to compact
+            feature vectors.
+        head (dict): Config dict for module of head functions.
+        memory_bank (dict): Module of memory banks. Defaults to None.
+        pretrained (str, optional): The pretrained checkpoint path, support
+            local path and remote path. Defaults to None.
+        data_preprocessor (dict or nn.Module, optional): Config to preprocess
+            images. Defaults to None.
+        init_cfg (dict or List[dict], optional): Config dict for weight
             initialization. Defaults to None.
     """
 
     def __init__(self,
-                 backbone: Dict,
-                 with_sobel: Optional[bool] = False,
-                 neck: Optional[Dict] = None,
-                 head: Optional[Dict] = None,
-                 loss: Optional[Dict] = None,
-                 memory_bank: Optional[Dict] = None,
-                 preprocess_cfg: Optional[Dict] = None,
-                 init_cfg: Optional[Union[Dict, List[Dict]]] = None) -> None:
-        super().__init__(preprocess_cfg=preprocess_cfg, init_cfg=init_cfg)
-        self.with_sobel = with_sobel
-        if with_sobel:
-            self.sobel_layer = Sobel()
-        self.backbone = build_backbone(backbone)
-        if neck is not None:
-            self.neck = build_neck(neck)
-        assert head is not None
-        self.head = build_head(head)
-        assert loss is not None
-        self.loss = build_loss(loss)
-        assert memory_bank is not None
-        self.memory_bank = build_memory(memory_bank)
+                 backbone: dict,
+                 neck: dict,
+                 head: dict,
+                 memory_bank: dict,
+                 pretrained: Optional[str] = None,
+                 data_preprocessor: Optional[Union[dict, nn.Module]] = None,
+                 init_cfg: Optional[Union[dict, List[dict]]] = None) -> None:
+        super().__init__(
+            backbone=backbone,
+            neck=neck,
+            head=head,
+            pretrained=pretrained,
+            data_preprocessor=data_preprocessor,
+            init_cfg=init_cfg)
+        # build memory
+        self.memory_bank = MODELS.build(memory_bank)
 
         # set re-weight tensors
         self.num_classes = self.head.num_classes
@@ -65,50 +57,46 @@ class ODC(BaseModel):
                                       dtype=torch.float32).cuda()
         self.loss_weight /= self.loss_weight.sum()
 
-    def extract_feat(self, inputs: List[torch.Tensor],
-                     data_samples: List[SelfSupDataSample],
+    def extract_feat(self, batch_inputs: List[torch.Tensor],
                      **kwarg) -> Tuple[torch.Tensor]:
-        """The forward function to extract features.
+        """Function to extract features from backbone.
 
         Args:
-            inputs (List[torch.Tensor]): The input images.
+            batch_inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
         Returns:
             Tuple[torch.Tensor]: backbone outputs.
         """
-        if self.with_sobel:
-            img = self.sobel_layer(inputs[0])
-        x = self.backbone(img)
+        x = self.backbone(batch_inputs[0])
         return x
 
-    def forward_train(self, inputs: List[torch.Tensor],
-                      data_samples: List[SelfSupDataSample],
-                      **kwargs) -> Dict[str, torch.Tensor]:
-        """Forward computation during training.
+    def loss(self, batch_inputs: List[torch.Tensor],
+             data_samples: List[SelfSupDataSample],
+             **kwargs) -> Dict[str, torch.Tensor]:
+        """The forward function in training.
 
         Args:
-            inputs (List[torch.Tensor]): The input images.
+            batch_inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
         Returns:
             Dict[str, torch.Tensor]: A dictionary of loss components.
         """
-        # forward & backward
-        feature = self.extract_feat(inputs[0])
-        idx = [data_sample.idx for data_sample in data_samples]
+        feature = self.extract_feat(batch_inputs)
+        idx = [data_sample.sample_idx.value for data_sample in data_samples]
         idx = torch.cat(idx)
         if self.with_neck:
             feature = self.neck(feature)
-        outs = self.head(feature)
         if self.memory_bank.label_bank.is_cuda:
-            loss_inputs = (outs, self.memory_bank.label_bank[idx])
+            loss_inputs = (feature, self.memory_bank.label_bank[idx])
         else:
-            loss_inputs = (outs, self.memory_bank.label_bank[idx.cpu()].cuda())
-        self.loss.class_weight = self.loss_weight
-        loss = self.loss(loss_inputs[0][0], loss_inputs[1])
+            loss_inputs = (feature,
+                           self.memory_bank.label_bank[idx.cpu()].cuda())
+
+        loss = self.head(*loss_inputs)
         losses = dict(loss=loss)
 
         # update samples memory
@@ -118,25 +106,27 @@ class ODC(BaseModel):
 
         return losses
 
-    def forward_test(self, inputs: List[torch.Tensor],
-                     data_samples: List[SelfSupDataSample],
-                     **kwargs) -> List[SelfSupDataSample]:
-        """The forward function in testing
+    def predict(self, batch_inputs: List[torch.Tensor],
+                data_samples: List[SelfSupDataSample],
+                **kwargs) -> List[SelfSupDataSample]:
+        """The forward function in testing.
+
         Args:
-            inputs (List[torch.Tensor]): The input images.
+            batch_inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
+
         Returns:
             List[SelfSupDataSample]: The prediction from model.
         """
-        feature = self.extract_feat(inputs[0])  # tuple
+        feature = self.extract_feat(batch_inputs)  # tuple
         if self.with_neck:
             feature = self.neck(feature)
-        outs = self.head(feature)
-        keys = [f'head{i}' for i in range(len(outs))]
+        outs = self.head.logits(feature)
+        keys = [f'head{i}' for i in self.backbone.out_indices]
 
-        for i in range(outs[0].shape[0]):
-            prediction_data = {key: out[i] for key, out in zip(keys, outs)}
-            prediction = InstanceData(**prediction_data)
-            data_samples[i].prediction = prediction
+        for i in range(len(outs)):
+            prediction_data = {key: out for key, out in zip(keys, outs)}
+            prediction = LabelData(**prediction_data)
+            data_samples[i].pred_label = prediction
         return data_samples

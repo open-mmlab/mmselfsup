@@ -5,7 +5,10 @@ import numpy as np
 import torch
 from mmengine.data import DefaultSampler
 
+from mmselfsup.registry import DATA_SAMPLERS
 
+
+@DATA_SAMPLERS.register_module()
 class DeepClusterSampler(DefaultSampler):
     """The sampler inherits ``DefaultSampler`` from mmengine.
 
@@ -56,10 +59,10 @@ class DeepClusterSampler(DefaultSampler):
                 indices = torch.arange(len(self.dataset)).tolist()
 
             # add extra samples to make it evenly divisible
-            if self.round_up:
-                indices = (
-                    indices *
-                    int(self.total_size / len(indices) + 1))[:self.total_size]
+            indices = (
+                indices *
+                int(self.total_size / len(indices) + 1))[:self.total_size]
+            assert len(indices) == self.total_size
             self.indices = indices
         else:
             self.unif_sampling_flag = False
@@ -100,7 +103,8 @@ class DeepClusterSampler(DefaultSampler):
         # add extra samples to make it evenly divisible
         assert len(indices) <= self.total_size, \
             f'{len(indices)} vs {self.total_size}'
-        indices += indices[:(self.total_size - len(indices))]
+        indices = (indices *
+                   int(self.total_size / len(indices) + 1))[:self.total_size]
         assert len(indices) == self.total_size, \
             f'{len(indices)} vs {self.total_size}'
         self.indices = indices

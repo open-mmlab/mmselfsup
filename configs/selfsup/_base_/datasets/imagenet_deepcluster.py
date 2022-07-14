@@ -1,11 +1,12 @@
 # dataset settings
+custom_imports = dict(imports='mmcls.datasets', allow_failed_imports=False)
 dataset_type = 'DeepClusterImageNet'
 data_root = 'data/imagenet/'
 file_client_args = dict(backend='disk')
 
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
-    dict(type='RandomResizedCrop', size=224),
+    dict(type='RandomResizedCrop', size=224, backend='pillow'),
     dict(type='RandomFlip', prob=0.5),
     dict(type='RandomRotation', degrees=2),
     dict(
@@ -14,7 +15,11 @@ train_pipeline = [
         contrast=0.4,
         saturation=1.0,
         hue=0.5),
-    dict(type='RandomGrayscale', prob=0.2, keep_channels=True),
+    dict(
+        type='RandomGrayscale',
+        prob=0.2,
+        keep_channels=True,
+        channel_weights=(0.114, 0.587, 0.2989)),
     dict(
         type='PackSelfSupInputs',
         pseudo_label_keys=['clustering_label'],
@@ -23,7 +28,7 @@ train_pipeline = [
 
 extract_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
-    dict(type='Resize', scale=256),
+    dict(type='mmcls.ResizeEdge', scale=256, edge='short', backend='pillow'),
     dict(type='CenterCrop', crop_size=224),
     dict(type='PackSelfSupInputs', meta_keys=['img_path'])
 ]
@@ -48,7 +53,7 @@ custom_hooks = [
             batch_size=128,
             num_workers=8,
             persistent_workers=True,
-            sampler=dict(type='DefaultSampler', shuffle=False),
+            sampler=dict(type='DefaultSampler', shuffle=False, round_up=False),
             dataset=dict(
                 type=dataset_type,
                 data_root=data_root,

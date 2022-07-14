@@ -21,7 +21,6 @@ def test_deepcluster_dataset():
             osp.dirname(__file__), '..', 'data', 'data_list.txt'),
         metainfo=None,
         data_root=osp.join(osp.dirname(__file__), '..', 'data'),
-        data_prefix=None,
         pipeline=train_pipeline)
     dataset = DeepClusterImageNet(**data)
     assert len(dataset.clustering_labels) == 2
