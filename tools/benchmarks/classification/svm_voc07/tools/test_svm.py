@@ -69,8 +69,8 @@ def test_svm(opts):
     for cls in range(num_classes):
         cost = costs_list[cls]
         model_file = osp.join(
-            opts.output_path,
-            'cls' + str(cls) + '_cost' + str(cost) + '.pickle')
+            opts.output_path, 'cls' + str(cls) + '_cost' +
+            svm_helper.py2_py3_compatible_cost(cost) + '.pickle')
         with open(model_file, 'rb') as fopen:
             if six.PY2:
                 model = pickle.load(fopen)
