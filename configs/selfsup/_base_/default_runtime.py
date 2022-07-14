@@ -19,12 +19,12 @@ log_processor = dict(
     window_size=10,
     custom_cfg=[dict(data_src='', method='mean', windows_size='global')])
 
-# vis_backends = [dict(type='LocalVisBackend')]
-# visualizer = dict(
-#     type='SelfSupLocalVisualizer',
-#     vis_backends=vis_backends,
-#     name='visualizer')
-# custom_hooks = [dict(type='SelfSupVisualizationHook', interval=10)]
+vis_backends = [dict(type='LocalVisBackend')]
+visualizer = dict(
+    type='SelfSupLocalVisualizer',
+    vis_backends=vis_backends,
+    name='visualizer')
+# custom_hooks = [dict(type='SelfSupVisualizationHook', interval=1)]
 
 log_level = 'INFO'
 load_from = None
