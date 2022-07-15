@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Iterator, List, Optional, Sized
+from typing import Iterator, Optional, Sized
 
 import numpy as np
 import torch
@@ -32,7 +32,7 @@ class DeepClusterSampler(DefaultSampler):
                  dataset: Sized,
                  shuffle: bool = True,
                  seed: Optional[int] = None,
-                 replace: Optional[bool] = False,
+                 replace: bool = False,
                  round_up: bool = True) -> None:
         super().__init__(
             dataset=dataset, shuffle=shuffle, seed=seed, round_up=round_up)
@@ -72,7 +72,7 @@ class DeepClusterSampler(DefaultSampler):
 
         return iter(self.indices)
 
-    def set_uniform_indices(self, labels: List, num_classes: int) -> None:
+    def set_uniform_indices(self, labels: list, num_classes: int) -> None:
         """The function is applied in DeepClusterHook for uniform sampling.
 
         Args:

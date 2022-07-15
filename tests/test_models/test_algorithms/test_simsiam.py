@@ -5,7 +5,7 @@ import platform
 import pytest
 import torch
 
-from mmselfsup.core import SelfSupDataSample
+from mmselfsup.data import SelfSupDataSample
 from mmselfsup.models.algorithms import SimSiam
 
 backbone = dict(

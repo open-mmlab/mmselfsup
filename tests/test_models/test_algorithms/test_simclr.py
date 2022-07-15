@@ -5,8 +5,7 @@ import platform
 import pytest
 import torch
 
-from mmselfsup.core.data_structures.selfsup_data_sample import \
-    SelfSupDataSample
+from mmselfsup.data import SelfSupDataSample
 from mmselfsup.models.algorithms.simclr import SimCLR
 
 backbone = dict(

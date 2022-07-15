@@ -1,12 +1,15 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import List, Optional, Union
+
+import torch
 import torch.nn as nn
 from mmcv.cnn import build_norm_layer
 from mmengine.model import BaseModule
 
-from ..builder import NECKS
+from mmselfsup.registry import MODELS
 
 
-@NECKS.register_module()
+@MODELS.register_module()
 class ODCNeck(BaseModule):
     """The non-linear neck of ODC: fc-bn-relu-dropout-fc-relu.
 
@@ -21,19 +24,18 @@ class ODCNeck(BaseModule):
         init_cfg (dict or list[dict], optional): Initialization config dict.
     """
 
-    def __init__(self,
-                 in_channels,
-                 hid_channels,
-                 out_channels,
-                 with_avg_pool=True,
-                 norm_cfg=dict(type='SyncBN'),
-                 init_cfg=[
-                     dict(
-                         type='Constant',
-                         val=1,
-                         layer=['_BatchNorm', 'GroupNorm'])
-                 ]):
-        super(ODCNeck, self).__init__(init_cfg)
+    def __init__(
+        self,
+        in_channels: int,
+        hid_channels: int,
+        out_channels: int,
+        with_avg_pool: bool = True,
+        norm_cfg: dict = dict(type='SyncBN'),
+        init_cfg: Optional[Union[dict, List[dict]]] = [
+            dict(type='Constant', val=1, layer=['_BatchNorm', 'GroupNorm'])
+        ]
+    ) -> None:
+        super().__init__(init_cfg)
         self.with_avg_pool = with_avg_pool
         if with_avg_pool:
             self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
@@ -44,7 +46,8 @@ class ODCNeck(BaseModule):
         self.relu = nn.ReLU(inplace=True)
         self.dropout = nn.Dropout()
 
-    def forward(self, x):
+    def forward(self, x: List[torch.Tensor]) -> List[torch.Tensor]:
+        """Forward function."""
         assert len(x) == 1
         x = x[0]
         if self.with_avg_pool:

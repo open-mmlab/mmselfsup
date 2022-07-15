@@ -96,6 +96,7 @@ class SimMIMSwinTransformer(SwinTransformer):
         self.apply(self._init_weights)
 
     def _init_weights(self, m):
+        """Initialize weights."""
         if isinstance(m, nn.Linear):
             trunc_normal_(m.weight, std=.02)
             if isinstance(m, nn.Linear) and m.bias is not None:

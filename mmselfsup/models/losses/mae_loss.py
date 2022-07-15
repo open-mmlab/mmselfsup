@@ -3,10 +3,10 @@
 import torch
 from mmengine.model import BaseModule
 
-from ..builder import LOSSES
+from mmselfsup.registry import MODELS
 
 
-@LOSSES.register_module()
+@MODELS.register_module()
 class MAEReconstructionLoss(BaseModule):
     """Loss function for MAE.
 

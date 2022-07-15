@@ -92,6 +92,7 @@ class NonLinearNeck(BaseModule):
             self.fc_names.append(f'fc{i}')
 
     def forward(self, x: Tuple[torch.Tensor]) -> List[torch.Tensor]:
+        """Forward function."""
         assert len(x) == 1
         x = x[0]
         if self.vit_backbone:

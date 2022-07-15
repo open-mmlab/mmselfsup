@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Dict, List, Sequence, Tuple, Union
+from typing import List, Sequence, Tuple, Union
 
 import torch
 import torch.nn as nn
@@ -30,7 +30,7 @@ class MultiClsHead(ClsHead):
             'adaptive', use adaptive average pooling, otherwise use specified
             pooling params. Defaults to 'adaptive'.
         num_classes (int): Number of classes. Defaults to 1000.
-        loss (dict): The Dict of loss information. Defaults to
+        loss (dict): The dict of loss information. Defaults to
             'mmcls.models.CrossEntro): Whether to unpool the features
             from last layer. Defaults to False.
         cal_acc (bool): Whether to calculate accuracy during training.
@@ -61,7 +61,7 @@ class MultiClsHead(ClsHead):
         cal_acc: bool = False,
         topk: Union[int, Tuple[int]] = (1, ),
         norm_cfg: dict = dict(type='BN'),
-        init_cfg: Union[Dict, List[Dict]] = [
+        init_cfg: Union[dict, List[dict]] = [
             dict(type='Normal', std=0.01, layer='Linear'),
             dict(type='Constant', val=1, layer=['_BatchNorm', 'GroupNorm'])
         ]

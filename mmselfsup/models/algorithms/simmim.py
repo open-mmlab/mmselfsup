@@ -3,7 +3,7 @@ from typing import Dict, List
 
 import torch
 
-from mmselfsup.core import SelfSupDataSample
+from mmselfsup.data import SelfSupDataSample
 from mmselfsup.registry import MODELS
 from .base import BaseModel
 

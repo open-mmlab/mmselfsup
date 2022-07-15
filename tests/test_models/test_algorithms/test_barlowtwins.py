@@ -5,19 +5,18 @@ import platform
 import pytest
 import torch
 
-from mmselfsup.core.data_structures.selfsup_data_sample import \
-    SelfSupDataSample
+from mmselfsup.data import SelfSupDataSample
 from mmselfsup.models.algorithms.barlowtwins import BarlowTwins
 
 backbone = dict(
     type='ResNet',
-    depth=50,
+    depth=18,
     in_channels=3,
     out_indices=[4],  # 0: conv-1, x: stage-x
     norm_cfg=dict(type='BN'))
 neck = dict(
     type='NonLinearNeck',
-    in_channels=2048,
+    in_channels=512,
     hid_channels=2,
     out_channels=2,
     num_layers=3,
@@ -56,4 +55,4 @@ def test_barlowtwins():
     assert isinstance(fake_loss['loss'].item(), float)
 
     fake_feats = alg(fake_inputs, fake_data_samples, mode='tensor')
-    assert list(fake_feats[0].shape) == [2, 2048, 7, 7]
+    assert list(fake_feats[0].shape) == [2, 512, 7, 7]

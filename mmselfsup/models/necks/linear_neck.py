@@ -26,13 +26,14 @@ class LinearNeck(BaseModule):
                  out_channels: int,
                  with_avg_pool: bool = True,
                  init_cfg: Optional[Union[dict, List[dict]]] = None) -> None:
-        super(LinearNeck, self).__init__(init_cfg)
+        super().__init__(init_cfg)
         self.with_avg_pool = with_avg_pool
         if with_avg_pool:
             self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Linear(in_channels, out_channels)
 
     def forward(self, x: Tuple[torch.Tensor]) -> List[torch.Tensor]:
+        """Forward function."""
         assert len(x) == 1
         x = x[0]
         if self.with_avg_pool:

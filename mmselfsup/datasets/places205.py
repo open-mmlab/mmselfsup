@@ -14,12 +14,12 @@ class Places205(CustomDataset):
     found in :class:`CustomDataset`.
 
     Args:
-        ann_file (str, optional): Annotation file path. Defaults to None.
+        ann_file (str): Annotation file path. Defaults to None.
         metainfo (dict, optional): Meta information for dataset, such as class
             information. Defaults to None.
-        data_root (str, optional): The root directory for ``data_prefix`` and
+        data_root (str): The root directory for ``data_prefix`` and
             ``ann_file``. Defaults to None.
-        data_prefix (str | dict, optional): Prefix for training data. Defaults
+        data_prefix (str | dict): Prefix for training data. Defaults
             to None.
         **kwargs: Other keyword arguments in :class:`CustomDataset` and
             :class:`BaseDataset`.
@@ -28,10 +28,10 @@ class Places205(CustomDataset):
     IMG_EXTENSIONS = ('.jpg', '.jpeg', '.png', '.ppm', '.bmp', '.pgm', '.tif')
 
     def __init__(self,
-                 ann_file: Optional[str] = None,
+                 ann_file: str = '',
                  metainfo: Optional[dict] = None,
-                 data_root: Optional[str] = None,
-                 data_prefix: Union[str, dict, None] = None,
+                 data_root: str = '',
+                 data_prefix: Union[str, dict] = '',
                  **kwargs):
         kwargs = {'extensions': self.IMG_EXTENSIONS, **kwargs}
         super().__init__(

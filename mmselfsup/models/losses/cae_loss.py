@@ -2,13 +2,13 @@
 from typing import Tuple
 
 import torch
-from mmcv.runner import BaseModule
+from mmengine.model import BaseModule
 from torch import nn
 
-from ..builder import LOSSES
+from mmselfsup.registry import MODELS
 
 
-@LOSSES.register_module()
+@MODELS.register_module()
 class CAELoss(BaseModule):
     """Loss function for CAE.
 

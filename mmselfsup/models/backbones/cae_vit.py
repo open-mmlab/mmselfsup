@@ -6,11 +6,11 @@ from mmcv.cnn.utils.weight_init import trunc_normal_
 from mmcv.runner.base_module import ModuleList
 from torch import nn
 
-from ..builder import BACKBONES
+from mmselfsup.registry import MODELS
 from ..utils import TransformerEncoderLayer, build_2d_sincos_position_embedding
 
 
-@BACKBONES.register_module()
+@MODELS.register_module()
 class CAEViT(VisionTransformer):
     """Vision Transformer for CAE pre-training.
 

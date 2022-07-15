@@ -4,8 +4,9 @@ import platform
 
 import pytest
 import torch
+from mmengine.data import InstanceData
 
-from mmselfsup.core import SelfSupDataSample
+from mmselfsup.data import SelfSupDataSample
 from mmselfsup.models.algorithms import ODC
 
 num_classes = 5
@@ -54,16 +55,16 @@ def test_odc():
         head=head,
         memory_bank=memory_bank,
         data_preprocessor=copy.deepcopy(data_preprocessor))
-    alg.set_reweight()
 
+    fake_data_sample = SelfSupDataSample()
+    fake_sample_idx = InstanceData(value=torch.tensor([0]))
+    fake_data_sample.sample_idx = fake_sample_idx
     fake_data = [{
         'inputs': [torch.randn((3, 224, 224))],
-        'data_sample': SelfSupDataSample()
+        'data_sample': fake_data_sample
     } for _ in range(2)]
 
     fake_inputs, fake_data_samples = alg.data_preprocessor(fake_data)
-    fake_loss = alg(fake_inputs, fake_data_samples, mode='loss')
-    assert fake_loss['loss'] > 0
 
     # test extract
     fake_feats = alg(fake_inputs, fake_data_samples, mode='tensor')

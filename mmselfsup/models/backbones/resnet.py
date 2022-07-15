@@ -2,11 +2,11 @@
 from mmcls.models.backbones import ResNet as _ResNet
 from mmcls.models.backbones.resnet import BasicBlock, Bottleneck
 
-from ..builder import BACKBONES
+from mmselfsup.registry import MODELS
 from ..utils import Sobel
 
 
-@BACKBONES.register_module()
+@MODELS.register_module()
 class ResNet(_ResNet):
     """ResNet backbone.
 
@@ -155,7 +155,7 @@ class ResNet(_ResNet):
         return tuple(outs)
 
 
-@BACKBONES.register_module()
+@MODELS.register_module()
 class ResNetSobel(ResNet):
     """ResNet with Sobel layer.
 
@@ -189,7 +189,7 @@ class ResNetSobel(ResNet):
         return tuple(outs)
 
 
-@BACKBONES.register_module()
+@MODELS.register_module()
 class ResNetV1d(ResNet):
     r"""ResNetV1d variant described in `Bag of Tricks
     <https://arxiv.org/pdf/1812.01187.pdf>`_.

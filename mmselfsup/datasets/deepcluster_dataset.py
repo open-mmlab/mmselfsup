@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Any, List, Optional, Union
+from typing import Any, Optional, Union
 
 from mmcls.datasets import ImageNet
 
@@ -42,7 +42,7 @@ class DeepClusterImageNet(ImageNet):
         # init clustering labels
         self.clustering_labels = [-1 for _ in range(len(self))]
 
-    def assign_labels(self, labels: List) -> None:
+    def assign_labels(self, labels: list) -> None:
         """Assign new labels to `self.clustering_labels`.
 
         Args:

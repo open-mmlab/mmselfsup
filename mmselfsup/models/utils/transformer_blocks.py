@@ -74,6 +74,7 @@ class MultiheadAttention(_MultiheadAttention):
         self.v_bias = nn.Parameter(torch.zeros(self.embed_dims))
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Forward function."""
         # qkv bias is different from that in mmcls
         B, N, _ = x.shape
 
@@ -195,6 +196,7 @@ class MultiheadAttentionWithRPE(MultiheadAttention):
                              relative_position_index)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Forward function."""
         qkv_bias = None
         if self.q_bias is not None:
             qkv_bias = torch.cat(
@@ -332,6 +334,7 @@ class TransformerEncoderLayer(_TransformerEncoderLayer):
             self.gamma_1, self.gamma_2 = None, None
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Forward function."""
         if self.gamma_1 is not None:
             x = x + self.drop_path(self.gamma_1 * self.attn(self.norm1(x)))
             x = x + self.drop_path(self.gamma_2 * self.ffn(self.norm2(x)))
@@ -428,6 +431,7 @@ class CAETransformerRegressorLayer(BaseModule):
 
     def forward(self, x_q: torch.Tensor, x_kv: torch.Tensor,
                 pos_q: torch.Tensor, pos_k: torch.Tensor) -> torch.Tensor:
+        """Forward function."""
         x = x_q + self.drop_path(self.gamma_1_cross * self.cross_attn(
             self.norm1_q_cross(x_q + pos_q),
             k=self.norm1_k_cross(x_kv + pos_k),
@@ -489,6 +493,7 @@ class CrossMultiheadAttention(BaseModule):
                 x: torch.Tensor,
                 k: torch.Tensor = None,
                 v: torch.Tensor = None) -> None:
+        """Forward function."""
         B, N, _ = x.shape
 
         N_k = k.shape[1]

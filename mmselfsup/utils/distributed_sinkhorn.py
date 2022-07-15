@@ -3,9 +3,8 @@
 
 # This file is modified from
 # https://github.com/facebookresearch/swav/blob/main/main_swav.py
-
 import torch
-import torch.distributed as dist
+from mmengine.dist import all_reduce
 
 
 @torch.no_grad()
@@ -32,8 +31,7 @@ def distributed_sinkhorn(out: torch.Tensor, sinkhorn_iterations: int,
 
     # make the matrix sums to 1
     sum_Q = torch.sum(Q)
-    if dist.is_initialized():
-        dist.all_reduce(sum_Q)
+    all_reduce(sum_Q)
     Q /= sum_Q
 
     for it in range(sinkhorn_iterations):
@@ -42,8 +40,7 @@ def distributed_sinkhorn(out: torch.Tensor, sinkhorn_iterations: int,
         if len(torch.nonzero(u == 0)) > 0:
             Q += eps_num_stab
             u = torch.sum(Q, dim=1, keepdim=True, dtype=Q.dtype)
-            if dist.is_initialized():
-                dist.all_reduce(u)
+            all_reduce(u)
         Q /= u
         Q /= K
 

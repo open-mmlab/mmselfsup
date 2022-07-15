@@ -1,13 +1,15 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import List, Optional, Union
+
 import torch
 import torch.nn as nn
 from mmcv.cnn import build_norm_layer
-from mmcv.runner import BaseModule
+from mmengine.model import BaseModule
 
-from ..builder import NECKS
+from mmselfsup.registry import MODELS
 
 
-@NECKS.register_module()
+@MODELS.register_module()
 class SwAVNeck(BaseModule):
     """The non-linear neck of SwAV: fc-bn-relu-fc-normalization.
 
@@ -24,20 +26,19 @@ class SwAVNeck(BaseModule):
         init_cfg (dict or list[dict], optional): Initialization config dict.
     """
 
-    def __init__(self,
-                 in_channels,
-                 hid_channels,
-                 out_channels,
-                 with_avg_pool=True,
-                 with_l2norm=True,
-                 norm_cfg=dict(type='SyncBN'),
-                 init_cfg=[
-                     dict(
-                         type='Constant',
-                         val=1,
-                         layer=['_BatchNorm', 'GroupNorm'])
-                 ]):
-        super(SwAVNeck, self).__init__(init_cfg)
+    def __init__(
+        self,
+        in_channels: int,
+        hid_channels: int,
+        out_channels: int,
+        with_avg_pool: bool = True,
+        with_l2norm: bool = True,
+        norm_cfg: dict = dict(type='SyncBN'),
+        init_cfg: Optional[Union[dict, List[dict]]] = [
+            dict(type='Constant', val=1, layer=['_BatchNorm', 'GroupNorm'])
+        ]
+    ) -> None:
+        super().__init__(init_cfg)
         self.with_avg_pool = with_avg_pool
         self.with_l2norm = with_l2norm
         if with_avg_pool:
@@ -52,16 +53,25 @@ class SwAVNeck(BaseModule):
                 nn.Linear(in_channels, hid_channels), self.bn,
                 nn.ReLU(inplace=True), nn.Linear(hid_channels, out_channels))
 
-    def forward_projection(self, x):
+    def forward_projection(self, x: torch.Tensor) -> torch.Tensor:
+        """Compute projection."""
         if self.projection_neck is not None:
             x = self.projection_neck(x)
         if self.with_l2norm:
             x = nn.functional.normalize(x, dim=1, p=2)
         return x
 
-    def forward(self, x):
-        # forward computing
-        # x: list of feature maps, len(x) according to len(num_crops)
+    def forward(self, x: List[torch.Tensor]) -> List[torch.Tensor]:
+        """Forward function.
+
+        Args:
+            x (List[torch.Tensor]): list of feature maps, len(x) according to
+                len(num_crops).
+
+        Returns:
+            List[torch.Tensor]: The projection vectors.
+        """
+
         avg_out = []
         for _x in x:
             _x = _x[0]

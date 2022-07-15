@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 from mmengine.data import LabelData
 
-from mmselfsup.core import SelfSupDataSample
+from mmselfsup.data import SelfSupDataSample
 from mmselfsup.registry import MODELS
 from .base import BaseModel
 
@@ -53,8 +53,9 @@ class ODC(BaseModel):
 
         # set re-weight tensors
         self.num_classes = self.head.num_classes
-        self.loss_weight = torch.ones((self.num_classes, ),
-                                      dtype=torch.float32).cuda()
+        self.register_buffer(
+            'loss_weight', torch.ones((self.num_classes, ),
+                                      dtype=torch.float32))
         self.loss_weight /= self.loss_weight.sum()
 
     def extract_feat(self, batch_inputs: List[torch.Tensor],
@@ -88,14 +89,11 @@ class ODC(BaseModel):
         feature = self.extract_feat(batch_inputs)
         idx = [data_sample.sample_idx.value for data_sample in data_samples]
         idx = torch.cat(idx)
+
         if self.with_neck:
             feature = self.neck(feature)
-        if self.memory_bank.label_bank.is_cuda:
-            loss_inputs = (feature, self.memory_bank.label_bank[idx])
-        else:
-            loss_inputs = (feature,
-                           self.memory_bank.label_bank[idx.cpu()].cuda())
 
+        loss_inputs = (feature, self.memory_bank.label_bank[idx])
         loss = self.head(*loss_inputs)
         losses = dict(loss=loss)
 

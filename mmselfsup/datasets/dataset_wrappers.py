@@ -1,7 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from torch.utils.data.dataset import ConcatDataset as _ConcatDataset
 
-from .builder import DATASETS
+from mmselfsup.registry import DATASETS
 
 
 @DATASETS.register_module()

@@ -1,3 +1,4 @@
+attrs
 future
 matplotlib
 mmcls
@@ -7,5 +8,4 @@ scipy
 six
 sklearn
 tensorboard
-timm
 tqdm

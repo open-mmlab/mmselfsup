@@ -18,7 +18,7 @@ class SimMIMNeck(BaseModule):
     """
 
     def __init__(self, in_channels: int, encoder_stride: int) -> None:
-        super(SimMIMNeck, self).__init__()
+        super().__init__()
         self.decoder = nn.Sequential(
             nn.Conv2d(
                 in_channels=in_channels,
@@ -28,7 +28,7 @@ class SimMIMNeck(BaseModule):
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-
+        """Forward function."""
         x = self.decoder(x)
 
         return x

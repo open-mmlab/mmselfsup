@@ -4,8 +4,8 @@ from typing import Dict, List, Tuple
 import torch
 from mmengine.data import LabelData
 
-from mmselfsup.core import SelfSupDataSample
-from ..builder import MODELS
+from mmselfsup.data import SelfSupDataSample
+from mmselfsup.registry import MODELS
 from .base import BaseModel
 
 

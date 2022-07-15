@@ -3,11 +3,11 @@ import torch
 from mmcls.models import VisionTransformer
 from torch import nn
 
-from ..builder import BACKBONES
+from mmselfsup.registry import MODELS
 from ..utils import build_2d_sincos_position_embedding
 
 
-@BACKBONES.register_module()
+@MODELS.register_module()
 class MAEViT(VisionTransformer):
     """Vision Transformer for MAE pre-training.
 

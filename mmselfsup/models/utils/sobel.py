@@ -5,7 +5,10 @@ from mmengine.model import BaseModule
 
 
 class Sobel(BaseModule):
-    """Sobel layer."""
+    """Sobel layer.
+
+    The layer reduces channels from 3 to 2.
+    """
 
     def __init__(self) -> None:
         super().__init__()
@@ -23,4 +26,5 @@ class Sobel(BaseModule):
             p.requires_grad = False
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Run sobel layer."""
         return self.sobel(x)
