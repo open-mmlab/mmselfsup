@@ -1,6 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import torch
 import torch.nn as nn
+from mmengine.dist import get_rank
 from mmengine.model import BaseModule
 
 from mmselfsup.registry import MODELS
@@ -60,7 +61,7 @@ class MoCoV3Head(BaseModule):
         # generate labels
         batch_size = logits.shape[0]
         labels = (torch.arange(batch_size, dtype=torch.long) +
-                  batch_size * torch.distributed.get_rank()).cuda()
+                  batch_size * get_rank()).to(logits.device)
 
         loss = self.loss(logits, labels)
         return loss

@@ -22,11 +22,13 @@ class MoCoV3(BaseModel):
         neck (dict): Config dict for module of deep features to compact feature
             vectors.
         head (dict): Config dict for module of head functions.
-        base_momentum (float, , optional): Momentum coefficient for the
-            momentum-updated encoder. Defaults to 0.99.
-        preprocess_cfg (Dict, optional): Config to preprocess images.
+        base_momentum (float): Momentum coefficient for the momentum-updated
+            encoder. Defaults to 0.99.
+        pretrained (str, optional): The pretrained checkpoint path, support
+            local path and remote path. Defaults to None.
+        data_preprocessor (dict, optional): Config to preprocess images.
             Defaults to None.
-        init_cfg (Dict or list[Dict], optional): Initialization config dict.
+        init_cfg (dict or list[dict], optional): Initialization config dict.
             Defaults to None
     """
 
@@ -34,7 +36,7 @@ class MoCoV3(BaseModel):
                  backbone: dict,
                  neck: dict,
                  head: dict,
-                 base_momentum: Optional[float] = 0.99,
+                 base_momentum: float = 0.99,
                  pretrained: Optional[str] = None,
                  data_preprocessor: Optional[Union[dict, nn.Module]] = None,
                  init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
@@ -45,13 +47,10 @@ class MoCoV3(BaseModel):
             pretrained=pretrained,
             data_preprocessor=data_preprocessor,
             init_cfg=init_cfg)
-        self.base_encoder = nn.Sequential(self.backbone, self.neck)
 
         # create momentum model
         self.momentum_encoder = CosineEMA(
-            self.base_encoder, momentum=base_momentum)
-        for param_m in self.momentum_encoder.module.parameters():
-            param_m.requires_grad = False
+            nn.Sequential(self.backbone, self.neck), momentum=base_momentum)
 
     def extract_feat(self, batch_inputs: List[torch.Tensor],
                      **kwarg) -> Tuple[torch.Tensor]:
@@ -85,13 +84,14 @@ class MoCoV3(BaseModel):
         view_2 = batch_inputs[1]
 
         # compute query features, [N, C] each
-        q1 = self.base_encoder(view_1)[0]
-        q2 = self.base_encoder(view_2)[0]
+        q1 = self.neck(self.backbone(view_1))[0]
+        q2 = self.neck(self.backbone(view_2))[0]
 
         # compute key features, [N, C] each, no gradient
         with torch.no_grad():
             # update momentum encoder
-            self.momentum_encoder.update_parameters(self.base_encoder)
+            self.momentum_encoder.update_parameters(
+                nn.Sequential(self.backbone, self.neck))
 
             k1 = self.momentum_encoder(view_1)[0]
             k2 = self.momentum_encoder(view_2)[0]
