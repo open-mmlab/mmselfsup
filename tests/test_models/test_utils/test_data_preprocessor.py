@@ -1,7 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import torch
 
-from mmselfsup.core import SelfSupDataSample
+from mmselfsup.data import SelfSupDataSample
 from mmselfsup.models.utils import SelfSupDataPreprocessor
 
 

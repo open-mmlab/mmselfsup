@@ -1,13 +1,13 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 
 import torch
-from mmcv.runner import BaseModule
+from mmengine.model import BaseModule
 from torch import nn
 
-from ..builder import LOSSES
+from mmselfsup.registry import MODELS
 
 
-@LOSSES.register_module()
+@MODELS.register_module()
 class CosineSimilarityLoss(BaseModule):
     """Cosine similarity loss function.
 

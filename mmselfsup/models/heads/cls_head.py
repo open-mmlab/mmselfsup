@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 from mmengine.model import BaseModule
 
-from ..builder import MODELS
+from mmselfsup.registry import MODELS
 
 
 @MODELS.register_module()

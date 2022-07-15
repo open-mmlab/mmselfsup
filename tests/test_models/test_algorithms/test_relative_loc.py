@@ -5,8 +5,7 @@ import pytest
 import torch
 from mmengine.data import InstanceData
 
-from mmselfsup.core.data_structures.selfsup_data_sample import \
-    SelfSupDataSample
+from mmselfsup.data import SelfSupDataSample
 from mmselfsup.models.algorithms.relative_loc import RelativeLoc
 
 backbone = dict(

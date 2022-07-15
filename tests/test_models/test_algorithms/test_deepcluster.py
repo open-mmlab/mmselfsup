@@ -6,15 +6,14 @@ import pytest
 import torch
 from mmengine.data import InstanceData
 
-from mmselfsup.core import SelfSupDataSample
+from mmselfsup.data import SelfSupDataSample
 from mmselfsup.models.algorithms import DeepCluster
 
 num_classes = 5
 with_sobel = True,
 backbone = dict(
-    type='ResNet',
+    type='ResNetSobel',
     depth=18,
-    in_channels=2,
     out_indices=[4],  # 0: conv-1, x: stage-x
     norm_cfg=dict(type='BN'))
 neck = dict(type='AvgPool2dNeck')
@@ -42,13 +41,12 @@ def test_deepcluster():
         head=head,
         data_preprocessor=copy.deepcopy(data_preprocessor))
     assert alg.num_classes == num_classes
-    assert hasattr(alg, 'sobel_layer')
     assert hasattr(alg, 'neck')
     assert hasattr(alg, 'head')
 
     fake_data_sample = SelfSupDataSample()
-    fake_label = InstanceData(label=torch.tensor([1]))
-    fake_data_sample.pseudo_label = fake_label
+    clustering_label = InstanceData(clustering_label=torch.tensor([1]))
+    fake_data_sample.pseudo_label = clustering_label
     fake_data = [{
         'inputs': [torch.randn(3, 224, 224)],
         'data_sample': fake_data_sample

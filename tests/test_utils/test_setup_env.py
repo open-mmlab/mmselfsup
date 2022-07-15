@@ -11,23 +11,23 @@ from mmselfsup.utils import register_all_modules
 class TestSetupEnv(TestCase):
 
     def test_register_all_modules(self):
-        from mmselfsup.registry import TRANSFORMS
+        from mmselfsup.registry import DATASETS
 
         # not init default scope
-        sys.modules.pop('mmselfsup.datasets.pipelines', None)
-        sys.modules.pop('mmselfsup.datasets.pipelines.formatting', None)
-        TRANSFORMS._module_dict.pop('PackSelfSupInputs', None)
-        self.assertFalse('PackSelfSupInputs' in TRANSFORMS.module_dict)
+        sys.modules.pop('mmselfsup.datasets', None)
+        sys.modules.pop('mmselfsup.datasets.places205', None)
+        DATASETS._module_dict.pop('Places205', None)
+        self.assertFalse('Places205' in DATASETS.module_dict)
         register_all_modules(init_default_scope=False)
-        self.assertTrue('PackSelfSupInputs' in TRANSFORMS.module_dict)
+        self.assertTrue('Places205' in DATASETS.module_dict)
 
         # init default scope
-        sys.modules.pop('mmselfsup.datasets.pipelines')
-        sys.modules.pop('mmselfsup.datasets.pipelines.formatting')
-        TRANSFORMS._module_dict.pop('PackSelfSupInputs', None)
-        self.assertFalse('PackSelfSupInputs' in TRANSFORMS.module_dict)
+        sys.modules.pop('mmselfsup.datasets')
+        sys.modules.pop('mmselfsup.datasets.places205')
+        DATASETS._module_dict.pop('Places205', None)
+        self.assertFalse('Places205' in DATASETS.module_dict)
         register_all_modules(init_default_scope=True)
-        self.assertTrue('PackSelfSupInputs' in TRANSFORMS.module_dict)
+        self.assertTrue('Places205' in DATASETS.module_dict)
         self.assertEqual(DefaultScope.get_current_instance().scope_name,
                          'mmselfsup')
 

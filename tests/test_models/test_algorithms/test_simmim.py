@@ -5,7 +5,7 @@ import pytest
 import torch
 from mmengine.data import InstanceData
 
-from mmselfsup.core import SelfSupDataSample
+from mmselfsup.data import SelfSupDataSample
 from mmselfsup.models.algorithms import SimMIM
 
 

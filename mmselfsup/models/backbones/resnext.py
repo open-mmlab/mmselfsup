@@ -2,11 +2,11 @@
 from mmcls.models.backbones.resnet import ResLayer
 from mmcls.models.backbones.resnext import Bottleneck
 
-from ..builder import BACKBONES
+from mmselfsup.registry import MODELS
 from .resnet import ResNet
 
 
-@BACKBONES.register_module()
+@MODELS.register_module()
 class ResNeXt(ResNet):
     """ResNeXt backbone.
 

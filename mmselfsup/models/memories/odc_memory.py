@@ -8,10 +8,10 @@ from mmengine.dist import get_dist_info
 from mmengine.model import BaseModule
 from sklearn.cluster import KMeans
 
-from ..builder import MEMORIES
+from mmselfsup.registry import MODELS
 
 
-@MEMORIES.register_module()
+@MODELS.register_module()
 class ODCMemory(BaseModule):
     """Memory module for ODC.
 
@@ -32,11 +32,16 @@ class ODCMemory(BaseModule):
         super().__init__()
         self.rank, self.num_replicas = get_dist_info()
         if self.rank == 0:
-            self.feature_bank = torch.zeros((length, feat_dim),
-                                            dtype=torch.float32)
-        self.label_bank = torch.zeros((length, ), dtype=torch.long)
-        self.centroids = torch.zeros((num_classes, feat_dim),
-                                     dtype=torch.float32).cuda()
+            self.register_buffer(
+                'feature_bank',
+                torch.zeros((length, feat_dim), dtype=torch.float32))
+
+        self.register_buffer('label_bank',
+                             torch.zeros((length, ), dtype=torch.long))
+        self.register_buffer(
+            'centroids',
+            torch.zeros((num_classes, feat_dim), dtype=torch.float32))
+
         self.kmeans = KMeans(n_clusters=2, random_state=0, max_iter=20)
         self.feat_dim = feat_dim
         self.initialized = False

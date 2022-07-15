@@ -5,8 +5,7 @@ import platform
 import pytest
 import torch
 
-from mmselfsup.core.data_structures.selfsup_data_sample import \
-    SelfSupDataSample
+from mmselfsup.data import SelfSupDataSample
 from mmselfsup.models.algorithms.swav import SwAV
 
 nmb_crops = [2, 6]

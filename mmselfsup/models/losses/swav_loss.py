@@ -1,14 +1,14 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Dict, List, Optional, Union
+from typing import List, Optional, Union
 
 import numpy as np
 import torch
 import torch.distributed as dist
 import torch.nn as nn
-from mmcv.runner import BaseModule
+from mmengine.model import BaseModule
 
+from mmselfsup.registry import MODELS
 from mmselfsup.utils import distributed_sinkhorn
-from ..builder import MODELS
 from ..utils import MultiPrototypes
 
 
@@ -33,7 +33,7 @@ class SwAVLoss(BaseModule):
             assignments. Defaults to [0, 1].
         num_crops (List[int]): list of number of crops. Defaults to [2].
         num_prototypes (int): number of prototypes. Defaults to 3000.
-        init_cfg (Dict or List[Dict], optional): Initialization config dict.
+        init_cfg (dict or List[dict], optional): Initialization config dict.
             Defaults to None.
     """
 
@@ -45,7 +45,7 @@ class SwAVLoss(BaseModule):
                  crops_for_assign: List[int] = [0, 1],
                  num_crops: List[int] = [2],
                  num_prototypes: int = 3000,
-                 init_cfg: Optional[Union[List[Dict], Dict]] = None):
+                 init_cfg: Optional[Union[List[dict], dict]] = None):
         super().__init__(init_cfg)
         self.sinkhorn_iterations = sinkhorn_iterations
         self.epsilon = epsilon

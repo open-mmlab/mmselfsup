@@ -3,8 +3,8 @@ from typing import Tuple
 
 import torch
 import torch.nn as nn
-from mmcv.runner import BaseModule, get_dist_info
-from mmengine.dist import all_gather
+from mmengine.dist import all_gather, get_dist_info
+from mmengine.model import BaseModule
 
 from mmselfsup.registry import MODELS
 from mmselfsup.utils import AliasMethod

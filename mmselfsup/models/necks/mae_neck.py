@@ -5,11 +5,11 @@ from mmcls.models.backbones.vision_transformer import TransformerEncoderLayer
 from mmcv.cnn import build_norm_layer
 from mmengine.model import BaseModule
 
-from ..builder import NECKS
+from mmselfsup.registry import MODELS
 from ..utils import build_2d_sincos_position_embedding
 
 
-@NECKS.register_module()
+@MODELS.register_module()
 class MAEPretrainDecoder(BaseModule):
     """Decoder for MAE Pre-training.
 
@@ -42,17 +42,19 @@ class MAEPretrainDecoder(BaseModule):
         (1, 196, 768)
     """
 
-    def __init__(self,
-                 num_patches=196,
-                 patch_size=16,
-                 in_chans=3,
-                 embed_dim=1024,
-                 decoder_embed_dim=512,
-                 decoder_depth=8,
-                 decoder_num_heads=16,
-                 mlp_ratio=4.,
-                 norm_cfg=dict(type='LN', eps=1e-6)):
-        super(MAEPretrainDecoder, self).__init__()
+    def __init__(
+            self,
+            num_patches: int = 196,
+            patch_size: int = 16,
+            in_chans: int = 3,
+            embed_dim: int = 1024,
+            decoder_embed_dim: int = 512,
+            decoder_depth: int = 8,
+            decoder_num_heads: int = 16,
+            mlp_ratio: int = 4.,
+            norm_cfg: dict = dict(type='LN', eps=1e-6),
+    ) -> None:
+        super().__init__()
         self.num_patches = num_patches
         self.decoder_embed = nn.Linear(embed_dim, decoder_embed_dim, bias=True)
 
@@ -77,8 +79,9 @@ class MAEPretrainDecoder(BaseModule):
         self.decoder_pred = nn.Linear(
             decoder_embed_dim, patch_size**2 * in_chans, bias=True)
 
-    def init_weights(self):
-        super(MAEPretrainDecoder, self).init_weights()
+    def init_weights(self) -> None:
+        """Initialization."""
+        super().init_weights()
 
         # initialize position embedding of MAE decoder
         decoder_pos_embed = build_2d_sincos_position_embedding(
@@ -91,8 +94,8 @@ class MAEPretrainDecoder(BaseModule):
 
         self.apply(self._init_weights)
 
-    def _init_weights(self, m):
-
+    def _init_weights(self, m: nn.Module) -> None:
+        """Initialization."""
         if isinstance(m, nn.Linear):
             torch.nn.init.xavier_uniform_(m.weight)
             if isinstance(m, nn.Linear) and m.bias is not None:
@@ -102,10 +105,12 @@ class MAEPretrainDecoder(BaseModule):
             nn.init.constant_(m.weight, 1.0)
 
     @property
-    def decoder_norm(self):
+    def decoder_norm(self) -> nn.Module:
         return getattr(self, self.decoder_norm_name)
 
-    def forward(self, x, ids_restore):
+    def forward(self, x: torch.Tensor,
+                ids_restore: torch.Tensor) -> torch.Tensor:
+        """Forward function."""
         # embed tokens
         x = self.decoder_embed(x)
 

@@ -1,12 +1,15 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import List, Optional, Union
+
+import torch
 import torch.nn as nn
 from mmcv.cnn import build_norm_layer
-from mmcv.runner import BaseModule
+from mmengine.model import BaseModule
 
-from ..builder import NECKS
+from mmselfsup.registry import MODELS
 
 
-@NECKS.register_module()
+@MODELS.register_module()
 class RelativeLocNeck(BaseModule):
     """The neck of relative patch location: fc-bn-relu-dropout.
 
@@ -20,19 +23,18 @@ class RelativeLocNeck(BaseModule):
         init_cfg (dict or list[dict], optional): Initialization config dict.
     """
 
-    def __init__(self,
-                 in_channels,
-                 out_channels,
-                 with_avg_pool=True,
-                 norm_cfg=dict(type='BN1d'),
-                 init_cfg=[
-                     dict(type='Normal', std=0.01, layer='Linear'),
-                     dict(
-                         type='Constant',
-                         val=1,
-                         layer=['_BatchNorm', 'GroupNorm'])
-                 ]):
-        super(RelativeLocNeck, self).__init__(init_cfg)
+    def __init__(
+        self,
+        in_channels: int,
+        out_channels: int,
+        with_avg_pool: bool = True,
+        norm_cfg: dict = dict(type='BN1d'),
+        init_cfg: Optional[Union[dict, List[dict]]] = [
+            dict(type='Normal', std=0.01, layer='Linear'),
+            dict(type='Constant', val=1, layer=['_BatchNorm', 'GroupNorm'])
+        ]
+    ) -> None:
+        super().__init__(init_cfg)
         self.with_avg_pool = with_avg_pool
         if with_avg_pool:
             self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
@@ -42,7 +44,8 @@ class RelativeLocNeck(BaseModule):
         self.relu = nn.ReLU(inplace=True)
         self.dropout = nn.Dropout()
 
-    def forward(self, x):
+    def forward(self, x: List[torch.Tensor]) -> List[torch.Tensor]:
+        """Forward function."""
         assert len(x) == 1
         x = x[0]
         if self.with_avg_pool:

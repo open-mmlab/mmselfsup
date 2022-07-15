@@ -1,13 +1,13 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import os
 import warnings
-from typing import Dict, List, Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union
 
 import torch
-from mmcv.runner import BaseModule
+from mmengine.model import BaseModule
 from torch import nn
 
-from ..builder import MODELS
+from mmselfsup.registry import MODELS
 from ..utils import Encoder
 
 
@@ -28,7 +28,7 @@ class CAEHead(BaseModule):
     def __init__(self,
                  loss: dict,
                  tokenizer_path: str,
-                 init_cfg: Optional[Union[Dict, List[Dict]]] = None) -> None:
+                 init_cfg: Optional[Union[dict, List[dict]]] = None) -> None:
         super().__init__(init_cfg=init_cfg)
         self.tokenizer_path = tokenizer_path
         self.encoder = self._load_encoder()

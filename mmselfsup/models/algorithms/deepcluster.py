@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 from mmengine.data import LabelData
 
-from mmselfsup.core import SelfSupDataSample
+from mmselfsup.data import SelfSupDataSample
 from mmselfsup.registry import MODELS
 from .base import BaseModel
 
@@ -46,8 +46,9 @@ class DeepCluster(BaseModel):
 
         # re-weight
         self.num_classes = self.head.num_classes
-        self.loss_weight = torch.ones((self.num_classes, ),
-                                      dtype=torch.float32).cuda()
+        self.register_buffer(
+            'loss_weight', torch.ones((self.num_classes, ),
+                                      dtype=torch.float32))
         self.loss_weight /= self.loss_weight.sum()
 
     def extract_feat(self, batch_inputs: List[torch.Tensor],

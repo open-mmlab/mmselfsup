@@ -30,7 +30,7 @@ class DenseCLNeck(BaseModule):
                  out_channels: int,
                  num_grid: Optional[int] = None,
                  init_cfg: Optional[Union[dict, List[dict]]] = None) -> None:
-        super(DenseCLNeck, self).__init__(init_cfg)
+        super().__init__(init_cfg)
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.mlp = nn.Sequential(
             nn.Linear(in_channels, hid_channels), nn.ReLU(inplace=True),

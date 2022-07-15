@@ -1,6 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import torch
-from mmcv.runner import BaseModule
+from mmengine.model import BaseModule
 
 from mmselfsup.registry import MODELS
 

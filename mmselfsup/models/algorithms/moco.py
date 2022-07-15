@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 from mmengine.model import ExponentialMovingAverage
 
-from mmselfsup.core import SelfSupDataSample
+from mmselfsup.data import SelfSupDataSample
 from mmselfsup.registry import MODELS
 from mmselfsup.utils import (batch_shuffle_ddp, batch_unshuffle_ddp,
                              concat_all_gather)

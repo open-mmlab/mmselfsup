@@ -3,7 +3,7 @@ from typing import List
 
 import torch
 import torch.nn as nn
-from mmcv.runner import BaseModule
+from mmengine.model import BaseModule
 
 
 class MultiPrototypes(BaseModule):
@@ -23,6 +23,7 @@ class MultiPrototypes(BaseModule):
                             nn.Linear(output_dim, k, bias=False))
 
     def forward(self, x: torch.Tensor) -> List[torch.Tensor]:
+        """Run forward for every prototype."""
         out = []
         for i in range(self.num_heads):
             out.append(getattr(self, 'prototypes' + str(i))(x))

@@ -5,11 +5,11 @@ from mmcls.models import VisionTransformer
 from mmcv.cnn import build_norm_layer
 from mmcv.runner.base_module import ModuleList
 
-from ..builder import BACKBONES
+from mmselfsup.registry import MODELS
 from ..utils import TransformerEncoderLayer
 
 
-@BACKBONES.register_module()
+@MODELS.register_module()
 class MIMVisionTransformer(VisionTransformer):
     """Vision Transformer for MIM-style model (Mask Image Modeling)
     classification (fine-tuning or linear probe).

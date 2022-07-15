@@ -3,8 +3,8 @@ from typing import Dict, List, Optional, Union
 
 import torch
 
-from mmselfsup.core import SelfSupDataSample
-from ..builder import MODELS
+from mmselfsup.data import SelfSupDataSample
+from mmselfsup.registry import MODELS
 from .base import BaseModel
 
 
@@ -45,11 +45,12 @@ class CAE(BaseModel):
         self.teacher = MODELS.build(backbone)
 
     def init_weights(self) -> None:
+        """Initialize weights."""
         super().init_weights()
         self._init_teacher()
 
     def _init_teacher(self) -> None:
-        # init the weights of teacher with those of backbone
+        """Init the weights of teacher with those of backbone."""
         for param_backbone, param_teacher in zip(self.backbone.parameters(),
                                                  self.teacher.parameters()):
             param_teacher.detach()
@@ -66,7 +67,16 @@ class CAE(BaseModel):
     def loss(self, batch_inputs: List[torch.Tensor],
              data_samples: List[SelfSupDataSample],
              **kwargs) -> Dict[str, torch.Tensor]:
+        """The forward function in training.
 
+        Args:
+            batch_inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
+
+        Returns:
+            Dict[str, torch.Tensor]: A dictionary of loss components.
+        """
         mask = torch.stack(
             [data_sample.mask.value for data_sample in data_samples])
 

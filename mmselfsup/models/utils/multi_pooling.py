@@ -48,5 +48,6 @@ class MultiPooling(BaseModule):
             ])
 
     def forward(self, x: Union[List, Tuple]) -> None:
+        """Forward function."""
         assert isinstance(x, (list, tuple))
         return [p(xx) for p, xx in zip(self.pools, x)]
