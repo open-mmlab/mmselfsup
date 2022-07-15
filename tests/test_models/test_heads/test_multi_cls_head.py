@@ -2,7 +2,7 @@
 from unittest import TestCase
 
 import torch
-from mmcls.core.data_structures import ClsDataSample
+from mmcls.data import ClsDataSample
 
 from mmselfsup.models.heads import MultiClsHead
 
@@ -17,12 +17,16 @@ class TestMultiClsHead(TestCase):
 
         fake_data_samples = [ClsDataSample().set_gt_label(1) for _ in range(2)]
         losses = head.loss(fake_in, fake_data_samples)
-        print(losses)
         self.assertEqual(len(losses.keys()), 2)
         for k in losses.keys():
             assert k.startswith('loss') or k.startswith('accuracy')
             if k.startswith('loss'):
                 self.assertGreater(losses[k].item(), 0)
+
+        # test calculation acc process
+        head = MultiClsHead(in_indices=(0, 1), cal_acc=True)
+        losses = head.loss(fake_in, fake_data_samples)
+        self.assertEqual(len(losses.keys()), 4)
 
     def test_predict(self):
         head = MultiClsHead(in_indices=(0, 1))
