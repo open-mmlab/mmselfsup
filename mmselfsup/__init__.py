@@ -6,15 +6,15 @@ from mmengine.utils import digit_version
 
 from .version import __version__
 
-mmcv_minimum_version = '1.4.2'
-mmcv_maximum_version = '1.7.0'
+mmcv_minimum_version = '2.0.0rc0'
+mmcv_maximum_version = '2.1.0'
 mmcv_version = digit_version(mmcv.__version__)
 
 mmengine_minimum_version = '0.0.0'
 mmengine_maximum_version = '0.2.0'
 mmengine_version = digit_version(mmengine.__version__)
 
-mmcls_minimum_version = '0.21.0'
+mmcls_minimum_version = '1.0.0rc0'
 mmcls_version = digit_version(mmcls.__version__)
 
 
