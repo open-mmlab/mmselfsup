@@ -26,9 +26,9 @@ class MoCoV3(BaseModel):
             encoder. Defaults to 0.99.
         pretrained (str, optional): The pretrained checkpoint path, support
             local path and remote path. Defaults to None.
-        data_preprocessor (Dict, optional): Config to preprocess images.
+        data_preprocessor (dict, optional): Config to preprocess images.
             Defaults to None.
-        init_cfg (Dict or list[Dict], optional): Initialization config dict.
+        init_cfg (dict or list[dict], optional): Initialization config dict.
             Defaults to None
     """
 
