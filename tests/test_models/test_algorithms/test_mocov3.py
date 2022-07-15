@@ -64,8 +64,11 @@ def test_mocov3():
         SelfSupDataSample()
     } for _ in range(2)]
 
-    # test extract
     fake_inputs, fake_data_samples = alg.data_preprocessor(fake_data)
+    fake_loss = alg(fake_inputs, fake_data_samples, mode='loss')
+    assert fake_loss['loss'] > 0
+
+    # test extract
     fake_feats = alg(fake_inputs, fake_data_samples, mode='tensor')
     assert fake_feats[0][0].size() == torch.Size([2, 384, 14, 14])
     assert fake_feats[0][1].size() == torch.Size([2, 384])
