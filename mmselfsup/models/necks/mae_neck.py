@@ -7,11 +7,11 @@ from mmcls.models.backbones.vision_transformer import TransformerEncoderLayer
 from mmcv.cnn import build_norm_layer
 from mmengine.model import BaseModule
 
-from ..builder import NECKS
+from ..builder import MODELS
 from ..utils import build_2d_sincos_position_embedding
 
 
-@NECKS.register_module()
+@MODELS.register_module()
 class MAEPretrainDecoder(BaseModule):
     """Decoder for MAE Pre-training.
 

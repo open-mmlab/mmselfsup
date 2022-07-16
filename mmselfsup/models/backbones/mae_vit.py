@@ -4,11 +4,11 @@ from typing import List, Optional, Sequence, Tuple, Union
 import torch
 from mmcls.models import VisionTransformer
 
-from ..builder import BACKBONES
+from ..builder import MODELS
 from ..utils import build_2d_sincos_position_embedding
 
 
-@BACKBONES.register_module()
+@MODELS.register_module()
 class MAEViT(VisionTransformer):
     """Vision Transformer for MAE pre-training.
 
