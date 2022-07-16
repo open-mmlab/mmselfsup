@@ -2,7 +2,12 @@
 custom_imports = dict(imports='mmcls.datasets', allow_failed_imports=False)
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
-file_client_args = dict(backend='disk')
+# file_client_args = dict(backend='disk')
+file_client_args = dict(
+    backend='memcached',
+    server_list_cfg='/mnt/lustre/share/memcached_client/pcs_server_list.conf',
+    client_cfg='/mnt/lustre/share_data/zhangwenwei/software/pymc/mc.conf',
+    sys_path='/mnt/lustre/share_data/zhangwenwei/software/pymc')
 
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
@@ -10,6 +15,7 @@ train_pipeline = [
         type='RandomResizedCrop',
         size=224,
         scale=(0.2, 1.0),
+        backend='pillow',
         interpolation='bicubic'),
     dict(type='RandomFlip', prob=0.5),
     dict(type='PackSelfSupInputs', meta_keys=['img_path'])
