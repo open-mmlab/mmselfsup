@@ -1,17 +1,21 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import List, Optional, Union
+
 import torch
 import torch.nn as nn
 from mmcls.models.backbones.vision_transformer import TransformerEncoderLayer
 from mmcv.cnn import build_norm_layer
 from mmengine.model import BaseModule
 
-from mmselfsup.registry import MODELS
+from ..builder import NECKS
 from ..utils import build_2d_sincos_position_embedding
 
 
-@MODELS.register_module()
+@NECKS.register_module()
 class MAEPretrainDecoder(BaseModule):
     """Decoder for MAE Pre-training.
+
+    Some of the code is borrowed from `https://github.com/facebookresearch/mae`. # noqa
 
     Args:
         num_patches (int): The number of total patches. Defaults to 196.
@@ -26,9 +30,8 @@ class MAEPretrainDecoder(BaseModule):
         mlp_ratio (int): Ratio of mlp hidden dim to decoder's embedding dim.
             Defaults to 4.
         norm_cfg (dict): Normalization layer. Defaults to LayerNorm.
-
-    Some of the code is borrowed from
-    `https://github.com/facebookresearch/mae`.
+        init_cfg (Union[List[dict], dict], optional): Initialization config
+            dict. Defaults to None.
 
     Example:
         >>> from mmselfsup.models import MAEPretrainDecoder
@@ -42,24 +45,28 @@ class MAEPretrainDecoder(BaseModule):
         (1, 196, 768)
     """
 
-    def __init__(
-            self,
-            num_patches: int = 196,
-            patch_size: int = 16,
-            in_chans: int = 3,
-            embed_dim: int = 1024,
-            decoder_embed_dim: int = 512,
-            decoder_depth: int = 8,
-            decoder_num_heads: int = 16,
-            mlp_ratio: int = 4.,
-            norm_cfg: dict = dict(type='LN', eps=1e-6),
-    ) -> None:
-        super().__init__()
+    def __init__(self,
+                 num_patches: int = 196,
+                 patch_size: int = 16,
+                 in_chans: int = 3,
+                 embed_dim: int = 1024,
+                 decoder_embed_dim: int = 512,
+                 decoder_depth: int = 8,
+                 decoder_num_heads: int = 16,
+                 mlp_ratio: int = 4,
+                 norm_cfg: dict = dict(type='LN', eps=1e-6),
+                 init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
+        super().__init__(init_cfg=init_cfg)
         self.num_patches = num_patches
+
+        # used to convert the dim of features from encoder to the dim
+        # compatible with that of decoder
         self.decoder_embed = nn.Linear(embed_dim, decoder_embed_dim, bias=True)
 
         self.mask_token = nn.Parameter(torch.zeros(1, 1, decoder_embed_dim))
 
+        # create new position embedding, different from that in encoder
+        # and is not learnable
         self.decoder_pos_embed = nn.Parameter(
             torch.zeros(1, self.num_patches + 1, decoder_embed_dim),
             requires_grad=False)
@@ -76,12 +83,13 @@ class MAEPretrainDecoder(BaseModule):
         self.decoder_norm_name, decoder_norm = build_norm_layer(
             norm_cfg, decoder_embed_dim, postfix=1)
         self.add_module(self.decoder_norm_name, decoder_norm)
+
+        # Used to map features to pixels
         self.decoder_pred = nn.Linear(
             decoder_embed_dim, patch_size**2 * in_chans, bias=True)
 
     def init_weights(self) -> None:
-        """Initialization."""
-        super().init_weights()
+        super(MAEPretrainDecoder, self).init_weights()
 
         # initialize position embedding of MAE decoder
         decoder_pos_embed = build_2d_sincos_position_embedding(
@@ -92,25 +100,12 @@ class MAEPretrainDecoder(BaseModule):
 
         torch.nn.init.normal_(self.mask_token, std=.02)
 
-        self.apply(self._init_weights)
-
-    def _init_weights(self, m: nn.Module) -> None:
-        """Initialization."""
-        if isinstance(m, nn.Linear):
-            torch.nn.init.xavier_uniform_(m.weight)
-            if isinstance(m, nn.Linear) and m.bias is not None:
-                nn.init.constant_(m.bias, 0)
-        elif isinstance(m, nn.LayerNorm):
-            nn.init.constant_(m.bias, 0)
-            nn.init.constant_(m.weight, 1.0)
-
     @property
-    def decoder_norm(self) -> nn.Module:
+    def decoder_norm(self):
         return getattr(self, self.decoder_norm_name)
 
     def forward(self, x: torch.Tensor,
                 ids_restore: torch.Tensor) -> torch.Tensor:
-        """Forward function."""
         # embed tokens
         x = self.decoder_embed(x)
 
