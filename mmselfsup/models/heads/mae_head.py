@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import List
+from typing import Dict, List
 
 import torch
 from mmcls.models import LabelSmoothLoss
@@ -7,7 +7,7 @@ from mmcv.cnn.utils.weight_init import trunc_normal_
 from mmengine.model import BaseModule
 from torch import nn
 
-from mmselfsup.registry import MODELS
+from ..builder import MODELS
 
 
 @MODELS.register_module()
@@ -31,7 +31,7 @@ class MAEPretrainHead(BaseModule):
         self.loss = MODELS.build(loss)
 
     def patchify(self, imgs: torch.Tensor) -> torch.Tensor:
-        """Get patches of the image."""
+
         p = self.patch_size
         assert imgs.shape[2] == imgs.shape[3] and imgs.shape[2] % p == 0
 
@@ -55,6 +55,7 @@ class MAEPretrainHead(BaseModule):
         """
         target = self.patchify(target)
         if self.norm_pix:
+            # normalize the target image
             mean = target.mean(dim=-1, keepdim=True)
             var = target.var(dim=-1, keepdim=True)
             target = (target - mean) / (var + 1.e-6)**.5
@@ -98,7 +99,6 @@ class MAEFinetuneHead(BaseModule):
         self.criterion = LabelSmoothLoss(label_smooth_val, num_classes)
 
     def init_weights(self):
-        """Initialization."""
         nn.init.constant_(self.head.bias, 0)
         trunc_normal_(self.head.weight, std=2e-5)
 
@@ -108,7 +108,7 @@ class MAEFinetuneHead(BaseModule):
 
         return [outputs]
 
-    def loss(self, outputs: List[torch.Tensor], labels: torch.Tensor) -> dict:
+    def loss(self, outputs: List[torch.Tensor], labels: torch.Tensor) -> Dict:
         """Compute the loss."""
         losses = dict()
         losses['loss'] = self.criterion(outputs[0], labels)
@@ -132,7 +132,6 @@ class MAELinprobeHead(BaseModule):
         self.criterion = nn.CrossEntropyLoss()
 
     def init_weights(self) -> None:
-        """Initialization."""
         nn.init.constant_(self.head.bias, 0)
         trunc_normal_(self.head.weight, std=0.01)
 
@@ -143,7 +142,7 @@ class MAELinprobeHead(BaseModule):
 
         return [outputs]
 
-    def loss(self, outputs: torch.Tensor, labels: torch.Tensor) -> dict:
+    def loss(self, outputs: torch.Tensor, labels: torch.Tensor) -> Dict:
         """Compute the loss."""
         losses = dict()
         losses['loss'] = self.criterion(outputs[0], labels)
