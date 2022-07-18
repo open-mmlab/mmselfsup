@@ -20,7 +20,8 @@ neck = dict(
     hid_channels=2,
     out_channels=2,
     num_layers=2,
-    with_avg_pool=True)
+    with_avg_pool=True,
+    norm_cfg=dict(type='BN1d'))
 head = dict(
     type='ContrastiveHead',
     loss=dict(type='mmcls.CrossEntropyLoss'),
@@ -49,6 +50,8 @@ def test_simclr():
     } for _ in range(2)]
 
     fake_inputs, fake_data_samples = alg.data_preprocessor(fake_data)
+    fake_loss = alg(fake_inputs, fake_data_samples, mode='loss')
+    assert fake_loss['loss'] > 0
 
     # test extract
     fake_feat = alg(fake_inputs, fake_data_samples, mode='tensor')
