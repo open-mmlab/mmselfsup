@@ -48,9 +48,9 @@ lr_config = dict(
     ...)
 ```
 
-Then during training, the program will call [CosineAnealingLrUpdaterHook](https://github.com/open-mmlab/mmcv/blob/f48241a65aebfe07db122e9db320c31b685dc674/mmcv/runner/hooks/lr_updater.py#L227) periodically to update the learning rate.
+Then during training, the program will call [CosineAnealingLrUpdaterHook](https://github.com/open-mmlab/mmcv/blob/0092699fef27a0e6cbe9c37f4c4de2fb6996a1c7/mmcv/runner/hooks/lr_updater.py#L269) periodically to update the learning rate.
 
-We also support many other learning rate schedules [here](https://github.com/open-mmlab/mmcv/blob/f48241a65aebfe07db122e9db320c31b685dc674/mmcv/runner/hooks/lr_updater.py), such as Poly schedule.
+We also support many other learning rate schedules [here](https://github.com/open-mmlab/mmcv/blob/master/mmcv/runner/hooks/lr_updater.py), such as Poly schedule.
 
 ### Warmup strategy
 
