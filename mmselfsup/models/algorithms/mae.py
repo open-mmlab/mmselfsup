@@ -1,4 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import torch
+
 from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
 from .base import BaseModel
 
@@ -56,3 +58,28 @@ class MAE(BaseModel):
         losses = self.head(img, pred, mask)
 
         return losses
+
+    def forward_test(self, img, **kwargs):
+        """Forward computation during testing.
+
+        Args:
+            img (Tensor): Input images of shape (N, C, H, W).
+            kwargs: Any keyword arguments to be used to forward.
+
+        Returns:
+            mask (Tensor): Mask used to mask image.
+            pred (Tensor): The output of neck.
+        """
+        latent, mask, ids_restore = self.backbone(img)
+        pred = self.neck(latent, ids_restore)
+
+        pred = self.head.unpatchify(pred)
+        pred = torch.einsum('nchw->nhwc', pred).detach().cpu()
+
+        mask = mask.detach()
+        mask = mask.unsqueeze(-1).repeat(1, 1, self.head.patch_size**2 *
+                                         3)  # (N, H*W, p*p*3)
+        mask = self.head.unpatchify(mask)  # 1 is removing, 0 is keeping
+        mask = torch.einsum('nchw->nhwc', mask).detach().cpu()
+
+        return mask, pred
