@@ -4,7 +4,7 @@ from typing import Dict, List, Tuple
 import torch
 
 from mmselfsup.data import SelfSupDataSample
-from ..builder import MODELS
+from mmselfsup.registry import MODELS
 from .base import BaseModel
 
 
