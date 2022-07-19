@@ -614,7 +614,7 @@ class ColorJitter(BaseTransform):
             if you normalize your image to an interval with negative values,
             or use an interpolation that generates negative values before using
             this function.
-        backend (str): The image processing backend type. Options are
+        backend (str): The type of image processing backend. Options are
             `cv2`, `pillow`. Defaults to `pillow`.
     """  # noqa: E501
 
