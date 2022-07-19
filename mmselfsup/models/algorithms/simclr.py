@@ -19,12 +19,13 @@ class SimCLR(BaseModel):
 
     @staticmethod
     def _create_buffer(
-            batch_size: int
+        batch_size: int, device: torch.device
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """Compute the mask and the index of positive samples.
 
         Args:
             batch_size (int): The batch size.
+            device (torch.device): The device of backend.
 
         Returns:
             Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
@@ -32,13 +33,13 @@ class SimCLR(BaseModel):
             - The index of positive samples.
             - The mask of negative samples.
         """
-        mask = 1 - torch.eye(batch_size * 2, dtype=torch.uint8).cuda()
+        mask = 1 - torch.eye(batch_size * 2, dtype=torch.uint8).to(device)
         pos_idx = (
-            torch.arange(batch_size * 2).cuda(),
+            torch.arange(batch_size * 2).to(device),
             2 * torch.arange(batch_size, dtype=torch.long).unsqueeze(1).repeat(
-                1, 2).view(-1, 1).squeeze().cuda())
+                1, 2).view(-1, 1).squeeze().to(device))
         neg_mask = torch.ones((batch_size * 2, batch_size * 2 - 1),
-                              dtype=torch.uint8).cuda()
+                              dtype=torch.uint8).to(device)
         neg_mask[pos_idx] = 0
         return mask, pos_idx, neg_mask
 
@@ -80,7 +81,7 @@ class SimCLR(BaseModel):
         assert z.size(0) % 2 == 0
         N = z.size(0) // 2
         s = torch.matmul(z, z.permute(1, 0))  # (2N)x(2N)
-        mask, pos_idx, neg_mask = self._create_buffer(N)
+        mask, pos_idx, neg_mask = self._create_buffer(N, s.device)
 
         # remove diagonal, (2N)x(2N-1)
         s = torch.masked_select(s, mask == 1).reshape(s.size(0), -1)
