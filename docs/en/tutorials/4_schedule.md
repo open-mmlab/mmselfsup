@@ -48,7 +48,7 @@ lr_config = dict(
     ...)
 ```
 
-Then during training, the program will call [CosineAnealingLrUpdaterHook](https://github.com/open-mmlab/mmcv/blob/0092699fef27a0e6cbe9c37f4c4de2fb6996a1c7/mmcv/runner/hooks/lr_updater.py#L269) periodically to update the learning rate.
+Then during training, the program will call [CosineAnnealingLrUpdaterHook](https://github.com/open-mmlab/mmcv/blob/0092699fef27a0e6cbe9c37f4c4de2fb6996a1c7/mmcv/runner/hooks/lr_updater.py#L269) periodically to update the learning rate.
 
 We also support many other learning rate schedules [here](https://github.com/open-mmlab/mmcv/blob/master/mmcv/runner/hooks/lr_updater.py), such as Poly schedule.
 
@@ -94,7 +94,7 @@ lr_config = dict(
 
 We support the momentum scheduler to modify the model's momentum according to learning rate, which could make the model converge in a faster way.
 
-Momentum scheduler is usually used with LR scheduler, for example, the following config is used to accelerate convergence. For more details, please refer to the implementation of [CyclicLrUpdater](https://github.com/open-mmlab/mmcv/blob/f48241a65aebfe07db122e9db320c31b685dc674/mmcv/runner/hooks/lr_updater.py#L327) and [CyclicMomentumUpdater](https://github.com/open-mmlab/mmcv/blob/f48241a65aebfe07db122e9db320c31b685dc674/mmcv/runner/hooks/momentum_updater.py#L130).
+Momentum scheduler is usually used with LR scheduler, for example, the following config is used to accelerate convergence. For more details, please refer to the implementation of [CyclicLrUpdaterHook](https://github.com/open-mmlab/mmcv/blob/0092699fef27a0e6cbe9c37f4c4de2fb6996a1c7/mmcv/runner/hooks/lr_updater.py#L434) and [CyclicMomentumUpdaterHook](https://github.com/open-mmlab/mmcv/blob/0092699fef27a0e6cbe9c37f4c4de2fb6996a1c7/mmcv/runner/hooks/momentum_updater.py#L291).
 
 Here is an example:
 
