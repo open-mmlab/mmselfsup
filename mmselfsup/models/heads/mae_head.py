@@ -26,7 +26,14 @@ class MAEPretrainHead(BaseModule):
         self.loss = MODELS.build(loss)
 
     def patchify(self, imgs: torch.Tensor) -> torch.Tensor:
+        """Split images into non-overlapped patches.
 
+        Args:
+            imgs (torch.Tensor): A batch of images, of shape B x H x W x C.
+
+        Returns:
+            torch.Tensor: Patchified images. The shape is B x L x D.
+        """
         p = self.patch_size
         assert imgs.shape[2] == imgs.shape[3] and imgs.shape[2] % p == 0
 

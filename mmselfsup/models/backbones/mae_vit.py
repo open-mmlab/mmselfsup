@@ -107,8 +107,8 @@ class MAEViT(VisionTransformer):
                 Defaults to 0.75.
 
         Returns:
-            Tuple[torch.Tensor, Tensor, Tensor]: masked image, mask and the ids
-                to restore original image.
+            Tuple[torch.Tensor, torch.Tensor, torch.Tensor]: masked image,
+                mask and the ids to restore original image.
 
             - x_masked (torch.Tensor): masked image.
             - mask (torch.Tensor): mask used to mask image.
