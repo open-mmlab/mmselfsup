@@ -89,7 +89,7 @@ class MAEPretrainDecoder(BaseModule):
             decoder_embed_dim, patch_size**2 * in_chans, bias=True)
 
     def init_weights(self) -> None:
-        super(MAEPretrainDecoder, self).init_weights()
+        super().init_weights()
 
         # initialize position embedding of MAE decoder
         decoder_pos_embed = build_2d_sincos_position_embedding(

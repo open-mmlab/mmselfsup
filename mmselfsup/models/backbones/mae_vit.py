@@ -80,7 +80,7 @@ class MAEViT(VisionTransformer):
         self.num_patches = self.patch_resolution[0] * self.patch_resolution[1]
 
     def init_weights(self) -> None:
-        super(MAEViT, self).init_weights()
+        super().init_weights()
         # initialize position embedding, patch embedding and cls token
         pos_embed = build_2d_sincos_position_embedding(
             int(self.num_patches**.5),
