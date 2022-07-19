@@ -1,16 +1,16 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 # Copyright (c) Meta Platforms, Inc. and affiliates.
-# Modified from https://colab.research.google.com/github/facebookresearch/mae/blob/main/demo/mae_visualize.ipynb
+# Modified from https://colab.research.google.com/github/facebookresearch/mae
+# /blob/main/demo/mae_visualize.ipynb
 
 from argparse import ArgumentParser
-import torch
-import numpy as np
-import matplotlib.pyplot as plt
-from PIL import Image
-import numpy as np
-import torch
-from mmselfsup.apis import init_model, inference_model
 
+import matplotlib.pyplot as plt
+import numpy as np
+import torch
+from PIL import Image
+
+from mmselfsup.apis import inference_model, init_model
 
 imagenet_mean = np.array([0.485, 0.456, 0.406])
 imagenet_std = np.array([0.229, 0.224, 0.225])
@@ -19,7 +19,8 @@ imagenet_std = np.array([0.229, 0.224, 0.225])
 def show_image(image, title=''):
     # image is [H, W, 3]
     assert image.shape[2] == 3
-    image = torch.clip((image * imagenet_std + imagenet_mean) * 255, 0, 255).int()
+    image = torch.clip((image * imagenet_std + imagenet_mean) * 255, 0,
+                       255).int()
     plt.imshow(image)
     plt.title(title, fontsize=16)
     plt.axis('off')
@@ -31,16 +32,16 @@ def show_images(x, im_masked, y, im_paste):
     plt.rcParams['figure.figsize'] = [24, 6]
 
     plt.subplot(1, 4, 1)
-    show_image(x, "original")
+    show_image(x, 'original')
 
     plt.subplot(1, 4, 2)
-    show_image(im_masked, "masked")
+    show_image(im_masked, 'masked')
 
     plt.subplot(1, 4, 3)
-    show_image(y, "reconstruction")
+    show_image(y, 'reconstruction')
 
     plt.subplot(1, 4, 4)
-    show_image(im_paste, "reconstruction + visible")
+    show_image(im_paste, 'reconstruction + visible')
 
     plt.show()
 
@@ -77,11 +78,11 @@ def main():
 
     img_norm_cfg = dict(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     model.cfg.data = dict(
-        test=dict(
-            pipeline = [
-                dict(type='Resize', size=(224, 224)),
-                dict(type='ToTensor'),
-                dict(type='Normalize', **img_norm_cfg),]))
+        test=dict(pipeline=[
+            dict(type='Resize', size=(224, 224)),
+            dict(type='ToTensor'),
+            dict(type='Normalize', **img_norm_cfg),
+        ]))
 
     img = Image.open(args.img)
     img, (mask, pred) = inference_model(model, img)
@@ -92,21 +93,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

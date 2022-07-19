@@ -1,11 +1,10 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-import torch
-from torchvision.transforms import Compose
-
 import mmcv
-from mmcv.runner import load_checkpoint
+import torch
 from mmcv.parallel import collate, scatter
+from mmcv.runner import load_checkpoint
 from mmcv.utils import build_from_cfg
+from torchvision.transforms import Compose
 
 from mmselfsup.datasets import PIPELINES
 from mmselfsup.models import build_algorithm
@@ -13,6 +12,7 @@ from mmselfsup.models import build_algorithm
 
 def init_model(config, checkpoint=None, device='cuda:0', options=None):
     """Initialize a model from config file.
+
     Args:
         config (str or :obj:`mmcv.Config`): Config file path or the config
             object.
@@ -43,6 +43,7 @@ def init_model(config, checkpoint=None, device='cuda:0', options=None):
 
 def inference_model(model, data):
     """Inference image(s) with the classifier.
+
     Args:
         model (nn.Module): The loaded classifier.
         img (str/ndarray): The image filename or loaded image.
@@ -54,8 +55,8 @@ def inference_model(model, data):
     device = next(model.parameters()).device  # model device
     # build the data pipeline
     test_pipeline = [
-            build_from_cfg(p, PIPELINES) for p in cfg.data.test.pipeline
-        ]
+        build_from_cfg(p, PIPELINES) for p in cfg.data.test.pipeline
+    ]
     test_pipeline = Compose(test_pipeline)
 
     data = test_pipeline(data)
