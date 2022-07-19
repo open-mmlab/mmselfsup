@@ -42,14 +42,14 @@ def init_model(config, checkpoint=None, device='cuda:0', options=None):
 
 
 def inference_model(model, data):
-    """Inference image(s) with the classifier.
+    """Inference a image with the model.
 
     Args:
-        model (nn.Module): The loaded classifier.
-        img (str/ndarray): The image filename or loaded image.
+        model (nn.Module): The loaded model.
+        data (PIL): The loaded image.
     Returns:
-        result (dict): The classification results that contains
-            `class_name`, `pred_label` and `pred_score`.
+        data (Tensor): The loaded image to input model.
+        output (Tensor, dict[str, Tensor]): the output of test model.
     """
     cfg = model.cfg
     device = next(model.parameters()).device  # model device
