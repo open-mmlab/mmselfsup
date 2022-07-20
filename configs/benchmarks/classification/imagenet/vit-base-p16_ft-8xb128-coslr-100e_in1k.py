@@ -83,7 +83,7 @@ val_dataloader = dict(batch_size=128, dataset=dict(pipeline=test_pipeline))
 test_dataloader = val_dataloader
 
 # optimizer wrapper
-custom_imports = dict(imports='mmselfsup.core', allow_failed_imports=False)
+custom_imports = dict(imports='mmselfsup.engine', allow_failed_imports=False)
 optim_wrapper = dict(
     optimizer=dict(
         type='AdamW',

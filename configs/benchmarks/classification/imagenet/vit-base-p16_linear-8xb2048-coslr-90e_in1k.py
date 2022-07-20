@@ -7,7 +7,8 @@ _base_ = [
 
 # model settings
 custom_imports = dict(
-    imports=['mmselfsup.models', 'mmselfsup.core'], allow_failed_imports=False)
+    imports=['mmselfsup.models', 'mmselfsup.engine'],
+    allow_failed_imports=False)
 model = dict(
     type='ImageClassifier',
     backbone=dict(
