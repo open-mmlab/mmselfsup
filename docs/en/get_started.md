@@ -13,7 +13,7 @@
     - [Use t-SNE](#use-t-sne)
     - [Reproducibility](#reproducibility)
 
-This page provides basic tutorials about the usage of MMSelfSup. For installation instructions, please see [install.md](install.md).
+This page provides basic usage about how to run algorithms and how to use some tools in MMSelfSup. For installation instructions and date preparation, please refer to [install.md](install.md) and [prepare_data.md](prepare_data.md).
 
 ## Start to Train
 
