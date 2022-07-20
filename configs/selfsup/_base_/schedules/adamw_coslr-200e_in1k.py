@@ -12,7 +12,7 @@ param_scheduler = [
         end=40,
         convert_to_iter_based=True),
     dict(
-        type='CosineAnnealingLR', T_max=260, by_epoch=True, begin=40, end=300)
+        type='CosineAnnealingLR', T_max=160, by_epoch=True, begin=40, end=200)
 ]
 
 # runtime settings

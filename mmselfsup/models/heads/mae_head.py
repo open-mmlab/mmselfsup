@@ -1,11 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import List
-
 import torch
-from mmcls.models import LabelSmoothLoss
-from mmcv.cnn.utils.weight_init import trunc_normal_
 from mmengine.model import BaseModule
-from torch import nn
 
 from mmselfsup.registry import MODELS
 
@@ -31,7 +26,14 @@ class MAEPretrainHead(BaseModule):
         self.loss = MODELS.build(loss)
 
     def patchify(self, imgs: torch.Tensor) -> torch.Tensor:
-        """Get patches of the image."""
+        """Split images into non-overlapped patches.
+
+        Args:
+            imgs (torch.Tensor): A batch of images, of shape B x H x W x C.
+
+        Returns:
+            torch.Tensor: Patchified images. The shape is B x L x D.
+        """
         p = self.patch_size
         assert imgs.shape[2] == imgs.shape[3] and imgs.shape[2] % p == 0
 
@@ -55,6 +57,7 @@ class MAEPretrainHead(BaseModule):
         """
         target = self.patchify(target)
         if self.norm_pix:
+            # normalize the target image
             mean = target.mean(dim=-1, keepdim=True)
             var = target.var(dim=-1, keepdim=True)
             target = (target - mean) / (var + 1.e-6)**.5
@@ -77,75 +80,3 @@ class MAEPretrainHead(BaseModule):
         loss = self.loss(pred, target, mask)
 
         return loss
-
-
-@MODELS.register_module()
-class MAEFinetuneHead(BaseModule):
-    """Fine-tuning head for MAE.
-
-    Args:
-        embed_dim (int): The dim of the feature before the classifier head.
-        num_classes (int): The total classes. Defaults to 1000.
-        label_smooth_val (float): The value of label smooth.
-    """
-
-    def __init__(self,
-                 embed_dim: int,
-                 num_classes: int = 1000,
-                 label_smooth_val: float = 0.1) -> None:
-        super().__init__()
-        self.head = nn.Linear(embed_dim, num_classes)
-        self.criterion = LabelSmoothLoss(label_smooth_val, num_classes)
-
-    def init_weights(self):
-        """Initialization."""
-        nn.init.constant_(self.head.bias, 0)
-        trunc_normal_(self.head.weight, std=2e-5)
-
-    def forward(self, x: torch.Tensor) -> List[torch.Tensor]:
-        """"Get the logits."""
-        outputs = self.head(x)
-
-        return [outputs]
-
-    def loss(self, outputs: List[torch.Tensor], labels: torch.Tensor) -> dict:
-        """Compute the loss."""
-        losses = dict()
-        losses['loss'] = self.criterion(outputs[0], labels)
-
-        return losses
-
-
-@MODELS.register_module()
-class MAELinprobeHead(BaseModule):
-    """Linear probing head for MAE.
-
-    Args:
-        embed_dim (int): The dim of the feature before the classifier head.
-        num_classes (int): The total classes. Defaults to 1000.
-    """
-
-    def __init__(self, embed_dim: int, num_classes: int = 1000) -> None:
-        super().__init__()
-        self.head = nn.Linear(embed_dim, num_classes)
-        self.bn = nn.BatchNorm1d(embed_dim, affine=False, eps=1e-6)
-        self.criterion = nn.CrossEntropyLoss()
-
-    def init_weights(self) -> None:
-        """Initialization."""
-        nn.init.constant_(self.head.bias, 0)
-        trunc_normal_(self.head.weight, std=0.01)
-
-    def forward(self, x: torch.Tensor) -> List[torch.Tensor]:
-        """"Get the logits."""
-        x = self.bn(x)
-        outputs = self.head(x)
-
-        return [outputs]
-
-    def loss(self, outputs: torch.Tensor, labels: torch.Tensor) -> dict:
-        """Compute the loss."""
-        losses = dict()
-        losses['loss'] = self.criterion(outputs[0], labels)
-
-        return losses

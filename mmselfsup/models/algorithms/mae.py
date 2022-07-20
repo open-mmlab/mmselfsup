@@ -43,6 +43,8 @@ class MAE(BaseModel):
         Returns:
             Dict[str, Tensor]: A dictionary of loss components.
         """
+        # ids_restore: the same as that in original repo, which is used
+        # to recover the original order of tokens in decoder.
         latent, mask, ids_restore = self.backbone(batch_inputs[0])
         pred = self.neck(latent, ids_restore)
         loss = self.head(pred, batch_inputs[0], mask)

@@ -10,6 +10,7 @@ train_pipeline = [
         type='RandomResizedCrop',
         size=224,
         scale=(0.2, 1.0),
+        backend='pillow',
         interpolation='bicubic'),
     dict(type='RandomFlip', prob=0.5),
     dict(type='PackSelfSupInputs', meta_keys=['img_path'])
