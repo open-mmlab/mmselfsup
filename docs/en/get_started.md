@@ -17,7 +17,7 @@ This page provides basic tutorials about the usage of MMSelfSup. For installatio
 
 ## Start to Train
 
-**Note**: The default learning rate in config files is for specific number of GPUs, which indicated in the config names. If using different number GPUs, the total batch size will change in proportion, you have to scale the learning rate following `new_lr = old_lr * new_ngpus / old_ngpus`.
+**Note**: The default learning rate in config files is for specific number of GPUs, which is indicated in the config names. If using different number GPUs, the total batch size will change in proportion, you have to scale the learning rate following `new_lr = old_lr * new_ngpus / old_ngpus`.
 
 ### Train with a single GPU
 
