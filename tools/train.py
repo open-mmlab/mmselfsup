@@ -14,6 +14,18 @@ def parse_args():
     parser.add_argument('config', help='train config file path')
     parser.add_argument('--work-dir', help='the dir to save logs and models')
     parser.add_argument(
+        '--resume',
+        nargs='?',
+        type=str,
+        const='auto',
+        help='If specify checkpint path, resume from it, while if not '
+        'specify, try to auto resume from the latest checkpoint '
+        'in the work directory.')
+    parser.add_argument(
+        '--amp',
+        action='store_true',
+        help='enable automatic-mixed-precision training')
+    parser.add_argument(
         '--cfg-options',
         nargs='+',
         action=DictAction,
@@ -58,6 +70,23 @@ def main():
         work_type = args.config.split('/')[1]
         cfg.work_dir = osp.join('./work_dirs', work_type,
                                 osp.splitext(osp.basename(args.config))[0])
+
+    # enable automatic-mixed-precision training
+    if args.amp is True:
+        optim_wrapper = cfg.optim_wrapper.get('type', 'OptimWrapper')
+        assert optim_wrapper in ['OptimWrapper', 'AmpOptimWrapper'], \
+            '`--amp` is not supported custom optimizer wrapper type ' \
+            f'`{optim_wrapper}.'
+        cfg.optim_wrapper.type = 'AmpOptimWrapper'
+        cfg.optim_wrapper.setdefault('loss_scale', 'dynamic')
+
+    # resume training
+    if args.resume == 'auto':
+        cfg.resume = True
+        cfg.load_from = None
+    elif args.resume is not None:
+        cfg.resume = True
+        cfg.load_from = args.resume
 
     # build the runner from config
     runner = Runner.from_cfg(cfg)
