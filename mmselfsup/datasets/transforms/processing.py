@@ -710,13 +710,16 @@ class ColorJitter(BaseTransform):
         img = results['img'].astype('uint8')
         for fn_id in order:
             if fn_id == 0 and brightness_factor is not None:
-                img = adjust_brightness(img, brightness_factor, self.backend)
+                img = adjust_brightness(
+                    img, brightness_factor, backend=self.backend)
             elif fn_id == 1 and contrast_factor is not None:
-                img = adjust_contrast(img, contrast_factor, self.backend)
+                img = adjust_contrast(
+                    img, contrast_factor, backend=self.backend)
             elif fn_id == 2 and saturation_factor is not None:
-                img = adjust_color(img, saturation_factor, self.backend)
+                img = adjust_color(
+                    img, saturation_factor, backend=self.backend)
             elif fn_id == 3 and hue_factor is not None:
-                img = adjust_hue(img, hue_factor, self.backend)
+                img = adjust_hue(img, hue_factor, backend=self.backend)
         results['img'] = img
         return results
 
