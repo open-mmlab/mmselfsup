@@ -25,7 +25,7 @@ def _rand_patch_box(num_boxes, h, w):
     br_x = clip(((cx * w) + (w * bw / 2)), 0, w)
     br_y = clip(((cy * h) + (h * bh / 2)), 0, h)
 
-    patch_box = torch.vstack([tl_x, tl_y, br_x, br_y]).T
+    patch_box = torch.stack([tl_x, tl_y, br_x, br_y]).T
     return patch_box.unsqueeze(0)
 
 
