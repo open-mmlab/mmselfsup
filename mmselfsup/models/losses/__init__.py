@@ -5,8 +5,10 @@ from .cross_correlation_loss import CrossCorrelationLoss
 from .mae_loss import MAEReconstructionLoss
 from .simmim_loss import SimMIMReconstructionLoss
 from .swav_loss import SwAVLoss
+from .reconstruction_loss import PixelReconstructionLoss
 
 __all__ = [
     'CAELoss', 'CrossCorrelationLoss', 'CosineSimilarityLoss',
-    'MAEReconstructionLoss', 'SimMIMReconstructionLoss', 'SwAVLoss'
+    'MAEReconstructionLoss', 'SimMIMReconstructionLoss', 'SwAVLoss',
+    'PixelReconstructionLoss'
 ]
