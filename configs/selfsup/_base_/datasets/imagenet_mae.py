@@ -7,10 +7,11 @@ data_root = 'data/imagenet/'
 #     backend='petrel',
 #     # 因为petreloss.conf设置sproject为默认，此处可省略前缀
 #     path_mapping=dict({
-#         './data/imagenet': 's3://openmmlab/datasets/classification/imagenet',
-#         'data/imagenet': 's3://openmmlab/datasets/classification/imagenet'
-#     })
-# )
+#         './data/imagenet':
+#         'openmmlab:s3://openmmlab/datasets/classification/imagenet',
+#         'data/imagenet':
+#         'openmmlab:s3://openmmlab/datasets/classification/imagenet'
+#     }))
 file_client_args = dict(
     backend='memcached',
     server_list_cfg='/mnt/lustre/share/memcached_client/pcs_server_list.conf',
