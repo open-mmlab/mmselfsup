@@ -1,5 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from typing import Optional
+
 import torch
 from mmengine.model import BaseModule
 
@@ -12,16 +13,16 @@ class PixelReconstructionLoss(BaseModule):
 
     This module measures the distance between the target image and the
     reconstructed image and compute the loss to optimize the model. Currently,
-    This module only provides L1 and L2 loss to penalize the reconstructed 
-    error. In addition, a mask can be passed in the ``forward`` function to 
-    only apply loss on visiable region, like that in MAE.
+    This module only provides L1 and L2 loss to penalize the reconstructed
+    error. In addition, a mask can be passed in the ``forward`` function to
+    only apply loss on visible region, like that in MAE.
 
     Args:
-        criterion (str): The loss the penalize the reconstructed error. 
+        criterion (str): The loss the penalize the reconstructed error.
             Currently, only supports L1 and L2 loss
-        channel (int, optional): The number of channels to average the 
+        channel (int, optional): The number of channels to average the
             reconstruction loss. If not None, the reconstruction loss
-            will be divided by the channel. Defaults to None. 
+            will be divided by the channel. Defaults to None.
     """
 
     def __init__(self, criterion: str, channel: Optional[int] = None) -> None:
@@ -32,8 +33,8 @@ class PixelReconstructionLoss(BaseModule):
         elif criterion == 'L2':
             self.penalty = torch.nn.MSELoss(reduction='none')
         else:
-            raise NotImplementedError(f"Currently, PixelReconstructionLoss \
-            only supports L1 and L2 loss, but get {criterion}")
+            raise NotImplementedError(f'Currently, PixelReconstructionLoss \
+            only supports L1 and L2 loss, but get {criterion}')
 
         self.channel = channel if channel is not None else 1
 

@@ -1,4 +1,6 @@
+# Copyright (c) OpenMMLab. All rights reserved.
 import torch
+
 from mmselfsup.models import PixelReconstructionLoss
 
 
