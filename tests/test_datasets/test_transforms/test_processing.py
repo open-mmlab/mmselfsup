@@ -8,8 +8,8 @@ import torch
 import torchvision
 from mmcv import imread
 from mmcv.transforms import Compose
+from mmengine.utils import digit_version
 from PIL import Image
-from torchvision.transforms.functional import InterpolationMode
 
 import mmselfsup.datasets.transforms.processing as mmselfsup_transforms
 from mmselfsup.datasets.transforms import (
@@ -502,12 +502,6 @@ def test_randomrotation():
     ori_img = torch.rand((224, 224, 3)).numpy().astype(np.uint8)
     ori_img_pil = Image.fromarray(ori_img, mode='RGB')
 
-    inverse_modes_mapping = {
-        'nearest': InterpolationMode.NEAREST,
-        'bilinear': InterpolationMode.BILINEAR,
-        'bicubic': InterpolationMode.BICUBIC,
-    }
-
     seed = random.randint(0, 100)
 
     # test when degrees is negative
@@ -566,8 +560,19 @@ def test_randomrotation():
         np.random.seed(seed)
 
         if 'interpolation' in kwargs:
-            mode = kwargs['interpolation']
-            kwargs['interpolation'] = inverse_modes_mapping[mode]
+            if digit_version(
+                    torchvision.__version__) >= digit_version('0.9.0'):
+                from torchvision.transforms.functional import InterpolationMode
+                inverse_modes_mapping = {
+                    'nearest': InterpolationMode.NEAREST,
+                    'bilinear': InterpolationMode.BILINEAR,
+                    'bicubic': InterpolationMode.BICUBIC,
+                }
+
+                mode = kwargs['interpolation']
+                kwargs['interpolation'] = inverse_modes_mapping[mode]
+            else:
+                kwargs.pop('interpolation')
 
         aug = []
         aug.extend([torchvision.transforms.RandomRotation(**kwargs)])

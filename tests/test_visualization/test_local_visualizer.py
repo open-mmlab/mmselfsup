@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 import torch
 from mmengine.data import InstanceData
+from mmengine.utils import digit_version
 
 from mmselfsup.data import SelfSupDataSample
 from mmselfsup.visualization import SelfSupLocalVisualizer
@@ -14,12 +15,17 @@ from mmselfsup.visualization import SelfSupLocalVisualizer
 def _rand_patch_box(num_boxes, h, w):
     cx, cy, bw, bh = torch.rand(num_boxes, 4).T
 
-    tl_x = ((cx * w) - (w * bw / 2)).clip(0, w)
-    tl_y = ((cy * h) - (h * bh / 2)).clip(0, h)
-    br_x = ((cx * w) + (w * bw / 2)).clip(0, w)
-    br_y = ((cy * h) + (h * bh / 2)).clip(0, h)
+    if digit_version(torch.__version__) < digit_version('1.7.0'):
+        clip = torch.clamp
+    else:
+        clip = torch.clip
 
-    patch_box = torch.vstack([tl_x, tl_y, br_x, br_y]).T
+    tl_x = clip(((cx * w) - (w * bw / 2)), 0, w)
+    tl_y = clip(((cy * h) - (h * bh / 2)), 0, h)
+    br_x = clip(((cx * w) + (w * bw / 2)), 0, w)
+    br_y = clip(((cy * h) + (h * bh / 2)), 0, h)
+
+    patch_box = torch.stack([tl_x, tl_y, br_x, br_y]).T
     return patch_box.unsqueeze(0)
 
 

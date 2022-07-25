@@ -141,7 +141,7 @@ class MultiClsHead(ClsHead):
             target = torch.stack(
                 [data_sample.gt_label.score for data_sample in data_samples])
         else:
-            target = torch.hstack(
+            target = torch.cat(
                 [data_sample.gt_label.label for data_sample in data_samples])
 
         # compute loss and accuracy
