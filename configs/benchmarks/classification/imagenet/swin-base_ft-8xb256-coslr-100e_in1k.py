@@ -1,8 +1,16 @@
 _base_ = [
-    '../_base_/models/swin-base.py', '../_base_/datasets/imagenet-swin.py',
+    'mmcls::_base_/models/swin_transformer/base_224.py',
+    '../_base_/datasets/imagenet-swin.py',
     '../_base_/schedules/adamw_coslr-100e_in1k.py',
     '../_base_/default_runtime.py'
 ]
+
+# model settings
+model = dict(
+    backbone=dict(
+        img_size=192,
+        drop_path_rate=0.1,
+        stage_cfgs=dict(block_cfgs=dict(window_size=6))))
 
 # schedule settings
 optim_wrapper = dict(
