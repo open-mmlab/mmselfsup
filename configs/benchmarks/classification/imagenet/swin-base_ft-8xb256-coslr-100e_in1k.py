@@ -13,7 +13,6 @@ model = dict(
         stage_cfgs=dict(block_cfgs=dict(window_size=6))))
 
 # schedule settings
-custom_imports = dict(imports='mmselfsup.engine', allow_failed_imports=False)
 optim_wrapper = dict(
     type='AmpOptimWrapper',
     optimizer=dict(
