@@ -17,18 +17,18 @@ from mmselfsup.models import build_algorithm
 def init_model(config: Union[str, mmcv.Config],
                checkpoint: Optional[str] = None,
                device: str = 'cuda:0',
-               options: dict = None) -> nn.Module:
+               options: Optional[dict] = None) -> nn.Module:
     """Initialize an model from config file.
 
     Args:
         config (str or :obj:``mmcv.Config``): Config file path or the config
             object.
         checkpoint (str, optional): Checkpoint path. If left as None, the model
-            will not load any weights.
+            will not load any weights. Defaults to None.
         device (str): The device where the model will be put on.
             Default to 'cuda:0'.
         options (dict, optional): Options to override some settings in the used
-            config.
+            config. Defaults to None.
     Returns:
         nn.Module: The initialized model.
     """
