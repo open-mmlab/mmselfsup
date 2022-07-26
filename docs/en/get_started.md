@@ -166,6 +166,27 @@ Arguments:
 - `WORK_DIR`: the directory to save the results of visualization.
 - `[optional arguments]`: for optional arguments, you can refer to [visualize_tsne.py](https://github.com/open-mmlab/mmselfsup/blob/master/tools/analysis_tools/visualize_tsne.py)
 
+### MAE Visualization
+
+We provide a tool to visualize the mask and reconstruction image of MAE model.
+
+```shell
+python tools/misc/mae_visualization.py ${IMG} ${CONFIG_FILE} ${CKPT_PATH} --device ${DEVICE}
+```
+
+参数:
+
+- `IMG`: an image path used for visualization.
+- `CONFIG_FILE`: config file for the pre-trained model.
+- `CKPT_PATH`: the path of model's checkpoint.
+- `DEVICE`: device used for inference.
+
+An example:
+
+```shell
+python tools/misc/mae_visualization.py tests/data/color.jpg configs/selfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k.py mae_epoch_400.pth --device 'cuda:0'
+```
+
 ### Reproducibility
 
 If you want to make your performance exactly reproducible, please switch on `--deterministic` to train the final model to be published. Note that this flag will switch off `torch.backends.cudnn.benchmark` and slow down the training speed.

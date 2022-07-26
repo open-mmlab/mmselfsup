@@ -164,6 +164,27 @@ python tools/analysis_tools/visualize_tsne.py ${CONFIG_FILE} --checkpoint ${CKPT
 - `WORK_DIR`: 保存可视化结果的路径.
 - `[optional arguments]`: 可选参数，具体可以参考 [visualize_tsne.py](../../tools/analysis_tools/visualize_tsne.py)
 
+### MAE 可视化
+
+我们提供了一个对 MAE 掩码效果和重建效果可视化可视化的方法:
+
+```shell
+python tools/misc/mae_visualization.py ${IMG} ${CONFIG_FILE} ${CKPT_PATH} --device ${DEVICE}
+```
+
+参数:
+
+- `IMG`: 用于可视化的图片
+- `CONFIG_FILE`: 训练预训练模型的参数配置文件.
+- `CKPT_PATH`: 预训练模型的路径.
+- `DEVICE`: 用于推理的设备.
+
+示例:
+
+```shell
+python tools/misc/mae_visualization.py tests/data/color.jpg configs/selfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k.py mae_epoch_400.pth --device 'cuda:0'
+```
+
 ### 可复现性
 
 如果您想确保模型精度的可复现性，您可以设置 `--deterministic` 参数。但是，开启 `--deterministic` 意味着关闭 `torch.backends.cudnn.benchmark`, 所以会使模型的训练速度变慢。
