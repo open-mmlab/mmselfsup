@@ -16,7 +16,7 @@ imagenet_mean = np.array([0.485, 0.456, 0.406])
 imagenet_std = np.array([0.229, 0.224, 0.225])
 
 
-def show_image(image, title=''):
+def show_image(image: torch.Tensor, title: str = '') -> None:
     # image is [H, W, 3]
     assert image.shape[2] == 3
     image = torch.clip((image * imagenet_std + imagenet_mean) * 255, 0,
@@ -27,7 +27,8 @@ def show_image(image, title=''):
     return
 
 
-def show_images(x, im_masked, y, im_paste):
+def show_images(x: torch.Tensor, im_masked: torch.Tensor, y: torch.Tensor,
+                im_paste: torch.Tensor) -> None:
     # make the plt figure larger
     plt.rcParams['figure.figsize'] = [24, 6]
 
