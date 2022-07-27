@@ -11,7 +11,7 @@ from .base import BaseModel
 class MAE(BaseModel):
     """MAE.
 
-    Implementation of `Masked Autoencoders Are Scalable Vision Learners.
+    Implementation of `Masked Autoencoders Are Scalable Vision Learners
     <https://arxiv.org/abs/2111.06377>`_.
 
     Args:
