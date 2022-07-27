@@ -9,10 +9,11 @@ from .base import BaseModel
 
 @ALGORITHMS.register_module()
 class MAE(BaseModel):
-    """MAE. Implementation of `Masked Autoencoders Are Scalable Vision
-    Learners.
+    """MAE.
 
-     <https://arxiv.org/abs/2111.06377>`_.
+    Implementation of `Masked Autoencoders Are Scalable Vision Learners.
+    <https://arxiv.org/abs/2111.06377>`_.
+
     Args:
         backbone (dict): Config dict for encoder. Defaults to None.
         neck (dict): Config dict for encoder. Defaults to None.
