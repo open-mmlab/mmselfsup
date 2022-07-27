@@ -19,7 +19,7 @@ class MAEPretrainHead(BaseModule):
     """
 
     def __init__(self, norm_pix: bool = False, patch_size: int = 16) -> None:
-        super(MAEPretrainHead, self).__init__()
+        super().__init__()
         self.norm_pix = norm_pix
         self.patch_size = patch_size
 
@@ -82,7 +82,7 @@ class MAEFinetuneHead(BaseModule):
     """
 
     def __init__(self, embed_dim, num_classes=1000, label_smooth_val=0.1):
-        super(MAEFinetuneHead, self).__init__()
+        super().__init__()
         self.head = nn.Linear(embed_dim, num_classes)
         self.criterion = LabelSmoothLoss(label_smooth_val, num_classes)
 
@@ -114,7 +114,7 @@ class MAELinprobeHead(BaseModule):
     """
 
     def __init__(self, embed_dim, num_classes=1000):
-        super(MAELinprobeHead, self).__init__()
+        super().__init__()
         self.head = nn.Linear(embed_dim, num_classes)
         self.bn = nn.BatchNorm1d(embed_dim, affine=False, eps=1e-6)
         self.criterion = nn.CrossEntropyLoss()
