@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Dict, Tuple
+from typing import Optional, Dict, Tuple
 
 import torch
 
@@ -15,19 +15,19 @@ class MAE(BaseModel):
     <https://arxiv.org/abs/2111.06377>`_.
 
     Args:
-        backbone (dict): Config dict for encoder. Defaults to None.
-        neck (dict): Config dict for encoder. Defaults to None.
-        head (dict): Config dict for loss functions. Defaults to None.
-        init_cfg (dict): Config dict for weight initialization.
+        backbone (dict, optional): Config dict for encoder. Defaults to None.
+        neck (dict, optional): Config dict for encoder. Defaults to None.
+        head (dict, optional): Config dict for loss functions. Defaults to None.
+        init_cfg (dict, optional): Config dict for weight initialization.
             Defaults to None.
     """
 
     def __init__(self,
-                 backbone: dict = None,
-                 neck: dict = None,
-                 head: dict = None,
-                 init_cfg: dict = None) -> None:
-        super(MAE, self).__init__(init_cfg)
+                 backbone: Optional[dict] = None,
+                 neck: Optional[dict] = None,
+                 head: Optional[dict] = None,
+                 init_cfg: Optional[dict] = None) -> None:
+        super().__init__(init_cfg)
         assert backbone is not None
         self.backbone = build_backbone(backbone)
         assert neck is not None
@@ -37,7 +37,7 @@ class MAE(BaseModel):
         self.head = build_head(head)
 
     def init_weights(self):
-        super(MAE, self).init_weights()
+        super().init_weights()
 
     def extract_feat(self, img: torch.Tensor) -> Tuple[torch.Tensor]:
         """Function to extract features from backbone.
@@ -45,7 +45,7 @@ class MAE(BaseModel):
         Args:
             img (torch.Tensor): Input images of shape (N, C, H, W).
         Returns:
-            tuple[torch.Tensor]: backbone outputs.
+            Tuple[torch.Tensor]: backbone outputs.
         """
         return self.backbone(img)
 
@@ -54,10 +54,10 @@ class MAE(BaseModel):
         """Forward computation during training.
 
         Args:
-            img (Tensor): Input images of shape (N, C, H, W).
+            img (torch.Tensor): Input images of shape (N, C, H, W).
             kwargs: Any keyword arguments to be used to forward.
         Returns:
-            dict[str, Tensor]: A dictionary of loss components.
+            Dict[str, torch.Tensor]: A dictionary of loss components.
         """
         latent, mask, ids_restore = self.backbone(img)
         pred = self.neck(latent, ids_restore)
