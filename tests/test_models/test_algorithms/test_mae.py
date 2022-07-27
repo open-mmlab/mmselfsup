@@ -33,5 +33,8 @@ def test_mae():
     fake_input = torch.randn((2, 3, 224, 224))
     fake_loss = alg.forward_train(fake_input)
     fake_feature = alg.extract_feat(fake_input)
+    mask, pred = alg.forward_test(fake_input)
     assert isinstance(fake_loss['loss'].item(), float)
     assert list(fake_feature[0].shape) == [2, 50, 768]
+    assert list(mask.shape) == [2, 224, 224, 3]
+    assert list(pred.shape) == [2, 224, 224, 3]

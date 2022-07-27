@@ -103,6 +103,10 @@ def test_mae_pretrain_head():
 
     assert loss_norm_pixel['loss'].item() > 0
 
+    x = torch.rand((1, 4, 16**2 * 3))
+    imgs = head_norm_pixel.unpatchify(x)
+    assert imgs.size() == torch.Size((1, 3, 32, 32))
+
 
 def test_mae_finetune_head():
 
