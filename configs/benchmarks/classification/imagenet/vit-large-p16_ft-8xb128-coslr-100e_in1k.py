@@ -13,3 +13,23 @@ optim_wrapper = dict(optimizer=dict(lr=0.004, layer_decay_rate=0.75))
 # training cfg
 # fine-tuning for 50 epochs for ViT-large
 train_cfg = dict(max_epochs=50)
+
+# learning rate scheduler
+# learning rate scheduler
+param_scheduler = [
+    dict(
+        type='LinearLR',
+        start_factor=1e-4,
+        by_epoch=True,
+        begin=0,
+        end=5,
+        convert_to_iter_based=True),
+    dict(
+        type='CosineAnnealingLR',
+        T_max=45,
+        by_epoch=True,
+        begin=5,
+        end=50,
+        eta_min=1e-6,
+        convert_to_iter_based=True)
+]
