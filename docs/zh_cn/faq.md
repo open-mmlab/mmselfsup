@@ -6,14 +6,15 @@
 
 下表显示了与 MMSelfSup 适配的 MMCV, MMClassification, MMDetection 和 MMSegmentation 的版本号。 为避免安装过程中出现问题，请参照下表安装适配的版本。
 
-| MMSelfSup version |    MMCV version     |  MMClassification version   | MMSegmentation version | MMDetection version |
-| :---------------: | :-----------------: | :-------------------------: | :--------------------: | :-----------------: |
-|  0.9.1 (master)   | mmcv-full >= 1.4.2  |       mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.19.0   |
-|       0.9.0       | mmcv-full >= 1.4.2  |       mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.19.0   |
-|       0.8.0       | mmcv-full >= 1.4.2  |       mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.19.0   |
-|       0.7.1       | mmcv-full >= 1.3.16 | mmcls >= 0.19.0, \<= 0.20.1 |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
-|       0.6.0       | mmcv-full >= 1.3.16 |       mmcls >= 0.19.0       |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
-|       0.5.0       | mmcv-full >= 1.3.16 |              /              |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
+| MMSelfSup version |         MMCV version         |  MMClassification version   | MMSegmentation version | MMDetection version |
+| :---------------: | :--------------------------: | :-------------------------: | :--------------------: | :-----------------: |
+|  0.9.2 (master)   | mmcv-full >= 1.4.2, \< 1.7.0 |       mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.19.0   |
+|       0.9.1       | mmcv-full >= 1.4.2, \< 1.6.0 |       mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.19.0   |
+|       0.9.0       |      mmcv-full >= 1.4.2      |       mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.19.0   |
+|       0.8.0       |      mmcv-full >= 1.4.2      |       mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.19.0   |
+|       0.7.1       |     mmcv-full >= 1.3.16      | mmcls >= 0.19.0, \<= 0.20.1 |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
+|       0.6.0       |     mmcv-full >= 1.3.16      |       mmcls >= 0.19.0       |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
+|       0.5.0       |     mmcv-full >= 1.3.16      |              /              |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
 
 **注意:**
 
