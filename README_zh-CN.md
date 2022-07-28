@@ -121,7 +121,7 @@ MMSelfSup 依赖 [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open
 - [x] [MoCo v3 (ICCV'2021)](https://arxiv.org/abs/2104.02057)
 - [x] [MAE (CVPR'2022)](https://arxiv.org/abs/2111.06377)
 - [x] [SimMIM (CVPR'2022)](https://arxiv.org/abs/2111.09886)
-- [x] [CAE](https://arxiv.org/abs/2202.03026)
+- [x] [CAE (ArXiv'2022)](https://arxiv.org/abs/2202.03026)
 
 更多的算法实现已经在我们的计划中。
 
