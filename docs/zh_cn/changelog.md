@@ -10,18 +10,18 @@
 
 #### Bug Fixes
 
-- 修复 extract.py 文件中 cfg/args 路径问题 ([#357](https://github.com/open-mmlab/mmselfsup/pull/357))
-- 修复 SimMIM 配置文件中的错误 ([#360](https://github.com/open-mmlab/mmselfsup/pull/360))
+- 修复 extract.py 文件中 cfg/args 路径问题，应用 cfg 中的路径进行处理 ([#357](https://github.com/open-mmlab/mmselfsup/pull/357))
+- 修复 SimMIM 配置文件中掩码生成器类型名称的错误 ([#360](https://github.com/open-mmlab/mmselfsup/pull/360))
 
 #### Improvements
 
 - 更新 mdformat 设置 ([#323](https://github.com/open-mmlab/mmselfsup/pull/323))
-- 添加 circle ci 配置([#374](https://github.com/open-mmlab/mmselfsup/pull/374))
+- 添加 circle ci 配置 ([#374](https://github.com/open-mmlab/mmselfsup/pull/374))
 
 #### Docs
 
 - 修复语言更换链接问题 ([#327](https://github.com/open-mmlab/mmselfsup/pull/327))
-- 更新文档链接 ([#354](https://github.com/open-mmlab/mmselfsup/pull/354))
+- 更新 tutorials/4_schedule.md 中的文档链接([#354](https://github.com/open-mmlab/mmselfsup/pull/354))
 
 ### v0.9.1 (31/05/2022)
 

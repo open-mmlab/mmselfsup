@@ -10,8 +10,8 @@
 
 #### Bug Fixes
 
-- Fix args/cfg bug in extract.py ([#357](https://github.com/open-mmlab/mmselfsup/pull/357))
-- Fix bugs of SimMIM config ([#360](https://github.com/open-mmlab/mmselfsup/pull/360))
+- Fix args/cfg bug in extract.py, use cfg.work_dir to save files ([#357](https://github.com/open-mmlab/mmselfsup/pull/357))
+- Fix SimMIM mask generator config bug ([#360](https://github.com/open-mmlab/mmselfsup/pull/360))
 
 #### Improvements
 
@@ -21,7 +21,7 @@
 #### Docs
 
 - Fix the link of switch language ([#327](https://github.com/open-mmlab/mmselfsup/pull/327))
-- Update lr_updater.py links ([#354](https://github.com/open-mmlab/mmselfsup/pull/354))
+- Update lr_updater.py links in tutorials/4_schedule.md ([#354](https://github.com/open-mmlab/mmselfsup/pull/354))
 
 ### v0.9.1 (31/05/2022)
 
