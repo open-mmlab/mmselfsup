@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Optional, Dict, Tuple
+from typing import Dict, Optional, Tuple
 
 import torch
 
@@ -15,17 +15,17 @@ class MAE(BaseModel):
     <https://arxiv.org/abs/2111.06377>`_.
 
     Args:
-        backbone (dict, optional): Config dict for encoder. Defaults to None.
-        neck (dict, optional): Config dict for encoder. Defaults to None.
-        head (dict, optional): Config dict for loss functions. Defaults to None.
+        backbone (dict): Config dict for encoder. Defaults to None.
+        neck (dict): Config dict for encoder. Defaults to None.
+        head (dict): Config dict for loss functions. Defaults to None.
         init_cfg (dict, optional): Config dict for weight initialization.
             Defaults to None.
     """
 
     def __init__(self,
-                 backbone: Optional[dict] = None,
-                 neck: Optional[dict] = None,
-                 head: Optional[dict] = None,
+                 backbone: dict,
+                 neck: dict,
+                 head: dict,
                  init_cfg: Optional[dict] = None) -> None:
         super().__init__(init_cfg)
         assert backbone is not None

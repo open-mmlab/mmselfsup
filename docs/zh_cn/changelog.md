@@ -2,6 +2,27 @@
 
 ## MMSelfSup
 
+### v0.9.2 (28/07/2022)
+
+#### New Features
+
+- 支持 MAE 重建图像的可视化 ([#376](https://github.com/open-mmlab/mmselfsup/pull/376))
+
+#### Bug Fixes
+
+- 修复 extract.py 文件中 cfg/args 路径问题 ([#357](https://github.com/open-mmlab/mmselfsup/pull/357))
+- 修复 SimMIM 配置文件中的错误 ([#360](https://github.com/open-mmlab/mmselfsup/pull/360))
+
+#### Improvements
+
+- 更新 mdformat 设置 ([#323](https://github.com/open-mmlab/mmselfsup/pull/323))
+- 添加 circle ci 配置([#374](https://github.com/open-mmlab/mmselfsup/pull/374))
+
+#### Docs
+
+- 修复语言更换链接问题 ([#327](https://github.com/open-mmlab/mmselfsup/pull/327))
+- 更新文档链接 ([#354](https://github.com/open-mmlab/mmselfsup/pull/354))
+
 ### v0.9.1 (31/05/2022)
 
 #### 亮点

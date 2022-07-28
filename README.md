@@ -65,12 +65,11 @@ The master branch works with **PyTorch 1.5** or higher.
 
 ## What's New
 
-MMSelfSup **v0.9.1** was released in 31/05/2022.
+MMSelfSup **v0.9.2** was released in 28/07/2022.
 
 Highlights of the new version:
 
-- Update **BYOL** model and results
-- Refine some documentation
+- Support MAE Reconstructed Image Visualization
 
 Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
 
@@ -120,8 +119,8 @@ Supported algorithms:
 - [x] [SimSiam (CVPR'2021)](https://arxiv.org/abs/2011.10566)
 - [x] [Barlow Twins (ICML'2021)](https://arxiv.org/abs/2103.03230)
 - [x] [MoCo v3 (ICCV'2021)](https://arxiv.org/abs/2104.02057)
-- [x] [MAE](https://arxiv.org/abs/2111.06377)
-- [x] [SimMIM](https://arxiv.org/abs/2111.09886)
+- [x] [MAE (CVPR'2022)](https://arxiv.org/abs/2111.06377)
+- [x] [SimMIM (CVPR'2022)](https://arxiv.org/abs/2111.09886)
 - [x] [CAE](https://arxiv.org/abs/2202.03026)
 
 More algorithms are in our plan.
