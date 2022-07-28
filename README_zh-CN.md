@@ -65,12 +65,11 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
 ## 更新
 
-最新的 **v0.9.1** 版本已经在 2022.05.31 发布。
+最新的 **v0.9.2** 版本已经在 2022.07.28 发布。
 
 新版本亮点：
 
-- 更新 **BYOL** 模型和结果
-- 更新优化部分文档
+- 支持 MAE 重建图像的可视化
 
 请参考 [更新日志](docs/zh_cn/changelog.md) 获取更多细节和历史版本信息。
 
@@ -120,9 +119,9 @@ MMSelfSup 依赖 [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open
 - [x] [SimSiam (CVPR'2021)](https://arxiv.org/abs/2011.10566)
 - [x] [Barlow Twins (ICML'2021)](https://arxiv.org/abs/2103.03230)
 - [x] [MoCo v3 (ICCV'2021)](https://arxiv.org/abs/2104.02057)
-- [x] [MAE](https://arxiv.org/abs/2111.06377)
-- [x] [SimMIM](https://arxiv.org/abs/2111.09886)
-- [x] [CAE](https://arxiv.org/abs/2202.03026)
+- [x] [MAE (CVPR'2022)](https://arxiv.org/abs/2111.06377)
+- [x] [SimMIM (CVPR'2022)](https://arxiv.org/abs/2111.09886)
+- [x] [CAE (ArXiv'2022)](https://arxiv.org/abs/2202.03026)
 
 更多的算法实现已经在我们的计划中。
 

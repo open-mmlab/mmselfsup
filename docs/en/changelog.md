@@ -2,6 +2,27 @@
 
 ## MMSelfSup
 
+### v0.9.2 (28/07/2022)
+
+#### New Features
+
+- Support MAE Reconstructed Image Visualization ([#376](https://github.com/open-mmlab/mmselfsup/pull/376))
+
+#### Bug Fixes
+
+- Fix args/cfg bug in extract.py, use cfg.work_dir to save files ([#357](https://github.com/open-mmlab/mmselfsup/pull/357))
+- Fix SimMIM mask generator config bug ([#360](https://github.com/open-mmlab/mmselfsup/pull/360))
+
+#### Improvements
+
+- Update mdformat settings ([#323](https://github.com/open-mmlab/mmselfsup/pull/323))
+- Add circleci ([#374](https://github.com/open-mmlab/mmselfsup/pull/374))
+
+#### Docs
+
+- Fix the link of switch language ([#327](https://github.com/open-mmlab/mmselfsup/pull/327))
+- Update lr_updater.py links in tutorials/4_schedule.md ([#354](https://github.com/open-mmlab/mmselfsup/pull/354))
+
 ### v0.9.1 (31/05/2022)
 
 #### Highlight
