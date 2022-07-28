@@ -47,7 +47,8 @@ train_cfg = dict(max_epochs=400)
 default_hooks = dict(
     logger=dict(type='LoggerHook', interval=100),
     # only keeps the latest 3 checkpoints
-    checkpoint=dict(type='CheckpointHook', interval=10, max_keep_ckpts=3))
+    checkpoint=dict(type='CheckpointHook', interval=1, max_keep_ckpts=3))
 
 # randomness
 randomness = dict(seed=0, diff_rank_seed=True)
+resume = True

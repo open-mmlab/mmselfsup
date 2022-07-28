@@ -87,7 +87,7 @@ custom_imports = dict(imports='mmselfsup.engine', allow_failed_imports=False)
 optim_wrapper = dict(
     optimizer=dict(
         type='AdamW',
-        lr=4e-3,
+        lr=2e-3,
         weight_decay=0.05,
         eps=1e-8,
         betas=(0.9, 0.999),
