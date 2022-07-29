@@ -5,8 +5,8 @@ import platform
 import pytest
 import torch
 
-from mmselfsup.data import SelfSupDataSample
 from mmselfsup.models.algorithms.mae import MAE
+from mmselfsup.structures import SelfSupDataSample
 
 backbone = dict(type='MAEViT', arch='b', patch_size=16, mask_ratio=0.75)
 neck = dict(

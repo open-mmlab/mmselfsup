@@ -6,8 +6,8 @@ import torch
 from mmengine.data import LabelData
 from torch.utils.data import Dataset
 
-from mmselfsup.data import SelfSupDataSample
 from mmselfsup.engine.hooks import DeepClusterHook
+from mmselfsup.structures import SelfSupDataSample
 
 num_classes = 5
 with_sobel = True,

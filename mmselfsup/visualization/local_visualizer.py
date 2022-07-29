@@ -7,8 +7,8 @@ from mmengine import Visualizer
 from mmengine.data import InstanceData
 from mmengine.dist import master_only
 
-from mmselfsup.data import SelfSupDataSample
 from mmselfsup.registry import VISUALIZERS
+from mmselfsup.structures import SelfSupDataSample
 
 
 @VISUALIZERS.register_module()

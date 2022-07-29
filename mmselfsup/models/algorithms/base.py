@@ -5,8 +5,8 @@ import torch
 from mmengine.model import BaseModel as _BaseModel
 from torch import nn
 
-from mmselfsup.data import SelfSupDataSample
 from mmselfsup.registry import MODELS
+from mmselfsup.structures import SelfSupDataSample
 
 
 class BaseModel(_BaseModel):

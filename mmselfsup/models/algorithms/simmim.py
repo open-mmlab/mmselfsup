@@ -3,8 +3,8 @@ from typing import Dict, List
 
 import torch
 
-from mmselfsup.data import SelfSupDataSample
 from mmselfsup.registry import MODELS
+from mmselfsup.structures import SelfSupDataSample
 from .base import BaseModel
 
 

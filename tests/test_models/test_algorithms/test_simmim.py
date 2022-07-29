@@ -5,8 +5,8 @@ import pytest
 import torch
 from mmengine.data import InstanceData
 
-from mmselfsup.data import SelfSupDataSample
 from mmselfsup.models.algorithms import SimMIM
+from mmselfsup.structures import SelfSupDataSample
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')

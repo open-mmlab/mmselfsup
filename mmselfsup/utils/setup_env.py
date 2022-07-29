@@ -17,11 +17,11 @@ def register_all_modules(init_default_scope: bool = True) -> None:
             https://github.com/open-mmlab/mmengine/blob/main/docs/en/tutorials/registry.md
             Defaults to True.
     """  # noqa
-    import mmselfsup.data  # noqa: F401,F403
     import mmselfsup.datasets  # noqa: F401,F403
     import mmselfsup.engine  # noqa: F401,F403
     import mmselfsup.evaluation  # noqa: F401,F403
     import mmselfsup.models  # noqa: F401,F403
+    import mmselfsup.structures  # noqa: F401,F403
     import mmselfsup.visualization  # noqa: F401,F403
 
     if init_default_scope:

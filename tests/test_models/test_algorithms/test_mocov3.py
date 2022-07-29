@@ -5,8 +5,8 @@ import platform
 import pytest
 import torch
 
-from mmselfsup.data import SelfSupDataSample
 from mmselfsup.models import MoCoV3
+from mmselfsup.structures import SelfSupDataSample
 
 backbone = dict(
     type='MoCoV3ViT',

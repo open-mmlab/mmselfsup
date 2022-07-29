@@ -6,8 +6,8 @@ import pytest
 import torch
 from mmengine.data import InstanceData
 
-from mmselfsup.data import SelfSupDataSample
 from mmselfsup.models.algorithms import DeepCluster
+from mmselfsup.structures import SelfSupDataSample
 
 num_classes = 5
 with_sobel = True,

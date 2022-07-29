@@ -6,8 +6,8 @@ import pytest
 import torch
 from mmengine.data import InstanceData
 
-from mmselfsup.data import SelfSupDataSample
 from mmselfsup.models.algorithms import NPID
+from mmselfsup.structures import SelfSupDataSample
 
 backbone = dict(
     type='ResNet',

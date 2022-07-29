@@ -2,7 +2,7 @@
 from unittest import TestCase
 
 import torch
-from mmcls.data import ClsDataSample
+from mmcls.structures import ClsDataSample
 
 from mmselfsup.models.heads import MultiClsHead
 

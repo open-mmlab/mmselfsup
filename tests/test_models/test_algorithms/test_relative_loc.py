@@ -5,8 +5,8 @@ import pytest
 import torch
 from mmengine.data import InstanceData
 
-from mmselfsup.data import SelfSupDataSample
 from mmselfsup.models.algorithms.relative_loc import RelativeLoc
+from mmselfsup.structures import SelfSupDataSample
 
 backbone = dict(
     type='ResNet',
