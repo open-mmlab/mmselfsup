@@ -1,8 +1,8 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import torch
 
-from mmselfsup.data import SelfSupDataSample
 from mmselfsup.models.utils import SelfSupDataPreprocessor
+from mmselfsup.structures import SelfSupDataSample
 
 
 def test_selfsup_data_preprocessor():

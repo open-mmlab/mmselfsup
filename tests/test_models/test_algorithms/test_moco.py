@@ -5,8 +5,8 @@ import platform
 import pytest
 import torch
 
-from mmselfsup.data import SelfSupDataSample
 from mmselfsup.models.algorithms import MoCo
+from mmselfsup.structures import SelfSupDataSample
 
 queue_len = 32
 feat_dim = 2

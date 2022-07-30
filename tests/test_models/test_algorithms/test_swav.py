@@ -5,8 +5,8 @@ import platform
 import pytest
 import torch
 
-from mmselfsup.data import SelfSupDataSample
 from mmselfsup.models.algorithms.swav import SwAV
+from mmselfsup.structures import SelfSupDataSample
 
 nmb_crops = [2, 6]
 backbone = dict(

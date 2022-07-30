@@ -10,10 +10,10 @@ from mmengine.model import BaseModel as EngineBaseModel
 from mmengine.model import BaseModule
 from torch.utils.data import Dataset
 
-from mmselfsup.data import SelfSupDataSample
 from mmselfsup.engine import SimSiamHook
 from mmselfsup.models.algorithms import BaseModel
 from mmselfsup.registry import MODELS
+from mmselfsup.structures import SelfSupDataSample
 
 
 class DummyDataset(Dataset):

@@ -11,11 +11,11 @@ from mmengine.model import BaseModule
 from mmengine.optim import OptimWrapper
 from torch.utils.data import Dataset
 
-from mmselfsup.data import SelfSupDataSample
 from mmselfsup.engine import SwAVHook
 from mmselfsup.models.algorithms import BaseModel
 from mmselfsup.models.heads import SwAVHead
 from mmselfsup.registry import MODELS
+from mmselfsup.structures import SelfSupDataSample
 
 
 class DummyDataset(Dataset):

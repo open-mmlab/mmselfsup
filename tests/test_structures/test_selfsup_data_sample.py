@@ -6,7 +6,7 @@ import torch
 # TODO: will use real PixelData once it is added in mmengine
 from mmengine.data import InstanceData, LabelData
 
-from mmselfsup.data import SelfSupDataSample
+from mmselfsup.structures import SelfSupDataSample
 
 
 def _equal(a, b):

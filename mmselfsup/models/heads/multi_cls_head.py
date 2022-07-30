@@ -3,9 +3,9 @@ from typing import List, Sequence, Tuple, Union
 
 import torch
 import torch.nn as nn
-from mmcls.data import ClsDataSample
 from mmcls.evaluation.metrics import Accuracy
 from mmcls.models import ClsHead
+from mmcls.structures import ClsDataSample
 from mmcv.cnn import build_norm_layer
 from mmengine.data import LabelData
 

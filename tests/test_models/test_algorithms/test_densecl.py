@@ -7,8 +7,8 @@ import pytest
 import torch
 
 import mmselfsup
-from mmselfsup.data import SelfSupDataSample
 from mmselfsup.models.algorithms.densecl import DenseCL
+from mmselfsup.structures import SelfSupDataSample
 
 queue_len = 32
 feat_dim = 2

@@ -5,8 +5,8 @@ import torch
 import torch.nn as nn
 from mmengine.data import LabelData
 
-from mmselfsup.data import SelfSupDataSample
 from mmselfsup.registry import MODELS
+from mmselfsup.structures import SelfSupDataSample
 from .base import BaseModel
 
 

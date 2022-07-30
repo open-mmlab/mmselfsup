@@ -5,8 +5,8 @@ import platform
 import pytest
 import torch
 
-from mmselfsup.data import SelfSupDataSample
 from mmselfsup.models.algorithms.barlowtwins import BarlowTwins
+from mmselfsup.structures import SelfSupDataSample
 
 backbone = dict(
     type='ResNet',
