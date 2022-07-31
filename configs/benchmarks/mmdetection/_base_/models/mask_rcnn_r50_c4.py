@@ -2,6 +2,13 @@
 norm_cfg = dict(type='BN', requires_grad=False)
 model = dict(
     type='MaskRCNN',
+    data_preprocessor=dict(
+        type='DetDataPreprocessor',
+        mean=[103.530, 116.280, 123.675],
+        std=[1.0, 1.0, 1.0],
+        bgr_to_rgb=False,
+        pad_mask=True,
+        pad_size_divisor=32),
     backbone=dict(
         type='ResNet',
         depth=50,
