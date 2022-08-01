@@ -9,7 +9,7 @@ from mmengine.data import InstanceData
 from mmengine.utils import digit_version
 
 from mmselfsup.structures import SelfSupDataSample
-from mmselfsup.visualization import SelfSupLocalVisualizer
+from mmselfsup.visualization import SelfSupVisualizer
 
 
 def _rand_patch_box(num_boxes, h, w):
@@ -29,7 +29,7 @@ def _rand_patch_box(num_boxes, h, w):
     return patch_box.unsqueeze(0)
 
 
-class TestSelfSupLocalVisualizer(TestCase):
+class TestSelfSupVisualizer(TestCase):
 
     def test_add_datasample(self):
         h = 12
@@ -56,19 +56,19 @@ class TestSelfSupLocalVisualizer(TestCase):
         pred_selfsup_data_sample = SelfSupDataSample()
         pred_selfsup_data_sample.pseudo_label = pseudo_label
 
-        selfsup_local_visualizer = SelfSupLocalVisualizer()
+        selfsup_visualizer = SelfSupVisualizer()
 
         # test gt_instances
-        selfsup_local_visualizer.add_datasample('image', image,
-                                                gt_selfsup_data_sample)
+        selfsup_visualizer.add_datasample('image', image,
+                                          gt_selfsup_data_sample)
 
         # test out_file
-        selfsup_local_visualizer.add_datasample(
+        selfsup_visualizer.add_datasample(
             'image', image, gt_selfsup_data_sample, out_file=out_file)
         self._assert_image_and_shape(out_file, (h, w, 3))
 
         # test pred_instance
-        selfsup_local_visualizer.add_datasample(
+        selfsup_visualizer.add_datasample(
             'image',
             image,
             gt_selfsup_data_sample,
@@ -78,7 +78,7 @@ class TestSelfSupLocalVisualizer(TestCase):
         self._assert_image_and_shape(out_file, (h, w, 3))
 
         # test gt_instances and pred_instances
-        selfsup_local_visualizer.add_datasample(
+        selfsup_visualizer.add_datasample(
             'image',
             image,
             gt_selfsup_data_sample,
@@ -102,19 +102,19 @@ class TestSelfSupLocalVisualizer(TestCase):
         pred_selfsup_data_sample = SelfSupDataSample()
         pred_selfsup_data_sample.pseudo_label = pseudo_label
 
-        selfsup_local_visualizer = SelfSupLocalVisualizer()
+        selfsup_visualizer = SelfSupVisualizer()
 
         # test gt_instances
-        selfsup_local_visualizer.add_datasample('image', image,
-                                                gt_selfsup_data_sample)
+        selfsup_visualizer.add_datasample('image', image,
+                                          gt_selfsup_data_sample)
 
         # test out_file
-        selfsup_local_visualizer.add_datasample(
+        selfsup_visualizer.add_datasample(
             'image', image, gt_selfsup_data_sample, out_file=out_file)
         self._assert_image_and_shape(out_file, (h, w * 4, 3))
 
         # test pred_instance
-        selfsup_local_visualizer.add_datasample(
+        selfsup_visualizer.add_datasample(
             'image',
             image,
             gt_selfsup_data_sample,
@@ -124,7 +124,7 @@ class TestSelfSupLocalVisualizer(TestCase):
         self._assert_image_and_shape(out_file, (h, w * 4, 3))
 
         # test gt_instances and pred_instances
-        selfsup_local_visualizer.add_datasample(
+        selfsup_visualizer.add_datasample(
             'image',
             image,
             gt_selfsup_data_sample,
@@ -147,19 +147,19 @@ class TestSelfSupLocalVisualizer(TestCase):
         pred_selfsup_data_sample = SelfSupDataSample()
         pred_selfsup_data_sample.mask = mask
 
-        selfsup_local_visualizer = SelfSupLocalVisualizer()
+        selfsup_visualizer = SelfSupVisualizer()
 
         # test gt_instances
-        selfsup_local_visualizer.add_datasample('image', image,
-                                                gt_selfsup_data_sample)
+        selfsup_visualizer.add_datasample('image', image,
+                                          gt_selfsup_data_sample)
 
         # test out_file
-        selfsup_local_visualizer.add_datasample(
+        selfsup_visualizer.add_datasample(
             'image', image, gt_selfsup_data_sample, out_file=out_file)
         self._assert_image_and_shape(out_file, (h, w, 3))
 
         # test pred_instance
-        selfsup_local_visualizer.add_datasample(
+        selfsup_visualizer.add_datasample(
             'image',
             image,
             gt_selfsup_data_sample,
@@ -169,7 +169,7 @@ class TestSelfSupLocalVisualizer(TestCase):
         self._assert_image_and_shape(out_file, (h, w, 3))
 
         # test gt_instances and pred_instances
-        selfsup_local_visualizer.add_datasample(
+        selfsup_visualizer.add_datasample(
             'image',
             image,
             gt_selfsup_data_sample,
@@ -186,19 +186,19 @@ class TestSelfSupLocalVisualizer(TestCase):
         # pred_instances
         pred_selfsup_data_sample = SelfSupDataSample()
 
-        selfsup_local_visualizer = SelfSupLocalVisualizer()
+        selfsup_visualizer = SelfSupVisualizer()
 
         # test gt_instances
-        selfsup_local_visualizer.add_datasample('image', image,
-                                                gt_selfsup_data_sample)
+        selfsup_visualizer.add_datasample('image', image,
+                                          gt_selfsup_data_sample)
 
         # test out_file
-        selfsup_local_visualizer.add_datasample(
+        selfsup_visualizer.add_datasample(
             'image', image, gt_selfsup_data_sample, out_file=out_file)
         self._assert_image_and_shape(out_file, (h, w * 2, 3))
 
         # test pred_instance
-        selfsup_local_visualizer.add_datasample(
+        selfsup_visualizer.add_datasample(
             'image',
             image,
             gt_selfsup_data_sample,
@@ -208,7 +208,7 @@ class TestSelfSupLocalVisualizer(TestCase):
         self._assert_image_and_shape(out_file, (h, w * 2, 3))
 
         # test gt_instances and pred_instances
-        selfsup_local_visualizer.add_datasample(
+        selfsup_visualizer.add_datasample(
             'image',
             image,
             gt_selfsup_data_sample,
