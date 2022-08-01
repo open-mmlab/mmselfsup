@@ -4,7 +4,7 @@ _base_ = [
     '../_base_/schedules/sgd_coslr-100e.py',
     '../_base_/default_runtime.py',
 ]
-# SwAV linear evaluation setting
+# SwAV and Barlow Twins linear evaluation setting
 
 model = dict(backbone=dict(frozen_stages=4))
 
