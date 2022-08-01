@@ -81,16 +81,20 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
         groups, with specific rules defined by paramwise_cfg.
 
         Args:
-            params (list[dict]): A list of param groups, it will be modified
+            params (List[dict]): A list of param groups, it will be modified
                 in place.
             module (nn.Module): The module to be added.
-            optimizer_cfg (Dict): The configuration of optimizer.
-            prefix (str): The prefix of the module
-            is_dcn_module (int|float|None): If the current module is a
-                submodule of DCN, `is_dcn_module` will be passed to
-                control conv_offset layer's learning rate. Defaults to None.
+            optimizer_cfg (dict): The configuration of optimizer.
+            prefix (str): The prefix of the module.
         """
         logger = MMLogger.get_current_instance()
+
+        # Check if self.param_cfg is not None
+        if len(self.paramwise_cfg) > 0:
+            logger.log("The paramwise_cfg will be ignored, and normalization \
+                parameters, bias, position embedding, class token and \
+                    relative position bias table will not be decayed by \
+                        default.")
 
         model_type = optimizer_cfg.pop('model_type', None)
         # model_type should not be None
@@ -118,7 +122,8 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
             # will not decay normalization params, bias, position embedding
             # class token, relative position bias table
             if len(param.shape) == 1 or name.endswith('.bias') or name in (
-                    'backbone.pos_embed', 'backbone.cls_token'):
+                    'backbone.pos_embed', 'backbone.cls_token'
+            ) or name.endswith('.relative_position_bias_table'):
                 group_name = 'no_decay'
                 this_weight_decay = 0.
             else:
