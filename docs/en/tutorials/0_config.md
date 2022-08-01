@@ -266,7 +266,7 @@ log_processor = dict(
 
 vis_backends = [dict(type='LocalVisBackend')]
 visualizer = dict(
-    type='SelfSupLocalVisualizer',
+    type='SelfSupVisualizer',
     vis_backends=vis_backends,
     name='visualizer')
 # custom_hooks = [dict(type='SelfSupVisualizationHook', interval=10)]
