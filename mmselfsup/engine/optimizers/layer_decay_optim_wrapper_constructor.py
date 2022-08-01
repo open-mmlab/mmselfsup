@@ -91,10 +91,10 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
 
         # Check if self.param_cfg is not None
         if len(self.paramwise_cfg) > 0:
-            logger.log("The paramwise_cfg will be ignored, and normalization \
+            logger.log('The paramwise_cfg will be ignored, and normalization \
                 parameters, bias, position embedding, class token and \
                     relative position bias table will not be decayed by \
-                        default.")
+                        default.')
 
         model_type = optimizer_cfg.pop('model_type', None)
         # model_type should not be None
