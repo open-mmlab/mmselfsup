@@ -118,3 +118,7 @@ def test_learning_rate_decay_optimizer_wrapper_constructor():
     assert optimizer_wrapper.optimizer.param_groups[-1]['lr_scale'] == 1.0
     assert optimizer_wrapper.optimizer.param_groups[-3]['lr_scale'] == 2.0
     assert optimizer_wrapper.optimizer.param_groups[-5]['lr_scale'] == 4.0
+    # check relative pos bias table is not decayed
+    assert optimizer_wrapper.optimizer.param_groups[-4][
+        'weight_decay'] == 0.0 and "backbone.stages.3.blocks.1.attn.w_msa.relative_position_bias_table" in optimizer_wrapper.optimizer.param_groups[  # noqa
+            -4]['param_names']
