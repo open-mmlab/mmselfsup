@@ -1,5 +1,5 @@
 _base_ = [
-    '../_base_/models/mocov3_vit-small-p16.py',
+    '../_base_/models/mocov3_vit-base-p16.py',
     '../_base_/datasets/imagenet_mocov3.py',
     '../_base_/schedules/adamw_coslr-300e_in1k.py',
     '../_base_/default_runtime.py',
