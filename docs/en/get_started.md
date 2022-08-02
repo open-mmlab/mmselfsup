@@ -11,6 +11,7 @@
     - [Count number of parameters](#count-number-of-parameters)
     - [Publish a model](#publish-a-model)
     - [Use t-SNE](#use-t-sne)
+    - [MAE Visualization](#mae-visualization)
     - [Reproducibility](#reproducibility)
 
 This page provides basic tutorials about the usage of MMSelfSup. For installation instructions, please see [install.md](install.md).
@@ -171,20 +172,21 @@ Arguments:
 We provide a tool to visualize the mask and reconstruction image of MAE model.
 
 ```shell
-python tools/misc/mae_visualization.py ${IMG} ${CONFIG_FILE} ${CKPT_PATH} --device ${DEVICE}
+python tools/misc/mae_visualization.py ${IMG_PATH} ${CONFIG_FILE} ${CKPT_PATH} ${OUT_FILE} --device ${DEVICE}
 ```
 
-参数:
+Arguments:
 
-- `IMG`: an image path used for visualization.
+- `IMG_PATH`: an image path used for visualization.
 - `CONFIG_FILE`: config file for the pre-trained model.
 - `CKPT_PATH`: the path of model's checkpoint.
+- `OUT_FILE`: the image path used for visualization results.
 - `DEVICE`: device used for inference.
 
 An example:
 
 ```shell
-python tools/misc/mae_visualization.py tests/data/color.jpg configs/selfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k.py mae_epoch_400.pth --device 'cuda:0'
+python tools/misc/mae_visualization.py tests/data/color.jpg configs/selfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k.py mae_epoch_400.pth results.jpg --device 'cuda:0'
 ```
 
 ### Reproducibility
