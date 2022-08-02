@@ -34,11 +34,19 @@ model = dict(
     ))
 
 # dataset settings
+# file_client_args = dict(
+#     backend='memcached',
+#     server_list_cfg='/mnt/lustre/share/memcached_client/pcs_server_list.conf',
+#     client_cfg='/mnt/lustre/share_data/zhangwenwei/software/pymc/mc.conf',
+#     sys_path='/mnt/lustre/share_data/zhangwenwei/software/pymc')
 file_client_args = dict(
-    backend='memcached',
-    server_list_cfg='/mnt/lustre/share/memcached_client/pcs_server_list.conf',
-    client_cfg='/mnt/lustre/share_data/zhangwenwei/software/pymc/mc.conf',
-    sys_path='/mnt/lustre/share_data/zhangwenwei/software/pymc')
+    backend='petrel',
+    path_mapping=dict({
+        './data/imagenet':
+        's3://openmmlab/datasets/classification/imagenet',
+        'data/imagenet':
+        's3://openmmlab/datasets/classification/imagenet'
+    }))
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(type='RandomResizedCrop', scale=224, backend='pillow'),
