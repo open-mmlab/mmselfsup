@@ -27,8 +27,8 @@ def show_image(image: torch.Tensor, title: str = '') -> None:
     return
 
 
-def show_images(x: torch.Tensor, im_masked: torch.Tensor, y: torch.Tensor,
-                im_paste: torch.Tensor) -> None:
+def save_images(x: torch.Tensor, im_masked: torch.Tensor, y: torch.Tensor,
+                im_paste: torch.Tensor, out_file: str) -> None:
     # make the plt figure larger
     plt.rcParams['figure.figsize'] = [24, 6]
 
@@ -44,7 +44,7 @@ def show_images(x: torch.Tensor, im_masked: torch.Tensor, y: torch.Tensor,
     plt.subplot(1, 4, 4)
     show_image(im_paste, 'reconstruction + visible')
 
-    plt.show()
+    plt.savefig(out_file)
 
 
 def post_process(
@@ -60,9 +60,10 @@ def post_process(
 
 def main():
     parser = ArgumentParser()
-    parser.add_argument('img', help='Image file')
+    parser.add_argument('img_path', help='Image file path')
     parser.add_argument('config', help='MAE Config file')
     parser.add_argument('checkpoint', help='Checkpoint file')
+    parser.add_argument('out_file', help='The output image file path')
     parser.add_argument(
         '--device', default='cuda:0', help='Device used for inference')
     args = parser.parse_args()
@@ -83,10 +84,10 @@ def main():
             dict(type='Normalize', **img_norm_cfg),
         ]))
 
-    img = Image.open(args.img)
+    img = Image.open(args.img_path)
     img, (mask, pred) = inference_model(model, img)
     x, im_masked, y, im_paste = post_process(img, pred, mask)
-    show_images(x, im_masked, y, im_paste)
+    save_images(x, im_masked, y, im_paste, args.out_file)
 
 
 if __name__ == '__main__':
