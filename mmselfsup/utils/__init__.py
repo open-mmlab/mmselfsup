@@ -5,13 +5,11 @@ from .collect import dist_forward_collect, nondist_forward_collect
 from .collect_env import collect_env
 from .distributed_sinkhorn import distributed_sinkhorn
 from .gather import concat_all_gather, gather_tensors, gather_tensors_batch
-from .logger import get_root_logger
 from .setup_env import register_all_modules
 
 __all__ = [
     'AliasMethod', 'batch_shuffle_ddp', 'batch_unshuffle_ddp',
     'dist_forward_collect', 'nondist_forward_collect', 'collect_env',
     'sync_random_seed', 'distributed_sinkhorn', 'concat_all_gather',
-    'gather_tensors', 'gather_tensors_batch', 'get_root_logger',
-    'register_all_modules'
+    'gather_tensors', 'gather_tensors_batch', 'register_all_modules'
 ]

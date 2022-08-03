@@ -4,12 +4,12 @@ from typing import Dict, List, Optional, Union
 
 import torch
 from mmengine.dist import get_dist_info
+from mmengine.logging import MMLogger
 from mmengine.optim import DefaultOptimWrapperConstructor
 from torch import nn
 
 from mmselfsup.registry import (OPTIM_WRAPPER_CONSTRUCTORS, OPTIM_WRAPPERS,
                                 OPTIMIZERS)
-from mmselfsup.utils import get_root_logger
 
 
 def get_layer_id_for_vit(var_name: str, max_layer_id: int) -> int:
@@ -88,7 +88,7 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
                 submodule of DCN, `is_dcn_module` will be passed to
                 control conv_offset layer's learning rate. Defaults to None.
         """
-        logger = get_root_logger()
+        logger = MMLogger.get_current_instance()
 
         model_type = optimizer_cfg.pop('model_type', None)
         # model_type should not be None
