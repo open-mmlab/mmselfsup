@@ -4,7 +4,7 @@ _base_ = [
     '../_base_/schedules/sgd_coslr-100e.py',
     '../_base_/default_runtime.py',
 ]
-# MoCo v3 linear probing setting
+# MoCoV3 ViT linear probing setting
 
 model = dict(backbone=dict(frozen_stages=12, norm_eval=True))
 

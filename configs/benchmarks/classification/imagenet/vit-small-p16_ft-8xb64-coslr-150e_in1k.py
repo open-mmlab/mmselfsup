@@ -1,5 +1,5 @@
 _base_ = 'vit-base-p16_ft-8xb64-coslr-150e_in1k.py'
-# MoCo v3 fine-tuning setting
+# MoCoV3 ViT  fine-tuning setting
 
 # model settings
 model = dict(

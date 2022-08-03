@@ -4,7 +4,7 @@ _base_ = [
     '../_base_/schedules/adamw_coslr-100e_in1k.py',
     '../_base_/default_runtime.py',
 ]
-# MoCo v3 fine-tuning setting
+# MoCoV3 ViT fine-tuning setting
 
 # model settings
 model = dict(
@@ -64,8 +64,7 @@ param_scheduler = [
         eta_min=1e-5,
         by_epoch=True,
         begin=5,
-        end=150,
-        convert_to_iter_based=True)
+        end=150)
 ]
 
 # runtime settings
