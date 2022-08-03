@@ -17,6 +17,6 @@ param_scheduler = [
         T_max=760,
         by_epoch=True,
         begin=40,
-        end=700,
+        end=800,
         convert_to_iter_based=True)
 ]
