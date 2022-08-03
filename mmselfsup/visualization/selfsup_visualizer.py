@@ -32,8 +32,8 @@ class SelfSupVisualizer(Visualizer):
         >>> import numpy as np
         >>> import torch
         >>> from mmengine.data import InstanceData
-        >>> from mmselfsup.core import SelfSupDataSample
-        >>> from mmselfsup.core import SelfSupVisualizer
+        >>> from mmselfsup.structures import SelfSupDataSample
+        >>> from mmselfsup.visualization import SelfSupVisualizer
 
         >>> selfsup_visualizer = SelfSupVisualizer()
         >>> image = np.random.randint(0, 256,
