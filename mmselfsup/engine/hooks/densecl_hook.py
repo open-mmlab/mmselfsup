@@ -4,6 +4,7 @@ from typing import Optional, Sequence
 from mmengine.hooks import Hook
 
 from mmselfsup.registry import HOOKS
+from mmselfsup.utils import get_model
 
 
 @HOOKS.register_module()
@@ -23,19 +24,19 @@ class DenseCLHook(Hook):
 
     def before_train(self, runner) -> None:
         """Obtain ``loss_lambda`` from algorithm."""
-        assert hasattr(runner.model.module, 'loss_lambda'), \
+        assert hasattr(get_model(runner.model), 'loss_lambda'), \
             "The runner must have attribute \"loss_lambda\" in DenseCL."
-        self.loss_lambda = runner.model.module.loss_lambda
+        self.loss_lambda = get_model(runner.model).loss_lambda
 
     def before_train_iter(self,
                           runner,
                           batch_idx: int,
                           data_batch: Optional[Sequence[dict]] = None) -> None:
         """Adjust ``loss_lambda`` every train iter."""
-        assert hasattr(runner.model.module, 'loss_lambda'), \
+        assert hasattr(get_model(runner.model), 'loss_lambda'), \
             "The runner must have attribute \"loss_lambda\" in DenseCL."
         cur_iter = runner.iter
         if cur_iter >= self.start_iters:
-            runner.model.module.loss_lambda = self.loss_lambda
+            get_model(runner.model).loss_lambda = self.loss_lambda
         else:
-            runner.model.module.loss_lambda = 0.
+            get_model(runner.model).loss_lambda = 0.
