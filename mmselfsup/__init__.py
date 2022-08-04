@@ -14,9 +14,9 @@ mmcls_version = digit_version(mmcls.__version__)
 
 
 assert (mmcv_version >= digit_version(mmcv_minimum_version)
-        and mmcv_version <= digit_version(mmcv_maximum_version)), \
+        and mmcv_version < digit_version(mmcv_maximum_version)), \
     f'MMCV=={mmcv.__version__} is used but incompatible. ' \
-    f'Please install mmcv>={mmcv_minimum_version}, <={mmcv_maximum_version}.'
+    f'Please install mmcv>={mmcv_minimum_version}, <{mmcv_maximum_version}.'
 
 assert mmcls_version >= digit_version(mmcls_minimum_version), \
     f'MMClassification=={mmcls.__version__} is used but incompatible. ' \
