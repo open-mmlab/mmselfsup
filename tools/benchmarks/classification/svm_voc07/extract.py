@@ -11,6 +11,7 @@ import torch
 from mmengine.config import Config, DictAction
 from mmengine.data import pseudo_collate, worker_init_fn
 from mmengine.dist import get_rank, init_dist
+from mmengine.logging import MMLogger
 from mmengine.model.wrappers import MMDistributedDataParallel, is_model_wrapper
 from mmengine.runner import load_checkpoint
 from mmengine.utils import mkdir_or_exist
@@ -18,7 +19,7 @@ from torch.utils.data import DataLoader
 
 from mmselfsup.models.utils import Extractor
 from mmselfsup.registry import DATA_SAMPLERS, DATASETS, MODELS
-from mmselfsup.utils import get_root_logger, register_all_modules
+from mmselfsup.utils import register_all_modules
 
 
 def parse_args():
@@ -100,7 +101,11 @@ def main():
     # init the logger before other steps
     timestamp = time.strftime('%Y%m%d_%H%M%S', time.localtime())
     log_file = osp.join(cfg.work_dir, f'extract_{timestamp}.log')
-    logger = get_root_logger(log_file=log_file, log_level=cfg.log_level)
+    logger = MMLogger.get_instance(
+        'mmselfsup',
+        logger_name='mmselfsup',
+        log_file=log_file,
+        log_level=cfg.log_level)
 
     # build the dataset
     dataset_cfg = Config.fromfile(args.dataset_config)
