@@ -19,22 +19,19 @@ train_pipeline = [
     dict(
         type='RandomChoiceResize',
         scales=[(1333, 640), (1333, 672), (1333, 704), (1333, 736),
-                   (1333, 768), (1333, 800)],
+                (1333, 768), (1333, 800)],
         keep_ratio=True),
     dict(type='RandomFlip', prob=0.5),
     dict(type='PackDetInputs')
 ]
 
-train_dataloader = dict(
-    dataset=dict(
-        pipeline=train_pipeline))
+train_dataloader = dict(dataset=dict(pipeline=train_pipeline))
 
 train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=12, val_interval=1)
 
 custom_imports = dict(
     imports=['mmselfsup.evaluation.functional.res_layer_extra_norm'],
     allow_failed_imports=False)
-
 
 env_cfg = dict(
     cudnn_benchmark=False,

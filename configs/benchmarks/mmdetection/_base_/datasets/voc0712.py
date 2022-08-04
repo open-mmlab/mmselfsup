@@ -2,7 +2,6 @@
 dataset_type = 'VOCDataset'
 data_root = 'data/VOCdevkit/'
 
-
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations', with_bbox=True),
@@ -50,7 +49,6 @@ train_dataloader = dict(
                         filter_empty_gt=True, min_size=32, bbox_min_size=32),
                     pipeline=train_pipeline)
             ])))
-
 
 val_dataloader = dict(
     batch_size=1,

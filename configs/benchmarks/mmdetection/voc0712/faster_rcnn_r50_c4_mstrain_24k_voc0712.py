@@ -1,6 +1,7 @@
 _base_ = [
     '../_base_/models/faster_rcnn_r50_c4.py',
-    '../_base_/schedules/schedule_24k.py', '../_base_/default_runtime.py',
+    '../_base_/schedules/schedule_24k.py',
+    '../_base_/default_runtime.py',
     '../_base_/datasets/voc0712.py',
 ]
 
@@ -12,10 +13,8 @@ model = dict(
             type='ResLayerExtraNorm', norm_cfg=norm_cfg, norm_eval=False),
         bbox_head=dict(num_classes=20)))
 
-
 train_pipeline = [
-    dict(
-        type='LoadImageFromFile'),
+    dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations', with_bbox=True),
     dict(
         type='RandomChoiceResize',
@@ -28,8 +27,7 @@ train_pipeline = [
 ]
 
 test_pipeline = [
-    dict(
-        type='LoadImageFromFile'),
+    dict(type='LoadImageFromFile'),
     dict(type='Resize', scale=(1333, 800), keep_ratio=True),
     dict(type='LoadAnnotations', with_bbox=True),
     dict(
@@ -65,22 +63,19 @@ train_dataloader = dict(
 val_dataloader = dict(dataset=dict(pipeline=test_pipeline))
 test_dataloader = val_dataloader
 
-
 val_evaluator = dict(type='VOCMetric', metric='mAP', eval_mode='11points')
 test_evaluator = val_evaluator
 
 checkpoint_config = dict(by_epoch=False, interval=2000)
 
 log_config = dict(
-    interval=50,
-    hooks=[
+    interval=50, hooks=[
         dict(type='TextLoggerHook', by_epoch=False),
     ])
 
 custom_imports = dict(
     imports=['mmselfsup.evaluation.functional.res_layer_extra_norm'],
     allow_failed_imports=False)
-
 
 env_cfg = dict(
     cudnn_benchmark=False,
