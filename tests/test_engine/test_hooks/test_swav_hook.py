@@ -6,7 +6,6 @@ import torch
 import torch.nn as nn
 from mmengine import Runner
 from mmengine.data import LabelData
-from mmengine.model import BaseModel as EngineBaseModel
 from mmengine.model import BaseModule
 from mmengine.optim import OptimWrapper
 from torch.utils.data import Dataset
@@ -16,6 +15,7 @@ from mmselfsup.models.algorithms import BaseModel
 from mmselfsup.models.heads import SwAVHead
 from mmselfsup.registry import MODELS
 from mmselfsup.structures import SelfSupDataSample
+from mmselfsup.utils import get_model
 
 
 class DummyDataset(Dataset):
@@ -34,7 +34,7 @@ class DummyDataset(Dataset):
         data_sample = SelfSupDataSample()
         gt_label = LabelData(value=self.label[index])
         setattr(data_sample, 'gt_label', gt_label)
-        return dict(inputs=self.data[index], data_sample=data_sample)
+        return dict(inputs=[self.data[index]], data_sample=data_sample)
 
 
 @MODELS.register_module()
@@ -65,7 +65,7 @@ class ToyModel(BaseModel):
         for x in data_samples:
             labels.append(x.gt_label.value)
             labels = torch.stack(labels)
-        outputs = self.backbone(batch_inputs)
+        outputs = self.backbone(batch_inputs[0])
         loss = (labels - outputs).sum()
         outputs = dict(loss=loss)
         return outputs
@@ -91,18 +91,9 @@ class TestSwAVHook(TestCase):
             queue_length=300,
             frozen_layers_cfg=dict(prototypes=2))
 
-        class DummyWrapper(EngineBaseModel):
-
-            def __init__(self, model):
-                super().__init__()
-                self.module = model
-
-            def forward(self, *args, **kwargs):
-                return self.module(*args, **kwargs)
-
         # test SwAVHook
         runner = Runner(
-            model=DummyWrapper(toy_model),
+            model=toy_model,
             work_dir=self.temp_dir.name,
             train_dataloader=dict(
                 dataset=dummy_dataset,
@@ -124,4 +115,4 @@ class TestSwAVHook(TestCase):
             if isinstance(hook, SwAVHook):
                 assert hook.queue_length == 300
 
-        assert runner.model.module.head.loss.use_queue is False
+        assert get_model(runner.model).head.loss.use_queue is False
