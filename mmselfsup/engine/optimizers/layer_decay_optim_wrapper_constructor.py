@@ -91,7 +91,7 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
 
         # Check if self.param_cfg is not None
         if len(self.paramwise_cfg) > 0:
-            logger.log('The paramwise_cfg will be ignored, and normalization \
+            logger.info('The paramwise_cfg will be ignored, and normalization \
                 parameters, bias, position embedding, class token and \
                     relative position bias table will not be decayed by \
                         default.')
@@ -162,7 +162,7 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
                     'lr': parameter_groups[key]['lr'],
                     'weight_decay': parameter_groups[key]['weight_decay'],
                 }
-            logger.log(f'Param groups = {json.dumps(to_display, indent=2)}')
+            logger.info(f'Param groups = {json.dumps(to_display, indent=2)}')
         params.extend(parameter_groups.values())
 
     def __call__(self, model: nn.Module) -> torch.optim.Optimizer:
