@@ -15,10 +15,3 @@ param_scheduler = [
 train_cfg = dict(type='IterBasedTrainLoop', max_iters=40000, val_interval=4000)
 val_cfg = dict(type='ValLoop')
 test_cfg = dict(type='TestLoop')
-default_hooks = dict(
-    timer=dict(type='IterTimerHook'),
-    logger=dict(type='LoggerHook', interval=50),
-    param_scheduler=dict(type='ParamSchedulerHook'),
-    checkpoint=dict(type='CheckpointHook', by_epoch=False, interval=4000),
-    sampler_seed=dict(type='DistSamplerSeedHook'),
-)
