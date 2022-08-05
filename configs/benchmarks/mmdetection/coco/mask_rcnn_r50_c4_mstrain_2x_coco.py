@@ -32,4 +32,3 @@ train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=12, val_interval=1)
 custom_imports = dict(
     imports=['mmselfsup.evaluation.functional.res_layer_extra_norm'],
     allow_failed_imports=False)
-
