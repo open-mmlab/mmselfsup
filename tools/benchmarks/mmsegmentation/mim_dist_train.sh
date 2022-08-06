@@ -18,4 +18,3 @@ mim train mmseg $CFG \
     model.backbone.init_cfg.checkpoint=$PRETRAIN \
     model.backbone.init_cfg.prefix="backbone." \
     $PY_ARGS
-
