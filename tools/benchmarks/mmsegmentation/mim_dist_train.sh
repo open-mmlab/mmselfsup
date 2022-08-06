@@ -14,6 +14,8 @@ PYTHONPATH="$(dirname $0)/..":$PYTHONPATH \
 mim train mmseg $CFG \
     --launcher pytorch -G $GPUS \
     --work-dir $WORK_DIR \
-    --cfg-options \
-    model.backbone.pretrained=$PRETRAIN \
+    --cfg-options model.backbone.init_cfg.type=Pretrained \
+    model.backbone.init_cfg.checkpoint=$PRETRAIN \
+    model.backbone.init_cfg.prefix="backbone." \
     $PY_ARGS
+
