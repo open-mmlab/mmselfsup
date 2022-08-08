@@ -88,6 +88,8 @@ def main():
 
     # create work_dir
     mmcv.mkdir_or_exist(osp.abspath(cfg.work_dir))
+    # dump config
+    cfg.dump(osp.join(cfg.work_dir, osp.basename(args.config)))
 
     # logger
     timestamp = time.strftime('%Y%m%d_%H%M%S', time.localtime())
