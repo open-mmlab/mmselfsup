@@ -71,6 +71,14 @@ class DenseCL(BaseModel):
         self.queue2 = nn.functional.normalize(self.queue2, dim=0)
         self.register_buffer('queue2_ptr', torch.zeros(1, dtype=torch.long))
 
+    def init_weights(self):
+        """Init weights and copy query encoder params to key encoder."""
+        super().init_weights()
+        for param_q, param_k in zip(self.encoder_q.parameters(),
+                                    self.encoder_k.parameters()):
+            param_k.data.copy_(param_q.data)
+            param_k.requires_grad = False
+
     @torch.no_grad()
     def _momentum_update_key_encoder(self):
         """Momentum update of the key encoder."""
