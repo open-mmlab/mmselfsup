@@ -6,7 +6,6 @@ import torch
 import torch.nn as nn
 from mmengine import Runner
 from mmengine.data import LabelData
-from mmengine.model import BaseModel as EngineBaseModel
 from mmengine.model import BaseModule
 from mmengine.optim import OptimWrapper
 from torch.utils.data import Dataset
@@ -15,6 +14,7 @@ from mmselfsup.engine import DenseCLHook
 from mmselfsup.models.algorithms import BaseModel
 from mmselfsup.registry import MODELS
 from mmselfsup.structures import SelfSupDataSample
+from mmselfsup.utils import get_model
 
 
 class DummyDataset(Dataset):
@@ -33,7 +33,7 @@ class DummyDataset(Dataset):
         data_sample = SelfSupDataSample()
         gt_label = LabelData(value=self.label[index])
         setattr(data_sample, 'gt_label', gt_label)
-        return dict(inputs=self.data[index], data_sample=data_sample)
+        return dict(inputs=[self.data[index]], data_sample=data_sample)
 
 
 @MODELS.register_module()
@@ -58,7 +58,7 @@ class ToyModel(BaseModel):
         for x in data_samples:
             labels.append(x.gt_label.value)
             labels = torch.stack(labels)
-        outputs = self.backbone(batch_inputs)
+        outputs = self.backbone(batch_inputs[0])
         loss = (labels - outputs).sum()
         outputs = dict(loss=loss)
         return outputs
@@ -78,18 +78,9 @@ class TestDenseCLHook(TestCase):
         toy_model = ToyModel().to(device)
         densecl_hook = DenseCLHook(start_iters=1)
 
-        class DummyWrapper(EngineBaseModel):
-
-            def __init__(self, model):
-                super().__init__()
-                self.module = model
-
-            def forward(self, *args, **kwargs):
-                return self.module(*args, **kwargs)
-
         # test DenseCLHook with model wrapper
         runner = Runner(
-            model=DummyWrapper(toy_model),
+            model=toy_model,
             work_dir=self.temp_dir.name,
             train_dataloader=dict(
                 dataset=dummy_dataset,
@@ -108,6 +99,6 @@ class TestDenseCLHook(TestCase):
         runner.train()
 
         if runner.iter >= 1:
-            assert runner.model.module.loss_lambda == 0.5
+            assert get_model(runner.model).loss_lambda == 0.5
         else:
-            assert runner.model.module.loss_lambda == 0.
+            assert get_model(runner.model).loss_lambda == 0.

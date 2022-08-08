@@ -82,8 +82,9 @@ class SelfSupDataPreprocessor(ImgDataPreprocessor):
         # :class:`mmengine.ImgDataPreprocessor`. Since there are multiple views
         # for an image for some  algorithms, e.g. SimCLR, each item in inputs
         # is a list, containing multi-views for an image.
-        inputs = [[(img_ - self.mean) / self.std for img_ in _input]
-                  for _input in inputs]
+        if self._enable_normalize:
+            inputs = [[(img_ - self.mean) / self.std for img_ in _input]
+                      for _input in inputs]
 
         batch_inputs = []
         for i in range(len(inputs[0])):
@@ -125,8 +126,9 @@ class RelativeLocDataPreprocessor(SelfSupDataPreprocessor):
         # :class:`mmengine.ImgDataPreprocessor`. Since there are multiple views
         # for an image for some  algorithms, e.g. SimCLR, each item in inputs
         # is a list, containing multi-views for an image.
-        inputs = [[(img_ - self.mean) / self.std for img_ in _input]
-                  for _input in inputs]
+        if self._enable_normalize:
+            inputs = [[(img_ - self.mean) / self.std for img_ in _input]
+                      for _input in inputs]
 
         batch_inputs = []
         for i in range(len(inputs[0])):
@@ -180,8 +182,9 @@ class RotationPredDataPreprocessor(SelfSupDataPreprocessor):
         # :class:`mmengine.ImgDataPreprocessor`. Since there are multiple views
         # for an image for some  algorithms, e.g. SimCLR, each item in inputs
         # is a list, containing multi-views for an image.
-        inputs = [[(img_ - self.mean) / self.std for img_ in _input]
-                  for _input in inputs]
+        if self._enable_normalize:
+            inputs = [[(img_ - self.mean) / self.std for img_ in _input]
+                      for _input in inputs]
 
         batch_inputs = []
         for i in range(len(inputs[0])):

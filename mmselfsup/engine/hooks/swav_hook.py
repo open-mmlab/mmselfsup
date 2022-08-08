@@ -3,11 +3,12 @@ import os.path as osp
 from typing import Dict, List, Optional, Sequence
 
 import torch
-import torch.distributed as dist
+from mmengine.dist import get_rank, get_world_size, is_distributed
 from mmengine.hooks import Hook
 from mmengine.logging import MMLogger
 
 from mmselfsup.registry import HOOKS
+from mmselfsup.utils import get_model
 
 
 @HOOKS.register_module()
@@ -45,8 +46,7 @@ class SwAVHook(Hook):
         interval: Optional[int] = 1,
         frozen_layers_cfg: Optional[Dict] = dict()
     ) -> None:
-        self.batch_size = batch_size * dist.get_world_size()\
-            if dist.is_initialized() else batch_size
+        self.batch_size = batch_size * get_world_size()
         self.epoch_queue_starts = epoch_queue_starts
         self.crops_for_assign = crops_for_assign
         self.feat_dim = feat_dim
@@ -58,16 +58,16 @@ class SwAVHook(Hook):
 
     def before_run(self, runner) -> None:
         """Check whether the queues exist locally or not."""
-        if dist.is_initialized():
+        if is_distributed():
             self.queue_path = osp.join(runner.work_dir,
-                                       'queue' + str(dist.get_rank()) + '.pth')
+                                       'queue' + str(get_rank()) + '.pth')
         else:
             self.queue_path = osp.join(runner.work_dir, 'queue.pth')
 
         # load the queues if queues exist locally
         if osp.isfile(self.queue_path):
             self.queue = torch.load(self.queue_path)['queue']
-            runner.model.module.head.loss.queue = self.queue
+            get_model(runner.model).head.loss.queue = self.queue
             MMLogger.get_current_instance().info(
                 f'Load queue from file: {self.queue_path}')
 
@@ -82,12 +82,12 @@ class SwAVHook(Hook):
         for layer, frozen_iters in self.frozen_layers_cfg.items():
             if runner.iter < frozen_iters and self.requires_grad:
                 self.requires_grad = False
-                for name, p in runner.model.module.named_parameters():
+                for name, p in get_model(runner.model).named_parameters():
                     if layer in name:
                         p.requires_grad = False
             elif runner.iter >= frozen_iters and not self.requires_grad:
                 self.requires_grad = True
-                for name, p in runner.model.module.named_parameters():
+                for name, p in get_model(runner.model).named_parameters():
                     if layer in name:
                         p.requires_grad = True
 
@@ -104,12 +104,12 @@ class SwAVHook(Hook):
             ).cuda()
 
         # set the boolean type of use_the_queue
-        runner.model.module.head.loss.queue = self.queue
-        runner.model.module.head.loss.use_queue = False
+        get_model(runner.model).head.loss.queue = self.queue
+        get_model(runner.model).head.loss.use_queue = False
 
     def after_train_epoch(self, runner) -> None:
         """Save the queues locally."""
-        self.queue = runner.model.module.head.loss.queue
+        self.queue = get_model(runner.model).head.loss.queue
 
         if self.queue is not None and self.every_n_epochs(
                 runner, self.interval):
