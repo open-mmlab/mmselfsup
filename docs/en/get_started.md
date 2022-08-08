@@ -31,7 +31,7 @@ python tools/train.py ${CONFIG_FILE}
 ### Train with single/multiple GPUs
 
 ```shell
-sh tools/dist_train.sh ${CONFIG_FILE} ${GPUS} --work-dir ${YOUR_WORK_DIR} [optional arguments]
+bash tools/dist_train.sh ${CONFIG_FILE} ${GPUS} --work-dir ${YOUR_WORK_DIR} [optional arguments]
 ```
 
 Optional arguments are:
