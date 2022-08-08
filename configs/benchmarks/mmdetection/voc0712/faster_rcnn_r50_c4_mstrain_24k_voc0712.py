@@ -66,21 +66,10 @@ test_dataloader = val_dataloader
 val_evaluator = dict(type='VOCMetric', metric='mAP', eval_mode='11points')
 test_evaluator = val_evaluator
 
-checkpoint_config = dict(by_epoch=False, interval=2000)
+default_hooks = dict(checkpoint=dict(by_epoch=False, interval=2000))
 
-log_config = dict(
-    interval=50, hooks=[
-        dict(type='TextLoggerHook', by_epoch=False),
-    ])
+log_processor = dict(by_epoch=False)
 
 custom_imports = dict(
     imports=['mmselfsup.evaluation.functional.res_layer_extra_norm'],
     allow_failed_imports=False)
-
-env_cfg = dict(
-    cudnn_benchmark=False,
-    mp_cfg=dict(mp_start_method='fork', opencv_num_threads=0),
-    dist_cfg=dict(backend='nccl'),
-)
-
-default_scope = 'mmdet'
