@@ -64,7 +64,8 @@ param_scheduler = [
         eta_min=1e-5,
         by_epoch=True,
         begin=5,
-        end=150)
+        end=150,
+        convert_to_iter_based=True)
 ]
 
 # runtime settings
@@ -75,3 +76,5 @@ train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=150)
 # it will remove the oldest one to keep the number of total ckpts as 3
 default_hooks = dict(
     checkpoint=dict(type='CheckpointHook', interval=10, max_keep_ckpts=3))
+
+randomness = dict(seed=0)
