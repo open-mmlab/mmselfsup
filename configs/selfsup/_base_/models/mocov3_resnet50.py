@@ -2,7 +2,7 @@
 temperature = 1.0
 model = dict(
     type='MoCoV3',
-    base_momentum=0.99,  # 0.99 for 100ep and 300ep, 0.996 for 1000ep
+    base_momentum=0.99,  # 0.99 for 100e and 300e, 0.996 for 1000e
     data_preprocessor=dict(
         mean=(123.675, 116.28, 103.53),
         std=(58.395, 57.12, 57.375),

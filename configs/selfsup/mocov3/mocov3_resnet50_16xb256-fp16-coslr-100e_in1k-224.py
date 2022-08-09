@@ -10,7 +10,8 @@ train_dataloader = dict(batch_size=256, num_workers=8)
 # optimizer
 optimizer = dict(type='LARS', lr=9.6, weight_decay=1e-6, momentum=0.9)
 optim_wrapper = dict(
-    type='OptimWrapper',
+    type='AmpOptimWrapper',
+    loss_scale='dynamic',
     optimizer=optimizer,
     paramwise_cfg=dict(
         custom_keys={
