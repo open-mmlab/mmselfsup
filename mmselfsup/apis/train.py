@@ -170,7 +170,7 @@ def train_model(model,
             assert isinstance(hook_cfg, dict), \
                 'Each item in custom_hooks expects dict type, but got ' \
                 f'{type(hook_cfg)}'
-            if hook_cfg.type == 'DeepClusterHook':
+            if hook_cfg.get('type', None) == 'DeepClusterHook':
                 common_params = dict(dist_mode=True, data_loaders=data_loaders)
             else:
                 common_params = dict()
