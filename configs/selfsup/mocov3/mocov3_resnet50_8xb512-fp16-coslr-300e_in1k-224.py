@@ -1,4 +1,4 @@
-_base_ = 'mocov3_resnet50_16xb256-fp16-coslr-100e_in1k-224.py'
+_base_ = 'mocov3_resnet50_8xb512-fp16-coslr-100e_in1k-224.py'
 
 # optimizer
 optimizer = dict(type='LARS', lr=4.8, weight_decay=1e-6)

@@ -5,7 +5,7 @@ _base_ = [
     '../_base_/default_runtime.py',
 ]
 
-train_dataloader = dict(batch_size=256, num_workers=8)
+train_dataloader = dict(batch_size=512, num_workers=8)
 
 # optimizer
 optimizer = dict(type='LARS', lr=9.6, weight_decay=1e-6, momentum=0.9)

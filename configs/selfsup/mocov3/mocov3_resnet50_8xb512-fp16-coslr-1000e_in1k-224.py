@@ -1,4 +1,4 @@
-_base_ = 'mocov3_resnet50_16xb256-fp16-coslr-100e_in1k-224.py'
+_base_ = 'mocov3_resnet50_8xb512-fp16-coslr-100e_in1k-224.py'
 
 model = dict(base_momentum=0.996)  # 0.99 for 100e and 300e, 0.996 for 1000e
 
