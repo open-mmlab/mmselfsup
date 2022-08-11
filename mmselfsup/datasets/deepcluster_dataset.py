@@ -47,7 +47,7 @@ class DeepClusterImageNet(ImageNet):
 
         Args:
             labels (list): The new labels.
-        
+
         Returns:
             None
         """

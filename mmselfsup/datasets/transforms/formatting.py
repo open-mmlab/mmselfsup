@@ -102,7 +102,7 @@ class PackSelfSupInputs(BaseTransform):
     def set_algorithm_keys(self, data_sample: SelfSupDataSample, key: str,
                            results: dict) -> None:
         """Set the algorithm keys of SelfSupDataSample.
-        
+
         Args:
             data_sample (SelfSupDataSample): An instance of SelfSupDataSample.
             key (str): The key, which may be used by the algorithm, such as

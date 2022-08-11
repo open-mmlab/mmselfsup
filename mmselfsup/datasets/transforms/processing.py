@@ -19,12 +19,12 @@ from mmselfsup.registry import TRANSFORMS
 
 def check_sequence_input(x: Sequence, name: str, req_sizes: tuple) -> None:
     """Check if the input is a sequence with the required sizes.
-    
+
     Args:
         x (Sequence): The input sequence.
         name (str): The name of the input.
         req_sizes (tuple): The required sizes of the input.
-    
+
     Returns:
         None
     """
@@ -150,7 +150,7 @@ class BEiTMaskGenerator(BaseTransform):
 
     def get_shape(self) -> Tuple[int, int]:
         """Get the shape of mask.
-        
+
         Returns:
             Tuple[int, int]: The shape of mask.
         """
@@ -158,7 +158,7 @@ class BEiTMaskGenerator(BaseTransform):
 
     def _mask(self, mask: np.ndarray, max_mask_patches: int) -> int:
         """Generate mask recursively.
-        
+
         Args:
             mask (np.ndarray): The mask to be generated.
             max_mask_patches (int): The maximum number of patches to be masked.
@@ -191,7 +191,7 @@ class BEiTMaskGenerator(BaseTransform):
 
     def transform(self, results: dict) -> dict:
         """Method to generate random block mask for each Image in BEiT.
-        
+
         Args:
             results (dict): Result dict from previous pipeline.
 
@@ -348,9 +348,9 @@ class RandomResizedCropAndInterpolationWithTwoPic(BaseTransform):
 
     def transform(self, results: dict) -> dict:
         """Crop the given image and resize it to two different sizes.
-        
+
         This module crops the given image randomly and resize the crop to two
-        different sizes. This is popularly used in BEiT-style masked image 
+        different sizes. This is popularly used in BEiT-style masked image
         modeling, where an off-the-shelf model is used to provide the target.
 
         Args:
@@ -423,10 +423,10 @@ class RandomGaussianBlur(BaseTransform):
 
     def transform(self, results: dict) -> dict:
         """Apply GaussianBlur augmentation to the given image.
-        
+
         Args:
             results (dict): Results from previous pipeline.
-        
+
         Returns:
             dict: Results after applying this transformation.
         """
@@ -476,10 +476,10 @@ class RandomSolarize(BaseTransform):
 
     def transform(self, results: dict) -> dict:
         """Apply Solarize augmentation to the given image.
-        
+
         Args:
             results (dict): Results from previous pipeline.
-        
+
         Returns:
             dict: Results after applying this transformation.
         """
@@ -537,10 +537,10 @@ class RotationWithLabels(BaseTransform):
 
     def transform(self, results: dict) -> dict:
         """Apply rotation augmentation to the given image.
-        
+
         Args:
             results (dict): Results from previous pipeline.
-        
+
         Returns:
             dict: Results after applying this transformation.
         """
@@ -631,10 +631,10 @@ class RandomPatchWithLabels(BaseTransform):
 
     def transform(self, results: dict) -> dict:
         """Apply random patch augmentation to the given image.
-        
+
         Args:
             results (dict): Results from previous pipeline.
-        
+
         Returns:
             dict: Results after applying this transformation.
         """
@@ -724,7 +724,7 @@ class ColorJitter(BaseTransform):
             bound: Tuple = (0, float('inf')),
             clip_first_on_zero: bool = True) -> Union[List[float], None]:
         """Check the input and convert it to the tuple format.
-        
+
         Args:
             value (float or list of float): The input value.
             name (str): The name of the input.
@@ -798,7 +798,8 @@ class ColorJitter(BaseTransform):
         return b, c, s, h, order
 
     def transform(self, results: dict) -> dict:
-        """Randomly change the brightness, contrast, saturation and hue of an image. # noqa: E501
+        """Randomly change the brightness, contrast, saturation and hue of an
+        image. # noqa: E501.
 
         Args:
             results (dict): The results dict from previous pipeline.
@@ -957,7 +958,7 @@ class RandomResizedCrop(BaseTransform):
 
     def transform(self, results: dict) -> dict:
         """Randomly crop the image.
-        
+
         Args:
             results (dict): Result dict from previous pipeline.
 
@@ -1076,7 +1077,7 @@ class RandomCrop(BaseTransform):
 
     def transform(self, results: dict) -> dict:
         """Randomly crop the image.
-        
+
         Args:
             results (dict): Result dict from previous pipeline.
 
@@ -1187,10 +1188,10 @@ class RandomRotation(BaseTransform):
                      name: str,
                      req_sizes: Tuple = (2, )) -> List[float]:
         """Setup the angle.
-        
+
         Args:
             x (Union[int, Sequence[int]]): Range of degrees to select from. If
-                degrees is an int instead of sequence like (min, max), the 
+                degrees is an int instead of sequence like (min, max), the
                 range of degrees will be (-degrees, +degrees).
             name (str): Name of the angle.
             req_sizes (Tuple): Required sizes of the angle.
@@ -1227,10 +1228,10 @@ class RandomRotation(BaseTransform):
 
     def transform(self, results: dict) -> dict:
         """Randomly rotate the image.
-        
+
         Args:
             results (dict): Result dict from previous pipeline.
-        
+
         Returns:
             dict: Result dict with the transformed image.
         """

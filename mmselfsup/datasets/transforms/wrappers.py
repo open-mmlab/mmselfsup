@@ -71,7 +71,7 @@ class MultiView(BaseTransform):
 
     def transform(self, results: dict) -> dict:
         """Apply transformation to inputs.
-        
+
         Args:
             results (dict): Result dict from previous pipelines.
 

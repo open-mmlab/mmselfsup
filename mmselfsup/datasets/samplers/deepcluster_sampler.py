@@ -78,7 +78,7 @@ class DeepClusterSampler(DefaultSampler):
         Args:
             labels (list): The updated labels after clustering.
             num_classes (int): number of clusters.
-        
+
         Returns:
             None
         """
