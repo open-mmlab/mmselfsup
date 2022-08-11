@@ -54,7 +54,14 @@ class SwAVNeck(BaseModule):
                 nn.ReLU(inplace=True), nn.Linear(hid_channels, out_channels))
 
     def forward_projection(self, x: torch.Tensor) -> torch.Tensor:
-        """Compute projection."""
+        """Compute projection.
+
+        Args:
+            x (torch.Tensor): The feature vectors after pooling.
+
+        Returns:
+            torch.Tensor: The output features with projection or L2-norm.
+        """
         if self.projection_neck is not None:
             x = self.projection_neck(x)
         if self.with_l2norm:
@@ -71,7 +78,6 @@ class SwAVNeck(BaseModule):
         Returns:
             List[torch.Tensor]: The projection vectors.
         """
-
         avg_out = []
         for _x in x:
             _x = _x[0]

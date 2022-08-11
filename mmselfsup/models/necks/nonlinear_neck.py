@@ -32,6 +32,8 @@ class NonLinearNeck(BaseModule):
             Defaults to False.
         with_avg_pool (bool): Whether to apply the global average pooling
             after backbone. Defaults to True.
+        vit_backbone (bool): The key to indicate whether the upstream backbone
+            is ViT. Defaults to False.
         norm_cfg (dict): Dictionary to construct and config norm layer.
             Defaults to dict(type='SyncBN').
         init_cfg (dict or list[dict], optional): Initialization config dict.
@@ -92,7 +94,14 @@ class NonLinearNeck(BaseModule):
             self.fc_names.append(f'fc{i}')
 
     def forward(self, x: Tuple[torch.Tensor]) -> List[torch.Tensor]:
-        """Forward function."""
+        """Forward function.
+
+        Args:
+            x (List[torch.Tensor]): The feature map of backbone.
+
+        Returns:
+            List[torch.Tensor]: The output features.
+        """
         assert len(x) == 1
         x = x[0]
         if self.vit_backbone:
