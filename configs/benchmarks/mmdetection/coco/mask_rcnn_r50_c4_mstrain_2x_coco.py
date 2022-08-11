@@ -1,15 +1,43 @@
-_base_ = [
-    '../_base_/models/mask_rcnn_r50_c4.py',
-    '../_base_/datasets/coco_instance.py',
-    '../_base_/schedules/schedule_2x.py', '../_base_/default_runtime.py'
-]
+_base_ = 'mmdet::mask_rcnn/mask_rcnn_r50_caffe_c4_1x_coco.py'
+# https://github.com/open-mmlab/mmdetection/blob/dev-3.x/configs/mask_rcnn/mask_rcnn_r50_caffe_c4_1x_coco.py
+
+data_preprocessor = dict(
+    type='DetDataPreprocessor',
+    mean=[123.675, 116.28, 103.53],
+    std=[58.395, 57.12, 57.375],
+    bgr_to_rgb=True,
+    pad_mask=True,
+    pad_size_divisor=32)
 
 norm_cfg = dict(type='SyncBN', requires_grad=True)
 model = dict(
-    backbone=dict(frozen_stages=-1, norm_cfg=norm_cfg, norm_eval=False),
+    data_preprocessor=data_preprocessor,
+    backbone=dict(
+        frozen_stages=-1,
+        norm_cfg=norm_cfg,
+        norm_eval=False,
+        style='pytorch',
+        init_cfg=dict(type='Pretrained', checkpoint='torchvision://resnet50')),
     roi_head=dict(
         shared_head=dict(
-            type='ResLayerExtraNorm', norm_cfg=norm_cfg, norm_eval=False)))
+            type='ResLayerExtraNorm',
+            norm_cfg=norm_cfg,
+            norm_eval=False,
+            style='pytorch')))
+
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=24)
+param_scheduler = [
+    dict(
+        type='LinearLR', start_factor=0.001, by_epoch=False, begin=0,
+        end=1000),
+    dict(
+        type='MultiStepLR',
+        begin=0,
+        end=24,
+        by_epoch=True,
+        milestones=[16, 22],
+        gamma=0.1)
+]
 
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
