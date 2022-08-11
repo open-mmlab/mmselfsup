@@ -78,6 +78,9 @@ class ClsHead(BaseModule):
             x (List[Tensor] | Tuple[Tensor]): Feature maps of backbone,
                 each tensor has shape (N, C, H, W).
             label (torch.Tensor): The label for cross entropy loss.
+
+        Returns:
+            torch.Tensor: The cross entropy loss.
         """
         outs = self.logits(x)
         loss = self.loss(outs[0], label)

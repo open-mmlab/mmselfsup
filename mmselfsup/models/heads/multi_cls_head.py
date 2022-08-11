@@ -103,7 +103,7 @@ class MultiClsHead(ClsHead):
                 each tensor has shape (N, C, H, W).
 
         Returns:
-            List: A list of class scores.
+            List[torch.Tensor]: A list of class scores.
         """
         assert isinstance(feats, (list, tuple))
         if self.with_last_layer_unpool:
@@ -131,7 +131,7 @@ class MultiClsHead(ClsHead):
             gt_label (torch.Tensor): The ground truth label.
 
         Returns:
-            Dict: Dict of loss and accuracy.
+            Dict[str, torch.Tensor]: Dict of loss and accuracy.
         """
         cls_score = self(feats)
 
@@ -168,7 +168,8 @@ class MultiClsHead(ClsHead):
                 the input data samples.
 
         Returns:
-            torch.Tensor: The inference results.
+            List[BaseDataElement]: The data samples containing annotation,
+                prediction, etc.
         """
         # multi-head scores
         pred_scores = self(feats)
