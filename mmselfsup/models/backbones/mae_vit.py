@@ -80,8 +80,8 @@ class MAEViT(VisionTransformer):
         self.num_patches = self.patch_resolution[0] * self.patch_resolution[1]
 
     def init_weights(self) -> None:
+        """Initialize position embedding, patch embedding and cls token."""
         super().init_weights()
-        # initialize position embedding, patch embedding and cls token
         pos_embed = build_2d_sincos_position_embedding(
             int(self.num_patches**.5),
             self.pos_embed.shape[-1],
@@ -140,6 +140,23 @@ class MAEViT(VisionTransformer):
     def forward(
             self, x: torch.Tensor
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        """Generate features for masked images.
+
+        This function generates mask and masks some patches randomly and get
+        the hidden features for visible patches.
+
+        Args:
+            x (torch.Tensor): Input images, which is of shape B x C x H x W.
+
+        Returns:
+            Tuple[torch.Tensor, torch.Tensor, torch.Tensor]: hidden features,
+                mask and the ids to restore original image.
+
+            - x (torch.Tensor): hidden features, which is of shape
+                B x (L * mask_ratio) x C.
+            - mask (torch.Tensor): mask used to mask image.
+            - ids_restore (torch.Tensor): ids to restore original image.
+        """
         B = x.shape[0]
         x = self.patch_embed(x)[0]
         # add pos embed w/o cls token

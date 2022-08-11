@@ -81,7 +81,7 @@ class SimMIMSwinTransformer(SwinTransformer):
 
     def init_weights(self) -> None:
         """Initialize weights."""
-        super(SwinTransformer, self).init_weights()
+        super().init_weights()
 
         if (isinstance(self.init_cfg, dict)
                 and self.init_cfg['type'] == 'Pretrained'):

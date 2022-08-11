@@ -5,7 +5,7 @@ from operator import mul
 from typing import List, Optional, Union
 
 import torch.nn as nn
-from mmcls.models.backbones import VisionTransformer as _VisionTransformer
+from mmcls.models.backbones import VisionTransformer
 from mmcls.models.utils import to_2tuple
 from mmcv.cnn.bricks.transformer import PatchEmbed
 from torch.nn.modules.batchnorm import _BatchNorm
@@ -15,7 +15,7 @@ from mmselfsup.registry import MODELS
 
 
 @MODELS.register_module()
-class MoCoV3ViT(_VisionTransformer):
+class MoCoV3ViT(VisionTransformer):
     """Vision Transformer.
 
     A pytorch implement of: `An Images is Worth 16x16 Words: Transformers for
@@ -73,6 +73,8 @@ class MoCoV3ViT(_VisionTransformer):
         self._freeze_stages()
 
     def init_weights(self) -> None:
+        """Initialize position embedding, patch embedding, qkv layers and
+        cls token."""
         super().init_weights()
 
         if not (isinstance(self.init_cfg, dict)

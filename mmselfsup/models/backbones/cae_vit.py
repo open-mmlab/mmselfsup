@@ -97,7 +97,8 @@ class CAEViT(VisionTransformer):
             self.layers.append(TransformerEncoderLayer(**_layer_cfg))
 
     def init_weights(self) -> None:
-        super(CAEViT, self).init_weights()
+        """Initialize position embedding, patch embedding and cls token."""
+        super().init_weights()
         if not (isinstance(self.init_cfg, dict)
                 and self.init_cfg['type'] == 'Pretrained'):
             # initialize position  embedding in backbone
@@ -124,6 +125,17 @@ class CAEViT(VisionTransformer):
                 nn.init.constant_(m.bias, 0)
 
     def forward(self, img: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
+        """Generate features for masked images.
+
+        This function generates mask images and get the hidden features for
+        visible patches.
+
+        Args:
+            x (torch.Tensor): Input images, which is of shape B x C x H x W.
+
+        Returns:
+            torch.Tensor: hidden features.
+        """
         x, _ = self.patch_embed(img)
         batch_size, _, dim = x.size()
 
