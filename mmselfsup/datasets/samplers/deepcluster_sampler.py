@@ -76,8 +76,11 @@ class DeepClusterSampler(DefaultSampler):
         """The function is applied in DeepClusterHook for uniform sampling.
 
         Args:
-            labels (List): The updated labels after clustering.
+            labels (list): The updated labels after clustering.
             num_classes (int): number of clusters.
+        
+        Returns:
+            None
         """
         self.unif_sampling_flag = True
         assert self.shuffle,\

@@ -100,8 +100,16 @@ class PackSelfSupInputs(BaseTransform):
 
     @classmethod
     def set_algorithm_keys(self, data_sample: SelfSupDataSample, key: str,
-                           results: Dict) -> None:
-        """Set the algorithm keys of SelfSupDataSample."""
+                           results: dict) -> None:
+        """Set the algorithm keys of SelfSupDataSample.
+        
+        Args:
+            data_sample (SelfSupDataSample): An instance of SelfSupDataSample.
+            key (str): The key, which may be used by the algorithm, such as
+                gt_label, sample_idx, mask, pred_label. For more keys, please
+                refer to the attribute of SelfSupDataSample.
+            results (dict): The results from the data pipeline.
+        """
         value = to_tensor(results[key])
         if key == 'sample_idx':
             sample_idx = InstanceData(value=value)

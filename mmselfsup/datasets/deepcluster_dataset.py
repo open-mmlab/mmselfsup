@@ -47,6 +47,9 @@ class DeepClusterImageNet(ImageNet):
 
         Args:
             labels (list): The new labels.
+        
+        Returns:
+            None
         """
         assert len(self.clustering_labels) == len(labels), (
             f'Inconsistent length of assigned labels, '

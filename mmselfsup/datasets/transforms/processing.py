@@ -17,7 +17,17 @@ from PIL import Image, ImageFilter
 from mmselfsup.registry import TRANSFORMS
 
 
-def check_sequence_input(x: Sequence, name: str, req_sizes: Tuple) -> None:
+def check_sequence_input(x: Sequence, name: str, req_sizes: tuple) -> None:
+    """Check if the input is a sequence with the required sizes.
+    
+    Args:
+        x (Sequence): The input sequence.
+        name (str): The name of the input.
+        req_sizes (tuple): The required sizes of the input.
+    
+    Returns:
+        None
+    """
     msg = req_sizes[0] if len(req_sizes) < 2 else ' or '.join(
         [str(s) for s in req_sizes])
     if not isinstance(x, Sequence):
@@ -65,6 +75,14 @@ class SimMIMMaskGenerator(BaseTransform):
         self.mask_count = int(np.ceil(self.token_count * self.mask_ratio))
 
     def transform(self, results: dict) -> dict:
+        """Method to generate random block mask for each Image in SimMIM.
+
+        Args:
+            results (dict): Result dict from previous pipeline.
+
+        Returns:
+            dict: Result dict with added key ``mask``.
+        """
         mask_idx = np.random.permutation(self.token_count)[:self.mask_count]
         mask = np.zeros(self.token_count, dtype=int)
         mask[mask_idx] = 1
@@ -131,9 +149,23 @@ class BEiTMaskGenerator(BaseTransform):
         self.log_aspect_ratio = (math.log(min_aspect), math.log(max_aspect))
 
     def get_shape(self) -> Tuple[int, int]:
+        """Get the shape of mask.
+        
+        Returns:
+            Tuple[int, int]: The shape of mask.
+        """
         return self.height, self.width
 
     def _mask(self, mask: np.ndarray, max_mask_patches: int) -> int:
+        """Generate mask recursively.
+        
+        Args:
+            mask (np.ndarray): The mask to be generated.
+            max_mask_patches (int): The maximum number of patches to be masked.
+
+        Returns:
+            int: The number of patches masked.
+        """
         delta = 0
         for _ in range(10):
             target_area = random.uniform(self.min_num_patches,
@@ -158,6 +190,14 @@ class BEiTMaskGenerator(BaseTransform):
         return delta
 
     def transform(self, results: dict) -> dict:
+        """Method to generate random block mask for each Image in BEiT.
+        
+        Args:
+            results (dict): Result dict from previous pipeline.
+
+        Returns:
+            dict: Result dict with added key ``mask``.
+        """
         mask = np.zeros(shape=self.get_shape(), dtype=np.int)
         mask_count = 0
         while mask_count != self.num_masking_patches:
@@ -307,6 +347,18 @@ class RandomResizedCropAndInterpolationWithTwoPic(BaseTransform):
         return i, j, h, w
 
     def transform(self, results: dict) -> dict:
+        """Crop the given image and resize it to two different sizes.
+        
+        This module crops the given image randomly and resize the crop to two
+        different sizes. This is popularly used in BEiT-style masked image 
+        modeling, where an off-the-shelf model is used to provide the target.
+
+        Args:
+            results (dict): Results from previous pipeline.
+
+        Returns:
+            dict: Results after applying this transformation.
+        """
         img = results['img']
         i, j, h, w = self.get_params(img, self.scale, self.ratio)
         if isinstance(self.interpolation, (tuple, list)):
@@ -370,6 +422,14 @@ class RandomGaussianBlur(BaseTransform):
         self.prob = prob
 
     def transform(self, results: dict) -> dict:
+        """Apply GaussianBlur augmentation to the given image.
+        
+        Args:
+            results (dict): Results from previous pipeline.
+        
+        Returns:
+            dict: Results after applying this transformation.
+        """
         if np.random.rand() > self.prob:
             return results
         img_pil = Image.fromarray(results['img'].astype('uint8'))
@@ -415,6 +475,14 @@ class RandomSolarize(BaseTransform):
         self.prob = prob
 
     def transform(self, results: dict) -> dict:
+        """Apply Solarize augmentation to the given image.
+        
+        Args:
+            results (dict): Results from previous pipeline.
+        
+        Returns:
+            dict: Results after applying this transformation.
+        """
         if np.random.rand() > self.prob:
             return results
         img = results['img']
@@ -468,6 +536,14 @@ class RotationWithLabels(BaseTransform):
         ]
 
     def transform(self, results: dict) -> dict:
+        """Apply rotation augmentation to the given image.
+        
+        Args:
+            results (dict): Results from previous pipeline.
+        
+        Returns:
+            dict: Results after applying this transformation.
+        """
         img = self._rotate(results['img'])
         rotation_labels = np.array([0, 1, 2, 3])
         results['img'] = img
@@ -554,6 +630,14 @@ class RandomPatchWithLabels(BaseTransform):
         return patches, patches_pos
 
     def transform(self, results: dict) -> dict:
+        """Apply random patch augmentation to the given image.
+        
+        Args:
+            results (dict): Results from previous pipeline.
+        
+        Returns:
+            dict: Results after applying this transformation.
+        """
         img = results['img']
         patches, patches_pos = self._image_to_patches(img)
         patches_pos = np.stack(patches_pos, axis=0)
@@ -639,7 +723,18 @@ class ColorJitter(BaseTransform):
             center: float = 1.,
             bound: Tuple = (0, float('inf')),
             clip_first_on_zero: bool = True) -> Union[List[float], None]:
-        """Check the input and convert it to the tuple format."""
+        """Check the input and convert it to the tuple format.
+        
+        Args:
+            value (float or list of float): The input value.
+            name (str): The name of the input.
+            center (float): The center value of the input.
+            bound (tuple of float): The bound of the input.
+            clip_first_on_zero (bool): Whether to clip the first value on zero.
+
+        Returns:
+            Union[List[float], None]: The converted value or None.
+        """
 
         if isinstance(value, numbers.Number):
             if value < 0:
@@ -703,6 +798,14 @@ class ColorJitter(BaseTransform):
         return b, c, s, h, order
 
     def transform(self, results: dict) -> dict:
+        """Randomly change the brightness, contrast, saturation and hue of an image. # noqa: E501
+
+        Args:
+            results (dict): The results dict from previous pipeline.
+
+        Returns:
+            dict: Results after applying this transformation.
+        """
         brightness_factor, contrast_factor, saturation_factor, hue_factor, \
             order = self.get_params(
                 self.brightness, self.contrast, self.saturation, self.hue)
@@ -853,6 +956,14 @@ class RandomResizedCrop(BaseTransform):
         return ymin, xmin, ymax, xmax
 
     def transform(self, results: dict) -> dict:
+        """Randomly crop the image.
+        
+        Args:
+            results (dict): Result dict from previous pipeline.
+
+        Returns:
+            dict: Result dict with the transformed image.
+        """
         img = results['img']
         get_params_args = dict(
             img=img,
@@ -964,6 +1075,14 @@ class RandomCrop(BaseTransform):
         return ymin, xmin, target_height, target_width
 
     def transform(self, results: dict) -> dict:
+        """Randomly crop the image.
+        
+        Args:
+            results (dict): Result dict from previous pipeline.
+
+        Returns:
+            dict: Result dict with the transformed image.
+        """
         img = results['img']
         if self.padding is not None:
             img = mmcv.impad(img, padding=self.padding, pad_val=self.pad_val)
@@ -1067,6 +1186,18 @@ class RandomRotation(BaseTransform):
                      x: Union[int, Sequence[int]],
                      name: str,
                      req_sizes: Tuple = (2, )) -> List[float]:
+        """Setup the angle.
+        
+        Args:
+            x (Union[int, Sequence[int]]): Range of degrees to select from. If
+                degrees is an int instead of sequence like (min, max), the 
+                range of degrees will be (-degrees, +degrees).
+            name (str): Name of the angle.
+            req_sizes (Tuple): Required sizes of the angle.
+
+        Returns:
+            List[float]: The range of valid angles.
+        """
         if isinstance(x, int):
             if x < 0:
                 raise ValueError(
@@ -1095,6 +1226,14 @@ class RandomRotation(BaseTransform):
         return angle
 
     def transform(self, results: dict) -> dict:
+        """Randomly rotate the image.
+        
+        Args:
+            results (dict): Result dict from previous pipeline.
+        
+        Returns:
+            dict: Result dict with the transformed image.
+        """
         img = results['img']
         angle = self.get_params(self.degrees)
         results['img'] = mmcv.imrotate(
