@@ -128,8 +128,7 @@ def create_train_job_batch(commands, model_info, args, port, script_name):
     config = Path(model_info.config)
     assert config.exists(), f'"{fname}": {config} not found.'
 
-    current_date = datetime.now().strftime('%Y%m%d')
-    work_dir = Path(args.work_dir) / Path(current_date) / fname
+    work_dir = Path(args.work_dir) / fname
     work_dir.mkdir(parents=True, exist_ok=True)
 
     if args.quotatype is not None:
