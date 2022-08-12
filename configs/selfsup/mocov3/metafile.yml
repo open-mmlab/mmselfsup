@@ -14,7 +14,7 @@ Collections:
     README: configs/selfsup/mocov3/README.md
 
 Models:
-  - Name: mocov3_vit-small-p16_32xb128-fp16-coslr-300e_in1k-224
+  - Name: mocov3_vit-small-p16_16xb256-fp16-coslr-300e_in1k-224
     In Collection: MoCoV3
     Metadata:
       Epochs: 300
@@ -24,5 +24,5 @@ Models:
         Dataset: ImageNet-1k
         Metrics:
           Top 1 Accuracy: 73.19
-    Config: configs/selfsup/mocov3/mocov3_vit-small-p16_32xb128-fp16-coslr-300e_in1k-224.py
+    Config: configs/selfsup/mocov3/mocov3_vit-small-p16_16xb256-fp16-coslr-300e_in1k-224.py
     Weights: https://download.openmmlab.com/mmselfsup/moco/mocov3_vit-small-p16_32xb128-fp16-coslr-300e_in1k-224_20220225-e31238dd.pth
