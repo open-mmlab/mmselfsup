@@ -16,4 +16,5 @@ mim train mmseg $CFG \
     --work-dir $WORK_DIR \
     --cfg-options model.backbone.init_cfg.type=Pretrained \
     model.backbone.init_cfg.checkpoint=$PRETRAIN \
+    model.backbone.init_cfg.prefix="backbone." \
     $PY_ARGS
