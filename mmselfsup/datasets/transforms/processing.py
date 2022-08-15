@@ -957,7 +957,7 @@ class RandomResizedCrop(BaseTransform):
         return ymin, xmin, ymax, xmax
 
     def transform(self, results: dict) -> dict:
-        """Randomly crop the image.
+        """Randomly crop the image and resize the image to the target size.
 
         Args:
             results (dict): Result dict from previous pipeline.
