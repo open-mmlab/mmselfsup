@@ -73,8 +73,8 @@ class MoCoV3ViT(VisionTransformer):
         self._freeze_stages()
 
     def init_weights(self) -> None:
-        """Initialize position embedding, patch embedding, qkv layers and
-        cls token."""
+        """Initialize position embedding, patch embedding, qkv layers and cls
+        token."""
         super().init_weights()
 
         if not (isinstance(self.init_cfg, dict)
