@@ -40,7 +40,7 @@ model = dict(backbone=dict(init_cfg=dict()))
 optimizer = dict(
     lr=1e-3 * 1024 / 256,
     paramwise_options={
-        'norm': dict(weight_decay=0.),
+        'ln': dict(weight_decay=0.),
         'bias': dict(weight_decay=0.),
         'pos_embed': dict(weight_decay=0.),
         'cls_token': dict(weight_decay=0.)
