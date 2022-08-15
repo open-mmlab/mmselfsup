@@ -17,12 +17,12 @@ param_scheduler = [
         convert_to_iter_based=True),
     dict(
         type='CosineAnnealingLR',
-        T_max=990,
+        T_max=790,
         by_epoch=True,
         begin=10,
-        end=1000,
+        end=800,
         convert_to_iter_based=True)
 ]
 
 # runtime settings
-train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=1000)
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=800)
