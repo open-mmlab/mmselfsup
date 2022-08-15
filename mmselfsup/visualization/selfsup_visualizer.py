@@ -62,7 +62,7 @@ class SelfSupVisualizer(Visualizer):
     def __init__(self,
                  name: str = 'visualizer',
                  image: Optional[np.ndarray] = None,
-                 vis_backends: Optional[Dict] = None,
+                 vis_backends: Optional[List[Dict]] = None,
                  save_dir: Optional[str] = None,
                  line_width: Union[int, float] = 3,
                  alpha: Union[int, float] = 0.8):
@@ -84,12 +84,12 @@ class SelfSupVisualizer(Visualizer):
         boxes: InstanceData,
         edge_colors: Union[str, tuple, List[str], List[tuple]] = 'r'
     ) -> np.ndarray:
-        """Draw instances of GT or prediction.
+        """Draw instance with boxes.
 
         Args:
             image (np.ndarray): The image to draw.
             boxes (:obj:`InstanceData`): Data structure for
-                instance-level annotations or predictions.
+                instance-level box annotations.
             edge_colors (Union[str, tuple, List[str], List[tuple]]): The
                 colors of boxes. ``colors`` can have the same length with
                 lines or just single value. If ``colors`` is single value, all
@@ -115,12 +115,12 @@ class SelfSupVisualizer(Visualizer):
             mask: InstanceData,
             colors: Union[str, tuple, List[str],
                           List[tuple]] = 'k') -> np.ndarray:
-        """Draw binary mask of GT or prediction.
+        """Draw instance with binary mask.
 
         Args:
             image (np.ndarray): The image to draw.
             mask (:obj:`InstanceData`): Data structure for
-                pixel-level annotations or predictions.
+                pixel-level annotations.
             colors (Union[str, tuple, List[str], List[tuple]]): The colors
                 which binary_masks will convert to. ``colors`` can have
                 the same length with binary_masks or just single value.

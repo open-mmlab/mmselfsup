@@ -26,7 +26,7 @@ class SelfSupDataSample(BaseDataElement):
          >>> import torch
          >>> import numpy as np
          >>> from mmengine.data import InstanceData
-         >>> from mmselfsup.core import SelfSupDataSample
+         >>> from mmselfsup.structures import SelfSupDataSample
 
          >>> data_sample = SelfSupDataSample()
          >>> gt_label = LabelData()
