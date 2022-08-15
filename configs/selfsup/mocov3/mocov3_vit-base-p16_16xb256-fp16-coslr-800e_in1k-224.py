@@ -1,11 +1,5 @@
 _base_ = 'mocov3_vit-base-p16_16xb256-fp16-coslr-300e_in1k-224.py'
 
-# optimizer
-optimizer = dict(type='AdamW', lr=2.4e-3, weight_decay=0.1)
-optim_wrapper = dict(
-    type='AmpOptimWrapper', loss_scale='dynamic', optimizer=optimizer)
-find_unused_parameters = True
-
 # learning rate scheduler
 param_scheduler = [
     dict(
@@ -26,5 +20,3 @@ param_scheduler = [
 
 # runtime settings
 train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=800)
-# only keeps the latest 3 checkpoints
-default_hooks = dict(checkpoint=dict(max_keep_ckpts=2))
