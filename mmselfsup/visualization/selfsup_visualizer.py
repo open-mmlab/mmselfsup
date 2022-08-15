@@ -12,8 +12,8 @@ from mmselfsup.structures import SelfSupDataSample
 
 
 @VISUALIZERS.register_module()
-class SelfSupLocalVisualizer(Visualizer):
-    """MMSelfSup Local Visualizer.
+class SelfSupVisualizer(Visualizer):
+    """MMSelfSup Visualizer.
 
     Args:
         name (str): Name of the instance. Defaults to 'visualizer'.
@@ -32,29 +32,29 @@ class SelfSupLocalVisualizer(Visualizer):
         >>> import numpy as np
         >>> import torch
         >>> from mmengine.data import InstanceData
-        >>> from mmselfsup.core import SelfSupDataSample
-        >>> from mmselfsup.core import SelfSupLocalVisualizer
+        >>> from mmselfsup.structures import SelfSupDataSample
+        >>> from mmselfsup.visualization import SelfSupVisualizer
 
-        >>> selfsup_local_visualizer = SelfSupLocalVisualizer()
+        >>> selfsup_visualizer = SelfSupVisualizer()
         >>> image = np.random.randint(0, 256,
         ...                     size=(10, 12, 3)).astype('uint8')
         >>> pseudo_label = InstanceData()
         >>> pseudo_label.patch_box = torch.Tensor([[1, 2, 2, 5]])
         >>> gt_selfsup_data_sample = SelfSupDataSample()
         >>> gt_selfsup_data_sample.pseudo_label = pseudo_label
-        >>> selfsup_local_visualizer.add_datasample('image', image,
+        >>> selfsup_visualizer.add_datasample('image', image,
         ...                         gt_selfsup_data_sample)
-        >>> selfsup_local_visualizer.add_datasample(
+        >>> selfsup_visualizer.add_datasample(
         ...                       'image', image, gt_selfsup_data_sample,
         ...                        out_file='out_file.jpg')
-        >>> selfsup_local_visualizer.add_datasample(
+        >>> selfsup_visualizer.add_datasample(
         ...                        'image', image, gt_selfsup_data_sample,
         ...                         show=True)
         >>> pseudo_label = InstanceData()
         >>> pseudo_label.patch_box = torch.Tensor([[1, 2, 2, 5]])
         >>> pred_selfsup_data_sample = SelfSupDataSample()
         >>> pred_selfsup_data_sample.pseudo_label = pseudo_label
-        >>> selfsup_local_visualizer.add_datasample('image', image,
+        >>> selfsup_visualizer.add_datasample('image', image,
         ...                         gt_selfsup_data_sample,
         ...                         pred_selfsup_data_sample)
     """
@@ -74,7 +74,7 @@ class SelfSupLocalVisualizer(Visualizer):
         self.line_width = line_width
         self.alpha = alpha
         # Set default value. When calling
-        # `SelfSupLocalVisualizer().dataset_meta=xxx`,
+        # `SelfSupVisualizer().dataset_meta=xxx`,
         # it will override the default value.
         self.dataset_meta = {}
 

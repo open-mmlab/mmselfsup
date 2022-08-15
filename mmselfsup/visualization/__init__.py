@@ -1,4 +1,4 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from .local_visualizer import SelfSupLocalVisualizer
+from .selfsup_visualizer import SelfSupVisualizer
 
-__all__ = ['SelfSupLocalVisualizer']
+__all__ = ['SelfSupVisualizer']
