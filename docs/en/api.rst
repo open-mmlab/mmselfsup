@@ -1,9 +1,4 @@
-mmselfsup.apis
----------------
-.. automodule:: mmselfsup.apis
-    :members:
-
-mmselfsup.core
+mmselfsup.datasets
 ---------------
 
 hooks
