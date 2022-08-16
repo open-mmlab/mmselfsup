@@ -11,7 +11,6 @@ PY_ARGS=${@:5}
 GPUS=${GPUS:-8}
 GPUS_PER_NODE=${GPUS_PER_NODE:-8}
 CPUS_PER_TASK=${CPUS_PER_TASK:-5}
-PORT=${PORT:-29500}
 SRUN_ARGS=${SRUN_ARGS:-""}
 
 # set work_dir according to config path and pretrained model to distinguish different models
@@ -29,5 +28,4 @@ srun -p ${PARTITION} \
     python -u tools/benchmarks/classification/knn_imagenet/test_knn.py $CFG \
         --cfg-options model.backbone.init_cfg.type=Pretrained \
         model.backbone.init_cfg.checkpoint=$PRETRAIN \
-        dist_params.port=$PORT \
         --work-dir $WORK_DIR --launcher="slurm" ${PY_ARGS}
