@@ -27,6 +27,12 @@ Welcome to MMSelfSup's documentation!
 
 .. toctree::
    :maxdepth: 1
+   :caption: Model Zoo
+
+   model_zoo.md
+
+.. toctree::
+   :maxdepth: 1
    :caption: Migration
 
    migration.md
@@ -35,12 +41,6 @@ Welcome to MMSelfSup's documentation!
    :caption: API Reference
 
    api.rst
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Model Zoo
-
-   model_zoo.md
 
 .. toctree::
    :maxdepth: 1

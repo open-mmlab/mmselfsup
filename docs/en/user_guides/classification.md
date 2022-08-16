@@ -1,32 +1,16 @@
-# Tutorial 5: Run Benchmarks
+# Classification
 
 In MMSelfSup, we provide many benchmarks, thus the models can be evaluated on different downstream tasks. Here are comprehensive tutorials and examples to explain how to run all benchmarks with MMSelfSup.
 
-- [Tutorial 5: Run Benchmarks](#tutorial-5-run-benchmarks)
-  - [Classification](#classification)
-    - [VOC SVM / Low-shot SVM](#voc-svm--low-shot-svm)
-    - [Linear Evaluation](#linear-evaluation)
-    - [ImageNet Semi-Supervised Classification](#imagenet-semi-supervised-classification)
-    - [ImageNet Nearest-Neighbor Classification](#imagenet-nearest-neighbor-classification)
-  - [Detection](#detection)
-  - [Segmentation](#segmentation)
-
-First, you are supposed to extract your backbone weights by `tools/model_converters/extract_backbone_weights.py`
-
-```shell
-python ./tools/model_converters/extract_backbone_weights.py {CHECKPOINT} {MODEL_FILE}
-```
-
-Arguments:
-
-- `CHECKPOINT`: the checkpoint file of a selfsup method named as epoch\_\*.pth.
-- `MODEL_FILE`: the output backbone weights file. If not mentioned, the `PRETRAIN` below uses this extracted model file.
-
-## Classification
+- [Classification](#classification)
+  - [VOC SVM / Low-shot SVM](#voc-svm--low-shot-svm)
+  - [Linear Evaluation](#linear-evaluation)
+  - [ImageNet Semi-Supervised Classification](#imagenet-semi-supervised-classification)
+  - [ImageNet Nearest-Neighbor Classification](#imagenet-nearest-neighbor-classification)
 
 As for classification, we provide scripts in folder `tools/benchmarks/classification/`, which has 4 `.sh` files, 1 folder for VOC SVM related classification task and 1 folder for ImageNet nearest-neighbor classification task.
 
-### VOC SVM / Low-shot SVM
+## VOC SVM / Low-shot SVM
 
 To run these benchmarks, you should first prepare your VOC datasets. Please refer to [prepare_data.md](https://github.com/open-mmlab/mmselfsup/blob/master/docs/en/prepare_data.md) for the details of data preparation.
 
@@ -60,7 +44,7 @@ Remarks:
 - if you want to change GPU numbers, you could add `GPUS_PER_NODE=4 GPUS=4` at the beginning of the command.
 - `EPOCH` is the epoch number of the ckpt that you want to test
 
-### Linear Evaluation
+## Linear Evaluation
 
 The linear evaluation is one of the most general benchmarks, we integrate several papers' config settings, also including multi-head linear evaluation. We write classification model in our own codebase for the multi-head function, thus, to run linear evaluation, we still use `.sh` script to launch training. The supported datasets are **ImageNet**, **Places205** and **iNaturalist18**.
 
@@ -78,7 +62,7 @@ Remarks:
 - `CONFIG`: Use config files under `configs/benchmarks/classification/`. Specifically, `imagenet` (excluding `imagenet_*percent` folders), `places205` and `inaturalist2018`.
 - `PRETRAIN`: the pre-trained model file.
 
-### ImageNet Semi-Supervised Classification
+## ImageNet Semi-Supervised Classification
 
 To run ImageNet semi-supervised classification, we still use `.sh` script to launch training.
 
@@ -96,7 +80,7 @@ Remarks:
 - `CONFIG`: Use config files under `configs/benchmarks/classification/imagenet/`, named `imagenet_*percent` folders.
 - `PRETRAIN`: the pre-trained model file.
 
-### ImageNet Nearest-Neighbor Classification
+## ImageNet Nearest-Neighbor Classification
 
 To evaluate the pre-trained models using the nearest-neighbor benchmark, you can run command below.
 
@@ -126,67 +110,3 @@ Remarks:
 - `PRETRAIN`: the pre-trained model file.
 - if you want to change GPU numbers, you could add `GPUS_PER_NODE=4 GPUS=4` at the beginning of the command.
 - `EPOCH` is the epoch number of the ckpt that you want to test
-
-## Detection
-
-Here, we prefer to use MMDetection to do the detection task. First, make sure you have installed [MIM](https://github.com/open-mmlab/mim), which is also a project of OpenMMLab.
-
-```shell
-pip install openmim
-```
-
-It is very easy to install the package.
-
-Besides, please refer to MMDet for [installation](https://github.com/open-mmlab/mmdetection/blob/master/docs/en/get_started.md) and [data preparation](https://github.com/open-mmlab/mmdetection/blob/master/docs/en/1_exist_data_model.md)
-
-After installation, you can run MMDet with simple command.
-
-```shell
-# distributed version
-bash tools/benchmarks/mmdetection/mim_dist_train.sh ${CONFIG} ${PRETRAIN} ${GPUS}
-
-# slurm version
-bash tools/benchmarks/mmdetection/mim_slurm_train.sh ${PARTITION} ${CONFIG} ${PRETRAIN}
-```
-
-Remarks:
-
-- `CONFIG`: Use config files under `configs/benchmarks/mmdetection/` or write your own config files
-- `PRETRAIN`: the pre-trained model file.
-
-Or if you want to do detection task with [detectron2](https://github.com/facebookresearch/detectron2), we also provides some config files.
-Please refer to [INSTALL.md](https://github.com/facebookresearch/detectron2/blob/main/INSTALL.md) for installation and follow the [directory structure](https://github.com/facebookresearch/detectron2/tree/main/datasets) to prepare your datasets required by detectron2.
-
-```shell
-conda activate detectron2 # use detectron2 environment here, otherwise use open-mmlab environment
-cd benchmarks/detection
-python convert-pretrain-to-detectron2.py ${WEIGHT_FILE} ${OUTPUT_FILE} # must use .pkl as the output extension.
-bash run.sh ${DET_CFG} ${OUTPUT_FILE}
-```
-
-## Segmentation
-
-For semantic segmentation task, we use MMSegmentation. First, make sure you have installed [MIM](https://github.com/open-mmlab/mim), which is also a project of OpenMMLab.
-
-```shell
-pip install openmim
-```
-
-It is very easy to install the package.
-
-Besides, please refer to MMSeg for [installation](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/get_started.md) and [data preparation](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/dataset_prepare.md#prepare-datasets).
-
-After installation, you can run MMSeg with simple command.
-
-```shell
-# distributed version
-bash tools/benchmarks/mmsegmentation/mim_dist_train.sh ${CONFIG} ${PRETRAIN} ${GPUS}
-
-# slurm version
-bash tools/benchmarks/mmsegmentation/mim_slurm_train.sh ${PARTITION} ${CONFIG} ${PRETRAIN}
-```
-
-Remarks:
-
-- `CONFIG`: Use config files under `configs/benchmarks/mmsegmentation/` or write your own config files
-- `PRETRAIN`: the pre-trained model file.

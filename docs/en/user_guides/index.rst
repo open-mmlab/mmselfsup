@@ -1,15 +1,22 @@
-Pretrain & Benchmarks
+Pretrain
 **************
 
 .. toctree::
    :maxdepth: 1
 
-
    1_config.md
    2_dataset_prepare.md
-   3_inference.md
-   4_pretrain.md
-   5_run_benchmarks.md
+   3_pretrain.md
+
+Downstream Tasks
+**************
+
+.. toctree::
+   :maxdepth: 1
+
+   classfication.md
+   detection.md
+   segmentation.md
 
 Useful Tools
 ************
