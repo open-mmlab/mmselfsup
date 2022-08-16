@@ -1,6 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import torch
 import torch.nn as nn
+from mmcv.utils.logging import logger_initialized, print_log
 
 from mmselfsup.utils import (batch_shuffle_ddp, batch_unshuffle_ddp,
                              concat_all_gather)
@@ -69,6 +70,17 @@ class DenseCL(BaseModel):
     def init_weights(self):
         """Init weights and copy query encoder init weights to key encoder."""
         super().init_weights()
+
+        # Get the initialized logger, if not exist,
+        # create a logger named `mmselfsup`
+        logger_names = list(logger_initialized.keys())
+        logger_name = logger_names[0] if logger_names else 'mmselfsup'
+
+        # log that key encoder is initialized by the query encoder
+        print_log(
+            'Key encoder is initialized by the query encoder.',
+            logger=logger_name)
+
         for param_q, param_k in zip(self.encoder_q.parameters(),
                                     self.encoder_k.parameters()):
             param_k.data.copy_(param_q.data)
