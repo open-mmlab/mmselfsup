@@ -14,7 +14,7 @@ Downstream Tasks
 .. toctree::
    :maxdepth: 1
 
-   classfication.md
+   classification.md
    detection.md
    segmentation.md
 
