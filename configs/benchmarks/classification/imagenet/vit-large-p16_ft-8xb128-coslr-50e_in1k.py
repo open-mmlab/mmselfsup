@@ -3,7 +3,7 @@ _base_ = 'vit-base-p16_ft-8xb128-coslr-100e_in1k.py'
 # model settings
 # MAE ViT-large set drop_path_rate to 0.2
 model = dict(
-    backbone=dict(arch='large', drop_path_rate=0.2),
+    backbone=dict(arch='large', drop_path_rate=0.1),
     head=dict(in_channels=1024))
 
 # optim settings
