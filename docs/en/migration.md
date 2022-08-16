@@ -1,3 +1,5 @@
+# Migration from MMSelfSup 0.x
+
 # Differences between MMSelfSup and OpenSelfSup
 
 This file records differences between the newest version of MMSelfSup with older versions and OpenSelfSup.

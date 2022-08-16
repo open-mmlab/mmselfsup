@@ -1,6 +1,6 @@
-# Tutorial 5: Customize Runtime Settings
+# Customize Runtime
 
-- [Tutorial 5: Customize Runtime Settings](#tutorial-5-customize-runtime-settings)
+- [Customize Runtime](#customize-runtime)
   - [Customize Workflow](#customize-workflow)
   - [Hooks](#hooks)
     - [default training hooks](#default-training-hooks)

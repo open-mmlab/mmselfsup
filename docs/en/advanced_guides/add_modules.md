@@ -1,6 +1,6 @@
-# Tutorial 3: Adding New Modules
+# Add Modules
 
-- [Tutorial 3: Adding New Modules](#tutorial-3-adding-new-modules)
+- [Add Modules](#add-modules)
   - [Add new backbone](#add-new-backbone)
   - [Add new necks](#add-new-necks)
   - [Add new loss](#add-new-loss)

@@ -1,6 +1,6 @@
-# Tutorial 2: Customize Data Pipelines
+# Add Transforms
 
-- [Tutorial 2: Customize Data Pipelines](#tutorial-2-customize-data-pipelines)
+- [Add Transforms](#add-transforms)
   - [Overview of `Pipeline`](#overview-of-pipeline)
   - [Creating new augmentations in `Pipeline`](#creating-new-augmentations-in-pipeline)
 

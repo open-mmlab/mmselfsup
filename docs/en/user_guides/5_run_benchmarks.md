@@ -1,8 +1,8 @@
-# Tutorial 6: Run Benchmarks
+# Tutorial 5: Run Benchmarks
 
 In MMSelfSup, we provide many benchmarks, thus the models can be evaluated on different downstream tasks. Here are comprehensive tutorials and examples to explain how to run all benchmarks with MMSelfSup.
 
-- [Tutorial 6: Run Benchmarks](#tutorial-6-run-benchmarks)
+- [Tutorial 5: Run Benchmarks](#tutorial-5-run-benchmarks)
   - [Classification](#classification)
     - [VOC SVM / Low-shot SVM](#voc-svm--low-shot-svm)
     - [Linear Evaluation](#linear-evaluation)
