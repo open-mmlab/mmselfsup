@@ -1,8 +1,8 @@
-# Adding Datasets
+# Add Datasets
 
 In this tutorial, we introduce the basic steps to create your customized dataset:
 
-- [Adding Datasets](#adding-datasets)
+- [Add Datasets](#add-datasets)
   - [An example of customized dataset](#an-example-of-customized-dataset)
   - [Creating the `DataSource`](#creating-the-datasource)
   - [Creating the `Dataset`](#creating-the-dataset)
@@ -10,7 +10,7 @@ In this tutorial, we introduce the basic steps to create your customized dataset
 
 If your algorithm does not need any customized dataset, you can use these off-the-shelf datasets under [datasets](../../mmselfsup/datasets). But to use these existing datasets, you have to convert your dataset to existing dataset format.
 
-### An example of customized dataset
+## An example of customized dataset
 
 Assuming the format of your dataset's annotation file is:
 
@@ -24,7 +24,7 @@ To write a new dataset, you need to implement:
 - `DataSource`: inherited from `BaseDataSource` and responsible for loading the annotation files and reading images.
 - `Dataset`: inherited from `BaseDataset` and responsible for applying transformation to images and packing these images.
 
-### Creating the `DataSource`
+## Creating the `DataSource`
 
 Assume the name of your `DataSource` is `NewDataSource`, you can create a file, named `new_data_source.py` under `mmselfsup/datasets/data_sources` and implement `NewDataSource` in it.
 
@@ -59,7 +59,7 @@ __all__ = [
 ]
 ```
 
-### Creating the `Dataset`
+## Creating the `Dataset`
 
 Assume the name of your `Dataset` is `NewDataset`, you can create a file, named `new_dataset.py` under `mmselfsup/datasets` and implement `NewDataset` in it.
 
@@ -99,7 +99,7 @@ __all__ = [
 ]
 ```
 
-### Modify config file
+## Modify config file
 
 To use `NewDataset`, you can modify the config as the following:
 
