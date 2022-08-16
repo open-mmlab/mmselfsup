@@ -1,6 +1,6 @@
-# Tutorial 4: Pretrain with existing models
+# Tutorial 3: Pretrain with existing models
 
-- [Tutorial 4: Pretrain with existing models](#tutorial-4-pretrain-with-existing-models)
+- [Tutorial 3: Pretrain with existing models](#tutorial-3-pretrain-with-existing-models)
   - [Start to Train](#start-to-train)
     - [Train with a single GPU](#train-with-a-single-gpu)
     - [Train with CPU](#train-with-cpu)
