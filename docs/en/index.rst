@@ -45,9 +45,8 @@ Welcome to MMSelfSup's documentation!
 .. toctree::
    :maxdepth: 1
    :caption: Notes
-   
+
    contribution_guide.md
-   projects.md
    changelog.md
    faq.md
 
