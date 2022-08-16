@@ -1,4 +1,20 @@
-# Prerequisites
+# Get Started
+
+- [Get Started](#get-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+    - [Best Practices](#best-practices)
+    - [Verify the installation](#verify-the-installation)
+    - [Customized installation](#customized-installation)
+      - [Benchmark](#benchmark)
+      - [CUDA versions](#cuda-versions)
+      - [Install MMCV without MIM](#install-mmcv-without-mim)
+      - [Another option: Docker Image](#another-option-docker-image)
+      - [Install on Google Colab](#install-on-google-colab)
+    - [Trouble shooting](#trouble-shooting)
+  - [Using multiple MMSelfSup versions](#using-multiple-mmselfsup-versions)
+
+## Prerequisites
 
 In this section we demonstrate how to prepare an environment with PyTorch.
 
@@ -29,11 +45,11 @@ On CPU platforms:
 conda install pytorch torchvision cpuonly -c pytorch
 ```
 
-# Installation
+## Installation
 
 We recommend that users follow our best practices to install MMSelfSup. However, the whole process is highly customizable. See [Customize Installation](#customized-installation) section for more information.
 
-## Best Practices
+### Best Practices
 
 **Step 0.** Install [MMCV](https://github.com/open-mmlab/mmcv) using [MIM](https://github.com/open-mmlab/mim).
 
@@ -61,7 +77,7 @@ Case b: If you use mmselfsup as a dependency or third-party package, install it 
 pip install mmselfsup
 ```
 
-## Verify the installation
+### Verify the installation
 
 To verify whether MMSelfSup is installed correctly, we can run the following sample code to initialize a model and inference a demo image.
 
@@ -96,9 +112,9 @@ loss = model.forward_train(image, label)
 
 The above code is supposed to run successfully upon you finish the installation.
 
-## Customized installation
+### Customized installation
 
-### Benchmark
+#### Benchmark
 
 The [Best Practices](#best-practices) is for basic usage, if you need to evaluate your pre-training model with some downstream tasks such as detection or segmentation, please also install [MMDetection](https://github.com/open-mmlab/mmdetection) and [MMSegmentation](https://github.com/open-mmlab/mmsegmentation).
 
@@ -112,7 +128,7 @@ pip install mmdet mmsegmentation
 
 For more details, you can check the installation page of [MMDetection](https://github.com/open-mmlab/mmdetection/blob/master/docs/en/get_started.md) and [MMSegmentation](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/get_started.md).
 
-### CUDA versions
+#### CUDA versions
 
 When installing PyTorch, you need to specify the version of CUDA. If you are not clear on which to choose, follow our recommendations:
 
@@ -125,7 +141,7 @@ Please make sure the GPU driver satisfies the minimum version requirements. See 
 Installing CUDA runtime libraries is enough if you follow our best practices, because no CUDA code will be compiled locally. However if you hope to compile MMCV from source or develop other CUDA operators, you need to install the complete CUDA toolkit from NVIDIA's [website](https://developer.nvidia.com/cuda-downloads), and its version should match the CUDA version of PyTorch. i.e., the specified version of cudatoolkit in `conda install` command.
 ```
 
-### Install MMCV without MIM
+#### Install MMCV without MIM
 
 MMCV contains C++ and CUDA extensions, thus depending on PyTorch in a complex way. MIM solves such dependencies automatically and makes the installation easier. However, it is not a must.
 
@@ -137,7 +153,7 @@ For example, the following command install mmcv-full built for PyTorch 1.10.x an
 pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/cu113/torch1.10/index.html
 ```
 
-### Another option: Docker Image
+#### Another option: Docker Image
 
 We provide a [Dockerfile](/docker/Dockerfile) to build an image.
 
@@ -156,7 +172,7 @@ docker run --gpus all --shm-size=8g -it -v {DATA_DIR}:/workspace/mmselfsup/data 
 
 `{DATA_DIR}` is your local folder containing all these datasets.
 
-### Install on Google Colab
+#### Install on Google Colab
 
 [Google Colab](https://research.google.com/) usually has PyTorch installed,
 thus we only need to install MMCV and MMSeflSup with the following commands.
@@ -188,12 +204,12 @@ print(mmselfsup.__version__)
 Within Jupyter, the exclamation mark `!` is used to call external executables and `%cd` is a [magic command](https://ipython.readthedocs.io/en/stable/interactive/magics.html#magic-cd) to change the current working directory of Python.
 ```
 
-## Trouble shooting
+### Trouble shooting
 
 If you have some issues during the installation, please first view the [FAQ](faq.md) page.
 You may [open an issue](https://github.com/open-mmlab/mmselfsup/issues/new/choose) on GitHub if no solution is found.
 
-# Using multiple MMSelfSup versions
+## Using multiple MMSelfSup versions
 
 If there are more than one mmselfsup on your machine, and you want to use them alternatively, the recommended way is to create multiple conda environments and use different environments for different versions.
 
