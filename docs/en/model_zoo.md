@@ -3,12 +3,16 @@
 All models and part of benchmark results are recorded below.
 
 - [Model Zoo](#model-zoo)
-  - [Pre-trained models](#pre-trained-models)
+  - [Statistics](#statistics)
   - [Benchmarks](#benchmarks)
     - [ImageNet Linear Evaluation](#imagenet-linear-evaluation)
     - [ImageNet Fine-tuning](#imagenet-fine-tuning)
 
-## Pre-trained models
+## Statistics
+
+- Number of papers: 17
+
+- Number of checkpoints: xx ckpts
 
 | Algorithm                                                                                                          | Config                                                                                                                                                                                       | Download                                                                                                                                                                                                                                                                  |
 | ------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
