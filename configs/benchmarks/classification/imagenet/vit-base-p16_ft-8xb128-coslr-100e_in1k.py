@@ -15,6 +15,7 @@ model = dict(
         patch_size=16,
         drop_path_rate=0.1,
         avg_token=True,
+        output_cls_token=False,
         final_norm=False,
         init_cfg=dict(type='Pretrained', checkpoint='')),
     neck=None,
