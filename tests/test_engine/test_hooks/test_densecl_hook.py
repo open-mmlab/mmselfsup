@@ -94,7 +94,8 @@ class TestDenseCLHook(TestCase):
             custom_hooks=[densecl_hook],
             default_hooks=dict(logger=None),
             log_processor=dict(window_size=1),
-            experiment_name='test_densecl_hook')
+            experiment_name='test_densecl_hook',
+            default_scope='mmselfsup')
 
         runner.train()
 
