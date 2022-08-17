@@ -9,6 +9,9 @@ import torch
 import mmselfsup
 from mmselfsup.models.algorithms.densecl import DenseCL
 from mmselfsup.structures import SelfSupDataSample
+from mmselfsup.utils import register_all_modules
+
+register_all_modules()
 
 queue_len = 32
 feat_dim = 2

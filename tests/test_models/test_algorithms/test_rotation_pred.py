@@ -8,6 +8,9 @@ from mmengine.data import InstanceData
 
 from mmselfsup.models.algorithms.rotation_pred import RotationPred
 from mmselfsup.structures import SelfSupDataSample
+from mmselfsup.utils import register_all_modules
+
+register_all_modules()
 
 backbone = dict(
     type='ResNet',

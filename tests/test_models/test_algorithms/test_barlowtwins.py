@@ -7,6 +7,9 @@ import torch
 
 from mmselfsup.models.algorithms.barlowtwins import BarlowTwins
 from mmselfsup.structures import SelfSupDataSample
+from mmselfsup.utils import register_all_modules
+
+register_all_modules()
 
 backbone = dict(
     type='ResNet',
