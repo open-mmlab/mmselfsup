@@ -179,7 +179,9 @@ def create_train_job_batch(commands, model_info, args, port, script_name):
             srun_args = srun_args.join(f'--quotatype {args.quotatype}')
 
         # get pretrain weights
-        weights = work_dir / 'last_checkpoint'
+        ckpt_path_file = work_dir / 'last_checkpoint'
+        with open(ckpt_path_file, 'r') as f:
+            ckpt = f.readlines()[0]
 
         launcher = 'none' if args.local else 'slurm'
 
@@ -194,7 +196,7 @@ def create_train_job_batch(commands, model_info, args, port, script_name):
             f'--srun-args "{srun_args}" '
             f'--work-dir {cls_work_dir} '
             f'--cfg-option model.backbone.init_cfg.type=Pretrained '
-            f'model.backbone.init_cfg.checkpoint={weights} '
+            f'model.backbone.init_cfg.checkpoint={ckpt} '
             f'model.backbone.init_cfg.prefix=backbone. '
             f'default_hooks.checkpoint.max_keep_ckpts=1 '
             f'{" ".join(args.cfg_options)}\n')
