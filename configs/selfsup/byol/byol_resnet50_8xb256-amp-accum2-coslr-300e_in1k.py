@@ -1,4 +1,4 @@
-_base_ = 'byol_resnet50_8xb256-fp16-accum2-coslr-200e_in1k.py'
+_base_ = 'byol_resnet50_8xb256-amp-accum2-coslr-200e_in1k.py'
 
 # learning rate scheduler
 param_scheduler = [
