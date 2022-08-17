@@ -11,7 +11,7 @@ pip install openmim
 
 It is very easy to install the package.
 
-Besides, please refer to MMSeg for [installation](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/get_started.md) and [data preparation](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/dataset_prepare.md#prepare-datasets).
+Besides, please refer to MMSegmentation for [installation](https://github.com/open-mmlab/mmsegmentation/blob/dev-1.x/docs/en/get_started.md) and [data preparation](https://github.com/open-mmlab/mmsegmentation/blob/dev-1.x/docs/en/user_guides/2_dataset_prepare.md).
 
 ## Train
 
@@ -27,5 +27,12 @@ bash tools/benchmarks/mmsegmentation/mim_slurm_train.sh ${PARTITION} ${CONFIG} $
 
 Remarks:
 
-- `CONFIG`: Use config files under `configs/benchmarks/mmsegmentation/` or write your own config files
+- `CONFIG`: Use config files under `configs/benchmarks/mmsegmentation/`. Since repositories of OpenMMLab have support referring config files across different 
+repositories, we can easily leverage the configs from MMSegmentation like:
+```shell
+_base_ = 'mmseg::fcn/fcn_r50-d8_769x769_40k_cityscapes.py'
+```
+Writing your config files from scratch is also supported.
+
 - `PRETRAIN`: the pre-trained model file.
+- `GPUS`: The number of GPUs that you want to use to train. We adopt 4 GPUs for segmentation tasks by default.

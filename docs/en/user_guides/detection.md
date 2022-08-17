@@ -15,27 +15,35 @@ Besides, please refer to MMDet for [installation](https://github.com/open-mmlab/
 
 ## Train
 
-After installation, you can run MMDet with simple command.
+After installation, you can run MMDetection with simple command.
 
 ```shell
 # distributed version
-bash tools/benchmarks/mmdetection/mim_dist_train.sh ${CONFIG} ${PRETRAIN} ${GPUS}
+bash tools/benchmarks/mmdetection/mim_dist_train_c4.sh ${CONFIG} ${PRETRAIN} ${GPUS}
+bash tools/benchmarks/mmdetection/mim_dist_train_fpn.sh ${CONFIG} ${PRETRAIN} ${GPUS}
 
 # slurm version
-bash tools/benchmarks/mmdetection/mim_slurm_train.sh ${PARTITION} ${CONFIG} ${PRETRAIN}
+bash tools/benchmarks/mmdetection/mim_slurm_train_c4.sh ${PARTITION} ${CONFIG} ${PRETRAIN}
+bash tools/benchmarks/mmdetection/mim_slurm_train_fpn.sh ${PARTITION} ${CONFIG} ${PRETRAIN}
 ```
 
 Remarks:
 
-- `CONFIG`: Use config files under `configs/benchmarks/mmdetection/` or write your own config files
+- `CONFIG`: Use config files under `configs/benchmarks/mmdetection/`. Since repositories of OpenMMLab have support referring config files across different 
+repositories, we can easily leverage the configs from MMDetection like:
+```shell
+_base_ = 'mmdet::mask_rcnn/mask_rcnn_r50_caffe_c4_1x_coco.py'
+```
+Writing your config files from scratch is also supported.
 - `PRETRAIN`: the pre-trained model file.
+- `GPUS`: The number of GPUs that you want to use to train. We adopt 8 GPUs for detection tasks by default.
 
-Or if you want to do detection task with [detectron2](https://github.com/facebookresearch/detectron2), we also provides some config files.
+Or if you want to do detection task with [detectron2](https://github.com/facebookresearch/detectron2), we also provide some config files.
 Please refer to [INSTALL.md](https://github.com/facebookresearch/detectron2/blob/main/INSTALL.md) for installation and follow the [directory structure](https://github.com/facebookresearch/detectron2/tree/main/datasets) to prepare your datasets required by detectron2.
 
 ```shell
 conda activate detectron2 # use detectron2 environment here, otherwise use open-mmlab environment
-cd benchmarks/detection
+cd tools/benchmarks/detectron2
 python convert-pretrain-to-detectron2.py ${WEIGHT_FILE} ${OUTPUT_FILE} # must use .pkl as the output extension.
 bash run.sh ${DET_CFG} ${OUTPUT_FILE}
 ```
