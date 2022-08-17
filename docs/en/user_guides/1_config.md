@@ -1,8 +1,8 @@
-# Tutorial 0: Learn about Configs
+# Tutorial 1: Learn about Configs
 
 MMSelfSup mainly uses python files as configs. The design of our configuration file system integrates modularity and inheritance, facilitating users to conduct various experiments. All configuration files are placed in the `configs` folder. If you wish to inspect the config file in summary, you may run `python tools/misc/print_config.py` to see the complete config.
 
-- [Tutorial 0: Learn about Configs](#tutorial-0-learn-about-configs)
+- [Tutorial 1: Learn about Configs](#tutorial-1-learn-about-configs)
   - [Config File and Checkpoint Naming Convention](#config-file-and-checkpoint-naming-convention)
     - [Algorithm information](#algorithm-information)
     - [Module information](#module-information)

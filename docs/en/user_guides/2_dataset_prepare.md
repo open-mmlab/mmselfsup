@@ -1,15 +1,16 @@
-# Prepare Datasets
+# Tutorial 2: Prepare Datasets
 
 MMSelfSup supports multiple datasets. Please follow the corresponding guidelines for data preparation. It is recommended to symlink your dataset root to `$MMSELFSUP/data`. If your folder structure is different, you may need to change the corresponding paths in config files.
 
-- [Prepare ImageNet](#prepare-imagenet)
-- [Prepare Place205](#prepare-place205)
-- [Prepare iNaturalist2018](#prepare-inaturalist2018)
-- [Prepare PASCAL VOC](#prepare-pascal-voc)
-- [Prepare CIFAR10](#prepare-cifar10)
-- [Prepare datasets for detection and segmentation](#prepare-datasets-for-detection-and-segmentation)
-  - [Detection](#detection)
-  - [Segmentation](#segmentation)
+- [Tutorial 2: Prepare Datasets](#tutorial-2-prepare-datasets)
+  - [Prepare ImageNet](#prepare-imagenet)
+  - [Prepare Place205](#prepare-place205)
+  - [Prepare iNaturalist2018](#prepare-inaturalist2018)
+  - [Prepare PASCAL VOC](#prepare-pascal-voc)
+  - [Prepare CIFAR10](#prepare-cifar10)
+  - [Prepare datasets for detection and segmentation](#prepare-datasets-for-detection-and-segmentation)
+    - [Detection](#detection)
+    - [Segmentation](#segmentation)
 
 ```
 mmselfsup

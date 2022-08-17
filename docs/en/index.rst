@@ -10,67 +10,54 @@ Welcome to MMSelfSup's documentation!
    :maxdepth: 1
    :caption: Get Started
 
-   install.md
-   prepare_data.md
+   overview.md
    get_started.md
+
+.. toctree::
+   :maxdepth: 2
+   :caption: User Guides
+
+   user_guides/index.rst
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Advanced Guides
+
+   advanced_guides/index.rst
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Model Zoo
+
    model_zoo.md
 
 .. toctree::
    :maxdepth: 1
-   :caption: Tutorials
+   :caption: Migration
 
-   tutorials/0_config.md
-   tutorials/1_new_dataset.md
-   tutorials/2_data_pipeline.md
-   tutorials/3_new_module.md
-   tutorials/4_schedule.md
-   tutorials/5_runtime.md
-   tutorials/6_benchmarks.md
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Algorithms
-
-   algorithms/byol.md
-   algorithms/deep.md
-   algorithms/dense.md
-   algorithms/moco.md
-   algorithms/npid.md
-   algorithms/odc.md
-   algorithms/rl.md
-   algorithms/rp.md
-   algorithms/simclr.md
-   algorithms/ss.md
-   algorithms/swav.md
-   algorithms/mocov3.md
-   algorithms/mae.md
-   algorithms/simmim.md
-   algorithms/barlowtwins.md
-   algorithms/cae.md
-
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Notes
-
-   changelog.md
-   compatibility.md
-
-.. toctree::
-   :caption: Switch Language
-
-   switch_language.md
+   migration.md
 
 .. toctree::
    :caption: API Reference
 
    api.rst
 
+.. toctree::
+   :maxdepth: 1
+   :caption: Notes
 
+   contribution_guide.md
+   changelog.md
+   faq.md
 
+.. toctree::
+   :caption: Switch Language
+
+   switch_language.md
 
 Indices and tables
 ==================
 
 * :ref:`genindex`
+* :ref:`modindex`
 * :ref:`search`

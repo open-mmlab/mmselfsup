@@ -1,33 +1,14 @@
-mmselfsup.apis
----------------
-.. automodule:: mmselfsup.apis
-    :members:
-
-mmselfsup.core
----------------
-
-hooks
-^^^^^^^^^^
-.. automodule:: mmselfsup.core.hooks
-    :members:
-
-optimizer
-^^^^^^^^^^
-.. automodule:: mmselfsup.core.optimizer
-    :members:
-
-
 mmselfsup.datasets
----------------------
+---------------
 
-data_sources
-^^^^^^^^^^^^^
-.. automodule:: mmselfsup.datasets.data_sources
+datasets
+^^^^^^^^^^
+.. automodule:: mmselfsup.datasets
     :members:
 
-pipelines
+transforms
 ^^^^^^^^^^
-.. automodule:: mmselfsup.datasets.pipelines
+.. automodule:: mmselfsup.datasets.transforms
     :members:
 
 samplers
@@ -35,11 +16,26 @@ samplers
 .. automodule:: mmselfsup.datasets.samplers
     :members:
 
-datasets
+mmselfsup.engine
+--------------
+
+hooks
 ^^^^^^^^^^
-.. automodule:: mmselfsup.datasets
+.. automodule:: mmselfsup.engine.hooks
     :members:
 
+optimizers
+^^^^^^^^^^
+.. automodule:: mmselfsup.engine.optimizers
+    :members:
+
+mmselfsup.evaluation
+-----------------
+
+functional
+^^^^^^^^^^
+.. automodule:: mmselfsup.evaluation.functional
+    :members:
 
 mmselfsup.models
 -----------------
@@ -54,9 +50,19 @@ backbones
 .. automodule:: mmselfsup.models.backbones
     :members:
 
+necks
+^^^^^^^^^^
+.. automodule:: mmselfsup.models.necks
+    :members:
+
 heads
 ^^^^^^^^^^
 .. automodule:: mmselfsup.models.heads
+    :members:
+
+losses
+^^^^^^^^^^
+.. automodule:: mmselfsup.models.losses
     :members:
 
 memories
@@ -64,16 +70,20 @@ memories
 .. automodule:: mmselfsup.models.memories
     :members:
 
-necks
-^^^^^^^^^^
-.. automodule:: mmselfsup.models.necks
-    :members:
-
 utils
 ^^^^^^^^^^
 .. automodule:: mmselfsup.models.utils
     :members:
 
+mmselfsup.structures
+---------------
+.. automodule:: mmselfsup.structures
+    :members:
+
+mmselfsup.visualization
+---------------
+.. automodule:: mmselfsup.visualization
+    :members:
 
 mmselfsup.utils
 ---------------

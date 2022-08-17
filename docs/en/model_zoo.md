@@ -2,7 +2,17 @@
 
 All models and part of benchmark results are recorded below.
 
-## Pre-trained models
+- [Model Zoo](#model-zoo)
+  - [Statistics](#statistics)
+  - [Benchmarks](#benchmarks)
+    - [ImageNet Linear Evaluation](#imagenet-linear-evaluation)
+    - [ImageNet Fine-tuning](#imagenet-fine-tuning)
+
+## Statistics
+
+- Number of papers: 17
+
+- Number of checkpoints: xx ckpts
 
 | Algorithm                                                                                                          | Config                                                                                                                                                                                       | Download                                                                                                                                                                                                                                                                  |
 | ------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -68,36 +78,3 @@ If not specified, we use linear evaluation setting from [MoCo](http://openaccess
 | MAE       | [mae_vit-base-p16_8xb512-coslr-400e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k.py)              |         | 83.1      |
 | SimMIM    | [simmim_swin-base_16xb128-coslr-100e_in1k-192](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simmim/simmim_swin-base_16xb128-coslr-100e_in1k-192.py) |         | 82.9      |
 | CAE       | [cae_vit-base-p16_8xb256-fp16-coslr-300e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/cae/cae_vit-base-p16_8xb256-fp16-coslr-300e_in1k.py)    |         | 83.2      |
-
-### COCO17 Object Detection and Instance Segmentation
-
-In COCO17 object detection and instance segmentation task, we choose the evaluation protocol from [MoCo](http://openaccess.thecvf.com/content_CVPR_2020/papers/He_Momentum_Contrast_for_Unsupervised_Visual_Representation_Learning_CVPR_2020_paper.pdf), with Mask-RCNN FPN architecture. The results below are fine-tuned with the same [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/mmdetection/coco/mask_rcnn_r50_fpn_mstrain_1x_coco.py).
-
-| Algorithm           | Config                                                                                                                                                                                   | mAP (Box) | mAP (Mask) |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---------- |
-| Relative Location   | [relative-loc_resnet50_8xb64-steplr-70e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k.py)           | 37.5      | 33.7       |
-| Rotation Prediction | [rotation-pred_resnet50_8xb16-steplr-70e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py)        | 37.9      | 34.2       |
-| NPID                | [npid_resnet50_8xb32-steplr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py)                                 | 38.5      | 34.6       |
-| SimCLR              | [simclr_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simclr/simclr_resnet50_8xb32-coslr-200e_in1k.py)                             | 38.7      | 34.9       |
-| MoCo v2             | [mocov2_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py)                             | 40.2      | 36.1       |
-| BYOL                | [byol_resnet50_8xb32-accum16-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py)                   | 40.9      | 36.8       |
-| SwAV                | [swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py) | 40.2      | 36.3       |
-| SimSiam             | [simsiam_resnet50_8xb32-coslr-100e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py)                          | 38.6      | 34.6       |
-|                     | [simsiam_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k.py)                          | 38.8      | 34.9       |
-
-### Pascal VOC12 Aug Semantic Segmentation
-
-In Pascal VOC12 Aug semantic segmentation task, we choose the evaluation protocol from [MMSeg](https://github.com/open-mmlab/mmsegmentation), with FCN architecture. The results below are fine-tuned with the same [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/mmsegmentation/voc12aug/fcn_r50-d8_512x512_20k_voc12aug.py).
-
-| Algorithm           | Config                                                                                                                                                                                   | mIOU  |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| Relative Location   | [relative-loc_resnet50_8xb64-steplr-70e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k.py)           | 63.49 |
-| Rotation Prediction | [rotation-pred_resnet50_8xb16-steplr-70e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/rotation_pred/rotation-pred_resnet50_8xb16-steplr-70e_in1k.py)        | 64.31 |
-| NPID                | [npid_resnet50_8xb32-steplr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py)                                 | 65.45 |
-| SimCLR              | [simclr_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simclr/simclr_resnet50_8xb32-coslr-200e_in1k.py)                             | 64.03 |
-| MoCo v2             | [mocov2_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py)                             | 67.55 |
-| BYOL                | [byol_resnet50_8xb32-accum16-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/byol/byol_resnet50_8xb32-accum16-coslr-200e_in1k.py)                   | 67.16 |
-| SwAV                | [swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/swav/swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py) | 63.73 |
-| DenseCL             | [densecl_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/densecl/densecl_resnet50_8xb32-coslr-200e_in1k.py)                          | 69.47 |
-| SimSiam             | [simsiam_resnet50_8xb32-coslr-100e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py)                          | 48.35 |
-|                     | [simsiam_resnet50_8xb32-coslr-200e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-200e_in1k.py)                          | 46.27 |
