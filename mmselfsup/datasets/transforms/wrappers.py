@@ -70,7 +70,14 @@ class MultiView(BaseTransform):
             self.transforms.extend([self.pipelines[i]] * num_views[i])
 
     def transform(self, results: dict) -> dict:
-        """Apply transformation to inputs."""
+        """Apply transformation to inputs.
+
+        Args:
+            results (dict): Result dict from previous pipelines.
+
+        Returns:
+            dict: Transformed results.
+        """
         multi_views_outputs = dict(img=[])
         for trans in self.transforms:
             inputs = copy.deepcopy(results)
