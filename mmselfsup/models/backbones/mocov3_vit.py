@@ -36,29 +36,23 @@ class MoCoV3ViT(VisionTransformer):
             Defaults to None.
     """
 
-    arch_zoo = {
-        **dict.fromkeys(
-            ['mocov3-s', 'mocov3-small'], {
-                'embed_dims': 384,
-                'num_layers': 12,
-                'num_heads': 12,
-                'feedforward_channels': 1536,
-            }),
-        **dict.fromkeys(
-            ['b', 'base'], {
-                'embed_dims': 768,
-                'num_layers': 12,
-                'num_heads': 12,
-                'feedforward_channels': 3072
-            }),
-    }
-
     def __init__(self,
                  stop_grad_conv1: bool = False,
                  frozen_stages: int = -1,
                  norm_eval: bool = False,
                  init_cfg: Optional[Union[dict, List[dict]]] = None,
                  **kwargs) -> None:
+
+        # add MoCoV3 ViT-small arch
+        self.arch_zoo.update(
+            dict.fromkeys(
+                ['mocov3-s', 'mocov3-small'], {
+                    'embed_dims': 384,
+                    'num_layers': 12,
+                    'num_heads': 12,
+                    'feedforward_channels': 1536,
+                }))
+
         super().__init__(init_cfg=init_cfg, **kwargs)
         self.patch_size = kwargs['patch_size']
         self.frozen_stages = frozen_stages
