@@ -348,7 +348,7 @@ def summary(models, args):
 
         # Skip if not found any vis_data folder.
         sub_dir = dir_map[model_name]
-        log_files = [f for f in sub_dir.glob('*/vis_data/scalars.json')]
+        log_files = [f for f in sub_dir.glob('*/*/vis_data/scalars.json')]
         if len(log_files) == 0:
             continue
         log_file = sorted(log_files)[-1]
