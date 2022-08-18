@@ -12,7 +12,7 @@ data = dict(samples_per_gpu=512, workers_per_gpu=32)
 optimizer = dict(
     lr=1.5e-4 * 4096 / 256,
     paramwise_options={
-        'norm': dict(weight_decay=0.),
+        'ln': dict(weight_decay=0.),
         'bias': dict(weight_decay=0.),
         'pos_embed': dict(weight_decay=0.),
         'mask_token': dict(weight_decay=0.),
