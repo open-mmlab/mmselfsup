@@ -2,7 +2,6 @@
 from typing import List, Optional, Sequence, Tuple
 
 import torch
-from mmengine.data import BaseDataElement
 from mmengine.model import ImgDataPreprocessor
 
 from mmselfsup.registry import MODELS
@@ -15,44 +14,6 @@ class SelfSupDataPreprocessor(ImgDataPreprocessor):
     Compared with the :class:`mmengine.ImgDataPreprocessor`, this module treats
     each item in `inputs` of input data as a list, instead of torch.Tensor.
     """
-
-    def collate_data(
-            self,
-            data: Sequence[dict]) -> Tuple[List[torch.Tensor], Optional[list]]:
-        """Collating and copying data to the target device.
-
-        This module overwrite the default method by treating each item in
-        ``input`` of the input data as a list.
-
-        Collates the data sampled from dataloader into a list of tensor and
-        list of labels, and then copies tensor to the target device.
-
-        Subclasses could override it to be compatible with the custom format
-        data sampled from custom dataloader.
-
-        Args:
-            data (Sequence[dict]): Data sampled from dataloader.
-
-        Returns:
-            Tuple[List[torch.Tensor], Optional[list]]: Unstacked list of input
-            tensor and list of labels at target device.
-        """
-        inputs = [[img.to(self.device) for img in _data['inputs']]
-                  for _data in data]
-        batch_data_samples: List[BaseDataElement] = []
-        # Model can get predictions without any data samples.
-        for _data in data:
-            if 'data_sample' in _data:
-                batch_data_samples.append(_data['data_sample'])
-        # Move data from CPU to corresponding device.
-        batch_data_samples = [
-            data_sample.to(self.device) for data_sample in batch_data_samples
-        ]
-
-        if not batch_data_samples:
-            batch_data_samples = None  # type: ignore
-
-        return inputs, batch_data_samples
 
     def forward(
             self,
@@ -72,24 +33,24 @@ class SelfSupDataPreprocessor(ImgDataPreprocessor):
             Tuple[torch.Tensor, Optional[list]]: Data in the same format as the
             model input.
         """
-        inputs, batch_data_samples = self.collate_data(data)
+        batch_inputs, batch_data_samples = self.cast_data(data)
         # channel transform
-        if self.channel_conversion:
-            inputs = [[img_[[2, 1, 0], ...] for img_ in _input]
-                      for _input in inputs]
+        if self._channel_conversion:
+            batch_inputs = [
+                _input[:, [2, 1, 0], ...] for _input in batch_inputs
+            ]
+
+        # Convert to float after channel conversion to ensure
+        # efficiency
+        batch_inputs = [input_.float() for input_ in batch_inputs]
 
         # Normalization. Here is what is different from
         # :class:`mmengine.ImgDataPreprocessor`. Since there are multiple views
         # for an image for some  algorithms, e.g. SimCLR, each item in inputs
         # is a list, containing multi-views for an image.
         if self._enable_normalize:
-            inputs = [[(img_ - self.mean) / self.std for img_ in _input]
-                      for _input in inputs]
-
-        batch_inputs = []
-        for i in range(len(inputs[0])):
-            cur_batch = [img[i] for img in inputs]
-            batch_inputs.append(torch.stack(cur_batch))
+            batch_inputs = [(_input - self.mean) / self.std
+                            for _input in batch_inputs]
 
         return batch_inputs, batch_data_samples
 
@@ -116,25 +77,7 @@ class RelativeLocDataPreprocessor(SelfSupDataPreprocessor):
             Tuple[torch.Tensor, Optional[list]]: Data in the same format as the
             model input.
         """
-        inputs, batch_data_samples = self.collate_data(data)
-        # channel transform
-        if self.channel_conversion:
-            inputs = [[img_[[2, 1, 0], ...] for img_ in _input]
-                      for _input in inputs]
-
-        # Normalization. Here is what is different from
-        # :class:`mmengine.ImgDataPreprocessor`. Since there are multiple views
-        # for an image for some  algorithms, e.g. SimCLR, each item in inputs
-        # is a list, containing multi-views for an image.
-        if self._enable_normalize:
-            inputs = [[(img_ - self.mean) / self.std for img_ in _input]
-                      for _input in inputs]
-
-        batch_inputs = []
-        for i in range(len(inputs[0])):
-            cur_batch = [img[i] for img in inputs]
-            batch_inputs.append(torch.stack(cur_batch))
-
+        batch_inputs, batch_data_samples = super().forward(data, training)
         # This part is unique to Relative Loc
         img1 = torch.stack(batch_inputs[1:], 1)  # Nx8xCxHxW
         img1 = img1.view(
@@ -172,24 +115,7 @@ class RotationPredDataPreprocessor(SelfSupDataPreprocessor):
             Tuple[torch.Tensor, Optional[list]]: Data in the same format as the
             model input.
         """
-        inputs, batch_data_samples = self.collate_data(data)
-        # channel transform
-        if self.channel_conversion:
-            inputs = [[img_[[2, 1, 0], ...] for img_ in _input]
-                      for _input in inputs]
-
-        # Normalization. Here is what is different from
-        # :class:`mmengine.ImgDataPreprocessor`. Since there are multiple views
-        # for an image for some  algorithms, e.g. SimCLR, each item in inputs
-        # is a list, containing multi-views for an image.
-        if self._enable_normalize:
-            inputs = [[(img_ - self.mean) / self.std for img_ in _input]
-                      for _input in inputs]
-
-        batch_inputs = []
-        for i in range(len(inputs[0])):
-            cur_batch = [img[i] for img in inputs]
-            batch_inputs.append(torch.stack(cur_batch))
+        batch_inputs, batch_data_samples = super().forward(data, training)
 
         # This part is unique to Rotation Pred
         img = torch.stack(batch_inputs, 1)  # Nx4xCxHxW
@@ -228,21 +154,22 @@ class CAEDataPreprocessor(SelfSupDataPreprocessor):
             Tuple[torch.Tensor, Optional[list]]: Data in the same format as the
             model input.
         """
-        inputs, batch_data_samples = self.collate_data(data)
+        batch_inputs, batch_data_samples = self.cast_data(data)
         # channel transform
-        if self.channel_conversion:
-            inputs = [[img_[[2, 1, 0], ...] for img_ in _input]
-                      for _input in inputs]
+        if self._channel_conversion:
+            batch_inputs = [
+                _input[:, [2, 1, 0], ...] for _input in batch_inputs
+            ]
+
+        # Convert to float after channel conversion to ensure
+        # efficiency
+        batch_inputs = [input_.float() for input_ in batch_inputs]
 
         # Normalization. Here is what is different from
         # :class:`mmselfsup.SelfSupDataPreprocessor`. Normalize the target
         # image and prediction image with different normalization params
-        inputs = [[(_input[0] - self.mean) / self.std,
-                   _input[1] / 255. * 0.8 + 0.1] for _input in inputs]
-
-        batch_inputs = []
-        for i in range(len(inputs[0])):
-            cur_batch = [img[i] for img in inputs]
-            batch_inputs.append(torch.stack(cur_batch))
+        if self._enable_normalize:
+            batch_inputs = [(batch_inputs[0] - self.mean) / self.std,
+                            batch_inputs[1] / 255. * 0.8 + 0.1]
 
         return batch_inputs, batch_data_samples

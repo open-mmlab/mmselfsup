@@ -38,6 +38,7 @@ train_dataloader = dict(
     num_workers=4,
     persistent_workers=True,
     sampler=dict(type='DeepClusterSampler', shuffle=True, replace=True),
+    collate_fn=dict(type='default_collate'),
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
@@ -54,6 +55,7 @@ custom_hooks = [
             num_workers=8,
             persistent_workers=True,
             sampler=dict(type='DefaultSampler', shuffle=False, round_up=False),
+            collate_fn=dict(type='default_collate'),
             dataset=dict(
                 type=dataset_type,
                 data_root=data_root,
