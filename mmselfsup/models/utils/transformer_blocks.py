@@ -9,7 +9,7 @@ from mmcls.models.utils import MultiheadAttention as _MultiheadAttention
 from mmcv.cnn import build_norm_layer
 from mmcv.cnn.bricks.drop import build_dropout
 from mmcv.cnn.bricks.transformer import FFN
-from mmcv.runner.base_module import BaseModule
+from mmengine.model import BaseModule
 from torch.nn import functional as F
 
 
