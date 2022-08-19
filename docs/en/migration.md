@@ -66,7 +66,7 @@ train_dataloader = dict(
 val_dataloader = ...
 ```
 
-Besides, we remove the key of `data_source` to keep the consistent pipeline format with other OpenMMLab projects. Please refer to [datasets.md](advanced_guides/datasets.md) and [transforms.md](advanced_guides/transforms.md) for more details.
+Besides, we remove the key of `data_source` to keep the consistent pipeline format with other OpenMMLab projects. Please refer to [1_config.md](user_guides/1_config.md) for more details.
 
 #### Models
 
