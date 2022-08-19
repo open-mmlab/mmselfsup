@@ -76,9 +76,7 @@ Besides, we remove the key of `data_source` to keep the consistent pipeline form
 
 In the config of models, there are two main different parts from MMSeflSup 0.x.
 
-1. There is a new key called `data_preprocessor`, which is responsible for preprocessing the data, like normalization, channel conversion, etc.
-
-For example:
+1. There is a new key called `data_preprocessor`, which is responsible for preprocessing the data, like normalization, channel conversion, etc. For example:
 
 ```python
 model = dict(
@@ -93,9 +91,7 @@ model = dict(
     init_cfg=...)
 ```
 
-2. There is a new key `loss` in `head` in MMSelfSup 1.x, to determine the loss function of the algorithm.
-
-For example:
+2. There is a new key `loss` in `head` in MMSelfSup 1.x, to determine the loss function of the algorithm. For example:
 
 ```python
 model = dict(
