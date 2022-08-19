@@ -57,6 +57,12 @@ def test_densecl():
     assert alg.queue.size() == torch.Size([feat_dim, queue_len])
     assert alg.queue2.size() == torch.Size([feat_dim, queue_len])
 
+    alg.init_weights()
+    for param_q, param_k in zip(alg.encoder_q.parameters(),
+                                alg.encoder_k.parameters()):
+        assert torch.equal(param_q, param_k)
+        assert param_k.requires_grad is False
+
     fake_input = torch.randn((2, 3, 224, 224))
     with pytest.raises(AssertionError):
         fake_out = alg.forward_train(fake_input)
