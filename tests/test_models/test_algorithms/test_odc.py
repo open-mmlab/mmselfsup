@@ -8,6 +8,9 @@ from mmengine.data import InstanceData
 
 from mmselfsup.models.algorithms import ODC
 from mmselfsup.structures import SelfSupDataSample
+from mmselfsup.utils import register_all_modules
+
+register_all_modules()
 
 num_classes = 5
 backbone = dict(

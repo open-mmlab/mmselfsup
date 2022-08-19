@@ -7,6 +7,9 @@ from mmengine.data import InstanceData
 
 from mmselfsup.models.algorithms import CAE
 from mmselfsup.structures import SelfSupDataSample
+from mmselfsup.utils import register_all_modules
+
+register_all_modules()
 
 # model settings
 backbone = dict(type='CAEViT', arch='b', patch_size=16, init_values=0.1)

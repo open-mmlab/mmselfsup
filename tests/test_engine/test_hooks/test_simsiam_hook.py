@@ -104,7 +104,8 @@ class TestSimSiamHook(TestCase):
             custom_hooks=[simsiam_hook],
             default_hooks=dict(logger=None),
             log_processor=dict(window_size=1),
-            experiment_name='test_simsiam_hook')
+            experiment_name='test_simsiam_hook',
+            default_scope='mmselfsup')
 
         runner.train()
 

@@ -107,7 +107,8 @@ class TestSwAVHook(TestCase):
             custom_hooks=[swav_hook],
             default_hooks=dict(logger=None),
             log_processor=dict(window_size=1),
-            experiment_name='test_swav_hook')
+            experiment_name='test_swav_hook',
+            default_scope='mmselfsup')
 
         runner.train()
 

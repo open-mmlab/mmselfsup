@@ -7,7 +7,9 @@ import torch
 
 from mmselfsup.models.algorithms.byol import BYOL
 from mmselfsup.structures import SelfSupDataSample
+from mmselfsup.utils import register_all_modules
 
+register_all_modules()
 backbone = dict(
     type='ResNet',
     depth=18,
