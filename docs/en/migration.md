@@ -17,7 +17,7 @@
 
 ## Migration from MMSelfSup 0.x
 
-In this section, it explains some modifications of MMSelfSup 1.x.  
+In this section, it explains some modifications of MMSelfSup 1.x.
 
 ### Config
 
@@ -47,7 +47,7 @@ data = dict(
     val=...)
 ```
 
-In **MMSelfSup 1.x**, we seperate `train_dataloader`, `val_dataloader` to summarize information correspodingly.
+In **MMSelfSup 1.x**, we separate `train_dataloader`, `val_dataloader` to summarize information correspodingly.
 
 Here is an example of `train_dataloader`:
 
@@ -72,7 +72,7 @@ Besides, we remove the key of `data_source` to keep the consistent pipeline form
 
 In the config of models, there are two main different parts.
 
-One is that there is a new key called `data_preprocessor`, which is responsible for preprocessing the data, like normalization, channel convertion, etc.
+One is that there is a new key called `data_preprocessor`, which is responsible for preprocessing the data, like normalization, channel conversion, etc.
 
 The other one is that a new key `loss` in `head` to determine the loss function of the algorithm.
 
