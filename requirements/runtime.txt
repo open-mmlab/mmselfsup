@@ -4,8 +4,8 @@ matplotlib
 mmcls
 numpy
 packaging
+scikit-learn
 scipy
 six
-sklearn
 tensorboard
 tqdm
