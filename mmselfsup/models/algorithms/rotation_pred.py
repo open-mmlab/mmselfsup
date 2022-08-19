@@ -25,7 +25,7 @@ class RotationPred(BaseModel):
             batch_inputs (List[torch.Tensor]): The input images.
 
         Returns:
-            Tuple[torch.Tensor]: backbone outputs.
+            Tuple[torch.Tensor]: Backbone outputs.
         """
 
         x = self.backbone(batch_inputs[0])
@@ -34,7 +34,7 @@ class RotationPred(BaseModel):
     def loss(self, batch_inputs: List[torch.Tensor],
              data_samples: List[SelfSupDataSample],
              **kwargs) -> Dict[str, torch.Tensor]:
-        """Forward computation during training.
+        """The forward function in training.
 
         Args:
             batch_inputs (List[torch.Tensor]): The input images.

@@ -14,7 +14,7 @@ class SwAV(BaseModel):
 
     Implementation of `Unsupervised Learning of Visual Features by Contrasting
     Cluster Assignments <https://arxiv.org/abs/2006.09882>`_. The queue is
-    built in `core/hooks/swav_hook.py`.
+    built in `engine/hooks/swav_hook.py`.
     """
 
     def extract_feat(self, batch_inputs: List[torch.Tensor],

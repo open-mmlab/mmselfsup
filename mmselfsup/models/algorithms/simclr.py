@@ -59,7 +59,7 @@ class SimCLR(BaseModel):
     def loss(self, batch_inputs: List[torch.Tensor],
              data_samples: List[SelfSupDataSample],
              **kwargs) -> Dict[str, torch.Tensor]:
-        """Forward computation during training.
+        """The forward function in training.
 
         Args:
             batch_inputs (List[torch.Tensor]): The input images.

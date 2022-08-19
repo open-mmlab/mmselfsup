@@ -2,7 +2,6 @@
 from typing import Dict, List, Optional, Tuple, Union
 
 import torch
-import torch.nn as nn
 from mmengine.data import LabelData
 
 from mmselfsup.registry import MODELS
@@ -16,16 +15,21 @@ class DeepCluster(BaseModel):
 
     Implementation of `Deep Clustering for Unsupervised Learning
     of Visual Features <https://arxiv.org/abs/1807.05520>`_.
-    The clustering operation is in `core/hooks/deepcluster_hook.py`.
+    The clustering operation is in `engine/hooks/deepcluster_hook.py`.
 
     Args:
         backbone (dict): Config dict for module of backbone.
         neck (dict): Config dict for module of deep features to compact
             feature vectors.
         head (dict): Config dict for module of head functions.
-        data_preprocessor (dict or nn.Module, optional): Config to preprocess
-            images. Defaults to None.
-        init_cfg (dict or List[dict], optional): Config dict for weight
+        pretrained (str, optional): The pretrained checkpoint path, support
+            local path and remote path. Defaults to None.
+        data_preprocessor (dict, optional): The config for preprocessing
+            input data. If None or no specified type, it will use
+            "SelfSupDataPreprocessor" as type.
+            See :class:`SelfSupDataPreprocessor` for more details.
+            Defaults to None.
+        init_cfg (Union[List[dict], dict], optional): Config dict for weight
             initialization. Defaults to None.
     """
 
@@ -34,7 +38,7 @@ class DeepCluster(BaseModel):
                  neck: dict,
                  head: dict,
                  pretrained: Optional[str] = None,
-                 data_preprocessor: Optional[Union[dict, nn.Module]] = None,
+                 data_preprocessor: Optional[dict] = None,
                  init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
         super().__init__(
             backbone=backbone,
@@ -57,11 +61,9 @@ class DeepCluster(BaseModel):
 
         Args:
             batch_inputs (List[torch.Tensor]): The input images.
-            data_samples (List[SelfSupDataSample]): All elements required
-                during the forward function.
 
         Returns:
-            Tuple[torch.Tensor]: backbone outputs.
+            Tuple[torch.Tensor]: Backbone outputs.
         """
         x = self.backbone(batch_inputs[0])
         return x

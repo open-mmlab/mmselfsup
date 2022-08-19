@@ -16,7 +16,6 @@ class BYOL(BaseModel):
 
     Implementation of `Bootstrap Your Own Latent: A New Approach to
     Self-Supervised Learning <https://arxiv.org/abs/2006.07733>`_.
-    The momentum adjustment is in `core/hooks/byol_hook.py`.
 
     Args:
         backbone (dict): Config dict for module of backbone.
@@ -27,9 +26,12 @@ class BYOL(BaseModel):
             network. Defaults to 0.996.
         pretrained (str, optional): The pretrained checkpoint path, support
             local path and remote path. Defaults to None.
-        data_preprocessor (dict, optional): Config dict to preprocess images.
+        data_preprocessor (dict, optional): The config for preprocessing
+            input data. If None or no specified type, it will use
+            "SelfSupDataPreprocessor" as type.
+            See :class:`SelfSupDataPreprocessor` for more details.
             Defaults to None.
-        init_cfg (dict or List[dict], optional): Config dict for weight
+        init_cfg (Union[List[dict], dict], optional): Config dict for weight
             initialization. Defaults to None.
     """
 
@@ -40,7 +42,7 @@ class BYOL(BaseModel):
                  base_momentum: float = 0.996,
                  pretrained: Optional[str] = None,
                  data_preprocessor: Optional[dict] = None,
-                 init_cfg: Optional[Union[dict, List[dict]]] = None) -> None:
+                 init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
         super().__init__(
             backbone=backbone,
             neck=neck,
@@ -58,10 +60,10 @@ class BYOL(BaseModel):
         """Function to extract features from backbone.
 
         Args:
-            inputs (List[torch.Tensor]): The input images.
+            batch_inputs (List[torch.Tensor]): The input images.
 
         Returns:
-            Tuple[torch.Tensor]: backbone outputs.
+            Tuple[torch.Tensor]: Backbone outputs.
         """
         x = self.backbone(batch_inputs[0])
         return x
@@ -69,7 +71,7 @@ class BYOL(BaseModel):
     def loss(self, batch_inputs: List[torch.Tensor],
              data_samples: List[SelfSupDataSample],
              **kwargs) -> Dict[str, torch.Tensor]:
-        """Forward computation during training.
+        """The forward function in training.
 
         Args:
             batch_inputs (List[torch.Tensor]): The input images.

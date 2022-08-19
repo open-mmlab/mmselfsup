@@ -12,10 +12,11 @@ from mmselfsup.utils import AliasMethod
 
 @MODELS.register_module()
 class SimpleMemory(BaseModule):
-    """Simple memory bank (e.g., for NPID).
+    """Simple feature memory bank.
 
     This module includes the memory bank that stores running average
-    features of all samples in the dataset.
+    features of all samples in the dataset. It is used in algorithms
+    like NPID.
 
     Args:
         length (int): Number of features stored in the memory bank.
@@ -33,7 +34,7 @@ class SimpleMemory(BaseModule):
         self.multinomial = AliasMethod(torch.ones(length))
 
     def update(self, idx: torch.Tensor, feature: torch.Tensor) -> None:
-        """Update features in memory bank.
+        """Update features in the memory bank.
 
         Args:
             idx (torch.Tensor): Indices for the batch of features.

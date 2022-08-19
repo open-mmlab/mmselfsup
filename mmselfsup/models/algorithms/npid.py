@@ -21,19 +21,19 @@ class NPID(BaseModel):
         neck (dict): Config dict for module of deep features to
             compact feature vectors.
         head (dict): Config dict for module of head functions.
-        memory_bank (dict): Config dict for module of memory banks.
+        memory_bank (dict): Config dict for module of memory bank.
         neg_num (int): Number of negative samples for each image.
             Defaults to 65536.
         ensure_neg (bool): If False, there is a small probability
             that negative samples contain positive ones. Defaults to False.
         pretrained (str, optional): The pretrained checkpoint path, support
             local path and remote path. Defaults to None.
-        data_preprocessor (Union[dict, nn.Module], optional): The config for
-            preprocessing input data. If None or no specified type, it will use
+        data_preprocessor (dict, optional): The config for preprocessing
+            input data. If None or no specified type, it will use
             "SelfSupDataPreprocessor" as type.
             See :class:`SelfSupDataPreprocessor` for more details.
             Defaults to None.
-        init_cfg (Dict or List[Dict], optional): Config dict for weight
+        init_cfg (Union[List[dict], dict], optional): Config dict for weight
             initialization. Defaults to None.
     """
 
@@ -45,8 +45,8 @@ class NPID(BaseModel):
                  neg_num: int = 65536,
                  ensure_neg: bool = False,
                  pretrained: Optional[str] = None,
-                 data_preprocessor: Optional[Union[dict, nn.Module]] = None,
-                 init_cfg: Optional[Union[dict, List[dict]]] = None) -> None:
+                 data_preprocessor: Optional[dict] = None,
+                 init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
         super().__init__(
             backbone=backbone,
             neck=neck,
@@ -66,11 +66,9 @@ class NPID(BaseModel):
 
         Args:
             batch_inputs (List[torch.Tensor]): The input images.
-            data_samples (List[SelfSupDataSample]): All elements required
-                during the forward function.
 
         Returns:
-            Tuple[torch.Tensor]: backbone outputs.
+            Tuple[torch.Tensor]: Backbone outputs.
         """
         x = self.backbone(batch_inputs[0])
         return x

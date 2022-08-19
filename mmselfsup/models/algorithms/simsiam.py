@@ -14,7 +14,7 @@ class SimSiam(BaseModel):
 
     Implementation of `Exploring Simple Siamese Representation Learning
     <https://arxiv.org/abs/2011.10566>`_. The operation of fixing learning rate
-    of predictor is in `core/hooks/simsiam_hook.py`.
+    of predictor is in `engine/hooks/simsiam_hook.py`.
     """
 
     def extract_feat(self, batch_inputs: List[torch.Tensor],
@@ -25,7 +25,7 @@ class SimSiam(BaseModel):
             batch_inputs (List[torch.Tensor]): The input images.
 
         Returns:
-            Tuple[torch.Tensor]: backbone outputs.
+            Tuple[torch.Tensor]: Backbone outputs.
         """
         return self.backbone(batch_inputs[0])
 

@@ -24,11 +24,9 @@ class BarlowTwins(BaseModel):
 
         Args:
             batch_inputs (List[torch.Tensor]): The input images.
-            data_samples (List[SelfSupDataSample]): All elements required
-                during the forward function.
 
         Returns:
-            Tuple[torch.Tensor]: backbone outputs.
+            Tuple[torch.Tensor]: Backbone outputs.
         """
         x = self.backbone(batch_inputs[0])
         return x
@@ -36,7 +34,7 @@ class BarlowTwins(BaseModel):
     def loss(self, batch_inputs: List[torch.Tensor],
              data_samples: List[SelfSupDataSample],
              **kwargs) -> Dict[str, torch.Tensor]:
-        """Forward computation during training.
+        """The forward function in training.
 
         Args:
             batch_inputs (List[torch.Tensor]): The input images.
