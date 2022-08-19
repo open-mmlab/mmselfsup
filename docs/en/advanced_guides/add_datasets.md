@@ -1,9 +1,10 @@
 # Add Datasets
 
-In this tutorial, we introduce the basic steps to create your customized dataset:
+In this tutorial, we introduce the basic steps to create your customized dataset. Before learning to to create your customized datasets, it is recommended to learn the basic concept of datasets in file [datasets.md](datasets.md).
 
 - [Add Datasets](#add-datasets)
   - [Creating the Dataset](#creating-the-dataset)
+  - [Add NewDataset to \_\_init\_\_py](#add-newdataset-to-__init__py)
   - [Modify config file](#modify-config-file)
 
 If your algorithm does not need any customized dataset, you can use these off-the-shelf datasets under [datasets directory](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/mmselfsup/datasets). But to use these existing datasets, you have to convert your dataset to existing dataset format.
@@ -44,14 +45,18 @@ class NewDataset(CustomDataset):
             **kwargs)
 
     def load_data_list(self) -> List[dict]:
-        """Rewrite load_data_list() for your specific requirement. The returned
-        data_list could include any information you need from data."""
+        # Rewrite load_data_list() to satisfy your specific requirement.
+        # The returned data_list could include any information you need from
+        # data or transforms.
+
         # writing your code here
         return data_list
-        
+
 ```
 
-Then, add `NewDataset` in `mmselfsup/dataset/__init__.py`.
+## Add NewDataset to \_\_init\_\_py
+
+Then, add `NewDataset` in `mmselfsup/dataset/__init__.py`. If it is not imported, the `NewDataset` will not be registered successfully.
 
 ```python
 ...

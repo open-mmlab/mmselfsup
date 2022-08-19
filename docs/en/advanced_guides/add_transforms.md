@@ -1,12 +1,14 @@
 # Add Transforms
 
+In this tutorial, we introduce the basic steps to create your customized transforms. Before learning to to create your customized transforms, it is recommended to learn the basic concept of transforms in file [transforms.md](transforms.md).
+
 - [Add Transforms](#add-transforms)
   - [Overview of Pipeline](#overview-of-pipeline)
-  - [Creating new transforms in Pipeline](#creating-new-transforms-in-pipeline)
+  - [Creating a new transform in Pipeline](#creating-a-new-transform-in-pipeline)
 
 ## Overview of Pipeline
 
-`Pipeline` is an important component in `Dataset`, which is responsible for applying a series of data augmentations to images, such as `RandomResizedCrop`, `RandomFlip`.
+`Pipeline` is an important component in `Dataset`, which is responsible for applying a series of data augmentations to images, such as `RandomResizedCrop`, `RandomFlip`, etc.
 
 Here is a config example of `Pipeline` for `SimCLR` training:
 
@@ -40,9 +42,9 @@ train_pipeline = [
 ]
 ```
 
-Every augmentation in the `Pipeline` receives a `Dict` as input and outputs a `Dict` containing the augmented image and other related information.
+Every augmentation in the `Pipeline` receives a `dict` as input and outputs a `dict` containing the augmented image and other related information.
 
-## Creating new transforms in Pipeline
+## Creating a new transform in Pipeline
 
 1. Write a new transform in [transforms.py](https://github.com/open-mmlab/mmselfsup/tree/1.x/mmselfsup/datasets/transforms) and overwrite the `transform` function, which takes a `Dict` as input:
 
@@ -52,14 +54,14 @@ class MyTransform(BaseTransform):
     """Docstring for transform.
     """
 
-    def transform(self, results: Dict) -> Dict:
+    def transform(self, results: dict) -> dict:
         # apply transform
         return results
 ```
 
 Then, add the transform to [__init__.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/__init__.py).
 
-**Note:** For the implementation of transforms, you could apply functions from [mmcv](https://github.com/open-mmlab/mmcv/tree/2.x/mmcv/image).
+**Note:** For the implementation of transforms, you could apply functions in [mmcv](https://github.com/open-mmlab/mmcv/tree/2.x/mmcv/image).
 
 2. Add `MyTransform` to config.
 
@@ -84,7 +86,7 @@ view_pipeline = [
         type='RandomGrayscale',
         prob=0.2,
         keep_channels=True,
-        channel_weights=(0.114, 0.587, 0.299)),
+        channel_weights=(0.114, 0.587, 0.2989)),
     dict(type='RandomGaussianBlur', sigma_min=0.1, sigma_max=2.0, prob=0.5),
 ]
 
