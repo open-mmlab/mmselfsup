@@ -129,7 +129,7 @@ The table below records the general modification of the folders and files.
 | apis                  | /                   | Currently, the `apis` folder has been **removed**, it might be added in the future.                                                                       |
 | core                  | engine              | The `core` folder has been renamed to `engine`, which includes `hooks`, `opimizers`.                                                                      |
 | datasets              | datasets            | The datasets is implemented according to different datasets, such as ImageNet, Places205.                                                                 |
-| datasets/data_sources | /                   | The `data_sources` has been removed and the directory of `datasets` now is consistent with other OpenMMLab projects.                                      |
+| datasets/data_sources | /                   | The `data_sources` has been **removed** and the directory of `datasets` now is consistent with other OpenMMLab projects.                                  |
 | datasets/pipelines    | datasets/transforms | The `pipelines` folder has been renamed to `transforms`.                                                                                                  |
 | /                     | evaluation          | The `evaluation` is created for some evaluation functions or classes, such as KNN function or layer for detection.                                        |
 | /                     | models/losses       | The `losses` folder is created to provide different loss implementation, which is from `heads`                                                            |
