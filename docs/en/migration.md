@@ -2,15 +2,104 @@
 
 - [Migration](#migration)
   - [Migration from MMSelfSup 0.x](#migration-from-mmselfsup-0x)
-  - [Differences between MMSelfSup and OpenSelfSup](#differences-between-mmselfsup-and-openselfsup)
-    - [Modular Design](#modular-design)
+    - [Config](#config)
       - [Datasets](#datasets)
       - [Models](#models)
+      - [Schedules](#schedules)
+    - [Folders and Files](#folders-and-files)
+  - [Differences between MMSelfSup and OpenSelfSup](#differences-between-mmselfsup-and-openselfsup)
+    - [Modular Design](#modular-design)
+      - [Datasets](#datasets-1)
+      - [Models](#models-1)
     - [Codebase Conventions](#codebase-conventions)
       - [Configs](#configs)
       - [Scripts](#scripts)
 
 ## Migration from MMSelfSup 0.x
+
+In this section, it explains some modifications of MMSelfSup 1.x.  
+
+### Config
+
+This part shows the three main parts of our config files in `_base_` folder.
+
+#### Datasets
+
+In **MMSelfSup 0.x**, we use key `data` to summarize all information, such as `samples_per_gpu`, `train`, `val`, etc.
+
+For example:
+
+```python
+data = dict(
+    samples_per_gpu=32,  # total 32*8(gpu)=256
+    workers_per_gpu=4,
+    train=dict(
+        type=dataset_type,
+        data_source=dict(
+            type=data_source,
+            data_prefix='data/imagenet/train',
+            ann_file='data/imagenet/meta/train.txt',
+        ),
+        num_views=[1, 1],
+        pipelines=[train_pipeline1, train_pipeline2],
+        prefetch=prefetch,
+    ),
+    val=...)
+```
+
+In **MMSelfSup 1.x**, we seperate `train_dataloader`, `val_dataloader` to summarize information correspodingly.
+
+Here is an example of `train_dataloader`:
+
+```python
+train_dataloader = dict(
+    batch_size=32,
+    num_workers=4,
+    persistent_workers=True,
+    sampler=dict(type='DefaultSampler', shuffle=True),
+    dataset=dict(
+        type=dataset_type,
+        data_root=data_root,
+        ann_file='meta/train.txt',
+        data_prefix=dict(img_path='train/'),
+        pipeline=train_pipeline))
+val_dataloader = ...
+```
+
+Besides, we remove the key of `data_source` to keep the consistent pipeline format with other OpenMMLab projects. Please refer to [datasets.md](advanced_guides/datasets.md) and [transforms.md](advanced_guides/transforms.md) for more details.
+
+#### Models
+
+In the config of models, there are two main different parts.
+
+One is that there is a new key called `data_preprocessor`, which is responsible for preprocessing the data, like normalization, channel convertion, etc.
+
+The other one is that a new key `loss` in `head` to determine the loss function of the algorithm.
+
+#### Schedules
+
+| MMSelfSup 0.x    | MMSelfSup 1.x   | Remark                                                                                                                          |
+| ---------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| optimizer_config | /               | It is removed.                                                                                                                  |
+| /                | optim_wrapper   | The `optim_wrapper` provides a common interface for updating parameters.                                                        |
+| lr_config        | param_scheduler | The `param_scheduler` is a list to set learning rate or other parameters, which is more flexible.                               |
+| runner           | train_cfg       | The loop setting (`EpochBasedTrainLoop`, `IterBasedTrainLoop`) in `train_cfg` controls the work flow of the algorithm training. |
+
+### Folders and Files
+
+The table below records the general modification of the folders and files.
+
+| MMSelfSup 0.x         | MMSelfSup 1.x       | Remark                                                                                                                                                   |
+| --------------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| apis                  | /                   | Currently, the `apis` folder has been removed, it might be added in the future.                                                                          |
+| core                  | engine              | The `core` folder has been renamed to `engine`, which includes `hooks`, `opimizers`.                                                                     |
+| datasets              | datasets            | The datasets is implemented according to different datasets, such as ImageNet, Places205.                                                                |
+| datasets/data_sources | /                   | The `data_sources` has been removed and the directory of `datasets` now is consistent with other OpenMMLab projects.                                     |
+| datasets/pipelines    | datasets/transforms | The `pipelines` folder has been renamed to `transforms`.                                                                                                 |
+| /                     | evaluation          | The `evaluation` is created for some evaluation functions or classes, such as KNN function or layer for detection.                                       |
+| /                     | models/losses       | The `losses` folder is created to provide different loss implementation, which is from `heads`                                                           |
+| /                     | structures          | The `structures` folder is for the implementation of data structures. In MMSelfSup, we provide `selfsup_data_sample` to save different data information. |
+| /                     | visualization       | The `visualization` folder contains the visualizer, which is responsible for some visualization tasks like visualizing data augment.                     |
 
 ## Differences between MMSelfSup and OpenSelfSup
 
