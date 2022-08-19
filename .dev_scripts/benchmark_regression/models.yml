@@ -1,0 +1,35 @@
+- Name: mae_vit-base-p16_8xb512-coslr-400e_in1k
+  ClsConfig: configs/benchmarks/classification/imagenet/vit-base-p16_ft-8xb128-coslr-100e_in1k.py
+  Cycle: month
+
+- Name: mocov3_vit-small-p16_16xb256-fp16-coslr-300e_in1k-224
+  ClsConfig: configs/benchmarks/classification/imagenet/vit-small-p16_linear-8xb128-coslr-90e_in1k.py
+  Cycle: month
+
+- Name: simmim_swin-base_8xb256-coslr-100e_in1k-192
+  ClsConfig: configs/benchmarks/classification/imagenet/swin-base_ft-8xb256-coslr-100e_in1k.py
+  Cycle: month
+
+- Name: simclr_resnet50_8xb32-coslr-200e_in1k
+  ClsConfig: configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-steplr-100e_in1k.py
+  Cycle: month
+
+- Name: byol_resnet50_8xb32-accum16-coslr-200e_in1k
+  ClsConfig: configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-steplr-100e_in1k.py
+  Cycle: month
+
+- Name: mocov2_resnet50_8xb32-coslr-200e_in1k
+  ClsConfig: configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-steplr-100e_in1k.py
+  Cycle: quarter
+
+- Name: simsiam_resnet50_8xb32-coslr-100e_in1k
+  ClsConfig: configs/benchmarks/classification/imagenet/resnet50_linear-8xb512-coslr-90e_in1k.py
+  Cycle: quarter
+
+- Name: densecl_resnet50_8xb32-coslr-200e_in1k
+  ClsConfig: configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-steplr-100e_in1k.py
+  Cycle: quarter
+
+- Name: swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96
+  ClsConfig: configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-coslr-100e_in1k.py
+  Cycle: quarter
