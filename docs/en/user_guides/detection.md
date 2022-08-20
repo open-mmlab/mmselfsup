@@ -75,5 +75,5 @@ Example:
 ```shell
 bash ./tools/benchmarks/mmdetection/mim_dist_test.sh \
 configs/benchmarks/mmdetection/coco/mask_rcnn_r50_fpn_mstrain_1x_coco.py \
-work_dir/byol_epoch_200_0805.pth/epoch_12.pth 8
+work_dir/epoch_12.pth 8
 ```
