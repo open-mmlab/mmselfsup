@@ -70,6 +70,36 @@ Remarks:
 - `CONFIG`: Use config files under `configs/benchmarks/classification/`. Specifically, `imagenet` (excluding `imagenet_*percent` folders), `places205` and `inaturalist2018`.
 - `PRETRAIN`: the pre-trained model file.
 
+Example:
+```shell
+bash ./tools/benchmarks/classification/mim_dist_train.sh \
+configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-coslr-100e_in1k.py \
+work_dir/pretrained_model.pth
+```
+
+
+If you want to test the well-trained model, please run the command bellow.
+```shell
+# distributed version
+bash tools/benchmarks/classification/mim_dist_test.sh ${CONFIG} ${CHECKPOINT}
+
+# slurm version
+bash tools/benchmarks/classification//mim_slurm_test.sh ${PARTITION} ${CONFIG} ${CHECKPOINT}
+```
+
+Remarks:
+- `CHECKPOINT`: The well-trained classification model that you want to test.
+
+
+Example:
+```shell
+bash ./tools/benchmarks/mmsegmentation/mim_dist_test.sh \
+configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-coslr-100e_in1k.py \
+work_dir/model.pth
+```
+
+
+
 ## ImageNet Semi-Supervised Classification
 
 To run ImageNet semi-supervised classification, we still use the same `.sh` script as Linear Evaluation to launch training.
