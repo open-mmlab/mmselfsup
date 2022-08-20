@@ -52,7 +52,7 @@ First, make sure you have installed [MIM](https://github.com/open-mmlab/mim), wh
 ```shell
 pip install openmim
 ```
-Besides, please refer to MMClassification for [installation](https://github.com/open-mmlab/mmclassification/blob/dev-1.x/docs/en/install.md) and [data preparation](https://github.com/open-mmlab/mmclassification/blob/dev-1.x/docs/en/getting_started.md)
+Besides, please refer to MMClassification for [installation](https://github.com/open-mmlab/mmclassification/blob/dev-1.x/docs/en/install.md) and [data preparation](https://github.com/open-mmlab/mmclassification/blob/dev-1.x/docs/en/getting_started.md).
 
 Then, run the command below.
 
