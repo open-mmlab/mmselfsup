@@ -5,6 +5,9 @@ In this tutorial, we introduce the basic steps to create your customized transfo
 - [Add Transforms](#add-transforms)
   - [Overview of Pipeline](#overview-of-pipeline)
   - [Creating a new transform in Pipeline](#creating-a-new-transform-in-pipeline)
+    - [Step 1: Creating the transform](#step-1-creating-the-transform)
+    - [Step 2: Add NewTransform to \_\_init\_\_py](#step-2-add-newtransform-to-__init__py)
+    - [Step 3: Modify the config file](#step-3-modify-the-config-file)
 
 ## Overview of Pipeline
 
@@ -46,11 +49,15 @@ Every augmentation in the `Pipeline` receives a `dict` as input and outputs a `d
 
 ## Creating a new transform in Pipeline
 
-1. Write a new transform in [transforms.py](https://github.com/open-mmlab/mmselfsup/tree/1.x/mmselfsup/datasets/transforms) and overwrite the `transform` function, which takes a `Dict` as input:
+Here are the steps to Create a new transform.
+
+### Step 1: Creating the transform
+
+Write a new transform in [processing.py](https://github.com/open-mmlab/mmselfsup/tree/1.x/mmselfsup/datasets/transforms/processing.py) and overwrite the `transform` function, which takes a `dict` as input:
 
 ```python
 @TRANSFORMS.register_module()
-class MyTransform(BaseTransform):
+class NewTransform(BaseTransform):
     """Docstring for transform.
     """
 
@@ -59,18 +66,31 @@ class MyTransform(BaseTransform):
         return results
 ```
 
-Then, add the transform to [__init__.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/__init__.py).
-
 **Note:** For the implementation of transforms, you could apply functions in [mmcv](https://github.com/open-mmlab/mmcv/tree/2.x/mmcv/image).
 
-2. Add `MyTransform` to config.
+### Step 2: Add NewTransform to \_\_init\_\_py
+
+Then, add the transform to [__init__.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/__init__.py).
+
+```python
+...
+from .processing import NewTransform, ...
+
+__all__ = [
+    ..., 'NewTransform'
+]
+```
+
+### Step 3: Modify the config file
+
+To use `NewTransform`, you can modify the config as the following:
 
 ```python
 view_pipeline = [
     dict(type='RandomResizedCrop', size=224, backend='pillow'),
     dict(type='RandomFlip', prob=0.5),
-    # add `MyTransform`
-    dict(type='MyTransform'),
+    # add `NewTransform`
+    dict(type='NewTransform'),
     dict(
         type='RandomApply',
         transforms=[

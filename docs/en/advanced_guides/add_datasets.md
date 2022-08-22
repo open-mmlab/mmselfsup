@@ -3,15 +3,15 @@
 In this tutorial, we introduce the basic steps to create your customized dataset. Before learning to to create your customized datasets, it is recommended to learn the basic concept of datasets in file [datasets.md](datasets.md).
 
 - [Add Datasets](#add-datasets)
-  - [Creating the Dataset](#creating-the-dataset)
-  - [Add NewDataset to \_\_init\_\_py](#add-newdataset-to-__init__py)
-  - [Modify config file](#modify-config-file)
+  - [Step 1: Creating the Dataset](#step-1-creating-the-dataset)
+  - [Step 2: Add NewDataset to \_\_init\_\_py](#step-2-add-newdataset-to-__init__py)
+  - [Step 3: Modify the config file](#step-3-modify-the-config-file)
 
 If your algorithm does not need any customized dataset, you can use these off-the-shelf datasets under [datasets directory](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/mmselfsup/datasets). But to use these existing datasets, you have to convert your dataset to existing dataset format.
 
 As for image pretraining, it is recommended to follow the format of MMClassification.
 
-## Creating the Dataset
+## Step 1: Creating the Dataset
 
 You could implement a new dataset class, inherited from `CustomDataset` from MMClassification for image pretraining.
 
@@ -54,7 +54,7 @@ class NewDataset(CustomDataset):
 
 ```
 
-## Add NewDataset to \_\_init\_\_py
+## Step 2: Add NewDataset to \_\_init\_\_py
 
 Then, add `NewDataset` in `mmselfsup/dataset/__init__.py`. If it is not imported, the `NewDataset` will not be registered successfully.
 
@@ -67,7 +67,7 @@ __all__ = [
 ]
 ```
 
-## Modify config file
+## Step 3: Modify the config file
 
 To use `NewDataset`, you can modify the config as the following:
 
