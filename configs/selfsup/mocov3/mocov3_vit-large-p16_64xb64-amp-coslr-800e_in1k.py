@@ -8,5 +8,5 @@ model = dict(
     neck=dict(in_channels=1024),
 )
 
-optim_wrapper = dict(clip_grad=dict(max_norm=5.0))
+optim_wrapper = dict(clip_grad=dict(max_norm=5.0, error_if_nonfinite=False))
 randomness = dict(seed=0)
