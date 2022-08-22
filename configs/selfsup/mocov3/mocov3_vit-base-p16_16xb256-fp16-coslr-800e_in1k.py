@@ -1,4 +1,4 @@
-_base_ = 'mocov3_vit-base-p16_16xb256-fp16-coslr-300e_in1k-224.py'
+_base_ = 'mocov3_vit-base-p16_16xb256-fp16-coslr-300e_in1k.py'
 
 # learning rate scheduler
 param_scheduler = [
