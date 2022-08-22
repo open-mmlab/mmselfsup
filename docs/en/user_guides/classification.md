@@ -43,9 +43,11 @@ Remarks:
 - if you want to change GPU numbers, you could add `GPUS_PER_NODE=4 GPUS=4` at the beginning of the command.
 - `EPOCH` is the epoch number of the ckpt that you want to test
 
-## Linear Evaluation
+## Linear Evaluation and fine-tuning
 
-The linear evaluation is one of the most general benchmarks, we integrate several papers' config settings, also including multi-head linear evaluation. We write a classification model in our own codebase for the multi-head function, thus, to run linear evaluation, we still use `.sh` script to launch training. The supported datasets are **ImageNet**, **Places205** and **iNaturalist18**.
+Linear evaluation and fine-tuning are two of the most general benchmarks. We provide config files and scripts to launch the training and testing
+for Linear Evaluation and Fine-tuning. The supported datasets are **ImageNet**, **Places205** and **iNaturalist18**.
+
 
 First, make sure you have installed [MIM](https://github.com/open-mmlab/mim), which is also a project of OpenMMLab.
 
@@ -102,7 +104,7 @@ work_dir/model.pth
 
 ## ImageNet Semi-Supervised Classification
 
-To run ImageNet semi-supervised classification, we still use the same `.sh` script as Linear Evaluation to launch training.
+To run ImageNet semi-supervised classification, we still use the same `.sh` script as Linear Evaluation and Fine-tuning to launch training.
 
 Remarks:
 
