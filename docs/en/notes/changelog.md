@@ -2,6 +2,32 @@
 
 ## MMSelfSup
 
+### v1.0.0rc0 (01/09/2022)
+
+#### Highlight
+
+- Based on MMEngine and MMCV.
+- Released with refactor.
+- Refine all documents.
+- Refactor the data pipeline, which is more powerful. 
+
+#### New Features
+
+- Add `SelfSupDataSample` to unify the components' interface.
+- Add `SelfSupVisualizer` for visualization.
+- Add `SelfSupDataPreprocessor` for data preprocess.
+
+#### Improvements
+
+- Most algorithms now support non-distributed training.
+- Change the interface of different data augmentation transforms to `dict`.
+- Run classification downstream task with MMClassification.
+
+#### Docs
+
+- Refine all documents and reorganize the directory.
+- Add concepts for different components.
+
 ### v0.9.1 (31/05/2022)
 
 #### Highlight
