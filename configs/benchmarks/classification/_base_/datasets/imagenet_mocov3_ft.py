@@ -1,7 +1,7 @@
 # dataset settings
 dataset_type = 'ImageNet'
-data_root = 'data/imagenet/'
-file_client_args = dict(backend='disk')
+data_root = 'sproject:s3://openmmlab/datasets/classification/imagenet/'
+file_client_args = dict(backend='petrel')
 
 preprocess_cfg = dict(
     # RGB format normalization parameters
@@ -61,7 +61,7 @@ train_dataloader = dict(
         ann_file='meta/train.txt',
         data_prefix='train',
         pipeline=train_pipeline),
-    sampler=dict(type='DefaultSampler', shuffle=True),
+    sampler=dict(type='RepeatAugSampler', shuffle=True),
     persistent_workers=True,
 )
 

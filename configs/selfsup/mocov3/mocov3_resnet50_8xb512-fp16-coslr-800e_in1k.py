@@ -1,6 +1,6 @@
 _base_ = 'mocov3_resnet50_8xb512-fp16-coslr-100e_in1k.py'
 
-model = dict(base_momentum=0.996)  # 0.99 for 100e and 300e, 0.996 for 1000e
+model = dict(base_momentum=0.996)  # 0.99 for 100e and 300e, 0.996 for 800e
 
 # optimizer
 optimizer = dict(type='LARS', lr=4.8, weight_decay=1.5e-6)
