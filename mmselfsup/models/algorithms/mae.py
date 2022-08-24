@@ -24,7 +24,7 @@ class MAE(BaseModel):
             batch_inputs (List[torch.Tensor]): The input images.
 
         Returns:
-            torch.Tensor: Outputs from neck.
+            Tuple[torch.Tensor]: Neck outputs.
         """
         latent, _, ids_restore = self.backbone(batch_inputs[0])
         pred = self.neck(latent, ids_restore)
@@ -41,7 +41,7 @@ class MAE(BaseModel):
                 during the forward function.
 
         Returns:
-            Dict[str, Tensor]: A dictionary of loss components.
+            Dict[str, torch.Tensor]: A dictionary of loss components.
         """
         # ids_restore: the same as that in original repo, which is used
         # to recover the original order of tokens in decoder.

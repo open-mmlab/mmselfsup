@@ -16,12 +16,15 @@ class CAE(BaseModel):
     Learning <https://arxiv.org/abs/2202.03026>`_.
 
     Args:
-        backbone (dict): Config dict for encoder.
-        neck (dict): Config dict for encoder.
-        head (dict): Config dict for head.
+        backbone (dict): Config dict for module of backbone.
+        neck (dict): Config dict for module of neck.
+        head (dict): Config dict for module of head functions.
         base_momentum (float): The base momentum coefficient for the target
             network. Defaults to 0.0.
-        data_preprocessor (dict, optional): Config to preprocess images.
+        data_preprocessor (dict, optional): The config for preprocessing
+            input data. If None or no specified type, it will use
+            "SelfSupDataPreprocessor" as type.
+            See :class:`SelfSupDataPreprocessor` for more details.
             Defaults to None.
         init_cfg (Union[List[dict], dict], optional): Config dict for weight
             initialization. Defaults to None.

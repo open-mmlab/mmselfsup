@@ -27,7 +27,7 @@ class SimMIM(BaseModel):
                 during the forward function.
 
         Returns:
-            torch.Tensor: The reconstructed image.
+            torch.Tensor: The reconstructed images.
         """
         mask = torch.stack(
             [data_sample.mask.value for data_sample in data_samples])

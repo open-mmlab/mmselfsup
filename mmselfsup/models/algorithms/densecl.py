@@ -20,7 +20,7 @@ class DenseCL(BaseModel):
     Implementation of `Dense Contrastive Learning for Self-Supervised Visual
     Pre-Training <https://arxiv.org/abs/2011.09157>`_.
     Borrowed from the authors' code: `<https://github.com/WXinlong/DenseCL>`_.
-    The loss_lambda warmup is in `core/hooks/densecl_hook.py`.
+    The loss_lambda warmup is in `engine/hooks/densecl_hook.py`.
 
     Args:
         backbone (dict): Config dict for module of backbone.
@@ -36,12 +36,12 @@ class DenseCL(BaseModel):
             loss. Defaults to 0.5.
         pretrained (str, optional): The pretrained checkpoint path, support
             local path and remote path. Defaults to None.
-        data_preprocessor (Union[dict, nn.Module], optional): The config for
-            preprocessing input data. If None or no specified type, it will use
+        data_preprocessor (dict, optional): The config for preprocessing
+            input data. If None or no specified type, it will use
             "SelfSupDataPreprocessor" as type.
             See :class:`SelfSupDataPreprocessor` for more details.
             Defaults to None.
-        init_cfg (Dict or List[Dict], optional): Config dict for weight
+        init_cfg (Union[List[dict], dict], optional): Config dict for weight
             initialization. Defaults to None.
     """
 
@@ -54,8 +54,8 @@ class DenseCL(BaseModel):
                  momentum: float = 0.999,
                  loss_lambda: float = 0.5,
                  pretrained: Optional[str] = None,
-                 data_preprocessor: Optional[Union[dict, nn.Module]] = None,
-                 init_cfg: Optional[Union[dict, List[dict]]] = None) -> None:
+                 data_preprocessor: Optional[dict] = None,
+                 init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
         super().__init__(
             backbone=backbone,
             neck=neck,
@@ -121,11 +121,9 @@ class DenseCL(BaseModel):
 
         Args:
             batch_inputs (List[torch.Tensor]): The input images.
-            data_samples (List[SelfSupDataSample]): All elements required
-                during the forward function.
 
         Returns:
-            Tuple[torch.Tensor]: backbone outputs.
+            Tuple[torch.Tensor]: Backbone outputs.
         """
         x = self.backbone(batch_inputs[0])
         return x
@@ -133,7 +131,7 @@ class DenseCL(BaseModel):
     def loss(self, batch_inputs: List[torch.Tensor],
              data_samples: List[SelfSupDataSample],
              **kwargs) -> Dict[str, torch.Tensor]:
-        """Forward computation during training.
+        """The forward function in training.
 
         Args:
             batch_inputs (List[torch.Tensor]): The input images.
@@ -225,9 +223,12 @@ class DenseCL(BaseModel):
         """Predict results from the extracted features.
 
         Args:
-            inputs (List[torch.Tensor]): The input images.
+            batch_inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
+
+        Returns:
+            SelfSupDataSample: The prediction from model.
         """
         q_grid = self.extract_feat(batch_inputs)[0]
         q_grid = q_grid.view(q_grid.size(0), q_grid.size(1), -1)

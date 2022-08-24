@@ -20,7 +20,7 @@ class ODCMemory(BaseModule):
     dataset; while the centroids memory stores features of cluster centroids.
 
     Args:
-        length (int): Number of features stored in samples memory.
+        length (int): Number of features stored in the samples memory.
         feat_dim (int): Dimension of stored features.
         momentum (float): Momentum coefficient for updating features.
         num_classes (int): Number of clusters.

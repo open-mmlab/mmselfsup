@@ -2,7 +2,6 @@
 from typing import Dict, List, Optional, Tuple, Union
 
 import torch
-import torch.nn as nn
 from mmengine.data import LabelData
 
 from mmselfsup.registry import MODELS
@@ -17,19 +16,22 @@ class ODC(BaseModel):
     Official implementation of `Online Deep Clustering for Unsupervised
     Representation Learning <https://arxiv.org/abs/2006.10645>`_.
     The operation w.r.t. memory bank and loss re-weighting is in
-     `core/hooks/odc_hook.py`.
+     `engine/hooks/odc_hook.py`.
 
     Args:
         backbone (dict): Config dict for module of backbone.
         neck (dict): Config dict for module of deep features to compact
             feature vectors.
         head (dict): Config dict for module of head functions.
-        memory_bank (dict): Module of memory banks. Defaults to None.
+        memory_bank (dict): Config dict for module of memory bank.
         pretrained (str, optional): The pretrained checkpoint path, support
             local path and remote path. Defaults to None.
-        data_preprocessor (dict or nn.Module, optional): Config to preprocess
-            images. Defaults to None.
-        init_cfg (dict or List[dict], optional): Config dict for weight
+        data_preprocessor (dict, optional): The config for preprocessing
+            input data. If None or no specified type, it will use
+            "SelfSupDataPreprocessor" as type.
+            See :class:`SelfSupDataPreprocessor` for more details.
+            Defaults to None.
+        init_cfg (Union[List[dict], dict], optional): Config dict for weight
             initialization. Defaults to None.
     """
 
@@ -39,8 +41,8 @@ class ODC(BaseModel):
                  head: dict,
                  memory_bank: dict,
                  pretrained: Optional[str] = None,
-                 data_preprocessor: Optional[Union[dict, nn.Module]] = None,
-                 init_cfg: Optional[Union[dict, List[dict]]] = None) -> None:
+                 data_preprocessor: Optional[dict] = None,
+                 init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
         super().__init__(
             backbone=backbone,
             neck=neck,
@@ -64,11 +66,9 @@ class ODC(BaseModel):
 
         Args:
             batch_inputs (List[torch.Tensor]): The input images.
-            data_samples (List[SelfSupDataSample]): All elements required
-                during the forward function.
 
         Returns:
-            Tuple[torch.Tensor]: backbone outputs.
+            Tuple[torch.Tensor]: Backbone outputs.
         """
         x = self.backbone(batch_inputs[0])
         return x

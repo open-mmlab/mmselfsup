@@ -3,6 +3,7 @@ from typing import List, Optional, Union
 
 import torch
 from mmengine.model import BaseModel as _BaseModel
+from mmengine.model.base_model import ForwardResults
 from torch import nn
 
 from mmselfsup.registry import MODELS
@@ -73,7 +74,7 @@ class BaseModel(_BaseModel):
     def forward(self,
                 batch_inputs: torch.Tensor,
                 data_samples: Optional[List[SelfSupDataSample]] = None,
-                mode: str = 'tensor'):
+                mode: str = 'tensor') -> ForwardResults:
         """Returns losses or predictions of training, validation, testing, and
         simple inference process.
 
@@ -113,7 +114,8 @@ class BaseModel(_BaseModel):
         else:
             raise RuntimeError(f'Invalid mode "{mode}".')
 
-    def extract_feat(self, batch_inputs):
+    def extract_feat(self,
+                     batch_inputs: torch.Tensor) -> Union[tuple, torch.Tensor]:
         """Extract features from the input tensor with shape (N, C, ...).
 
         This is a abstract method, and subclass should overwrite this methods
@@ -143,7 +145,7 @@ class BaseModel(_BaseModel):
                 every samples.
 
         Returns:
-            dict[str, Tensor]: a dictionary of loss components
+            dict[str, Tensor]: A dictionary of loss components.
         """
         raise NotImplementedError
 

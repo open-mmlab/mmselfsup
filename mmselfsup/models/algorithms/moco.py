@@ -34,9 +34,12 @@ class MoCo(BaseModel):
             encoder. Defaults to 0.999.
         pretrained (str, optional): The pretrained checkpoint path, support
             local path and remote path. Defaults to None.
-        data_preprocessor (Dict, optional): Config to preprocess images.
+        data_preprocessor (dict, optional): The config for preprocessing
+            input data. If None or no specified type, it will use
+            "SelfSupDataPreprocessor" as type.
+            See :class:`SelfSupDataPreprocessor` for more details.
             Defaults to None.
-        init_cfg (dict or list[dict], optional): Config dict for weight
+        init_cfg (Union[List[dict], dict], optional): Config dict for weight
             initialization. Defaults to None.
     """
 
@@ -48,7 +51,7 @@ class MoCo(BaseModel):
                  feat_dim: int = 128,
                  momentum: float = 0.999,
                  pretrained: Optional[str] = None,
-                 data_preprocessor: Optional[Union[dict, nn.Module]] = None,
+                 data_preprocessor: Optional[dict] = None,
                  init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
         super().__init__(
             backbone=backbone,
@@ -91,11 +94,9 @@ class MoCo(BaseModel):
 
         Args:
             batch_inputs (List[torch.Tensor]): The input images.
-            data_samples (List[SelfSupDataSample]): All elements required
-                during the forward function.
 
         Returns:
-            Tuple[torch.Tensor]: backbone outputs.
+            Tuple[torch.Tensor]: Backbone outputs.
         """
         x = self.backbone(batch_inputs[0])
         return x
