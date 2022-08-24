@@ -13,9 +13,6 @@ All models and part of benchmark results are recorded below.
 
 - Number of checkpoints: xx ckpts
 
-
-
-
 ## Benchmark
 
 ImageNet has multiple versions, but the most commonly used one is ILSVRC 2012. The results below are trained by linear evaluation or fine-tuning and the backbone is loaded with self-supervised pretrain backbone.
@@ -31,7 +28,7 @@ ImageNet has multiple versions, but the most commonly used one is ILSVRC 2012. T
       <th>Linear Eval</th>
       <th>Fine-tuning</th>
       <th>Pretrain Link</th>
-      <th>Classification</th>
+      <th>Classification Link</th>
 	</tr>
   <tr>
 	    <td>Relative-Loc</td>
@@ -40,8 +37,8 @@ ImageNet has multiple versions, but the most commonly used one is ILSVRC 2012. T
       <td>512</td>
       <td>40.4</td>
       <td></td>
-      <td>TODO</td>
-      <td>TODO</td>
+      <td><a href=''>config</a> | <a href=''>model</a> | <a href=''>log</a></td>
+      <td><a href=''>config</a> | <a href=''>model</a> | <a href=''>log</a></td>
 	</tr>
   <tr>
 	    <td>Rotation-Pred</td>
