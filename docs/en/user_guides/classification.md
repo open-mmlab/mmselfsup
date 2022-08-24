@@ -48,12 +48,12 @@ Remarks:
 Linear evaluation and fine-tuning are two of the most general benchmarks. We provide config files and scripts to launch the training and testing
 for Linear Evaluation and Fine-tuning. The supported datasets are **ImageNet**, **Places205** and **iNaturalist18**.
 
-
 First, make sure you have installed [MIM](https://github.com/open-mmlab/mim), which is also a project of OpenMMLab.
 
 ```shell
 pip install openmim
 ```
+
 Besides, please refer to MMClassification for [installation](https://github.com/open-mmlab/mmclassification/blob/dev-1.x/docs/en/install.md) and [data preparation](https://github.com/open-mmlab/mmclassification/blob/dev-1.x/docs/en/getting_started.md).
 
 Then, run the command below.
@@ -73,14 +73,15 @@ Remarks:
 - `PRETRAIN`: the pre-trained model file.
 
 Example:
+
 ```shell
 bash ./tools/benchmarks/classification/mim_dist_train.sh \
 configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-coslr-100e_in1k.py \
 work_dir/pretrained_model.pth
 ```
 
+If you want to test the well-trained model, please run the command below.
 
-If you want to test the well-trained model, please run the command bellow.
 ```shell
 # distributed version
 bash tools/benchmarks/classification/mim_dist_test.sh ${CONFIG} ${CHECKPOINT}
@@ -90,17 +91,16 @@ bash tools/benchmarks/classification//mim_slurm_test.sh ${PARTITION} ${CONFIG} $
 ```
 
 Remarks:
+
 - `CHECKPOINT`: The well-trained classification model that you want to test.
 
-
 Example:
+
 ```shell
 bash ./tools/benchmarks/mmsegmentation/mim_dist_test.sh \
 configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-coslr-100e_in1k.py \
 work_dir/model.pth
 ```
-
-
 
 ## ImageNet Semi-Supervised Classification
 
