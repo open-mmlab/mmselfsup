@@ -11,7 +11,7 @@ We provide scripts in folder `tools/benchmarks/classification/`, which has 2 `.s
 
 ## VOC SVM / Low-shot SVM
 
-To run these benchmarks, you should first prepare your VOC datasets. Please refer to [prepare_data.md](./docs/en/user_guides/2_dataset_prepare.md) for the details of data preparation.
+To run these benchmarks, you should first prepare your VOC datasets. Please refer to [prepare_data.md](./2_dataset_prepare.md) for the details of data preparation.
 
 To evaluate the pre-trained models, you can run the command below.
 
