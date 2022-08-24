@@ -2,7 +2,7 @@
 
 - [Classification](#classification)
   - [VOC SVM / Low-shot SVM](#voc-svm--low-shot-svm)
-  - [Linear Evaluation](#linear-evaluation)
+  - [Linear Evaluation and Fine-tuning](#Linear Evaluation and Fine-tuning)
   - [ImageNet Semi-Supervised Classification](#imagenet-semi-supervised-classification)
   - [ImageNet Nearest-Neighbor Classification](#imagenet-nearest-neighbor-classification)
 
@@ -43,7 +43,7 @@ Remarks:
 - if you want to change GPU numbers, you could add `GPUS_PER_NODE=4 GPUS=4` at the beginning of the command.
 - `EPOCH` is the epoch number of the ckpt that you want to test
 
-## Linear Evaluation and fine-tuning
+## Linear Evaluation and Fine-tuning
 
 Linear evaluation and fine-tuning are two of the most general benchmarks. We provide config files and scripts to launch the training and testing
 for Linear Evaluation and Fine-tuning. The supported datasets are **ImageNet**, **Places205** and **iNaturalist18**.
