@@ -2,7 +2,7 @@
 
 - [Classification](#classification)
   - [VOC SVM / Low-shot SVM](#voc-svm--low-shot-svm)
-  - [Linear Evaluation and Fine-tuning](#Linear Evaluation and Fine-tuning)
+  - [Linear Evaluation and Fine-tuning](#linear-evaluation-and-fine-tuning)
   - [ImageNet Semi-Supervised Classification](#imagenet-semi-supervised-classification)
   - [ImageNet Nearest-Neighbor Classification](#imagenet-nearest-neighbor-classification)
 
