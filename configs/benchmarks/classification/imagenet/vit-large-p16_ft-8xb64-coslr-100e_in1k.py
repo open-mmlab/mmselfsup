@@ -20,6 +20,7 @@ model = dict(
             type='LabelSmoothLoss', label_smooth_val=0.1, mode='original'),
     ))
 
+# learning rate scheduler
 param_scheduler = [
     dict(
         type='LinearLR',
@@ -36,3 +37,6 @@ param_scheduler = [
         end=100,
         convert_to_iter_based=True)
 ]
+
+# runtime settings
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=100)
