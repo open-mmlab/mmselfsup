@@ -1,4 +1,4 @@
-_base_ = 'mocov3_vit-base-p16_16xb256-fp16-coslr-300e_in1k.py'
+_base_ = 'mocov3_vit-base-p16_16xb256-amp-coslr-300e_in1k.py'
 
 train_dataloader = dict(batch_size=64, num_workers=8)
 
