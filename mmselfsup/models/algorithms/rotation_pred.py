@@ -17,27 +17,27 @@ class RotationPred(BaseModel):
     Rotations <https://arxiv.org/abs/1803.07728>`_.
     """
 
-    def extract_feat(self, batch_inputs: List[torch.Tensor],
+    def extract_feat(self, inputs: List[torch.Tensor],
                      **kwargs) -> Tuple[torch.Tensor]:
         """Function to extract features from backbone.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
 
         Returns:
             Tuple[torch.Tensor]: Backbone outputs.
         """
 
-        x = self.backbone(batch_inputs[0])
+        x = self.backbone(inputs[0])
         return x
 
-    def loss(self, batch_inputs: List[torch.Tensor],
+    def loss(self, inputs: List[torch.Tensor],
              data_samples: List[SelfSupDataSample],
              **kwargs) -> Dict[str, torch.Tensor]:
         """The forward function in training.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
@@ -45,7 +45,7 @@ class RotationPred(BaseModel):
             Dict[str, torch.Tensor]: A dictionary of loss components.
         """
 
-        x = self.backbone(batch_inputs[0])
+        x = self.backbone(inputs[0])
 
         rot_label = [
             data_sample.pseudo_label.rot_label for data_sample in data_samples
@@ -55,13 +55,13 @@ class RotationPred(BaseModel):
         losses = dict(loss=loss)
         return losses
 
-    def predict(self, batch_inputs: List[torch.Tensor],
+    def predict(self, inputs: List[torch.Tensor],
                 data_samples: List[SelfSupDataSample],
                 **kwargs) -> List[SelfSupDataSample]:
         """The forward function in testing.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
@@ -69,7 +69,7 @@ class RotationPred(BaseModel):
             List[SelfSupDataSample]: The prediction from model.
         """
 
-        x = self.backbone(batch_inputs[0])  # tuple
+        x = self.backbone(inputs[0])  # tuple
         outs = self.head.logits(x)
         keys = [f'head{i}' for i in self.backbone.out_indices]
         outs = [torch.chunk(out, len(outs[0]) // 4, 0) for out in outs]

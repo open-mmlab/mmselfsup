@@ -60,33 +60,35 @@ class NPID(BaseModel):
         self.neg_num = neg_num
         self.ensure_neg = ensure_neg
 
-    def extract_feat(self, batch_inputs: List[torch.Tensor],
+    def extract_feat(self, inputs: List[torch.Tensor],
                      **kwarg) -> Tuple[torch.Tensor]:
         """Function to extract features from backbone.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
             Tuple[torch.Tensor]: Backbone outputs.
         """
-        x = self.backbone(batch_inputs[0])
+        x = self.backbone(inputs[0])
         return x
 
-    def loss(self, batch_inputs: List[torch.Tensor],
+    def loss(self, inputs: List[torch.Tensor],
              data_samples: List[SelfSupDataSample],
              **kwargs) -> Dict[str, torch.Tensor]:
         """The forward function in training.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
         Returns:
             Dict[str, Tensor]: A dictionary of loss components.
         """
-        feature = self.backbone(batch_inputs[0])
+        feature = self.backbone(inputs[0])
         idx = [data_sample.sample_idx.value for data_sample in data_samples]
         idx = torch.cat(idx)
         if self.with_neck:

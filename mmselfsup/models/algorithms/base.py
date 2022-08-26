@@ -72,7 +72,7 @@ class BaseModel(_BaseModel):
         return hasattr(self, 'head') and self.head is not None
 
     def forward(self,
-                batch_inputs: torch.Tensor,
+                inputs: torch.Tensor,
                 data_samples: Optional[List[SelfSupDataSample]] = None,
                 mode: str = 'tensor') -> ForwardResults:
         """Returns losses or predictions of training, validation, testing, and
@@ -81,7 +81,7 @@ class BaseModel(_BaseModel):
         This module overwrites the abstract method in ``BaseModel``.
 
         Args:
-            batch_inputs (torch.Tensor): batch input tensor collated by
+            inputs (torch.Tensor): batch input tensor collated by
                 :attr:`data_preprocessor`.
             data_samples (List[BaseDataElement], optional):
                 data samples collated by :attr:`data_preprocessor`.
@@ -105,24 +105,23 @@ class BaseModel(_BaseModel):
                   or ``dict of tensor for custom use.
         """
         if mode == 'tensor':
-            feats = self.extract_feat(batch_inputs)
+            feats = self.extract_feat(inputs)
             return feats
         elif mode == 'loss':
-            return self.loss(batch_inputs, data_samples)
+            return self.loss(inputs, data_samples)
         elif mode == 'predict':
-            return self.predict(batch_inputs, data_samples)
+            return self.predict(inputs, data_samples)
         else:
             raise RuntimeError(f'Invalid mode "{mode}".')
 
-    def extract_feat(self,
-                     batch_inputs: torch.Tensor) -> Union[tuple, torch.Tensor]:
+    def extract_feat(self, inputs):
         """Extract features from the input tensor with shape (N, C, ...).
 
         This is a abstract method, and subclass should overwrite this methods
         if needed.
 
         Args:
-            batch_inputs (Tensor): A batch of inputs. The shape of it should be
+            inputs (Tensor): A batch of inputs. The shape of it should be
                 ``(num_samples, num_channels, *img_shape)``.
 
         Returns:
@@ -131,7 +130,7 @@ class BaseModel(_BaseModel):
         """
         raise NotImplementedError
 
-    def loss(self, batch_inputs: torch.Tensor,
+    def loss(self, inputs: torch.Tensor,
              data_samples: List[SelfSupDataSample]) -> dict:
         """Calculate losses from a batch of inputs and data samples.
 
@@ -139,7 +138,7 @@ class BaseModel(_BaseModel):
         if needed.
 
         Args:
-            batch_inputs (torch.Tensor): The input tensor with shape
+            inputs (torch.Tensor): The input tensor with shape
                 (N, C, ...) in general.
             data_samples (List[SelfSupDataSample]): The annotation data of
                 every samples.
@@ -150,7 +149,7 @@ class BaseModel(_BaseModel):
         raise NotImplementedError
 
     def predict(self,
-                batch_inputs: tuple,
+                inputs: tuple,
                 data_samples: Optional[List[SelfSupDataSample]] = None,
                 **kwargs) -> List[SelfSupDataSample]:
         """Predict results from the extracted features.
