@@ -9,7 +9,7 @@
 - Based on MMEngine and MMCV.
 - Released with refactor.
 - Refine all documents.
-- Refactor the data pipeline, which is more powerful. 
+- Refactor the data pipeline, which is more powerful.
 
 #### New Features
 
