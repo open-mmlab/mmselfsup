@@ -61,7 +61,7 @@ class MoCoV3(BaseModel):
 
         Args:
             inputs (List[torch.Tensor]): The input images.
-            data_samples (List[SelfSupDataSample]): All 
+            data_samples (List[SelfSupDataSample]): All
 
         Returns:
             Tuple[torch.Tensor]: Backbone outputs.
