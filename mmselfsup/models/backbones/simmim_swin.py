@@ -4,7 +4,7 @@ from typing import Optional, Sequence, Tuple, Union
 import torch
 import torch.nn as nn
 from mmcls.models import SwinTransformer
-from mmengine.model.utils import trunc_normal_
+from mmengine.model.weight_init import trunc_normal_
 
 from mmselfsup.registry import MODELS
 

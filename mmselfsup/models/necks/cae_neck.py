@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 from mmcv.cnn import build_norm_layer
 from mmengine.model import BaseModule
-from mmengine.model.utils import trunc_normal_
+from mmengine.model.weight_init import trunc_normal_
 
 from mmselfsup.registry import MODELS
 from ..utils import CAETransformerRegressorLayer, TransformerEncoderLayer

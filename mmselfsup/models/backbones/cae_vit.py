@@ -3,7 +3,7 @@ import numpy as np
 import torch
 from mmcls.models import VisionTransformer
 from mmengine.model import ModuleList
-from mmengine.model.utils import trunc_normal_
+from mmengine.model.weight_init import trunc_normal_
 from torch import nn
 
 from mmselfsup.registry import MODELS

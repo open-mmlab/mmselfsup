@@ -3,7 +3,6 @@ from typing import List, Optional, Union
 
 import torch
 from mmengine.model import BaseModel as _BaseModel
-from mmengine.model.base_model import ForwardResults
 from torch import nn
 
 from mmselfsup.registry import MODELS
@@ -74,7 +73,7 @@ class BaseModel(_BaseModel):
     def forward(self,
                 inputs: torch.Tensor,
                 data_samples: Optional[List[SelfSupDataSample]] = None,
-                mode: str = 'tensor') -> ForwardResults:
+                mode: str = 'tensor'):
         """Returns losses or predictions of training, validation, testing, and
         simple inference process.
 
