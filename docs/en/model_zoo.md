@@ -15,11 +15,12 @@ All models and part of benchmark results are recorded below.
 
 ## Benchmarks
 
-ImageNet has multiple versions, but the most commonly used one is ILSVRC 2012. The classification results (Top-1 %) below are trained by linear evaluation or fine-tuning and the backbone is loaded with self-supervised pretrain backbone.
-
 ### ImageNet
 
-<table>
+ImageNet has multiple versions, but the most commonly used one is ILSVRC 2012. The classification results (Top-1 %) below are trained by linear evaluation or fine-tuning and the backbone is loaded with self-supervised pretrain backbone.
+
+<table class="docutils">
+<thead>
 	<tr>
 	    <th>Algorithm</th>
 	    <th>Backbone</th>
@@ -31,6 +32,8 @@ ImageNet has multiple versions, but the most commonly used one is ILSVRC 2012. T
       <th>Linear Eval Link</th>
       <th>Fine-tuning Link</th>
 	</tr>
+  </thead>
+  <tbody>
   <tr>
 	    <td>Relative-Loc</td>
 	    <td>ResNet50</td>
@@ -305,3 +308,5 @@ ImageNet has multiple versions, but the most commonly used one is ILSVRC 2012. T
       <td>/</td>
       <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/benchmarks/classification/imagenet/swin-base_ft-8xb256-coslr-100e_in1k.py'>config</a> | <a href=''>model</a> | <a href=''>log</a></td>
 	</tr>
+</tbody>
+</table>
