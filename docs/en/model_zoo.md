@@ -19,7 +19,7 @@ All models and part of benchmark results are recorded below.
 
 ImageNet has multiple versions, but the most commonly used one is ILSVRC 2012. The classification results (Top-1 %) below are trained by linear evaluation or fine-tuning and the backbone is loaded with self-supervised pretrain backbone.
 
-<table class="docutils">
+<table class="docutils" style='width=1500'>
 <thead>
 	<tr>
 	    <th>Algorithm</th>
