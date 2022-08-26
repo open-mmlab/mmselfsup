@@ -4,10 +4,10 @@ from unittest import TestCase
 
 import torch
 import torch.nn as nn
-from mmengine import Runner
-from mmengine.data import LabelData
 from mmengine.model import BaseModule
 from mmengine.optim import OptimWrapper
+from mmengine.runner import Runner
+from mmengine.structures import LabelData
 from torch.utils.data import Dataset
 
 from mmselfsup.engine import SwAVHook
@@ -98,6 +98,7 @@ class TestSwAVHook(TestCase):
             train_dataloader=dict(
                 dataset=dummy_dataset,
                 sampler=dict(type='DefaultSampler', shuffle=True),
+                collate_fn=dict(type='default_collate'),
                 batch_size=1,
                 num_workers=0),
             optim_wrapper=OptimWrapper(

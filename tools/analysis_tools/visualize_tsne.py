@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 from mmengine.config import Config, DictAction
-from mmengine.data import pseudo_collate, worker_init_fn
+from mmengine.dataset import pseudo_collate, worker_init_fn
 from mmengine.dist import get_rank, init_dist
 from mmengine.logging import MMLogger
 from mmengine.model.wrappers import MMDistributedDataParallel, is_model_wrapper

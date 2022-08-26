@@ -1,6 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 # TODO: will use real PixelData once it is added in mmengine
-from mmengine.data import BaseDataElement, InstanceData, LabelData
+from mmengine.structures import BaseDataElement, InstanceData, LabelData
 
 
 class SelfSupDataSample(BaseDataElement):
@@ -25,8 +25,8 @@ class SelfSupDataSample(BaseDataElement):
     Examples:
          >>> import torch
          >>> import numpy as np
-         >>> from mmengine.data import InstanceData
-         >>> from mmselfsup.structures import SelfSupDataSample
+         >>> from mmengine.structure import InstanceData
+         >>> from mmselfsup.core import SelfSupDataSample
 
          >>> data_sample = SelfSupDataSample()
          >>> gt_label = LabelData()

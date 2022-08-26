@@ -5,7 +5,7 @@ import numpy as np
 import torch
 from mmcv.transforms import to_tensor
 from mmcv.transforms.base import BaseTransform
-from mmengine.data import InstanceData, LabelData
+from mmengine.structures import InstanceData, LabelData
 
 from mmselfsup.registry import TRANSFORMS
 from mmselfsup.structures import SelfSupDataSample

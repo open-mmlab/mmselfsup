@@ -50,20 +50,19 @@ def test_swav():
         head=head,
         data_preprocessor=copy.deepcopy(data_preprocessor))
 
-    fake_data = [{
+    fake_data = {
         'inputs': [
-            torch.randn((3, 224, 224)),
-            torch.randn((3, 224, 224)),
-            torch.randn((3, 96, 96)),
-            torch.randn((3, 96, 96)),
-            torch.randn((3, 96, 96)),
-            torch.randn((3, 96, 96)),
-            torch.randn((3, 96, 96)),
-            torch.randn((3, 96, 96))
+            torch.randn((2, 3, 224, 224)),
+            torch.randn((2, 3, 224, 224)),
+            torch.randn((2, 3, 96, 96)),
+            torch.randn((2, 3, 96, 96)),
+            torch.randn((2, 3, 96, 96)),
+            torch.randn((2, 3, 96, 96)),
+            torch.randn((2, 3, 96, 96)),
+            torch.randn((2, 3, 96, 96))
         ],
-        'data_sample':
-        SelfSupDataSample()
-    } for _ in range(2)]
+        'data_sample': [SelfSupDataSample() for _ in range(2)]
+    }
 
     fake_batch_inputs, fake_data_samples = alg.data_preprocessor(fake_data)
     fake_outputs = alg(fake_batch_inputs, fake_data_samples, mode='loss')

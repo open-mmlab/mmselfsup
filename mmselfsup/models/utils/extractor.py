@@ -4,9 +4,9 @@ from typing import Dict, List, Optional, Sequence, Union
 import numpy as np
 import torch
 import torch.nn as nn
-from mmengine import Runner
 from mmengine.dist import get_rank
 from mmengine.model import BaseModel
+from mmengine.runner import Runner
 from torch.utils.data import DataLoader
 
 from mmselfsup.utils import dist_forward_collect, nondist_forward_collect

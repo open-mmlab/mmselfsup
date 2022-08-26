@@ -4,7 +4,7 @@ from unittest import TestCase
 import numpy as np
 import torch
 # TODO: will use real PixelData once it is added in mmengine
-from mmengine.data import InstanceData, LabelData
+from mmengine.structures import InstanceData, LabelData
 
 from mmselfsup.structures import SelfSupDataSample
 

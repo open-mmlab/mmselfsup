@@ -2,7 +2,7 @@
 from typing import Dict, List, Tuple
 
 import torch
-from mmengine.data import LabelData
+from mmengine.structures import LabelData
 
 from mmselfsup.registry import MODELS
 from mmselfsup.structures import SelfSupDataSample

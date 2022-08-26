@@ -5,7 +5,7 @@ import platform
 import pytest
 import torch
 
-from mmselfsup.models.algorithms.barlowtwins import BarlowTwins
+from mmselfsup.models import BarlowTwins
 from mmselfsup.structures import SelfSupDataSample
 from mmselfsup.utils import register_all_modules
 
@@ -46,12 +46,12 @@ def test_barlowtwins():
         head=head,
         data_preprocessor=copy.deepcopy(data_preprocessor))
 
-    fake_data = [{
-        'inputs': [torch.randn((3, 224, 224)),
-                   torch.randn((3, 224, 224))],
-        'data_sample':
-        SelfSupDataSample()
-    } for _ in range(2)]
+    fake_data = {
+        'inputs':
+        [torch.randn((2, 3, 224, 224)),
+         torch.randn((2, 3, 224, 224))],
+        'data_sample': [SelfSupDataSample() for _ in range(2)]
+    }
 
     fake_inputs, fake_data_samples = alg.data_preprocessor(fake_data)
     fake_loss = alg(fake_inputs, fake_data_samples, mode='loss')

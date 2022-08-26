@@ -2,7 +2,8 @@
 from typing import Dict, List, Optional, Tuple, Union
 
 import torch
-from mmengine.data import LabelData
+import torch.nn as nn
+from mmengine.structures import LabelData
 
 from mmselfsup.registry import MODELS
 from mmselfsup.structures import SelfSupDataSample

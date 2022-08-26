@@ -3,7 +3,7 @@ import platform
 
 import pytest
 import torch
-from mmengine.data import InstanceData
+from mmengine.structures import InstanceData
 
 from mmselfsup.models.algorithms import CAE
 from mmselfsup.structures import SelfSupDataSample
@@ -44,18 +44,19 @@ def test_cae():
         data_preprocessor=data_preprocessor)
     # model.init_weights()
 
-    fake_img = torch.rand((3, 224, 224))
-    fake_target_img = torch.rand((3, 112, 112))
+    fake_img = torch.rand((1, 3, 224, 224))
+    fake_target_img = torch.rand((1, 3, 112, 112))
     fake_mask = torch.zeros((196)).bool()
     fake_mask[75:150] = 1
     fake_data_sample = SelfSupDataSample()
     fake_mask = InstanceData(value=fake_mask)
     fake_data_sample.mask = fake_mask
+    fake_data_sample = [fake_data_sample]
 
-    fake_data = [{
+    fake_data = {
         'inputs': [fake_img, fake_target_img],
         'data_sample': fake_data_sample
-    }]
+    }
 
     fake_batch_inputs, fake_data_samples = model.data_preprocessor(fake_data)
     fake_outputs = model(fake_batch_inputs, fake_data_samples, mode='loss')

@@ -4,7 +4,7 @@ import platform
 
 import pytest
 import torch
-from mmengine.data import InstanceData
+from mmengine.structures import InstanceData
 
 from mmselfsup.models.algorithms import DeepCluster
 from mmselfsup.structures import SelfSupDataSample
@@ -50,10 +50,12 @@ def test_deepcluster():
     fake_data_sample = SelfSupDataSample()
     clustering_label = InstanceData(clustering_label=torch.tensor([1]))
     fake_data_sample.pseudo_label = clustering_label
-    fake_data = [{
-        'inputs': [torch.randn(3, 224, 224)],
-        'data_sample': fake_data_sample
-    } for _ in range(2)]
+    fake_data = {
+        'inputs':
+        [torch.randn((2, 3, 224, 224)),
+         torch.randn((2, 3, 224, 224))],
+        'data_sample': [SelfSupDataSample() for _ in range(2)]
+    }
 
     fake_inputs, fake_data_samples = alg.data_preprocessor(fake_data)
     fake_loss = alg(fake_inputs, fake_data_samples, mode='loss')

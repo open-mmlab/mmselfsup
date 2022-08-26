@@ -4,7 +4,7 @@ import platform
 
 import pytest
 import torch
-from mmengine.data import InstanceData
+from mmengine.structures import InstanceData
 
 from mmselfsup.models.algorithms import NPID
 from mmselfsup.structures import SelfSupDataSample
@@ -41,12 +41,14 @@ def test_npid():
         memory_bank=memory_bank,
         data_preprocessor=copy.deepcopy(data_preprocessor))
 
-    fake_data = [{
-        'inputs': [torch.randn((3, 224, 224))],
-        'data_sample':
-        SelfSupDataSample(
-            sample_idx=InstanceData(value=torch.randint(0, 7, (1, ))))
-    } for _ in range(2)]
+    fake_data = {
+        'inputs': [torch.randn((2, 3, 224, 224))],
+        'data_samples': [
+            SelfSupDataSample(
+                sample_idx=InstanceData(value=torch.randint(0, 7, (1, ))))
+            for _ in range(2)
+        ]
+    }
 
     fake_inputs, fake_data_samples = alg.data_preprocessor(fake_data)
     fake_loss = alg(fake_inputs, fake_data_samples, mode='loss')

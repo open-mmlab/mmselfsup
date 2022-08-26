@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import List, Optional, Sequence, Tuple
+from typing import List, Optional, Tuple
 
 import torch
 from mmengine.model import ImgDataPreprocessor
@@ -17,14 +17,14 @@ class SelfSupDataPreprocessor(ImgDataPreprocessor):
 
     def forward(
             self,
-            data: Sequence[dict],
+            data: dict,
             training: bool = False
     ) -> Tuple[List[torch.Tensor], Optional[list]]:
         """Performs normalization、padding and bgr2rgb conversion based on
         ``BaseDataPreprocessor``.
 
         Args:
-            data (Sequence[dict]): data sampled from dataloader.
+            data (dict): data sampled from dataloader.
             training (bool): Whether to enable training time augmentation. If
                 subclasses override this method, they can perform different
                 preprocessing strategies for training and testing based on the
@@ -33,6 +33,7 @@ class SelfSupDataPreprocessor(ImgDataPreprocessor):
             Tuple[torch.Tensor, Optional[list]]: Data in the same format as the
             model input.
         """
+        data = [val for _, val in data.items()]
         batch_inputs, batch_data_samples = self.cast_data(data)
         # channel transform
         if self._channel_conversion:
@@ -61,14 +62,14 @@ class RelativeLocDataPreprocessor(SelfSupDataPreprocessor):
 
     def forward(
             self,
-            data: Sequence[dict],
+            data: dict,
             training: bool = False
     ) -> Tuple[List[torch.Tensor], Optional[list]]:
         """Performs normalization、padding and bgr2rgb conversion based on
         ``BaseDataPreprocessor``.
 
         Args:
-            data (Sequence[dict]): data sampled from dataloader.
+            data (dict): data sampled from dataloader.
             training (bool): Whether to enable training time augmentation. If
                 subclasses override this method, they can perform different
                 preprocessing strategies for training and testing based on the
@@ -99,14 +100,14 @@ class RotationPredDataPreprocessor(SelfSupDataPreprocessor):
 
     def forward(
             self,
-            data: Sequence[dict],
+            data: dict,
             training: bool = False
     ) -> Tuple[List[torch.Tensor], Optional[list]]:
         """Performs normalization、padding and bgr2rgb conversion based on
         ``BaseDataPreprocessor``.
 
         Args:
-            data (Sequence[dict]): data sampled from dataloader.
+            data (dict): data sampled from dataloader.
             training (bool): Whether to enable training time augmentation. If
                 subclasses override this method, they can perform different
                 preprocessing strategies for training and testing based on the
@@ -138,14 +139,14 @@ class CAEDataPreprocessor(SelfSupDataPreprocessor):
 
     def forward(
             self,
-            data: Sequence[dict],
+            data: dict,
             training: bool = False
     ) -> Tuple[List[torch.Tensor], Optional[list]]:
         """Performs normalization、padding and bgr2rgb conversion based on
         ``BaseDataPreprocessor``.
 
         Args:
-            data (Sequence[dict]): data sampled from dataloader.
+            data (dict): data sampled from dataloader.
             training (bool): Whether to enable training time augmentation. If
                 subclasses override this method, they can perform different
                 preprocessing strategies for training and testing based on the
@@ -154,6 +155,8 @@ class CAEDataPreprocessor(SelfSupDataPreprocessor):
             Tuple[torch.Tensor, Optional[list]]: Data in the same format as the
             model input.
         """
+        data = [val
+                for _, val in data.items()] if isinstance(data, dict) else data
         batch_inputs, batch_data_samples = self.cast_data(data)
         # channel transform
         if self._channel_conversion:
