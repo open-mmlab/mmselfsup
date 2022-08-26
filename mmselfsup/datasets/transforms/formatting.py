@@ -21,7 +21,7 @@ class PackSelfSupInputs(BaseTransform):
 
     Added Keys:
 
-    - data_sample
+    - data_samples
     - inputs
 
     Args:
@@ -58,7 +58,7 @@ class PackSelfSupInputs(BaseTransform):
             Dict:
 
             - 'inputs' (List[torch.Tensor]): The forward data of models.
-            - 'data_sample' (SelfSupDataSample): The annotation info of the
+            - 'data_samples' (SelfSupDataSample): The annotation info of the
                 the forward data.
         """
         packed_results = dict()
@@ -94,7 +94,7 @@ class PackSelfSupInputs(BaseTransform):
         for key in self.meta_keys:
             img_meta[key] = results[key]
         data_sample.set_metainfo(img_meta)
-        packed_results['data_sample'] = data_sample
+        packed_results['data_samples'] = data_sample
 
         return packed_results
 
