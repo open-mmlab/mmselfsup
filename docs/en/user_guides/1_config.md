@@ -51,7 +51,7 @@ We detail the naming convention for each part in the name of the config file:
 - `npid-ensure-neg`
 - `deepcluster-sobel`
 
-Different words are connected with dash `-`.
+Note that different words are connected with dash `-`.
 
 ### Module information
 
@@ -67,9 +67,9 @@ The module information mainly includes the backbone information. E.g.:
 
 Sometimes, there are some special settings needed to be mentioned in the config name. E.g.:
 
-- `resnet50-sobel`: In some downstream tasks，the backbone only receives 2-channel images after the Sobel layer as input.
+- `resnet50-sobel`: In some downstream tasks like linear evaluation, the backbone only takes 2-channel images after the Sobel layer as input when loading the DeepCluster pre-traiend model.
 
-`neck_setting`, `head_setting` and `loss_setting` are optional.
+Note that `neck_setting`, `head_setting` and `loss_setting` are optional.
 
 ### Training information
 
