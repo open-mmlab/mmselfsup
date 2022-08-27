@@ -8,18 +8,18 @@ We incorporate modular and inheritance design into our config system, which is c
     - [Module information](#module-information)
     - [Training information](#training-information)
     - [Data information](#data-information)
-    - [Config File Name Example](#config-file-name-example)
+    - [Config file name example](#config-file-name-example)
   - [Config File Structure](#config-file-structure)
   - [Inherit and Modify Config File](#inherit-and-modify-config-file)
     - [Use intermediate variables in configs](#use-intermediate-variables-in-configs)
     - [Ignore some fields in the base configs](#ignore-some-fields-in-the-base-configs)
-    - [Use some fields in the base configs](#use-some-fields-in-the-base-configs)
-  - [Modify config through script arguments](#modify-config-through-script-arguments)
-  - [Import modules from other MM-codebases](#import-modules-from-other-mm-codebases)
+    - [Reuse some fields in the base configs](#reuse-some-fields-in-the-base-configs)
+  - [Modify Config through Script Arguments](#modify-config-through-script-arguments)
+  - [Import Modules from Other MM-Codebases](#import-modules-from-other-mm-codebases)
 
 ## Config File and Checkpoint Naming Convention
 
-We follow the convention below to name config files. Contributors are advised to follow the same convention. The name of config file is divided into four parts: `algorithm info`, `module information`, `training information` and `data information`. Logically, different parts are connected with underscores `_`, and info belonging to the same part is connected with dashes `-`.
+We follow the convention below to name config files. Contributors are advised to follow the same convention. The name of config file is divided into four parts: `algorithm info`, `module information`, `training information` and `data information`. Logically, different parts are connected with underscore `_`, and info belonging to the same part is connected with dash `-`.
 
 The following example is for illustration:
 
@@ -51,7 +51,7 @@ We detail the naming convention for each part in the name of the config file:
 - `npid-ensure-neg`
 - `deepcluster-sobel`
 
-Different words are connected with dashes `-`.
+Different words are connected with dash `-`.
 
 ### Module information
 
@@ -67,7 +67,7 @@ The module information mainly includes the backbone information. E.g.:
 
 Sometimes, there are some special settings needed to be mentioned in the config name. E.g.:
 
-- `resnet50-sobel`: In some downstream tasks，the backbone will only receive 2-channel images after the Sobel layer as input.
+- `resnet50-sobel`: In some downstream tasks，the backbone only receives 2-channel images after the Sobel layer as input.
 
 `neck_setting`, `head_setting` and `loss_setting` are optional.
 
@@ -291,24 +291,24 @@ For easy understanding, we recommend contributors to inherit from existing confi
 
 For all configs under the same folder, it is recommended to have only **one** _primitive_ config. All other configs should inherit from the _primitive_ config. In this way, the maximum of inheritance level is 3.
 
-For example, if your config file is based on MoCo v2 with some other modification, you can first inherit the basic configuration of MoCo v2 by specifying `_base_ ='./mocov2_resnet50_8xb32-coslr-200e_in1k.py.py'` (The path relative to your config file), and then modify the necessary parameters in your customized config file. A more specific example, now we want to use almost all configs in `configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py.py`, except for changing the training epochs from 200 to 800, you can create a new config file `configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-800e_in1k.py.py` with content as below:
+For example, if your config file is based on MoCo v2 with some other modifications, you can first inherit the basic configuration of MoCo v2 by specifying `_base_ ='./mocov2_resnet50_8xb32-coslr-200e_in1k.py'` (The path relative to your config file), and then modify the necessary fields in your customized config file. A more specific example, now we want to use almost all configs in `configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py`, except for changing the training epochs from 200 to 800, you can create a new config file `configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-800e_in1k.py` with the content as below:
 
 ```python
 _base_ = './mocov2_resnet50_8xb32-coslr-200e_in1k.py'
 
-runner = dict(max_epochs=800)
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=800)
 ```
 
 ### Use intermediate variables in configs
 
-Some intermediate variables are used in the configuration file. The intermediate variables make the configuration file more clear and easier to modify.
+Some intermediate variables are used in the config file. The intermediate variables make the config file clearer and easier to modify.
 
-For example, `dataset_type`, `train_pipeline`, `file_client_args` are the intermediate variables of the data. We first need to define them and then pass them to `data`.
+For example, `dataset_type`, `data_root`, `train_pipeline` are the intermediate variables of `dataset`. We first need to define them and then pass them into `dataset`.
 
 ```python
 # dataset settings
 
-# Since we use ``ImageNet`` from mmclassification, we need set the
+# Since we use ``ImageNet`` from mmclassification, we need to set the
 # custom_imports here.
 custom_imports = dict(imports='mmcls.datasets', allow_failed_imports=False)
 
@@ -320,7 +320,8 @@ file_client_args = dict(backend='disk')
 
 # The difference between mocov2 and mocov1 is the transforms in the pipeline
 view_pipeline = [
-    dict(type='RandomResizedCrop', size=224, scale=(0.2, 1.)),
+    dict(
+        type='RandomResizedCrop', size=224, scale=(0.2, 1.), backend='pillow'),
     dict(
         type='RandomApply',
         transforms=[
@@ -332,7 +333,11 @@ view_pipeline = [
                 hue=0.1)
         ],
         prob=0.8),
-    dict(type='RandomGrayscale', prob=0.2, keep_channels=True),
+    dict(
+        type='RandomGrayscale',
+        prob=0.2,
+        keep_channels=True,
+        channel_weights=(0.114, 0.587, 0.2989)),
     dict(type='RandomGaussianBlur', sigma_min=0.1, sigma_max=2.0, prob=0.5),
     dict(type='RandomFlip', prob=0.5),
 ]
@@ -345,7 +350,8 @@ train_pipeline = [
 
 train_dataloader = dict(
     batch_size=32,
-    num_workers=4,
+    num_workers=8,
+    drop_last=True,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
     dataset=dict(
@@ -358,9 +364,9 @@ train_dataloader = dict(
 
 ### Ignore some fields in the base configs
 
-Sometimes, you need to set `_delete_=True` to ignore some domain content in the basic configuration file. You can refer to [mmengine](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/config.md) for more instructions.
+Sometimes, you may set `_delete_=True` to ignore some of the fields in base configs. You can refer to [mmengine](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/config.md) for more instructions.
 
-The following is an example. If you want to use `MoCoV2Neck` in simclr, just using inheritance and directly modifying it will report `get unexcepected keyword 'num_layers'` error, because the `'num_layers'` field of the basic config in `model.neck` domain information is reserved, and you need to add `_delete_=True` to ignore the original content of `model.neck` in the basic configuration file:
+The following is an example. If you want to use `MoCoV2Neck` in SimCLR, directly inheriting and modifying it will report `get unexcepected keyword 'num_layers'` error since `NonLinearNeck` and `MoCoV2Neck` use different keywords to construct. In this case, adding `_delete_=True` would replace all old keys in `neck` field with new keys:
 
 ```python
 _base_ = 'simclr_resnet50_8xb32-coslr-200e_in1k.py'
@@ -375,11 +381,11 @@ model = dict(
         with_avg_pool=True))
 ```
 
-### Use some fields in the base configs
+### Reuse some fields in the base configs
 
-Sometimes, you may refer to some fields in the `_base_` config, so as to avoid duplication of definitions. You can refer to [mmengine](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/config.md) for some more instructions.
+Sometimes, you may reuse some fields in base configs, so as to avoid duplication of variables. You can refer to [mmengine](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/config.md) for more instructions.
 
-The following is an example of using the `num_classes` variable in the base configuration file, please refer to `configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py`.
+The following is an example of reusing the `num_classes` variable in the base config file. Please refer to `configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py` for more details.
 
 ```python
 _base_ = [
@@ -397,14 +403,14 @@ model = dict(
 
 ```
 
-## Modify config through script arguments
+## Modify Config through Script Arguments
 
-When users use the script "tools/train.py" or "tools/test.py" to submit tasks or use some other tools, they can directly modify the content of the configuration file used by specifying the `--cfg-options` parameter.
+When using the script `tools/train.py`/`tools/test.py` to submit tasks or using some other tools, you can directly modify the content of the configuration file by specifying the `--cfg-options` parameter.
 
 - Update config keys of dict chains.
 
   The config options can be specified following the order of the dict keys in the original config.
-  For example, `--cfg-options model.backbone.norm_eval=False` changes the all BN modules in model backbones to `train` mode.
+  For example, `--cfg-options model.backbone.norm_eval=False` changes all BN modules in backbone to `train` mode.
 
 - Update keys inside a list of configs.
 
@@ -414,22 +420,27 @@ When users use the script "tools/train.py" or "tools/test.py" to submit tasks or
 
 - Update values of list/tuples.
 
-  If the value to be updated is a list or a tuple. For example, some configuration files contain `param_scheduler = "[dict(type='CosineAnnealingLR',T_max=200,by_epoch=True,begin=0,end=200)]"`. If you want to change this key, you may specify `--cfg-options param_scheduler = "[dict(type='LinearLR',start_factor=1e-4, by_epoch=True,begin=0,end=40,convert_to_iter_based=True)]"`. Note that the quotation mark " is necessary to support list/tuple data types, and that **NO** white space is allowed inside the quotation marks in the specified value.
+  If the value to be updated is a list or a tuple. For example, some config files contain `param_scheduler = "[dict(type='CosineAnnealingLR',T_max=200,by_epoch=True,begin=0,end=200)]"`. If you want to change this key, you may specify `--cfg-options param_scheduler = "[dict(type='LinearLR',start_factor=1e-4, by_epoch=True,begin=0,end=40,convert_to_iter_based=True)]"`. Note that the quotation mark `"` is necessary to support list/tuple data types, and that **NO** white space is allowed inside the quotation marks for the specified value.
+  
+```{note}
+    This modification only supports modifying configuration items of string, int, float, boolean, None, list and tuple types.
+    More specifically, for list and tuple types, the elements inside them must also be one of the above seven types.
+```
 
-## Import modules from other MM-codebases
+## Import Modules from Other MM-Codebases
 
 ```{note}
 This part may only be used when using other MM-codebase, like mmcls as a third party library to build your own project, and beginners can skip it.
 ```
 
-You may use other MM-codebase to complete your project and create new classes of datasets, models, data enhancements, etc. in the project. In order to streamline the code, you can use MM-codebase as a third-party library, you just need to keep your own extra code and import your own custom module in the configuration files. For examples, you may refer to [OpenMMLab Algorithm Competition Project](https://github.com/zhangrui-wolf/openmmlab-competition-2021) .
+You may use other MM-codebase to complete your project and create new classes of datasets, models, data enhancements, etc. in the project. In order to streamline the code, you can use MM-codebase as a third-party library, you just need to keep your own extra code and import your own custom module in the config files. For example, you may refer to [OpenMMLab Algorithm Competition Project](https://github.com/zhangrui-wolf/openmmlab-competition-2021) .
 
-Add the following code to your own configuration files:
+Add the following code to your own config files:
 
 ```python
 custom_imports = dict(
     imports=['your_dataset_class',
-             'your_transforme_class',
+             'your_transform_class',
              'your_model_class',
              'your_module_class'],
     allow_failed_imports=False)
