@@ -67,7 +67,7 @@ The module information mainly includes the backbone information. E.g.:
 
 Sometimes, there are some special settings needed to be mentioned in the config name. E.g.:
 
-- `resnet50-sobel`: In some downstream tasks like linear evaluation, the backbone only takes 2-channel images after the Sobel layer as input when loading the DeepCluster pre-traiend model.
+- `resnet50-sobel`: In some downstream tasks like linear evaluation, when loading the DeepCluster pre-traiend model, the backbone only takes 2-channel images after the Sobel layer as input.
 
 Note that `neck_setting`, `head_setting` and `loss_setting` are optional.
 
@@ -421,7 +421,7 @@ When using the script `tools/train.py`/`tools/test.py` to submit tasks or using 
 - Update values of list/tuples.
 
   If the value to be updated is a list or a tuple. For example, some config files contain `param_scheduler = "[dict(type='CosineAnnealingLR',T_max=200,by_epoch=True,begin=0,end=200)]"`. If you want to change this key, you may specify `--cfg-options param_scheduler = "[dict(type='LinearLR',start_factor=1e-4, by_epoch=True,begin=0,end=40,convert_to_iter_based=True)]"`. Note that the quotation mark `"` is necessary to support list/tuple data types, and that **NO** white space is allowed inside the quotation marks for the specified value.
-  
+
 ```{note}
     This modification only supports modifying configuration items of string, int, float, boolean, None, list and tuple types.
     More specifically, for list and tuple types, the elements inside them must also be one of the above seven types.
