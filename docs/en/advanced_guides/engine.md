@@ -5,20 +5,20 @@
 - [Engine](#engine)
   - [Hook](#hook)
     - [Introduction](#introduction)
-    - [default hooks](#default-hooks)
-    - [Use other implemented hooks](#use-other-implemented-hooks)
-    - [Implemented hooks in MMSelfsup](#implemented-hooks-in-mmselfsup)
+    - [Default hooks](#default-hooks)
+    - [Common Hooks implemented in MMEngine](#common-hooks-implemented-in-mmengine)
+    - [Hooks implemented in MMSelfsup](#hooks-implemented-in-mmselfsup)
   - [Optimizer](#optimizer)
-    - [Optimizer](#optimizer)
-      - [Customize optimizer supported by Pytorch](#customize-optimizer-supported-by-pytorch)
+    - [Optimizer](#optimizer-1)
+      - [Customize optimizer supported by PyTorch](#customize-optimizer-supported-by-pytorch)
       - [Parameter-wise configuration](#parameter-wise-configuration)
       - [Implemented optimizers in MMSelfsup](#implemented-optimizers-in-mmselfsup)
-    - [Optimizer Wrapper](#optimizer-wrapper)
+    - [Optimizer wrapper](#optimizer-wrapper)
       - [Gradient clipping](#gradient-clipping)
       - [Gradient accumulation](#gradient-accumulation)
-      - [automatic mixed precision training](#automatic-mixed-precision-training)
+      - [Automatic mixed precision(AMP) training](#automatic-mixed-precisionamp-training)
     - [Constructor](#constructor)
-      - [Implemented constructors in MMSelfsup](#implemented-constructors-in-mmselfsup)
+      - [Constructors implemented in MMSelfsup](#constructors-implemented-in-mmselfsup)
 
 <!-- /TOC -->
 
@@ -54,9 +54,9 @@ The custom hooks are registered through custom_hooks. Generally, they are hooks 
 
 The priority determines the execution order of the hooks. Before training, the log will print out the execution order of the hooks at each stage to facilitate debugging.
 
-### default hooks
+### Default hooks
 
-Some common hooks are not registered through `custom_hooks`, they are
+The following common hooks are already reigistered by [default](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/_base_/default_runtime.py#L3), which is implemented through [`register_default_hooks`](https://github.com/open-mmlab/mmengine/blob/main/mmengine/runner/runner.py#L1750) in MMEngine:
 
 |                                                     Hooks                                                     |                                                         Usage                                                         |     Priority      |
 | :-----------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------: | :---------------: |
@@ -67,7 +67,7 @@ Some common hooks are not registered through `custom_hooks`, they are
 | [ParamSchedulerHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/param_scheduler_hook.py) |                     update some hyper-parameters in optimizer, e.g., learning rate and momentum.                      |     LOW (70)      |
 |     [CheckpointHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/checkpoint_hook.py)      |                                            save checkpoints periodically.                                             |   VERY_LOW (90)   |
 
-### Use other implemented hooks
+### Common Hooks implemented in MMEngine
 
 Some hooks have been already implemented in MMEngine, they are:
 
@@ -78,7 +78,7 @@ Some hooks have been already implemented in MMEngine, they are:
 |        [SyncBuffersHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/sync_buffer_hook.py)         | synchronize model buffers such as running_mean and running_var in BN at the end of each epoch. | NORMAL (50)  |
 | [NaiveVisualizationHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/naive_visualization_hook.py) |               Show or Write the predicted results during the process of testing.               | LOWEST (100) |
 
-### Implemented hooks in MMSelfsup
+### Hooks implemented in MMSelfsup
 
 Some hooks have been already implemented in MMSelfsup, they are:
 
@@ -146,7 +146,7 @@ custom_hooks = [
 
 ### Optimizer
 
-#### Customize optimizer supported by Pytorch
+#### Customize optimizer supported by PyTorch
 
 We already support to use all the optimizers implemented by PyTorch, see `mmengine/optim/optimizer/builder.py`. To use and modify them, please change the `optimizer` field of config files.
 
@@ -191,7 +191,7 @@ In addition to optimizers implemented by PyTorch, we also implement a customized
 optimizer = dict(type='LARS', lr=4.8, momentum=0.9, weight_decay=1e-6)
 ```
 
-### Optimizer Wrapper
+### Optimizer wrapper
 
 Besides the basic function of PyTorch optimizers, we also provide some enhancement functions, such as gradient clipping, gradient accumulation, automatic mixed precision training, etc. Please refer to [MMEngine](https://github.com/open-mmlab/mmengine/blob/main/mmengine/optim/optimizer/optimizer_wrapper.py) for more details.
 
@@ -236,7 +236,7 @@ optim_wrapper = dict(
     accumulative_counts=1)
 ```
 
-#### automatic mixed precision training
+#### Automatic mixed precision(AMP) training
 
 ```python
 optimizer = dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0001)
@@ -249,7 +249,7 @@ The default setting of `loss_scale` of `AmpOptimWrapper` is `dynamic`.
 
 The constructor aims to build optimizer, optimizer wrapper and customize hyper-parameters of different layers. The key `paramwise_cfg` of `optim_wrapper` in configs controls this customization.
 
-#### Implemented constructors in MMSelfsup
+#### Constructors implemented in MMSelfsup
 
 - [LearningRateDecayOptimWrapperConstructor](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/engine/optimizers/layer_decay_optim_wrapper_constructor.py#L64)
 
