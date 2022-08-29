@@ -9,7 +9,7 @@
 Data flow defines how data should be passed between two isolated modules, e.g. dataloader and model, as shown below.
 
 <div align="left">
-<img src="https://user-images.githubusercontent.com/30762564/185855134-89f5be9e-39ca-4da4-bd87-7cf26e80ab2f.png" width="40%"/>
+<img src="https://user-images.githubusercontent.com/30762564/185855134-89f5be9e-39ca-4da4-bd87-7cf26e80ab2f.png" width="70%"/>
 </div>
 
 In MMSelfSup, we mainly focus on the data flow between dataloader and model, and between model and visualizer. As for the
