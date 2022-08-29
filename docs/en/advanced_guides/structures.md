@@ -1,6 +1,6 @@
 # Structures
 
-- [SelfSupDataSample](#selfsupdatasample)
+- [Structures](#structures)
   - [Customized attributes in SelfSupDataSample](#customized-attributes-in-selfsupdatasample)
   - [Pack data to SelfSupDataSample in MMSelfSup](#pack-data-to-selfsupdatasample-in-mmselfsup)
 
@@ -25,7 +25,7 @@ customized attributes:
 - pseudo_label (BaseDataElement), containing the pseudo label used in pretext
   tasks, such as the location in Relative Location.
 
-To help uses capture the basic idea of SelfSupDataSample, we give a toy example, about how to create a `SelfSupDataSample`
+To help users capture the basic idea of SelfSupDataSample, we give a toy example, about how to create a `SelfSupDataSample`
 instance and set these attributes in it.
 
 ```python
@@ -63,8 +63,7 @@ print(selfsup_data_sample.mask.value.shape)
 ## Pack data to SelfSupDataSample in MMSelfSup
 
 Before feeding data into model, MMSelfSup packs data into `SelfSupDataSample` in data pipeline.
-If you do not understand data pipeline, you can consult [data transform](https://github.com/open-mmlab/mmcv/blob/transforms/docs/zh_cn/understand_mmcv/data_transform.md). To pack data, implements a data transform, call [PackSelfSupInputs](mmselfsup/datasets/pipelines/formatting.py).
-
+If you do not understand data pipeline, you can consult [data transform](https://github.com/open-mmlab/mmcv/blob/transforms/docs/zh_cn/understand_mmcv/data_transform.md). To pack data, we implement a data transform, called [PackSelfSupInputs](mmselfsup.datasets.transforms.PackSelfSupInputs)
 ```python
 class PackSelfSupInputs(BaseTransform):
     """Pack data into the format compatible with the inputs of algorithm.
@@ -176,5 +175,5 @@ class PackSelfSupInputs(BaseTransform):
 
 `algorithm_keys` are these attributes, except for `pseudo_label`, in SelfSupDataSample and
 `pseudo_label_keys` are these sub-keys in pseudo_label of SelfSupDataSample. Thank you for reading
-the while tutorial. If you have any problems, you can raise an issue in GitHub, and we will reach you
+the whole tutorial. If you have any problems, you can raise an issue in GitHub, and we will reach you
 as soon as possible.
