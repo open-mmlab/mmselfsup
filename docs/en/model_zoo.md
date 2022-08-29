@@ -11,13 +11,13 @@ All models and part of benchmark results are recorded below.
 
 - Number of papers: 17
 
-- Number of checkpoints: xx ckpts
+- Number of checkpoints: 48
 
 ## Benchmarks
 
 ### ImageNet
 
-ImageNet has multiple versions, but the most commonly used one is ILSVRC 2012. The classification results (Top-1 %) below are trained by linear evaluation or fine-tuning and the backbone is loaded with self-supervised pretrain backbone.
+ImageNet has multiple versions, but the most commonly used one is ILSVRC 2012. The classification results below are trained by linear evaluation or fine-tuning with loaded self-supervised pretrain backbones.
 
 <table class="docutils">
 <thead>
@@ -277,8 +277,8 @@ ImageNet has multiple versions, but the most commonly used one is ILSVRC 2012. T
       <td>70.7</td>
       <td>85.2</td>
       <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/mae/mae_vit-large-p16_8xb512-amp-coslr-400e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-large-p16_8xb512-fp16-coslr-400e_in1k/mae_vit-large-p16_8xb512-fp16-coslr-400e_in1k_20220825-b11d0425.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-large-p16_8xb512-fp16-coslr-400e_in1k/mae_vit-large-p16_8xb512-fp16-coslr-400e_in1k_20220726_202204.json'>log</a></td>
-      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/benchmarks/classification/imagenet/vit-large-p16_linear-8xb2048-coslr-90e_in1k.py'>config</a> | <a href=''>model</a> | <a href=''>log</a></td>
-      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/benchmarks/classification/imagenet/vit-large-p16_ft-8xb128-coslr-50e_in1k.py'>config</a> | <a href=''>model</a> | <a href=''>log</a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/benchmarks/classification/imagenet/vit-large-p16_linear-8xb2048-coslr-90e_in1k.py'>config</a> | model | <a href='https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-large-p16_8xb512-fp16-coslr-400e_in1k/vit-large-p16_linear-8xb2048-coslr-90e_in1k/vit-large-p16_linear-8xb2048-coslr-90e_in1k_20220803_101331.json'>log</a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/benchmarks/classification/imagenet/vit-large-p16_ft-8xb128-coslr-50e_in1k.py'>config</a> | model | <a href='https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-large-p16_8xb512-fp16-coslr-400e_in1k/vit-large-p16_ft-8xb128-coslr-50e_in1k/vit-large-p16_ft-8xb128-coslr-50e_in1k_20220729_122511.json'>log</a></td>
 	</tr>
   <tr>
 	    <td>ViT-large</td>
@@ -286,9 +286,9 @@ ImageNet has multiple versions, but the most commonly used one is ILSVRC 2012. T
       <td>4096</td>
       <td>73.7</td>
       <td>85.4</td>
-      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/mae/mae_vit-large-p16_8xb512-amp-coslr-800e_in1k.py'>config</a> | <a href=''>model</a> | <a href=''>log</a></td>
-      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/benchmarks/classification/imagenet/vit-large-p16_linear-8xb2048-coslr-90e_in1k.py'>config</a> | <a href=''>model</a> | <a href=''>log</a></td>
-      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/benchmarks/classification/imagenet/vit-large-p16_ft-8xb128-coslr-50e_in1k.py'>config</a> | <a href=''>model</a> | <a href=''>log</a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/mae/mae_vit-large-p16_8xb512-amp-coslr-800e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-large-p16_8xb512-fp16-coslr-800e_in1k/mae_vit-large-p16_8xb512-fp16-coslr-800e_in1k_20220825-df72726a.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-large-p16_8xb512-fp16-coslr-800e_in1k/mae_vit-large-p16_8xb512-fp16-coslr-800e_in1k_20220804_104018.json'>log</a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/benchmarks/classification/imagenet/vit-large-p16_linear-8xb2048-coslr-90e_in1k.py'>config</a> | model | <a href='https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-large-p16_8xb512-fp16-coslr-800e_in1k/vit-large-p16_linear-8xb2048-coslr-90e_in1k/vit-large-p16_linear-8xb2048-coslr-90e_in1k_20220808_092730.json'>log</a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/benchmarks/classification/imagenet/vit-large-p16_ft-8xb128-coslr-50e_in1k.py'>config</a> | model | <a href='https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-large-p16_8xb512-fp16-coslr-800e_in1k/vit-large-p16_ft-8xb128-coslr-50e_in1k/vit-large-p16_ft-8xb128-coslr-50e_in1k_20220730_235819.json'>log</a></td>
 	</tr>
   <tr>
 	    <td>ViT-large</td>
