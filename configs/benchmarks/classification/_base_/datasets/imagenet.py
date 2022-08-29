@@ -1,7 +1,7 @@
 # dataset settings
 dataset_type = 'ImageNet'
-data_root = 'sproject:s3://openmmlab/datasets/classification/imagenet/'
-file_client_args = dict(backend='petrel')
+data_root = 'data/imagenet/'
+file_client_args = dict(backend='disk')
 
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),

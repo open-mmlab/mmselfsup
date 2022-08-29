@@ -1,8 +1,8 @@
 # dataset settings
 custom_imports = dict(imports='mmcls.datasets', allow_failed_imports=False)
 dataset_type = 'mmcls.ImageNet'
-data_root = 'sproject:s3://openmmlab/datasets/classification/imagenet/'
-file_client_args = dict(backend='petrel')
+data_root = 'data/imagenet/'
+file_client_args = dict(backend='disk')
 
 view_pipeline1 = [
     dict(
