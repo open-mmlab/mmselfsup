@@ -64,6 +64,7 @@ print(selfsup_data_sample.mask.value.shape)
 
 Before feeding data into model, MMSelfSup packs data into `SelfSupDataSample` in data pipeline.
 If you do not understand data pipeline, you can consult [data transform](https://github.com/open-mmlab/mmcv/blob/transforms/docs/zh_cn/understand_mmcv/data_transform.md). To pack data, we implement a data transform, called [PackSelfSupInputs](mmselfsup.datasets.transforms.PackSelfSupInputs)
+
 ```python
 class PackSelfSupInputs(BaseTransform):
     """Pack data into the format compatible with the inputs of algorithm.
