@@ -26,7 +26,7 @@ into a tuple, containing the input images and meta info (`SelfSupDataSample`).
 ### Data from dataset
 
 In MMSelfSup, before feeding into the model, data should go through a series of transformations, called `pipeline`, e.g. `RandomResizedCrop` and `ColorJitter`. No matter how many transformations in the pipeline, the last transformation is `PackSelfSupInputs`. `PackSelfSupInputs` will
-pack these data from previous transformations into a dictionary. The dictionary contains two parts, namely, `inputs` and `data_sample`.
+pack these data from previous transformations into a dictionary. The dictionary contains two parts, namely, `inputs` and `data_samples`.
 
 ```python
 
@@ -43,7 +43,7 @@ class PackSelfSupInputs(BaseTransform):
             packed_results['inputs'] = img
 
         ...
-        packed_results['data_sample'] = data_sample
+        packed_results['data_samples'] = data_sample
 
         return packed_results
 ```
