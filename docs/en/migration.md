@@ -17,11 +17,11 @@
 
 ## Migration from MMSelfSup 0.x
 
-we introduce some modifications of MMSelfSup 1.x, to help users to migrate their projects based on MMSelfSup from 0.x smoothly.
+we introduce some modifications of MMSelfSup 1.x, to help users to migrate their projects based on MMSelfSup 0.x to 1.x smoothly.
 
 ### Config
 
-This section illusreates the changes of our config files in `_base_` folder, which includes three parts
+This section illustrates the changes of our config files in `_base_` folder, which includes three parts
 
 - Datasets: `mmselfsup/configs/selfsup/_base_/datasets`
 - Models: `mmselfsup/configs/selfsup/_base_/models`
