@@ -36,7 +36,7 @@ To help the user to use the MMSelfSup quickly, we recommend the following roadma
 
 Typically, SSL is considered as the pre-training algorithm for various model architectures. Thus, the complete pipeline consists of the **pre-training** stage and the **benchmark** stage.
 
-- For the user who want to try MMSelfSup with various SSL algorithms. We first refer the user to [Get Started](<>) for the **environment setup**.
+- For the user who wants to try MMSelfSup with various SSL algorithms. We first refer the user to [Get Started](<>) for the **environment setup**.
 
 - For the pre-training stage, we refer the user to [Pre-train](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/#pretrain) for using various SSL algorithms to obtain the pre-trained model.
 
