@@ -17,7 +17,7 @@ The community has witnessed rapid development of SSL in the past few years. Our 
 
 ## Design of MMSelfSup
 
-MMSelfSup follows the modular designed architecture as other OpenMMLab projects. We illustrate the overall framework is illustrated as below:
+MMSelfSup follows the modular designed architecture as other OpenMMLab projects. the overall framework is illustrated below:
 
 <div align="center">
   <img src="../../resources/mmselfsup_arch_uml.jpg" width="500"/>
