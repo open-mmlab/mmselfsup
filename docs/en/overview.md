@@ -20,7 +20,7 @@ The community has witnessed rapid development of SSL in the past few years. Our 
 MMSelfSup follows the modular designed architecture as other OpenMMLab projects. the overall framework is illustrated below:
 
 <div align="center">
-  <img src="../../resources/mmselfsup_arch_uml.jpg" width="500"/>
+  <img src="https://user-images.githubusercontent.com/36138628/187197848-e518052f-b75e-4981-bed7-d71dc1a5a0fb.jpg" width="500"/>
 </div>
 
 - **Datasets** provides the support for various datasets, with many useful augmentation strategy.
@@ -36,7 +36,7 @@ To help the user to use the MMSelfSup quickly, we recommend the following roadma
 
 Typically, SSL is considered as the pre-training algorithm for various model architectures. Thus, the complete pipeline consists of the **pre-training** stage and the **benchmark** stage.
 
-- For the user who wants to try MMSelfSup with various SSL algorithms. We first refer the user to [Get Started](<>) for the **environment setup**.
+- For the user who wants to try MMSelfSup with various SSL algorithms. We first refer the user to [Get Started](./get_started.md) for the **environment setup**.
 
 - For the pre-training stage, we refer the user to [Pre-train](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/#pretrain) for using various SSL algorithms to obtain the pre-trained model.
 
