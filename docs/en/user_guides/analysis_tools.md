@@ -9,7 +9,6 @@
   - [MAE Visualization](#mae-visualization)
   - [Use t-SNE](#use-t-sne)
 
-
 ## Count number of parameters
 
 ```shell
@@ -17,6 +16,7 @@ python tools/analysis_tools/count_parameters.py ${CONFIG_FILE}
 ```
 
 An example:
+
 ```shell
 python tools/analysis_tools/count_parameters.py configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py
 ```
@@ -34,6 +34,7 @@ python tools/model_converters/publish_model.py ${INPUT_FILENAME} ${OUTPUT_FILENA
 ```
 
 An example:
+
 ```shell
 python tools/model_converters/publish_model.py YOUR/PATH/epoch_100.pth YOUR/PATH/epoch_100_output.pth
 ```
@@ -41,7 +42,6 @@ python tools/model_converters/publish_model.py YOUR/PATH/epoch_100.pth YOUR/PATH
 ## Reproducibility
 
 If you want to make your performance exactly reproducible, please switch on `--deterministic` to train the final model to be published. Note that this flag will switch off `torch.backends.cudnn.benchmark` and slow down the training speed.
-
 
 ## Log Analysis
 
@@ -141,6 +141,7 @@ Arguments:
 - `[optional arguments]`: for optional arguments, you can refer to [visualize_tsne.py](https://github.com/open-mmlab/mmselfsup/blob/master/tools/analysis_tools/visualize_tsne.py)
 
 An example:
+
 ```shell
 python tools/analysis_tools/visualize_tsne.py configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py --checkpoint epoch_100.pth --work-dir work_dirs/selfsup/simsiam_resnet50_8xb32-coslr-200e_in1k
 ```
