@@ -46,4 +46,4 @@ Typically, SSL is considered as the pre-training algorithm for various model arc
 
 ### Learn SSL with MMSelfSup
 
-If you are new to SSL, we recommend using the [Model Zoo](https://mmselfsup.readthedocs.io/en/dev-1.x/model_zoo.html) as a reference to learn the milestones SSL algorithms.
+If you are new to SSL, we recommend using the [Model Zoo](https://mmselfsup.readthedocs.io/en/dev-1.x/model_zoo.html) as a reference to learn the representative SSL algorithms.
