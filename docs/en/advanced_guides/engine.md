@@ -3,26 +3,24 @@
 <!-- TOC -->
 
 - [Engine](#engine)
-    - [Hook](#hook)
-        - [Introduction](#introduction)
-        - [default hooks](#default-hooks)
-        - [Use other implemented hooks](#use-other-implemented-hooks)
-        - [Implemented hooks in MMSelfsup](#implemented-hooks-in-mmselfsup)
+  - [Hook](#hook)
+    - [Introduction](#introduction)
+    - [default hooks](#default-hooks)
+    - [Use other implemented hooks](#use-other-implemented-hooks)
+    - [Implemented hooks in MMSelfsup](#implemented-hooks-in-mmselfsup)
+  - [Optimizer](#optimizer)
     - [Optimizer](#optimizer)
-        - [Optimizer](#optimizer)
-            - [Customize optimizer supported by Pytorch](#customize-optimizer-supported-by-pytorch)
-            - [Parameter-wise configuration](#parameter-wise-configuration)
-            - [Implemented optimizers in MMSelfsup](#implemented-optimizers-in-mmselfsup)
-        - [Optimizer Wrapper](#optimizer-wrapper)
-            - [Gradient clipping](#gradient-clipping)
-            - [Gradient accumulation](#gradient-accumulation)
-            - [automatic mixed precision training](#automatic-mixed-precision-training)
-        - [Constructor](#constructor)
-            - [Implemented constructors in MMSelfsup](#implemented-constructors-in-mmselfsup)
+      - [Customize optimizer supported by Pytorch](#customize-optimizer-supported-by-pytorch)
+      - [Parameter-wise configuration](#parameter-wise-configuration)
+      - [Implemented optimizers in MMSelfsup](#implemented-optimizers-in-mmselfsup)
+    - [Optimizer Wrapper](#optimizer-wrapper)
+      - [Gradient clipping](#gradient-clipping)
+      - [Gradient accumulation](#gradient-accumulation)
+      - [automatic mixed precision training](#automatic-mixed-precision-training)
+    - [Constructor](#constructor)
+      - [Implemented constructors in MMSelfsup](#implemented-constructors-in-mmselfsup)
 
 <!-- /TOC -->
-
-
 
 ## Hook
 
@@ -60,25 +58,25 @@ The priority determines the execution order of the hooks. Before training, the l
 
 Some common hooks are not registered through `custom_hooks`, they are
 
-|                    Hooks                    |                            Usage                             |     Priority      |
-| :-----------------------------------------: | :----------------------------------------------------------: | :---------------: |
-|     [RuntimeInfoHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/runtime_info_hook.py)     |         update runtime information into message hub.         |  VERY_HIGH (10)   |
-|       [IterTimerHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/iter_timer_hook.py)       |             log the time spent during iteration.             |    NORMAL (50)    |
-| [DistSamplerSeedHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/sampler_seed_hook.py) |         ensure distributed Sampler shuffle is active         |    NORMAL (50)    |
-|          [LoggerHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/logger_hook.py)          | collect logs from different components of ``Runner`` and write them to terminal, JSON file, tensorboard and wandb .etc. | BELOW_NORMAL (60) |
-|  [ParamSchedulerHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/param_scheduler_hook.py)  | update some hyper-parameters in optimizer, e.g., learning rate and momentum. |     LOW (70)      |
-|      [CheckpointHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/checkpoint_hook.py)      |                save checkpoints periodically.                |   VERY_LOW (90)   |
+|                                                     Hooks                                                     |                                                         Usage                                                         |     Priority      |
+| :-----------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------: | :---------------: |
+|    [RuntimeInfoHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/runtime_info_hook.py)    |                                     update runtime information into message hub.                                      |  VERY_HIGH (10)   |
+|      [IterTimerHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/iter_timer_hook.py)      |                                         log the time spent during iteration.                                          |    NORMAL (50)    |
+|  [DistSamplerSeedHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/sampler_seed_hook.py)  |                                     ensure distributed Sampler shuffle is active                                      |    NORMAL (50)    |
+|         [LoggerHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/logger_hook.py)          | collect logs from different components of `Runner` and write them to terminal, JSON file, tensorboard and wandb .etc. | BELOW_NORMAL (60) |
+| [ParamSchedulerHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/param_scheduler_hook.py) |                     update some hyper-parameters in optimizer, e.g., learning rate and momentum.                      |     LOW (70)      |
+|     [CheckpointHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/checkpoint_hook.py)      |                                            save checkpoints periodically.                                             |   VERY_LOW (90)   |
 
 ### Use other implemented hooks
 
 Some hooks have been already implemented in MMEngine, they are:
 
-|                            Hooks                             |                            Usage                             |   Priority   |
-| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------: |
-| [EMAHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/ema_hook.py) | apply Exponential Moving Average (EMA) on the model during training. | NORMAL (50)  |
-| [EmptyCacheHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/empty_cache_hook.py) | release all unoccupied cached GPU memory during the process of training. | NORMAL (50)  |
-| [SyncBuffersHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/sync_buffer_hook.py) | synchronize model buffers such as running_mean and running_var in BN at the end of each epoch. | NORMAL (50)  |
-| [NaiveVisualizationHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/naive_visualization_hook.py) | Show or Write the predicted results during the process of testing. | LOWEST (100) |
+|                                                         Hooks                                                         |                                             Usage                                              |   Priority   |
+| :-------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------: | :----------: |
+|                [EMAHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/ema_hook.py)                 |              apply Exponential Moving Average (EMA) on the model during training.              | NORMAL (50)  |
+|         [EmptyCacheHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/empty_cache_hook.py)         |            release all unoccupied cached GPU memory during the process of training.            | NORMAL (50)  |
+|        [SyncBuffersHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/sync_buffer_hook.py)         | synchronize model buffers such as running_mean and running_var in BN at the end of each epoch. | NORMAL (50)  |
+| [NaiveVisualizationHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/naive_visualization_hook.py) |               Show or Write the predicted results during the process of testing.               | LOWEST (100) |
 
 ### Implemented hooks in MMSelfsup
 
@@ -96,12 +94,11 @@ Some hooks have been already implemented in MMSelfsup, they are:
 
 - ......
 
-**An example: **
+An example:
 
-Take [DenseCLHook](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/engine/hooks/densecl_hook.py) for example, this hook includes ``loss_lambda`` warmup in DenseCL.
+Take [DenseCLHook](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/engine/hooks/densecl_hook.py) for example, this hook includes `loss_lambda` warmup in DenseCL.
 
 `loss_lambda` is loss weight for the single and dense contrastive loss. Defaults to 0.5.
-
 
 ```python
 losses = dict()
@@ -110,7 +107,6 @@ losses['loss_dense'] = loss_dense * self.loss_lambda
 ```
 
 `DenseCLHook` is implemented as follows:
-
 
 ```python
 ...
@@ -145,7 +141,6 @@ custom_hooks = [
     dict(type='DenseCLHook', start_iters=500)
 ]
 ```
-
 
 ## Optimizer
 
@@ -215,7 +210,7 @@ optim_wrapper = dict(
 # norm_type: type of the used p-norm, here norm_type is 2.
 ```
 
-If ``clip_grad`` is not None, it will be the arguments of ``torch.nn.utils.clip_grad.clip_grad_norm_()``.
+If `clip_grad` is not None, it will be the arguments of `torch.nn.utils.clip_grad.clip_grad_norm_()`.
 
 #### Gradient accumulation
 
@@ -256,13 +251,11 @@ The constructor aims to build optimizer, optimizer wrapper and customize hyper-p
 
 #### Implemented constructors in MMSelfsup
 
-
 - [LearningRateDecayOptimWrapperConstructor](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/engine/optimizers/layer_decay_optim_wrapper_constructor.py#L64)
 
-`LearningRateDecayOptimWrapperConstructor` sets different learning rates for different layers of backbone. Note: Currently, this optimizer constructor is built for ViT and Swin. 
+`LearningRateDecayOptimWrapperConstructor` sets different learning rates for different layers of backbone. Note: Currently, this optimizer constructor is built for ViT and Swin.
 
 An example:
-
 
 ```python
 optim_wrapper = dict(
@@ -280,5 +273,4 @@ optim_wrapper = dict(
     constructor='mmselfsup.LearningRateDecayOptimWrapperConstructor')
 ```
 
-Note: `paramwise_cfg` will be ignored, and it can be written as  `paramwise_cfg=dict()` .  By default, `LearningRateDecayOptimWrapperConstructor` will not apply weight decay to ``normalization parameters``, ``bias``, ``position embedding``, ``class token``, and ``relative position bias table``, automatically. 
-
+Note: `paramwise_cfg` will be ignored, and it can be written as  `paramwise_cfg=dict()` .  By default, `LearningRateDecayOptimWrapperConstructor` will not apply weight decay to `normalization parameters`, `bias`, `position embedding`, `class token`, and `relative position bias table`, automatically.
