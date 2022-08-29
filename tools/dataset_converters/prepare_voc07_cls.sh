@@ -2,7 +2,7 @@
 
 DATA="$1"
 if [ "$DATA" == "" ]; then
-    echo "Usage: bash tools/data_converters/prepare_voc07_cls.sh YOUR_DATA_ROOT"
+    echo "Usage: bash tools/dataset_converters/prepare_voc07_cls.sh YOUR_DATA_ROOT"
     exit
 fi
 
