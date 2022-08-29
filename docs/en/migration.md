@@ -70,7 +70,7 @@ train_dataloader = dict(
 val_dataloader = ...
 ```
 
-Besides, we remove the key of `data_source` to keep the consistent pipeline format with other OpenMMLab projects. Please refer to [1_config.md](user_guides/1_config.md) for more details.
+Besides, we remove the key of `data_source` to keep the pipeline format consistent with that in other OpenMMLab projects. Please refer to [1_config.md](user_guides/1_config.md) for more details.
 
 #### Models
 
@@ -120,17 +120,17 @@ model = dict(
 
 The table below records the general modification of the folders and files.
 
-| MMSelfSup 0.x         | MMSelfSup 1.x       | Remark                                                                                                                                                    |
-| --------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| apis                  | /                   | Currently, the `apis` folder has been **removed**, it might be added in the future.                                                                       |
-| core                  | engine              | The `core` folder has been renamed to `engine`, which includes `hooks`, `opimizers`.                                                                      |
-| datasets              | datasets            | The datasets is implemented according to different datasets, such as ImageNet, Places205.                                                                 |
-| datasets/data_sources | /                   | The `data_sources` has been **removed** and the directory of `datasets` now is consistent with other OpenMMLab projects.                                  |
-| datasets/pipelines    | datasets/transforms | The `pipelines` folder has been renamed to `transforms`.                                                                                                  |
-| /                     | evaluation          | The `evaluation` is created for some evaluation functions or classes, such as KNN function or layer for detection.                                        |
-| /                     | models/losses       | The `losses` folder is created to provide different loss implementation, which is from `heads`                                                            |
-| /                     | structures          | The `structures` folder is for the implementation of data structures. In MMSelfSup, we provide `selfsup_data_sample` to store different data information. |
-| /                     | visualization       | The `visualization` folder contains the visualizer, which is responsible for some visualization tasks like visualizing data augmentation.                 |
+| MMSelfSup 0.x         | MMSelfSup 1.x       | Remark                                                                                                                                                                                                       |
+| --------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| apis                  | /                   | Currently, the `apis` folder has been **removed**, it might be added in the future.                                                                                                                          |
+| core                  | engine              | The `core` folder has been renamed to `engine`, which includes `hooks`, `opimizers`.                                                                                                                         |
+| datasets              | datasets            | The datasets is implemented according to different datasets, such as ImageNet, Places205.                                                                                                                    |
+| datasets/data_sources | /                   | The `data_sources` has been **removed** and the directory of `datasets` now is consistent with other OpenMMLab projects.                                                                                     |
+| datasets/pipelines    | datasets/transforms | The `pipelines` folder has been renamed to `transforms`.                                                                                                                                                     |
+| /                     | evaluation          | The `evaluation` is created for some evaluation functions or classes, such as KNN function or layer for detection.                                                                                           |
+| /                     | models/losses       | The `losses` folder is created to provide different loss implementations, which is from `heads`                                                                                                              |
+| /                     | structures          | The `structures` folder is for the implementation of data structures. In MMSelfSup, we implement a new data structure, `selfsup_data_sample`,  to pass and receive data throughout the training/val process. |
+| /                     | visualization       | The `visualization` folder contains the visualizer, which is responsible for some visualization tasks like visualizing data augmentation.                                                                    |
 
 ## Differences between MMSelfSup and OpenSelfSup
 
