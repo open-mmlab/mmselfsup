@@ -33,6 +33,10 @@ class SelfSupDataPreprocessor(ImgDataPreprocessor):
             Tuple[torch.Tensor, Optional[list]]: Data in the same format as the
             model input.
         """
+        assert isinstance(data,
+                          dict), "Please use default_collate in dataloader, \
+            instead of pseudo_collate."
+
         data = [val for _, val in data.items()]
         batch_inputs, batch_data_samples = self.cast_data(data)
         # channel transform
@@ -155,8 +159,7 @@ class CAEDataPreprocessor(SelfSupDataPreprocessor):
             Tuple[torch.Tensor, Optional[list]]: Data in the same format as the
             model input.
         """
-        data = [val
-                for _, val in data.items()] if isinstance(data, dict) else data
+        data = [val for _, val in data.items()]
         batch_inputs, batch_data_samples = self.cast_data(data)
         # channel transform
         if self._channel_conversion:
