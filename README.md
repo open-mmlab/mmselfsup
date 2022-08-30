@@ -43,7 +43,7 @@ English | [简体中文](README_zh-CN.md)
 
 MMSelfSup is an open source self-supervised representation learning toolbox based on PyTorch. It is a part of the [OpenMMLab](https://openmmlab.com/) project.
 
-The master branch works with **PyTorch 1.5** or higher.
+The master branch works with **PyTorch 1.6** or higher.
 
 ### Major features
 

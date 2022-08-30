@@ -43,7 +43,7 @@
 
 MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱，是 [OpenMMLab](https://openmmlab.com/) 项目成员之一。
 
-主分支代码支持 **PyTorch 1.5** 及以上的版本。
+主分支代码支持 **PyTorch 1.6** 及以上的版本。
 
 ### 主要特性
 
@@ -65,64 +65,56 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
 ## 更新
 
-最新的 **v0.9.1** 版本已经在 2022.05.31 发布。
+最新的 **v1.0.0rc0** 版本已经在 2022.09.01 发布。
 
 新版本亮点：
 
-- 更新 **BYOL** 模型和结果
-- 更新优化部分文档
+- 基于 MMEngine 和 MMCV
+- 全面代码重构
+- 文档更新
+- 更强大的数据流
 
 请参考 [更新日志](docs/zh_cn/changelog.md) 获取更多细节和历史版本信息。
 
-MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibility.md) 中。
+MMSelfSup 1.x 和 0.x 的不同点写在 [迁移文档]([docs/en/compatibility.md](https://mmselfsup.readthedocs.io/en/dev-1.x/migration.html)) 中。
 
 ## 安装
 
-MMSelfSup 依赖 [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open-mmlab/mmcv) 和 [MMClassification](https://github.com/open-mmlab/mmclassification).
+MMSelfSup 依赖 [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open-mmlab/mmcv), [MMEngine](https://github.com/open-mmlab/mmengine) 和 [MMClassification](https://github.com/open-mmlab/mmclassification)。
 
-请参考 [安装文档](docs/zh_cn/install.md) 获取更详细的安装指南。
+请参考 [安装文档](https://mmselfsup.readthedocs.io/en/dev-1.x/get_started.html) 获取更详细的安装指南。
 
-## 快速入门
+## 指引
 
-请参考 [准备数据](docs/zh_cn/prepare_data.md) 准备数据集和 [入门指南](docs/zh_cn/get_started.md) 获取 MMSelfSup 的基本使用方法.
+我们针对基础使用和进阶用法提供了 [User Guides](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/index.html) 和 [Advanced Guides](https://mmselfsup.readthedocs.io/en/dev-1.x/advanced_guides/index.html)。
 
-我们也提供了更加全面的教程，包括:
-
-- [配置文件](docs/zh_cn/tutorials/0_config.md)
-- [添加数据集](docs/zh_cn/tutorials/1_new_dataset.md)
-- [数据处理流](docs/zh_cn/tutorials/2_data_pipeline.md)
-- [添加新模块](docs/zh_cn/tutorials/3_new_module.md)
-- [自定义流程](docs/zh_cn/tutorials/4_schedule.md)
-- [自定义运行](docs/zh_cn/tutorials/5_runtime.md)
-- [基准测试](docs/zh_cn/tutorials/6_benchmarks.md)
-
-另外，我们提供了 [colab 教程](https://github.com/open-mmlab/mmselfsup/blob/master/demo/mmselfsup_colab_tutorial.ipynb)。
+我们也提供了 [Colab 教程](https://github.com/open-mmlab/mmselfsup/blob/master/demo/mmselfsup_colab_tutorial.ipynb)。
 
 如果遇到问题，请参考 [常见问题解答](docs/zh_cn/faq.md)。
 
 ## 模型库
 
-请参考 [模型库](docs/zh_cn/model_zoo.md) 查看我们更加全面的模型基准结果。
+请参考 [模型库](https://mmselfsup.readthedocs.io/en/dev-1.x/model_zoo.html) 查看我们更加全面的模型基准结果。
 
 目前已支持的算法:
 
-- [x] [Relative Location (ICCV'2015)](https://arxiv.org/abs/1505.05192)
-- [x] [Rotation Prediction (ICLR'2018)](https://arxiv.org/abs/1803.07728)
-- [x] [DeepCLuster (ECCV'2018)](https://arxiv.org/abs/1807.05520)
-- [x] [NPID (CVPR'2018)](https://arxiv.org/abs/1805.01978)
-- [x] [ODC (CVPR'2020)](https://arxiv.org/abs/2006.10645)
-- [x] [MoCo v1 (CVPR'2020)](https://arxiv.org/abs/1911.05722)
-- [x] [SimCLR (ICML'2020)](https://arxiv.org/abs/2002.05709)
-- [x] [MoCo v2 (ArXiv'2020)](https://arxiv.org/abs/2003.04297)
-- [x] [BYOL (NeurIPS'2020)](https://arxiv.org/abs/2006.07733)
-- [x] [SwAV (NeurIPS'2020)](https://arxiv.org/abs/2006.09882)
-- [x] [DenseCL (CVPR'2021)](https://arxiv.org/abs/2011.09157)
-- [x] [SimSiam (CVPR'2021)](https://arxiv.org/abs/2011.10566)
-- [x] [Barlow Twins (ICML'2021)](https://arxiv.org/abs/2103.03230)
-- [x] [MoCo v3 (ICCV'2021)](https://arxiv.org/abs/2104.02057)
-- [x] [MAE](https://arxiv.org/abs/2111.06377)
-- [x] [SimMIM](https://arxiv.org/abs/2111.09886)
-- [x] [CAE](https://arxiv.org/abs/2202.03026)
+- [x] [Relative Location (ICCV'2015)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/relavive_loc)
+- [x] [Rotation Prediction (ICLR'2018)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/rotation_pred)
+- [x] [DeepCluster (ECCV'2018)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/deepcluster)
+- [x] [NPID (CVPR'2018)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/npid)
+- [x] [ODC (CVPR'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/odc)
+- [x] [MoCo v1 (CVPR'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mocov1)
+- [x] [SimCLR (ICML'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/simclr)
+- [x] [MoCo v2 (ArXiv'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/byol)
+- [x] [BYOL (NeurIPS'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mocov2)
+- [x] [SwAV (NeurIPS'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/swav)
+- [x] [DenseCL (CVPR'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/densecl)
+- [x] [SimSiam (CVPR'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/simsiam)
+- [x] [Barlow Twins (ICML'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/barlowtwins)
+- [x] [MoCo v3 (ICCV'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mocov3)
+- [x] [MAE (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mae)
+- [x] [SimMIM (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/simmim)
+- [x] [CAE (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/cae)
 
 更多的算法实现已经在我们的计划中。
 
@@ -144,7 +136,7 @@ MMSelfSup 依赖 [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open
 
 ## 参与贡献
 
-我们非常欢迎任何有助于提升 MMSelfSup 的贡献，请参考 [贡献指南](.github/CONTRIBUTING.md) 来了解如何参与贡献。
+我们非常欢迎任何有助于提升 MMSelfSup 的贡献，请参考 [贡献指南](docs/en/notes/contribution_guides.md) 来了解如何参与贡献。
 
 ## 致谢
 
