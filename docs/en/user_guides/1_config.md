@@ -1,6 +1,6 @@
 # Tutorial 1: Learn about Configs
 
-We incorporate modular and inheritance design into our config system, which is convenient to conduct various experiments. If you wish to inspect the config file, you may run `python tools/print_config.py /PATH/TO/CONFIG` to see the complete config. You may also pass `--cfg-options xxx.yyy=zzz` to see the updated config.
+We incorporate modular and inheritance design into our config system, which is convenient to conduct various experiments. If you wish to inspect the config file, you may run `python tools/misc/print_config.py /PATH/TO/CONFIG` to see the complete config. You may also pass `--cfg-options xxx.yyy=zzz` to see the updated config.
 
 - [Tutorial 1: Learn about Configs](#tutorial-1-learn-about-configs)
   - [Config File and Checkpoint Naming Convention](#config-file-and-checkpoint-naming-convention)
@@ -225,6 +225,7 @@ train_dataloader = dict(
     drop_last=True,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
+    collate_fn=dict(type='default_collate'),
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
@@ -296,6 +297,12 @@ For example, if your config file is based on MoCo v2 with some other modificatio
 ```python
 _base_ = './mocov2_resnet50_8xb32-coslr-200e_in1k.py'
 
+# learning rate scheduler
+param_scheduler = [
+    dict(type='CosineAnnealingLR', T_max=800, by_epoch=True, begin=0, end=800)
+]
+
+# runtime settings
 train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=800)
 ```
 
@@ -354,6 +361,7 @@ train_dataloader = dict(
     drop_last=True,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
+    collate_fn=dict(type='default_collate'),
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
