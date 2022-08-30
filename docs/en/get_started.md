@@ -20,7 +20,7 @@
 
 In this section, we demonstrate how to prepare an environment with PyTorch.
 
-MMselfSup works on Linux (Windows and macOS are not officially supported). It requires Python 3.6+, CUDA 9.2+ and PyTorch 1.5+.
+MMSelfSup works on Linux (Windows and macOS are not officially supported). It requires Python 3.6+, CUDA 9.2+ and PyTorch 1.5+.
 
 ```{note}
 If you are experienced with PyTorch and have already installed it, just skip this part and jump to the [next section](#installation). Otherwise, you can follow these steps for the preparation.
@@ -53,7 +53,7 @@ conda install pytorch torchvision cpuonly -c pytorch
 
 We recommend users to follow our best practices to install MMSelfSup. However, the whole process is highly customizable. See [Customize Installation](#customize-installation) section for more information.
 
-### Best Practices
+### Best practices
 
 **Step 0.** Install [MMEngine](https://github.com/open-mmlab/mmengine) and [MMCV](https://github.com/open-mmlab/mmcv) using [MIM](https://github.com/open-mmlab/mim).
 
@@ -136,7 +136,7 @@ The above code is supposed to run successfully upon you finish the installation.
 
 #### Benchmark
 
-The [Best Practices](#best-practices) is for basic usage. If you need to evaluate your pre-trained model with some downstream tasks such as detection or segmentation, please also install [MMDetection](https://github.com/open-mmlab/mmdetection) and [MMSegmentation](https://github.com/open-mmlab/mmsegmentation).
+The [Best practices](#best-practices) is for basic usage. If you need to evaluate your pre-trained model with some downstream tasks such as detection or segmentation, please also install [MMDetection](https://github.com/open-mmlab/mmdetection) and [MMSegmentation](https://github.com/open-mmlab/mmsegmentation).
 
 If you don't run MMDetection and MMSegmentation benchmarks, it is unnecessary to install them.
 
