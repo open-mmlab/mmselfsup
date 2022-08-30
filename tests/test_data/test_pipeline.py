@@ -187,3 +187,14 @@ def test_random_resize_crop_with_two_pic():
     fake_output = module(fake_input)
     assert list(fake_output[0].size) == [224, 224]
     assert list(fake_output[1].size) == [112, 112]
+
+
+def test_maskfeat_mask_gen():
+    transform = dict(
+        type='MaskfeatMaskGenerator', mask_window_size=14, mask_ratio=0.6)
+
+    img = torch.rand((3, 224, 224))
+    module = build_from_cfg(transform, PIPELINES)
+    res = module(img)
+    assert list(res[1].shape) == [14, 14]
+    assert res[1].int().sum() / 14**2 - 0.6 < 1e-6
