@@ -1,6 +1,6 @@
 # Add Datasets
 
-In this tutorial, we introduce the basic steps to create your customized dataset. Before learning to to create your customized datasets, it is recommended to learn the basic concept of datasets in file [datasets.md](datasets.md).
+In this tutorial, we introduce the basic steps to create your customized dataset. Before learning to create your customized datasets, it is recommended to learn the basic concept of datasets in file [datasets.md](datasets.md).
 
 - [Add Datasets](#add-datasets)
   - [Step 1: Creating the Dataset](#step-1-creating-the-dataset)

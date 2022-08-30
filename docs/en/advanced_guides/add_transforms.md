@@ -1,6 +1,6 @@
 # Add Transforms
 
-In this tutorial, we introduce the basic steps to create your customized transforms. Before learning to to create your customized transforms, it is recommended to learn the basic concept of transforms in file [transforms.md](transforms.md).
+In this tutorial, we introduce the basic steps to create your customized transforms. Before learning to create your customized transforms, it is recommended to learn the basic concept of transforms in file [transforms.md](transforms.md).
 
 - [Add Transforms](#add-transforms)
   - [Overview of Pipeline](#overview-of-pipeline)
@@ -49,11 +49,11 @@ Every augmentation in the `Pipeline` receives a `dict` as input and outputs a `d
 
 ## Creating a new transform in Pipeline
 
-Here are the steps to Create a new transform.
+Here are the steps to create a new transform.
 
 ### Step 1: Creating the transform
 
-Write a new transform in [processing.py](https://github.com/open-mmlab/mmselfsup/tree/1.x/mmselfsup/datasets/transforms/processing.py) and overwrite the `transform` function, which takes a `dict` as input:
+Write a new transform in [processing.py](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/mmselfsup/datasets/transforms/processing.py) and overwrite the `transform` function, which takes a `dict` as input:
 
 ```python
 @TRANSFORMS.register_module()
@@ -66,11 +66,11 @@ class NewTransform(BaseTransform):
         return results
 ```
 
-**Note:** For the implementation of transforms, you could apply functions in [mmcv](https://github.com/open-mmlab/mmcv/tree/2.x/mmcv/image).
+**Note:** For the implementation of transforms, you could apply functions in [mmcv](https://github.com/open-mmlab/mmcv/tree/dev-2.x/mmcv/image).
 
 ### Step 2: Add NewTransform to \_\_init\_\_py
 
-Then, add the transform to [__init__.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/__init__.py).
+Then, add the transform to [\_\_init\_\_.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/__init__.py).
 
 ```python
 ...
