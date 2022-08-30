@@ -1,5 +1,5 @@
 faiss-cpu
-mmcv>=2.0.0rc0
+mmcv>=2.0.0rc1
 mmselfsup
 scikit-learn
 torch
