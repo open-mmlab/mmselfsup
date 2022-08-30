@@ -20,7 +20,7 @@
 
 In this section, we demonstrate how to prepare an environment with PyTorch.
 
-MMSelfSup works on Linux (Windows and macOS are not officially supported). It requires Python 3.6+, CUDA 9.2+ and PyTorch 1.5+.
+MMSelfSup works on Linux (Windows and macOS are not officially supported). It requires Python 3.6+, CUDA 9.2+ and PyTorch 1.6+.
 
 ```{note}
 If you are experienced with PyTorch and have already installed it, just skip this part and jump to the [next section](#installation). Otherwise, you can follow these steps for the preparation.
@@ -59,7 +59,8 @@ We recommend users to follow our best practices to install MMSelfSup. However, t
 
 ```shell
 pip install -U openmim
-mim install mmengine "mmcv-full>=2.0rc0"
+mim install mmengine
+mim install mmcv>=2.0.0rc1
 ```
 
 **Step 1.** Install MMSelfSup.
@@ -94,12 +95,20 @@ git checkout dev-1.x
 Just install with pip.
 
 ```shell
-pip install "mmselfsup>=1.0rc0"
+pip install mmselfsup>=1.0.0rc0
 ```
 
 ### Verify the installation
 
-To verify whether MMSelfSup is installed correctly, you can run the following sample code to initialize a model and inference a demo image.
+To verify whether MMSelfSup is installed correctly, you can run the following command.
+
+```python
+import mmselfsup
+print(mmselfsup.__version__)
+# Example output: 1.0.0rc0 or newer
+```
+
+We also provide the following sample code to initialize a model and inference a demo image.
 
 ```python
 import torch
@@ -180,7 +189,7 @@ To install MMCV with pip instead of MIM, please follow [MMCV installation guides
 For example, the following command install mmcv-full built for PyTorch 1.10.x and CUDA 11.3.
 
 ```shell
-pip install "mmcv-full>=2.0rc0" -f https://download.openmmlab.com/mmcv/dist/cu113/torch1.10/index.html
+pip install mmcv-full>=2.0.0rc1 -f https://download.openmmlab.com/mmcv/dist/cu113/torch1.10/index.html
 ```
 
 ### Install on CPU-only platforms
@@ -199,7 +208,8 @@ thus we only need to install MMCV and MMSeflSup with the following commands.
 
 ```shell
 !pip3 install openmim
-!mim install mmengine "mmcv-full>=2.0rc0"
+!mim install mmengine
+!mim install mmcv>=2.0.0rc1
 ```
 
 **Step 1.** Install MMSelfSup from the source.
