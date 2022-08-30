@@ -42,7 +42,7 @@ Typically, SSL is considered as the pre-training algorithm for various model arc
 
 - For the benchmark stage, we refer the user to [Benchmark](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/#downstream-tasks) for examples and usage of applying the pre-trained models in many downstream tasks.
 
-- Also, we provide some analysis tools and visualization tools[(Useful Tools)](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/#downstream-tasks) to help  diagnose the algorithm.
+- Also, we provide some analysis tools and visualization tools [Useful Tools](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/#downstream-tasks) to help  diagnose the algorithm.
 
 ### Learn SSL with MMSelfSup
 
