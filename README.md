@@ -74,13 +74,13 @@ MMSelfSup **v1.0.0rc0** was released in 01/09/2022.
 
 Please refer to [Changelog](docs/en/changelog.md) for details and release history.
 
-Differences between MMSelfSup 1.x and 0.x can be found in [Migration](docs/en/migration.md).
+Differences between MMSelfSup 1.x and 0.x can be found in [Migration](https://mmselfsup.readthedocs.io/en/dev-1.x/migration.html).
 
 ## Installation
 
 MMSelfSup depends on [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open-mmlab/mmcv), [MMEngine](https://github.com/open-mmlab/mmengine) and [MMClassification](https://github.com/open-mmlab/mmclassification).
 
-Please refer to [Get Started](docs/en/get_started.md) for more detailed instruction.
+Please refer to [Get Started](https://mmselfsup.readthedocs.io/en/dev-1.x/get_started.html) for more detailed instruction.
 
 ## Guides
 
@@ -92,7 +92,7 @@ Please refer to [FAQ](docs/en/faq.md) for frequently asked questions.
 
 ## Model Zoo
 
-Please refer to [Model Zoo.md](docs/en/model_zoo.md) for a comprehensive set of pre-trained models and benchmarks.
+Please refer to [Model Zoo.md](https://mmselfsup.readthedocs.io/en/dev-1.x/model_zoo.html) for a comprehensive set of pre-trained models and benchmarks.
 
 Supported algorithms:
 
