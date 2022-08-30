@@ -1,6 +1,6 @@
-# Tutorial 3: Pretrain with existing models
+# Tutorial 3: Pretrain with Existing Models
 
-- [Tutorial 3: Pretrain with existing models](#tutorial-3-pretrain-with-existing-models)
+- [Tutorial 3: Pretrain with Existing Models](#tutorial-3-pretrain-with-existing-models)
   - [Start to Train](#start-to-train)
     - [Train with a single GPU](#train-with-a-single-gpu)
     - [Train with CPU](#train-with-cpu)
@@ -12,7 +12,7 @@ This page provides the basic usage about how to run algorithms and how to use so
 
 ## Start to Train
 
-**Note**: The default learning rate in config files is for specific number of GPUs, which is indicated in the config names. If you use different number of GPUs, the total batch size will be changed in proportion. In this case, you have to scale the learning rate following `new_lr = old_lr * new_ngpus / old_ngpus`.
+**Note**: The default learning rate in config files is for specific number of GPUs, which is indicated in the config names. If you use different number of GPUs, the total batch size will be changed in proportion. In this case, you have to scale the learning rate following `new_lr = old_lr * new_batchsize / old_batchsize`.
 
 ### Train with a single GPU
 
