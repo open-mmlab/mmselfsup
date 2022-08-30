@@ -46,9 +46,9 @@ Welcome to MMSelfSup's documentation!
    :maxdepth: 1
    :caption: Notes
 
-   contribution_guide.md
-   changelog.md
-   faq.md
+   notes/contribution_guide.md
+   notes/changelog.md
+   notes/faq.md
 
 .. toctree::
    :caption: Switch Language
