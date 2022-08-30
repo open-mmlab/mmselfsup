@@ -34,8 +34,8 @@ class SelfSupDataPreprocessor(ImgDataPreprocessor):
             model input.
         """
         assert isinstance(data,
-                          dict), "Please use default_collate in dataloader, \
-            instead of pseudo_collate."
+                          dict), 'Please use default_collate in dataloader, \
+            instead of pseudo_collate.'
 
         data = [val for _, val in data.items()]
         batch_inputs, batch_data_samples = self.cast_data(data)
