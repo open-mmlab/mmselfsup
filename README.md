@@ -65,22 +65,17 @@ The master branch works with **PyTorch 1.5** or higher.
 
 ## What's New
 
-MMSelfSup **v0.9.1** was released in 31/05/2022.
-
-Highlights of the new version:
-
-- Update **BYOL** model and results
-- Refine some documentation
+MMSelfSup **v1.0.0rc0** was released in 01/09/2022.
 
 Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
 
-Differences between MMSelfSup and OpenSelfSup codebases can be found in [compatibility.md](docs/en/compatibility.md).
+Differences between MMSelfSup 1.x and 0.x can be found in [migration.md](docs/en/migration.md).
 
 ## Installation
 
-MMSelfSup depends on [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open-mmlab/mmcv) and [MMClassification](https://github.com/open-mmlab/mmclassification).
+MMSelfSup depends on [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open-mmlab/mmcv), [MMEngine](https://github.com/open-mmlab/mmengine) and [MMClassification](https://github.com/open-mmlab/mmclassification).
 
-Please refer to [install.md](docs/en/install.md) for more detailed instruction.
+Please refer to [get_started.md](docs/en/get_started.md) for more detailed instruction.
 
 ## Get Started
 
@@ -144,7 +139,7 @@ More algorithms are in our plan.
 
 ## Contributing
 
-We appreciate all contributions improving MMSelfSup. Please refer to [CONTRIBUTING.md](.github/CONTRIBUTING.md) for more details about the contributing guideline.
+We appreciate all contributions improving MMSelfSup. Please refer to [contribution_guides.md](docs/en/notes/contribution_guides.md) for more details about the contributing guideline.
 
 ## Acknowledgement
 
