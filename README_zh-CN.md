@@ -19,16 +19,16 @@
   <div>&nbsp;</div>
 
 [![PyPI](https://img.shields.io/pypi/v/mmselfsup)](https://pypi.org/project/mmselfsup)
-[![docs](https://img.shields.io/badge/docs-latest-blue)](https://mmselfsup.readthedocs.io/en/latest/)
+[![docs](https://img.shields.io/badge/docs-latest-blue)](https://mmselfsup.readthedocs.io/en/dev-1.x/)
 [![badge](https://github.com/open-mmlab/mmselfsup/workflows/build/badge.svg)](https://github.com/open-mmlab/mmselfsup/actions)
 [![codecov](https://codecov.io/gh/open-mmlab/mmselfsup/branch/master/graph/badge.svg)](https://codecov.io/gh/open-mmlab/mmselfsup)
 [![license](https://img.shields.io/github/license/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/blob/master/LICENSE)
 [![open issues](https://isitmaintained.com/badge/open/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/issues)
 
-[📘使用文档](https://mmselfsup.readthedocs.io/zh_CN/latest/) |
-[🛠️安装教程](https://mmselfsup.readthedocs.io/zh_CN/latest/install.html) |
-[👀模型库](https://github.com/open-mmlab/mmselfsup/blob/master/docs/zh_cn/model_zoo.md) |
-[🆕更新日志](https://mmselfsup.readthedocs.io/zh_CN/latest/changelog.html) |
+[📘使用文档](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/) |
+[🛠️安装教程](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/get_started.html) |
+[👀模型库](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/model_zoo.html) |
+[🆕更新日志](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/notes/changelog.html) |
 [🤔报告问题](https://github.com/open-mmlab/mmselfsup/issues/new/choose)
 
 </div>
@@ -74,27 +74,27 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 - 文档更新
 - 更强大的数据流
 
-请参考 [更新日志](docs/zh_cn/changelog.md) 获取更多细节和历史版本信息。
+请参考 [更新日志](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/notes/changelog.html) 获取更多细节和历史版本信息。
 
-MMSelfSup 1.x 和 0.x 的不同点写在 [迁移文档]([docs/en/compatibility.md](https://mmselfsup.readthedocs.io/en/dev-1.x/migration.html)) 中。
+MMSelfSup 1.x 和 0.x 的不同点写在 [迁移文档](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/migration.html) 中。
 
 ## 安装
 
 MMSelfSup 依赖 [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open-mmlab/mmcv), [MMEngine](https://github.com/open-mmlab/mmengine) 和 [MMClassification](https://github.com/open-mmlab/mmclassification)。
 
-请参考 [安装文档](https://mmselfsup.readthedocs.io/en/dev-1.x/get_started.html) 获取更详细的安装指南。
+请参考 [安装文档](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/get_started.html) 获取更详细的安装指南。
 
 ## 指引
 
-我们针对基础使用和进阶用法提供了 [User Guides](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/index.html) 和 [Advanced Guides](https://mmselfsup.readthedocs.io/en/dev-1.x/advanced_guides/index.html)。
+我们针对基础使用和进阶用法提供了 [用户指引](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/index.html) 和 [进阶指引](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/advanced_guides/index.html)。
 
 我们也提供了 [Colab 教程](https://github.com/open-mmlab/mmselfsup/blob/master/demo/mmselfsup_colab_tutorial.ipynb)。
 
-如果遇到问题，请参考 [常见问题解答](docs/zh_cn/faq.md)。
+如果遇到问题，请参考 [常见问题解答](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/notes/faq.html)。
 
 ## 模型库
 
-请参考 [模型库](https://mmselfsup.readthedocs.io/en/dev-1.x/model_zoo.html) 查看我们更加全面的模型基准结果。
+请参考 [模型库](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/model_zoo.html) 查看我们更加全面的模型基准结果。
 
 目前已支持的算法:
 
@@ -136,7 +136,7 @@ MMSelfSup 依赖 [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open
 
 ## 参与贡献
 
-我们非常欢迎任何有助于提升 MMSelfSup 的贡献，请参考 [贡献指南](docs/en/notes/contribution_guides.md) 来了解如何参与贡献。
+我们非常欢迎任何有助于提升 MMSelfSup 的贡献，请参考 [贡献指南](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/notes/contribution_guide.html) 来了解如何参与贡献。
 
 ## 致谢
 

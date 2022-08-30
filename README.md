@@ -19,16 +19,16 @@
   <div>&nbsp;</div>
 
 [![PyPI](https://img.shields.io/pypi/v/mmselfsup)](https://pypi.org/project/mmselfsup)
-[![docs](https://img.shields.io/badge/docs-latest-blue)](https://mmselfsup.readthedocs.io/en/latest/)
+[![docs](https://img.shields.io/badge/docs-latest-blue)](https://mmselfsup.readthedocs.io/en/dev-1.x/)
 [![badge](https://github.com/open-mmlab/mmselfsup/workflows/build/badge.svg)](https://github.com/open-mmlab/mmselfsup/actions)
 [![codecov](https://codecov.io/gh/open-mmlab/mmselfsup/branch/master/graph/badge.svg)](https://codecov.io/gh/open-mmlab/mmselfsup)
 [![license](https://img.shields.io/github/license/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/blob/master/LICENSE)
 [![open issues](https://isitmaintained.com/badge/open/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/issues)
 
-[📘Documentation](https://mmselfsup.readthedocs.io/en/latest/) |
-[🛠️Installation](https://mmselfsup.readthedocs.io/en/latest/install.html) |
-[👀Model Zoo](https://github.com/open-mmlab/mmselfsup/blob/master/docs/en/model_zoo.md) |
-[🆕Update News](https://mmselfsup.readthedocs.io/en/latest/changelog.html) |
+[📘Documentation](https://mmselfsup.readthedocs.io/en/dev-1.x/) |
+[🛠️Installation](https://mmselfsup.readthedocs.io/en/dev-1.x/get_started.html) |
+[👀Model Zoo](https://mmselfsup.readthedocs.io/en/dev-1.x/model_zoo.html) |
+[🆕Update News](https://mmselfsup.readthedocs.io/en/dev-1.x/notes/changelog.html) |
 [🤔Reporting Issues](https://github.com/open-mmlab/mmselfsup/issues/new/choose)
 
 </div>
@@ -72,7 +72,7 @@ MMSelfSup **v1.0.0rc0** was released in 01/09/2022.
 - Refine all documents.
 - Refactor the data pipeline, which is more powerful.
 
-Please refer to [Changelog](docs/en/changelog.md) for details and release history.
+Please refer to [Changelog](https://mmselfsup.readthedocs.io/en/dev-1.x/notes/changelog.html) for details and release history.
 
 Differences between MMSelfSup 1.x and 0.x can be found in [Migration](https://mmselfsup.readthedocs.io/en/dev-1.x/migration.html).
 
@@ -88,7 +88,7 @@ For tutorials, we provide [User Guides](https://mmselfsup.readthedocs.io/en/dev-
 
 [Colab Tutorials](https://github.com/open-mmlab/mmselfsup/blob/master/demo/mmselfsup_colab_tutorial.ipynb) are also provided.
 
-Please refer to [FAQ](docs/en/faq.md) for frequently asked questions.
+Please refer to [FAQ](https://mmselfsup.readthedocs.io/en/dev-1.x/notes/faq.html) for frequently asked questions.
 
 ## Model Zoo
 
@@ -134,7 +134,7 @@ More algorithms are in our plan.
 
 ## Contributing
 
-We appreciate all contributions improving MMSelfSup. Please refer to [Contribution Guides](docs/en/notes/contribution_guides.md) for more details about the contributing guideline.
+We appreciate all contributions improving MMSelfSup. Please refer to [Contribution Guides](https://mmselfsup.readthedocs.io/en/dev-1.x/notes/contribution_guide.html) for more details about the contributing guideline.
 
 ## Acknowledgement
 
