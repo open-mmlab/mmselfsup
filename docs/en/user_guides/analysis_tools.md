@@ -1,12 +1,13 @@
 # Analysis tools
 
+<!-- TOC -->
+
 - [Analysis tools](#analysis-tools)
   - [Count number of parameters](#count-number-of-parameters)
   - [Publish a model](#publish-a-model)
   - [Reproducibility](#reproducibility)
   - [Log Analysis](#log-analysis)
   - [Visualize Datasets](#visualize-datasets)
-  - [MAE Visualization](#mae-visualization)
   - [Use t-SNE](#use-t-sne)
 
 ## Count number of parameters
@@ -41,7 +42,7 @@ python tools/model_converters/publish_model.py YOUR/PATH/epoch_100.pth YOUR/PATH
 
 ## Reproducibility
 
-If you want to make your performance exactly reproducible, please switch on `--deterministic` to train the final model to be published. Note that this flag will switch off `torch.backends.cudnn.benchmark` and slow down the training speed.
+If you want to make your performance exactly reproducible, please set `--cfg-options randomness.deterministic=True` to train the final model. Note that this will switch off `torch.backends.cudnn.benchmark` and slow down the training speed.
 
 ## Log Analysis
 
@@ -102,27 +103,6 @@ An example:
 
 ```shell
 python tools/misc/browse_dataset.py configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py
-```
-
-## MAE Visualization
-
-We provide a tool to visualize the mask and reconstruction image of MAE model.
-
-```shell
-python tools/misc/mae_visualization.py ${IMG} ${CONFIG_FILE} ${CKPT_PATH} --device ${DEVICE}
-```
-
-Arguments:
-
-- `IMG`: an image path used for visualization.
-- `CONFIG_FILE`: config file for the pre-trained model.
-- `CKPT_PATH`: the path of model's checkpoint.
-- `DEVICE`: device used for inference.
-
-An example:
-
-```shell
-python tools/misc/mae_visualization.py tests/data/color.jpg configs/selfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k.py mae_epoch_400.pth --device 'cuda:0'
 ```
 
 ## Use t-SNE
