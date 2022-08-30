@@ -3,8 +3,8 @@ from typing import Dict, List, Optional, Tuple, Union
 
 import torch
 import torch.nn as nn
-from mmengine.data import BaseDataElement
 from mmengine.model import ExponentialMovingAverage
+from mmengine.structures import BaseDataElement
 
 from mmselfsup.registry import MODELS
 from mmselfsup.structures import SelfSupDataSample
@@ -115,35 +115,37 @@ class DenseCL(BaseModel):
 
         self.queue2_ptr[0] = ptr
 
-    def extract_feat(self, batch_inputs: List[torch.Tensor],
+    def extract_feat(self, inputs: List[torch.Tensor],
                      **kwargs) -> Tuple[torch.Tensor]:
         """Function to extract features from backbone.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
             Tuple[torch.Tensor]: Backbone outputs.
         """
-        x = self.backbone(batch_inputs[0])
+        x = self.backbone(inputs[0])
         return x
 
-    def loss(self, batch_inputs: List[torch.Tensor],
+    def loss(self, inputs: List[torch.Tensor],
              data_samples: List[SelfSupDataSample],
              **kwargs) -> Dict[str, torch.Tensor]:
         """The forward function in training.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
         Returns:
             Dict[str, torch.Tensor]: A dictionary of loss components.
         """
-        assert isinstance(batch_inputs, list)
-        im_q = batch_inputs[0]
-        im_k = batch_inputs[1]
+        assert isinstance(inputs, list)
+        im_q = inputs[0]
+        im_k = inputs[1]
         # compute query features
         q_b = self.backbone(im_q)  # backbone features
         q, q_grid, q2 = self.neck(q_b)  # queries: NxC; NxCxS^2
@@ -217,7 +219,7 @@ class DenseCL(BaseModel):
 
         return losses
 
-    def predict(self, batch_inputs: List[torch.Tensor],
+    def predict(self, inputs: List[torch.Tensor],
                 data_samples: List[SelfSupDataSample],
                 **kwargs) -> SelfSupDataSample:
         """Predict results from the extracted features.
@@ -230,7 +232,7 @@ class DenseCL(BaseModel):
         Returns:
             SelfSupDataSample: The prediction from model.
         """
-        q_grid = self.extract_feat(batch_inputs)[0]
+        q_grid = self.extract_feat(inputs)[0]
         q_grid = q_grid.view(q_grid.size(0), q_grid.size(1), -1)
         q_grid = nn.functional.normalize(q_grid, dim=1)
 

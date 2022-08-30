@@ -4,7 +4,7 @@ import platform
 
 import pytest
 import torch
-from mmengine.data import InstanceData
+from mmengine.structures import InstanceData
 
 from mmselfsup.models.algorithms import ODC
 from mmselfsup.structures import SelfSupDataSample
@@ -62,10 +62,10 @@ def test_odc():
     fake_data_sample = SelfSupDataSample()
     fake_sample_idx = InstanceData(value=torch.tensor([0]))
     fake_data_sample.sample_idx = fake_sample_idx
-    fake_data = [{
-        'inputs': [torch.randn((3, 224, 224))],
-        'data_sample': fake_data_sample
-    } for _ in range(2)]
+    fake_data = {
+        'inputs': [torch.randn((2, 3, 224, 224))],
+        'data_samples': [SelfSupDataSample() for _ in range(2)]
+    }
 
     fake_inputs, fake_data_samples = alg.data_preprocessor(fake_data)
 

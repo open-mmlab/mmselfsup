@@ -7,7 +7,7 @@ from mmcls.evaluation.metrics import Accuracy
 from mmcls.models import ClsHead
 from mmcls.structures import ClsDataSample
 from mmcv.cnn import build_norm_layer
-from mmengine.data import LabelData
+from mmengine.structures import LabelData
 
 from mmselfsup.registry import MODELS
 from ..utils import MultiPooling

@@ -4,10 +4,9 @@ from unittest import TestCase
 
 import torch
 import torch.nn as nn
-from mmengine import Runner
-from mmengine.data import LabelData
-from mmengine.model import BaseModel as EngineBaseModel
 from mmengine.model import BaseModule
+from mmengine.runner import Runner
+from mmengine.structures import LabelData
 from torch.utils.data import Dataset
 
 from mmselfsup.engine import SimSiamHook
@@ -32,7 +31,7 @@ class DummyDataset(Dataset):
         data_sample = SelfSupDataSample()
         gt_label = LabelData(value=self.label[index])
         setattr(data_sample, 'gt_label', gt_label)
-        return dict(inputs=self.data[index], data_sample=data_sample)
+        return dict(inputs=[self.data[index]], data_samples=data_sample)
 
 
 @MODELS.register_module()
@@ -56,7 +55,7 @@ class ToyModel(BaseModel):
         for x in data_samples:
             labels.append(x.gt_label.value)
             labels = torch.stack(labels)
-        outputs = self.backbone(batch_inputs)
+        outputs = self.backbone(batch_inputs[0])
         loss = (labels - outputs).sum()
         outputs = dict(loss=loss)
         return outputs
@@ -77,22 +76,14 @@ class TestSimSiamHook(TestCase):
         simsiam_hook = SimSiamHook(
             fix_pred_lr=True, lr=0.05, adjust_by_epoch=False)
 
-        class DummyWrapper(EngineBaseModel):
-
-            def __init__(self, model):
-                super().__init__()
-                self.module = model
-
-            def forward(self, *args, **kwargs):
-                return self.module(*args, **kwargs)
-
         # test SimSiamHook
         runner = Runner(
-            model=DummyWrapper(toy_model),
+            model=toy_model,
             work_dir=self.temp_dir.name,
             train_dataloader=dict(
                 dataset=dummy_dataset,
                 sampler=dict(type='DefaultSampler', shuffle=True),
+                collate_fn=dict(type='default_collate'),
                 batch_size=1,
                 num_workers=0),
             optim_wrapper=dict(

@@ -3,7 +3,7 @@ from typing import Iterator, Optional, Sized
 
 import numpy as np
 import torch
-from mmengine.data import DefaultSampler
+from mmengine.dataset import DefaultSampler
 
 from mmselfsup.registry import DATA_SAMPLERS
 

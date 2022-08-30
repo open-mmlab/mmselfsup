@@ -3,9 +3,9 @@ from typing import Dict, List, Optional, Union
 
 import mmcv
 import numpy as np
-from mmengine import Visualizer
-from mmengine.data import InstanceData
 from mmengine.dist import master_only
+from mmengine.structures import InstanceData
+from mmengine.visualization import Visualizer
 
 from mmselfsup.registry import VISUALIZERS
 from mmselfsup.structures import SelfSupDataSample
@@ -31,7 +31,7 @@ class SelfSupVisualizer(Visualizer):
     Examples:
         >>> import numpy as np
         >>> import torch
-        >>> from mmengine.data import InstanceData
+        >>> from mmengine.structures import InstanceData
         >>> from mmselfsup.structures import SelfSupDataSample
         >>> from mmselfsup.visualization import SelfSupVisualizer
 

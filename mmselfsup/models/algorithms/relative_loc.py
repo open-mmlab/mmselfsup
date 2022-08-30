@@ -2,7 +2,7 @@
 from typing import Dict, List, Tuple
 
 import torch
-from mmengine.data import LabelData
+from mmengine.structures import LabelData
 
 from mmselfsup.registry import MODELS
 from mmselfsup.structures import SelfSupDataSample
@@ -17,35 +17,35 @@ class RelativeLoc(BaseModel):
     Prediction <https://arxiv.org/abs/1505.05192>`_.
     """
 
-    def extract_feat(self, batch_inputs: List[torch.Tensor],
+    def extract_feat(self, inputs: List[torch.Tensor],
                      **kwargs) -> Tuple[torch.Tensor]:
         """Function to extract features from backbone.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
 
         Returns:
             Tuple[torch.Tensor]: Backbone outputs.
         """
 
-        x = self.backbone(batch_inputs[0])
+        x = self.backbone(inputs[0])
         return x
 
-    def loss(self, batch_inputs: List[torch.Tensor],
+    def loss(self, inputs: List[torch.Tensor],
              data_samples: List[SelfSupDataSample],
              **kwargs) -> Dict[str, torch.Tensor]:
         """The forward function in training.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
         Returns:
             Dict[str, torch.Tensor]: A dictionary of loss components.
         """
-        x1 = self.backbone(batch_inputs[0])
-        x2 = self.backbone(batch_inputs[1])
+        x1 = self.backbone(inputs[0])
+        x2 = self.backbone(inputs[1])
         x = (torch.cat((x1[0], x2[0]), dim=1), )
         x = self.neck(x)
         patch_label = [
@@ -58,21 +58,21 @@ class RelativeLoc(BaseModel):
         losses = dict(loss=loss)
         return losses
 
-    def predict(self, batch_inputs: List[torch.Tensor],
+    def predict(self, inputs: List[torch.Tensor],
                 data_samples: List[SelfSupDataSample],
                 **kwargs) -> List[SelfSupDataSample]:
         """The forward function in testing.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
         Returns:
             List[SelfSupDataSample]: The prediction from model.
         """
-        x1 = self.backbone(batch_inputs[0])
-        x2 = self.backbone(batch_inputs[1])
+        x1 = self.backbone(inputs[0])
+        x2 = self.backbone(inputs[1])
         x = (torch.cat((x1[0], x2[0]), dim=1), )
         x = self.neck(x)
         outs = self.head.logits(x)

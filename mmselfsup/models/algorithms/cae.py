@@ -67,13 +67,13 @@ class CAE(BaseModel):
             param_teacher.data = param_teacher.data * self.momentum + \
                 param_bacbone.data * (1. - self.momentum)
 
-    def loss(self, batch_inputs: List[torch.Tensor],
+    def loss(self, inputs: List[torch.Tensor],
              data_samples: List[SelfSupDataSample],
              **kwargs) -> Dict[str, torch.Tensor]:
         """The forward function in training.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
@@ -85,29 +85,29 @@ class CAE(BaseModel):
 
         mask = mask.flatten(1).to(torch.bool)
 
-        unmasked = self.backbone(batch_inputs[0], mask)
+        unmasked = self.backbone(inputs[0], mask)
 
         # get the latent prediction for the masked patches
         with torch.no_grad():
-            # batch_inputs[0] is the prediction image
-            latent_target = self.teacher(batch_inputs[0], ~mask)
+            # inputs[0] is the prediction image
+            latent_target = self.teacher(inputs[0], ~mask)
             latent_target = latent_target[:, 1:, :]
             self.momentum_update()
 
-        pos_embed = self.backbone.pos_embed.expand(batch_inputs[0].shape[0],
-                                                   -1, -1)
-        pos_embed_masked = pos_embed[:, 1:][mask].reshape(
-            batch_inputs[0].shape[0], -1, pos_embed.shape[-1])
+        pos_embed = self.backbone.pos_embed.expand(inputs[0].shape[0], -1, -1)
+        pos_embed_masked = pos_embed[:,
+                                     1:][mask].reshape(inputs[0].shape[0], -1,
+                                                       pos_embed.shape[-1])
         pos_embed_unmasked = pos_embed[:, 1:][~mask].reshape(
-            batch_inputs[0].shape[0], -1, pos_embed.shape[-1])
+            inputs[0].shape[0], -1, pos_embed.shape[-1])
 
         # input the unmasked tokens and masked tokens to the decoder
         logits, latent_pred = self.neck(unmasked[:, 1:], pos_embed_masked,
                                         pos_embed_unmasked)
 
         logits = logits.view(-1, logits.shape[-1])
-        # batch_inputs[1] is the target image
-        loss_main, loss_align = self.head(logits, batch_inputs[1], latent_pred,
+        # inputs[1] is the target image
+        loss_main, loss_align = self.head(logits, inputs[1], latent_pred,
                                           latent_target, mask)
         losses = dict()
 

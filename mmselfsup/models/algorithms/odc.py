@@ -2,7 +2,7 @@
 from typing import Dict, List, Optional, Tuple, Union
 
 import torch
-from mmengine.data import LabelData
+from mmengine.structures import LabelData
 
 from mmselfsup.registry import MODELS
 from mmselfsup.structures import SelfSupDataSample
@@ -60,33 +60,35 @@ class ODC(BaseModel):
                                       dtype=torch.float32))
         self.loss_weight /= self.loss_weight.sum()
 
-    def extract_feat(self, batch_inputs: List[torch.Tensor],
+    def extract_feat(self, inputs: List[torch.Tensor],
                      **kwarg) -> Tuple[torch.Tensor]:
         """Function to extract features from backbone.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
             Tuple[torch.Tensor]: Backbone outputs.
         """
-        x = self.backbone(batch_inputs[0])
+        x = self.backbone(inputs[0])
         return x
 
-    def loss(self, batch_inputs: List[torch.Tensor],
+    def loss(self, inputs: List[torch.Tensor],
              data_samples: List[SelfSupDataSample],
              **kwargs) -> Dict[str, torch.Tensor]:
         """The forward function in training.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
         Returns:
             Dict[str, torch.Tensor]: A dictionary of loss components.
         """
-        feature = self.extract_feat(batch_inputs)
+        feature = self.extract_feat(inputs)
         idx = [data_sample.sample_idx.value for data_sample in data_samples]
         idx = torch.cat(idx)
 
@@ -104,20 +106,20 @@ class ODC(BaseModel):
 
         return losses
 
-    def predict(self, batch_inputs: List[torch.Tensor],
+    def predict(self, inputs: List[torch.Tensor],
                 data_samples: List[SelfSupDataSample],
                 **kwargs) -> List[SelfSupDataSample]:
         """The forward function in testing.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
         Returns:
             List[SelfSupDataSample]: The prediction from model.
         """
-        feature = self.extract_feat(batch_inputs)  # tuple
+        feature = self.extract_feat(inputs)  # tuple
         if self.with_neck:
             feature = self.neck(feature)
         outs = self.head.logits(feature)

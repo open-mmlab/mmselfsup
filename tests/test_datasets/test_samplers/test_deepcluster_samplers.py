@@ -2,7 +2,7 @@
 from unittest import TestCase
 from unittest.mock import patch
 
-from mmengine.data.sampler import DefaultSampler
+from mmengine.dataset.sampler import DefaultSampler
 
 from mmselfsup.datasets.samplers import DeepClusterSampler
 
@@ -13,7 +13,7 @@ class TestDeepClusterSampler(TestCase):
         self.data_length = 100
         self.dataset = list(range(self.data_length))
 
-    @patch('mmengine.data.sampler.get_dist_info', return_value=(0, 1))
+    @patch('mmengine.dataset.sampler.get_dist_info', return_value=(0, 1))
     def test_deepcluster_sampler(self, mock):
         # test round_up=True
         sampler = DeepClusterSampler(
@@ -40,7 +40,7 @@ class TestDeepClusterSampler(TestCase):
         self.assertEqual(len(list(sampler)), self.data_length)
         self.assertNotEqual(list(sampler), list(default_sampler))
 
-    @patch('mmengine.data.sampler.get_dist_info', return_value=(0, 1))
+    @patch('mmengine.dataset.sampler.get_dist_info', return_value=(0, 1))
     def test_set_uniform_indices(self, mock):
         sampler = DeepClusterSampler(self.dataset, seed=0, replace=True)
         idx_0 = list(sampler)

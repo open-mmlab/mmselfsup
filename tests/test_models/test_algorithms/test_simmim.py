@@ -3,7 +3,7 @@ import platform
 
 import pytest
 import torch
-from mmengine.data import InstanceData
+from mmengine.structures import InstanceData
 
 from mmselfsup.models.algorithms import SimMIM
 from mmselfsup.structures import SelfSupDataSample
@@ -39,10 +39,10 @@ def test_simmim():
     fake_data_sample = SelfSupDataSample()
     fake_mask = InstanceData(value=torch.rand((48, 48)))
     fake_data_sample.mask = fake_mask
-    fake_data = [{
-        'inputs': [torch.randn((3, 192, 192))],
-        'data_sample': fake_data_sample
-    } for _ in range(2)]
+    fake_data = {
+        'inputs': [torch.randn((2, 3, 192, 192))],
+        'data_sample': [fake_data_sample for _ in range(2)]
+    }
 
     fake_batch_inputs, fake_data_samples = model.data_preprocessor(fake_data)
     fake_outputs = model(fake_batch_inputs, fake_data_samples, mode='loss')

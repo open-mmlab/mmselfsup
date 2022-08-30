@@ -16,13 +16,13 @@ class SimMIM(BaseModel):
     <https://arxiv.org/abs/2111.09886>`_.
     """
 
-    def extract_feat(self, batch_inputs: List[torch.Tensor],
+    def extract_feat(self, inputs: List[torch.Tensor],
                      data_samples: List[SelfSupDataSample],
                      **kwarg) -> torch.Tensor:
         """The forward function to extract features.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
@@ -31,17 +31,17 @@ class SimMIM(BaseModel):
         """
         mask = torch.stack(
             [data_sample.mask.value for data_sample in data_samples])
-        img_latent = self.backbone(batch_inputs[0], mask)
+        img_latent = self.backbone(inputs[0], mask)
         feat = self.neck(img_latent[0])
         return feat
 
-    def loss(self, batch_inputs: List[torch.Tensor],
+    def loss(self, inputs: List[torch.Tensor],
              data_samples: List[SelfSupDataSample],
              **kwargs) -> Dict[str, torch.Tensor]:
         """The forward function in training.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
@@ -50,7 +50,7 @@ class SimMIM(BaseModel):
         """
         mask = torch.stack(
             [data_sample.mask.value for data_sample in data_samples])
-        img = batch_inputs[0]
+        img = inputs[0]
 
         img_latent = self.backbone(img, mask)
         img_rec = self.neck(img_latent[0])

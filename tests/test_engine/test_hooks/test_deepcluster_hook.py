@@ -3,7 +3,7 @@ import tempfile
 from unittest import TestCase
 
 import torch
-from mmengine.data import LabelData
+from mmengine.structures import LabelData
 from torch.utils.data import Dataset
 
 from mmselfsup.engine.hooks import DeepClusterHook

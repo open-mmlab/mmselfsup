@@ -75,12 +75,12 @@ def test_densecl():
     mmselfsup.models.algorithms.densecl.concat_all_gather = MagicMock(
         side_effect=mock_concat_all_gather)
 
-    fake_data = [{
-        'inputs': [torch.randn((3, 224, 224)),
-                   torch.randn((3, 224, 224))],
-        'data_sample':
-        SelfSupDataSample(),
-    } for _ in range(2)]
+    fake_data = {
+        'inputs':
+        [torch.randn((2, 3, 224, 224)),
+         torch.randn((2, 3, 224, 224))],
+        'data_sample': [SelfSupDataSample() for _ in range(2)]
+    }
 
     fake_inputs, fake_data_samples = alg.data_preprocessor(fake_data)
     fake_loss = alg(fake_inputs, fake_data_samples, mode='loss')

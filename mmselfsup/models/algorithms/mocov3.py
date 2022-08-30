@@ -55,34 +55,35 @@ class MoCoV3(BaseModel):
         self.momentum_encoder = CosineEMA(
             nn.Sequential(self.backbone, self.neck), momentum=base_momentum)
 
-    def extract_feat(self, batch_inputs: List[torch.Tensor],
+    def extract_feat(self, inputs: List[torch.Tensor],
                      **kwarg) -> Tuple[torch.Tensor]:
         """Function to extract features from backbone.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All
 
         Returns:
             Tuple[torch.Tensor]: Backbone outputs.
         """
-        x = self.backbone(batch_inputs[0])
+        x = self.backbone(inputs[0])
         return x
 
-    def loss(self, batch_inputs: List[torch.Tensor],
+    def loss(self, inputs: List[torch.Tensor],
              data_samples: List[SelfSupDataSample],
              **kwargs) -> Dict[str, torch.Tensor]:
         """The forward function in training.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
         Returns:
             Dict[str, torch.Tensor]: A dictionary of loss components.
         """
-        view_1 = batch_inputs[0]
-        view_2 = batch_inputs[1]
+        view_1 = inputs[0]
+        view_2 = inputs[1]
 
         # compute query features, [N, C] each
         q1 = self.neck(self.backbone(view_1))[0]

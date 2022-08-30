@@ -5,7 +5,7 @@ from unittest import TestCase
 import cv2
 import numpy as np
 import torch
-from mmengine.data import InstanceData
+from mmengine.structures import InstanceData
 from mmengine.utils import digit_version
 
 from mmselfsup.structures import SelfSupDataSample

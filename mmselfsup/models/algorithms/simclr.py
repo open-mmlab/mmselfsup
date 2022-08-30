@@ -43,34 +43,34 @@ class SimCLR(BaseModel):
         neg_mask[pos_idx] = 0
         return mask, pos_idx, neg_mask
 
-    def extract_feat(self, batch_inputs: List[torch.Tensor],
+    def extract_feat(self, inputs: List[torch.Tensor],
                      **kwargs) -> Tuple[torch.Tensor]:
         """Function to extract features from backbone.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
 
         Returns:
             Tuple[torch.Tensor]: Backbone outputs.
         """
-        x = self.backbone(batch_inputs[0])
+        x = self.backbone(inputs[0])
         return x
 
-    def loss(self, batch_inputs: List[torch.Tensor],
+    def loss(self, inputs: List[torch.Tensor],
              data_samples: List[SelfSupDataSample],
              **kwargs) -> Dict[str, torch.Tensor]:
         """The forward function in training.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
         Returns:
             Dict[str, torch.Tensor]: A dictionary of loss components.
         """
-        assert isinstance(batch_inputs, list)
-        inputs = torch.stack(batch_inputs, 1)
+        assert isinstance(inputs, list)
+        inputs = torch.stack(inputs, 1)
         inputs = inputs.reshape((inputs.size(0) * 2, inputs.size(2),
                                  inputs.size(3), inputs.size(4)))
         x = self.backbone(inputs)

@@ -17,33 +17,33 @@ class SimSiam(BaseModel):
     of predictor is in `engine/hooks/simsiam_hook.py`.
     """
 
-    def extract_feat(self, batch_inputs: List[torch.Tensor],
+    def extract_feat(self, inputs: List[torch.Tensor],
                      **kwarg) -> Tuple[torch.Tensor]:
         """Function to extract features from backbone.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
 
         Returns:
             Tuple[torch.Tensor]: Backbone outputs.
         """
-        return self.backbone(batch_inputs[0])
+        return self.backbone(inputs[0])
 
-    def loss(self, batch_inputs: List[torch.Tensor],
+    def loss(self, inputs: List[torch.Tensor],
              data_samples: List[SelfSupDataSample],
              **kwargs) -> Dict[str, torch.Tensor]:
         """The forward function in training.
 
         Args:
-            batch_inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
         Returns:
             Dict[str, Tensor]: A dictionary of loss components.
         """
-        img_v1 = batch_inputs[0]
-        img_v2 = batch_inputs[1]
+        img_v1 = inputs[0]
+        img_v2 = inputs[1]
 
         z1 = self.neck(self.backbone(img_v1))[0]  # NxC
         z2 = self.neck(self.backbone(img_v2))[0]  # NxC
