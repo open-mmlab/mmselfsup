@@ -72,7 +72,7 @@ class SelfSupDataPreprocessor(ImgDataPreprocessor):
             data: dict,
             training: bool = False
     ) -> Tuple[List[torch.Tensor], Optional[list]]:
-       
+
         assert isinstance(data,
                           dict), 'Please use default_collate in dataloader, \
             instead of pseudo_collate.'
