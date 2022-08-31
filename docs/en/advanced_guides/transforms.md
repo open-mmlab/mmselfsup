@@ -17,27 +17,34 @@ We may also use some transforms from other repositories, e.g. `LoadImageFromFile
 The last two transforms will be introduced below.
 
 ## Introduction of `MultiView`
-
+We build a wrapper named `MultiView` for some algorithms e.g. MOCO, SimCLR and SwAV with multi-view image inputs. In the config file, we can 
+define it as:
 ```python
-
-view_pipeline = [
-    dict(type='RandomResizedCrop', size=224, scale=(0.2, 1.)),
-    dict(type='RandomGrayscale', prob=0.2, keep_channels=True),
-    dict(
-        type='ColorJitter',
-        brightness=0.4,
-        contrast=0.4,
-        saturation=0.4,
-        hue=0.4),
-    dict(type='RandomFlip', prob=0.5),
-]
-
-train_pipeline = [
-    dict(type='LoadImageFromFile'),
-    dict(type='MultiView', num_views=2, transforms=[view_pipeline]),
-    dict(type='PackSelfSupInputs', meta_keys=['img_path'])
+pipeline = [
+     dict(type='MultiView',
+          num_views=2,
+          transforms=[
+            [dict(type='Resize', scale=224),]
+          ])
 ]
 ```
+, which means that there are two views in the pipeline.
 
+We can also define pipeline with different views like:
+```python
+pipeline = [
+     dict(type='MultiView',
+          num_views=[2, 6],
+          transforms=[
+            [   
+              dict(type='Resize', scale=224)],
+            [
+              dict(type='Resize', scale=224),
+              dict(type='RandomSolarize')],
+          ])
+]
+```
+This means that there are two pipelines, which contain 2 views and 6 views, respectively.
+More examples can be found in [imagenet_mocov1.py](../../../configs/selfsup/_base_/datasets/imagenet_mocov1.py), [imagenet_mocov2.py](../../../configs/selfsup/_base_/datasets/imagenet_mocov2.py) and [imagenet_swav_mcrop-2-6.py](../../../configs/selfsup/_base_/datasets/imagenet_swav_mcrop-2-6.py) etc.  
 
 ## Introduction of `PackSelfSupInputs`
