@@ -9,31 +9,10 @@
 
 We have introduced how to build a `Pipeline` in [add_transforms](./add_transforms.md). A `Pipeline` contains a series of
 `transforms`. There are three main categories of `transforms` in MMSelfSup:
-
-1. Transforms about processing the data. The unique transforms in MMSelfSup are defined in [processing.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/processing.py), e.g. `RandomCrop`, `RandomResizedCrop` and `RandomGaussianBlur`.
-   We may also use some transforms from other repositories, e.g. `LoadImageFromFile` from MMCV.
-
-2. The transform wrapper for multiple views of an image. It is defined in [wrappers.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/wrappers.py).
-
-3. The transform to pack data into a format compatible with the inputs of the algorithm. It is defined in [formatting.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/formatting.py).
-
-In summary, we implement these `transforms` below. The last two transforms will be introduced in detail.
-
-|                                                      class                                                      |                                      function                                      |
-| :-------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------: |
-|                           [`BEiTMaskGenerator`](mmselfsup.datasets.BEiTMaskGenerator)                           |                      Generate mask for image refers to `BEiT`                      |
-|                         [`SimMIMMaskGenerator`](mmselfsup.datasets.SimMIMMaskGenerator)                         |            Generate random block mask for each Image refers to `SimMIM`            |
-|                                 [`ColorJitter`](mmselfsup.datasets.ColorJitter)                                 |      Randomly change the brightness, contrast, saturation and hue of an image      |
-|                                  [`RandomCrop`](mmselfsup.datasets.RandomCrop)                                  |                     Crop the given Image at a random location                      |
-|                          [`RandomGaussianBlur`](mmselfsup.datasets.RandomGaussianBlur)                          |                    GaussianBlur augmentation refers to `SimCLR`                    |
-|                           [`RandomResizedCrop`](mmselfsup.datasets.RandomResizedCrop)                           |                Crop the given image to random size and aspectratio                 |
-| [`RandomResizedCropAndInterpolationWithTwoPic`](mmselfsup.datasets.RandomResizedCropAndInterpolationWithTwoPic) | Crop the given PIL Image to random size and aspect ratio with random interpolation |
-|                              [`RandomSolarize`](mmselfsup.datasets.RandomSolarize)                              |                     Solarization augmentation refers to `BYOL`                     |
-|                          [`RotationWithLabels`](mmselfsup.datasets.RotationWithLabels)                          |                                Rotation prediction                                 |
-|                       [`RandomPatchWithLabels`](mmselfsup.datasets.RandomPatchWithLabels)                       |                 Apply random patch augmentation to the given image                 |
-|                              [`RandomRotation`](mmselfsup.datasets.RandomRotation)                              |                             Rotate the image by angle                              |
-|                             [`MultiView`](mmselfsup.datasets.transforms.MultiView)                              |               A wrapper for algorithms with multi-view image inputs                |
-|                           [`PackSelfSupInputs`](mmselfsup.datasets.PackSelfSupInputs)                           |         Pack data into a format compatible with the inputs of an algorithm         |
+1. Transforms about processing the data. The unique transforms in MMSelfSup are defined in [processing.py](../../../mmselfsup/datasets/transforms/processing.py), e.g. `RandomCrop`, `RandomResizedCrop` and `RandomGaussianBlur`.
+We may also use some transforms from other repositories, e.g. `LoadImageFromFile` from MMCV.
+2. The transform wrapper for multiple views of an image. It is defined in [wrappers.py](../../../mmselfsup/datasets/transforms/wrappers.py).
+3. The transform to pack data into the format compatible with the inputs of algorithm. It is defined in [formatting.py](../../../mmselfsup/datasets/transforms/formatting.py).
 
 ## Introduction of `MultiView`
 
