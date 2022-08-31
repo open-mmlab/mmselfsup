@@ -15,9 +15,9 @@ In this tutorial, we will introduce some methods about how to customize runtime 
 
 ## Loop
 
-Now we use `train_cfg`, `val_cfg` and `test_cfg` to control the training workflow.
+`Loop` means the workflow of training, validation or testing and we use `train_cfg`, `val_cfg` and `test_cfg` to build `Loop`.
 
-For example:
+E.g.:
 
 ```python
 # Use EpochBasedTrainLoop to train 200 epochs.
@@ -102,7 +102,7 @@ Here is an example of SGD optimizer:
 optimizer = dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0001)
 ```
 
-We support all optimizers of PyTorch. For more details, please refer to [MMEngine optimizer document](https://github.com/open-mmlab/mmengine/blob/main/docs/en/tutorials/optimizer.md).
+We support all optimizers of PyTorch. For more details, please refer to [MMEngine optimizer document](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/optim_wrapper.md).
 
 ### Optimizer Wrapper
 
@@ -126,7 +126,7 @@ The default setting of `loss_scale` of `AmpOptimWrapper` is `dynamic`.
 
 The constructor aims to build optimizer, optimizer wrapper and customize hyper-parameters of different layers. The key `paramwise_cfg` of `optim_wrapper` in configs controls this customization.
 
-The example and detailed information can be found in [MMEngine optimizer document](https://github.com/open-mmlab/mmengine/blob/main/docs/en/tutorials/optimizer.md).
+The example and detailed information can be found in [MMEngine optimizer document](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/optim_wrapper.md).
 
 Besides, We could use `custom_keys` to set different hyper-parameters of different modules.
 
