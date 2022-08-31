@@ -4,6 +4,7 @@ We list some common troubles faced by many users and their corresponding solutio
 
 - [FAQ](#faq)
   - [Installation](#installation)
+  - [DeepCluster on A100 GPU](#deepcluster-on-a100-gpu)
 
 ## Installation
 
@@ -22,3 +23,15 @@ Compatible MMCV, MMClassification, MMDetection and MMSegmentation versions are s
 
 - You need to run `pip uninstall mmcv` first if you have mmcv installed. If mmcv and mmcv-full are both installed, there will be `ModuleNotFoundError`.
 - If you still have version problem, please create an issue and provide your package versions.
+
+## DeepCluster on A100 GPU
+
+Problem: If you want to try [DeepCluster](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/deepcluster/README.md) algorithm on A100 GPU, use the `faiss` installed by pip will raise error, which is mentioned in [here](https://github.com/facebookresearch/faiss/issues/2076).
+
+Please install `faiss` by conda like this:
+
+```bash
+conda install -c pytorch faiss-gpu cudatoolkit=11.3
+```
+
+> Also, you need to install PyTorch with the support of CUDA 11.3, and the faiss-gpu==1.7.2 requires python 3.6-3.8.
