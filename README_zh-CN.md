@@ -84,11 +84,25 @@ MMSelfSup 依赖 [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open
 
 请参考 [安装文档](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/get_started.html) 获取更详细的安装指南。
 
-## 指引
+## 快速入门
 
-我们针对基础使用和进阶用法提供了 [用户指引](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/index.html) 和 [进阶指引](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/advanced_guides/index.html)。
+我们针对基础使用和进阶用法提供了 [用户指引](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/index.html)：
 
-我们也提供了 [Colab 教程](https://github.com/open-mmlab/mmselfsup/blob/master/demo/mmselfsup_colab_tutorial.ipynb)。
+Pretrain
+- [Config](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/1_config.html)
+- [Prepare Dataset](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/2_dataset_prepare.html)
+- [Pretrain with Existing Models](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/3_pretrain.html)
+
+Downetream Tasks
+- [Classification](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/classification.html)
+- [Detection](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/detection.html)
+- [Segmentation](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/segmentation.html)
+
+Useful Tools
+- [Visualization](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/visualization.html)
+- [Analysis Tools](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/analysis_tools.html)
+
+我们也提供了 [进阶指引](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/advanced_guides/index.html) 和 [Colab 教程](https://github.com/open-mmlab/mmselfsup/blob/master/demo/mmselfsup_colab_tutorial.ipynb)。
 
 如果遇到问题，请参考 [常见问题解答](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/notes/faq.html)。
 

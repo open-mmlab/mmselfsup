@@ -1,7 +1,7 @@
 attrs
 future
 matplotlib
-mmcls
+mmcls>=2.0.0rc0
 numpy
 packaging
 scikit-learn

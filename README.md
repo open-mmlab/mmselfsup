@@ -80,13 +80,27 @@ Differences between MMSelfSup 1.x and 0.x can be found in [Migration](https://mm
 
 MMSelfSup depends on [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open-mmlab/mmcv), [MMEngine](https://github.com/open-mmlab/mmengine) and [MMClassification](https://github.com/open-mmlab/mmclassification).
 
-Please refer to [Get Started](https://mmselfsup.readthedocs.io/en/dev-1.x/get_started.html) for more detailed instruction.
+Please refer to [Installation](https://mmselfsup.readthedocs.io/en/dev-1.x/get_started.html) for more detailed instruction.
 
-## Guides
+## Get Started
 
-For tutorials, we provide [User Guides](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/index.html) and [Advanced Guides](https://mmselfsup.readthedocs.io/en/dev-1.x/advanced_guides/index.html) for basic usage and advanced customization.
+For tutorials, we provide [User Guides](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/index.html) for basic usage:
 
-[Colab Tutorials](https://github.com/open-mmlab/mmselfsup/blob/master/demo/mmselfsup_colab_tutorial.ipynb) are also provided.
+Pretrain
+- [Config](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/1_config.html)
+- [Prepare Dataset](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/2_dataset_prepare.html)
+- [Pretrain with Existing Models](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/3_pretrain.html)
+
+Downetream Tasks
+- [Classification](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/classification.html)
+- [Detection](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/detection.html)
+- [Segmentation](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/segmentation.html)
+
+Useful Tools
+- [Visualization](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/visualization.html)
+- [Analysis Tools](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/analysis_tools.html)
+
+[Advanced Guides](https://mmselfsup.readthedocs.io/en/dev-1.x/advanced_guides/index.html) and [Colab Tutorials](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/demo/mmselfsup_colab_tutorial.ipynb) are also provided.
 
 Please refer to [FAQ](https://mmselfsup.readthedocs.io/en/dev-1.x/notes/faq.html) for frequently asked questions.
 
