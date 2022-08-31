@@ -15,14 +15,7 @@ preprocess_cfg = dict(
 bgr_mean = preprocess_cfg['mean'][::-1]
 bgr_std = preprocess_cfg['std'][::-1]
 
-file_client_args = dict(
-    backend='petrel',
-    path_mapping=dict({
-        './data/imagenet':
-        's3://openmmlab/datasets/classification/imagenet',
-        'data/imagenet':
-        's3://openmmlab/datasets/classification/imagenet'
-    }))
+file_client_args = dict(backend='disk')
 
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
