@@ -4,18 +4,26 @@
 
 ### v1.0.0rc0 (01/09/2022)
 
+We are excited to announce the release of MMSelfSup v1.0.0rc0.
+MMSelfSup v1.0.0rc0 is the first version of MMSelfSup 1.x, a part of the OpenMMLab 2.x projects.
+
+We briefly list the major breaking changes here. Please refer to the [migration guide](../migration.md) for details and migration instructions.
+
 #### Highlight
 
-- Based on MMEngine and MMCV.
+- Based on [MMEngine](https://github.com/open-mmlab/mmengine) and [MMCV](https://github.com/open-mmlab/mmcv).
 - Released with refactor.
+  - Datasets
+  - Models
+  - Config
+  - ...
 - Refine all documents.
-- Refactor the data pipeline, which is more powerful.
 
 #### New Features
 
 - Add `SelfSupDataSample` to unify the components' interface.
 - Add `SelfSupVisualizer` for visualization.
-- Add `SelfSupDataPreprocessor` for data preprocess.
+- Add `SelfSupDataPreprocessor` for data preprocess in model.
 
 #### Improvements
 
