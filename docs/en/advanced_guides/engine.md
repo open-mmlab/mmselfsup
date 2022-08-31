@@ -82,15 +82,15 @@ Some hooks have been already implemented in MMEngine, they are:
 
 Some hooks have been already implemented in MMSelfsup, they are:
 
-- [DeepClusterHook](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/engine/hooks/deepcluster_hook.py)
+- [DeepClusterHook](mmselfsup.engine.hooks.DeepclusterHook)
 
-- [DenseCLHook](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/engine/hooks/densecl_hook.py)
+- [DenseCLHook](mmselfsup.engine.hooks.DenseCLHook)
 
-- [ODCHook](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/engine/hooks/odc_hook.py)
+- [ODCHook](mmselfsup.engine.hooks.ODCHook)
 
-- [SimSiamHook](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/engine/hooks/simsiam_hook.py)
+- [SimSiamHook](mmselfsup.engine.hooks.SimSiamHook)
 
-- [SwAVHook](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/engine/hooks/swav_hook.py)
+- [SwAVHook](mmselfsup.engine.hooks.SwAVHook)
 
 - ......
 
