@@ -2,6 +2,41 @@
 
 ## MMSelfSup
 
+### v1.0.0rc0 (01/09/2022)
+
+We are excited to announce the release of MMSelfSup v1.0.0rc0.
+MMSelfSup v1.0.0rc0 is the first version of MMSelfSup 1.x, a part of the OpenMMLab 2.x projects. 
+The `master` branch is still 0.x version and we will checkout a new `1.x` branch to release 1.x version. The two versions will be maintained simultaneously in the future.
+
+We briefly list the major breaking changes here. Please refer to the [migration guide](../migration.md) for details and migration instructions.
+
+#### Highlight
+
+- Based on [MMEngine](https://github.com/open-mmlab/mmengine) and [MMCV](https://github.com/open-mmlab/mmcv).
+- Released with refactor.
+  - Datasets
+  - Models
+  - Config
+  - ...
+- Refine all documents.
+
+#### New Features
+
+- Add `SelfSupDataSample` to unify the components' interface.
+- Add `SelfSupVisualizer` for visualization.
+- Add `SelfSupDataPreprocessor` for data preprocess in model.
+
+#### Improvements
+
+- Most algorithms now support non-distributed training.
+- Change the interface of different data augmentation transforms to `dict`.
+- Run classification downstream task with MMClassification.
+
+#### Docs
+
+- Refine all documents and reorganize the directory.
+- Add concepts for different components.
+
 ### v0.9.1 (31/05/2022)
 
 #### Highlight
