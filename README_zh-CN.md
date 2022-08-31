@@ -89,16 +89,19 @@ MMSelfSup 依赖 [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open
 我们针对基础使用和进阶用法提供了 [用户指引](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/index.html)：
 
 Pretrain
+
 - [Config](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/1_config.html)
 - [Prepare Dataset](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/2_dataset_prepare.html)
 - [Pretrain with Existing Models](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/3_pretrain.html)
 
 Downetream Tasks
+
 - [Classification](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/classification.html)
 - [Detection](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/detection.html)
 - [Segmentation](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/segmentation.html)
 
 Useful Tools
+
 - [Visualization](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/visualization.html)
 - [Analysis Tools](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/analysis_tools.html)
 

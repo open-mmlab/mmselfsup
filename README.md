@@ -87,16 +87,19 @@ Please refer to [Installation](https://mmselfsup.readthedocs.io/en/dev-1.x/get_s
 For tutorials, we provide [User Guides](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/index.html) for basic usage:
 
 Pretrain
+
 - [Config](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/1_config.html)
 - [Prepare Dataset](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/2_dataset_prepare.html)
 - [Pretrain with Existing Models](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/3_pretrain.html)
 
 Downetream Tasks
+
 - [Classification](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/classification.html)
 - [Detection](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/detection.html)
 - [Segmentation](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/segmentation.html)
 
 Useful Tools
+
 - [Visualization](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/visualization.html)
 - [Analysis Tools](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/analysis_tools.html)
 
