@@ -7,7 +7,7 @@ train_cfg = dict(max_epochs=800)
 param_scheduler = [
     dict(
         type='LinearLR',
-        start_factor=0.0001,
+        start_factor=0.000000001,
         by_epoch=True,
         begin=0,
         end=40,
@@ -17,6 +17,6 @@ param_scheduler = [
         T_max=760,
         by_epoch=True,
         begin=40,
-        end=700,
+        end=800,
         convert_to_iter_based=True)
 ]
