@@ -19,7 +19,7 @@ Also for data flow between model and visualizer, you can refer to [visualization
 ## Data flow between dataloader and model
 
 The data flow between dataloader and model can be generally split into three parts, i) use `PackSelfSupInputs` to pack
-data from previous transformations into a dictionary, ii) use `collect_fn` to stack a list of tensors into a batched tensor,
+data from previous transformations into a dictionary, ii) use `collate_fn` to stack a list of tensors into a batched tensor,
 iii) data preprocessor will move all these data to target device, e.g. GPUS, and unzip the dictionary from the dataloader
 into a tuple, containing the input images and meta info (`SelfSupDataSample`).
 
