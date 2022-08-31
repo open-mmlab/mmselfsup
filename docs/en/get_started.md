@@ -194,7 +194,7 @@ For example, the following command installs mmcv-full built for PyTorch 1.12.0 a
 pip install 'mmcv>=2.0.0rc1' -f https://download.openmmlab.com/mmcv/dist/cu116/torch1.12.0/index.html
 ```
 
-### Install on CPU-only platforms
+#### Install on CPU-only platforms
 
 MMSelfSup can be built for CPU only environment. In CPU mode, you can train, test or inference a model.
 
