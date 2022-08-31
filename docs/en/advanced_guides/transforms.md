@@ -12,18 +12,11 @@ We have introduced how to build a `Pipeline` in [add_transforms](./add_transform
 1. Transforms about processing the data. The unique transforms in MMSelfSup are defined in [processing.py](../../../mmselfsup/datasets/transforms/processing.py), e.g. `RandomCrop`, `RandomResizedCrop` and `RandomGaussianBlur`.
 We may also use some transforms from other repositories, e.g. `LoadImageFromFile` from MMCV.
 2. The transform wrapper for multiple views of an image. It is defined in [wrappers.py](../../../mmselfsup/datasets/transforms/wrappers.py).
-3. The transform to pack data into the format compatible with the inputs of algorithm. It is defined in [formatting.py](../../../mmselfsup/datasets/transforms/formatting.py).
+3. The transform to pack data into a format compatible with the inputs of the algorithm. It is defined in [formatting.py](../../../mmselfsup/datasets/transforms/formatting.py).
 
 ## Introduction of `MultiView`
-<<<<<<< HEAD
-
-We build a wrapper named [`MultiView`](mmselfsup.datasets.transforms.MultiView) for some algorithms e.g. MOCO, SimCLR and SwAV with multi-view image inputs. In the config file, we can
-define it as:
-
-=======
 We build a wrapper named `MultiView` for some algorithms e.g. MOCO, SimCLR and SwAV with multi-view image inputs. In the config file, we can 
 define it as:
->>>>>>> add transforms.md
 ```python
 pipeline = [
      dict(type='MultiView',
@@ -31,43 +24,6 @@ pipeline = [
           transforms=[
             [dict(type='Resize', scale=224),]
           ])
-]
-```
-
-, which means that there are two views in the pipeline.
-
-We can also define pipeline with different views like:
-
-```python
-pipeline = [
-     dict(type='MultiView',
-          num_views=[2, 6],
-          transforms=[
-            [
-              dict(type='Resize', scale=224)],
-            [
-              dict(type='Resize', scale=224),
-              dict(type='RandomSolarize')],
-          ])
-]
-```
-
-This means that there are two pipelines, which contain 2 views and 6 views, respectively.
-More examples can be found in [imagenet_mocov1.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/_base_/datasets/imagenet_mocov1.py), [imagenet_mocov2.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/_base_/datasets/imagenet_mocov2.py) and [imagenet_swav_mcrop-2-6.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/_base_/datasets/imagenet_swav_mcrop-2-6.py) etc.
-
-## Introduction of `PackSelfSupInputs`
-
-We build a class named [`PackSelfSupInputs`](mmselfsup.datasets.transforms.PackSelfSupInputs) to pack data into a format compatible with the inputs of an algorithm. This transform
-is usually put at the end of the pipeline like:
-
-```python
-train_pipeline = [
-    dict(type='LoadImageFromFile'),
-    dict(type='MultiView', num_views=2, transforms=[view_pipeline]),
-    dict(type='PackSelfSupInputs', meta_keys=['img_path'])
-]
-```
-=======
 ]
 ```
 , which means that there are two views in the pipeline.
@@ -90,10 +46,7 @@ This means that there are two pipelines, which contain 2 views and 6 views, resp
 More examples can be found in [imagenet_mocov1.py](../../../configs/selfsup/_base_/datasets/imagenet_mocov1.py), [imagenet_mocov2.py](../../../configs/selfsup/_base_/datasets/imagenet_mocov2.py) and [imagenet_swav_mcrop-2-6.py](../../../configs/selfsup/_base_/datasets/imagenet_swav_mcrop-2-6.py) etc.  
 
 ## Introduction of `PackSelfSupInputs`
-<<<<<<< HEAD
->>>>>>> add transforms.md
-=======
-We build a class named `PackSelfSupInputs` to pack data into the format compatible with the inputs of algorithm. This transform
+We build a class named `PackSelfSupInputs` to pack data into a format compatible with the inputs of the algorithm. This transform
 is usually put at the end of the pipeline like:
 ```python
 train_pipeline = [
@@ -102,4 +55,3 @@ train_pipeline = [
     dict(type='PackSelfSupInputs', meta_keys=['img_path'])
 ]
 ```
->>>>>>> add transforms.md
