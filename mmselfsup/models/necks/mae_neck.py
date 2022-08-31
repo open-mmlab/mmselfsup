@@ -89,9 +89,9 @@ class MAEPretrainDecoder(BaseModule):
             decoder_embed_dim, patch_size**2 * in_chans, bias=True)
 
     def init_weights(self) -> None:
+        """Initialize position embedding and mask token of MAE decoder."""
         super().init_weights()
 
-        # initialize position embedding of MAE decoder
         decoder_pos_embed = build_2d_sincos_position_embedding(
             int(self.num_patches**.5),
             self.decoder_pos_embed.shape[-1],
@@ -106,6 +106,21 @@ class MAEPretrainDecoder(BaseModule):
 
     def forward(self, x: torch.Tensor,
                 ids_restore: torch.Tensor) -> torch.Tensor:
+        """The forward function.
+
+        The process computes the visible patches' features vectors and the mask
+        tokens to output feature vectors, which will be used for
+        reconstruction.
+
+        Args:
+            x (torch.Tensor): hidden features, which is of shape
+                    B x (L * mask_ratio) x C.
+            ids_restore (torch.Tensor): ids to restore original image.
+
+        Returns:
+            x (torch.Tensor): The reconstructed feature vectors, which is of
+                shape B x (num_patches) x C.
+        """
         # embed tokens
         x = self.decoder_embed(x)
 

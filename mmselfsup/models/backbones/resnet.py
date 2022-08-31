@@ -1,4 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import Optional, Tuple
+
+import torch
 from mmcls.models.backbones import ResNet as _ResNet
 from mmcls.models.backbones.resnet import BasicBlock, Bottleneck
 
@@ -70,40 +73,41 @@ class ResNet(_ResNet):
     }
 
     def __init__(self,
-                 depth,
-                 in_channels=3,
-                 stem_channels=64,
-                 base_channels=64,
-                 expansion=None,
-                 num_stages=4,
-                 strides=(1, 2, 2, 2),
-                 dilations=(1, 1, 1, 1),
-                 out_indices=(4, ),
-                 style='pytorch',
-                 deep_stem=False,
-                 avg_down=False,
-                 frozen_stages=-1,
-                 conv_cfg=None,
-                 norm_cfg=dict(type='BN', requires_grad=True),
-                 norm_eval=False,
-                 with_cp=False,
-                 zero_init_residual=False,
-                 init_cfg=[
+                 depth: int,
+                 in_channels: int = 3,
+                 stem_channels: int = 64,
+                 base_channels: int = 64,
+                 expansion: Optional[int] = None,
+                 num_stages: int = 4,
+                 strides: Tuple[int] = (1, 2, 2, 2),
+                 dilations: Tuple[int] = (1, 1, 1, 1),
+                 out_indices: Tuple[int] = (4, ),
+                 style: str = 'pytorch',
+                 deep_stem: bool = False,
+                 avg_down: bool = False,
+                 frozen_stages: int = -1,
+                 conv_cfg: Optional[dict] = None,
+                 norm_cfg: Optional[dict] = dict(
+                     type='BN', requires_grad=True),
+                 norm_eval: bool = False,
+                 with_cp: bool = False,
+                 zero_init_residual: bool = False,
+                 init_cfg: Optional[dict] = [
                      dict(type='Kaiming', layer=['Conv2d']),
                      dict(
                          type='Constant',
                          val=1,
                          layer=['_BatchNorm', 'GroupNorm'])
                  ],
-                 drop_path_rate=0.0,
-                 **kwargs):
+                 drop_path_rate: float = 0.0,
+                 **kwargs) -> None:
         # As the meaning of the `out_indices` is different between MMCls and
         # MMSelfSup (Number 3 indicates the last stage output in MMCls but
         # number 4 in MMSelfSup) and there is a sanity check in MMCls ResNet
         # init function, we use a fake input of `out_indices` to pass it.
         temp_out_indices = out_indices
         out_indices = (3, )
-        super(ResNet, self).__init__(
+        super().__init__(
             depth=depth,
             in_channels=in_channels,
             stem_channels=stem_channels,
@@ -128,12 +132,12 @@ class ResNet(_ResNet):
         self.out_indices = temp_out_indices
         assert max(out_indices) < num_stages + 1
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> Tuple[torch.Tensor]:
         """Forward function.
 
         As the behavior of forward function in MMSelfSup is different from
         MMCls, we rewrite the forward function. MMCls does not output the
-        feature map from the 'stem' layer, which we will use for downstream
+        feature map from the 'stem' layer, which will be used for downstream
         evaluation.
         """
         if self.deep_stem:
@@ -163,11 +167,11 @@ class ResNetSobel(ResNet):
     color shortcut.
     """
 
-    def __init__(self, **kwargs):
-        super(ResNetSobel, self).__init__(in_channels=2, **kwargs)
+    def __init__(self, **kwargs) -> None:
+        super().__init__(in_channels=2, **kwargs)
         self.sobel_layer = Sobel()
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> Tuple[torch.Tensor]:
         """Forward function."""
         x = self.sobel_layer(x)
         if self.deep_stem:

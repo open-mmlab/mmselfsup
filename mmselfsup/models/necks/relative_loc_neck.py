@@ -45,7 +45,14 @@ class RelativeLocNeck(BaseModule):
         self.dropout = nn.Dropout()
 
     def forward(self, x: List[torch.Tensor]) -> List[torch.Tensor]:
-        """Forward function."""
+        """Forward function.
+
+        Args:
+            x (List[torch.Tensor]): The feature map of backbone.
+
+        Returns:
+            List[torch.Tensor]: The output features.
+        """
         assert len(x) == 1
         x = x[0]
         if self.with_avg_pool:

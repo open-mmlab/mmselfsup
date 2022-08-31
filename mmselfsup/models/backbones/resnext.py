@@ -1,4 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import torch.nn as nn
 from mmcls.models.backbones.resnet import ResLayer
 from mmcls.models.backbones.resnext import Bottleneck
 
@@ -74,12 +75,16 @@ class ResNeXt(ResNet):
         152: (Bottleneck, (3, 8, 36, 3))
     }
 
-    def __init__(self, depth, groups=32, width_per_group=4, **kwargs):
+    def __init__(self,
+                 depth: int,
+                 groups: int = 32,
+                 width_per_group: int = 4,
+                 **kwargs) -> None:
         self.groups = groups
         self.width_per_group = width_per_group
-        super(ResNeXt, self).__init__(depth=depth, **kwargs)
+        super().__init__(depth=depth, **kwargs)
 
-    def make_res_layer(self, **kwargs):
+    def make_res_layer(self, **kwargs) -> nn.Module:
         """Redefine the function for ResNeXt related args."""
         return ResLayer(
             groups=self.groups,

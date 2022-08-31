@@ -48,7 +48,14 @@ class DenseCLNeck(BaseModule):
         """Forward function of neck.
 
         Args:
-            x (list[tensor]): feature map of backbone.
+            x (List[torch.Tensor]): feature map of backbone.
+
+        Returns:
+            List[torch.Tensor, torch.Tensor, torch.Tensor]: The global feature
+                vectors and dense feature vectors.
+                - avgpooled_x: Global feature vectors.
+                - x: Dense feature vectors.
+                - avgpooled_x2: Dense feature vectors for queue.
         """
         assert len(x) == 1
         x = x[0]

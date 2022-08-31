@@ -3,7 +3,7 @@ from typing import Tuple
 
 import torch
 import torch.nn as nn
-from mmengine.dist import get_world_size
+from mmengine.dist import all_reduce, get_world_size
 from mmengine.model import BaseModule
 
 from mmselfsup.registry import MODELS
@@ -72,14 +72,13 @@ class LatentCrossCorrelationHead(BaseModule):
             target (torch.Tensor): NxC target features.
 
         Returns:
-            torch.Tensor: The cross correlation matrix.
+            torch.Tensor: The cross correlation loss.
         """
         # cross-correlation matrix
         cross_correlation_matrix = self.bn(input).T @ self.bn(target)
         cross_correlation_matrix.div_(input.size(0) * self.world_size)
 
-        if torch.distributed.is_initialized():
-            torch.distributed.all_reduce(cross_correlation_matrix)
+        all_reduce(cross_correlation_matrix)
 
         loss = self.loss(cross_correlation_matrix)
         return loss
