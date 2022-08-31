@@ -116,7 +116,7 @@ another useful document, [add_datasets](./add_datasets.md).
 ## Samplers
 
 In pytorch, `Sampler` is used to sample the index of data before loading. `MMEngine` has already implemented `DefaultSampler` and
-`InfiniteSampler`. In most situation, we can directly use them, instead of implementing customized sampler. But the `DeepClusterSa is a special case, in which we implement the unique index sampling logic. We recommend interested user to refer to the API doc for more details about this sampler. If you want to implement your customized sampler, you can follow `DeepClusterSampler`and implement it under`./sampler\`.
+`InfiniteSampler`. In most situation, we can directly use them, instead of implementing customized sampler. But the `DeepClusterSampler` is a special case, in which we implement the unique index sampling logic. We recommend interested user to refer to the API doc for more details about this sampler. If you want to implement your customized sampler, you can follow `DeepClusterSampler`and implement it under the folder of `samplers`.
 
 ## Transforms
 
@@ -124,7 +124,7 @@ In short, `transform` refer to data augmentation in `MM-repos` and we compose a 
 `MMCV` already provides some useful transforms, covering most of scenarios. But every `MM-repo` defines their own transforms, following
 the [User Guide](https://github.com/open-mmlab/mmcv/blob/dev-2.x/docs/zh_cn/understand_mmcv/data_transform.md) in `MMCV`. Concretely, every
 customized dataset: i) inherits [BaseTransform](https://github.com/open-mmlab/mmcv/blob/19a024155a0b710568c2faeae07dead2a5550392/mmcv/transforms/base.py#L6),
-ii) overwrite the `transform` functiond implement your key logic in it. In MMSelfSup, we implement these `transforms` below:
+ii) overwrite the `transform` function and implement your key logic in it. In MMSelfSup, we implement these `transforms` below:
 
 |                                                      class                                                      |
 | :-------------------------------------------------------------------------------------------------------------: |
