@@ -34,4 +34,4 @@ Please install `faiss` by conda like this:
 conda install -c pytorch faiss-gpu cudatoolkit=11.3
 ```
 
-Also, you need to install PyTorch with the support of CUDA 11.3.
+> Also, you need to install PyTorch with the support of CUDA 11.3, and the faiss-gpu==1.7.2 requires python 3.6-3.8.

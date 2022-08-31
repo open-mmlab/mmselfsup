@@ -6,7 +6,6 @@
     - [Python](#python)
     - [C++ and CUDA](#c-and-cuda)
   - [Pre-commit Hook](#pre-commit-hook)
-  - [Writing Documentation](#writing-documentation)
 
 Thanks for your interest in contributing to MMSelfSup! All kinds of contributions are welcome, including but not limited to the following.
 
@@ -19,7 +18,7 @@ Thanks for your interest in contributing to MMSelfSup! All kinds of contribution
 We recommend the potential contributors follow this workflow for contribution.
 
 1. Fork and pull the latest MMSelfSup repository, follow [get_started](<>) to setup the environment.
-2. Checkout a new branch (**do not use master branch** for PRs)
+2. Checkout a new branch (**do not use master/dev branch** for PRs)
 
 ```bash
 git checkout -b xxxx # xxxx is the name of new branch
@@ -66,13 +65,9 @@ pip install -U pre-commit
 From the repository folder
 
 ```shell
-pre-commit install
+pre-commit run
 ```
 
 After this on every commit check code linters and formatter will be enforced.
 
 > Before you create a PR, make sure that your code lints and is formatted by yapf.
-
-## Writing Documentation
-
-(WIP)
