@@ -1,10 +1,13 @@
-# 常见问题解答
+# FAQ
 
-我们在这里列出了使用时的一些常见问题及其相应的解决方案。 如果您发现有一些问题被遗漏，请随时提 PR 丰富这个列表。 如果您无法在此获得帮助，请使用 [issue 模板](https://github.com/open-mmlab/mmselfsup/tree/master/.github/ISSUE_TEMPLATE)创建问题，但是请在模板中填写所有必填信息，这有助于我们更快定位问题。
+We list some common troubles faced by many users and their corresponding solutions here. Feel free to enrich the list if you find any frequent issues and have ways to help others to solve them. If the contents here do not cover your issue, please create an issue using the [provided templates](https://github.com/open-mmlab/mmselfsup/tree/master/.github/ISSUE_TEMPLATE) and make sure you fill in all required information in the template.
 
-## 安装相关
+- [FAQ](#faq)
+  - [Installation](#installation)
 
-下表显示了与 MMSelfSup 适配的 MMCV, MMClassification, MMDetection 和 MMSegmentation 的版本号。 为避免安装过程中出现问题，请参照下表安装适配的版本。
+## Installation
+
+Compatible MMCV, MMClassification, MMDetection and MMSegmentation versions are shown below. Please install the correct version of them to avoid installation issues.
 
 | MMSelfSup version |    MMCV version     |  MMClassification version   | MMSegmentation version | MMDetection version |
 | :---------------: | :-----------------: | :-------------------------: | :--------------------: | :-----------------: |
@@ -15,7 +18,7 @@
 |       0.6.0       | mmcv-full >= 1.3.16 |       mmcls >= 0.19.0       |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
 |       0.5.0       | mmcv-full >= 1.3.16 |              /              |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
 
-**注意:**
+**Note:**
 
-- 如果您已经安装了 mmcv, 您需要运行 `pip uninstall mmcv` 来卸载已经安装的 mmcv。 如果您在本地同时安装了 mmcv 和 mmcv-full, `ModuleNotFoundError` 将会抛出。
-- 如过您仍然对版本问题有疑问，欢迎创建 issue 并提供您的依赖库信息。
+- You need to run `pip uninstall mmcv` first if you have mmcv installed. If mmcv and mmcv-full are both installed, there will be `ModuleNotFoundError`.
+- If you still have version problem, please create an issue and provide your package versions.
