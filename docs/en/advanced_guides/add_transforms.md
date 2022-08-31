@@ -1,21 +1,26 @@
 # Add Transforms
 
+In this tutorial, we introduce the basic steps to create your customized transforms. Before learning to create your customized transforms, it is recommended to learn the basic concept of transforms in file [transforms.md](transforms.md).
+
 - [Add Transforms](#add-transforms)
-  - [Overview of `Pipeline`](#overview-of-pipeline)
-  - [Creating new augmentations in `Pipeline`](#creating-new-augmentations-in-pipeline)
+  - [Overview of Pipeline](#overview-of-pipeline)
+  - [Creating a new transform in Pipeline](#creating-a-new-transform-in-pipeline)
+    - [Step 1: Creating the transform](#step-1-creating-the-transform)
+    - [Step 2: Add NewTransform to \_\_init\_\_py](#step-2-add-newtransform-to-__init__py)
+    - [Step 3: Modify the config file](#step-3-modify-the-config-file)
 
-## Overview of `Pipeline`
+## Overview of Pipeline
 
-`DataSource` and `Pipeline` are two important components in `Dataset`. We have introduced `DataSource` in [add_new_dataset](./1_new_dataset.md). And the `Pipeline` is responsible for applying a series of data augmentations to images, such as random flip.
+`Pipeline` is an important component in `Dataset`, which is responsible for applying a series of data augmentations to images, such as `RandomResizedCrop`, `RandomFlip`, etc.
 
 Here is a config example of `Pipeline` for `SimCLR` training:
 
 ```python
-train_pipeline = [
-    dict(type='RandomResizedCrop', size=224),
-    dict(type='RandomHorizontalFlip'),
+view_pipeline = [
+    dict(type='RandomResizedCrop', size=224, backend='pillow'),
+    dict(type='RandomFlip', prob=0.5),
     dict(
-        type='RandomAppliedTrans',
+        type='RandomApply',
         transforms=[
             dict(
                 type='ColorJitter',
@@ -24,36 +29,70 @@ train_pipeline = [
                 saturation=0.8,
                 hue=0.2)
         ],
-        p=0.8),
-    dict(type='RandomGrayscale', p=0.2),
-    dict(type='GaussianBlur', sigma_min=0.1, sigma_max=2.0, p=0.5)
+        prob=0.8),
+    dict(
+        type='RandomGrayscale',
+        prob=0.2,
+        keep_channels=True,
+        channel_weights=(0.114, 0.587, 0.2989)),
+    dict(type='RandomGaussianBlur', sigma_min=0.1, sigma_max=2.0, prob=0.5),
+]
+
+train_pipeline = [
+    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='MultiView', num_views=2, transforms=[view_pipeline]),
+    dict(type='PackSelfSupInputs', meta_keys=['img_path'])
 ]
 ```
 
-Every augmentation in the `Pipeline` receives an image as input and outputs an augmented image.
+Every augmentation in the `Pipeline` receives a `dict` as input and outputs a `dict` containing the augmented image and other related information.
 
-## Creating new augmentations in `Pipeline`
+## Creating a new transform in Pipeline
 
-1.Write a new transformation function in [transforms.py](../../mmselfsup/datasets/pipelines/transforms.py) and overwrite the `__call__` function, which takes a `Pillow` image as input:
+Here are the steps to create a new transform.
+
+### Step 1: Creating the transform
+
+Write a new transform in [processing.py](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/mmselfsup/datasets/transforms/processing.py) and overwrite the `transform` function, which takes a `dict` as input:
 
 ```python
-@PIPELINES.register_module()
-class MyTransform(object):
+@TRANSFORMS.register_module()
+class NewTransform(BaseTransform):
+    """Docstring for transform.
+    """
 
-    def __call__(self, img):
-        # apply transforms on img
-        return img
+    def transform(self, results: dict) -> dict:
+        # apply transform
+        return results
 ```
 
-2.Use it in config files. We reuse the config file shown above and add `MyTransform` to it.
+**Note:** For the implementation of transforms, you could apply functions in [mmcv](https://github.com/open-mmlab/mmcv/tree/dev-2.x/mmcv/image).
+
+### Step 2: Add NewTransform to \_\_init\_\_py
+
+Then, add the transform to [\_\_init\_\_.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/__init__.py).
 
 ```python
-train_pipeline = [
-    dict(type='RandomResizedCrop', size=224),
-    dict(type='RandomHorizontalFlip'),
-    dict(type='MyTransform'),
+...
+from .processing import NewTransform, ...
+
+__all__ = [
+    ..., 'NewTransform'
+]
+```
+
+### Step 3: Modify the config file
+
+To use `NewTransform`, you can modify the config as the following:
+
+```python
+view_pipeline = [
+    dict(type='RandomResizedCrop', size=224, backend='pillow'),
+    dict(type='RandomFlip', prob=0.5),
+    # add `NewTransform`
+    dict(type='NewTransform'),
     dict(
-        type='RandomAppliedTrans',
+        type='RandomApply',
         transforms=[
             dict(
                 type='ColorJitter',
@@ -62,8 +101,18 @@ train_pipeline = [
                 saturation=0.8,
                 hue=0.2)
         ],
-        p=0.8),
-    dict(type='RandomGrayscale', p=0.2),
-    dict(type='GaussianBlur', sigma_min=0.1, sigma_max=2.0, p=0.5)
+        prob=0.8),
+    dict(
+        type='RandomGrayscale',
+        prob=0.2,
+        keep_channels=True,
+        channel_weights=(0.114, 0.587, 0.2989)),
+    dict(type='RandomGaussianBlur', sigma_min=0.1, sigma_max=2.0, prob=0.5),
+]
+
+train_pipeline = [
+    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='MultiView', num_views=2, transforms=[view_pipeline]),
+    dict(type='PackSelfSupInputs', meta_keys=['img_path'])
 ]
 ```
