@@ -69,28 +69,33 @@ class SelfSupDataPreprocessor(ImgDataPreprocessor):
 
     def forward(
             self,
-            data: Sequence[dict],
+            data: dict,
             training: bool = False
     ) -> Tuple[List[torch.Tensor], Optional[list]]:
+       
+        assert isinstance(data,
+                          dict), 'Please use default_collate in dataloader, \
+            instead of pseudo_collate.'
 
-        inputs, batch_data_samples = self.collate_data(data)
+        data = [val for _, val in data.items()]
+        batch_inputs, batch_data_samples = self.cast_data(data)
         # channel transform
-        if self.channel_conversion:
-            inputs = [[img_[[2, 1, 0], ...] for img_ in _input]
-                      for _input in inputs]
+        if self._channel_conversion:
+            batch_inputs = [
+                _input[:, [2, 1, 0], ...] for _input in batch_inputs
+            ]
+
+        # Convert to float after channel conversion to ensure
+        # efficiency
+        batch_inputs = [input_.float() for input_ in batch_inputs]
 
         # Normalization. Here is what is different from
         # :class:`mmengine.ImgDataPreprocessor`. Since there are multiple views
         # for an image for some  algorithms, e.g. SimCLR, each item in inputs
         # is a list, containing multi-views for an image.
         if self._enable_normalize:
-            inputs = [[(img_ - self.mean) / self.std for img_ in _input]
-                      for _input in inputs]
-
-        batch_inputs = []
-        for i in range(len(inputs[0])):
-            cur_batch = [img[i] for img in inputs]
-            batch_inputs.append(torch.stack(cur_batch))
+            batch_inputs = [(_input - self.mean) / self.std
+                            for _input in batch_inputs]
 
         return batch_inputs, batch_data_samples
 ```
