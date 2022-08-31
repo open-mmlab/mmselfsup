@@ -2,24 +2,28 @@
 
 - [Migration](#migration)
   - [Migration from MMSelfSup 0.x](#migration-from-mmselfsup-0x)
-    - [Config](#config)
-      - [Datasets](#datasets)
-      - [Models](#models)
-      - [Schedules](#schedules)
-    - [Folders and Files](#folders-and-files)
-  - [Differences between MMSelfSup and OpenSelfSup](#differences-between-mmselfsup-and-openselfsup)
-    - [Modular Design](#modular-design)
-      - [Datasets](#datasets-1)
-      - [Models](#models-1)
-    - [Codebase Conventions](#codebase-conventions)
-      - [Configs](#configs)
-      - [Scripts](#scripts)
+  - [Config](#config)
+    - [Datasets](#datasets)
+    - [Models](#models)
+    - [Schedules](#schedules)
+    - [Runtime settings](#runtime-settings)
+  - [Folders and Files](#folders-and-files)
 
 ## Migration from MMSelfSup 0.x
 
-we introduce some modifications of MMSelfSup 1.x, to help users to migrate their projects based on MMSelfSup 0.x to 1.x smoothly.
+We introduce some modifications of MMSelfSup 1.x, to help users to migrate their projects based on MMSelfSup 0.x to 1.x smoothly.
 
-### Config
+MMSelfSup 1.x depends on some new packages, you can prepare a new clean environment and install again
+according to the [install tutorial](./get_started.md). Or install the below packages manually.
+
+1. [MMEngine](https://github.com/open-mmlab/mmengine): MMEngine is the core the OpenMMLab 2.0 architecture,
+   and we splited many compentents unrelated to computer vision from MMCV to MMEngine.
+2. [MMCV](https://github.com/open-mmlab/mmcv): The computer vision package of OpenMMLab. This is not a new
+   dependency, but you need to upgrade it to above `2.0.0rc1` version.
+3. [MMClassification](https://github.com/open-mmlab/mmcv): The image classification package of OpenMMLab. This is not a new
+   dependency, but you need to upgrade it to above `2.0.0rc0` version.
+
+## Config
 
 This section illustrates the changes of our config files in `_base_` folder, which includes three parts
 
@@ -27,11 +31,16 @@ This section illustrates the changes of our config files in `_base_` folder, whi
 - Models: `mmselfsup/configs/selfsup/_base_/models`
 - Schedules: `mmselfsup/configs/selfsup/_base_/schedules`
 
-#### Datasets
+### Datasets
 
 In **MMSelfSup 0.x**, we use key `data` to summarize all information, such as `samples_per_gpu`, `train`, `val`, etc.
 
-For example:
+In **MMSelfSup 1.x**, we separate `train_dataloader`, `val_dataloader` to summarize information correspodingly and the key `data` has been **removed**.
+
+<table class="docutils">
+<tr>
+<td>Original</td>
+<td>
 
 ```python
 data = dict(
@@ -50,10 +59,11 @@ data = dict(
     ),
     val=...)
 ```
+</td>
 
-In **MMSelfSup 1.x**, we separate `train_dataloader`, `val_dataloader` to summarize information correspodingly and the key `data` has been **removed**.
-
-Here is an example of `train_dataloader`:
+<tr>
+<td>New</td>
+<td>
 
 ```python
 train_dataloader = dict(
@@ -69,10 +79,31 @@ train_dataloader = dict(
         pipeline=train_pipeline))
 val_dataloader = ...
 ```
+</td>
+</tr>
+</table>
 
 Besides, we remove the key of `data_source` to keep the pipeline format consistent with that in other OpenMMLab projects. Please refer to [1_config.md](user_guides/1_config.md) for more details.
 
-#### Models
+Changes in **`pipeline`**:
+
+Take MAE as an example of `pipeline`:
+
+```python
+train_pipeline = [
+    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(
+        type='RandomResizedCrop',
+        size=224,
+        scale=(0.2, 1.0),
+        backend='pillow',
+        interpolation='bicubic'),
+    dict(type='RandomFlip', prob=0.5),
+    dict(type='PackSelfSupInputs', meta_keys=['img_path'])
+]
+```
+
+### Models
 
 In the config of models, there are two main different parts from MMSeflSup 0.x.
 
@@ -107,7 +138,7 @@ model = dict(
     init_cfg=...)
 ```
 
-#### Schedules
+### Schedules
 
 | MMSelfSup 0.x    | MMSelfSup 1.x   | Remark                                                                                                                          |
 | ---------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------- |
@@ -116,7 +147,224 @@ model = dict(
 | lr_config        | param_scheduler | The `param_scheduler` is a list to set learning rate or other parameters, which is more flexible.                               |
 | runner           | train_cfg       | The loop setting (`EpochBasedTrainLoop`, `IterBasedTrainLoop`) in `train_cfg` controls the work flow of the algorithm training. |
 
-### Folders and Files
+1. Changes in **`optimizer`** and **`optimizer_config`**:
+
+- Now we use `optim_wrapper` field to specify all configuration about the optimization process. And the
+  `optimizer` is a sub field of `optim_wrapper` now.
+- `paramwise_cfg` is also a sub field of `optim_wrapper`, instead of `optimizer`.
+- `optimizer_config` is removed now, and all configurations of it are moved to `optim_wrapper`.
+- `grad_clip` is renamed to `clip_grad`.
+
+<table class="docutils">
+<tr>
+<td>Original</td>
+<td>
+
+```python
+optimizer = dict(
+    type='AdamW',
+    lr=0.0015,
+    weight_decay=0.3,
+    paramwise_cfg = dict(
+        norm_decay_mult=0.0,
+        bias_decay_mult=0.0,
+    ))
+optimizer_config = dict(grad_clip=dict(max_norm=1.0))
+```
+</td>
+<tr>
+<td>New</td>
+<td>
+
+```python
+optim_wrapper = dict(
+    optimizer=dict(type='AdamW', lr=0.0015, weight_decay=0.3),
+    paramwise_cfg = dict(
+        norm_decay_mult=0.0,
+        bias_decay_mult=0.0,
+    ),
+    clip_gard=dict(max_norm=1.0),
+)
+```
+</td>
+</tr>
+</table>
+
+2. Changes in **`lr_config`**:
+
+- The `lr_config` field is removed and we use new `param_scheduler` to replace it.
+- The `warmup` related arguments are removed, since we use schedulers combination to implement this
+  functionality.
+The new schedulers combination mechanism is very flexible, and you can use it to design many kinds of learning
+rate / momentum curves. See [the tutorial](TODO) for more details.
+<table class="docutils">
+<tr>
+<td>Original</td>
+<td>
+
+```python
+lr_config = dict(
+    policy='CosineAnnealing',
+    min_lr=0,
+    warmup='linear',
+    warmup_iters=5,
+    warmup_ratio=0.01,
+    warmup_by_epoch=True)
+```
+</td>
+<tr>
+<td>New</td>
+<td>
+
+```python
+param_scheduler = [
+    # warmup
+    dict(
+        type='LinearLR',
+        start_factor=0.01,
+        by_epoch=True,
+        end=5,
+        # Update the learning rate after every iters.
+        convert_to_iter_based=True),
+    # main learning rate scheduler
+    dict(type='CosineAnnealingLR', by_epoch=True, begin=5， end=200),
+]
+```
+</td>
+</tr>
+</table>
+
+3. Changes in **`runner`**:
+
+Most configuration in the original `runner` field is moved to `train_cfg`, `val_cfg` and `test_cfg`, which
+configure the loop in training, validation and test.
+
+<table class="docutils">
+<tr>
+<td>Original</td>
+<td>
+
+```python
+runner = dict(type='EpochBasedRunner', max_epochs=200)
+```
+</td>
+<tr>
+<td>New</td>
+<td>
+
+```python
+train_cfg = dict(by_epoch=True, max_epochs=200)
+```
+</td>
+</tr>
+</table>
+
+### Runtime settings
+
+1. Changes in **`checkpoint_config`** and **`log_config`**:
+
+The `checkpoint_config` are moved to `default_hooks.checkpoint` and the `log_config` are moved to `default_hooks.logger`.
+
+And we move many hooks settings from the script code to the `default_hooks` field in the runtime configuration.
+
+```python
+default_hooks = dict(
+    # record the time of every iterations.
+    timer=dict(type='IterTimerHook'),
+    # print log every 100 iterations.
+    logger=dict(type='LoggerHook', interval=100),
+    # enable the parameter scheduler.
+    param_scheduler=dict(type='ParamSchedulerHook'),
+    # save checkpoint per epoch, and automatically save the best checkpoint.
+    checkpoint=dict(type='CheckpointHook', interval=1, save_best='auto'),
+    # set sampler seed in distributed evrionment.
+    sampler_seed=dict(type='DistSamplerSeedHook'),
+    # validation results visualization, set True to enable it.
+    visualization=dict(type='VisualizationHook', enable=False),
+)
+```
+
+In addition, we splited the original logger to logger and visualizer. The logger is used to record
+information and the visualizer is used to show the logger in different backends, like terminal, TensorBoard
+and Wandb.
+
+<table class="docutils">
+<tr>
+<td>Original</td>
+<td>
+
+```python
+log_config = dict(
+    interval=100,
+    hooks=[
+        dict(type='TextLoggerHook'),
+        dict(type='TensorboardLoggerHook'),
+    ])
+```
+</td>
+<tr>
+<td>New</td>
+<td>
+
+```python
+default_hooks = dict(
+    ...
+    logger=dict(type='LoggerHook', interval=100),
+)
+visualizer = dict(
+    type='SelfSupVisualizer',
+    vis_backends=[dict(type='LocalVisBackend'), dict(type='TensorboardVisBackend')],
+)
+```
+</td>
+</tr>
+</table>
+
+2. Changes in **`load_from`** and **`resume_from`**:
+
+- The `resume_from` is removed. And we use `resume` and `load_from` to replace it.
+  - If `resume=True` and `load_from` is not None, resume training from the checkpoint in `load_from`.
+  - If `resume=True` and `load_from` is None, try to resume from the latest checkpoint in the work directory.
+  - If `resume=False` and `load_from` is not None, only load the checkpoint, not resume training.
+  - If `resume=False` and `load_from` is None, do not load nor resume.
+
+3. Changes in **`dist_params`**:
+  
+The `dist_params` field is a sub field of `env_cfg` now. And there are some new configurations in the `env_cfg`.
+
+```python
+env_cfg = dict(
+    # whether to enable cudnn benchmark
+    cudnn_benchmark=False,
+    # set multi process parameters
+    mp_cfg=dict(mp_start_method='fork', opencv_num_threads=0),
+    # set distributed parameters
+    dist_cfg=dict(backend='nccl'),
+)
+```
+
+4. Changes in **`workflow`**: `workflow` related functionalities are **removed**.
+
+5. New field **`visualizer`**: 
+
+The visualizer is a new design in OpenMMLab 2.0 architecture. We use a
+visualizer instance in the runner to handle results & log visualization and save to different backends.
+See the [MMEngine tutorial](TODO) for more details.
+
+```python
+visualizer = dict(
+    type='SelfSupVisualizer',
+    vis_backends=[
+        dict(type='LocalVisBackend'),
+        # Uncomment the below line to save the log and visualization results to TensorBoard.
+        # dict(type='TensorboardVisBackend')
+    ]
+)
+```
+
+6. New field **`default_scope`**: The start point to search module for all registries. The `default_scope` in MMSelfSup is `mmselfsup`. See [the registry tutorial](TODO) for more details.
+
+## Folders and Files
 
 The table below records the general modification of the folders and files.
 
@@ -131,63 +379,3 @@ The table below records the general modification of the folders and files.
 | /                     | models/losses       | The `losses` folder is created to provide different loss implementations, which is from `heads`                                                                                                              |
 | /                     | structures          | The `structures` folder is for the implementation of data structures. In MMSelfSup, we implement a new data structure, `selfsup_data_sample`,  to pass and receive data throughout the training/val process. |
 | /                     | visualization       | The `visualization` folder contains the visualizer, which is responsible for some visualization tasks like visualizing data augmentation.                                                                    |
-
-## Differences between MMSelfSup and OpenSelfSup
-
-This file records differences between the newest version of MMSelfSup with older versions and OpenSelfSup.
-
-MMSelfSup goes through a refactoring and addresses many legacy issues. It is not compatitible with OpenSelfSup, i.e. the old config files are supposed to be updated as some arguments of the class or names of the components have been modified.
-
-The major differences are in two folds: codebase conventions, modular design.
-
-### Modular Design
-
-In order to build more clear directory structure, MMSelfSup redesigns some of the modules.
-
-#### Datasets
-
-- MMSelfSup merges some datasets to reduce some redundant codes.
-
-  - Classification, Extraction, NPID -> OneViewDataset
-
-  - BYOL, Contrastive -> MultiViewDataset
-
-- The `data_sources` folder has been refactored, thus the loading function is more robust.
-
-In addition, this part is still under refactoring, it will be released in following version.
-
-#### Models
-
-- The registry mechanism is updated. Currently, the parts under the `models` folder are built with a parent called `MMCV_MODELS` that is imported from `MMCV`. Please check [mmselfsup/models/builder.py](https://github.com/open-mmlab/mmselfsup/blob/master/mmselfsup/models/builder.py) and refer to [mmcv/utils/registry.py](https://github.com/open-mmlab/mmcv/blob/master/mmcv/utils/registry.py) for more details.
-
-- The `models` folder includes `algorithms`, `backbones`, `necks`, `heads`, `memories` and some required utils. The `algorithms` integrates the other main components to build the self-supervised learning algorithms, which is like `classifiers` in `MMCls` or `detectors` in `MMDet`.
-
-- In OpenSelfSup, the names of `necks` are kind of confused and all in one file. Now, the `necks` are refactored, managed with one folder and renamed for easier understanding. Please check `mmselfsup/models/necks` for more details.
-
-### Codebase Conventions
-
-MMSelfSup renews codebase conventions as OpenSelfSup has not been updated for some time.
-
-#### Configs
-
-- MMSelfSup renames all config files to use new name convention. Please refer to [0_config](./tutorials/0_config.md) for more details.
-
-- In the configs, some arguments of the class or names of the components have been modified.
-
-  - One algorithm name has been modified: MOCO -> MoCo
-
-  - As all models' components inherit `BaseModule` from `MMCV`, the models are initialized with `init_cfg`. Please use it to set your initialization. Besides, `init_weights` can also be used.
-
-  - Please use new neck names to compose your algorithms, check it before write your own configs.
-
-  - The normalization layers are all built with arguments `norm_cfg`.
-
-#### Scripts
-
-- The directory of `tools` is modified, thus it has more clear structure. It has several folders to manage different scripts. For example, it has two converter folders for models and data format. Besides, the benchmark related scripts are all in `benchmarks` folder, which has the same structure as `configs/benchmarks`.
-
-- The arguments in `train.py` has been updated. Two major modifications are listed below.
-
-  - Add `--cfg-options` to modify the config from cmd arguments.
-
-  - Remove `--pretrained` and use `--cfg-options` to set the pretrained models.
