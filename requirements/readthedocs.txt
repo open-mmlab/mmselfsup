@@ -1,4 +1,4 @@
-mmcls>=1.0.0rc0
+mmcls
 mmcv>=2.0.0rc1
 mmengine
 mmselfsup
