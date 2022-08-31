@@ -4,6 +4,8 @@
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
     - [Best practices](#best-practices)
+      - [Install from source](#install-from-source)
+      - [Install as a Python package](#install-as-a-python-package)
     - [Verify the installation](#verify-the-installation)
     - [Customize installation](#customize-installation)
       - [Benchmark](#benchmark)
@@ -189,10 +191,10 @@ To install MMCV with pip instead of MIM, please follow [MMCV installation guides
 For example, the following command installs mmcv-full built for PyTorch 1.12.0 and CUDA 11.6.
 
 ```shell
-pip install 'mmcv-full>=2.0.0rc1' -f https://download.openmmlab.com/mmcv/dist/cu116/torch1.12.0/index.html
+pip install 'mmcv>=2.0.0rc1' -f https://download.openmmlab.com/mmcv/dist/cu116/torch1.12.0/index.html
 ```
 
-### Install on CPU-only platforms
+#### Install on CPU-only platforms
 
 MMSelfSup can be built for CPU only environment. In CPU mode, you can train, test or inference a model.
 

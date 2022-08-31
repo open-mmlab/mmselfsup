@@ -8,20 +8,21 @@ We list some common troubles faced by many users and their corresponding solutio
 
 ## Installation
 
-Compatible MMCV, MMClassification, MMDetection and MMSegmentation versions are shown below. Please install the correct version of them to avoid installation issues.
+Compatible MMEngine, MMCV, MMClassification, MMDetection and MMSegmentation versions are shown below. Please install the correct version of them to avoid installation issues.
 
-| MMSelfSup version |    MMCV version     |  MMClassification version   | MMSegmentation version | MMDetection version |
-| :---------------: | :-----------------: | :-------------------------: | :--------------------: | :-----------------: |
-|  0.9.1 (master)   | mmcv-full >= 1.4.2  |       mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.19.0   |
-|       0.9.0       | mmcv-full >= 1.4.2  |       mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.19.0   |
-|       0.8.0       | mmcv-full >= 1.4.2  |       mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.19.0   |
-|       0.7.1       | mmcv-full >= 1.3.16 | mmcls >= 0.19.0, \<= 0.20.1 |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
-|       0.6.0       | mmcv-full >= 1.3.16 |       mmcls >= 0.19.0       |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
-|       0.5.0       | mmcv-full >= 1.3.16 |              /              |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
+| MMSelfSup version | MMEngine version  |    MMCV version     |  MMClassification version   | MMSegmentation version | MMDetection version |
+| :---------------: | :---------------: | :-----------------: | :-------------------------: | :--------------------: | :-----------------: |
+|  1.0.0rc0 (1.x)   | mmengine >= 0.5.0 |  mmcv >= 2.0.0rc1   |      mmcls >= 1.0.0rc0      |   mmseg >= 1.0.0rc0    |  mmdet >= 3.0.0rc0  |
+|       0.9.1       |         /         | mmcv-full >= 1.4.2  |       mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.19.0   |
+|       0.9.0       |         /         | mmcv-full >= 1.4.2  |       mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.19.0   |
+|       0.8.0       |         /         | mmcv-full >= 1.4.2  |       mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.19.0   |
+|       0.7.1       |         /         | mmcv-full >= 1.3.16 | mmcls >= 0.19.0, \<= 0.20.1 |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
+|       0.6.0       |         /         | mmcv-full >= 1.3.16 |       mmcls >= 0.19.0       |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
+|       0.5.0       |         /         | mmcv-full >= 1.3.16 |              /              |    mmseg >= 0.20.2     |   mmdet >= 2.16.0   |
 
 **Note:**
 
-- You need to run `pip uninstall mmcv` first if you have mmcv installed. If mmcv and mmcv-full are both installed, there will be `ModuleNotFoundError`.
+- MMDetection and MMSegmentation are optional.
 - If you still have version problem, please create an issue and provide your package versions.
 
 ## DeepCluster on A100 GPU

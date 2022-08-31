@@ -19,16 +19,16 @@
   <div>&nbsp;</div>
 
 [![PyPI](https://img.shields.io/pypi/v/mmselfsup)](https://pypi.org/project/mmselfsup)
-[![docs](https://img.shields.io/badge/docs-latest-blue)](https://mmselfsup.readthedocs.io/en/latest/)
+[![docs](https://img.shields.io/badge/docs-latest-blue)](https://mmselfsup.readthedocs.io/en/dev-1.x/)
 [![badge](https://github.com/open-mmlab/mmselfsup/workflows/build/badge.svg)](https://github.com/open-mmlab/mmselfsup/actions)
 [![codecov](https://codecov.io/gh/open-mmlab/mmselfsup/branch/master/graph/badge.svg)](https://codecov.io/gh/open-mmlab/mmselfsup)
 [![license](https://img.shields.io/github/license/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/blob/master/LICENSE)
 [![open issues](https://isitmaintained.com/badge/open/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/issues)
 
-[📘Documentation](https://mmselfsup.readthedocs.io/en/latest/) |
-[🛠️Installation](https://mmselfsup.readthedocs.io/en/latest/install.html) |
-[👀Model Zoo](https://github.com/open-mmlab/mmselfsup/blob/master/docs/en/model_zoo.md) |
-[🆕Update News](https://mmselfsup.readthedocs.io/en/latest/changelog.html) |
+[📘Documentation](https://mmselfsup.readthedocs.io/en/dev-1.x/) |
+[🛠️Installation](https://mmselfsup.readthedocs.io/en/dev-1.x/get_started.html) |
+[👀Model Zoo](https://mmselfsup.readthedocs.io/en/dev-1.x/model_zoo.html) |
+[🆕Update News](https://mmselfsup.readthedocs.io/en/dev-1.x/notes/changelog.html) |
 [🤔Reporting Issues](https://github.com/open-mmlab/mmselfsup/issues/new/choose)
 
 </div>
@@ -43,7 +43,7 @@ English | [简体中文](README_zh-CN.md)
 
 MMSelfSup is an open source self-supervised representation learning toolbox based on PyTorch. It is a part of the [OpenMMLab](https://openmmlab.com/) project.
 
-The master branch works with **PyTorch 1.5** or higher.
+The master branch works with **PyTorch 1.6** or higher.
 
 ### Major features
 
@@ -65,64 +65,71 @@ The master branch works with **PyTorch 1.5** or higher.
 
 ## What's New
 
-MMSelfSup **v0.9.1** was released in 31/05/2022.
+MMSelfSup **v1.0.0rc0** was released in 01/09/2022.
 
-Highlights of the new version:
+- Based on MMEngine and MMCV.
+- Released with refactor.
+- Refine all documents.
+- Refactor the data pipeline, which is more powerful.
 
-- Update **BYOL** model and results
-- Refine some documentation
+Please refer to [Changelog](https://mmselfsup.readthedocs.io/en/dev-1.x/notes/changelog.html) for details and release history.
 
-Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
-
-Differences between MMSelfSup and OpenSelfSup codebases can be found in [compatibility.md](docs/en/compatibility.md).
+Differences between MMSelfSup 1.x and 0.x can be found in [Migration](https://mmselfsup.readthedocs.io/en/dev-1.x/migration.html).
 
 ## Installation
 
-MMSelfSup depends on [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open-mmlab/mmcv) and [MMClassification](https://github.com/open-mmlab/mmclassification).
+MMSelfSup depends on [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open-mmlab/mmcv), [MMEngine](https://github.com/open-mmlab/mmengine) and [MMClassification](https://github.com/open-mmlab/mmclassification).
 
-Please refer to [install.md](docs/en/install.md) for more detailed instruction.
+Please refer to [Installation](https://mmselfsup.readthedocs.io/en/dev-1.x/get_started.html) for more detailed instruction.
 
 ## Get Started
 
-Please refer to [prepare_data.md](docs/en/prepare_data.md) for dataset preparation and [get_started.md](docs/en/get_started.md) for the basic usage of MMSelfSup.
+For tutorials, we provide [User Guides](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/index.html) for basic usage:
 
-We also provides tutorials for more details:
+Pretrain
 
-- [config](docs/en/tutorials/0_config.md)
-- [add new dataset](docs/en/tutorials/1_new_dataset.md)
-- [data pipeline](docs/en/tutorials/2_data_pipeline.md)
-- [add new module](docs/en/tutorials/3_new_module.md)
-- [customize schedules](docs/en/tutorials/4_schedule.md)
-- [customize runtime](docs/en/tutorials/5_runtime.md)
-- [benchmarks](docs/en/tutorials/6_benchmarks.md)
+- [Config](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/1_config.html)
+- [Prepare Dataset](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/2_dataset_prepare.html)
+- [Pretrain with Existing Models](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/3_pretrain.html)
 
-Besides, we provide [colab tutorial](https://github.com/open-mmlab/mmselfsup/blob/master/demo/mmselfsup_colab_tutorial.ipynb) for basic usage.
+Downetream Tasks
 
-Please refer to [FAQ](docs/en/faq.md) for frequently asked questions.
+- [Classification](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/classification.html)
+- [Detection](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/detection.html)
+- [Segmentation](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/segmentation.html)
+
+Useful Tools
+
+- [Visualization](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/visualization.html)
+- [Analysis Tools](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/analysis_tools.html)
+
+[Advanced Guides](https://mmselfsup.readthedocs.io/en/dev-1.x/advanced_guides/index.html) and [Colab Tutorials](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/demo/mmselfsup_colab_tutorial.ipynb) are also provided.
+
+Please refer to [FAQ](https://mmselfsup.readthedocs.io/en/dev-1.x/notes/faq.html) for frequently asked questions.
 
 ## Model Zoo
 
-Please refer to [model_zoo.md](docs/en/model_zoo.md) for a comprehensive set of pre-trained models and benchmarks.
+Please refer to [Model Zoo.md](https://mmselfsup.readthedocs.io/en/dev-1.x/model_zoo.html) for a comprehensive set of pre-trained models and benchmarks.
 
 Supported algorithms:
 
-- [x] [Relative Location (ICCV'2015)](https://arxiv.org/abs/1505.05192)
-- [x] [Rotation Prediction (ICLR'2018)](https://arxiv.org/abs/1803.07728)
-- [x] [DeepCluster (ECCV'2018)](https://arxiv.org/abs/1807.05520)
-- [x] [NPID (CVPR'2018)](https://arxiv.org/abs/1805.01978)
-- [x] [ODC (CVPR'2020)](https://arxiv.org/abs/2006.10645)
-- [x] [MoCo v1 (CVPR'2020)](https://arxiv.org/abs/1911.05722)
-- [x] [SimCLR (ICML'2020)](https://arxiv.org/abs/2002.05709)
-- [x] [MoCo v2 (ArXiv'2020)](https://arxiv.org/abs/2003.04297)
-- [x] [BYOL (NeurIPS'2020)](https://arxiv.org/abs/2006.07733)
-- [x] [SwAV (NeurIPS'2020)](https://arxiv.org/abs/2006.09882)
-- [x] [DenseCL (CVPR'2021)](https://arxiv.org/abs/2011.09157)
-- [x] [SimSiam (CVPR'2021)](https://arxiv.org/abs/2011.10566)
-- [x] [Barlow Twins (ICML'2021)](https://arxiv.org/abs/2103.03230)
-- [x] [MoCo v3 (ICCV'2021)](https://arxiv.org/abs/2104.02057)
-- [x] [MAE](https://arxiv.org/abs/2111.06377)
-- [x] [SimMIM](https://arxiv.org/abs/2111.09886)
-- [x] [CAE](https://arxiv.org/abs/2202.03026)
+- [x] [Relative Location (ICCV'2015)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/relavive_loc)
+- [x] [Rotation Prediction (ICLR'2018)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/rotation_pred)
+- [x] [DeepCluster (ECCV'2018)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/deepcluster)
+- [x] [NPID (CVPR'2018)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/npid)
+- [x] [ODC (CVPR'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/odc)
+- [x] [MoCo v1 (CVPR'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mocov1)
+- [x] [SimCLR (ICML'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/simclr)
+- [x] [MoCo v2 (ArXiv'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/byol)
+- [x] [BYOL (NeurIPS'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mocov2)
+- [x] [SwAV (NeurIPS'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/swav)
+- [x] [DenseCL (CVPR'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/densecl)
+- [x] [SimSiam (CVPR'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/simsiam)
+- [x] [Barlow Twins (ICML'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/barlowtwins)
+- [x] [MoCo v3 (ICCV'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mocov3)
+- [x] [MAE (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mae)
+- [x] [SimMIM (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/simmim)
+- [x] [CAE (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/cae)
 
 More algorithms are in our plan.
 
@@ -144,7 +151,7 @@ More algorithms are in our plan.
 
 ## Contributing
 
-We appreciate all contributions improving MMSelfSup. Please refer to [CONTRIBUTING.md](.github/CONTRIBUTING.md) for more details about the contributing guideline.
+We appreciate all contributions improving MMSelfSup. Please refer to [Contribution Guides](https://mmselfsup.readthedocs.io/en/dev-1.x/notes/contribution_guide.html) for more details about the contributing guideline.
 
 ## Acknowledgement
 
@@ -172,6 +179,7 @@ This project is released under the [Apache 2.0 license](LICENSE).
 
 ## Projects in OpenMMLab
 
+- [MMEngine](https://github.com/open-mmlab/mmengine): OpenMMLab foundational library for training deep learning models.
 - [MMCV](https://github.com/open-mmlab/mmcv): OpenMMLab foundational library for computer vision.
 - [MIM](https://github.com/open-mmlab/mim): MIM installs OpenMMLab packages.
 - [MMClassification](https://github.com/open-mmlab/mmclassification): OpenMMLab image classification toolbox and benchmark.

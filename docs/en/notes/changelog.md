@@ -5,7 +5,7 @@
 ### v1.0.0rc0 (01/09/2022)
 
 We are excited to announce the release of MMSelfSup v1.0.0rc0.
-MMSelfSup v1.0.0rc0 is the first version of MMSelfSup 1.x, a part of the OpenMMLab 2.x projects. 
+MMSelfSup v1.0.0rc0 is the first version of MMSelfSup 1.x, a part of the OpenMMLab 2.x projects.
 The `master` branch is still 0.x version and we will checkout a new `1.x` branch to release 1.x version. The two versions will be maintained simultaneously in the future.
 
 We briefly list the major breaking changes here. Please refer to the [migration guide](../migration.md) for details and migration instructions.

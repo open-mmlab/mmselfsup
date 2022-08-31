@@ -12,12 +12,15 @@ RUN apt-get update && apt-get install -y ffmpeg libsm6 libxext6 git ninja-build 
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install MMCV MMDetection MMSegmentation
-RUN pip install mmcv-full==1.3.16 -f https://download.openmmlab.com/mmcv/dist/cu113/torch1.10.0/index.html
-RUN pip install mmsegmentation mmdet
+# Install MMEngine and MMCV
+RUN pip install openmim
+RUN mim install mmengine "mmcv>=2.0.0rc1"
+RUN mim install mmsegmentation mmdet
+
 # Install MMSelfSup
 RUN conda clean --all
 RUN git clone https://github.com/open-mmlab/mmselfsup.git  /mmselfsup
 WORKDIR /mmselfsup
 ENV FORCE_CUDA="1"
+RUN git checkout 1.x
 RUN pip install --no-cache-dir -e .
