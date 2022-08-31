@@ -7,7 +7,7 @@
     - [Models](#models)
     - [Schedules](#schedules)
     - [Runtime settings](#runtime-settings)
-  - [Folders and Files](#folders-and-files)
+  - [Package](#package)
 
 ## Migration from MMSelfSup 0.x
 
@@ -71,7 +71,7 @@ train_dataloader = dict(
     num_workers=4,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
-    collate_fn='default_collate',
+    collate_fn=dict(type='default_collate'),
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
@@ -84,7 +84,7 @@ val_dataloader = ...
 </tr>
 </table>
 
-Besides, we remove the key of `data_source` to keep the pipeline format consistent with that in other OpenMMLab projects. Please refer to [1_config.md](user_guides/1_config.md) for more details.
+Besides, we remove the key of `data_source` to keep the pipeline format consistent with that in other OpenMMLab projects. Please refer to [Config](user_guides/1_config.md) for more details.
 
 Changes in **`pipeline`**:
 
@@ -324,6 +324,7 @@ visualizer = dict(
 2. Changes in **`load_from`** and **`resume_from`**:
 
 - The `resume_from` is removed. And we use `resume` and `load_from` to replace it.
+
   - If `resume=True` and `load_from` is not None, resume training from the checkpoint in `load_from`.
   - If `resume=True` and `load_from` is None, try to resume from the latest checkpoint in the work directory.
   - If `resume=False` and `load_from` is not None, only load the checkpoint, not resume training.
@@ -365,7 +366,7 @@ visualizer = dict(
 
 6. New field **`default_scope`**: The start point to search module for all registries. The `default_scope` in MMSelfSup is `mmselfsup`. See [the registry tutorial](TODO) for more details.
 
-## Folders and Files
+## Package
 
 The table below records the general modification of the folders and files.
 
