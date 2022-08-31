@@ -48,3 +48,12 @@ This means that there are two pipelines, which contain 2 views and 6 views, resp
 More examples can be found in [imagenet_mocov1.py](../../../configs/selfsup/_base_/datasets/imagenet_mocov1.py), [imagenet_mocov2.py](../../../configs/selfsup/_base_/datasets/imagenet_mocov2.py) and [imagenet_swav_mcrop-2-6.py](../../../configs/selfsup/_base_/datasets/imagenet_swav_mcrop-2-6.py) etc.  
 
 ## Introduction of `PackSelfSupInputs`
+We build a class named `PackSelfSupInputs` to pack data into the format compatible with the inputs of algorithm. This transform
+is usually put at the end of the pipeline like:
+```python
+train_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(type='MultiView', num_views=2, transforms=[view_pipeline]),
+    dict(type='PackSelfSupInputs', meta_keys=['img_path'])
+]
+```
