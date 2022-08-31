@@ -13,11 +13,11 @@
 
 We introduce some modifications of MMSelfSup 1.x, to help users to migrate their projects based on MMSelfSup 0.x to 1.x smoothly.
 
-MMSelfSup 1.x depends on some new packages, you can prepare a new clean environment and install again
-according to the [install tutorial](./get_started.md). Or install the below packages manually.
+MMSelfSup 1.x depends on some new packages, you should create a new environment, with these required packages installed
+according to the [install tutorial](./get_started.md). Three important packages are listed below,
 
-1. [MMEngine](https://github.com/open-mmlab/mmengine): MMEngine is the core the OpenMMLab 2.0 architecture,
-   and we splited many compentents unrelated to computer vision from MMCV to MMEngine.
+1. [MMEngine](https://github.com/open-mmlab/mmengine): MMEngine is the base of all OpenMMLab 2.0 repos.
+   Some modules, which are not specific to Computer Vision, are migrated from MMCV to this repo.
 2. [MMCV](https://github.com/open-mmlab/mmcv): The computer vision package of OpenMMLab. This is not a new
    dependency, but you need to upgrade it to above `2.0.0rc1` version.
 3. [MMClassification](https://github.com/open-mmlab/mmcv): The image classification package of OpenMMLab. This is not a new
