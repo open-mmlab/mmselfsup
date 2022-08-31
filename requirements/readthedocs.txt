@@ -1,5 +1,6 @@
-faiss-cpu
+mmcls>=1.0.0rc0
 mmcv>=2.0.0rc1
+mmengine
 mmselfsup
 scikit-learn
 torch
