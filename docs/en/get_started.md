@@ -172,7 +172,7 @@ Installing CUDA runtime libraries is enough if you follow our best practices, be
 
 #### Install MMEngine without MIM
 
-To install MMEngine with pip instead of MIM, please follow [MMEngine installation guides](https://mmcv.readthedocs.io/en/latest/get_started/installation.html).
+To install MMEngine with pip instead of MIM, please follow [MMEngine installation guides](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/get_started/installation.md).
 
 For example, you can install MMEngine by the following command.
 
@@ -184,7 +184,7 @@ pip install mmengine
 
 MMCV contains C++ and CUDA extensions, thus depending on PyTorch in a complex way. MIM solves such dependencies automatically and makes the installation easier. However, it is not a must.
 
-To install MMCV with pip instead of MIM, please follow [MMCV installation guides](https://mmcv.readthedocs.io/en/latest/get_started/installation.html). This requires manually specifying a find-url based on PyTorch version and its CUDA version.
+To install MMCV with pip instead of MIM, please follow [MMCV installation guides](https://mmcv.readthedocs.io/en/2.x/get_started/installation.html). This requires manually specifying a find-url based on PyTorch version and its CUDA version.
 
 For example, the following command installs mmcv-full built for PyTorch 1.12.0 and CUDA 11.6.
 
@@ -254,7 +254,7 @@ docker run --gpus all --shm-size=8g -it -v {DATA_DIR}:/workspace/mmselfsup/data 
 
 ### Trouble shooting
 
-If you have some issues during the installation, please first view the [FAQ](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/docs/en/notes/faq.md) page.
+If you have some issues during the installation, please first view the [FAQ](notes/faq.md) page.
 You may [open an issue](https://github.com/open-mmlab/mmselfsup/issues/new/choose) on GitHub if no solution is found.
 
 ## Using Multiple MMSelfSup Versions
