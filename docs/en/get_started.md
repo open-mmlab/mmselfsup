@@ -23,7 +23,7 @@ In this section, we demonstrate how to prepare an environment with PyTorch.
 MMSelfSup works on Linux (Windows and macOS are not officially supported). It requires Python 3.6+, CUDA 9.2+ and PyTorch 1.6+.
 
 ```{note}
-If you are experienced with PyTorch and have already installed it, just skip this part and jump to the [next section](#installation). Otherwise, you can follow these steps for the preparation.
+If you are experienced with PyTorch and have already installed it, just skip this part and jump to the next Installation section. Otherwise, you can follow these steps for the preparation.
 ```
 
 **Step 0.** Download and install Miniconda from the [official website](https://docs.conda.io/en/latest/miniconda.html).
@@ -60,7 +60,7 @@ We recommend users to follow our best practices to install MMSelfSup. However, t
 ```shell
 pip install -U openmim
 mim install mmengine
-mim install mmcv>=2.0.0rc1
+mim install 'mmcv>=2.0.0rc1'
 ```
 
 **Step 1.** Install MMSelfSup.
@@ -95,7 +95,7 @@ git checkout dev-1.x
 Just install with pip.
 
 ```shell
-pip install mmselfsup>=1.0.0rc0
+pip install 'mmselfsup>=1.0.0rc0'
 ```
 
 ### Verify the installation
@@ -152,7 +152,7 @@ If you don't run MMDetection and MMSegmentation benchmarks, it is unnecessary to
 You can simply install MMDetection and MMSegmentation with the following command:
 
 ```shell
-pip install mmdet mmsegmentation
+pip install 'mmdet>=3.0.0rc0' 'mmsegmentation>=1.0.0rc0'
 ```
 
 For more details, you can check the installation page of [MMDetection](https://github.com/open-mmlab/mmdetection/blob/dev-3.x/docs/en/get_started.md) and [MMSegmentation](https://github.com/open-mmlab/mmsegmentation/blob/dev-1.x/docs/en/get_started.md).
@@ -186,10 +186,10 @@ MMCV contains C++ and CUDA extensions, thus depending on PyTorch in a complex wa
 
 To install MMCV with pip instead of MIM, please follow [MMCV installation guides](https://mmcv.readthedocs.io/en/latest/get_started/installation.html). This requires manually specifying a find-url based on PyTorch version and its CUDA version.
 
-For example, the following command install mmcv-full built for PyTorch 1.10.x and CUDA 11.3.
+For example, the following command installs mmcv-full built for PyTorch 1.12.0 and CUDA 11.6.
 
 ```shell
-pip install mmcv-full>=2.0.0rc1 -f https://download.openmmlab.com/mmcv/dist/cu113/torch1.10/index.html
+pip install 'mmcv-full>=2.0.0rc1' -f https://download.openmmlab.com/mmcv/dist/cu116/torch1.12.0/index.html
 ```
 
 ### Install on CPU-only platforms
@@ -197,7 +197,7 @@ pip install mmcv-full>=2.0.0rc1 -f https://download.openmmlab.com/mmcv/dist/cu11
 MMSelfSup can be built for CPU only environment. In CPU mode, you can train, test or inference a model.
 
 Some functionalities are gone in this mode, usually GPU-compiled ops. But don't
-worry, almost all models in MMClassification don't depends on these ops.
+worry, almost all models in MMSelfSup don't depend on these ops.
 
 #### Install on Google Colab
 
@@ -209,7 +209,7 @@ thus we only need to install MMCV and MMSeflSup with the following commands.
 ```shell
 !pip3 install openmim
 !mim install mmengine
-!mim install mmcv>=2.0.0rc1
+!mim install 'mmcv>=2.0.0rc1'
 ```
 
 **Step 1.** Install MMSelfSup from the source.
