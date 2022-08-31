@@ -132,6 +132,7 @@ class CAEViT(VisionTransformer):
 
         Args:
             x (torch.Tensor): Input images, which is of shape B x C x H x W.
+            mask (torch.Tensor): Mask for input, which is of shape B x L.
 
         Returns:
             torch.Tensor: hidden features.
