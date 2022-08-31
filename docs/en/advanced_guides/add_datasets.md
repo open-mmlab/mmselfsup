@@ -7,7 +7,7 @@ In this tutorial, we introduce the basic steps to create your customized dataset
   - [Step 2: Add NewDataset to \_\_init\_\_py](#step-2-add-newdataset-to-__init__py)
   - [Step 3: Modify the config file](#step-3-modify-the-config-file)
 
-If your algorithm does not need any customized dataset, you can use these off-the-shelf datasets under [datasets directory](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/mmselfsup/datasets). But to use these existing datasets, you have to convert your dataset to existing dataset format.
+If your algorithm does not need any customized dataset, you can use these off-the-shelf datasets under [datasets directory](mmselfsup.datasets). But to use these existing datasets, you have to convert your dataset to existing dataset format.
 
 As for image pretraining, it is recommended to follow the format of MMClassification.
 
