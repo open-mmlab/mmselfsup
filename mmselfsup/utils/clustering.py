@@ -116,7 +116,9 @@ def run_kmeans(x: np.ndarray,
     # perform the training
     clus.train(x, index)
     _, I = index.search(x, 1)  # noqa E741
-    losses = faiss.vector_to_array(clus.obj)
+
+    stats = clus.iteration_stats
+    losses = np.array([stats.at(i).obj for i in range(stats.size())])
     if verbose:
         print(f'k-means loss evolution: {losses}')
 

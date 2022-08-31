@@ -32,12 +32,10 @@ class ODCMemory(BaseModule):
         super().__init__()
         self.rank, self.num_replicas = get_dist_info()
         if self.rank == 0:
-            self.register_buffer(
-                'feature_bank',
-                torch.zeros((length, feat_dim), dtype=torch.float32))
+            self.feature_bank = torch.zeros((length, feat_dim),
+                                            dtype=torch.float32)
 
-        self.register_buffer('label_bank',
-                             torch.zeros((length, ), dtype=torch.long))
+        self.label_bank = torch.zeros((length, ), dtype=torch.long)
         self.register_buffer(
             'centroids',
             torch.zeros((num_classes, feat_dim), dtype=torch.float32))

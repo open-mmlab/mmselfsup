@@ -2,6 +2,8 @@
 from typing import Dict, List, Optional, Tuple, Union
 
 import torch
+import torch.nn as nn
+from mmengine.device import get_device
 from mmengine.structures import LabelData
 
 from mmselfsup.registry import MODELS
@@ -95,7 +97,8 @@ class ODC(BaseModel):
         if self.with_neck:
             feature = self.neck(feature)
 
-        loss_inputs = (feature, self.memory_bank.label_bank[idx])
+        loss_inputs = (feature,
+                       self.memory_bank.label_bank[idx].to(get_device()))
         loss = self.head(*loss_inputs)
         losses = dict(loss=loss)
 

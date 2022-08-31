@@ -115,4 +115,5 @@ class ODCHook(Hook):
         inv_histogram = (1. / (histogram + 1e-10))**reweight_pow
         weight = inv_histogram / inv_histogram.sum()
         runner.model.module.loss_weight.copy_(torch.from_numpy(weight))
-        runner.model.module.head.loss.class_weight = self.loss_weight
+        runner.model.module.head.loss.class_weight = \
+            runner.model.module.loss_weight
