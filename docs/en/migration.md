@@ -59,6 +59,7 @@ data = dict(
     ),
     val=...)
 ```
+
 </td>
 
 <tr>
@@ -80,6 +81,7 @@ train_dataloader = dict(
         pipeline=train_pipeline))
 val_dataloader = ...
 ```
+
 </td>
 </tr>
 </table>
@@ -172,6 +174,7 @@ optimizer = dict(
     ))
 optimizer_config = dict(grad_clip=dict(max_norm=1.0))
 ```
+
 </td>
 <tr>
 <td>New</td>
@@ -187,6 +190,7 @@ optim_wrapper = dict(
     clip_gard=dict(max_norm=1.0),
 )
 ```
+
 </td>
 </tr>
 </table>
@@ -196,8 +200,9 @@ optim_wrapper = dict(
 - The `lr_config` field is removed and we use new `param_scheduler` to replace it.
 - The `warmup` related arguments are removed, since we use schedulers combination to implement this
   functionality.
-The new schedulers combination mechanism is very flexible, and you can use it to design many kinds of learning
-rate / momentum curves. See [the tutorial](TODO) for more details.
+  The new schedulers combination mechanism is very flexible, and you can use it to design many kinds of learning
+  rate / momentum curves. See [the tutorial](TODO) for more details.
+
 <table class="docutils">
 <tr>
 <td>Original</td>
@@ -212,6 +217,7 @@ lr_config = dict(
     warmup_ratio=0.01,
     warmup_by_epoch=True)
 ```
+
 </td>
 <tr>
 <td>New</td>
@@ -231,6 +237,7 @@ param_scheduler = [
     dict(type='CosineAnnealingLR', by_epoch=True, begin=5， end=200),
 ]
 ```
+
 </td>
 </tr>
 </table>
@@ -248,6 +255,7 @@ configure the loop in training, validation and test.
 ```python
 runner = dict(type='EpochBasedRunner', max_epochs=200)
 ```
+
 </td>
 <tr>
 <td>New</td>
@@ -256,6 +264,7 @@ runner = dict(type='EpochBasedRunner', max_epochs=200)
 ```python
 train_cfg = dict(by_epoch=True, max_epochs=200)
 ```
+
 </td>
 </tr>
 </table>
@@ -302,6 +311,7 @@ log_config = dict(
         dict(type='TensorboardLoggerHook'),
     ])
 ```
+
 </td>
 <tr>
 <td>New</td>
@@ -317,6 +327,7 @@ visualizer = dict(
     vis_backends=[dict(type='LocalVisBackend'), dict(type='TensorboardVisBackend')],
 )
 ```
+
 </td>
 </tr>
 </table>
@@ -331,7 +342,7 @@ visualizer = dict(
   - If `resume=False` and `load_from` is None, do not load nor resume.
 
 3. Changes in **`dist_params`**:
-  
+
 The `dist_params` field is a sub field of `env_cfg` now. And there are some new configurations in the `env_cfg`.
 
 ```python
@@ -347,7 +358,7 @@ env_cfg = dict(
 
 4. Changes in **`workflow`**: `workflow` related functionalities are **removed**.
 
-5. New field **`visualizer`**: 
+5. New field **`visualizer`**:
 
 The visualizer is a new design in OpenMMLab 2.0 architecture. We use a
 visualizer instance in the runner to handle results & log visualization and save to different backends.
