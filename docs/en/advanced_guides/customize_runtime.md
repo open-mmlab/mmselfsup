@@ -1,224 +1,84 @@
 # Customize Runtime
 
 - [Customize Runtime](#customize-runtime)
-  - [Customize Workflow](#customize-workflow)
-  - [Hooks](#hooks)
-    - [default training hooks](#default-training-hooks)
-      - [CheckpointHook](#checkpointhook)
-      - [LoggerHooks](#loggerhooks)
-      - [EvalHook](#evalhook)
-  - [Use other implemented hooks](#use-other-implemented-hooks)
-  - [Customize self-implemented hooks](#customize-self-implemented-hooks)
-    - [1. Implement a new hook](#1-implement-a-new-hook)
-    - [2. Import the new hook](#2-import-the-new-hook)
-    - [3. Modify the config](#3-modify-the-config)
+  - [Loop](#loop)
+  - [Hook](#hook)
+    - [Step 1: Create a new hook](#step-1-create-a-new-hook)
+    - [Step 2: Import the new hook](#step-2-import-the-new-hook)
+    - [Step 3: Modify the config](#step-3-modify-the-config)
+  - [Optimizer](#optimizer)
+    - [Optimizer Wrapper](#optimizer-wrapper)
+    - [Constructor](#constructor)
+  - [Scheduler](#scheduler)
 
-In this tutorial, we will introduce some methods about how to customize workflow and hooks when running your own settings for the project.
+In this tutorial, we will introduce some methods about how to customize runtime settings for the project.
 
-## Customize Workflow
+## Loop
 
-Workflow is a list of (phase, duration) to specify the running order and duration. The meaning of "duration" depends on the runner's type.
+`Loop` means the workflow of training, validation or testing and we use `train_cfg`, `val_cfg` and `test_cfg` to build `Loop`.
 
-For example, we use epoch-based runner by default, and the "duration" means how many epochs the phase to be executed in a cycle. Usually, we only want to execute training phase, just use the following config.
+E.g.:
 
 ```python
-workflow = [('train', 1)]
+# Use EpochBasedTrainLoop to train 200 epochs.
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=200)
 ```
 
-Sometimes we may want to check some metrics (e.g. loss, accuracy) about the model on the validate set. In such case, we can set the workflow as
+MMEngine defines several [basic loops](https://github.com/open-mmlab/mmengine/blob/main/mmengine/runner/loops.py). Users could implement customized loops if the defined loops are not satisfied.
+
+## Hook
+
+Before learning to create your customized hooks, it is recommended to learn the basic concept of hooks in file [engine.md](engine.md).
+
+### Step 1: Create a new hook
+
+Depending on your intention of this hook, you need to implement corresponding functions according to the hook point of your expectation.
+
+For example, if you want to modify the value of a hyper-parameter according to the training iter and two other hyper-parameters after every train iter, you could implement a hook like:
 
 ```python
-[('train', 1), ('val', 1)]
-```
+# Copyright (c) OpenMMLab. All rights reserved.
+from typing import Optional, Sequence
 
-so we will run training and valiation for one epoch iteratively.
+from mmengine.hooks import Hook
 
-By default, we recommend using `EvalHook` to do evaluation after the training epoch.
-
-## Hooks
-
-The hook mechanism is widely used in the OpenMMLab open-source algorithm library. Inserted in the `Runner`, the entire life cycle of the training process can be managed easily. You can learn more about the hook through [related article](https://www.calltutors.com/blog/what-is-hook/).
-
-Hooks only work after being registered into the runner. At present, hooks are mainly divided into two categories:
-
-- default training hooks
-
-Those hooks are registered by the runner by default. Generally, they fulfill some basic functions, and have default priority, you don't need to modify the priority.
-
-- custom hooks
-
-The custom hooks are registered through custom_hooks. Generally, they are hooks with enhanced functions. The priority needs to be specified in the configuration file. If you do not specify the priority of the hook, it will be set to 'NORMAL' by default.
-
-Priority list
-
-|      Level      | Value |
-| :-------------: | :---: |
-|     HIGHEST     |   0   |
-|    VERY_HIGH    |  10   |
-|      HIGH       |  30   |
-|  ABOVE_NORMAL   |  40   |
-| NORMAL(default) |  50   |
-|  BELOW_NORMAL   |  60   |
-|       LOW       |  70   |
-|    VERY_LOW     |  90   |
-|     LOWEST      |  100  |
-
-The priority determines the execution order of the hooks. Before training, the log will print out the execution order of the hooks at each stage to facilitate debugging.
-
-### default training hooks
-
-Some common hooks are not registered through `custom_hooks`, they are
-
-|         Hooks         |     Priority      |
-| :-------------------: | :---------------: |
-|    `LrUpdaterHook`    |  VERY_HIGH (10)   |
-| `MomentumUpdaterHook` |     HIGH (30)     |
-|    `OptimizerHook`    | ABOVE_NORMAL (40) |
-|   `CheckpointHook`    |    NORMAL (50)    |
-|    `IterTimerHook`    |     LOW (70)      |
-|      `EvalHook`       |     LOW (70)      |
-|    `LoggerHook(s)`    |   VERY_LOW (90)   |
-
-`OptimizerHook`, `MomentumUpdaterHook` and `LrUpdaterHook` have been introduced in [schedule strategy](./4_schedule.md). `IterTimerHook` is used to record elapsed time and does not support modification.
-
-Here we reveal how to customize `CheckpointHook`, `LoggerHooks`, and `EvalHook`.
-
-#### CheckpointHook
-
-The MMCV runner will use `checkpoint_config` to initialize [`CheckpointHook`](https://github.com/open-mmlab/mmcv/blob/9ecd6b0d5ff9d2172c49a182eaa669e9f27bb8e7/mmcv/runner/hooks/checkpoint.py).
-
-```python
-checkpoint_config = dict(interval=1)
-```
-
-We could set `max_keep_ckpts` to save only a small number of checkpoints or decide whether to store state dict of optimizer by `save_optimizer`. More details of the arguments are [here](https://mmcv.readthedocs.io/en/latest/api.html#mmcv.runner.CheckpointHook)
-
-#### LoggerHooks
-
-The `log_config` wraps multiple logger hooks and enables to set intervals. Now MMCV supports `TextLoggerHook`, `WandbLoggerHook`, `MlflowLoggerHook`, `NeptuneLoggerHook`, `DvcliveLoggerHook` and `TensorboardLoggerHook`.
-The detailed usages can be found in the [doc](https://mmcv.readthedocs.io/en/latest/api.html#mmcv.runner.LoggerHook).
-
-```python
-log_config = dict(
-    interval=50,
-    hooks=[
-        dict(type='TextLoggerHook'),
-        dict(type='TensorboardLoggerHook')
-    ])
-```
-
-#### EvalHook
-
-The config of `evaluation` will be used to initialize the [`EvalHook`](https://github.com/open-mmlab/mmclassification/blob/master/mmcls/core/evaluation/eval_hooks.py).
-
-The `EvalHook` has some reserved keys, such as `interval`, `save_best` and `start`, and the other arguments such as `metrics` will be passed to the `dataset.evaluate()`
-
-```python
-evaluation = dict(interval=1, metric='accuracy', metric_options={'topk': (1, )})
-```
-
-You can save the model weight when the best verification result is obtained by modifying the parameter `save_best`:
-
-```python
-# "auto" means automatically select the metrics to compare.
-# You can also use a specific key like "accuracy_top-1".
-evaluation = dict(interval=1, save_best="auto", metric='accuracy', metric_options={'topk': (1, )})
-```
-
-When running some large-scale experiments, you can skip the validation step at the beginning of training by modifying the parameter `start` as below:
-
-```python
-evaluation = dict(interval=1, start=200, metric='accuracy', metric_options={'topk': (1, )})
-```
-
-This indicates that, during the first 200 epochs, evaluation will not be executed. From the 200th epoch, evaluation will be executed after the training process.
-
-## Use other implemented hooks
-
-Some hooks have been already implemented in MMCV and MMClassification, they are:
-
-- [EMAHook](https://github.com/open-mmlab/mmcv/blob/master/mmcv/runner/hooks/ema.py)
-- [SyncBuffersHook](https://github.com/open-mmlab/mmcv/blob/master/mmcv/runner/hooks/sync_buffer.py)
-- [EmptyCacheHook](https://github.com/open-mmlab/mmcv/blob/master/mmcv/runner/hooks/memory.py)
-- [ProfilerHook](https://github.com/open-mmlab/mmcv/blob/master/mmcv/runner/hooks/profiler.py)
-- ......
-
-If the hook is already implemented in MMCV, you can directly modify the config to use the hook as below
-
-```python
-mmcv_hooks = [
-    dict(type='MMCVHook', a=a_value, b=b_value, priority='NORMAL')
-]
-```
-
-such as using `EMAHook`, interval is 100 iters:
-
-```python
-custom_hooks = [
-    dict(type='EMAHook', interval=100, priority='HIGH')
-]
-```
-
-## Customize self-implemented hooks
-
-### 1. Implement a new hook
-
-Here we give an example of creating a new hook in MMSelfSup.
-
-```python
-from mmcv.runner import HOOKS, Hook
+from mmselfsup.registry import HOOKS
+from mmselfsup.utils import get_model
 
 
 @HOOKS.register_module()
-class MyHook(Hook):
+class NewHook(Hook):
+    """Docstring for NewHook.
+    """
 
-    def __init__(self, a, b):
-        pass
+    def __init__(self, a: int, b: int) -> None:
+        self.a = a
+        self.b = b
 
-    def before_run(self, runner):
-        pass
-
-    def after_run(self, runner):
-        pass
-
-    def before_epoch(self, runner):
-        pass
-
-    def after_epoch(self, runner):
-        pass
-
-    def before_iter(self, runner):
-        pass
-
-    def after_iter(self, runner):
-        pass
+    def before_train_iter(self,
+                          runner,
+                          batch_idx: int,
+                          data_batch: Optional[Sequence[dict]] = None) -> None:
+        cur_iter = runner.iter
+        get_model(runner.model).hyper_parameter = self.a * cur_iter + self.b
 ```
 
-Depending on your intention of this hook, you need to implement different functionalities in `before_run`, `after_run`, `before_epoch`, `after_epoch`, `before_iter`, and `after_iter`.
+### Step 2: Import the new hook
 
-### 2. Import the new hook
-
-Then we need to ensure `MyHook` imported. Assuming `MyHook` is in `mmselfsup/core/hooks/my_hook.py`, there are two ways to import it:
-
-- Modify `mmselfsup/core/hooks/__init__.py` as below
+Then we need to ensure `NewHook` imported. Assuming `NewHook` is in `mmselfsup/engine/hooks/new_hook.py`, modify `mmselfsup/engine/hooks/__init__.py` as below
 
 ```python
-from .my_hook import MyHook
+...
+from .new_hook import NewHook
 
-__all__ = [..., MyHook, ...]
+__all__ = [..., NewHook]
 ```
 
-- Use `custom_imports` in the config to manually import it
-
-```python
-custom_imports = dict(imports=['mmselfsup.core.hooks.my_hook'], allow_failed_imports=False)
-```
-
-### 3. Modify the config
+### Step 3: Modify the config
 
 ```python
 custom_hooks = [
-    dict(type='MyHook', a=a_value, b=b_value)
+    dict(type='NewHook', a=a_value, b=b_value)
 ]
 ```
 
@@ -226,8 +86,109 @@ You can also set the priority of the hook as below:
 
 ```python
 custom_hooks = [
-    dict(type='MyHook', a=a_value, b=b_value, priority='ABOVE_NORMAL')
+    dict(type='NewHook', a=a_value, b=b_value, priority='ABOVE_NORMAL')
 ]
 ```
 
 By default, the hook's priority is set as `NORMAL` during registration.
+
+## Optimizer
+
+Before customizing the optimizer config, it is recommended to learn the basic concept of optimizer in file [engine.md](engine.md).
+
+Here is an example of SGD optimizer:
+
+```python
+optimizer = dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0001)
+```
+
+We support all optimizers of PyTorch. For more details, please refer to [MMEngine optimizer document](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/optim_wrapper.md).
+
+### Optimizer Wrapper
+
+Optimizer wrapper provides a unified interface for single precision training and automatic mixed precision training with different hardware. Here is an example of `optim_wrapper` setting:
+
+```python
+optimizer = dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0001)
+optim_wrapper = dict(type='OptimWrapper', optimizer=optimizer)
+```
+
+Besides, if you want to apply automatic mixed precision training, you could modify the config above like:
+
+```python
+optimizer = dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0001)
+optim_wrapper = dict(type='AmpOptimWrapper', optimizer=optimizer)
+```
+
+The default setting of `loss_scale` of `AmpOptimWrapper` is `dynamic`.
+
+### Constructor
+
+The constructor aims to build optimizer, optimizer wrapper and customize hyper-parameters of different layers. The key `paramwise_cfg` of `optim_wrapper` in configs controls this customization.
+
+The example and detailed information can be found in [MMEngine optimizer document](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/optim_wrapper.md).
+
+Besides, We could use `custom_keys` to set different hyper-parameters of different modules.
+
+Here is the `optim_wrapper` example of MAE. The config below sets weight decay multiplication to be 0 of `pos_embed`, `mask_token`, `cls_token` modules and those layers whose name contains `ln` and `bias`. During training, the weight decay of these modules will be `weight_decay * decay_mult`.
+
+```python
+optimizer = dict(
+    type='AdamW', lr=1.5e-4 * 4096 / 256, betas=(0.9, 0.95), weight_decay=0.05)
+optim_wrapper = dict(
+    type='OptimWrapper',
+    optimizer=optimizer,
+    paramwise_cfg=dict(
+        custom_keys={
+            'ln': dict(decay_mult=0.0),
+            'bias': dict(decay_mult=0.0),
+            'pos_embed': dict(decay_mult=0.),
+            'mask_token': dict(decay_mult=0.),
+            'cls_token': dict(decay_mult=0.)
+        }))
+```
+
+Furthermore, for some specific settings, we could use boolean type arguments to control the optimization process or parameters. For example, here is an example config of SimCLR:
+
+```python
+optimizer = dict(type='LARS', lr=0.3, momentum=0.9, weight_decay=1e-6)
+optim_wrapper = dict(
+    type='OptimWrapper',
+    optimizer=optimizer,
+    paramwise_cfg=dict(
+        custom_keys={
+            'bn': dict(decay_mult=0, lars_exclude=True),
+            'bias': dict(decay_mult=0, lars_exclude=True),
+            # bn layer in ResNet block downsample module
+            'downsample.1': dict(decay_mult=0, lars_exclude=True),
+        }))
+```
+
+In `LARS` optimizer, we have `lars_exclude` to decide whether the named layers apply the `LARS` optimization methods or not.
+
+## Scheduler
+
+Before customizing the scheduler config, it is recommended to learn the basic concept of scheduler in [MMEngine document](https://github.com/open-mmlab/mmengine/blob/main/docs/en/tutorials/param_scheduler.md).
+
+Here is an example of scheduler:
+
+```python
+param_scheduler = [
+    dict(
+        type='LinearLR',
+        start_factor=1e-4,
+        by_epoch=True,
+        begin=0,
+        end=40,
+        convert_to_iter_based=True),
+    dict(
+        type='CosineAnnealingLR',
+        T_max=360,
+        by_epoch=True,
+        begin=40,
+        end=400,
+        convert_to_iter_based=True)
+]
+```
+
+**Note:** When you change the `max_epochs` in `train_cfg`, make sure that the args in `param_scheduler` are modified simultanuously.
