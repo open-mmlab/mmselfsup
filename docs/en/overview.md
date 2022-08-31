@@ -3,7 +3,9 @@
 - [Overview](#overview)
   - [Introduction of Self-supervised Learning](#introduction-of-self-supervised-learning)
   - [Design of MMSelfSup](#design-of-mmselfsup)
-  - [Hands-on Roadmap of MMselfSup](#hands-on-roadmap-of-mmselfsup)
+  - [Hands-on Roadmap of MMSelfSup](#hands-on-roadmap-of-mmselfsup)
+    - [Play with MMSelfSup](#play-with-mmselfsup)
+    - [Learn SSL with MMSelfSup](#learn-ssl-with-mmselfsup)
 
 In this section, We would like to give a quick review of the open-source library [MMSelfSup](https://github.com/open-mmlab/mmselfsup).
 
@@ -38,12 +40,12 @@ Typically, SSL is considered as the pre-training algorithm for various model arc
 
 - For the user who wants to try MMSelfSup with various SSL algorithms. We first refer the user to [Get Started](./get_started.md) for the **environment setup**.
 
-- For the pre-training stage, we refer the user to [Pre-train](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/#pretrain) for using various SSL algorithms to obtain the pre-trained model.
+- For the pre-training stage, we refer the user to [Pre-train](user_guides/3_pretrain.md) for using various SSL algorithms to obtain the pre-trained model.
 
 - For the benchmark stage, we refer the user to [Benchmark](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/#downstream-tasks) for examples and usage of applying the pre-trained models in many downstream tasks.
 
-- Also, we provide some analysis tools and visualization tools [Useful Tools](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/#downstream-tasks) to help  diagnose the algorithm.
+- Also, we provide some analysis tools and visualization tools [Useful Tools](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/#useful-tools) to help  diagnose the algorithm.
 
 ### Learn SSL with MMSelfSup
 
-If you are new to SSL, we recommend using the [Model Zoo](https://mmselfsup.readthedocs.io/en/dev-1.x/model_zoo.html) as a reference to learn the representative SSL algorithms.
+If you are new to SSL, we recommend using the [Model Zoo](model_zoo.md) as a reference to learn the representative SSL algorithms.

@@ -14,7 +14,7 @@ Data flow defines how data should be passed between two isolated modules, e.g. d
 
 In MMSelfSup, we mainly focus on the data flow between dataloader and model, and between model and visualizer. As for the
 data flow between model and metric, please refer to the docs in other repos, e.g. [MMClassification](https://github.com/open-mmlab/mmclassification).
-Also for data flow between model and visualizer, you can refer to [visualization](../user/guides/visualization.md)
+Also for data flow between model and visualizer, you can refer to [visualization](../user_guides/visualization.md)
 
 ## Data flow between dataloader and model
 
