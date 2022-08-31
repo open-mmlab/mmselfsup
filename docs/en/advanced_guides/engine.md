@@ -82,7 +82,7 @@ Some hooks have been already implemented in MMEngine, they are:
 
 Some hooks have been already implemented in MMSelfsup, they are:
 
-- [DeepClusterHook](mmselfsup.engine.hooks.DeepclusterHook)
+- [DeepClusterHook](mmselfsup.engine.hooks.DeepClusterHook)
 
 - [DenseCLHook](mmselfsup.engine.hooks.DenseCLHook)
 
