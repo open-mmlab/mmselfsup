@@ -12,7 +12,7 @@
       - [CUDA versions](#cuda-versions)
       - [Install MMEngine without MIM](#install-mmengine-without-mim)
       - [Install MMCV without MIM](#install-mmcv-without-mim)
-    - [Install on CPU-only platforms](#install-on-cpu-only-platforms)
+      - [Install on CPU-only platforms](#install-on-cpu-only-platforms)
       - [Install on Google Colab](#install-on-google-colab)
       - [Using MMSelfSup with Docker](#using-mmselfsup-with-docker)
     - [Trouble shooting](#trouble-shooting)
