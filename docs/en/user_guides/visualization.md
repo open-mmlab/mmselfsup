@@ -1,6 +1,6 @@
 # Visualization
 
-Visualization can give an intuitive interpretation of model training.
+Visualization can give an intuitive interpretation of the performance of the model.
 
 <!-- TOC -->
 
@@ -14,9 +14,9 @@ Visualization can give an intuitive interpretation of model training.
 
 ## How visualization is implemented
 
-it is recommended to learn the basic concept of visualization in file [engine.md](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/design/visualization.md).
+It is recommended to learn the basic concept of visualization in [engine.md](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/design/visualization.md).
 
-OpenMMLab 2.0 introduces the visualization object `Visualizer` and different visualization storage backends `VisBackend`. The `UML` diagram of the relationship between `Visualizer` and  `VisBackend` is as follows:
+OpenMMLab 2.0 introduces the visualization object `Visualizer` and several visualization backends `VisBackend`. The diagram below shows the relationship between `Visualizer` and  `VisBackend`,
 
 ![img](https://user-images.githubusercontent.com/17425982/163327736-f7cb3b16-ef07-46bc-982a-3cc7495e6c82.png)
 
@@ -43,7 +43,7 @@ The function [`add_datasample()`](https://github.com/open-mmlab/mmselfsup/blob/d
 
 ## Use different storage backends
 
-If you want to use a different storage backend (Wandb, Tensorboard, or a custom backend with a remote window), just change the `vis_backends` in the config, as follows:
+If you want to use a different backend (Wandb, Tensorboard, or a custom backend with a remote window), just change the `vis_backends` in the config, as follows:
 
 **Local**
 
@@ -67,7 +67,7 @@ visualizer = dict(
     type='SelfSupVisualizer', vis_backends=vis_backends, name='visualizer')
 ```
 
-Note that when multiple visualization storage backends exist for `vis_backends`, only `WandbVisBackend` is valid. Because the data drawn by `WandbVisBackend` is not compatible with the `LocalVisBackend`.
+Note that when multiple visualization backends exist for `vis_backends`, only `WandbVisBackend` is valid.
 
 ## Customize Visualization
 
