@@ -17,7 +17,7 @@ All models and part of benchmark results are recorded below.
 
 ### ImageNet
 
-ImageNet has multiple versions, but the most commonly used one is ILSVRC 2012. The classification results below are trained by linear evaluation or fine-tuning with loaded self-supervised pretrain backbones.
+ImageNet has multiple versions, but the most commonly used one is ILSVRC 2012. The classification results below are reported by linear evaluation or fine-tuning with pre-trained weights provided by various algorithms.
 
 <table class="docutils">
 <thead>
