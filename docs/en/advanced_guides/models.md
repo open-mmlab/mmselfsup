@@ -14,7 +14,7 @@ contains the following fix parts,
   for SimMIM.
 - necks, some specifial modules, such as decoder, appended directly to the output of the backbone.
 - heads, some specifial modules, such as mlp layers, appended to the output of the backbone or neck.
-- memories, some memory banks or queues in some algorithm, e.g. MoCov1/v2.
+- memories, some memory banks or queues in some algorithms, e.g. MoCov1/v2.
 - losses, used to compute the loss between the predicted output and the target.
 
 ## Overview of modules in MMSelfSup
@@ -43,7 +43,7 @@ described above.
 
 ## Construct algorithms from sub-modules
 
-Just as shown in above table, each algorithm is a combination of backbone, neck, head, loss, and memories. You are free to use these existing modules to build your own algorithms. If there are some customized modules, you should follow [add_modules](./add_modules.md)
+Just as shown in above table, each algorithm is a combination of backbone, neck, head, loss and memories. You are free to use these existing modules to build your own algorithms. If some customized modules are required, you should follow [add_modules](./add_modules.md) to meet your own need.
 MMSelfSup provides a base model, called `BaseModel`, and all algorithms
 should inherit this base model. And all sub-modules, except for memories, will be built in the base model, during the initialization of each algorithm. Memories will be built in the `__init__` of each specific algorithm. And loss will be built when building the head.
 
@@ -86,8 +86,8 @@ following section.
 
 ## Overview these abstract functions in base model
 
-The `forward` function is the entrance to the your results. However, it is different from the default `forward` function in most PyTorch code, which
-only has one mode. You will mess all your logic in the `forward` function, limiting the scability. Just as shown in the table below, `forward` function in MMSelfSup has three modes, i) tensor, ii) loss and iii) predict.
+The `forward` function is the entrance to the results. However, it is different from the default `forward` function in most PyTorch code, which
+only has one mode. You will mess all your logic in the `forward` function, limiting the scability. Just as shown in the code below, `forward` function in MMSelfSup has three modes, i) tensor, ii) loss and iii) predict.
 
 ```python
 def forward(self,
