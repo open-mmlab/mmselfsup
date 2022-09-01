@@ -258,7 +258,7 @@ The constructor aims to build optimizer, optimizer wrapper and customize hyper-p
 
 #### Constructors implemented in MMSelfsup
 
-- [LearningRateDecayOptimWrapperConstructor](mmselfsup.engine.optimizers.LearningRateDecayOptimWrapperConstructor
+- [LearningRateDecayOptimWrapperConstructor](mmselfsup.engine.optimizers.LearningRateDecayOptimWrapperConstructor)
 
 `LearningRateDecayOptimWrapperConstructor` sets different learning rates for different layers of backbone. Note: Currently, this optimizer constructor is built for ViT and Swin.
 
