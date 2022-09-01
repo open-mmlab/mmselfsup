@@ -65,7 +65,7 @@ The master branch works with **PyTorch 1.6** or higher.
 
 ## What's New
 
-MMSelfSup **v1.0.0rc0** was released in 01/09/2022.
+MMSelfSup **v1.0.0rc1** was released in 01/09/2022.
 
 - Based on MMEngine and MMCV.
 - Released with refactor.
