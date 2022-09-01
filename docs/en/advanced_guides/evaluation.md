@@ -13,7 +13,7 @@
 
 ## Evaluation in MMEngine
 
-During model validation and testing, quantitative evaluation is often required. `Metric` and `Evaluator` have been implemented in MMEngine to perform this function. See [MMEngine Doc](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/design/metric_and_evaluator.md).
+During model validation and testing, quantitative evaluation is often required. `Metric` and `Evaluator` have been implemented in MMEngine to perform this function. See [MMEngine Doc](https://mmengine.readthedocs.io/en/latest/design/evaluation.html).
 
 Model evaluation is divided into online evaluation and offline evaluation.
 
@@ -79,11 +79,11 @@ results = evaluator.offline_evaluate(data, predictions, chunk_size=128)
 
 During pretrain, validation and testing are not included, so it is no need to use evaluation.
 
-During benchmark, the pre-trained model will use some other OpenMMLab repos, e.g. MMClassification and MMSegmentation, which have already implemented their own evaluation functionalities.
+During benchmark, the pre-trained models need other downstream tasks to evaluate the performance, e.g. classification, detection, segmentation, etc. It is recommended to run downstream tasks with other OpenMMLab repos, such as MMClassification or MMDetection, which have already implemented their own evaluation functionalities.
 
-But MMSelfSup also implements some custom evaluation functionalities, shown as below:
+But MMSelfSup also implements some custom evaluation functionalities to support downstream tasks, shown as below:
 
-- [`knn_classifier()`](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/evaluation/functional/knn_classifier.py)
+- [`knn_classifier()`](mmselfsup.evaluation.functional.knn_classifier)
 
 It compute accuracy of knn classifier predictions, and is used in [KNN evaluation](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/benchmarks/classification/knn_imagenet/test_knn.py#L179).
 
@@ -94,7 +94,7 @@ top1, top5 = knn_classifier(train_feats, train_labels, val_feats,
 ...
 ```
 
-- [`ResLayerExtraNorm`](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/evaluation/functional/res_layer_extra_norm.py)
+- [`ResLayerExtraNorm`](mmselfsup.evaluation.functional.ResLayerExtraNorm)
 
 It add extra norm to original `ResLayer`, and is used in mmdetection benchmark config.
 
@@ -111,4 +111,4 @@ model = dict(
 
 ## Customize Evaluation
 
-Custom `Metric` and `Evaluator`  are also supported, see [MMEngine Doc](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/evaluation.md)
+Custom `Metric` and `Evaluator`  are also supported, see [MMEngine Doc](https://mmengine.readthedocs.io/en/latest/design/evaluation.html)
