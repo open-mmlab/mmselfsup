@@ -144,11 +144,13 @@ custom_hooks = [
 
 ## Optimizer
 
+We will introduce Optimizer section through 3 different parts: Optimizer, Optimizer wrapper, and Constructor.
+
 ### Optimizer
 
 #### Customize optimizer supported by PyTorch
 
-We already support to use all the optimizers implemented by PyTorch, see `mmengine/optim/optimizer/builder.py`. To use and modify them, please change the `optimizer` field of config files.
+We have already supported all the optimizers implemented by PyTorch, see `mmengine/optim/optimizer/builder.py`. To use and modify them, please change the `optimizer` field of config files.
 
 For example, if you want to use SGD, the modification could be as the following.
 
@@ -166,26 +168,31 @@ optimizer = dict(type='Adam', lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_de
 
 #### Parameter-wise configuration
 
-Some models may have some parameter-specific settings for optimization, for example, no weight decay to the BatchNorm layer and the bias in each layer. To finely configure them, we can use the `paramwise_options` in optimizer.
+Some models may have some parameter-specific settings for optimization, for example, no weight decay to the BatchNorm layer and the bias in each layer. To finely configure them, we can use the `paramwise_cfg` in optimizer.
 
-For example, if we do not want to apply weight decay to the parameters of `BatchNorm` or `GroupNorm`, and the bias in each layer, we can use following config file:
+For example, in MAE, we do not want to apply weight decay to the parameters of `ln`, `bias`, `pos_embed`, `mask_token` and `cls_token`, so we can use following config file:
 
 ```python
 optimizer = dict(
-    type=...,
-    lr=...,
-    paramwise_options={
-        '(bn|gn)(\\d+)?.(weight|bias)':
-        dict(weight_decay=0.),
-        'bias': dict(weight_decay=0.)
-    })
+    type='AdamW', lr=1.5e-4 * 4096 / 256, betas=(0.9, 0.95), weight_decay=0.05)
+optim_wrapper = dict(
+    type='OptimWrapper',
+    optimizer=optimizer,
+    paramwise_cfg=dict(
+        custom_keys={
+            'ln': dict(decay_mult=0.0),
+            'bias': dict(decay_mult=0.0),
+            'pos_embed': dict(decay_mult=0.),
+            'mask_token': dict(decay_mult=0.),
+            'cls_token': dict(decay_mult=0.)
+        }))
 ```
 
 #### Implemented optimizers in MMSelfsup
 
 - [LARS](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/engine/optimizers/lars.py)
 
-In addition to optimizers implemented by PyTorch, we also implement a customized [LARS](https://arxiv.org/abs/1708.03888) in `mmselfsup/engine/optimizers/lars.py`. It implements layer-wise adaptive rate scaling for SGD.
+In addition to optimizers implemented by PyTorch, we also implement a customized [LARS](mmselfsup.engine.optimizers.LARS) in `mmselfsup/engine/optimizers/lars.py`. It implements layer-wise adaptive rate scaling for SGD.
 
 ```python
 optimizer = dict(type='LARS', lr=4.8, momentum=0.9, weight_decay=1e-6)
@@ -251,7 +258,7 @@ The constructor aims to build optimizer, optimizer wrapper and customize hyper-p
 
 #### Constructors implemented in MMSelfsup
 
-- [LearningRateDecayOptimWrapperConstructor](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/engine/optimizers/layer_decay_optim_wrapper_constructor.py#L64)
+- [LearningRateDecayOptimWrapperConstructor](mmselfsup.engine.optimizers.LearningRateDecayOptimWrapperConstructor
 
 `LearningRateDecayOptimWrapperConstructor` sets different learning rates for different layers of backbone. Note: Currently, this optimizer constructor is built for ViT and Swin.
 
