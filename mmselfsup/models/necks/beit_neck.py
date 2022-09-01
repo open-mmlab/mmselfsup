@@ -3,8 +3,8 @@ from typing import Tuple
 
 import torch
 import torch.nn as nn
-from mmcv.cnn.utils.weight_init import trunc_normal_
 from mmengine.model import BaseModule
+from mmengine.model.weight_init import trunc_normal_
 
 from mmselfsup.registry import MODELS
 

@@ -37,6 +37,7 @@ train_dataloader = dict(
     num_workers=4,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
+    collate_fn=dict(type='default_collate'),
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
