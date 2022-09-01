@@ -21,7 +21,7 @@ according to the [install tutorial](./get_started.md). Three important packages 
 2. [MMCV](https://github.com/open-mmlab/mmcv): The computer vision package of OpenMMLab. This is not a new
    dependency, but you need to upgrade it to above `2.0.0rc1` version.
 3. [MMClassification](https://github.com/open-mmlab/mmcv): The image classification package of OpenMMLab. This is not a new
-   dependency, but you need to upgrade it to above `2.0.0rc0` version.
+   dependency, but you need to upgrade it to above `1.0.0rc0` version.
 
 ## Config
 
