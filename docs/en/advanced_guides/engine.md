@@ -96,7 +96,7 @@ Some hooks have been already implemented in MMSelfsup, they are:
 
 An example:
 
-Take [DenseCLHook](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/engine/hooks/densecl_hook.py) for example, this hook includes `loss_lambda` warmup in DenseCL.
+Take [DenseCLHook](mmselfsup.engine.hooks.DenseCLHook) for example, this hook includes `loss_lambda` warmup in DenseCL.
 
 `loss_lambda` is loss weight for the single and dense contrastive loss. Defaults to 0.5.
 
@@ -190,7 +190,7 @@ optim_wrapper = dict(
 
 #### Implemented optimizers in MMSelfsup
 
-- [LARS](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/engine/optimizers/lars.py)
+- [LARS](mmselfsup.engine.optimizers.LARS)
 
 In addition to optimizers implemented by PyTorch, we also implement a customized [LARS](mmselfsup.engine.optimizers.LARS) in `mmselfsup/engine/optimizers/lars.py`. It implements layer-wise adaptive rate scaling for SGD.
 
