@@ -1,6 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 
-from typing import List, Optional, Sequence, Union
+from typing import Optional, Union
 
 import numpy as np
 import torch
@@ -16,8 +16,8 @@ from mmselfsup.structures import SelfSupDataSample
 def init_model(config: Union[str, Config],
                checkpoint: Optional[str] = None,
                device: str = 'cuda:0',
-               options: Optional[dict] = None):
-    """Initialize a classifier from config file.
+               options: Optional[dict] = None) -> nn.Module:
+    """Initialize a model from config file.
 
     Args:
         config (str or :obj:`mmengine.Config`): Config file path or the config
@@ -52,24 +52,17 @@ def init_model(config: Union[str, Config],
     return model
 
 
-ImagesType = Union[str, np.ndarray, Sequence[str], Sequence[np.ndarray]]
-SampleList = List[SelfSupDataSample]
-
-
 def inference_model(model: nn.Module,
-                    img: ImagesType) -> Union[SelfSupDataSample, SampleList]:
-    """Inference image(s) with the mmselfsup model.
+                    img: Union[str, np.ndarray]) -> SelfSupDataSample:
+    """Inference an image with the mmselfsup model.
 
     Args:
-        Model (nn.Module): The loaded model.
-        imgs (str, ndarray, Sequence[str/ndarray]):
-           Either image files or loaded images.
-        test_pipeline_cfg (:obj:`Compose`): Test pipeline.
+        model (nn.Module): The loaded model.
+        img (Union[str, ndarray]):
+           Either image path or loaded image.
 
     Returns:
-        :obj:`SelfSupDataSample` or list[:obj:`SelfSupDataSample`]:
-        If imgs is a list or tuple, the same length list type results
-        will be returned, otherwise return the model results directly.
+        SelfSupDataSample: Output of model inference.
     """
     cfg = model.cfg
     # build the data pipeline
@@ -89,4 +82,4 @@ def inference_model(model: nn.Module,
     # forward the model
     with torch.no_grad():
         results = model.test_step(data)
-    return data, results
+    return results

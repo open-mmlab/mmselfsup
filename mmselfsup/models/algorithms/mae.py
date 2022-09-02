@@ -2,6 +2,7 @@
 from typing import Dict, List, Optional, Tuple
 
 import torch
+from mmengine.structures import BaseDataElement
 
 from mmselfsup.registry import MODELS
 from mmselfsup.structures import SelfSupDataSample
@@ -31,21 +32,20 @@ class MAE(BaseModel):
         return pred
 
     def predict(self,
-                inputs: tuple,
+                inputs: List[torch.Tensor],
                 data_samples: Optional[List[SelfSupDataSample]] = None,
-                **kwargs) -> List[SelfSupDataSample]:
-        """Predict results from the extracted features.
+                **kwargs) -> SelfSupDataSample:
+        """The forward function in testing.
 
         Args:
-            feats (tuple): The features extracted from the backbone.
-            data_samples (List[BaseDataElement], optional): The annotation
-                data of every samples. Defaults to None.
-            **kwargs: Other keyword arguments accepted by the ``predict``
-                method of :attr:`head`.
+            inputs (List[torch.Tensor]): The input images.
+            data_samples (List[SelfSupDataSample]): All elements required
+                during the forward function.
 
         Returns:
-            Tuple[torch.Tensor]: Neck outputs.
+            SelfSupDataSample: The prediction from model.
         """
+
         latent, mask, ids_restore = self.backbone(inputs[0])
         pred = self.neck(latent, ids_restore)
 
@@ -58,7 +58,11 @@ class MAE(BaseModel):
         mask = self.head.unpatchify(mask)  # 1 is removing, 0 is keeping
         mask = torch.einsum('nchw->nhwc', mask).detach().cpu()
 
-        return mask, pred
+        results = SelfSupDataSample()
+        results.mask = BaseDataElement(**dict(value=mask))
+        results.pred = BaseDataElement(**dict(value=pred))
+
+        return results
 
     def loss(self, inputs: List[torch.Tensor],
              data_samples: List[SelfSupDataSample],
