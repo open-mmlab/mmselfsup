@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 
 import torch
 
@@ -29,6 +29,36 @@ class MAE(BaseModel):
         latent, _, ids_restore = self.backbone(inputs[0])
         pred = self.neck(latent, ids_restore)
         return pred
+
+    def predict(self,
+                inputs: tuple,
+                data_samples: Optional[List[SelfSupDataSample]] = None,
+                **kwargs) -> List[SelfSupDataSample]:
+        """Predict results from the extracted features.
+
+        Args:
+            feats (tuple): The features extracted from the backbone.
+            data_samples (List[BaseDataElement], optional): The annotation
+                data of every samples. Defaults to None.
+            **kwargs: Other keyword arguments accepted by the ``predict``
+                method of :attr:`head`.
+
+        Returns:
+            Tuple[torch.Tensor]: Neck outputs.
+        """
+        latent, mask, ids_restore = self.backbone(inputs[0])
+        pred = self.neck(latent, ids_restore)
+
+        pred = self.head.unpatchify(pred)
+        pred = torch.einsum('nchw->nhwc', pred).detach().cpu()
+
+        mask = mask.detach()
+        mask = mask.unsqueeze(-1).repeat(1, 1, self.head.patch_size**2 *
+                                         3)  # (N, H*W, p*p*3)
+        mask = self.head.unpatchify(mask)  # 1 is removing, 0 is keeping
+        mask = torch.einsum('nchw->nhwc', mask).detach().cpu()
+
+        return mask, pred
 
     def loss(self, inputs: List[torch.Tensor],
              data_samples: List[SelfSupDataSample],

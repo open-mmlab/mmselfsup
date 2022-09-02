@@ -43,6 +43,22 @@ class MAEPretrainHead(BaseModule):
         x = x.reshape(shape=(imgs.shape[0], h * w, p**2 * 3))
         return x
 
+    def unpatchify(self, x: torch.Tensor) -> torch.Tensor:
+        """
+        Args:
+            x (torch.Tensor): The shape is (N, L, patch_size**2 *3)
+        Returns:
+            imgs (torch.Tensor): The shape is (N, 3, H, W)
+        """
+        p = self.patch_size
+        h = w = int(x.shape[1]**.5)
+        assert h * w == x.shape[1]
+
+        x = x.reshape(shape=(x.shape[0], h, w, p, p, 3))
+        x = torch.einsum('nhwpqc->nchpwq', x)
+        imgs = x.reshape(shape=(x.shape[0], 3, h * p, h * p))
+        return imgs
+
     def construct_target(self, target: torch.Tensor) -> torch.Tensor:
         """Construct the reconstruction target.
 
