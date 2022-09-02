@@ -20,7 +20,7 @@ In this tutorial, we will explain the above three parts in details.
 
 OpenMMLab provides a lot of off-the-shelf datasets, and all these datasets inherit the [BaseDataset](https://github.com/open-mmlab/mmengine/blob/429bb27972bee1a9f3095a4d5f6ac5c0b88ccf54/mmengine/dataset/base_dataset.py#L116)
 implemented in [MMEngine](https://github.com/open-mmlab/mmengine). To have a full knowledge about all these functionalities implemented in
-`BaseDataset`, we recommend interested readers to refer to the documents in [MMEngine](https://github.com/open-mmlab/mmengine/blob/main/docs/en/tutorials/basedataset.md). `ImageNet`, `ADE20KDataset` and `CocoDataset` are the three commonly used datasets `MMSelfSup`. Before using them, you should refactor your local folder according to
+`BaseDataset`, we recommend interested readers to refer to the documents in [MMEngine](https://mmengine.readthedocs.io/en/latest/advanced_tutorials/basedataset.html). `ImageNet`, `ADE20KDataset` and `CocoDataset` are the three commonly used datasets `MMSelfSup`. Before using them, you should refactor your local folder according to
 the following format.
 
 ### Refactor your datasets
