@@ -16,9 +16,10 @@ from .simclr import SimCLR
 from .simmim import SimMIM
 from .simsiam import SimSiam
 from .swav import SwAV
+from .mixmim import MixMIM
 
 __all__ = [
     'BaseModel', 'BarlowTwins', 'BYOL', 'DeepCluster', 'DenseCL', 'MoCo',
     'NPID', 'ODC', 'RelativeLoc', 'RotationPred', 'SimCLR', 'SimSiam', 'SwAV',
-    'MAE', 'MoCoV3', 'SimMIM', 'CAE'
+    'MAE', 'MoCoV3', 'SimMIM', 'CAE', 'MixMIM'
 ]
