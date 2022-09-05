@@ -17,7 +17,7 @@ We may also use some transforms from other repositories, e.g. `LoadImageFromFile
 The last two transforms will be introduced below.
 
 ## Introduction of `MultiView`
-We build a wrapper named [MultiView](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/wrappers.py) for some algorithms e.g. MOCO, SimCLR and SwAV with multi-view image inputs. In the config file, we can 
+We build a wrapper named [MultiView](mmselfsup.datasets.transforms.MultiVie) for some algorithms e.g. MOCO, SimCLR and SwAV with multi-view image inputs. In the config file, we can 
 define it as:
 ```python
 pipeline = [
@@ -48,7 +48,7 @@ This means that there are two pipelines, which contain 2 views and 6 views, resp
 More examples can be found in [imagenet_mocov1.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/_base_/datasets/imagenet_mocov1.py), [imagenet_mocov2.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/_base_/datasets/imagenet_mocov2.py) and [imagenet_swav_mcrop-2-6.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/_base_/datasets/imagenet_swav_mcrop-2-6.py) etc.  
 
 ## Introduction of `PackSelfSupInputs`
-We build a class named [`PackSelfSupInputs`](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/formatting.py) to pack data into a format compatible with the inputs of the algorithm. This transform
+We build a class named [`PackSelfSupInputs`](mmselfsup.datasets.transforms.PackSelfSupInputs) to pack data into a format compatible with the inputs of the algorithm. This transform
 is usually put at the end of the pipeline like:
 ```python
 train_pipeline = [
