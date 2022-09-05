@@ -15,7 +15,7 @@ We may also use some transforms from other repositories, e.g. `LoadImageFromFile
 3. The transform to pack data into a format compatible with the inputs of the algorithm. It is defined in [formatting.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/formatting.py).
 
 ## Introduction of `MultiView`
-We build a wrapper named [MultiView](mmselfsup.datasets.transforms.MultiVie) for some algorithms e.g. MOCO, SimCLR and SwAV with multi-view image inputs. In the config file, we can 
+We build a wrapper named [MultiView](mmselfsup.datasets.transforms.MultiView) for some algorithms e.g. MOCO, SimCLR and SwAV with multi-view image inputs. In the config file, we can 
 define it as:
 ```python
 pipeline = [
