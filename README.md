@@ -97,7 +97,7 @@ Please refer to [install.md](docs/en/install.md) for more detailed instruction.
 
 ## Get Started
 
-Please refer to [prepare_data.md](docs/en/prepare_data.md) for dataset preparation, [get_started.md](docs/en/get_started.md) for the basic usage and [benchmarks.md](docs/en/tutorials/6_benchmarks.md) for runing benchmarks.
+Please refer to [prepare_data.md](docs/en/prepare_data.md) for dataset preparation, [get_started.md](docs/en/get_started.md) for the basic usage and [benchmarks.md](docs/en/tutorials/6_benchmarks.md) for running benchmarks.
 
 We also provides tutorials for more details:
 
