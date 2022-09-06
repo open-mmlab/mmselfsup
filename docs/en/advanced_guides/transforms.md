@@ -26,7 +26,6 @@ In summary, we implement these `transforms` below. The last two transforms will 
 |                          [`RandomGaussianBlur`](mmselfsup.datasets.RandomGaussianBlur)                          | GaussianBlur augmentation refers to `SimCLR` | 
 |                           [`RandomResizedCrop`](mmselfsup.datasets.RandomResizedCrop)                           | Crop the given image to random size and aspectratio | 
 | [`RandomResizedCropAndInterpolationWithTwoPic`](mmselfsup.datasets.RandomResizedCropAndInterpolationWithTwoPic) | Crop the given PIL Image to random size and aspect ratio with random interpolation| 
-|                           [`RandomResizedCrop`](mmselfsup.datasets.RandomResizedCrop)                           | Crop the given image to random size and aspect ratio| 
 |                              [`RandomSolarize`](mmselfsup.datasets.RandomSolarize)                              | Solarization augmentation refers to `BYOL`| 
 |                          [`RotationWithLabels`](mmselfsup.datasets.RotationWithLabels)                          | Rotation prediction| 
 |                          [`MultiView`](mmselfsup.datasets.transforms.MultiView)                                 | A wrapper for algorithms with multi-view image inputs| 
