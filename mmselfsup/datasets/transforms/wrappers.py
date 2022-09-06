@@ -37,7 +37,8 @@ class MultiView(BaseTransform):
         >>>                dict(type='Resize', scale=224))],
         >>>         ])
         >>> ]
-        >>> # Example 2: MultiViews 2 pipelines, the first with 2 views, the second with 6 views
+        >>> # Example 2: MultiViews 2 pipelines, the first with 2 views,
+        >>> # the second with 6 views
         >>> pipeline = [
         >>>     dict(type='MultiView',
         >>>         num_views=[2, 6],
