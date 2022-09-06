@@ -49,7 +49,7 @@ By default, only values whose keys contain `'loss'` will be back propagated, if 
 
 ```python
 class YourAlgorithm(BaseModel):
-    
+
     def loss():
         ...
 
