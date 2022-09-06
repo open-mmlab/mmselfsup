@@ -24,9 +24,8 @@ In summary, we implement these `transforms` below. The last two transforms will 
 |                                 [`ColorJitter`](mmselfsup.datasets.ColorJitter)                                 | Randomly change the brightness, contrast, saturation and hue of an image |  
 |                                  [`RandomCrop`](mmselfsup.datasets.RandomCrop)                                  | Crop the given Image at a random location | 
 |                          [`RandomGaussianBlur`](mmselfsup.datasets.RandomGaussianBlur)                          | GaussianBlur augmentation refers to `SimCLR` | 
-|                           [`RandomResizedCrop`](mmselfsup.datasets.RandomResizedCrop)                           | Crop the given image to random size and aspect ratio | 
-| [`RandomResizedCropAndInterpolationWithTwoPic`](mmselfsup.datasets.RandomResizedCropAndInterpolationWithTwoPic) | Crop the given PIL Image to random size and aspect ratio with random
-    interpolation| 
+|                           [`RandomResizedCrop`](mmselfsup.datasets.RandomResizedCrop)                           | Crop the given image to random size and aspectratio | 
+| [`RandomResizedCropAndInterpolationWithTwoPic`](mmselfsup.datasets.RandomResizedCropAndInterpolationWithTwoPic) | Crop the given PIL Image to random size and aspect ratio with random interpolation| 
 |                           [`MultiScaleFlipAug`](mmselfsup.datasets.MultiScaleFlipAug)                           | | 
 |                           [`RandomResizedCrop`](mmselfsup.datasets.RandomResizedCrop)                           | Crop the given image to random size and aspect ratio| 
 |                              [`RandomSolarize`](mmselfsup.datasets.RandomSolarize)                              | Solarization augmentation refers to `BYOL`| 
