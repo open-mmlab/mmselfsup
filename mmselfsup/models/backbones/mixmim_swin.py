@@ -5,14 +5,16 @@ import torch
 from mmcls.models import SwinTransformer
 from mmcls.models.backbones.base_backbone import BaseBackbone
 from mmselfsup.registry import MODELS
-from ..utils import build_2d_sincos_position_embedding
+
 import random
 from torch.nn import functional as F
 from torch import nn
 from mmcls.models.utils.attention import WindowMSA
 from mmcv.runner.base_module import BaseModule
 from torch.utils.checkpoint import checkpoint
-
+from mmcv.cnn.bricks.transformer import FFN, PatchEmbed, PatchMerging
+from mmcv.cnn import build_norm_layer
+from ..utils import build_2d_sincos_position_embedding
 
 class MixMIMBlock(BaseModule):
 
@@ -115,34 +117,128 @@ class MixMIMLayer(BaseModule):
 
 @MODELS.register_module()
 class MixMIMTransformer(BaseBackbone):
+    arch_zoo = {
+        **dict.fromkeys(['b', 'base'],
+                        {'embed_dims': 128,
+                         'depths':     [2, 2, 18,  2],
+                         'num_heads':  [4, 8, 16, 32]}),
+        **dict.fromkeys(['l', 'large'],
+                        {'embed_dims': 192,
+                         'depths':     [2,  2, 18,  2],
+                         'num_heads':  [6, 12, 24, 48]}),
+        **dict.fromkeys(['h', 'huge'],
+                        {'embed_dims': 352,
+                         'depths': [2, 2, 18, 2],
+                         'num_heads': [11, 22, 44, 88]}),
+    }  # yapf: disable
+
+
+
     def __init__(self,
-                 decoder_dim=512,
-                 decoder_depth=8,
-                 decoder_num_heads=16,
+                 arch='base',
                  mlp_ratio=4,
-                 norm_pix_loss=True,
                  img_size=224,
                  patch_size=4,
-                 in_chans=3,
-                 num_classes=0,
-                 embed_dim=96,
-                 depths=[2, 2, 18, 2],
+                 in_channels=3,
+                 embed_dims=96,
                  num_heads=[3, 6, 12, 24],
                  window_size=[7, 7, 14, 7],
                  qkv_bias=True,
                  qk_scale=None,
-                 patch_norm=True,
+                 patch_cfg=dict(),
+                 norm_cfg=dict(type='LN'),
                  drop_rate=0.0,
                  drop_path_rate=0.0,
                  attn_drop_rate=0.0,
                  norm_layer=nn.LayerNorm,
                  use_checkpoint=False,
-                 range_mask_ratio=0.0,
                  init_cfg: Optional[dict] = None,
                  ) -> None:
         super(MixMIMTransformer, self).__init__(init_cfg=init_cfg)
-        pass
 
+        self.embed_dims = self.arch_settings['embed_dims']
+        self.depths = self.arch_settings['depths']
+        self.num_heads = self.arch_settings['num_heads']
+
+        self.encoder_stride = 32
+
+        self.num_layers = len(self.depths)
+        self.qkv_bias = qkv_bias
+        self.drop_rate = drop_rate
+        self.attn_drop_rate = attn_drop_rate
+        self.use_checkpoint = use_checkpoint
+        self.mlp_ratio = mlp_ratio
+        self.window_size = window_size
+
+        _patch_cfg = dict(
+            in_channels=in_channels,
+            input_size=img_size,
+            embed_dims=self.embed_dims,
+            conv_type='Conv2d',
+            kernel_size=patch_size,
+            stride=patch_size,
+            norm_cfg=dict(type='LN'),
+        )
+        _patch_cfg.update(patch_cfg)
+        self.patch_embed = PatchEmbed(**_patch_cfg)
+        self.patch_resolution = self.patch_embed.init_out_size
+
+        self.dpr = [x.item() for x in torch.linspace(0, drop_path_rate, sum(depths))]  # stochastic depth decay rule
+        # build layers
+        self.layers = nn.ModuleList()
+        for i_layer in range(self.num_layers):
+            self.layers.append(MixMIMLayer(
+                dim=int(self.embed_dim * 2 ** i_layer),
+                input_resolution=(self.patch_resolution[0] // (2 ** i_layer), self.patch_resolution[1] // (2 ** i_layer)),
+                depth=self.depths[i_layer],
+                num_heads=self.num_heads[i_layer],
+                window_size=self.window_size[i_layer],
+                mlp_ratio=self.mlp_ratio,
+                qkv_bias=self.qkv_bias,
+                drop=self.drop_rate,
+                attn_drop=self.attn_drop_rate,
+                drop_path=self.dpr[sum(self.depths[:i_layer]):sum(self.depths[:i_layer + 1])],
+                norm_layer=norm_layer,
+                downsample=PatchMerging if (i_layer < self.num_layers - 1) else None,
+                use_checkpoint=self.use_checkpoint)
+            )
+
+        self.num_features = int(self.embed_dims * 2 ** (self.num_layers - 1))
+        self.drop_after_pos = nn.Dropout(p=drop_rate)
+        self.norm = build_norm_layer(norm_cfg, self.num_features)
+
+        self.mask_token = nn.Parameter(torch.zeros(1, 1, self.decoder_dim))
+
+        self.num_patches = self.patch_resolution[0] * self.patch_resolution[1]
+        self.absolute_pos_embed = nn.Parameter(torch.zeros(1, num_patches, self.embed_dims), requires_grad=False)
+
+    def init_weights(self):
+        super(MixMIMTransformer, self).init_weights()
+
+        if (isinstance(self.init_cfg, dict)
+                and self.init_cfg['type'] == 'Pretrained'):
+            # Suppress default init if use pretrained model.
+            return
+
+        trunc_normal_(self.mask_token, mean=0., std=.02)
+        trunc_normal_(self.absolute_pos_embed, std=0.02)
+
+        # initialize (and freeze) pos_embed by sin-cos embedding
+        pos_embed = build_2d_sincos_position_embedding(
+            int(self.num_patches**.5), self.absolute_pos_embed.shape[-1], cls_token=False)
+        self.absolute_pos_embed.data.copy_(torch.from_numpy(pos_embed).float().unsqueeze(0))
+
+        self.apply(self._init_weights)
+
+    def _init_weights(self, m):
+        if isinstance(m, nn.Linear):
+            # we use xavier_uniform following official JAX ViT:
+            torch.nn.init.xavier_uniform_(m.weight)
+            if isinstance(m, nn.Linear) and m.bias is not None:
+                nn.init.constant_(m.bias, 0)
+        elif isinstance(m, nn.LayerNorm):
+            nn.init.constant_(m.bias, 0)
+            nn.init.constant_(m.weight, 1.0)
 
 
     def random_masking(self, x: torch.Tensor, mask_ratio: float = 0.5):
