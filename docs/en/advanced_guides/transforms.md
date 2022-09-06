@@ -19,7 +19,6 @@ In summary, we implement these `transforms` below.
 
 |                                                      class                                                      | function| 
 | :-------------------------------------------------------------------------------------------------------------: | :------:| 
-|                           [`PackSelfSupInputs`](mmselfsup.datasets.PackSelfSupInputs)                           | | 
 |                           [`BEiTMaskGenerator`](mmselfsup.datasets.BEiTMaskGenerator)                           | | 
 |                         [`SimMIMMaskGenerator`](mmselfsup.datasets.SimMIMMaskGenerator)                         | |  
 |                                 [`ColorJitter`](mmselfsup.datasets.ColorJitter)                                 | |  
@@ -31,8 +30,9 @@ In summary, we implement these `transforms` below.
 |                           [`RandomResizedCrop`](mmselfsup.datasets.RandomResizedCrop)                           | | 
 |                              [`RandomSolarize`](mmselfsup.datasets.RandomSolarize)                              | | 
 |                          [`RotationWithLabels`](mmselfsup.datasets.RotationWithLabels)                          | | 
-
-
+|                          [`MultiView`](mmselfsup.datasets.transforms.MultiView)                                 | | 
+|                          [`PackSelfSupInputs`](mmselfsup.datasets.PackSelfSupInputs)                            | | 
+We will introduce the last two transforms in detail.
 
 
 ## Introduction of `MultiView`
