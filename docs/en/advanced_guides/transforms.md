@@ -17,7 +17,7 @@ We may also use some transforms from other repositories, e.g. `LoadImageFromFile
 The last two transforms will be introduced below.
 
 ## Introduction of `MultiView`
-We build a wrapper named [MultiView](mmselfsup.datasets.transforms.MultiView) for some algorithms e.g. MOCO, SimCLR and SwAV with multi-view image inputs. In the config file, we can 
+We build a wrapper named [`MultiView`](mmselfsup.datasets.transforms.MultiView) for some algorithms e.g. MOCO, SimCLR and SwAV with multi-view image inputs. In the config file, we can 
 define it as:
 ```python
 pipeline = [
