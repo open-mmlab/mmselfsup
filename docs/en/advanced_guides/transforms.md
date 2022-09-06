@@ -15,15 +15,16 @@ We may also use some transforms from other repositories, e.g. `LoadImageFromFile
 2. The transform wrapper for multiple views of an image. It is defined in [wrappers.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/wrappers.py).
 3. The transform to pack data into a format compatible with the inputs of the algorithm. It is defined in [formatting.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/formatting.py).
 
-In summary, we implement these `transforms` below.
+In summary, we implement these `transforms` below. The last two transforms will be introduced in detail.
 
 |                                                      class                                                      | function| 
 | :-------------------------------------------------------------------------------------------------------------: | :------:| 
-|                           [`BEiTMaskGenerator`](mmselfsup.datasets.BEiTMaskGenerator)                           | | 
-|                         [`SimMIMMaskGenerator`](mmselfsup.datasets.SimMIMMaskGenerator)                         | |  
-|                                 [`ColorJitter`](mmselfsup.datasets.ColorJitter)                                 | |  
-|                                  [`RandomCrop`](mmselfsup.datasets.RandomCrop)                                  | | 
-|                          [`RandomGaussianBlur`](mmselfsup.datasets.RandomGaussianBlur)                          | | 
+|                           [`BEiTMaskGenerator`](mmselfsup.datasets.BEiTMaskGenerator)                           | Generate mask for image in `BEiT`| 
+|                         [`SimMIMMaskGenerator`](mmselfsup.datasets.SimMIMMaskGenerator)                         | Generate random block mask for each Image in `SimMIM` |  
+|                                 [`ColorJitter`](mmselfsup.datasets.ColorJitter)                                 | Randomly change the brightness, contrast, saturation and hue of an
+    image |  
+|                                  [`RandomCrop`](mmselfsup.datasets.RandomCrop)                                  | Crop the given Image at a random location| 
+|                          [`RandomGaussianBlur`](mmselfsup.datasets.RandomGaussianBlur)                          | GaussianBlur augmentation refers to `SimCLR` | 
 |                           [`RandomResizedCrop`](mmselfsup.datasets.RandomResizedCrop)                           | | 
 | [`RandomResizedCropAndInterpolationWithTwoPic`](mmselfsup.datasets.RandomResizedCropAndInterpolationWithTwoPic) | | 
 |                           [`MultiScaleFlipAug`](mmselfsup.datasets.MultiScaleFlipAug)                           | | 
@@ -34,7 +35,6 @@ In summary, we implement these `transforms` below.
 |                          [`PackSelfSupInputs`](mmselfsup.datasets.PackSelfSupInputs)                            | | 
 
 
-We will introduce the last two transforms in detail.
 
 
 ## Introduction of `MultiView`
