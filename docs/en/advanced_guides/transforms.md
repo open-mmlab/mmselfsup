@@ -19,20 +19,20 @@ In summary, we implement these `transforms` below. The last two transforms will 
 
 |                                                      class                                                      | function| 
 | :-------------------------------------------------------------------------------------------------------------: | :------:| 
-|                           [`BEiTMaskGenerator`](mmselfsup.datasets.BEiTMaskGenerator)                           | Generate mask for image in `BEiT`| 
-|                         [`SimMIMMaskGenerator`](mmselfsup.datasets.SimMIMMaskGenerator)                         | Generate random block mask for each Image in `SimMIM` |  
-|                                 [`ColorJitter`](mmselfsup.datasets.ColorJitter)                                 | Randomly change the brightness, contrast, saturation and hue of an
-    image |  
-|                                  [`RandomCrop`](mmselfsup.datasets.RandomCrop)                                  | Crop the given Image at a random location| 
+|                           [`BEiTMaskGenerator`](mmselfsup.datasets.BEiTMaskGenerator)                           | Generate mask for image refers to `BEiT`| 
+|                         [`SimMIMMaskGenerator`](mmselfsup.datasets.SimMIMMaskGenerator)                         | Generate random block mask for each Image refers to `SimMIM` |  
+|                                 [`ColorJitter`](mmselfsup.datasets.ColorJitter)                                 | Randomly change the brightness, contrast, saturation and hue of an image |  
+|                                  [`RandomCrop`](mmselfsup.datasets.RandomCrop)                                  | Crop the given Image at a random location | 
 |                          [`RandomGaussianBlur`](mmselfsup.datasets.RandomGaussianBlur)                          | GaussianBlur augmentation refers to `SimCLR` | 
-|                           [`RandomResizedCrop`](mmselfsup.datasets.RandomResizedCrop)                           | | 
-| [`RandomResizedCropAndInterpolationWithTwoPic`](mmselfsup.datasets.RandomResizedCropAndInterpolationWithTwoPic) | | 
+|                           [`RandomResizedCrop`](mmselfsup.datasets.RandomResizedCrop)                           | Crop the given image to random size and aspect ratio | 
+| [`RandomResizedCropAndInterpolationWithTwoPic`](mmselfsup.datasets.RandomResizedCropAndInterpolationWithTwoPic) | Crop the given PIL Image to random size and aspect ratio with random
+    interpolation| 
 |                           [`MultiScaleFlipAug`](mmselfsup.datasets.MultiScaleFlipAug)                           | | 
-|                           [`RandomResizedCrop`](mmselfsup.datasets.RandomResizedCrop)                           | | 
-|                              [`RandomSolarize`](mmselfsup.datasets.RandomSolarize)                              | | 
-|                          [`RotationWithLabels`](mmselfsup.datasets.RotationWithLabels)                          | | 
-|                          [`MultiView`](mmselfsup.datasets.transforms.MultiView)                                 | | 
-|                          [`PackSelfSupInputs`](mmselfsup.datasets.PackSelfSupInputs)                            | | 
+|                           [`RandomResizedCrop`](mmselfsup.datasets.RandomResizedCrop)                           | Crop the given image to random size and aspect ratio| 
+|                              [`RandomSolarize`](mmselfsup.datasets.RandomSolarize)                              | Solarization augmentation refers to `BYOL`| 
+|                          [`RotationWithLabels`](mmselfsup.datasets.RotationWithLabels)                          | Rotation prediction| 
+|                          [`MultiView`](mmselfsup.datasets.transforms.MultiView)                                 | A wrapper for algorithms with multi-view image inputs| 
+|                          [`PackSelfSupInputs`](mmselfsup.datasets.PackSelfSupInputs)                            | Pack data into a format compatible with the inputs of an algorithm | 
 
 
 
@@ -69,7 +69,7 @@ This means that there are two pipelines, which contain 2 views and 6 views, resp
 More examples can be found in [imagenet_mocov1.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/_base_/datasets/imagenet_mocov1.py), [imagenet_mocov2.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/_base_/datasets/imagenet_mocov2.py) and [imagenet_swav_mcrop-2-6.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/_base_/datasets/imagenet_swav_mcrop-2-6.py) etc.  
 
 ## Introduction of `PackSelfSupInputs`
-We build a class named [`PackSelfSupInputs`](mmselfsup.datasets.transforms.PackSelfSupInputs) to pack data into a format compatible with the inputs of the algorithm. This transform
+We build a class named [`PackSelfSupInputs`](mmselfsup.datasets.transforms.PackSelfSupInputs) to pack data into a format compatible with the inputs of an algorithm. This transform
 is usually put at the end of the pipeline like:
 ```python
 train_pipeline = [
