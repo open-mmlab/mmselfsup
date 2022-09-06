@@ -32,6 +32,8 @@ In summary, we implement these `transforms` below.
 |                          [`RotationWithLabels`](mmselfsup.datasets.RotationWithLabels)                          | | 
 |                          [`MultiView`](mmselfsup.datasets.transforms.MultiView)                                 | | 
 |                          [`PackSelfSupInputs`](mmselfsup.datasets.PackSelfSupInputs)                            | | 
+
+
 We will introduce the last two transforms in detail.
 
 
