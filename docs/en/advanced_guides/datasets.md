@@ -136,8 +136,6 @@ ii) overwrite the `transform` function and implement your key logic in it. In MM
 |                          [`RandomGaussianBlur`](mmselfsup.datasets.RandomGaussianBlur)                          |
 |                           [`RandomResizedCrop`](mmselfsup.datasets.RandomResizedCrop)                           |
 | [`RandomResizedCropAndInterpolationWithTwoPic`](mmselfsup.datasets.RandomResizedCropAndInterpolationWithTwoPic) |
-|                           [`MultiScaleFlipAug`](mmselfsup.datasets.MultiScaleFlipAug)                           |
-|                           [`RandomResizedCrop`](mmselfsup.datasets.RandomResizedCrop)                           |
 |                              [`RandomSolarize`](mmselfsup.datasets.RandomSolarize)                              |
 |                          [`RotationWithLabels`](mmselfsup.datasets.RotationWithLabels)                          |
 
