@@ -9,16 +9,11 @@ on:
       - 'README.md'
       - 'README_zh-CN.md'
       - 'docs/**'
-      - 'model-index.yml'
-      - 'configs/**.md'
-
-  pull_request:
-    paths-ignore:
-      - 'README.md'
-      - 'README_zh-CN.md'
-      - 'docs/**'
-      - 'model-index.yml'
-      - 'configs/**.md'
+      - 'demo/**'
+      - '.dev_scripts/**'
+      - '.circleci/**'
+    branches:
+      - dev-1.x
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
