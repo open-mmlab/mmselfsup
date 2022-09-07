@@ -70,7 +70,7 @@ jobs:
       - run:
           name: Run unittests
           command: |
-            coverage run --branch --source mmocr -m pytest tests/
+            coverage run --branch --source mmselfsup -m pytest tests/
             coverage xml
             coverage report -m
   build_cuda:
@@ -103,10 +103,10 @@ jobs:
       - run:
           name: Install mmselfsup dependencies
           command: |
-            docker exec mmocr pip install -e /mmengine
-            docker exec mmocr pip install -U openmim
-            docker exec mmocr mim install 'mmcv >= 2.0.0rc1'
-            docker exec mmocr pip install -r requirements/tests.txt
+            docker exec mmselfsup pip install -e /mmengine
+            docker exec mmselfsup pip install -U openmim
+            docker exec mmselfsup mim install 'mmcv >= 2.0.0rc1'
+            docker exec mmselfsup pip install -r requirements/tests.txt
       - run:
           name: Build and install
           command: |
