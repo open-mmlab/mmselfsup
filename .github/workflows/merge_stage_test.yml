@@ -114,7 +114,7 @@ jobs:
           env_vars: OS,PYTHON
           name: codecov-umbrella
           fail_ci_if_error: false
-  
+
   build_cu102:
     runs-on: ubuntu-18.04
     container:
