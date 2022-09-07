@@ -30,6 +30,14 @@ In summary, we implement these `transforms` below. The last two transforms will 
 | [`RandomResizedCropAndInterpolationWithTwoPic`](mmselfsup.datasets.RandomResizedCropAndInterpolationWithTwoPic) | Crop the given PIL Image to random size and aspect ratio with random interpolation |
 |                              [`RandomSolarize`](mmselfsup.datasets.RandomSolarize)                              |                     Solarization augmentation refers to `BYOL`                     |
 |                          [`RotationWithLabels`](mmselfsup.datasets.RotationWithLabels)                          |                                Rotation prediction                                 |
+
+
+|                           [`RandomPatchWithLabels`](mmselfsup.datasets.RandomPatchWithLabels)                           |         Apply random patch augmentation to the given image         |
+
+|                           [`RandomRotation`](mmselfsup.datasets.RandomRotation)                           |         Rotate the image by angle         |
+
+
+
 |                             [`MultiView`](mmselfsup.datasets.transforms.MultiView)                              |               A wrapper for algorithms with multi-view image inputs                |
 |                           [`PackSelfSupInputs`](mmselfsup.datasets.PackSelfSupInputs)                           |         Pack data into a format compatible with the inputs of an algorithm         |
 
