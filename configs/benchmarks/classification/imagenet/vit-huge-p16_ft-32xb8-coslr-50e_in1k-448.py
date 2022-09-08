@@ -45,7 +45,21 @@ train_pipeline = [
     dict(type='PackClsInputs')
 ]
 
+test_pipeline = [
+    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(
+        type='ResizeEdge',
+        scale=512,
+        edge='short',
+        backend='pillow',
+        interpolation='bicubic'),
+    dict(type='CenterCrop', crop_size=448),
+    dict(type='PackClsInputs')
+]
+
 train_dataloader = dict(dataset=dict(pipeline=train_pipeline))
+val_dataloader = dict(dataset=dict(pipeline=test_pipeline))
+test_dataloader = dict(dataset=dict(pipeline=test_pipeline))
 
 # learning rate settings
 optim_wrapper = dict(optimizer=dict(lr=0.001, layer_decay_rate=0.75))
