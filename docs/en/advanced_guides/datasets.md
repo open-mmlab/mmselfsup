@@ -138,6 +138,8 @@ ii) overwrite the `transform` function and implement your key logic in it. In MM
 | [`RandomResizedCropAndInterpolationWithTwoPic`](mmselfsup.datasets.RandomResizedCropAndInterpolationWithTwoPic) |
 |                              [`RandomSolarize`](mmselfsup.datasets.RandomSolarize)                              |
 |                          [`RotationWithLabels`](mmselfsup.datasets.RotationWithLabels)                          |
+|                       [`RandomPatchWithLabels`](mmselfsup.datasets.RandomPatchWithLabels)                       |
+|                              [`RandomRotation`](mmselfsup.datasets.RandomRotation)                              |
 
 For interested users, you can refer to the API doc to have a full understanding of these transforms. Now, we have introduced
 the basic concepts about transform. If you want to know how to use them in your config or implement your customed transforms,
