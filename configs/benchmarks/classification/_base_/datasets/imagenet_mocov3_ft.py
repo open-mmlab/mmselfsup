@@ -1,7 +1,7 @@
 # dataset settings
 dataset_type = 'ImageNet'
-data_root = 'data/imagenet/'
-file_client_args = dict(backend='disk')
+data_root = 'sproject:s3://openmmlab/datasets/classification/imagenet/'
+file_client_args = dict(backend='petrel')
 
 preprocess_cfg = dict(
     # RGB format normalization parameters
