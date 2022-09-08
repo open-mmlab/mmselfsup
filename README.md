@@ -86,12 +86,16 @@ Highlights of the new version:
 - Based on [MMEngine](https://github.com/open-mmlab/mmengine) and [MMCV](https://github.com/open-mmlab/mmcv/tree/2.x).
 - Released with refactor.
 - Refine all [documents](https://mmselfsup.readthedocs.io/en/1.x/).
+- Support MAE with different pre-training epochs and backbones of different scales.
+- More concise API.
+- More powerful data pipeline.
+- Higher accurcy for some algorithms.
 
 Find more new features in [1.x branch](https://github.com/open-mmlab/mmselfsup/tree/1.x). Issues and PRs are welcome!
 
 ## Installation
 
-MMSelfSup depends on [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open-mmlab/mmcv) and [MMClassification](https://github.com/open-mmlab/mmclassification).
+MMSelfSup relies on [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open-mmlab/mmcv) and [MMClassification](https://github.com/open-mmlab/mmclassification).
 
 Please refer to [install.md](docs/en/install.md) for more detailed instruction.
 
@@ -99,7 +103,7 @@ Please refer to [install.md](docs/en/install.md) for more detailed instruction.
 
 Please refer to [prepare_data.md](docs/en/prepare_data.md) for dataset preparation, [get_started.md](docs/en/get_started.md) for the basic usage and [benchmarks.md](docs/en/tutorials/6_benchmarks.md) for running benchmarks.
 
-We also provides tutorials for more details:
+We also provides more detailed tutorials:
 
 - [config](docs/en/tutorials/0_config.md)
 - [add new dataset](docs/en/tutorials/1_new_dataset.md)

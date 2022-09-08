@@ -85,7 +85,11 @@ MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibilit
 
 - 基于全新的 [MMEngine](https://github.com/open-mmlab/mmengine) 和 [MMCV](https://github.com/open-mmlab/mmcv/tree/2.x)。
 - 代码库重构，统一接口。
-- 完善了新版本 [文档](https://mmselfsup.readthedocs.io/en/1.x/).
+- 完善了新版本 [文档](https://mmselfsup.readthedocs.io/en/1.x/)。
+- 支持了不同训练时间、不同尺寸的 MAE 预训练模型。
+- 更加简洁的 API。
+- 更加强大的数据管道。
+- 部分模型具有更高的准确率。
 
 在 [1.x 分支](https://github.com/open-mmlab/mmselfsup/tree/1.x) 查看更多新特性。 欢迎大家提 Issues 和 PRs!
 
