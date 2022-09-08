@@ -23,7 +23,7 @@ Models:
     Config: configs/selfsup/barlowtwins/barlowtwins_resnet50_8xb256-coslr-300e_in1k.py
     Weights: https://download.openmmlab.com/mmselfsup/1.x/barlowtwins/barlowtwins_resnet50_8xb256-coslr-300e_in1k/barlowtwins_resnet50_8xb256-coslr-300e_in1k_20220825-57307488.pth
     Downstream:
-      - Task: Image Classification
+      - Type: Image Classification
         Metadata:
           Epochs: 100
           Batch Size: 256

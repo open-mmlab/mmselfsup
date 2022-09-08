@@ -27,18 +27,18 @@ Models:
           Epochs: 90
           Batch Size: 16384
         Results:
-          Task: Linear Evaluation
-          Dataset: ImageNet-1k
-          Metrics:
-            Top 1 Accuracy: 60.8
+          - Task: Linear Evaluation
+            Dataset: ImageNet-1k
+            Metrics:
+              Top 1 Accuracy: 60.8
         Config: configs/benchmarks/classification/imagenet/vit-base-p16_linear-8xb2048-coslr-90e_in1k.py
       - Type: Image Classification
         Metadata:
           Epochs: 100
           Batch Size: 1024
         Results:
-          Task: Fine-tuning
-          Dataset: ImageNet-1k
-          Metrics:
-            Top 1 Accuracy: 83.1
+          - Task: Fine-tuning
+            Dataset: ImageNet-1k
+            Metrics:
+              Top 1 Accuracy: 83.1
         Config: configs/benchmarks/classification/imagenet/vit-base-p16_ft-8xb128-coslr-100e_in1k.py
