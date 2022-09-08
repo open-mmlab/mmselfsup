@@ -19,10 +19,18 @@ Models:
     Metadata:
       Epochs: 300
       Batch Size: 2048
-    Results:
-      - Task: Self-Supervised Image Classification
-        Dataset: ImageNet-1k
-        Metrics:
-          Top 1 Accuracy: 71.66
+    Results: null
     Config: configs/selfsup/barlowtwins/barlowtwins_resnet50_8xb256-coslr-300e_in1k.py
-    Weights: https://download.openmmlab.com/mmselfsup/barlowtwins/barlowtwins_resnet50_8xb256-coslr-300e_in1k_20220419-5ae15f89.pth
+    Weights: https://download.openmmlab.com/mmselfsup/1.x/barlowtwins/barlowtwins_resnet50_8xb256-coslr-300e_in1k/barlowtwins_resnet50_8xb256-coslr-300e_in1k_20220825-57307488.pth
+    Downstream:
+      - Task: Image Classification
+        Metadata:
+          Epochs: 100
+          Batch Size: 256
+        Results:
+          - Task: Linear Evaluation
+            Dataset: ImageNet-1k
+            Metrics:
+              Top 1 Accuracy: 71.8
+        Config: configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-coslr-100e_in1k.py
+        Weights: https://download.openmmlab.com/mmselfsup/1.x/barlowtwins/barlowtwins_resnet50_8xb256-coslr-300e_in1k/resnet50_linear-8xb32-coslr-100e_in1k/resnet50_linear-8xb32-coslr-100e_in1k_20220825-52fde35f.pth
