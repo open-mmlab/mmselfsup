@@ -16,6 +16,10 @@ model = dict(
         embed_dim=1024,
         decoder_embed_dim=512,
         decoder_depth=8,
-        decoder_num_heads=16,
+        decoder_num_heads=16),
+    head=dict(
+        type='MixMIMPretrainHead',
+        norm_pix=True,
+        loss=dict(type='MAEReconstructionLoss')
     )
-    )
+)
