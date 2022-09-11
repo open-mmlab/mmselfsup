@@ -6,8 +6,17 @@ model = dict(
         img_size=224, stage_cfgs=dict(block_cfgs=dict(window_size=7))))
 
 # train pipeline
+file_client_args = dict(
+    backend='petrel',
+    path_mapping=dict({
+        './data/imagenet':
+        'openmmlab:s3://openmmlab/datasets/classification/imagenet',
+        'data/imagenet':
+        'openmmlab:s3://openmmlab/datasets/classification/imagenet'
+    }),
+    enable_mc=True)
 train_pipeline = [
-    dict(type='LoadImageFromFile'),
+    dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(
         type='RandomResizedCrop',
         scale=224,
@@ -35,7 +44,7 @@ train_pipeline = [
 
 # test pipeline
 test_pipeline = [
-    dict(type='LoadImageFromFile'),
+    dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(
         type='mmcls.ResizeEdge',
         scale=256,
@@ -46,5 +55,9 @@ test_pipeline = [
     dict(type='PackClsInputs')
 ]
 
-train_dataloader = dict(dataset=dict(pipeline=train_pipeline))
-val_dataloader = dict(dataset=dict(pipeline=test_pipeline))
+train_dataloader = dict(
+    dataset=dict(pipeline=train_pipeline),
+    collate_fn=dict(type='default_collate'))
+val_dataloader = dict(
+    dataset=dict(pipeline=test_pipeline),
+    collate_fn=dict(type='default_collate'))
