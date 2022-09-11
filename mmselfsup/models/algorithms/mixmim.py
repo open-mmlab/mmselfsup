@@ -25,8 +25,6 @@ class MixMIM(BaseModel):
         super().__init__(backbone=backbone, neck=neck, head=head, pretrained=pretrained,
                          data_preprocessor=data_preprocessor, init_cfg=init_cfg)
 
-
-
     def loss(self, inputs: List[torch.Tensor],
              data_samples: List[SelfSupDataSample],
              **kwargs) -> Dict[str, torch.Tensor]:
