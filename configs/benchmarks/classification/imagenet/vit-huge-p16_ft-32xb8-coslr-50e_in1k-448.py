@@ -62,4 +62,4 @@ val_dataloader = dict(dataset=dict(pipeline=test_pipeline))
 test_dataloader = dict(dataset=dict(pipeline=test_pipeline))
 
 # learning rate settings
-optim_wrapper = dict(optimizer=dict(lr=0.001, layer_decay_rate=0.75))
+optim_wrapper = dict(optimizer=dict(lr=0.004, layer_decay_rate=0.75))
