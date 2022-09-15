@@ -57,7 +57,9 @@ test_pipeline = [
 
 train_dataloader = dict(
     dataset=dict(pipeline=train_pipeline),
-    collate_fn=dict(type='default_collate'))
+    collate_fn=dict(type='default_collate'),
+    pin_memory=True)
 val_dataloader = dict(
     dataset=dict(pipeline=test_pipeline),
-    collate_fn=dict(type='default_collate'))
+    collate_fn=dict(type='default_collate'),
+    pin_memory=True)
