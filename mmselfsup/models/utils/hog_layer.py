@@ -10,7 +10,7 @@ class HOGLayerC(nn.Module):
     """Generate hog feature for each batch images. This module is used in
     Maskfeat to generate hog feature. This code is borrowed from.
 
-    <https://github.com/facebookresearch/SlowFast/blob/main/slowfast/models/masked.py>
+    <https://github.com/facebookresearch/SlowFast/blob/main/slowfast/models/operators.py>
     Args:
         nbins (int): Number of bin. Defaults to 9.
         pool (float): Number of cell. Defaults to 8.
@@ -21,7 +21,7 @@ class HOGLayerC(nn.Module):
                  nbins: int = 9,
                  pool: int = 8,
                  gaussian_window: int = 16) -> None:
-        super(HOGLayerC, self).__init__()
+        super().__init__()
         self.nbins = nbins
         self.pool = pool
         self.pi = math.pi
@@ -47,7 +47,7 @@ class HOGLayerC(nn.Module):
             return w
 
         gkern1d = _gaussian_fn(kernlen, std)
-        gkern2d = torch.outer(gkern1d, gkern1d)
+        gkern2d = gkern1d[:, None] * gkern1d[None, :]
         return gkern2d / gkern2d.sum()
 
     def _reshape(self, hog_feat: torch.Tensor) -> torch.Tensor:

@@ -486,10 +486,10 @@ class Solarization(object):
 
 @PIPELINES.register_module()
 class MaskfeatMaskGenerator(object):
-    """Generate random block mask for each image. This module is used in
-    Maskfeat to generate masks. This code is borrowed from.
+    """Generate random block mask for each image.
 
-    <https://github.com/facebookresearch/SlowFast/blob/main/slowfast/datasets/transform.py>
+    This module is borrowed from
+    https://github.com/facebookresearch/SlowFast/blob/main/slowfast/datasets/transform.py
     Args:
         mask_window_size (int): Size of input image. Defaults to 14.
         mask_ratio (float): The mask ratio of image. Defaults to 0.4.

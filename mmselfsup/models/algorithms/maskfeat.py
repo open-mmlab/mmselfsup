@@ -35,9 +35,6 @@ class MaskFeat(BaseModel):
         assert hog_para is not None
         self.hog_layer = HOGLayerC(**hog_para)
 
-    def init_weights(self) -> None:
-        super().init_weights()
-
     def extract_feat(self, input: List[torch.Tensor]) -> torch.Tensor:
         """Function to extract features from backbone.
 
