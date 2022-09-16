@@ -64,7 +64,7 @@ def test_odc():
     fake_data_sample.sample_idx = fake_sample_idx
     fake_data = {
         'inputs': [torch.randn((2, 3, 224, 224))],
-        'data_samples': [SelfSupDataSample() for _ in range(2)]
+        'data_samples': [fake_data_sample for _ in range(2)]
     }
 
     fake_inputs, fake_data_samples = alg.data_preprocessor(fake_data)

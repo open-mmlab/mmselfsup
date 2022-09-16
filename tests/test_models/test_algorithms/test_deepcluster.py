@@ -54,7 +54,7 @@ def test_deepcluster():
         'inputs':
         [torch.randn((2, 3, 224, 224)),
          torch.randn((2, 3, 224, 224))],
-        'data_sample': [SelfSupDataSample() for _ in range(2)]
+        'data_sample': [fake_data_sample for _ in range(2)]
     }
 
     fake_inputs, fake_data_samples = alg.data_preprocessor(fake_data)

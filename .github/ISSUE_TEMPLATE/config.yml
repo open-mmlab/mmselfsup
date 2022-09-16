@@ -2,5 +2,5 @@ blank_issues_enabled: false
 
 contact_links:
   - name: MMSelfSup Documentation
-    url: https://mmselfsup.readthedocs.io/en/latest/
+    url: https://mmselfsup.readthedocs.io/en/1.x/
     about: Check if your question is answered in docs
