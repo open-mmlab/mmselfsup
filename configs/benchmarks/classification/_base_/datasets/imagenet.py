@@ -1,7 +1,7 @@
 # dataset settings
 dataset_type = 'ImageNet'
-data_root = 'data/imagenet/'
-file_client_args = dict(backend='disk')
+data_root = 'sproject:s3://openmmlab/datasets/classification/imagenet/'
+file_client_args = dict(backend='petrel')
 
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
@@ -26,7 +26,9 @@ train_dataloader = dict(
         data_prefix='train',
         pipeline=train_pipeline),
     sampler=dict(type='DefaultSampler', shuffle=True),
+    collate_fn=dict(type='default_collate'),
     persistent_workers=True,
+    pin_memory=True,
 )
 
 val_dataloader = dict(
