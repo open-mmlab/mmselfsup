@@ -86,7 +86,7 @@ Highlights of the new version:
 - Based on [MMEngine](https://github.com/open-mmlab/mmengine) and [MMCV](https://github.com/open-mmlab/mmcv/tree/2.x).
 - Released with refactor.
 - Refine all [documents](https://mmselfsup.readthedocs.io/en/1.x/).
-- Support MAE with different pre-training epochs and backbones of different scales.
+- Support `MAE`, `SimMIM`, `MoCoV3` with different pre-training epochs and backbones of different scales.
 - More concise API.
 - More powerful data pipeline.
 - Higher accurcy for some algorithms.
