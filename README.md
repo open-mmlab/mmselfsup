@@ -65,6 +65,8 @@ The master branch works with **PyTorch 1.5** or higher.
 
 ## What's New
 
+### Stable version
+
 MMSelfSup **v0.9.2** was released in 28/07/2022.
 
 Highlights of the new version:
@@ -75,17 +77,33 @@ Please refer to [changelog.md](docs/en/changelog.md) for details and release his
 
 Differences between MMSelfSup and OpenSelfSup codebases can be found in [compatibility.md](docs/en/compatibility.md).
 
+### Preview of 1.x version
+
+A brand new version of **MMSelfSup v1.0.0rc1** was released in 01/09/2022:
+
+Highlights of the new version:
+
+- Based on [MMEngine](https://github.com/open-mmlab/mmengine) and [MMCV](https://github.com/open-mmlab/mmcv/tree/2.x).
+- Released with refactor.
+- Refine all [documents](https://mmselfsup.readthedocs.io/en/1.x/).
+- Support `MAE`, `SimMIM`, `MoCoV3` with different pre-training epochs and backbones of different scales.
+- More concise API.
+- More powerful data pipeline.
+- Higher accurcy for some algorithms.
+
+Find more new features in [1.x branch](https://github.com/open-mmlab/mmselfsup/tree/1.x). Issues and PRs are welcome!
+
 ## Installation
 
-MMSelfSup depends on [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open-mmlab/mmcv) and [MMClassification](https://github.com/open-mmlab/mmclassification).
+MMSelfSup relies on [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open-mmlab/mmcv) and [MMClassification](https://github.com/open-mmlab/mmclassification).
 
 Please refer to [install.md](docs/en/install.md) for more detailed instruction.
 
 ## Get Started
 
-Please refer to [prepare_data.md](docs/en/prepare_data.md) for dataset preparation and [get_started.md](docs/en/get_started.md) for the basic usage of MMSelfSup.
+Please refer to [prepare_data.md](docs/en/prepare_data.md) for dataset preparation, [get_started.md](docs/en/get_started.md) for the basic usage and [benchmarks.md](docs/en/tutorials/6_benchmarks.md) for running benchmarks.
 
-We also provides tutorials for more details:
+We also provides more detailed tutorials:
 
 - [config](docs/en/tutorials/0_config.md)
 - [add new dataset](docs/en/tutorials/1_new_dataset.md)
@@ -93,7 +111,6 @@ We also provides tutorials for more details:
 - [add new module](docs/en/tutorials/3_new_module.md)
 - [customize schedules](docs/en/tutorials/4_schedule.md)
 - [customize runtime](docs/en/tutorials/5_runtime.md)
-- [benchmarks](docs/en/tutorials/6_benchmarks.md)
 
 Besides, we provide [colab tutorial](https://github.com/open-mmlab/mmselfsup/blob/master/demo/mmselfsup_colab_tutorial.ipynb) for basic usage.
 
@@ -105,23 +122,23 @@ Please refer to [model_zoo.md](docs/en/model_zoo.md) for a comprehensive set of 
 
 Supported algorithms:
 
-- [x] [Relative Location (ICCV'2015)](https://arxiv.org/abs/1505.05192)
-- [x] [Rotation Prediction (ICLR'2018)](https://arxiv.org/abs/1803.07728)
-- [x] [DeepCluster (ECCV'2018)](https://arxiv.org/abs/1807.05520)
-- [x] [NPID (CVPR'2018)](https://arxiv.org/abs/1805.01978)
-- [x] [ODC (CVPR'2020)](https://arxiv.org/abs/2006.10645)
-- [x] [MoCo v1 (CVPR'2020)](https://arxiv.org/abs/1911.05722)
-- [x] [SimCLR (ICML'2020)](https://arxiv.org/abs/2002.05709)
-- [x] [MoCo v2 (ArXiv'2020)](https://arxiv.org/abs/2003.04297)
-- [x] [BYOL (NeurIPS'2020)](https://arxiv.org/abs/2006.07733)
-- [x] [SwAV (NeurIPS'2020)](https://arxiv.org/abs/2006.09882)
-- [x] [DenseCL (CVPR'2021)](https://arxiv.org/abs/2011.09157)
-- [x] [SimSiam (CVPR'2021)](https://arxiv.org/abs/2011.10566)
-- [x] [Barlow Twins (ICML'2021)](https://arxiv.org/abs/2103.03230)
-- [x] [MoCo v3 (ICCV'2021)](https://arxiv.org/abs/2104.02057)
-- [x] [MAE (CVPR'2022)](https://arxiv.org/abs/2111.06377)
-- [x] [SimMIM (CVPR'2022)](https://arxiv.org/abs/2111.09886)
-- [x] [CAE (ArXiv'2022)](https://arxiv.org/abs/2202.03026)
+- [x] [Relative Location (ICCV'2015)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/relative_loc)
+- [x] [Rotation Prediction (ICLR'2018)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/rotation_pred)
+- [x] [DeepCluster (ECCV'2018)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/deepcluster)
+- [x] [NPID (CVPR'2018)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/npid)
+- [x] [ODC (CVPR'2020)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/odc)
+- [x] [MoCo v1 (CVPR'2020)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/mocov1)
+- [x] [SimCLR (ICML'2020)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/simclr)
+- [x] [MoCo v2 (ArXiv'2020)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/byol)
+- [x] [BYOL (NeurIPS'2020)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/mocov2)
+- [x] [SwAV (NeurIPS'2020)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/swav)
+- [x] [DenseCL (CVPR'2021)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/densecl)
+- [x] [SimSiam (CVPR'2021)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/simsiam)
+- [x] [Barlow Twins (ICML'2021)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/barlowtwins)
+- [x] [MoCo v3 (ICCV'2021)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/mocov3)
+- [x] [MAE (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/mae)
+- [x] [SimMIM (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/simmim)
+- [x] [CAE (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/cae)
 
 More algorithms are in our plan.
 
