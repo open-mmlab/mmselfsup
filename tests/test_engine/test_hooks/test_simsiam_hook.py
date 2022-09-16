@@ -1,9 +1,11 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import logging
 import tempfile
 from unittest import TestCase
 
 import torch
 import torch.nn as nn
+from mmengine.logging import MMLogger
 from mmengine.model import BaseModule
 from mmengine.runner import Runner
 from mmengine.structures import LabelData
@@ -67,6 +69,10 @@ class TestSimSiamHook(TestCase):
         self.temp_dir = tempfile.TemporaryDirectory()
 
     def tearDown(self):
+        # `FileHandler` should be closed in Windows, otherwise we cannot
+        # delete the temporary directory
+        logging.shutdown()
+        MMLogger._instance_dict.clear()
         self.temp_dir.cleanup()
 
     def test_simsiam_hook(self):
