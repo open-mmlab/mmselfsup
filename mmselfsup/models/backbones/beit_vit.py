@@ -56,10 +56,12 @@ class BEiTViT(VisionTransformer):
         output_cls_token (bool): Whether output the cls_token. If set True,
             ``with_cls_token`` must be True. Defaults to True.
         beit_style (bool): Whether or not use BEiT-style. Defaults to True.
-        use_shared_rel_pos_bias (bool): Whether or not use shared relative
-            position bias. Defaults to True.
         use_abs_pos_emb (bool): Whether or not use absolute position embedding.
             Defaults to False.
+        use_rel_pos_bias (bool): Whether or not use relative position bias.
+            Defaults to False.
+        use_shared_rel_pos_bias (bool): Whether or not use shared relative
+            position bias. Defaults to True.
         layer_scale_init_value (float): The initialization value for
             the learnable scaling of attention and FFN. Defaults to 0.1.
         interpolate_mode (str): Select the interpolate mode for position
@@ -87,8 +89,9 @@ class BEiTViT(VisionTransformer):
                  frozen_stages: int = -1,
                  output_cls_token: bool = True,
                  beit_style: bool = True,
-                 use_shared_rel_pos_bias: bool = True,
                  use_abs_pos_emb: bool = False,
+                 use_rel_pos_bias: bool = False,
+                 use_shared_rel_pos_bias: bool = True,
                  layer_scale_init_value: int = 0.1,
                  interpolate_mode: str = 'bicubic',
                  patch_cfg: dict = dict(padding=0),
@@ -110,8 +113,9 @@ class BEiTViT(VisionTransformer):
             frozen_stages=frozen_stages,
             output_cls_token=output_cls_token,
             beit_style=beit_style,
-            use_shared_rel_pos_bias=use_shared_rel_pos_bias,
             use_abs_pos_emb=use_abs_pos_emb,
+            use_shared_rel_pos_bias=use_shared_rel_pos_bias,
+            use_rel_pos_bias=use_rel_pos_bias,
             layer_scale_init_value=layer_scale_init_value,
             interpolate_mode=interpolate_mode,
             patch_cfg=patch_cfg,
