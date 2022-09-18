@@ -9,7 +9,8 @@ _base_ = [
 train_dataloader = dict(batch_size=64, num_workers=8)
 
 # optimizer wrapper
-optimizer = dict(type='AdamW', lr=1.5e-3, betas=(0.9, 0.999))
+optimizer = dict(
+    type='AdamW', lr=1.5e-3, betas=(0.9, 0.999), weight_decay=0.05)
 
 optim_wrapper = dict(
     type='AmpOptimWrapper',
@@ -34,17 +35,17 @@ param_scheduler = [
         convert_to_iter_based=True),
     dict(
         type='CosineAnnealingLR',
-        T_max=290,
+        T_max=790,
         eta_min=1e-5,
         by_epoch=True,
         begin=10,
-        end=300,
+        end=800,
         convert_to_iter_based=True)
 ]
 
 # runtime settings
 # pre-train for 300 epochs
-train_cfg = dict(max_epochs=300)
+train_cfg = dict(max_epochs=800)
 default_hooks = dict(
     logger=dict(type='LoggerHook', interval=100),
     # only keeps the latest 3 checkpoints

@@ -69,9 +69,9 @@ class BEiTHead(BaseModule):
         target = target.detach()
 
         if not return_all_tokens:
-            mask = mask.view(-1, 1)
+            mask = mask.flatten(0).to(torch.bool)
             target = target.view(-1, 1)
-            logits, target = logits * mask, target * mask
+            logits, target = logits[mask], target[mask]
 
         loss_main = self.loss(logits, target.squeeze(-1))
         return loss_main
