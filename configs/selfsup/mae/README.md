@@ -49,7 +49,7 @@ methods that use only ImageNet-1K data. Transfer performance in downstream tasks
   </thead>
   <tbody>
   <tr>
-      <td rowspan="7">MAE</td>
+      <td rowspan="9">MAE</td>
 	    <td>ViT-base</td>
 	    <td>300</td>
       <td>4096</td>
@@ -118,6 +118,26 @@ methods that use only ImageNet-1K data. Transfer performance in downstream tasks
       <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/mae/mae_vit-large-p16_8xb512-amp-coslr-1600e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-large-p16_8xb512-fp16-coslr-1600e_in1k/mae_vit-large-p16_8xb512-fp16-coslr-1600e_in1k_20220825-cc7e98c9.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-large-p16_8xb512-fp16-coslr-1600e_in1k/mae_vit-large-p16_8xb512-fp16-coslr-1600e_in1k_20220806_210725.json'>log</a></td>
       <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/benchmarks/classification/imagenet/vit-large-p16_linear-8xb2048-coslr-90e_in1k.py'>config</a> | model | <a href='https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-large-p16_8xb512-fp16-coslr-1600e_in1k/vit-large-p16_linear-8xb2048-coslr-90e_in1k/vit-large-p16_linear-8xb2048-coslr-90e_in1k_20220813_155615.json'>log</a></td>
       <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/benchmarks/classification/imagenet/vit-large-p16_ft-8xb128-coslr-50e_in1k.py'>config</a> | model | <a href='https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-large-p16_8xb512-fp16-coslr-1600e_in1k/vit-large-p16_ft-8xb128-coslr-50e_in1k/vit-large-p16_ft-8xb128-coslr-50e_in1k_20220813_125305.json'>log</a></td>
+	</tr>
+  <tr>
+	    <td>ViT-huge-FT-224</td>
+	    <td>1600</td>
+      <td>4096</td>
+      <td>/</td>
+      <td>86.9</td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/mae/mae_vit-huge-p16_8xb512-amp-coslr-1600e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k_20220916-ff848775.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k_20220814_135241.json'>log</a></td>
+      <td>/</td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/benchmarks/classification/imagenet/vit-huge-p16_ft-8xb128-coslr-50e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k/vit-huge-p16_ft-8xb128-coslr-50e_in1k/vit-huge-p16_ft-8xb128-coslr-50e_in1k_20220916-0bfc9bfd.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k/vit-huge-p16_ft-8xb128-coslr-50e_in1k/vit-huge-p16_ft-8xb128-coslr-50e_in1k_20220829_114027.json'>log</a></td>
+	</tr>
+  <tr>
+	    <td>ViT-huge-FT-448</td>
+	    <td>1600</td>
+      <td>4096</td>
+      <td>/</td>
+      <td>87.3</td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/mae/mae_vit-huge-p16_8xb512-amp-coslr-1600e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k_20220916-ff848775.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k_20220814_135241.json'>log</a></td>
+      <td>/</td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/benchmarks/classification/imagenet/vit-huge-p16_ft-32xb8-coslr-50e_in1k-448.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k/vit-huge-p16_ft-32xb8-coslr-50e_in1k-448/vit-huge-p16_ft-32xb8-coslr-50e_in1k-448_20220916-95b6a0ce.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k/vit-huge-p16_ft-32xb8-coslr-50e_in1k-448/vit-huge-p16_ft-32xb8-coslr-50e_in1k-448_20220913_113737.json'>log</a></td>
 	</tr>
 </tbody>
 </table>
