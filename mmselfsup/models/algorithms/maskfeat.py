@@ -18,6 +18,10 @@ class MaskFeat(BaseModel):
         backbone (dict): Config dict for encoder. Defaults to None.
         head (dict): Config dict for loss functions. Defaults to None.
         hog_para (dict): Config dict for hog layer. Defaults to None.
+            dict['nbins', int]: Number of bin. Defaults to 9.
+            dict['pool', float]: Number of cell. Defaults to 8.
+            dict['gaussian_window', int]: Size of gaussian kernel.
+                Defaults to 16.
         init_cfg (dict): Config dict for weight initialization.
             Defaults to None.
     """

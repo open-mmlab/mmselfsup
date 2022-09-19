@@ -496,9 +496,10 @@ class MaskfeatMaskGenerator(object):
         min_num_patches (int): Minimum number of patches that require masking.
             Defaults to 15.
         max_num_patches (int, optional): Maximum number of patches that
-            require masking.
+            require masking. Defaults to None.
         min_aspect (int): Minimum aspect of patches. Defaults to 0.3.
         max_aspect (float, optional): Maximum aspect of patches.
+            Defaults to None.
     """
 
     def __init__(

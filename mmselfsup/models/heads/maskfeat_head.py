@@ -16,8 +16,6 @@ class MaskFeatPretrainHead(BaseModule):
         embed_dim (int): The dim of the feature before the classifier head.
             Defaults to 768.
         hog_dim (int): The dim of the hog feature. Defaults to 108.
-        reduction (str): Specifies reduction to apply to the output.
-            Defaults to "mean" (default) or "none".
     """
 
     def __init__(self, embed_dim: int = 768, hog_dim: int = 108) -> None:
@@ -73,6 +71,8 @@ class MaskFeatFinetuneHead(BaseModule):
     Args:
         embed_dim (int): The dim of the feature before the classifier head.
         num_classes (int): The total classes. Defaults to 1000.
+        label_smooth_val (float): The degree of label smoothing.
+            Defaults to 0.1.
     """
 
     def __init__(self,
