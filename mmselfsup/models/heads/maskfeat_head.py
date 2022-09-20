@@ -86,7 +86,7 @@ class MaskFeatFinetuneHead(BaseModule):
 
     def init_weights(self) -> None:
         nn.init.constant_(self.head.bias, 0)
-        trunc_normal_(self.head.weight, std=2e-5)
+        trunc_normal_(self.head.weight, std=.02)
 
     def forward(self, x: torch.Tensor) -> list:
         """"Get the logits."""
