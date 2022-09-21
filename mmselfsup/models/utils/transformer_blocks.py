@@ -1,15 +1,18 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from typing import Sequence
 
+import numpy as np
 import torch
 import torch.nn as nn
+from mmcls.models.backbones.vision_transformer import \
+    BEiTTransformerEncoderLayer
 from mmcls.models.backbones.vision_transformer import \
     TransformerEncoderLayer as _TransformerEncoderLayer
 from mmcls.models.utils import MultiheadAttention as _MultiheadAttention
 from mmcv.cnn import build_norm_layer
 from mmcv.cnn.bricks.drop import build_dropout
 from mmcv.cnn.bricks.transformer import FFN
-from mmengine.model import BaseModule
+from mmengine.model import BaseModule, ModuleList
 from torch.nn import functional as F
 
 
@@ -591,3 +594,64 @@ class RelativePositionBias(BaseModule):
                 self.window_size[0] * self.window_size[1] + 1, -1)
         return relative_position_bias.permute(
             2, 0, 1).contiguous()  # nH, Wh*Ww, Wh*Ww
+
+
+class BEiTV2CLSPretrainLayers(BaseModule):
+    arch_zoo = {
+        **dict.fromkeys(
+            ['b', 'base'], {
+                'embed_dims': 768,
+                'num_layers': 2,
+                'num_heads': 12,
+                'feedforward_channels': 768 * 4
+            }),
+    }
+
+    def __init__(
+            self,
+            arch: str = 'base',
+            layer_scale_init_value: float = 0.1,
+            drop_rate: float = 0.,
+            drop_path_rate: float = 0.,
+            norm_cfg: dict = dict(type='LN'),
+    ) -> None:
+
+        super().__init__()
+
+        if isinstance(arch, str):
+            arch = arch.lower()
+            assert arch in set(self.arch_zoo), \
+                f'Arch {arch} is not in default archs {set(self.arch_zoo)}'
+            self.arch_settings = self.arch_zoo[arch]
+        else:
+            essential_keys = {
+                'embed_dims', 'num_layers', 'num_heads', 'feedforward_channels'
+            }
+            assert isinstance(arch, dict) and essential_keys <= set(arch), \
+                f'Custom arch needs a dict with keys {essential_keys}'
+            self.arch_settings = arch
+
+        self.embed_dims = self.arch_settings['embed_dims']
+        self.num_layers = self.arch_settings['num_layers']
+
+        # stochastic depth decay rule
+        dpr = np.linspace(0, drop_path_rate, self.num_layers)
+
+        self.layers = ModuleList()
+        for i in range(self.num_layers):
+            _layer_cfg = dict(
+                embed_dims=self.embed_dims,
+                num_heads=self.arch_settings['num_heads'],
+                feedforward_channels=self.
+                arch_settings['feedforward_channels'],
+                drop_rate=drop_rate,
+                drop_path_rate=dpr[i],
+                norm_cfg=norm_cfg,
+                layer_scale_init_value=layer_scale_init_value,
+                window_size=None)
+            self.layers.append(BEiTTransformerEncoderLayer(**_layer_cfg))
+
+    def forward(self, x: torch.Tensor, shared_rel_pos_bias) -> torch.Tensor:
+        for layer in self.layers:
+            x = layer(x, rel_pos_bias=shared_rel_pos_bias)
+        return x

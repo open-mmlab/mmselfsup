@@ -179,3 +179,52 @@ class CAEDataPreprocessor(SelfSupDataPreprocessor):
                             batch_inputs[1] / 255. * 0.8 + 0.1]
 
         return batch_inputs, batch_data_samples
+
+
+@MODELS.register_module()
+class BEiTv2DataPreprocessor(SelfSupDataPreprocessor):
+    """Image pre-processor for BEiT.
+
+    Compared with the :class:`mmselfsup.SelfSupDataPreprocessor`, this module
+    will normalize the prediction image and target image with different
+    normalization parameters.
+    """
+
+    def forward(
+            self,
+            data: dict,
+            training: bool = False
+    ) -> Tuple[List[torch.Tensor], Optional[list]]:
+        """Performs normalization、padding and bgr2rgb conversion based on
+        ``BaseDataPreprocessor``.
+
+        Args:
+            data (dict): data sampled from dataloader.
+            training (bool): Whether to enable training time augmentation. If
+                subclasses override this method, they can perform different
+                preprocessing strategies for training and testing based on the
+                value of ``training``.
+        Returns:
+            Tuple[torch.Tensor, Optional[list]]: Data in the same format as the
+            model input.
+        """
+        data = [val for _, val in data.items()]
+        batch_inputs, batch_data_samples = self.cast_data(data)
+        # channel transform
+        if self._channel_conversion:
+            batch_inputs = [
+                _input[:, [2, 1, 0], ...] for _input in batch_inputs
+            ]
+
+        # Convert to float after channel conversion to ensure
+        # efficiency
+        batch_inputs = [input_.float() for input_ in batch_inputs]
+
+        # Normalization. Here is what is different from
+        # :class:`mmselfsup.SelfSupDataPreprocessor`. Normalize the target
+        # image and prediction image with different normalization params
+        if self._enable_normalize:
+            batch_inputs = [(batch_inputs[0] - self.mean) / self.std,
+                            batch_inputs[1] / 127.5 - 1.0]
+
+        return batch_inputs, batch_data_samples

@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Tuple
+from typing import Tuple, Union
 
 import torch
 from mmengine.model import BaseModule
@@ -19,7 +19,7 @@ class BEiTLoss(BaseModule):
         super().__init__()
         self.loss_cross_entropy = nn.CrossEntropyLoss()
 
-    def forward(self, logits: torch.Tensor,
+    def forward(self, logits: Union[Tuple[torch.Tensor], torch.Tensor],
                 target: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
         """Forward function of BEiT Loss.
 
@@ -30,6 +30,10 @@ class BEiTLoss(BaseModule):
         Returns:
             Tuple[torch.Tensor, torch.Tensor]: The main loss.
         """
-        loss_main = self.loss_cross_entropy(logits, target)
-
-        return loss_main
+        if isinstance(logits, torch.Tensor):
+            loss = self.loss_cross_entropy(logits, target)
+            return loss
+        elif isinstance(logits, Tuple):
+            loss_1 = self.loss_cross_entropy(logits[0], target)
+            loss_2 = self.loss_cross_entropy(logits[1], target)
+            return loss_1, loss_2

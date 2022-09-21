@@ -1,14 +1,14 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import os
 import warnings
-from typing import List, Optional, Union
+from typing import List, Optional, Tuple, Union
 
 import torch
 from mmengine.model import BaseModule
 from torch import nn
 
 from mmselfsup.registry import MODELS
-from ..utils import Encoder
+from ..utils import VQKD, Encoder
 
 
 @MODELS.register_module()
@@ -27,15 +27,21 @@ class BEiTHead(BaseModule):
 
     def __init__(self,
                  loss: dict,
+                 tokenizer_type: str,
                  tokenizer_path: str,
                  init_cfg: Optional[Union[dict, List[dict]]] = None) -> None:
         super().__init__(init_cfg=init_cfg)
+        self.tokenizer_type = tokenizer_type
         self.tokenizer_path = tokenizer_path
         self.encoder = self._load_encoder()
         self.loss = MODELS.build(loss)
 
     def _load_encoder(self) -> nn.Module:
-        encoder = Encoder()
+        if self.tokenizer_type == 'dall-e':
+            encoder = Encoder()
+        elif self.tokenizer_type == 'vqkd':
+            encoder = VQKD()
+
         if os.path.exists(self.tokenizer_path):
             state_dict = torch.load(self.tokenizer_path)
             encoder.load_state_dict(state_dict)
@@ -49,11 +55,15 @@ class BEiTHead(BaseModule):
     def _generate_target(self, img_target: torch.Tensor) -> torch.Tensor:
         """Generate the reconstruction target."""
         logits = self.encoder(img_target)
-        target = torch.argmax(logits, dim=1)
-        return target.flatten(1)
+        if self.tokenizer_type == 'dall-e':
+            target = torch.argmax(logits, dim=1)
+            target = target.flatten(1)
+        elif self.tokenizer_type == 'vqkd':
+            target = logits
+        return target
 
     def forward(self,
-                logits: torch.Tensor,
+                logits: Union[Tuple[torch.Tensor], torch.Tensor],
                 img_target: torch.Tensor,
                 mask: torch.Tensor,
                 return_all_tokens=False) -> torch.Tensor:
@@ -71,7 +81,11 @@ class BEiTHead(BaseModule):
         if not return_all_tokens:
             mask = mask.flatten(0).to(torch.bool)
             target = target.view(-1, 1)
-            logits, target = logits[mask], target[mask]
+            target = target[mask]
+            if isinstance(logits, torch.Tensor):
+                logits = logits[mask]
+            elif isinstance(logits, Tuple):
+                logits = logits[0][mask], logits[1][mask]
 
-        loss_main = self.loss(logits, target.squeeze(-1))
-        return loss_main
+        loss = self.loss(logits, target.squeeze(-1))
+        return loss

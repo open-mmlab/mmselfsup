@@ -6,7 +6,6 @@ from mmcls.models import VisionTransformer, resize_pos_embed
 from mmengine.model.weight_init import trunc_normal_
 from torch import nn
 
-from mmselfsup.models.utils import RelativePositionBias
 from mmselfsup.registry import MODELS
 
 
@@ -124,13 +123,6 @@ class BEiTViT(VisionTransformer):
 
         self.mask_token = nn.Parameter(torch.zeros(1, 1, self.embed_dims))
 
-        if use_shared_rel_pos_bias:
-            self.shared_rel_pos_bias = RelativePositionBias(
-                window_size=self.patch_resolution,
-                num_heads=self.arch_settings['num_heads'])
-        else:
-            self.shared_rel_pos_bias = None
-
     def init_weights(self) -> None:
         """Initialize position embedding, patch embedding and cls token."""
         super().init_weights()
@@ -165,7 +157,8 @@ class BEiTViT(VisionTransformer):
             if m.bias is not None:
                 nn.init.constant_(m.bias, 0)
 
-    def forward(self, x: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, mask: torch.Tensor,
+                rel_pos_bias: torch.Tensor) -> torch.Tensor:
         B = x.shape[0]
         x, patch_resolution = self.patch_embed(x)
 
@@ -191,12 +184,14 @@ class BEiTViT(VisionTransformer):
             # Remove class token for transformer encoder input
             x = x[:, 1:]
 
-        shared_rel_pos_bias = self.shared_rel_pos_bias(
-        ) if self.shared_rel_pos_bias is not None else None
+        outs = []
         for i, layer in enumerate(self.layers):
-            x = layer(x, rel_pos_bias=shared_rel_pos_bias)
+            x = layer(x, rel_pos_bias=rel_pos_bias)
 
             if i == len(self.layers) - 1 and self.final_norm:
                 x = self.norm1(x)
 
-        return x
+            if i in self.out_indices:
+                outs.append(x)
+
+        return tuple(outs)

@@ -44,7 +44,8 @@ class BEiTNeck(BaseModule):
             if isinstance(m, nn.Linear) and m.bias is not None:
                 nn.init.constant_(m.bias, 0)
 
-    def forward(self, x: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+    def forward(self, x: Tuple[torch.Tensor],
+                **kwargs) -> Tuple[torch.Tensor, torch.Tensor]:
         """Get the latent prediction and final prediction.
 
         Args:
@@ -53,8 +54,8 @@ class BEiTNeck(BaseModule):
         Returns:
             Tuple[torch.Tensor, torch.Tensor]: Final prediction.
         """
-
-        logits = self.decoders(x)
+        x = x[0]
+        logits = self.decoders(x[:, 1:, :])
         logits = logits.view(-1, logits.shape[-1])
 
         return logits
