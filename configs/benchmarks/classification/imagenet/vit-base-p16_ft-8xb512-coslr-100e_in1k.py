@@ -1,3 +1,5 @@
+# The finetune config of maskfeat.
+
 _base_ = [
     '../_base_/models/vit-base-p16_ft.py',
     '../_base_/datasets/imagenet.py',
