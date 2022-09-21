@@ -20,7 +20,7 @@ train_pipeline = [
     dict(
         type='mmselfsup.RandomResizedCropAndInterpolationWithTwoPic',
         size=224,
-        scale=(0.5, 1.0),
+        scale=(0.08, 1.0),
         ratio=(0.75, 1.3333),
         interpolation='bicubic'),
     dict(type='RandomFlip', prob=0.5, direction='horizontal'),
@@ -62,7 +62,7 @@ train_dataloader = dict(
     persistent_workers=True,
 )
 val_dataloader = dict(
-    batch_size=32,
+    batch_size=256,
     num_workers=4,
     dataset=dict(
         type=dataset_type,
@@ -113,7 +113,7 @@ custom_imports = dict(imports='mmselfsup.engine', allow_failed_imports=False)
 optim_wrapper = dict(
     optimizer=dict(
         type='AdamW',
-        lr=0.002 * 8,
+        lr=0.002 * 8 / 2,
         weight_decay=0.05,
         eps=1e-8,
         betas=(0.9, 0.999),
@@ -124,8 +124,8 @@ optim_wrapper = dict(
         norm_decay_mult=0.0,
         bias_decay_mult=0.0,
         custom_keys={
-            '.cls_token': dict(decay_mult=0.0),
-            '.pos_embed': dict(decay_mult=0.0)
+            'ln': dict(decay_mult=0.0),
+            'bias': dict(decay_mult=0.0),
         }))
 
 # learning rate scheduler
