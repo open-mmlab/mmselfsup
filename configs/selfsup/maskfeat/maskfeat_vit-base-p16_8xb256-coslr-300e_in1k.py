@@ -30,7 +30,7 @@ param_scheduler = [
         convert_to_iter_based=True),
     dict(
         type='CosineAnnealingLR',
-        T_max=360,
+        T_max=270,
         by_epoch=True,
         begin=30,
         end=300,
@@ -38,7 +38,7 @@ param_scheduler = [
 ]
 
 # runtime settings
-# pre-train for 400 epochs
+# pre-train for 300 epochs
 train_cfg = dict(max_epochs=300)
 default_hooks = dict(
     logger=dict(type='LoggerHook', interval=100),

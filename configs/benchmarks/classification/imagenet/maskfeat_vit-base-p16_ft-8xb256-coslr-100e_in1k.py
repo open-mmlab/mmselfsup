@@ -99,7 +99,10 @@ model = dict(
         in_channels=768,
         loss=dict(
             type='LabelSmoothLoss', label_smooth_val=0.1, mode='original'),
-        init_cfg=[dict(type='TruncNormal', layer='Linear', std=.02)]),
+        init_cfg=[
+            dict(type='TruncNormal', layer='Linear.weight', std=.02),
+            dict(type='Constant', layer='Linear.bias', val=0)
+        ]),
     train_cfg=dict(augments=[
         dict(type='Mixup', alpha=0.8, num_classes=1000),
         dict(type='CutMix', alpha=1.0, num_classes=1000)
@@ -136,7 +139,7 @@ param_scheduler = [
         convert_to_iter_based=True),
     dict(
         type='CosineAnnealingLR',
-        T_max=95,
+        T_max=80,
         by_epoch=True,
         begin=20,
         end=100,
