@@ -3,14 +3,21 @@ import platform
 
 import pytest
 import torch
-from mmengine.data import InstanceData
+from mmengine.structures import InstanceData
 
 from mmselfsup.models.algorithms import BEiT
 from mmselfsup.structures import SelfSupDataSample
 
 # model settings
 backbone = dict(
-    type='BEiTViT', arch='deit-b', beit_style=True, layer_scale_init_value=0.1)
+    type='BEiTViT',
+    arch='base',
+    patch_size=16,
+    drop_path_rate=0.1,
+    final_norm=True,
+    beit_style=True,
+    layer_scale_init_value=0.1,
+)
 neck = dict(
     type='BEiTNeck',
     num_classes=8192,
@@ -18,7 +25,8 @@ neck = dict(
 )
 head = dict(
     type='BEiTHead',
-    tokenizer_path='beit_ckpt/encoder_stat_dict.pth',
+    tokenizer_type='dall-e',
+    tokenizer_path='beit_ckpt/dalle_encoder.pth',
     loss=dict(type='BEiTLoss'))
 
 data_preprocessor = dict(
@@ -37,18 +45,19 @@ def test_beit():
         data_preprocessor=data_preprocessor)
     # model.init_weights()
 
-    fake_img = torch.rand((3, 224, 224))
-    fake_target_img = torch.rand((3, 112, 112))
+    fake_img = torch.rand((1, 3, 224, 224))
+    fake_target_img = torch.rand((1, 3, 112, 112))
     fake_mask = torch.zeros((196)).bool()
     fake_mask[75:150] = 1
     fake_data_sample = SelfSupDataSample()
     fake_mask = InstanceData(value=fake_mask)
     fake_data_sample.mask = fake_mask
+    fake_data_sample = [fake_data_sample]
 
-    fake_data = [{
+    fake_data = {
         'inputs': [fake_img, fake_target_img],
         'data_sample': fake_data_sample
-    } for _ in range(2)]
+    }
 
     fake_batch_inputs, fake_data_samples = model.data_preprocessor(fake_data)
     fake_outputs = model(fake_batch_inputs, fake_data_samples, mode='loss')
