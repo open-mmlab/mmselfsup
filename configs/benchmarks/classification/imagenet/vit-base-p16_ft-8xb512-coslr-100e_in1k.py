@@ -1,11 +1,10 @@
-# The finetune config of maskfeat.
-
 _base_ = [
     '../_base_/models/vit-base-p16_ft.py',
     '../_base_/datasets/imagenet.py',
     '../_base_/schedules/adamw_coslr-100e_in1k.py',
     '../_base_/default_runtime.py',
 ]
+# maskfeat fine-tuning setting
 
 # dataset
 img_norm_cfg = dict(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
