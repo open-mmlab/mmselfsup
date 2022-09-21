@@ -10,7 +10,7 @@ from mmselfsup.registry import MODELS
 
 
 @MODELS.register_module()
-class BEiTNeck(BaseModule):
+class BEiTv1Neck(BaseModule):
     """Neck for BEiT Pre-training.
 
     This module construct the decoder for the final prediction.
@@ -35,7 +35,7 @@ class BEiTNeck(BaseModule):
             embed_dims, num_classes) if num_classes > 0 else nn.Identity()
 
     def init_weights(self) -> None:
-        super(BEiTNeck, self).init_weights()
+        super(BEiTv1Neck, self).init_weights()
         self.apply(self._init_weights)
 
     def _init_weights(self, m: nn.Module) -> None:

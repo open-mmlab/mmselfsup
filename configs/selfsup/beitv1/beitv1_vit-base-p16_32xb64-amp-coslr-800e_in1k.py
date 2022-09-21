@@ -1,6 +1,6 @@
 _base_ = [
     '../_base_/models/beitv1.py',
-    '../_base_/datasets/imagenet_beit.py',
+    '../_base_/datasets/imagenet_beitv1.py',
     '../_base_/schedules/adamw_coslr-200e_in1k.py',
     '../_base_/default_runtime.py',
 ]

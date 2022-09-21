@@ -11,7 +11,7 @@ model = dict(
         layer_scale_init_value=0.1,
     ),
     neck=dict(
-        type='BEiTNeck',
+        type='BEiTv1Neck',
         num_classes=8192,
         embed_dims=768,
     ),
