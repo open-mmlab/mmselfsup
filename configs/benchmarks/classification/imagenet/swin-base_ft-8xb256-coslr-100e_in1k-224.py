@@ -6,15 +6,7 @@ model = dict(
         img_size=224, stage_cfgs=dict(block_cfgs=dict(window_size=7))))
 
 # train pipeline
-file_client_args = dict(
-    backend='petrel',
-    path_mapping=dict({
-        './data/imagenet':
-        'openmmlab:s3://openmmlab/datasets/classification/imagenet',
-        'data/imagenet':
-        'openmmlab:s3://openmmlab/datasets/classification/imagenet'
-    }),
-    enable_mc=True)
+file_client_args = dict(backend='disk')
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(
