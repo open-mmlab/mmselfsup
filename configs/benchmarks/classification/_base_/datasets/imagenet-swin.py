@@ -1,5 +1,6 @@
 # dataset settings
 dataset_type = 'ImageNet'
+data_root = 'data/imagenet/'
 preprocess_cfg = dict(
     # RGB format normalization parameters
     mean=[123.675, 116.28, 103.53],
@@ -57,7 +58,7 @@ train_dataloader = dict(
     num_workers=8,
     dataset=dict(
         type=dataset_type,
-        data_root='data/imagenet',
+        data_root=data_root,
         ann_file='meta/train.txt',
         data_prefix='train',
         pipeline=train_pipeline),
@@ -70,7 +71,7 @@ val_dataloader = dict(
     num_workers=5,
     dataset=dict(
         type=dataset_type,
-        data_root='data/imagenet',
+        data_root=data_root,
         ann_file='meta/val.txt',
         data_prefix='val',
         pipeline=test_pipeline),
