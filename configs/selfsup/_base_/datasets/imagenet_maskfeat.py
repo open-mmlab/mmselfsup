@@ -14,10 +14,11 @@ file_client_args = dict(
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(
-        type='RandomResizedCropAndInterpolationWithTwoPic',
+        type='RandomResizedCrop',
         size=224,
         scale=(0.5, 1.0),
         ratio=(0.75, 1.3333),
+        backend='pillow',
         interpolation='bicubic'),
     dict(type='RandomFlip', prob=0.5, direction='horizontal'),
     dict(type='MaskfeatMaskGenerator', mask_window_size=14, mask_ratio=0.4),

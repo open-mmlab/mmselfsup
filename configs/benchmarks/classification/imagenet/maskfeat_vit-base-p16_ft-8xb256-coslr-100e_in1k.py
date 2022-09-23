@@ -18,10 +18,9 @@ file_client_args = dict(
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(
-        type='mmselfsup.RandomResizedCropAndInterpolationWithTwoPic',
-        size=224,
-        scale=(0.08, 1.0),
-        ratio=(0.75, 1.3333),
+        type='RandomResizedCrop',
+        scale=224,
+        backend='pillow',
         interpolation='bicubic'),
     dict(type='RandomFlip', prob=0.5, direction='horizontal'),
     dict(
@@ -99,10 +98,7 @@ model = dict(
         in_channels=768,
         loss=dict(
             type='LabelSmoothLoss', label_smooth_val=0.1, mode='original'),
-        init_cfg=[
-            dict(type='TruncNormal', layer='Linear.weight', std=.02),
-            dict(type='Constant', layer='Linear.bias', val=0)
-        ]),
+        init_cfg=[dict(type='TruncNormal', layer='Linear', std=.02)]),
     train_cfg=dict(augments=[
         dict(type='Mixup', alpha=0.8, num_classes=1000),
         dict(type='CutMix', alpha=1.0, num_classes=1000)
@@ -126,6 +122,8 @@ optim_wrapper = dict(
         custom_keys={
             'ln': dict(decay_mult=0.0),
             'bias': dict(decay_mult=0.0),
+            'pos_embed': dict(weight_decay=0.),
+            'cls_token': dict(weight_decay=0.),
         }))
 
 # learning rate scheduler
