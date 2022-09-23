@@ -5,7 +5,6 @@
   - [Code style](#code-style)
     - [Python](#python)
     - [C++ and CUDA](#c-and-cuda)
-  - [Pre-commit Hook](#pre-commit-hook)
 
 Thanks for your interest in contributing to MMSelfSup! All kinds of contributions are welcome, including but not limited to the following.
 
@@ -17,17 +16,26 @@ Thanks for your interest in contributing to MMSelfSup! All kinds of contribution
 
 We recommend the potential contributors follow this workflow for contribution.
 
-1. Fork and pull the latest MMSelfSup repository, follow [get_started](<>) to setup the environment.
+1. Fork and pull the latest MMSelfSup repository, follow [get_started](../get_started.md) to setup the environment.
 2. Checkout a new branch (**do not use master/dev branch** for PRs)
 
+Please checkout a new branch from `dev-1.x` branch, you could follow the commands below:
+
 ```bash
+git clone git@github.com:open-mmlab/mmselfsup.git
+cd mmselfsup
+git checkout dev-1.x
 git checkout -b xxxx # xxxx is the name of new branch
 ```
 
 3. Edit the related files follow the code style mentioned below
-4. Use [pre-commit hook](<>) to check and format your changes.
+4. Use **pre-commit hook** to check and format your changes.
 5. Commit your changes
 6. Create a PR with related information
+
+```{note}
+If you plan to add some new features that involve large changes, it is encouraged to open an issue for discussion first.
+```
 
 ## Code style
 
@@ -46,12 +54,6 @@ We use the following tools for linting and formatting:
 
 Style configurations of yapf and isort can be found in [setup.cfg](./setup.cfg).
 
-### C++ and CUDA
-
-We follow the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html).
-
-## Pre-commit Hook
-
 We use [pre-commit hook](https://pre-commit.com/) that checks and formats for `flake8`, `yapf`, `isort`, `trailing whitespaces`, `markdown files`,
 fixes `end-of-files`, `double-quoted-strings`, `python-encoding-pragma`, `mixed-line-ending`, sorts `requirments.txt` automatically on every commit.
 The config for a pre-commit hook is stored in [.pre-commit-config](./.pre-commit-config.yaml).
@@ -65,9 +67,14 @@ pip install -U pre-commit
 From the repository folder
 
 ```shell
+pre-commit install
 pre-commit run
 ```
 
 After this on every commit check code linters and formatter will be enforced.
 
 > Before you create a PR, make sure that your code lints and is formatted by yapf.
+
+### C++ and CUDA
+
+We follow the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html).
