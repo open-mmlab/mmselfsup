@@ -19,7 +19,7 @@ if not prefetch:
         [dict(type='ToTensor'),
          dict(type='Normalize', **img_norm_cfg)])
 
-train_pipeline.append(dict(type='MaskfeatMaskGenerator', mask_ratio=0.4))
+train_pipeline.append(dict(type='MaskFeatMaskGenerator', mask_ratio=0.4))
 
 # dataset summary
 data = dict(

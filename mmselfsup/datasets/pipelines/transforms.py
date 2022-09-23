@@ -485,7 +485,7 @@ class Solarization(object):
 
 
 @PIPELINES.register_module()
-class MaskfeatMaskGenerator(object):
+class MaskFeatMaskGenerator(object):
     """Generate random block mask for each image.
 
     This module is borrowed from

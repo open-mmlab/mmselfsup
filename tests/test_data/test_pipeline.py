@@ -191,7 +191,7 @@ def test_random_resize_crop_with_two_pic():
 
 def test_maskfeat_mask_gen():
     transform = dict(
-        type='MaskfeatMaskGenerator', mask_window_size=14, mask_ratio=0.6)
+        type='MaskFeatMaskGenerator', mask_window_size=14, mask_ratio=0.6)
 
     img = torch.rand((3, 224, 224))
     module = build_from_cfg(transform, PIPELINES)
