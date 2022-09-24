@@ -5,6 +5,7 @@ from .contrastive_head import ContrastiveHead
 from .latent_pred_head import (LatentClsHead, LatentCrossCorrelationHead,
                                LatentPredictHead)
 from .mae_head import MAEFinetuneHead, MAELinprobeHead, MAEPretrainHead
+from .maskfeat_head import MaskFeatFinetuneHead, MaskFeatPretrainHead
 from .mocov3_head import MoCoV3Head
 from .multi_cls_head import MultiClsHead
 from .simmim_head import SimMIMHead
@@ -14,5 +15,6 @@ __all__ = [
     'ContrastiveHead', 'ClsHead', 'LatentPredictHead', 'LatentClsHead',
     'LatentCrossCorrelationHead', 'MultiClsHead', 'SwAVHead',
     'MAEFinetuneHead', 'MAEPretrainHead', 'MoCoV3Head', 'SimMIMHead',
-    'CAEHead', 'MAELinprobeHead'
+    'CAEHead', 'MAELinprobeHead', 'MaskFeatFinetuneHead',
+    'MaskFeatPretrainHead'
 ]
