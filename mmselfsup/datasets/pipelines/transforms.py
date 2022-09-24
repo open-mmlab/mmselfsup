@@ -482,3 +482,113 @@ class Solarization(object):
         repr_str += f'threshold = {self.threshold}, '
         repr_str += f'prob = {self.prob}'
         return repr_str
+
+
+@PIPELINES.register_module()
+class MaskFeatMaskGenerator(object):
+    """Generate random block mask for each image.
+
+    This module is borrowed from
+    https://github.com/facebookresearch/SlowFast/blob/main/slowfast/datasets/transform.py
+    Args:
+        mask_window_size (int): Size of input image. Defaults to 14.
+        mask_ratio (float): The mask ratio of image. Defaults to 0.4.
+        min_num_patches (int): Minimum number of patches that require masking.
+            Defaults to 15.
+        max_num_patches (int, optional): Maximum number of patches that
+            require masking. Defaults to None.
+        min_aspect (int): Minimum aspect of patches. Defaults to 0.3.
+        max_aspect (float, optional): Maximum aspect of patches.
+            Defaults to None.
+    """
+
+    def __init__(
+        self,
+        mask_window_size: int = 14,
+        mask_ratio: float = 0.4,
+        min_num_patches: int = 15,
+        max_num_patches: Optional[int] = None,
+        min_aspect: float = 0.3,
+        max_aspect: Optional[float] = None,
+    ) -> None:
+        self.height, self.width = mask_window_size, mask_window_size
+
+        self.num_patches = self.height * self.width
+        self.num_masking_patches = int(mask_window_size**2 * mask_ratio)
+
+        self.min_num_patches = min_num_patches
+        self.max_num_patches = (
+            self.num_masking_patches
+            if max_num_patches is None else max_num_patches)
+
+        max_aspect = max_aspect or 1 / min_aspect
+        self.log_aspect_ratio = (math.log(min_aspect), math.log(max_aspect))
+
+    def __repr__(self) -> str:
+        repr_str = self.__class__.__name__
+        repr_str += f'(height={self.height}, '
+        repr_str += f'width={self.width}, '
+        repr_str += f'num_patches={self.num_patches}, '
+        repr_str += f'num_masking_patches={self.num_masking_patches}, '
+        repr_str += f'min_num_patches={self.min_num_patches}, '
+        repr_str += f'max_num_patches={self.max_num_patches}, '
+        repr_str += f'log_aspect_ratio={self.log_aspect_ratio})'
+        return repr_str
+
+    def get_shape(self) -> Tuple[int, int]:
+        return self.height, self.width
+
+    def _random_masking(self, mask: np.array, max_mask_patches: int) -> int:
+        """Generate random block masks for each image up to 10 times.
+
+        Args:
+            mask (np.array): Initial mask of shape (mask_window_size,
+                mask_window_size).
+            max_mask_patches (int): Maximum number of masked patches required.
+        Returns:
+            int: Number of masking patches.
+        """
+        delta = 0
+        for _ in range(10):
+            target_area = random.uniform(self.min_num_patches,
+                                         max_mask_patches)
+            aspect_ratio = math.exp(random.uniform(*self.log_aspect_ratio))
+            h = int(round(math.sqrt(target_area * aspect_ratio)))
+            w = int(round(math.sqrt(target_area / aspect_ratio)))
+            if w < self.width and h < self.height:
+                top = random.randint(0, self.height - h)
+                left = random.randint(0, self.width - w)
+
+                num_masked = mask[top:top + h, left:left + w].sum()
+                # Overlap
+                if 0 < h * w - num_masked <= max_mask_patches:
+                    for i in range(top, top + h):
+                        for j in range(left, left + w):
+                            if mask[i, j] == 0:
+                                mask[i, j] = 1
+                                delta += 1
+
+                if delta > 0:
+                    break
+        return delta
+
+    def __call__(self, img: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+        """Generate random block mask for each image.
+
+        Args:
+            img (torch.Tensor): Input image of shape (C, H, W).
+        Returns:
+            Tuple[torch.Tensor, torch.Tensor]: Input image and mask.
+        """
+        mask = np.zeros(shape=self.get_shape(), dtype=np.int)
+        mask_count = 0
+        while mask_count < self.num_masking_patches:
+            max_mask_patches = self.num_masking_patches - mask_count
+            max_mask_patches = min(max_mask_patches, self.max_num_patches)
+
+            delta = self._random_masking(mask, max_mask_patches)
+            if delta == 0:
+                break
+            else:
+                mask_count += delta
+        return img, torch.Tensor(mask).bool()
