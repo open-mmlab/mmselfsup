@@ -1,0 +1,27 @@
+Collections:
+  - Name: MaskFeat
+    Metadata:
+      Training Data: ImageNet-1k
+      Training Techniques:
+        - AdamW
+      Training Resources: 8x A100-80G GPUs
+      Architecture:
+        - ViT
+    Paper:
+        URL: https://arxiv.org/abs/2112.09133v1
+        Title: "Masked Feature Prediction for Self-Supervised Visual Pre-Training"
+    README: configs/selfsup/maskfeat/README.md
+
+Models:
+  - Name: maskfeat_vit-base-p16_8xb256-coslr-300e_in1k
+    In Collection: MaskFeat
+    Metadata:
+      Epochs: 300
+      Batch Size: 2048
+    Results:
+      - Task: Self-Supervised Image Classification
+        Dataset: ImageNet-1k
+        Metrics:
+          Top 1 Accuracy: 83.5
+    Config: configs/selfsup/maskfeat/maskfeat_vit-base-p16_8xb256-coslr-300e_in1k.py
+    Weights: https://download.openmmlab.com/mmselfsup/maskfeat/maskfeat_vit-base-p16_8xb256-coslr-300e_in1k_20220913-591d4c4b.pth
