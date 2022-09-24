@@ -5,7 +5,9 @@ import torch.nn.functional as F
 from mmselfsup.models.heads import (ClsHead, ContrastiveHead, LatentClsHead,
                                     LatentCrossCorrelationHead,
                                     LatentPredictHead, MAEFinetuneHead,
-                                    MAEPretrainHead, MultiClsHead, SwAVHead)
+                                    MAEPretrainHead, MaskFeatFinetuneHead,
+                                    MaskFeatPretrainHead, MultiClsHead,
+                                    SwAVHead)
 
 
 def test_cls_head():
@@ -111,6 +113,31 @@ def test_mae_pretrain_head():
 def test_mae_finetune_head():
 
     head = MAEFinetuneHead(num_classes=1000, embed_dim=768)
+    fake_input = torch.rand((2, 768))
+    fake_labels = F.normalize(torch.rand((2, 1000)), dim=-1)
+    fake_features = head.forward(fake_input)
+
+    assert list(fake_features[0].shape) == [2, 1000]
+
+    loss = head.loss(fake_features, fake_labels)
+
+    assert loss['loss'].item() > 0
+
+
+def test_maskfeat_pretrain_head():
+    head = MaskFeatPretrainHead(hog_dim=108)
+    fake_mask = torch.ones((2, 14, 14)).bool()
+    fake_pred = torch.rand((2, 197, 768))
+    fake_hog = torch.rand((2, 196, 108))
+
+    loss = head.forward(fake_pred, fake_hog, fake_mask)
+
+    assert loss['loss'].item() > 0
+
+
+def test_maskfeat_finetune_head():
+
+    head = MaskFeatFinetuneHead(num_classes=1000, embed_dim=768)
     fake_input = torch.rand((2, 768))
     fake_labels = F.normalize(torch.rand((2, 1000)), dim=-1)
     fake_features = head.forward(fake_input)
