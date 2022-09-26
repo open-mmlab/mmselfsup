@@ -13,7 +13,7 @@ from PIL import Image
 
 import mmselfsup.datasets.transforms.processing as mmselfsup_transforms
 from mmselfsup.datasets.transforms import (
-    BEiTMaskGenerator, ColorJitter, MaskfeatMaskGenerator, RandomGaussianBlur,
+    BEiTMaskGenerator, ColorJitter, MaskFeatMaskGenerator, RandomGaussianBlur,
     RandomPatchWithLabels, RandomResizedCropAndInterpolationWithTwoPic,
     RandomSolarize, RotationWithLabels, SimMIMMaskGenerator)
 
@@ -589,7 +589,7 @@ def test_randomrotation():
 
 def test_maskfeat_mask_gen():
     transform = dict(mask_window_size=14, mask_ratio=0.6)
-    module = MaskfeatMaskGenerator(**transform)
+    module = MaskFeatMaskGenerator(**transform)
     results = {}
 
     results = module(results)
