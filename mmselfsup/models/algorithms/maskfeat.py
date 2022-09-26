@@ -12,12 +12,18 @@ from .base import BaseModel
 @MODELS.register_module()
 class MaskFeat(BaseModel):
     """MaskFeat.
+
     Implementation of `Masked Feature Prediction for
     Self-Supervised Visual Pre-Training <https://arxiv.org/abs/2112.09133>`_.
+
     Args:
         backbone (dict): Config dict for module of backbone.
         head (dict):Config dict for module of head functions.
         hog_para (dict): Config dict for hog layer.
+            dict['nbins', int]: Number of bin. Defaults to 9.
+            dict['pool', float]: Number of cell. Defaults to 8.
+            dict['gaussian_window', int]: Size of gaussian kernel.
+                Defaults to 16.
         pretrained (str, optional): The pretrained checkpoint path, support
             local path and remote path. Defaults to None.
         data_preprocessor (dict, optional): The config for preprocessing

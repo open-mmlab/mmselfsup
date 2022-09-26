@@ -2,14 +2,7 @@
 custom_imports = dict(imports='mmcls.datasets', allow_failed_imports=False)
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
-file_client_args = dict(
-    backend='petrel',
-    path_mapping=dict({
-        './data/':
-        'sproject:s3://openmmlab/datasets/classification/',
-        'data/':
-        'sproject:s3://openmmlab/datasets/classification/'
-    }))
+file_client_args = dict(backend='disk')
 
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
@@ -20,7 +13,7 @@ train_pipeline = [
         ratio=(0.75, 1.3333),
         interpolation='bicubic'),
     dict(type='RandomFlip', prob=0.5, direction='horizontal'),
-    dict(type='MaskfeatMaskGenerator', mask_window_size=14, mask_ratio=0.4),
+    dict(type='MaskFeatMaskGenerator', mask_window_size=14, mask_ratio=0.4),
     dict(
         type='PackSelfSupInputs',
         algorithm_keys=['mask'],

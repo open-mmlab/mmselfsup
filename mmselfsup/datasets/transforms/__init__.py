@@ -1,6 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from .formatting import PackSelfSupInputs
-from .processing import (BEiTMaskGenerator, ColorJitter, MaskfeatMaskGenerator,
+from .processing import (BEiTMaskGenerator, ColorJitter, MaskFeatMaskGenerator,
                          RandomCrop, RandomGaussianBlur, RandomPatchWithLabels,
                          RandomResizedCrop,
                          RandomResizedCropAndInterpolationWithTwoPic,
@@ -14,5 +14,5 @@ __all__ = [
     'RandomResizedCropAndInterpolationWithTwoPic', 'PackSelfSupInputs',
     'MultiView', 'RotationWithLabels', 'RandomPatchWithLabels',
     'RandomRotation', 'RandomResizedCrop', 'RandomCrop',
-    'MaskfeatMaskGenerator'
+    'MaskFeatMaskGenerator'
 ]
