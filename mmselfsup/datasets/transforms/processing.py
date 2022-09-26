@@ -1258,8 +1258,8 @@ class RandomRotation(BaseTransform):
 
 
 @TRANSFORMS.register_module()
-class MaskfeatMaskGenerator(BaseTransform):
-    """Generate mask for image.
+class MaskFeatMaskGenerator(BaseTransform):
+    """Generate random block mask for image.
 
     Added Keys:
 
@@ -1276,7 +1276,8 @@ class MaskfeatMaskGenerator(BaseTransform):
         max_num_patches (int, optional): Maximum number of patches that
             require masking. Defaults to None.
         min_aspect (int): Minimum aspect of patches. Defaults to 0.3.
-        max_aspect (float, optional): Maximum aspect of patches. Defaults to None.
+        max_aspect (float, optional): Maximum aspect of patches.
+            Defaults to None.
     """
 
     def __init__(
@@ -1317,6 +1318,7 @@ class MaskfeatMaskGenerator(BaseTransform):
 
     def _random_masking(self, mask: np.array, max_mask_patches: int) -> int:
         """Generate random block masks for each image up to 10 times.
+
         Args:
             mask (np.array): Initial mask of shape (mask_window_size,
                 mask_window_size).
@@ -1350,10 +1352,10 @@ class MaskfeatMaskGenerator(BaseTransform):
 
     def transform(self, results: dict) -> dict:
         """Method to generate random block mask for each Image in MaskFeat.
-        
+
         Args:
             results (dict): Result dict from previous pipeline.
-            
+
         Returns:
             dict: Result dict with added key ``mask``.
         """
