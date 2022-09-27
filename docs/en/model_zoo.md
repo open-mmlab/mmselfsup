@@ -11,7 +11,7 @@ All models and part of benchmark results are recorded below.
 
 - Number of papers: 17
 
-- Number of checkpoints: 48
+- Number of checkpoints: 60
 
 ## Benchmarks
 
@@ -179,24 +179,34 @@ ImageNet has multiple versions, but the most commonly used one is ILSVRC 2012. T
       <td>/</td>
 	</tr>
   <tr>
-      <td rowspan="5">MoCo v3</td>
+      <td rowspan="6">MoCo v3</td>
 	    <td>ResNet50</td>
 	    <td>100</td>
       <td>4096</td>
-      <td>69.4</td>
+      <td>69.6</td>
       <td>/</td>
-      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/mocov3/mocov3_resnet50_8xb512-coslr-100e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-coslr-100e_in1k/mocov3_resnet50_16xb256-coslr-100e_in1k-224_20220826-e91fee43.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-coslr-100e_in1k/mocov3_resnet50_16xb256-coslr-100e_in1k-224_20220810_081339.json'>log</a></td>
-      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/benchmarks/classification/imagenet/resnet50_linear-8xb128-coslr-90e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-coslr-100e_in1k/resnet50_linear-8xb128-coslr-90e_in1k/resnet50_linear-8xb128-coslr-90e_in1k_20220827-969f1ba0.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-coslr-100e_in1k/resnet50_linear-8xb128-coslr-90e_in1k/resnet50_linear-8xb128-coslr-90e_in1k_20220802_133808.json'>log</a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/mocov3/mocov3_resnet50_8xb512-amp-coslr-100e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-amp-coslr-100e_in1k/mocov3_resnet50_8xb512-amp-coslr-100e_in1k_20220927-f1144efa.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-amp-coslr-100e_in1k/mocov3_resnet50_8xb512-amp-coslr-100e_in1k_20220915_154635.json'>log</a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/benchmarks/classification/imagenet/resnet50_linear-8xb128-coslr-90e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-amp-coslr-100e_in1k/resnet50_linear-8xb128-coslr-90e_in1k/resnet50_linear-8xb128-coslr-90e_in1k_20220927-8f7d937e.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-amp-coslr-100e_in1k/resnet50_linear-8xb128-coslr-90e_in1k/resnet50_linear-8xb128-coslr-90e_in1k_20220920_113350.json'>log</a></td>
       <td>/</td>
 	</tr>
   <tr>
 	    <td>ResNet50</td>
 	    <td>300</td>
       <td>4096</td>
-      <td>73.1</td>
+      <td>72.8</td>
       <td>/</td>
-      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/mocov3/mocov3_resnet50_8xb512-coslr-300e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-coslr-300e_in1k/mocov3_resnet50_8xb512-coslr-300e_in1k-224_20220826-a93d4fd7.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-coslr-300e_in1k/mocov3_resnet50_8xb512-coslr-300e_in1k-224_20220810_150212.json'>log</a></td>
-      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/benchmarks/classification/imagenet/resnet50_linear-8xb128-coslr-90e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-coslr-300e_in1k/resnet50_linear-8xb128-coslr-90e_in1k/resnet50_linear-8xb128-coslr-90e_in1k_20220826-cb12e537.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-coslr-300e_in1k/resnet50_linear-8xb128-coslr-90e_in1k/resnet50_linear-8xb128-coslr-90e_in1k_20220815_122007.json'>log</a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/mocov3/mocov3_resnet50_8xb512-amp-coslr-300e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-amp-coslr-300e_in1k/mocov3_resnet50_8xb512-amp-coslr-300e_in1k_20220927-1e4f3304.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-amp-coslr-300e_in1k/mocov3_resnet50_8xb512-amp-coslr-300e_in1k_20220915_180538.json'>log</a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/benchmarks/classification/imagenet/resnet50_linear-8xb128-coslr-90e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-amp-coslr-300e_in1k/resnet50_linear-8xb128-coslr-90e_in1k/resnet50_linear-8xb128-coslr-90e_in1k_20220927-d21ddac2.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-amp-coslr-300e_in1k/resnet50_linear-8xb128-coslr-90e_in1k/resnet50_linear-8xb128-coslr-90e_in1k_20220920_113403.json'>log</a></td>
+      <td>/</td>
+	</tr>
+  <tr>
+	    <td>ResNet50</td>
+	    <td>800</td>
+      <td>4096</td>
+      <td>74.4</td>
+      <td>/</td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/mocov3/mocov3_resnet50_8xb512-amp-coslr-800e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-amp-coslr-800e_in1k/mocov3_resnet50_8xb512-amp-coslr-800e_in1k_20220927-e043f51a.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-amp-coslr-800e_in1k/mocov3_resnet50_8xb512-amp-coslr-800e_in1k_20220919_111209.json'>log</a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/benchmarks/classification/imagenet/resnet50_linear-8xb128-coslr-90e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-amp-coslr-800e_in1k/resnet50_linear-8xb128-coslr-90e_in1k/resnet50_linear-8xb128-coslr-90e_in1k_20220927-0e97a483.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-amp-coslr-800e_in1k/resnet50_linear-8xb128-coslr-90e_in1k/resnet50_linear-8xb128-coslr-90e_in1k_20220926_102021.json'>log</a></td>
       <td>/</td>
 	</tr>
   <tr>
