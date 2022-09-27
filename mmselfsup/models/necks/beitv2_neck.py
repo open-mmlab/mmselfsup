@@ -104,6 +104,6 @@ class BEiTV2Neck(BaseModule):
 
         logits, logits_1 = self.decoders(x), self.decoders(x_cls_pt)
         logits = logits.view(-1, logits.shape[-1])
-        logits_1 = logits.view(-1, logits_1.shape[-1])
+        logits_1 = logits_1.view(-1, logits_1.shape[-1])
 
         return logits, logits_1
