@@ -26,7 +26,9 @@ train_dataloader = dict(
         data_prefix='train',
         pipeline=train_pipeline),
     sampler=dict(type='DefaultSampler', shuffle=True),
+    collate_fn=dict(type='default_collate'),
     persistent_workers=True,
+    pin_memory=True,
 )
 
 val_dataloader = dict(
