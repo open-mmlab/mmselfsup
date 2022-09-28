@@ -6,6 +6,7 @@ Collections:
         - LARS
       Training Resources: 32x V100 GPUs
       Architecture:
+        - ResNet
         - ViT
         - MoCo
     Paper:
@@ -14,15 +15,134 @@ Collections:
     README: configs/selfsup/mocov3/README.md
 
 Models:
-  - Name: mocov3_vit-small-p16_16xb256-fp16-coslr-300e_in1k-224
+  - Name: mocov3_resnet50_8xb512-amp-coslr-100e_in1k
+    In Collection: MoCoV3
+    Metadata:
+      Epochs: 100
+      Batch Size: 4096
+    Results: null
+    Config: configs/selfsup/mocov3/mocov3_resnet50_8xb512-amp-coslr-100e_in1k.py
+    Weights: https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-amp-coslr-100e_in1k/mocov3_resnet50_8xb512-amp-coslr-100e_in1k_20220927-f1144efa.pth
+    Downstream:
+      - Type: Image Classification
+        Metadata:
+          Epochs: 90
+          Batch Size: 1024
+        Results:
+          - Task: Linear Evaluation
+            Dataset: ImageNet-1k
+            Metrics:
+              Top 1 Accuracy: 69.6
+        Config: configs/benchmarks/classification/imagenet/resnet50_linear-8xb128-coslr-90e_in1k.py
+        Weights: https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-amp-coslr-100e_in1k/resnet50_linear-8xb128-coslr-90e_in1k/resnet50_linear-8xb128-coslr-90e_in1k_20220927-8f7d937e.pth
+  - Name: mocov3_resnet50_8xb512-amp-coslr-100e_in1k
     In Collection: MoCoV3
     Metadata:
       Epochs: 300
       Batch Size: 4096
-    Results:
-      - Task: Self-Supervised Image Classification
-        Dataset: ImageNet-1k
-        Metrics:
-          Top 1 Accuracy: 73.19
-    Config: configs/selfsup/mocov3/mocov3_vit-small-p16_16xb256-fp16-coslr-300e_in1k-224.py
-    Weights: https://download.openmmlab.com/mmselfsup/moco/mocov3_vit-small-p16_32xb128-fp16-coslr-300e_in1k-224_20220225-e31238dd.pth
+    Results: null
+    Config: configs/selfsup/mocov3/mocov3_resnet50_8xb512-amp-coslr-300e_in1k.py
+    Weights: https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-amp-coslr-300e_in1k/mocov3_resnet50_8xb512-amp-coslr-300e_in1k_20220927-1e4f3304.pth
+    Downstream:
+      - Type: Image Classification
+        Metadata:
+          Epochs: 90
+          Batch Size: 1024
+        Results:
+          - Task: Linear Evaluation
+            Dataset: ImageNet-1k
+            Metrics:
+              Top 1 Accuracy: 72.8
+        Config: configs/benchmarks/classification/imagenet/resnet50_linear-8xb128-coslr-90e_in1k.py
+        Weights: https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-amp-coslr-300e_in1k/resnet50_linear-8xb128-coslr-90e_in1k/resnet50_linear-8xb128-coslr-90e_in1k_20220927-d21ddac2.pth
+  - Name: mocov3_resnet50_8xb512-amp-coslr-100e_in1k
+    In Collection: MoCoV3
+    Metadata:
+      Epochs: 800
+      Batch Size: 4096
+    Results: null
+    Config: configs/selfsup/mocov3/mocov3_resnet50_8xb512-amp-coslr-300e_in1k.py
+    Weights: https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-amp-coslr-800e_in1k/mocov3_resnet50_8xb512-amp-coslr-800e_in1k_20220927-e043f51a.pth
+    Downstream:
+      - Type: Image Classification
+        Metadata:
+          Epochs: 90
+          Batch Size: 1024
+        Results:
+          - Task: Linear Evaluation
+            Dataset: ImageNet-1k
+            Metrics:
+              Top 1 Accuracy: 74.4
+        Config: configs/benchmarks/classification/imagenet/resnet50_linear-8xb128-coslr-90e_in1k.py
+        Weights: https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_resnet50_8xb512-amp-coslr-800e_in1k/resnet50_linear-8xb128-coslr-90e_in1k/resnet50_linear-8xb128-coslr-90e_in1k_20220927-0e97a483.pth
+  - Name: mocov3_vit-small-p16_16xb256-amp-coslr-300e_in1k
+    In Collection: MoCoV3
+    Metadata:
+      Epochs: 300
+      Batch Size: 4096
+    Results: null
+    Config: configs/selfsup/mocov3/mocov3_vit-small-p16_16xb256-amp-coslr-300e_in1k.py
+    Weights: https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_vit-small-p16_16xb256-amp-coslr-300e_in1k/mocov3_vit-small-p16_16xb256-amp-coslr-300e_in1k-224_20220826-08bc52f7.pth
+    Downstream:
+      - Type: Image Classification
+        Metadata:
+          Epochs: 90
+          Batch Size: 1024
+        Results:
+          - Task: Linear Evaluation
+            Dataset: ImageNet-1k
+            Metrics:
+              Top 1 Accuracy: 73.6
+        Config: configs/benchmarks/classification/imagenet/vit-small-p16_linear-8xb128-coslr-90e.py
+        Weights: https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_vit-small-p16_16xb256-amp-coslr-300e_in1k/vit-small-p16_linear-8xb128-coslr-90e_in1k/vit-small-p16_linear-8xb128-coslr-90e_in1k_20220826-376674ef.pth
+  - Name: mocov3_vit-base-p16_16xb256-amp-coslr-300e_in1k
+    In Collection: MoCoV3
+    Metadata:
+      Epochs: 300
+      Batch Size: 4096
+    Results: null
+    Config: configs/selfsup/mocov3/mocov3_vit-base-p16_16xb256-amp-coslr-300e_in1k.py
+    Weights: https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_vit-base-p16_16xb256-amp-coslr-300e_in1k/mocov3_vit-base-p16_16xb256-amp-coslr-300e_in1k-224_20220826-25213343.pth
+    Downstream:
+      - Type: Image Classification
+        Metadata:
+          Epochs: 90
+          Batch Size: 1024
+        Results:
+          - Task: Linear Evaluation
+            Dataset: ImageNet-1k
+            Metrics:
+              Top 1 Accuracy: 76.9
+        Config: configs/benchmarks/classification/imagenet/vit-base-p16_linear-8xb128-coslr-90e.py
+        Weights: https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_vit-base-p16_16xb256-amp-coslr-300e_in1k/vit-base-p16_linear-8xb128-coslr-90e_in1k/vit-base-p16_linear-8xb128-coslr-90e_in1k_20220826-83be7758.pth
+      - Type: Image Classification
+        Metadata:
+          Epochs: 150
+          Batch Size: 512
+        Results:
+          - Task: Fine-tuning
+            Dataset: ImageNet-1k
+            Metrics:
+              Top 1 Accuracy: 83.0
+        Config: configs/benchmarks/classification/imagenet/vit-base-p16_ft-8xb64-coslr-150e_in1k.py
+        Weights: https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_vit-base-p16_16xb256-amp-coslr-300e_in1k/vit-base-p16_ft-8xb64-coslr-150e_in1k/vit-base-p16_ft-8xb64-coslr-150e_in1k_20220826-f1e6c442.pth
+  - Name: mocov3_vit-large-p16_64xb64-amp-coslr-300e_in1k
+    In Collection: MoCoV3
+    Metadata:
+      Epochs: 300
+      Batch Size: 4096
+    Results: null
+    Config: configs/selfsup/mocov3/mocov3_vit-base-p16_64xb64-amp-coslr-300e_in1k.py
+    Weights: https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_vit-large-p16_64xb64-amp-coslr-300e_in1k/mocov3_vit-large-p16_64xb64-amp-coslr-300e_in1k-224_20220829-9b88a442.pth
+    Downstream:
+      - Type: Image Classification
+        Metadata:
+          Epochs: 100
+          Batch Size: 512
+        Results:
+          - Task: Fine-tuning
+            Dataset: ImageNet-1k
+            Metrics:
+              Top 1 Accuracy: 83.7
+        Config: configs/benchmarks/classification/imagenet/vit-large-p16_ft-8xb64-coslr-150e_in1k.py
+        Weights: https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_vit-large-p16_64xb64-amp-coslr-300e_in1k/vit-large-p16_ft-8xb64-coslr-100e_in1k/vit-large-p16_ft-8xb64-coslr-100e_in1k_20220829-878a2f7f.pth
