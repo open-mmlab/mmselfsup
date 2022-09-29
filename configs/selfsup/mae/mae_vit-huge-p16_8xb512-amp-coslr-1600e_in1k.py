@@ -1,4 +1,4 @@
-_base_ = 'mae_vit-large-p16_8xb512-fp16-coslr-300e_in1k.py'
+_base_ = 'mae_vit-large-p16_8xb512-amp-coslr-300e_in1k.py'
 
 # pre-train for 100 epochs
 train_cfg = dict(max_epochs=1600)
