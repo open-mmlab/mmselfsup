@@ -7,30 +7,30 @@
 #### 亮点
 
 - 支持 MaskFeat ([#485](https://github.com/open-mmlab/mmselfsup/pull/485))
-- Update README to announce 1.0.0rc version ([#474](https://github.com/open-mmlab/mmselfsup/pull/474))
+- 更新 README 宣传 1.0.0rc 版本 ([#474](https://github.com/open-mmlab/mmselfsup/pull/474))
 
 #### 新特性
 
-- Support MaskFeat ([#485](https://github.com/open-mmlab/mmselfsup/pull/485))
+- 支持 MaskFeat ([#485](https://github.com/open-mmlab/mmselfsup/pull/485))
 
 #### Bug 修复
 
-- Fix DenseCL init weights bug ([#411](https://github.com/open-mmlab/mmselfsup/pull/411))
-- Fix norm typo in config ([#418](https://github.com/open-mmlab/mmselfsup/pull/418))
-- Fix read image bug ([#386](https://github.com/open-mmlab/mmselfsup/pull/386))
+- 修复 DenseCL 初始化的问题 ([#411](https://github.com/open-mmlab/mmselfsup/pull/411))
+- 修复配置文件中归一化的错误 ([#418](https://github.com/open-mmlab/mmselfsup/pull/418))
+- 修复读取图片的问题 ([#386](https://github.com/open-mmlab/mmselfsup/pull/386))
 
 #### 改进
 
-- Change hook_cfg type access ([#409](https://github.com/open-mmlab/mmselfsup/pull/409))
-- Support to dump training config ([#410](https://github.com/open-mmlab/mmselfsup/pull/410))
-- Support to save MAE visualization results ([#388](https://github.com/open-mmlab/mmselfsup/pull/388))
-- Remove default value of deprecated option ([#490](https://github.com/open-mmlab/mmselfsup/pull/490))
+- 更新 hook_cfg 获取方式 ([#409](https://github.com/open-mmlab/mmselfsup/pull/409))
+- 支持输出配置文件 ([#410](https://github.com/open-mmlab/mmselfsup/pull/410))
+- 支持保存 MAE 可视化结果 ([#388](https://github.com/open-mmlab/mmselfsup/pull/388))
+- 删除废弃项的默认值 ([#490](https://github.com/open-mmlab/mmselfsup/pull/490))
 
 #### 文档
 
-- Update the link of MAE ([#497](https://github.com/open-mmlab/mmselfsup/pull/497))
-- Update README to announce 1.0.0rc version ([#474](https://github.com/open-mmlab/mmselfsup/pull/474))
-- Update get_started.md ([#402](https://github.com/open-mmlab/mmselfsup/pull/402))
+- 更新 MAE 配置文件链接 ([#497](https://github.com/open-mmlab/mmselfsup/pull/497))
+- 更新 README 宣传 1.0.0rc 版本 ([#474](https://github.com/open-mmlab/mmselfsup/pull/474))
+- 更新 get_started 文档 ([#402](https://github.com/open-mmlab/mmselfsup/pull/402))
 
 ### v0.9.2 (28/07/2022)
 
