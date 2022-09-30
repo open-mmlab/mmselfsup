@@ -65,18 +65,6 @@ The master branch works with **PyTorch 1.5** or higher.
 
 ## What's New
 
-### Stable version
-
-MMSelfSup **v0.10.0** was released in 30/09/2022.
-
-Highlights of the new version:
-
-- Support MaskFeat
-
-Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
-
-Differences between MMSelfSup and OpenSelfSup codebases can be found in [compatibility.md](docs/en/compatibility.md).
-
 ### Preview of 1.x version
 
 A brand new version of **MMSelfSup v1.0.0rc1** was released in 01/09/2022:
@@ -92,6 +80,18 @@ Highlights of the new version:
 - Higher accurcy for some algorithms.
 
 Find more new features in [1.x branch](https://github.com/open-mmlab/mmselfsup/tree/1.x). Issues and PRs are welcome!
+
+### Stable version
+
+MMSelfSup **v0.10.0** was released in 30/09/2022.
+
+Highlights of the new version:
+
+- Support MaskFeat
+
+Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
+
+Differences between MMSelfSup and OpenSelfSup codebases can be found in [compatibility.md](docs/en/compatibility.md).
 
 ## Installation
 
