@@ -95,8 +95,8 @@ class BaseDataSource(object, metaclass=ABCMeta):
                 img_bytes,
                 flag=self.color_type,
                 channel_order=self.channel_order)
-        elif self.data_infos[idx].get('img_prefix', None) is not None:
-            if self.data_infos[idx]['img_prefix'] is not None:
+        elif self.data_infos[idx].get('img_info', None) is not None:
+            if self.data_infos[idx].get('img_prefix', None) is not None:
                 filename = osp.join(
                     self.data_infos[idx]['img_prefix'],
                     self.data_infos[idx]['img_info']['filename'])
