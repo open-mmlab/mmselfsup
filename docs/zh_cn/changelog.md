@@ -2,23 +2,53 @@
 
 ## MMSelfSup
 
+### v0.10.0 (30/09/2022)
+
+#### 亮点
+
+- 支持 MaskFeat ([#485](https://github.com/open-mmlab/mmselfsup/pull/485))
+- Update README to announce 1.0.0rc version ([#474](https://github.com/open-mmlab/mmselfsup/pull/474))
+
+#### 新特性
+
+- Support MaskFeat ([#485](https://github.com/open-mmlab/mmselfsup/pull/485))
+
+#### Bug 修复
+
+- Fix DenseCL init weights bug ([#411](https://github.com/open-mmlab/mmselfsup/pull/411))
+- Fix norm typo in config ([#418](https://github.com/open-mmlab/mmselfsup/pull/418))
+- Fix read image bug ([#386](https://github.com/open-mmlab/mmselfsup/pull/386))
+
+#### 改进
+
+- Change hook_cfg type access ([#409](https://github.com/open-mmlab/mmselfsup/pull/409))
+- Support to dump training config ([#410](https://github.com/open-mmlab/mmselfsup/pull/410))
+- Support to save MAE visualization results ([#388](https://github.com/open-mmlab/mmselfsup/pull/388))
+- Remove default value of deprecated option ([#490](https://github.com/open-mmlab/mmselfsup/pull/490))
+
+#### 文档
+
+- Update the link of MAE ([#497](https://github.com/open-mmlab/mmselfsup/pull/497))
+- Update README to announce 1.0.0rc version ([#474](https://github.com/open-mmlab/mmselfsup/pull/474))
+- Update get_started.md ([#402](https://github.com/open-mmlab/mmselfsup/pull/402))
+
 ### v0.9.2 (28/07/2022)
 
-#### New Features
+#### 新特性
 
 - 支持 MAE 重建图像的可视化 ([#376](https://github.com/open-mmlab/mmselfsup/pull/376))
 
-#### Bug Fixes
+#### Bug 修复
 
 - 修复 extract.py 文件中 cfg/args 路径问题，应用 cfg 中的路径进行处理 ([#357](https://github.com/open-mmlab/mmselfsup/pull/357))
 - 修复 SimMIM 配置文件中掩码生成器类型名称的错误 ([#360](https://github.com/open-mmlab/mmselfsup/pull/360))
 
-#### Improvements
+#### 改进
 
 - 更新 mdformat 设置 ([#323](https://github.com/open-mmlab/mmselfsup/pull/323))
 - 添加 circle ci 配置 ([#374](https://github.com/open-mmlab/mmselfsup/pull/374))
 
-#### Docs
+#### 文档
 
 - 修复语言更换链接问题 ([#327](https://github.com/open-mmlab/mmselfsup/pull/327))
 - 更新 tutorials/4_schedule.md 中的文档链接([#354](https://github.com/open-mmlab/mmselfsup/pull/354))

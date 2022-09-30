@@ -2,6 +2,36 @@
 
 ## MMSelfSup
 
+### v0.10.0 (30/09/2022)
+
+#### Highlight
+
+- Support MaskFeat ([#485](https://github.com/open-mmlab/mmselfsup/pull/485))
+- Update README to announce 1.0.0rc version ([#474](https://github.com/open-mmlab/mmselfsup/pull/474))
+
+#### New Features
+
+- Support MaskFeat ([#485](https://github.com/open-mmlab/mmselfsup/pull/485))
+
+#### Bug Fixes
+
+- Fix DenseCL init weights bug ([#411](https://github.com/open-mmlab/mmselfsup/pull/411))
+- Fix norm typo in config ([#418](https://github.com/open-mmlab/mmselfsup/pull/418))
+- Fix read image bug ([#386](https://github.com/open-mmlab/mmselfsup/pull/386))
+
+#### Improvements
+
+- Change hook_cfg type access ([#409](https://github.com/open-mmlab/mmselfsup/pull/409))
+- Support to dump training config ([#410](https://github.com/open-mmlab/mmselfsup/pull/410))
+- Support to save MAE visualization results ([#388](https://github.com/open-mmlab/mmselfsup/pull/388))
+- Remove default value of deprecated option ([#490](https://github.com/open-mmlab/mmselfsup/pull/490))
+
+#### Docs
+
+- Update the link of MAE ([#497](https://github.com/open-mmlab/mmselfsup/pull/497))
+- Update README to announce 1.0.0rc version ([#474](https://github.com/open-mmlab/mmselfsup/pull/474))
+- Update get_started.md ([#402](https://github.com/open-mmlab/mmselfsup/pull/402))
+
 ### v0.9.2 (28/07/2022)
 
 #### New Features

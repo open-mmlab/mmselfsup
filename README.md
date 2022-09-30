@@ -67,11 +67,11 @@ The master branch works with **PyTorch 1.5** or higher.
 
 ### Stable version
 
-MMSelfSup **v0.9.2** was released in 28/07/2022.
+MMSelfSup **v0.10.0** was released in 30/09/2022.
 
 Highlights of the new version:
 
-- Support MAE Reconstructed Image Visualization
+- Support MaskFeat
 
 Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
 
@@ -138,6 +138,7 @@ Supported algorithms:
 - [x] [MoCo v3 (ICCV'2021)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/mocov3)
 - [x] [MAE (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/mae)
 - [x] [SimMIM (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/simmim)
+- [x] [MaskFeat (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/maskfeat)
 - [x] [CAE (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/cae)
 
 More algorithms are in our plan.
