@@ -8,7 +8,8 @@ Compatible MMCV, MMClassification, MMDetection and MMSegmentation versions are s
 
 | MMSelfSup version |         MMCV version         |  MMClassification version   | MMSegmentation version | MMDetection version |
 | :---------------: | :--------------------------: | :-------------------------: | :--------------------: | :-----------------: |
-|  0.9.2 (master)   | mmcv-full >= 1.4.2, \< 1.7.0 |       mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.19.0   |
+|  0.10.0 (master)  | mmcv-full >= 1.4.2, \< 1.7.0 |       mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.19.0   |
+|       0.9.2       | mmcv-full >= 1.4.2, \< 1.7.0 |       mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.19.0   |
 |       0.9.1       | mmcv-full >= 1.4.2, \< 1.6.0 |       mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.19.0   |
 |       0.9.0       |      mmcv-full >= 1.4.2      |       mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.19.0   |
 |       0.8.0       |      mmcv-full >= 1.4.2      |       mmcls >= 0.21.0       |    mmseg >= 0.20.2     |   mmdet >= 2.19.0   |

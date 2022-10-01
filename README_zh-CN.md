@@ -65,18 +65,6 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
 ## 更新
 
-### 稳定版本
-
-最新的 **v0.9.2** 版本已经在 2022.07.28 发布。
-
-新版本亮点：
-
-- 支持 MAE 重建图像的可视化
-
-请参考 [更新日志](docs/zh_cn/changelog.md) 获取更多细节和历史版本信息。
-
-MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibility.md) 中。
-
 ### 1.x 预览版本
 
 全新的 **MMSelfSup v1.0.0rc1** 版本已在 2022.09.01 发布。
@@ -92,6 +80,18 @@ MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibilit
 - 部分模型具有更高的准确率。
 
 在 [1.x 分支](https://github.com/open-mmlab/mmselfsup/tree/1.x) 查看更多新特性。 欢迎大家提 Issues 和 PRs!
+
+### 稳定版本
+
+最新的 **v0.10.0** 版本已经在 2022.09.30 发布。
+
+新版本亮点：
+
+- 支持 MaskFeat
+
+请参考 [更新日志](docs/zh_cn/changelog.md) 获取更多细节和历史版本信息。
+
+MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibility.md) 中。
 
 ## 安装
 
@@ -138,6 +138,7 @@ MMSelfSup 依赖 [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open
 - [x] [MoCo v3 (ICCV'2021)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/mocov3)
 - [x] [MAE (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/mae)
 - [x] [SimMIM (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/simmim)
+- [x] [MaskFeat (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/maskfeat)
 - [x] [CAE (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/cae)
 
 更多的算法实现已经在我们的计划中。
