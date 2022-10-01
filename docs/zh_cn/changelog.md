@@ -2,23 +2,53 @@
 
 ## MMSelfSup
 
+### v0.10.0 (30/09/2022)
+
+#### 亮点
+
+- 支持 MaskFeat ([#485](https://github.com/open-mmlab/mmselfsup/pull/485))
+- 更新 README 宣传 1.0.0rc 版本 ([#474](https://github.com/open-mmlab/mmselfsup/pull/474))
+
+#### 新特性
+
+- 支持 MaskFeat ([#485](https://github.com/open-mmlab/mmselfsup/pull/485))
+
+#### Bug 修复
+
+- 修复 DenseCL 初始化的问题 ([#411](https://github.com/open-mmlab/mmselfsup/pull/411))
+- 修复配置文件中归一化的错误 ([#418](https://github.com/open-mmlab/mmselfsup/pull/418))
+- 修复读取图片的问题 ([#386](https://github.com/open-mmlab/mmselfsup/pull/386))
+
+#### 改进
+
+- 更新 hook_cfg 获取方式 ([#409](https://github.com/open-mmlab/mmselfsup/pull/409))
+- 支持输出配置文件 ([#410](https://github.com/open-mmlab/mmselfsup/pull/410))
+- 支持保存 MAE 可视化结果 ([#388](https://github.com/open-mmlab/mmselfsup/pull/388))
+- 删除废弃项的默认值 ([#490](https://github.com/open-mmlab/mmselfsup/pull/490))
+
+#### 文档
+
+- 更新 MAE 配置文件链接 ([#497](https://github.com/open-mmlab/mmselfsup/pull/497))
+- 更新 README 宣传 1.0.0rc 版本 ([#474](https://github.com/open-mmlab/mmselfsup/pull/474))
+- 更新 get_started 文档 ([#402](https://github.com/open-mmlab/mmselfsup/pull/402))
+
 ### v0.9.2 (28/07/2022)
 
-#### New Features
+#### 新特性
 
 - 支持 MAE 重建图像的可视化 ([#376](https://github.com/open-mmlab/mmselfsup/pull/376))
 
-#### Bug Fixes
+#### Bug 修复
 
 - 修复 extract.py 文件中 cfg/args 路径问题，应用 cfg 中的路径进行处理 ([#357](https://github.com/open-mmlab/mmselfsup/pull/357))
 - 修复 SimMIM 配置文件中掩码生成器类型名称的错误 ([#360](https://github.com/open-mmlab/mmselfsup/pull/360))
 
-#### Improvements
+#### 改进
 
 - 更新 mdformat 设置 ([#323](https://github.com/open-mmlab/mmselfsup/pull/323))
 - 添加 circle ci 配置 ([#374](https://github.com/open-mmlab/mmselfsup/pull/374))
 
-#### Docs
+#### 文档
 
 - 修复语言更换链接问题 ([#327](https://github.com/open-mmlab/mmselfsup/pull/327))
 - 更新 tutorials/4_schedule.md 中的文档链接([#354](https://github.com/open-mmlab/mmselfsup/pull/354))
