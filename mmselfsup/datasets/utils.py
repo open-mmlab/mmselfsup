@@ -136,7 +136,7 @@ def extract_archive(from_path, to_path=None, remove_finished=False):
                     if not is_within_directory(path, member_path):
                         raise Exception("Attempted Path Traversal in Tar File")
             
-                tar.extractall(path, members, numeric_owner) 
+                tar.extractall(path, members, numeric_owner=numeric_owner) 
                 
             
             safe_extract(tar, path=to_path)
@@ -158,7 +158,7 @@ def extract_archive(from_path, to_path=None, remove_finished=False):
                     if not is_within_directory(path, member_path):
                         raise Exception("Attempted Path Traversal in Tar File")
             
-                tar.extractall(path, members, numeric_owner) 
+                tar.extractall(path, members, numeric_owner=numeric_owner) 
                 
             
             safe_extract(tar, path=to_path)
@@ -180,7 +180,7 @@ def extract_archive(from_path, to_path=None, remove_finished=False):
                     if not is_within_directory(path, member_path):
                         raise Exception("Attempted Path Traversal in Tar File")
             
-                tar.extractall(path, members, numeric_owner) 
+                tar.extractall(path, members, numeric_owner=numeric_owner) 
                 
             
             safe_extract(tar, path=to_path)
