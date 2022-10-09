@@ -50,3 +50,8 @@ default_hooks = dict(
 
 # randomness
 randomness = dict(seed=0, diff_rank_seed=True)  # √
+
+
+
+vis_backends = [dict(type='TensorboardVisBackend'), dict(type='LocalVisBackend')]
+visualizer = dict(vis_backends=vis_backends)
