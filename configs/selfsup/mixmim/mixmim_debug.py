@@ -17,10 +17,7 @@ optim_wrapper = dict(
     paramwise_cfg=dict(
         custom_keys={
             'ln': dict(decay_mult=0.0),
-            'bias': dict(decay_mult=0.0),
-            'pos_embed': dict(decay_mult=0.),
-            'mask_token': dict(decay_mult=0.),
-            'cls_token': dict(decay_mult=0.)
+            'bias': dict(decay_mult=0.0)
         }))
 
 
