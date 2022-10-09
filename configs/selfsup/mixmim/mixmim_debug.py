@@ -6,11 +6,11 @@ _base_ = [
 ]
 
 
-train_dataloader = dict(batch_size=2, num_workers=1)
+#train_dataloader = dict(batch_size=2, num_workers=1)
 
 # optimizer wrapper
 optimizer = dict(
-    type='AdamW', lr=1.5e-4 * 4096 / 256, betas=(0.9, 0.95), weight_decay=0.05)  # 4096 = 8GPU * 512batchsize
+    type='AdamW', lr=1.5e-4 * 1024 / 256, betas=(0.9, 0.95), weight_decay=0.05)  # 4096 = 8GPU * 512batchsize
 optim_wrapper = dict(
     type='OptimWrapper',
     optimizer=optimizer,
@@ -34,15 +34,15 @@ param_scheduler = [
         convert_to_iter_based=True),
     dict(
         type='CosineAnnealingLR',
-        T_max=560,
+        T_max=260,
         by_epoch=True,
         begin=40,
-        end=600,  # √
+        end=300,  # √
         convert_to_iter_based=True)
 ]
 
 
-train_cfg = dict(max_epochs=600)
+train_cfg = dict(max_epochs=300)
 default_hooks = dict(
     logger=dict(type='LoggerHook', interval=100),
     # only keeps the latest 3 checkpoints
