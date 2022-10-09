@@ -252,7 +252,7 @@ class MixMIMTransformer(BaseBackbone):
                  img_size=224,
                  patch_size=4,
                  in_channels=3,
-                 window_size=[7, 7, 14, 7],
+                 window_size=[14, 14, 14, 7],
                  qkv_bias=True,
                  patch_cfg=dict(),
                  norm_cfg=dict(type='LN'),
