@@ -4,6 +4,7 @@ from mmengine.model import BaseModule
 
 from mmselfsup.registry import MODELS
 from .mae_head import MAEPretrainHead
+import timm.optim.optim_factory as optim_factory
 
 @MODELS.register_module()
 class MixMIMPretrainHead(MAEPretrainHead):
