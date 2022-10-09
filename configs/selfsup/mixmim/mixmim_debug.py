@@ -27,17 +27,17 @@ optim_wrapper = dict(
 param_scheduler = [
     dict(
         type='LinearLR',
-        start_factor=1e-4,  # √
+        start_factor=1e-4,
         by_epoch=True,
         begin=0,
-        end=40,  # √
+        end=40,
         convert_to_iter_based=True),
     dict(
         type='CosineAnnealingLR',
         T_max=260,
         by_epoch=True,
         begin=40,
-        end=300,  # √
+        end=300,
         convert_to_iter_based=True)
 ]
 
