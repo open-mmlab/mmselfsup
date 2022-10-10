@@ -11,8 +11,8 @@ file_client_args = dict(
 
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
-# data_root = '/data/common/ImageNet/'
-# file_client_args = dict(backend='disk')
+data_root = '/data/common/ImageNet/'
+file_client_args = dict(backend='disk')
 
 train_pipeline = [  # √
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
@@ -36,7 +36,7 @@ train_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
-        # ann_file="/home/nus-zwb/research/data/imagenet/train.txt",
-        ann_file="/mnt/lustre/zhaowangbo/research/2022ICLR/data/imagenet/meta/train.txt",
+        ann_file="/home/nus-zwb/research/data/imagenet/train.txt",
+        # ann_file="/mnt/lustre/zhaowangbo/research/2022ICLR/data/imagenet/meta/train.txt",
         data_prefix=dict(img_path='train/'),
         pipeline=train_pipeline))
