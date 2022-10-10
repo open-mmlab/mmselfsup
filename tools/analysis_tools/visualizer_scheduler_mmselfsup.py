@@ -9,6 +9,7 @@ from unittest.mock import MagicMock
 import matplotlib.pyplot as plt
 import rich
 import torch.nn as nn
+from mmcls.utils import register_all_modules
 from mmselfsup.utils import register_all_modules
 from mmengine.config import Config, DictAction
 from mmengine.hooks import Hook
