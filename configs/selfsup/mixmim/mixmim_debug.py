@@ -10,7 +10,7 @@ _base_ = [
 
 # optimizer wrapper
 optimizer = dict(
-    type='AdamW', lr=1.5e-4 * 1024 / 256, betas=(0.9, 0.95), weight_decay=0.05)  # 4096 = 8GPU * 512batchsize
+    type='AdamW', lr= 2 * 1.5e-4 * 1024 / 256, betas=(0.9, 0.95), weight_decay=0.05)  # 4096 = 8GPU * 512batchsize
 optim_wrapper = dict(
     type='OptimWrapper',
     optimizer=optimizer,
