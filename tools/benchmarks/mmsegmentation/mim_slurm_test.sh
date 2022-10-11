@@ -24,4 +24,4 @@ mim test mmseg \
     --partition $PARTITION \
     --work-dir $WORK_DIR \
     --srun-args "$SRUN_ARGS" \
-    $PY_ARGS
+    --cfg-options $PY_ARGS
