@@ -2,6 +2,44 @@
 
 ## MMSelfSup
 
+### v1.0.0rc2 (11/10/2022)
+
+The `master` branch is still 0.x version and we will checkout a new `1.x` branch to release 1.x version. The two versions will be maintained simultaneously in the future.
+
+We briefly list the major breaking changes here. Please refer to the [migration guide](../migration.md) for details and migration instructions.
+
+#### Highlight
+
+- Full support of `MAE`, `SimMIM`, `MoCoV3`.
+
+#### New Features
+
+- Full support of `MAE` ([#483](https://github.com/open-mmlab/mmselfsup/pull/483))
+- Full support of `SimMIM` ([#487](https://github.com/open-mmlab/mmselfsup/pull/487))
+- Full support of `MoCoV3` ([#496](https://github.com/open-mmlab/mmselfsup/pull/496)) 
+
+#### Bug Fixes
+
+- Fix classification configs ([#488](https://github.com/open-mmlab/mmselfsup/pull/488))
+- Fix MAE config name error ([#498](https://github.com/open-mmlab/mmselfsup/pull/498))
+
+#### Improvements
+
+- Refactor colab tutorial ([#470](https://github.com/open-mmlab/mmselfsup/pull/470)))
+- Update readthedocs requirements ([#472](https://github.com/open-mmlab/mmselfsup/pull/472))
+- Update CI ([#476](https://github.com/open-mmlab/mmselfsup/pull/476))
+- Refine mim_slurm_test.sh ([#477](https://github.com/open-mmlab/mmselfsup/pull/477))
+- Update Metafile format and content ([#478](https://github.com/open-mmlab/mmselfsup/pull/478))
+
+#### Docs
+
+- Add advanced_guides/engine.md ([#454](https://github.com/open-mmlab/mmselfsup/pull/454))
+- Add advanced_guides/evaluation.md ([#456](https://github.com/open-mmlab/mmselfsup/pull/456))
+- add advanced_guides/transforms.md ([#463](https://github.com/open-mmlab/mmselfsup/pull/463))
+- Add dataset docs ([#437](https://github.com/open-mmlab/mmselfsup/pull/437))
+- Refine contribution guide ([#492](https://github.com/open-mmlab/mmselfsup/pull/492))
+- update convention ([#475](https://github.com/open-mmlab/mmselfsup/pull/475)) 
+
 ### v1.0.0rc1 (01/09/2022)
 
 We are excited to announce the release of MMSelfSup v1.0.0rc1.
