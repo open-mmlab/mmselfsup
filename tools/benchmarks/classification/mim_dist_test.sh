@@ -14,4 +14,4 @@ mim test mmcls \
     --checkpoint $CHECKPOINT \
     --launcher pytorch \
     -G $GPUS \
-    $PY_ARGS
+    --cfg-options $PY_ARGS

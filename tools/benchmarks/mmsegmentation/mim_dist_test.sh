@@ -17,4 +17,4 @@ mim test mmseg \
     --launcher pytorch \
     -G $GPUS \
     --work-dir $WORK_DIR \
-    $PY_ARGS
+    --cfg-options $PY_ARGS
