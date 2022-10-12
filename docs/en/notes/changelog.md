@@ -28,7 +28,7 @@ We briefly list the major breaking changes here. Please refer to the [migration 
 - Refactor colab tutorial ([#470](https://github.com/open-mmlab/mmselfsup/pull/470)))
 - Update readthedocs requirements ([#472](https://github.com/open-mmlab/mmselfsup/pull/472))
 - Update CI ([#476](https://github.com/open-mmlab/mmselfsup/pull/476))
-- Refine mim_slurm_test.sh ([#477](https://github.com/open-mmlab/mmselfsup/pull/477))
+- Refine `mim_slurm_test.sh` and `mim_dist_test.sh` for benchmarks ([#477](https://github.com/open-mmlab/mmselfsup/pull/477))
 - Update Metafile format and content ([#478](https://github.com/open-mmlab/mmselfsup/pull/478))
 
 #### Docs
