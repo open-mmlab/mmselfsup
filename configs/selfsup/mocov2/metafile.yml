@@ -20,10 +20,18 @@ Models:
     Metadata:
       Epochs: 200
       Batch Size: 256
-    Results:
-      - Task: Self-Supervised Image Classification
-        Dataset: ImageNet-1k
-        Metrics:
-          Top 1 Accuracy: 67.58
+    Results: null
     Config: configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py
-    Weights: https://download.openmmlab.com/mmselfsup/moco/mocov2_resnet50_8xb32-coslr-200e_in1k_20220225-89e03af4.pth
+    Weights: https://download.openmmlab.com/mmselfsup/1.x/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k/mocov2_resnet50_8xb32-coslr-200e_in1k_20220825-b6d23c86.pth
+    Downstream:
+      - Type: Image Classification
+        Metadata:
+          Epochs: 100
+          Batch Size: 256
+        Results:
+          - Task: Linear Evaluation
+            Dataset: ImageNet-1k
+            Metrics:
+              Top 1 Accuracy: 67.5
+        Config: configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-steplr-100e_in1k.py
+        Weights: https://download.openmmlab.com/mmselfsup/1.x/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k/resnet50_linear-8xb32-steplr-100e_in1k/resnet50_linear-8xb32-steplr-100e_in1k_20220825-994c4128.pth
