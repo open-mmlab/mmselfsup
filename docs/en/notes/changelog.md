@@ -16,7 +16,7 @@ We briefly list the major breaking changes here. Please refer to the [migration 
 
 - Full support of `MAE` ([#483](https://github.com/open-mmlab/mmselfsup/pull/483))
 - Full support of `SimMIM` ([#487](https://github.com/open-mmlab/mmselfsup/pull/487))
-- Full support of `MoCoV3` ([#496](https://github.com/open-mmlab/mmselfsup/pull/496)) 
+- Full support of `MoCoV3` ([#496](https://github.com/open-mmlab/mmselfsup/pull/496))
 
 #### Bug Fixes
 
@@ -38,7 +38,7 @@ We briefly list the major breaking changes here. Please refer to the [migration 
 - add advanced_guides/transforms.md ([#463](https://github.com/open-mmlab/mmselfsup/pull/463))
 - Add dataset docs ([#437](https://github.com/open-mmlab/mmselfsup/pull/437))
 - Refine contribution guide ([#492](https://github.com/open-mmlab/mmselfsup/pull/492))
-- update convention ([#475](https://github.com/open-mmlab/mmselfsup/pull/475)) 
+- update convention ([#475](https://github.com/open-mmlab/mmselfsup/pull/475))
 
 ### v1.0.0rc1 (01/09/2022)
 
