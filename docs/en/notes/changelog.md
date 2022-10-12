@@ -2,7 +2,7 @@
 
 ## MMSelfSup
 
-### v1.0.0rc2 (11/10/2022)
+### v1.0.0rc2 (12/10/2022)
 
 The `master` branch is still 0.x version and we will checkout a new `1.x` branch to release 1.x version. The two versions will be maintained simultaneously in the future.
 
