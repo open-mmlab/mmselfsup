@@ -67,7 +67,7 @@ The master branch works with **PyTorch 1.6** or higher.
 
 MMSelfSup **v1.0.0rc2** was released in 11/10/2022.
 
-- Full support of `MAE`, `SimMIM`, `MoCoV3`.
+- Full support of `MAE`, `SimMIM`, `MoCoV3` with different model sizes and different pre-training epochs.
 - Update documents and colab tutorial.
 
 MMSelfSup **v1.0.0rc1** was released in 01/09/2022.
