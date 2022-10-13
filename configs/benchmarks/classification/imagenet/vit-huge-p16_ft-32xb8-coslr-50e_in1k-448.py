@@ -8,15 +8,7 @@ model = dict(
     head=dict(in_channels=1280))
 
 # dataset settings
-# file_client_args = dict(backend='disk')
-file_client_args = dict(
-    backend='petrel',
-    path_mapping=dict({
-        './data/imagenet':
-        's3://openmmlab/datasets/classification/imagenet',
-        'data/imagenet':
-        's3://openmmlab/datasets/classification/imagenet'
-    }))
+file_client_args = dict(backend='disk')
 
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
