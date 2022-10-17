@@ -38,6 +38,7 @@ class BaseModel(_BaseModel):
                  backbone: dict,
                  neck: Optional[dict] = None,
                  head: Optional[dict] = None,
+                 target_generator: Optional[dict] = None,
                  pretrained: Optional[str] = None,
                  data_preprocessor: Optional[Union[dict, nn.Module]] = None,
                  init_cfg: Optional[dict] = None):
@@ -62,6 +63,9 @@ class BaseModel(_BaseModel):
         if head is not None:
             self.head = MODELS.build(head)
 
+        if target_generator is not None:
+            self.target_generator = MODELS.build(target_generator)
+
     @property
     def with_neck(self) -> bool:
         return hasattr(self, 'neck') and self.neck is not None
@@ -69,6 +73,11 @@ class BaseModel(_BaseModel):
     @property
     def with_head(self) -> bool:
         return hasattr(self, 'head') and self.head is not None
+
+    @property
+    def with_target_generator(self) -> bool:
+        return hasattr(
+            self, 'target_generator') and self.target_generator is not None
 
     def forward(self,
                 inputs: torch.Tensor,
@@ -113,7 +122,7 @@ class BaseModel(_BaseModel):
         else:
             raise RuntimeError(f'Invalid mode "{mode}".')
 
-    def extract_feat(self, inputs):
+    def extract_feat(self, inputs: torch.Tensor):
         """Extract features from the input tensor with shape (N, C, ...).
 
         This is a abstract method, and subclass should overwrite this methods

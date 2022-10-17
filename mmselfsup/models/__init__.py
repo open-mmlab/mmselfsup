@@ -8,6 +8,7 @@ from .heads import *  # noqa: F401,F403
 from .losses import *  # noqa: F401,F403
 from .memories import *  # noqa: F401,F403
 from .necks import *  # noqa: F401,F403
+from .target_generators import *  # noqa: F401,F403
 
 __all__ = [
     'ALGORITHMS', 'BACKBONES', 'NECKS', 'HEADS', 'MEMORIES', 'LOSSES',
