@@ -1,13 +1,18 @@
 # dataset settings
-custom_imports = dict(imports='mmcls.datasets', allow_failed_imports=False)
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
-file_client_args = dict(backend='disk')
-
+file_client_args = dict(
+    backend='petrel',
+    path_mapping=dict({
+        './data/':
+        'sproject:s3://openmmlab/datasets/classification/',
+        'data/':
+        'sproject:s3://openmmlab/datasets/classification/'
+    }))
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(
-        type='RandomResizedCropAndInterpolationWithTwoPic',
+        type='RandomResizedCrop',
         size=224,
         scale=(0.5, 1.0),
         ratio=(0.75, 1.3333),
@@ -21,9 +26,10 @@ train_pipeline = [
 ]
 
 train_dataloader = dict(
-    batch_size=128,
+    batch_size=256,
     num_workers=8,
     persistent_workers=True,
+    pin_memory=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
     collate_fn=dict(type='default_collate'),
     dataset=dict(

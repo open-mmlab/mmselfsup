@@ -1,15 +1,37 @@
+# mmcls:: means we use the default settings from MMClassification
 _base_ = [
-    '../_base_/datasets/imagenet.py',
+    'mmcls::_base_/datasets/imagenet_bs64_swin_224.py',
     'mmcls::_base_/schedules/imagenet_bs1024_adamw_swin.py',
     'mmcls::_base_/default_runtime.py'
 ]
 # maskfeat fine-tuning setting
+# model settings
+model = dict(
+    type='ImageClassifier',
+    backbone=dict(
+        type='VisionTransformer',
+        arch='base',
+        img_size=224,
+        patch_size=16,
+        drop_path_rate=0.1,
+        avg_token=True,
+        output_cls_token=False,
+        final_norm=False),
+    neck=None,
+    head=dict(
+        type='LinearClsHead',
+        num_classes=1000,
+        in_channels=768,
+        loss=dict(
+            type='LabelSmoothLoss', label_smooth_val=0.1, mode='original'),
+        init_cfg=[dict(type='TruncNormal', layer='Linear', std=.02)]),
+    train_cfg=dict(augments=[
+        dict(type='Mixup', alpha=0.8, num_classes=1000),
+        dict(type='CutMix', alpha=1.0, num_classes=1000)
+    ]))
 
 # dataset
-dataset_type = 'ImageNet'
-data_root = 'data/imagenet/'
 file_client_args = dict(backend='disk')
-
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(
@@ -43,64 +65,14 @@ test_pipeline = [
     dict(type='CenterCrop', crop_size=224),
     dict(type='PackClsInputs'),
 ]
-train_dataloader = dict(
-    batch_size=256,
-    num_workers=4,
-    dataset=dict(
-        type=dataset_type,
-        data_root='data/imagenet',
-        ann_file='meta/train.txt',
-        data_prefix='train',
-        pipeline=train_pipeline),
-    sampler=dict(type='DefaultSampler', shuffle=True),
-    persistent_workers=True,
-)
-val_dataloader = dict(
-    batch_size=256,
-    num_workers=4,
-    dataset=dict(
-        type=dataset_type,
-        data_root='data/imagenet',
-        ann_file='meta/val.txt',
-        data_prefix='val',
-        pipeline=test_pipeline),
-    sampler=dict(type='DefaultSampler', shuffle=False),
-    persistent_workers=True,
-)
-val_evaluator = dict(type='mmcls.Accuracy', topk=(1, 5))
+
+train_dataloader = dict(batch_size=256, dataset=dict(pipeline=train_pipeline))
+val_dataloader = dict(batch_size=256, dataset=dict(pipeline=test_pipeline))
 
 # If you want standard test, please manually configure the test dataset
 test_dataloader = val_dataloader
-test_evaluator = val_evaluator
-
-# model settings
-model = dict(
-    type='ImageClassifier',
-    backbone=dict(
-        type='VisionTransformer',
-        arch='base',
-        img_size=224,
-        patch_size=16,
-        drop_path_rate=0.1,
-        avg_token=True,
-        output_cls_token=False,
-        final_norm=False,
-        init_cfg=dict(type='Pretrained', checkpoint='')),
-    neck=None,
-    head=dict(
-        type='LinearClsHead',
-        num_classes=1000,
-        in_channels=768,
-        loss=dict(
-            type='LabelSmoothLoss', label_smooth_val=0.1, mode='original'),
-        init_cfg=[dict(type='TruncNormal', layer='Linear', std=.02)]),
-    train_cfg=dict(augments=[
-        dict(type='Mixup', alpha=0.8, num_classes=1000),
-        dict(type='CutMix', alpha=1.0, num_classes=1000)
-    ]))
 
 # optimizer wrapper
-custom_imports = dict(imports='mmselfsup.engine', allow_failed_imports=False)
 optim_wrapper = dict(
     optimizer=dict(
         type='AdamW',
@@ -115,15 +87,15 @@ optim_wrapper = dict(
         norm_decay_mult=0.0,
         bias_decay_mult=0.0,
         custom_keys={
-            'pos_embed': dict(weight_decay=0.),
-            'cls_token': dict(weight_decay=0.),
+            'pos_embed': dict(decay_mult=0.),
+            'cls_token': dict(decay_mult=0.),
         }))
 
 # learning rate scheduler
 param_scheduler = [
     dict(
         type='LinearLR',
-        start_factor=1e-08,
+        start_factor=1e-4,
         by_epoch=True,
         begin=0,
         end=20,
@@ -139,10 +111,9 @@ param_scheduler = [
 ]
 
 # runtime settings
+train_cfg = dict(max_epochs=100)
 default_hooks = dict(
     # save checkpoint per epoch.
     checkpoint=dict(type='CheckpointHook', interval=1, max_keep_ckpts=3))
-
-train_cfg = dict(by_epoch=True, max_epochs=100)
 
 randomness = dict(seed=0)

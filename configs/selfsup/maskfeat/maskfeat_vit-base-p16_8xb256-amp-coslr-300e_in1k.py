@@ -5,18 +5,20 @@ _base_ = [
     '../_base_/default_runtime.py',
 ]
 
-# dataset 8 x 256
-train_dataloader = dict(batch_size=256, num_workers=8)
-
 # optimizer wrapper
 optimizer = dict(lr=2e-4 * 8, betas=(0.9, 0.999), weight_decay=0.05)
 optim_wrapper = dict(
-    type='OptimWrapper',
+    type='AmpOptimWrapper',
+    loss_scale='dynamic',
     optimizer=optimizer,
-    paramwise_cfg=dict(custom_keys={
-        'ln': dict(decay_mult=0.0),
-        'bias': dict(decay_mult=0.0),
-    }),
+    paramwise_cfg=dict(
+        norm_decay_mult=0.0,
+        bias_decay_mult=0.0,
+        custom_keys={
+            'pos_embed': dict(decay_mult=0.),
+            'mask_token': dict(decay_mult=0.),
+            'cls_token': dict(decay_mult=0.)
+        }),
     clip_grad=dict(max_norm=0.02))
 
 # learning rate scheduler
@@ -47,4 +49,3 @@ default_hooks = dict(
 
 # randomness
 randomness = dict(seed=0, diff_rank_seed=True)
-resume = True
