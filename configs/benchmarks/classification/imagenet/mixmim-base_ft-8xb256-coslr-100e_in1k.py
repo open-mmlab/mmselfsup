@@ -5,7 +5,7 @@ _base_ = [
 ]
 
 
-load_from = "work_dirs/selfsup/mixmim_debug/epoch_300.pth"
+# load_from = "work_dirs/selfsup/mixmim_debug/epoch_300.pth"
 
 model = dict(
     type='ImageClassifier',
