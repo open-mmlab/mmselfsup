@@ -275,7 +275,7 @@ resume = True
 
 ## Train SimCLR on Custom Dataset
 
-We provide an example of using SimCLR on custom dataset, the main idea is similar with the [Train MAE on Custom Dataset
+We provide an example of using SimCLR on custom dataset, the main idea is similar to the [Train MAE on Custom Dataset
 ](#train-mae-on-custom-dataset).
 
 The template config is `configs/selfsup/simclr/simclr_resnet50_8xb32-coslr-200e_in1k.py`. And the edited config is:
