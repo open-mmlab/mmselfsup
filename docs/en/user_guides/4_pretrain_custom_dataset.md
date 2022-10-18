@@ -17,7 +17,7 @@ In MMSelfSup, We support the `CustomDataset` from MMClassification,  which is ab
 
 ### Get the path of custom dataset
 
-It should be like `/dataset/my_custom_dataset`
+It should be like `data/custom_dataset/`
 
 ### Choose one config as template
 
@@ -87,7 +87,7 @@ resume = True
 The dataset related config is defined in `'../_base_/datasets/imagenet_mae.py'` in `_base_`. We then copy the content of dataset config file into our created file `mae_vit-base-p16_8xb512-coslr-400e_custom_dataset.py`.
 
 - Then we remove the `'../_base_/datasets/imagenet_mae.py'` in `_base_`.
-- Set the `dataset_type = 'mmcls.CustomDataset'`, and the path of the custom dataset ` dataset_type = /dataset/my_custom_dataset`.
+- Set the `dataset_type = 'mmcls.CustomDataset'`, and the path of the custom dataset ` data_root = /dataset/my_custom_dataset`.
 - Remove the `ann_file` in `train_dataloader`, and edit the `data_prefix` if needed.
 
 And edited the config will be like this:
