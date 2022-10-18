@@ -5,7 +5,7 @@ _base_ = [
 ]
 
 
-load_from = "/home/nus-zwb/openmmlab/mixmim/mmself_pre.pth"
+load_from = "work_dirs/selfsup/mixmim_debug/epoch_300.pth"
 
 model = dict(
     type='ImageClassifier',
