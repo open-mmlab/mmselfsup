@@ -517,38 +517,7 @@ class MixMIMTransformerFinetune(BaseBackbone):
             nn.init.constant_(m.weight, 1.0)
 
 
-    def random_masking(self, x: torch.Tensor, mask_ratio: float = 0.5):
-
-        B, C, H, W = x.shape
-        out_H = H // self.encoder_stride
-        out_W = W // self.encoder_stride
-        s3_H, s3_W = out_H * 2, out_W * 2
-        s2_H, s2_W = out_H * 4, out_W * 4
-        s1_H, s1_W = out_H * 8, out_W * 8
-
-        seq_l = out_H * out_W
-        # use a shared mask for a batch images
-        mask = torch.zeros([1, 1, seq_l], device=x.device)
-
-        mask_ratio = mask_ratio + random.uniform(0.0, self.range_mask_ratio)
-        noise = torch.rand(1, 1, seq_l, device=x.device)  # noise in [0, 1]
-        # ascend: small is keep, large is removed
-        mask_idx = torch.argsort(noise, dim=2)[:, :, :int(seq_l * mask_ratio)]
-        mask.scatter_(2, mask_idx, 1)
-        mask = mask.reshape(1, 1, out_H, out_W)
-        mask_s1 = F.interpolate(mask, size=(s1_H, s1_W), mode='nearest')
-        mask_s2 = F.interpolate(mask, size=(s2_H, s2_W), mode='nearest')
-        mask_s3 = F.interpolate(mask, size=(s3_H, s3_W), mode='nearest')
-
-        mask = mask.reshape(1, out_H * out_W, 1).contiguous()
-        mask_s1 = mask_s1.reshape(1, s1_H * s1_W, 1).contiguous()
-        mask_s2 = mask_s2.reshape(1, s2_H * s2_W, 1).contiguous()
-        mask_s3 = mask_s3.reshape(1, s3_H * s3_W, 1).contiguous()
-
-        return mask_s1, mask_s2, mask_s3, mask
-
-
-    def forward(self, x: torch.Tensor, mask_ratio=0.5):
+    def forward(self, x: torch.Tensor):
 
         x, patch_resolution = self.patch_embed(x)
 
