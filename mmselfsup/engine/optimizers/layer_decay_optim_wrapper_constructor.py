@@ -59,6 +59,38 @@ def get_layer_id_for_swin(var_name: str, max_layer_id: int,
     else:
         return max_layer_id - 1
 
+def get_layer_id_for_mixmim(var_name: str, max_layer_id: int,
+                          depths: List[int]) -> int:
+    """Get the layer id to set the different learning rates for Swin.
+    Args:
+        var_name (str): The key of the model.
+        num_max_layer (int): Maximum number of backbone layers.
+        depths (List[int]): Depths for each stage.
+    Returns:
+        int: Returns the layer id of the key.
+    """
+    if 'mask_token' in var_name:
+        return 0
+    elif 'patch_embed' in var_name:
+        return 0
+    elif 'cls_token' in var_name:
+        return 0
+    elif 'absolute_pos_embed' in var_name:
+        return 0
+    elif 'pos_embed' in var_name:
+        return 0
+    elif var_name.startswith('backbone.layers'):
+        layer_id = int(var_name.split('.')[2])
+        block_id = var_name.split('.')[4]
+        #print("layer_id:", layer_id)
+        #print("block_id:", block_id)
+        if block_id == 'downsample' or block_id == 'reduction' or  block_id == 'norm':
+            return sum(depths[:layer_id + 1])
+        layer_id = sum(depths[:layer_id]) + int(block_id)
+        return layer_id + 1
+    else:
+        return max_layer_id - 1
+
 
 @OPTIM_WRAPPER_CONSTRUCTORS.register_module()
 class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
@@ -120,6 +152,8 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
             num_layers = len(module.backbone.layers) + 2
         elif model_type == 'swin':
             num_layers = sum(module.backbone.depths) + 2
+        elif model_type == 'mixmim':
+            num_layers = sum(module.backbone.depths) + 2
 
         # if layer_decay_rate is not provided, not decay
         decay_rate = optimizer_cfg.pop('layer_decay_rate', 1.0)
@@ -145,6 +179,9 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
                 layer_id = get_layer_id_for_vit(name, num_layers)
             elif model_type == 'swin':
                 layer_id = get_layer_id_for_swin(name, num_layers,
+                                                 module.backbone.depths)
+            elif model_type == 'mixmim':
+                layer_id = get_layer_id_for_mixmim(name, num_layers,
                                                  module.backbone.depths)
 
             group_name = f'layer_{layer_id}_{group_name}'
