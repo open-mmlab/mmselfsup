@@ -359,10 +359,10 @@ default_hooks = dict(
 
 ## Load pre-trained model to speedup convergence
 
-To speedup the convergence of the model on your own dataset. You may use the pre-trained model as the initialization for the model's weight. You just need to specify the url of the pre-trained model via command.
+To speedup the convergence of the model on your own dataset. You may use the pre-trained model as the initialization for the model's weight. You just need to specify the url of the pre-trained model via command. You can find our provide pre-trained checkpoint here: [Model Zoo](https://mmselfsup.readthedocs.io/en/1.x/model_zoo.html)
 
 ```bash
-bash tools/dist_train.sh ${CONFIG} ${GPUS} --cfg-options ${PRETRAIN}
+bash tools/dist_train.sh ${CONFIG} ${GPUS} --cfg-options model.pretrained=${PRETRAIN}
 ```
 
 - `CONFIG`: the edited config path
