@@ -7,6 +7,7 @@ Pretrain
    1_config.md
    2_dataset_prepare.md
    3_pretrain.md
+   4_pretrain_custom_dataset.md
 
 Downstream Tasks
 **************
