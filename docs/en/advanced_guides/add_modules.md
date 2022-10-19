@@ -1,6 +1,6 @@
 # Add Modules
 
-In this tutorial, we introduce the basic steps to create your customized modules. Before learning to create your customized modules, it is recommended to learn the basic concept of models in file [models.md](models.md). You can customize all the components introduced in    [models.md](models.md), such as **backbone**, **neck**, **head** and **loss**.
+In this tutorial, we introduce the basic steps to create your customized modules. Before learning to create your customized modules, it is recommended to learn the basic concept of models in file [models.md](models.md). You can customize all the components introduced in [models.md](models.md), such as **backbone**, **neck**, **head** and **loss**.
 
 - [Add Modules](#add-modules)
   - [Add a new backbone](#add-a-new-backbone)
@@ -32,7 +32,7 @@ class NewBackbone(nn.Module):
 
     def init_weights(self):
         pass
-        
+
     def train(self, mode=True):
         pass
 ```
@@ -44,7 +44,7 @@ class NewBackbone(nn.Module):
 from .new_backbone import NewBackbone
 
 __all__ = [
-    ..., 
+    ...,
     'NewBackbone',
     ...
 ]
@@ -80,7 +80,7 @@ from mmselfsup.registry import MODELS
 class NewNeck(BaseModule):
 
     def __init__(self, *args, **kwargs):
-        super(NewNeck, self).__init__()
+        super().__init__()
         pass
 
     def forward(self, x):
@@ -132,7 +132,7 @@ from mmselfsup.registry import MODELS
 class NewHead(BaseModule):
 
     def __init__(self, loss, **kwargs):
-        super(NewHead, self).__init__()
+        super().__init__()
         # build loss
         self.loss = MODELS.build(loss)
         # other specific initializations
@@ -186,7 +186,7 @@ from mmselfsup.registry import MODELS
 class NewLoss(BaseModule):
 
     def __init__(self, *args, **kwargs):
-        super(NewLoss, self).__init__()
+        super().__init__()
         pass
 
     def forward(self, *args, **kwargs):
@@ -236,7 +236,7 @@ from .base import BaseModel
 class NewAlgorithm(BaseModel):
 
     def __init__(self, backbone, neck=None, head=None, init_cfg=None):
-        super(NewAlgorithm, self).__init__(init_cfg)
+        super().__init__(init_cfg)
         pass
 
     def extract_feat(self, inputs, **kwargs):
@@ -256,8 +256,8 @@ class NewAlgorithm(BaseModel):
 from .new_algorithm import NewAlgorithm
 
 __all__ = [
-    ..., 
-    'NewAlgorithm', 
+    ...,
+    'NewAlgorithm',
     ...
 ]
 ```
