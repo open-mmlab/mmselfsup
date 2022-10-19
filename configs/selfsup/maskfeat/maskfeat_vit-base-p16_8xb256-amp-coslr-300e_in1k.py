@@ -15,9 +15,9 @@ optim_wrapper = dict(
         norm_decay_mult=0.0,
         bias_decay_mult=0.0,
         custom_keys={
-            'pos_embed': dict(decay_mult=0.),
+            # 'pos_embed': dict(decay_mult=0.),
             'mask_token': dict(decay_mult=0.),
-            'cls_token': dict(decay_mult=0.)
+            # 'cls_token': dict(decay_mult=0.)
         }),
     clip_grad=dict(max_norm=0.02))
 
