@@ -6,7 +6,7 @@ _base_ = [
 
 
 # load_from = "work_dirs/selfsup/mixmim_debug/epoch_300.pth"
-custom_imports = dict(imports=["/mnt/lustre/zhaowangbo/openmmlab/mmselfsup/mmselfsup"], allow_failed_imports=False)
+# custom_imports = dict(imports=["/mnt/lustre/zhaowangbo/openmmlab/mmselfsup/mmselfsup"], allow_failed_imports=False)
 model = dict(
     type='ImageClassifier',
     backbone=dict(
