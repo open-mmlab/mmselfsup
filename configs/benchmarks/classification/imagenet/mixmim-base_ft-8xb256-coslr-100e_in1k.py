@@ -125,6 +125,8 @@ test_pipeline = [
 train_dataloader = dict(
     batch_size=128,
     num_workers=8,
+    pin_memory=True,
+    collate_fn=dict(type="default_collate"),
     dataset=dict(
         type=dataset_type,
         data_root='data/imagenet',
@@ -139,6 +141,8 @@ train_dataloader = dict(
 val_dataloader = dict(
     batch_size=64,
     num_workers=5,
+    pin_memory=True,
+    collate_fn=dict(type="default_collate"),
     dataset=dict(
         type=dataset_type,
         data_root='data/imagenet',
