@@ -6,7 +6,6 @@ model = dict(
         std=[58.395, 57.12, 57.375],
         bgr_to_rgb=True),
     backbone=dict(type='MaskFeatViT', arch='b', patch_size=16),
-    hog_para=dict(nbins=9, pool=8, gaussian_window=16),
     head=dict(
         type='MaskFeatPretrainHead',
         predictor=dict(
@@ -14,4 +13,6 @@ model = dict(
             in_channels=768,
             out_channels=108,
             with_avg_pool=False),
-        loss=dict(type='MaskFeatReconstructionLoss')))
+        loss=dict(type='MaskFeatReconstructionLoss')),
+    target_generator=dict(
+        type='HOGGenerator', nbins=9, pool=8, gaussian_window=16))

@@ -1,11 +1,10 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Tuple
 
 import torch
 
 from mmselfsup.registry import MODELS
 from mmselfsup.structures import SelfSupDataSample
-from ..utils.hog_layer import HOGLayerC
 from .base import BaseModel
 
 
@@ -34,22 +33,6 @@ class MaskFeat(BaseModel):
         init_cfg (Union[List[dict], dict], optional): Config dict for weight
             initialization. Defaults to None.
     """
-
-    def __init__(self,
-                 backbone: dict,
-                 head: dict,
-                 hog_para: dict,
-                 pretrained: Optional[str] = None,
-                 data_preprocessor: Optional[dict] = None,
-                 init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
-        super().__init__(
-            backbone=backbone,
-            head=head,
-            pretrained=pretrained,
-            data_preprocessor=data_preprocessor,
-            init_cfg=init_cfg)
-
-        self.hog_layer = HOGLayerC(**hog_para)
 
     def extract_feat(self, inputs: List[torch.Tensor],
                      data_samples: List[SelfSupDataSample],
@@ -82,14 +65,13 @@ class MaskFeat(BaseModel):
         Returns:
             Dict[str, torch.Tensor]: A dictionary of loss components.
         """
-        # ids_restore: the same as that in original repo, which is used
-        # to recover the original order of tokens in decoder.
         img = inputs[0]
         mask = torch.stack(
             [data_sample.mask.value for data_sample in data_samples])
 
         latent = self.backbone(img, mask)
-        hog = self.hog_layer(img)
+        hog = self.target_generator(img)
+
         loss = self.head(latent, hog, mask)
         losses = dict(loss=loss)
         return losses

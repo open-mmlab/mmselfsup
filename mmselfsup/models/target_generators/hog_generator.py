@@ -1,6 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import math
-from typing import Optional
 
 import torch
 import torch.nn.functional as F
@@ -28,9 +27,8 @@ class HOGGenerator(BaseModule):
     def __init__(self,
                  nbins: int = 9,
                  pool: int = 8,
-                 gaussian_window: int = 16,
-                 init_cfg: Optional[dict] = None) -> None:
-        super().__init__(init_cfg=init_cfg)
+                 gaussian_window: int = 16) -> None:
+        super().__init__()
         self.nbins = nbins
         self.pool = pool
         self.pi = math.pi
