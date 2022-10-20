@@ -145,7 +145,7 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
 
         # currently, we only support layer-wise learning rate decay for vit
         # and swin.
-        assert model_type in ['vit', 'swin'], f'Currently, we do not support \
+        assert model_type in ['vit', 'swin', 'mixmim'], f'Currently, we do not support \
             layer-wise learning rate decay for {model_type}'
 
         if model_type == 'vit':
