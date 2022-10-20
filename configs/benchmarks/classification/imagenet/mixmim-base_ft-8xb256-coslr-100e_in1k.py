@@ -86,7 +86,7 @@ train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(
         type='RandomResizedCrop',
-        scale=192,
+        scale=224,
         backend='pillow',
         interpolation='bicubic'),
     dict(type='RandomFlip', prob=0.5, direction='horizontal'),
@@ -118,7 +118,7 @@ test_pipeline = [
         edge='short',
         backend='pillow',
         interpolation='bicubic'),
-    dict(type='CenterCrop', crop_size=192),
+    dict(type='CenterCrop', crop_size=224),
     dict(type='PackClsInputs'),
 ]
 
