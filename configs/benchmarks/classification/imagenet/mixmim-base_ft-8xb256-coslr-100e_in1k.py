@@ -35,7 +35,7 @@ model = dict(
 optim_wrapper = dict(
     type='AmpOptimWrapper',
     optimizer=dict(
-        type='AdamW', lr=2e-3, model_type='mixmim', layer_decay_rate=0.7),
+        type='AdamW', lr=4e-3, model_type='mixmim', layer_decay_rate=0.7),
     paramwise_cfg=dict(
         norm_decay_mult=0.0,
         bias_decay_mult=0.0,
@@ -49,7 +49,7 @@ optim_wrapper = dict(
 param_scheduler = [
     dict(
         type='LinearLR',
-        start_factor=1e-8, # approach 0  # old setting 2e-4
+        start_factor=2.5e-7 / 1.25e-3, # approach 0  # old setting 2e-4
         by_epoch=True,
         begin=0,
         end=5,
