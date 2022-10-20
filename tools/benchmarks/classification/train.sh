@@ -22,7 +22,6 @@ srun -p ${PARTITION} \
     --kill-on-bad-exit=1 \
     python -u tools/train.py ${CONFIG} \
     --launcher="slurm" \
-    --work-dir $WORK_DIR \
     --cfg-options model.backbone.init_cfg.type=Pretrained \
     model.backbone.init_cfg.checkpoint=${PRETRAIN} \
     model.backbone.init_cfg.prefix="backbone." \
