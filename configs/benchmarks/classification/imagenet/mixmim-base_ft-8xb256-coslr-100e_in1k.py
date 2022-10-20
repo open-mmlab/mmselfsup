@@ -158,8 +158,8 @@ val_dataloader = dict(
 
 
 default_hooks = dict(
-    checkpoint=dict(type='CheckpointHook', interval=1, max_keep_ckpts=3),
-    logger=dict(type='LoggerHook', interval=1))
+    checkpoint=dict(type='CheckpointHook', interval=1, max_keep_ckpts=1),
+    logger=dict(type='LoggerHook', interval=100))
 
 randomness = dict(seed=0)
 
