@@ -20,7 +20,7 @@ srun -p ${PARTITION} \
     --ntasks-per-node=${GPUS_PER_NODE} \
     --cpus-per-task=${CPUS_PER_TASK} \
     --kill-on-bad-exit=1 \
-    python -u tools/train.py ${CONFIG} \
+    python -u tools/train.py ${CFG} \
     --launcher="slurm" \
     --cfg-options model.backbone.init_cfg.type=Pretrained \
     model.backbone.init_cfg.checkpoint=${PRETRAIN} \
