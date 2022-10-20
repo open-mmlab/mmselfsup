@@ -1,5 +1,5 @@
-_base_ = 'mmdet::pascal_voc/faster_rcnn_r50_caffe_c4_mstrain_18k_voc0712.py'
-# https://github.com/open-mmlab/mmdetection/blob/dev-3.x/configs/pascal_voc/faster_rcnn_r50_caffe_c4_mstrain_18k_voc0712.py
+_base_ = 'mmdet::pascal_voc/faster-rcnn_r50-caffe-c4_ms-18k_voc0712.py'
+# https://github.com/open-mmlab/mmdetection/blob/dev-3.x/configs/pascal_voc/faster-rcnn_r50-caffe-c4_ms-18k_voc0712.py
 
 data_preprocessor = dict(
     type='DetDataPreprocessor',
@@ -96,5 +96,5 @@ default_hooks = dict(checkpoint=dict(by_epoch=False, interval=2000))
 log_processor = dict(by_epoch=False)
 
 custom_imports = dict(
-    imports=['mmselfsup.evaluation.functional.res_layer_extra_norm'],
+    imports=['mmselfsup.models.utils.res_layer_extra_norm'],
     allow_failed_imports=False)
