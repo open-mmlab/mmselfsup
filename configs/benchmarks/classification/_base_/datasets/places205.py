@@ -43,8 +43,4 @@ val_dataloader = dict(
         data_prefix=dict(
             img_path='data/vision/torralba/deeplearning/images256/'),
         pipeline=test_pipeline))
-
-val_evaluator = [
-    dict(type='Accuracy', top_k=(1, 5)),
-]
-val_cfg = dict(interval=10)
+val_evaluator = dict(type='Accuracy', top_k=(1, 5))

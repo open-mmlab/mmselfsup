@@ -43,7 +43,7 @@ val_dataloader = dict(
     sampler=dict(type='DefaultSampler', shuffle=False),
     persistent_workers=True,
 )
-val_evaluator = dict(type='mmcls.Accuracy', topk=(1, 5))
+val_evaluator = dict(type='Accuracy', topk=(1, 5))
 
 # If you want standard test, please manually configure the test dataset
 test_dataloader = val_dataloader
