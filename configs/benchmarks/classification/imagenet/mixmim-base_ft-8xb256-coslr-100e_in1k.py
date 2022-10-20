@@ -124,7 +124,7 @@ test_pipeline = [
 
 train_dataloader = dict(
     batch_size=128,
-    num_workers=8,
+    num_workers=32,
     pin_memory=True,
     # collate_fn=dict(type="default_collate"),
     dataset=dict(
