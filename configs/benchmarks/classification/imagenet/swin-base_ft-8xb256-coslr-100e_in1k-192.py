@@ -1,6 +1,6 @@
 _base_ = [
     'mmcls::_base_/models/swin_transformer/base_224.py',
-    '../_base_/datasets/imagenet-swin.py',
+    '../_base_/datasets/imagenet_swin_192.py',
     '../_base_/schedules/adamw_coslr-100e_in1k.py',
     'mmcls::_base_/default_runtime.py'
 ]
