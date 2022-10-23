@@ -36,44 +36,44 @@ git checkout -b xxxx # xxxx is the name of new branch
 如果您计划去增添一些涉及到很大变化的新特性，我们推荐您先创建一个 issue 与我们讨论。
 ```
 
-## Code style
+## 代码风格
 
 ### Python
 
-We adopt [PEP8](https://www.python.org/dev/peps/pep-0008/) as the preferred code style.
+我们采用 [PEP8](https://www.python.org/dev/peps/pep-0008/) 作为我们的代码风格。
+我们采用一下工具来进行 linting 和 formatting：
 
-We use the following tools for linting and formatting:
+- [flake8](https://github.com/PyCQA/flake8): 一个linter工具装饰器.
+- [isort](https://github.com/timothycrosley/isort): 一个为 Python 导入排序的工具。
+- [yapf](https://github.com/google/yapf): 一个为 Python 文件格式化的工具。 
+- [codespell](https://github.com/codespell-project/codespell): 一个修改错误拼写的Python工具。
+- [mdformat](https://github.com/executablebooks/mdformat): Mdformat 是一个可选的 Markdorn 的格式化工具，可以让 Markdown 文件中的格式保持一致。
+- [docformatter](https://github.com/myint/docformatter): 一个格式化 docstring 的工具.
 
-- [flake8](https://github.com/PyCQA/flake8): A wrapper around some linter tools.
-- [isort](https://github.com/timothycrosley/isort): A Python utility to sort imports.
-- [yapf](https://github.com/google/yapf): A formatter for Python files.
-- [codespell](https://github.com/codespell-project/codespell): A Python utility to fix common misspellings in text files.
-- [mdformat](https://github.com/executablebooks/mdformat): Mdformat is an opinionated Markdown formatter that can be used to enforce a consistent style in Markdown files.
-- [docformatter](https://github.com/myint/docformatter): A formatter to format docstring.
+配置 yapf 和 isort 放在在 [setup.cfg](./setup.cfg)中。
 
-Style configurations of yapf and isort can be found in [setup.cfg](./setup.cfg).
+我们使用 [pre-commit hook](https://pre-commit.com/) 来检查和格式化`flake8`, `yapf`, `isort`, `trailing whitespaces`, `markdown files`，自动修改`end-of-files`, `double-quoted-strings`, `python-encoding-pragma`, `mixed-line-ending`, sorts `requirments.txt` 在每一次提交。
+为 pre-commit hook 的配置储存在 [.pre-commit-config](./.pre-commit-config.yaml)。
 
-We use [pre-commit hook](https://pre-commit.com/) that checks and formats for `flake8`, `yapf`, `isort`, `trailing whitespaces`, `markdown files`,
-fixes `end-of-files`, `double-quoted-strings`, `python-encoding-pragma`, `mixed-line-ending`, sorts `requirments.txt` automatically on every commit.
-The config for a pre-commit hook is stored in [.pre-commit-config](./.pre-commit-config.yaml).
+在您 clone 残酷之后，您需要安装并初始化 pre-commit hook。
 
-After you clone the repository, you will need to install initialize pre-commit hook.
 
 ```shell
 pip install -U pre-commit
 ```
 
-From the repository folder
+在仓库的文件夹中
 
 ```shell
 pre-commit install
 pre-commit run
 ```
 
-After this on every commit check code linters and formatter will be enforced.
+在此之后，在每一次提交时 linters 和 formatter 都会进行。
 
-> Before you create a PR, make sure that your code lints and is formatted by yapf.
+在您创建一个 PR 前，请确保您的代码 lint 并被 yapf 格式化过。
 
 ### C++ and CUDA
 
-We follow the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html).
+我们采用[Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)。
+
