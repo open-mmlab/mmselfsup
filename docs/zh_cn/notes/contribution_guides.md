@@ -71,7 +71,8 @@ pre-commit run
 
 在此之后，在每一次提交时 linters 和 formatter 都会进行。
 
-在您创建一个 PR 前，请确保您的代码 lint 并被 yapf 格式化过。
+
+> 在您创建一个 PR 前，请确保您的代码 lint 并被 yapf 格式化过。
 
 ### C++ and CUDA
 
