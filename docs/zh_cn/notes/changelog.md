@@ -1,4 +1,4 @@
-# Changelog
+# 更新日志
 
 ## MMSelfSup
 
@@ -74,7 +74,6 @@ We are excited to announce the release of MMSelfSup v1.0.0rc1. MMSelfSup v1.0.0r
 - 优化所有文档和重新整理路径。
 - 为不同组件增加新的概念。
 
-# 更新日志
 
 ## MMSelfSup
 
