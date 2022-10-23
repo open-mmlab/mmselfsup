@@ -3,7 +3,7 @@
 
 - [FAQ](#faq)
   - [安装](#安装)
-  - [A100 GPU DeepCluster](#A100 GPU DeepCluster)
+  - [DeepCluster on A100 GPU](#deepcluster-on-a100-gpu)
 
 ## 安装
 MMCV, MMClassification, MMDetection and MMSegmentation 的版本兼容性如下所示。 请安装正确的版本来避免安装问题。
