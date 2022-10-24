@@ -24,11 +24,11 @@ for 400 epochs, the details are below:
 ## Citation
 
 ```bibtex
-@article{He2021MaskedAA,
-  title={Masked Autoencoders Are Scalable Vision Learners},
-  author={Kaiming He and Xinlei Chen and Saining Xie and Yanghao Li and
-  Piotr Doll'ar and Ross B. Girshick},
-  journal={ArXiv},
-  year={2021}
+@inproceedings{wei2022masked,
+  title={Masked feature prediction for self-supervised visual pre-training},
+  author={Wei, Chen and Fan, Haoqi and Xie, Saining and Wu, Chao-Yuan and Yuille, Alan and Feichtenhofer, Christoph},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={14668--14678},
+  year={2022}
 }
 ```
