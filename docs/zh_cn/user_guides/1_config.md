@@ -269,26 +269,25 @@ _base_ = './mocov2_resnet50_8xb32-coslr-200e_in1k.py'
 runner = dict(max_epochs=800)
 ```
 
-### Use intermediate variables in configs
+### 使用配置中的中间变量
 
-Some intermediate variables are used in the configuration file. The intermediate variables make the configuration file more clear and easier to modify.
+在配置文件中使用一些中间变量会使配置文件更加清晰和易于修改。
 
-For example, `dataset_type`, `train_pipeline`, `file_client_args` are the intermediate variables of the data. We first need to define them and then pass them to `data`.
+例如 `dataset_type`, `train_pipeline`, `file_client_args` 是数据中的中间变量。 我们先定义它们再将它们传进 `data`.
 
 ```python
-# dataset settings
+# 数据集配置
 
-# Since we use ``ImageNet`` from mmclassification, we need set the
-# custom_imports here.
+# 因为我们使用来源于 MMClassification 中的 ``ImageNet`` , 我们需要设置
+# custom_imports
 custom_imports = dict(imports='mmcls.datasets', allow_failed_imports=False)
 
-# We use the ``ImageNet`` dataset implemented by mmclassification, so there
-# is a ``mmcls`` prefix.
+# 我们使用来源于 MMClassification 中的 ``ImageNet``, 所以有一个 ``mmcls`` 的前缀
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
 file_client_args = dict(backend='disk')
 
-# The difference between mocov2 and mocov1 is the transforms in the pipeline
+# mocov2 和 mocov1 的不同主要来自于数据增强
 view_pipeline = [
     dict(type='RandomResizedCrop', size=224, scale=(0.2, 1.)),
     dict(
