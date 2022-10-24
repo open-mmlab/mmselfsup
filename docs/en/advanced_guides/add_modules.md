@@ -1,204 +1,275 @@
 # Add Modules
 
+In this tutorial, we introduce the basic steps to create your customized modules. Before learning to create your customized modules, it is recommended to learn the basic concept of models in file [models.md](models.md). You can customize all the components introduced in [models.md](models.md), such as **backbone**, **neck**, **head** and **loss**.
+
 - [Add Modules](#add-modules)
-  - [Add new backbone](#add-new-backbone)
-  - [Add new necks](#add-new-necks)
-  - [Add new loss](#add-new-loss)
+  - [Add a new backbone](#add-a-new-backbone)
+  - [Add a new neck](#add-a-new-neck)
+  - [Add a new head](#add-a-new-head)
+  - [Add a new loss](#add-a-new-loss)
   - [Combine all](#combine-all)
 
-In self-supervised learning domain, each model can be divided into following four parts:
+## Add a new backbone
 
-- backbone: used to extract image's feature
-- projection head: projects feature extracted by backbone to another space
-- loss: loss function the model will optimize
-- memory bank(optional): some methods, `e.g. odc`, need extract memory bank to store image's feature.
+Assume you are going to create a new backbone `NewBackbone`.
 
-## Add new backbone
-
-Assuming we are going to create a customized backbone `CustomizedBackbone`
-
-1.Create a new file `mmselfsup/models/backbones/customized_backbone.py` and implement `CustomizedBackbone` in it.
+1. Create a new file `mmselfsup/models/backbones/new_backbone.py` and implement `NewBackbone` in it.
 
 ```python
 import torch.nn as nn
-from ..builder import BACKBONES
 
-@BACKBONES.register_module()
-class CustomizedBackbone(nn.Module):
+from mmselfsup.registry import MODELS
 
-    def __init__(self, **kwargs):
 
-        ## TODO
+@MODELS.register_module()
+class NewBackbone(nn.Module):
 
-    def forward(self, x):
+    def __init__(self, *args, **kwargs):
+        pass
 
-        ## TODO
+    def forward(self, x):  # should return a tuple
+        pass
 
-    def init_weights(self, pretrained=None):
-
-        ## TODO
+    def init_weights(self):
+        pass
 
     def train(self, mode=True):
-
-        ## TODO
+        pass
 ```
 
-2.Import the customized backbone in `mmselfsup/models/backbones/__init__.py`.
+2. Import the new backbone module in `mmselfsup/models/backbones/__init__.py`.
 
 ```python
-from .customized_backbone import CustomizedBackbone
+...
+from .new_backbone import NewBackbone
 
 __all__ = [
-    ..., 'CustomizedBackbone'
+    ...,
+    'NewBackbone',
+    ...
 ]
 ```
 
-3.Use it in your config file.
+3. Use it in your config file.
 
 ```python
 model = dict(
     ...
     backbone=dict(
-        type='CustomizedBackbone',
+        type='NewBackbone',
         ...),
     ...
 )
 ```
 
-## Add new necks
+## Add a new neck
 
-we include all projection heads in `mmselfsup/models/necks`. Assuming we are going to create a `CustomizedProjHead`.
+You can write a new neck inherited from `BaseModule` from mmengine, and overwrite `forward`. We have a unified interface for weight initialization in mmengine, you can use `init_cfg` to specify the initialization function and arguments, or overwrite `init_weights` if you prefer customized initialization.
 
-1.Create a new file `mmselfsup/models/necks/customized_proj_head.py` and implement `CustomizedProjHead` in it.
+We include all necks in `mmselfsup/models/necks`. Assume you are going to create a new neck `NewNeck`.
+
+1. Create a new file `mmselfsup/models/necks/new_neck.py` and implement `NewNeck` in it.
 
 ```python
-import torch.nn as nn
-from mmcv.runner import BaseModule
+from mmengine.model import BaseModule
 
-from ..builder import NECKS
+from mmselfsup.registry import MODELS
 
 
-@NECKS.register_module()
-class CustomizedProjHead(BaseModule):
+@MODELS.register_module()
+class NewNeck(BaseModule):
 
     def __init__(self, *args, **kwargs):
-        super(CustomizedProjHead, self).__init__(init_cfg)
-        ## TODO
+        super().__init__()
+        pass
+
     def forward(self, x):
-        ## TODO
+        pass
 ```
 
-You need to implement the forward function, which takes the feature from the backbone and outputs the projected feature.
+You need to implement the `forward` function, which applies some operations on the output from the backbone and forwards the results to the head.
 
-2.Import the `CustomizedProjHead` in `mmselfsup/models/necks/__init__`.
+2. Import the new neck module in `mmselfsup/models/necks/__init__.py`.
 
 ```python
-from .customized_proj_head import CustomizedProjHead
+...
+from .new_neck import NewNeck
 
 __all__ = [
     ...,
-    CustomizedProjHead,
+    'NewNeck',
     ...
 ]
 ```
 
-3.Use it in your config file.
+3. Use it in your config file.
 
 ```python
 model = dict(
-    ...,
+    ...
     neck=dict(
-        type='CustomizedProjHead',
+        type='NewNeck',
         ...),
-   ...)
+    ...
+)
 ```
 
-## Add new loss
+## Add a new head
 
-To add a new loss function, we mainly implement the `forward` function in the loss module.
+You can write a new head inherited from `BaseModule` from mmengine, and overwrite `forward`.
 
-1.Create a new file `mmselfsup/models/heads/customized_head.py` and implement your customized `CustomizedHead` in it.
+We include all heads in `mmselfsup/models/heads`. Assume you are going to create a new head `NewHead`.
+
+1. Create a new file `mmselfsup/models/heads/new_head.py` and implement `NewHead` in it.
 
 ```python
-import torch
-import torch.nn as nn
-from mmcv.runner import BaseModule
+from mmengine.model import BaseModule
 
-from ..builder import HEADS
+from mmselfsup.registry import MODELS
 
 
-@HEADS.register_module()
-class CustomizedHead(BaseModule):
+@MODELS.register_module()
+class NewHead(BaseModule):
 
-    def __init__(self, *args, **kwargs):
-        super(CustomizedHead, self).__init__()
-
-        ## TODO
+    def __init__(self, loss, **kwargs):
+        super().__init__()
+        # build loss
+        self.loss = MODELS.build(loss)
+        # other specific initializations
 
     def forward(self, *args, **kwargs):
-
-        ## TODO
+        pass
 ```
 
-2.Import the module in `mmselfsup/models/heads/__init__.py`
+You need to implement the `forward` function, which applies some operations on the output from the neck/backbone and computes the loss. Please note that the loss module should be built in the head module for the loss computation.
+
+2. Import the new head module in `mmselfsup/models/heads/__init__.py`.
 
 ```python
-from .customized_head import CustomizedHead
+...
+from .new_head import NewHead
 
-__all__ = [..., CustomizedHead, ...]
+__all__ = [
+    ...,
+    'NewHead',
+    ...
+]
 ```
 
-3.Use it in your config file.
+3. Use it in your config file.
 
 ```python
 model = dict(
+    ...
+    head=dict(
+        type='NewHead',
+        ...),
+    ...
+)
+```
+
+## Add a new loss
+
+To add a new loss function, we mainly implement the `forward` function in the loss module. We should register the loss module as `MODELS` as well.
+
+We include all losses in `mmselfsup/models/losses`. Assume you are going to create a new loss `NewLoss`.
+
+1. Create a new file `mmselfsup/models/losses/new_loss.py` and implement `NewLoss` in it.
+
+```python
+from mmengine.model import BaseModule
+
+from mmselfsup.registry import MODELS
+
+
+@MODELS.register_module()
+class NewLoss(BaseModule):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__()
+        pass
+
+    def forward(self, *args, **kwargs):
+        pass
+```
+
+2. Import the new loss module in `mmselfsup/models/losses/__init__.py`
+
+```python
+...
+from .new_loss import NewLoss
+
+__all__ = [
     ...,
-    head=dict(type='CustomizedHead')
-    )
+    'NewLoss',
+    ...
+]
+```
+
+3. Use it in your config file.
+
+```python
+model = dict(
+    ...
+    head=dict(
+        ...
+        loss=dict(
+            type='NewLoss',
+            ...),
+        ...),
+    ...
+)
 ```
 
 ## Combine all
 
-After creating each component, mentioned above, we need to create a `CustomizedAlgorithm` to organize them logically. And the `CustomizedAlgorithm` takes raw images as inputs and outputs the loss to the optimizer.
+After creating each component mentioned above, we need to create a new algorithm `NewAlgorithm` to organize them logically. `NewAlgorithm` takes raw images as inputs and outputs the loss to the optimizer.
 
-1.Create a new file `mmselfsup/models/algorithms/customized_algorithm.py` and implement `CustomizedAlgorithm` in it.
+1. Create a new file `mmselfsup/models/algorithms/new_algorithm.py` and implement `NewAlgorithm` in it.
 
 ```python
-# Copyright (c) OpenMMLab. All rights reserved.
-import torch
-
-from ..builder import ALGORITHMS, build_backbone, build_head, build_neck
-from ..utils import GatherLayer
+from mmselfsup.registry import MODELS
 from .base import BaseModel
 
 
-@ALGORITHMS.register_module()
-class CustomizedAlgorithm(BaseModel):
+@MODELS.register_module()
+class NewAlgorithm(BaseModel):
 
     def __init__(self, backbone, neck=None, head=None, init_cfg=None):
-        super(SimCLR, self).__init__(init_cfg)
+        super().__init__(init_cfg)
+        pass
 
-        ## TODO
+    def extract_feat(self, inputs, **kwargs):
+        pass
 
-    def forward_train(self, img, **kwargs):
+    def loss(self, inputs, data_samples, **kwargs):
+        pass
 
-        ## TODO
+    def predict(self, inputs, data_samples, **kwargs):
+        pass
 ```
 
-2.Import the module in `mmselfsup/models/algorithms/__init__.py`
+2. Import the new algorithm module in `mmselfsup/models/algorithms/__init__.py`
 
 ```python
-from .customized_algorithm import CustomizedAlgorithm
+...
+from .new_algorithm import NewAlgorithm
 
-__all__ = [..., CustomizedAlgorithm, ...]
+__all__ = [
+    ...,
+    'NewAlgorithm',
+    ...
+]
 ```
 
-3.Use it in your config file.
+3. Use it in your config file.
 
 ```python
 model = dict(
-    type='CustomizedAlgorightm',
+    type='NewAlgorithm',
     backbone=...,
     neck=...,
-    head=...)
+    head=...,
+    ...
+)
 ```
