@@ -1,8 +1,16 @@
 # dataset settings
 dataset_type = 'Places205'
 data_root = 'data/Places205/'
-file_client_args = dict(backend='disk')
+data_preprocessor = dict(
+    num_classes=205,
+    # RGB format normalization parameters
+    mean=[123.675, 116.28, 103.53],
+    std=[58.395, 57.12, 57.375],
+    # convert image from BGR to RGB
+    to_rgb=True,
+)
 
+file_client_args = dict(backend='disk')
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(type='Resize', scale=256),

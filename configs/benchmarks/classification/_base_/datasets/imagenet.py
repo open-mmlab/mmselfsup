@@ -1,8 +1,16 @@
 # dataset settings
 dataset_type = 'ImageNet'
 data_root = 'data/imagenet/'
-file_client_args = dict(backend='disk')
+data_preprocessor = dict(
+    num_classes=1000,
+    # RGB format normalization parameters
+    mean=[123.675, 116.28, 103.53],
+    std=[58.395, 57.12, 57.375],
+    # convert image from BGR to RGB
+    to_rgb=True,
+)
 
+file_client_args = dict(backend='disk')
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(type='RandomResizedCrop', scale=224, backend='pillow'),
