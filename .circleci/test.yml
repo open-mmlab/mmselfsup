@@ -61,7 +61,9 @@ jobs:
           command: |
             pip install git+https://github.com/open-mmlab/mmengine.git@main
             pip install -U openmim
-            mim install 'mmcv >= 2.0.0rc1'
+            mim install 'mmcv>=2.0.0rc1'
+            mim install 'mmdet>=3.0.0rc0'
+            mim install 'mmsegmentation>=1.0.0rc0'
             pip install -r requirements/tests.txt
       - run:
           name: Build and install
@@ -105,7 +107,9 @@ jobs:
           command: |
             docker exec mmselfsup pip install -e /mmengine
             docker exec mmselfsup pip install -U openmim
-            docker exec mmselfsup mim install 'mmcv >= 2.0.0rc1'
+            docker exec mmselfsup mim install 'mmcv>=2.0.0rc1'
+            docker exec mmselfsup mim install 'mmdet>=3.0.0rc0'
+            docker exec mmselfsup mim install 'mmsegmentation>=1.0.0rc0'
             docker exec mmselfsup pip install -r requirements/tests.txt
       - run:
           name: Build and install
