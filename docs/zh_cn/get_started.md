@@ -204,7 +204,7 @@ MMSelfSup 可以仅用于 CPU 环境。 在 CPU 模式下，您可以训练、�
 
 [Google Colab](https://research.google.com/) 通常会安装 PyTorch，因此我们只需要使用以下命令安装 MMCV 和 MMSeflSup。
 
-**步骤 0.** 使用 [MIM](https://github.com/open-mmlab/mim) 安装 MMEngine](https://github.com/open-mmlab/mmengine) 和 [MMCV](https://github.com/open-mmlab/mmcv)。
+**步骤 0.** 使用 [MIM](https://github.com/open-mmlab/mim) 安装 MMEngine\](https://github.com/open-mmlab/mmengine) 和 [MMCV](https://github.com/open-mmlab/mmcv)。
 
 ```shell
 !pip3 install openmim
@@ -238,9 +238,10 @@ print(mmselfsup.__version__)
 我们提供了一个 [Dockerfile](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/docker/Dockerfile) 来构建镜像。请确保您的 [docker 版本](https://docs.docker.com/engine/install/) >=19.03。
 
 ```shell
-# 使用 PyTorch 1.10.0，CUDA 11.3，CUDNN 8 构建镜像。
+# 使用 PyTorch 1.10.0、CUDA 11.3、CUDNN 8 构建镜像。
 docker build -f ./docker/Dockerfile --rm -t mmselfsup:torch1.10.0-cuda11.3-cudnn8 .
 ```
+
 **重要提示：** 请确保您已安装 [nvidia-container-toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker)。
 
 运行以下命令：
