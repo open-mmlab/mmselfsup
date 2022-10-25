@@ -6,7 +6,7 @@
 
 `master` 仍然是 0.x 版本，我们将会 checkout 一个新的 `1.x` 用来发布 1.x 版本。 未来我们会同时维护两个版本。
 
-我们简要的列出主要的改变。 请参考[migration guide](../migration.md)来查看细节和迁移指引
+我们简要的列出主要的改变。 请参考[迁移文档](../migration.md)来查看细节和迁移指引
 
 #### 亮点
 
@@ -15,7 +15,7 @@
 #### 新特性
 
 - 全量支持 `MAE` ([#483](https://github.com/open-mmlab/mmselfsup/pull/483))
-  -全量支持 `SimMIM` ([#487](https://github.com/open-mmlab/mmselfsup/pull/487))
+-全量支持 `SimMIM` ([#487](https://github.com/open-mmlab/mmselfsup/pull/487))
 - 全量支持 of `MoCoV3` ([#496](https://github.com/open-mmlab/mmselfsup/pull/496))
 
 #### 修复 Bug
@@ -46,7 +46,7 @@
 We are excited to announce the release of MMSelfSup v1.0.0rc1. MMSelfSup v1.0.0rc1 是 MMSelfSup 1.x 的第一个版本，是 OpenMMLab 2.0 项目中的一部分。
 `master` 仍然是 0.x 版本，我们将会 checkout 一个新的 `1.x` 用来发布 1.x 版本。 未来我们会同时维护两个版本。
 
-我们简要的列出主要的改变。 请参考[migration guide](../migration.md)来查看细节和迁移指引
+我们简要的列出主要的改变。 请参考[迁移文档](../migration.md)来查看细节和迁移指引
 
 #### 亮点
 
