@@ -31,7 +31,7 @@ git checkout -b xxxx # xxxx is the name of new branch
 3. 根据后面提到的代码风格编辑相关的文件
 4. 使用 **pre-commit hook** 来检查和格式化您的修改。
 5. 提交您的修改。
-6. 创建一个 PR。
+6. 创建一个 PR，并往dev-1.x合入。
 
 ```{note}
 如果您计划去增添一些涉及到很大变化的新特性，我们推荐您先创建一个 issue 与我们讨论。
