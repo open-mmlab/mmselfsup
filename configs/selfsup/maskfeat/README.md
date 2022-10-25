@@ -1,49 +1,60 @@
-# MAE
+# MaskFeat
 
-> [Masked Autoencoders Are Scalable Vision Learners](https://arxiv.org/abs/2111.06377)
+> [Masked Feature Prediction for Self-Supervised Visual Pre-Training](https://arxiv.org/abs/2112.09133v1)
 
 <!-- [ALGORITHM] -->
 
 ## Abstract
 
-This paper shows that masked autoencoders (MAE) are
-scalable self-supervised learners for computer vision. Our
-MAE approach is simple: we mask random patches of the
-input image and reconstruct the missing pixels. It is based
-on two core designs. First, we develop an asymmetric
-encoder-decoder architecture, with an encoder that operates only on the
-visible subset of patches (without mask tokens), along with a lightweight
-decoder that reconstructs the original image from the latent representation
-and mask tokens. Second, we find that masking a high proportion
-of the input image, e.g., 75%, yields a nontrivial and
-meaningful self-supervisory task. Coupling these two designs enables us to
-train large models efficiently and effectively: we accelerate
-training (by 3× or more) and improve accuracy. Our scalable approach allows
-for learning high-capacity models that generalize well: e.g., a vanilla
-ViT-Huge model achieves the best accuracy (87.8%) among
-methods that use only ImageNet-1K data. Transfer performance in downstream tasks outperforms supervised pretraining and shows promising scaling behavior.
+We present Masked Feature Prediction (MaskFeat) for self-supervised pre-training of video models. Our approach first randomly masks out a portion of the input sequence and then predicts the feature of the masked regions. We study five different types of features and find Histograms of Oriented Gradients (HOG), a hand-crafted feature descriptor, works particularly well in terms of both performance and efficiency. We observe that the local contrast normalization in HOG is essential for good results, which is in line with earlier work using HOG for visual recognition. Our approach can learn abundant visual knowledge and drive large-scale Transformer-based models. Without using extra model weights or supervision, MaskFeat pre-trained on unlabeled videos achieves unprecedented results of 86.7% with MViT-L on Kinetics-400, 88.3% on Kinetics-600, 80.4% on Kinetics-700, 38.8 mAP on AVA, and 75.0% on SSv2. MaskFeat further generalizes to image input, which can be interpreted as a video with a single frame and obtains competitive results on ImageNet.
 
 <div align="center">
-<img src="https://user-images.githubusercontent.com/30762564/150733959-2959852a-c7bd-4d3f-911f-3e8d8839fe67.png" width="40%"/>
+<img src="https://user-images.githubusercontent.com/48178838/190090285-428f07c0-0887-4ce8-b94f-f719cfd25622.png" width="60%"/>
 </div>
 
 ## Models and Benchmarks
 
-Here, we report the results of the model, which is pre-trained on ImageNet-1k
-for 400 epochs, the details are below:
+Here, we report the results of the model on ImageNet, the details are below:
 
-| Backbone | Pre-train epoch | Fine-tuning Top-1 |                                                     Pre-train Config                                                      |                                                                 Fine-tuning Config                                                                 |                                                                                                                      Download                                                                                                                       |
-| :------: | :-------------: | :---------------: | :-----------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| ViT-B/16 |       400       |       83.1        | [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/mae/mae_vit-b-p16_8xb512-coslr-400e_in1k.py) | [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/imagenet/vit-base-p16_ft-8xb128-coslr-100e_in1k.py) | [model](https://download.openmmlab.com/mmselfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k-224_20220223-85be947b.pth) \| [log](https://download.openmmlab.com/mmselfsup/mae/mae_vit-base-p16_8xb512-coslr-300e_in1k-224_20220210_140925.log.json) |
+<table class="docutils">
+<thead>
+  <tr>
+	    <th rowspan="2">Algorithm</th>
+	    <th rowspan="2">Backbone</th>
+	    <th rowspan="2">Epoch</th>
+      <th rowspan="2">Batch Size</th>
+      <th colspan="2" align="center">Results (Top-1 %)</th>
+      <th colspan="3" align="center">Links</th>
+	</tr>
+	<tr>
+      <th>Linear Eval</th>
+      <th>Fine-tuning</th>
+      <th>Pretrain</th>
+      <th>Linear Eval</th>
+      <th>Fine-tuning</th>
+	</tr>
+  </thead>
+  <tr>
+      <td>MaskFeat</td>
+	    <td>ViT-base</td>
+	    <td>300</td>
+      <td>2048</td>
+      <td>/</td>
+      <td>83.4</td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/cae/maskfeat_vit-base-p16_8xb256-amp-coslr-300e_in1k.py'>config</a> | <a href=''>model</a> | <a href=''>log</a></td>
+      <td>/</td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/benchmarks/classification/imagenet/vit-base-p16_ft-8xb256-coslr-100e_in1k.py'>config</a> | <a href=''>model</a> | <a href=''>log</a></td>
+	</tr>
+  </tbody>
+</table>
 
 ## Citation
 
 ```bibtex
-@article{He2021MaskedAA,
-  title={Masked Autoencoders Are Scalable Vision Learners},
-  author={Kaiming He and Xinlei Chen and Saining Xie and Yanghao Li and
-  Piotr Doll'ar and Ross B. Girshick},
-  journal={ArXiv},
-  year={2021}
+@InProceedings{wei2022masked,
+    author    = {Wei, Chen and Fan, Haoqi and Xie, Saining and Wu, Chao-Yuan and Yuille, Alan and Feichtenhofer, Christoph},
+    title     = {Masked Feature Prediction for Self-Supervised Visual Pre-Training},
+    booktitle = {CVPR},
+    year      = {2022},
 }
 ```
