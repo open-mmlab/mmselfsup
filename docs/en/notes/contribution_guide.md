@@ -31,7 +31,7 @@ git checkout -b xxxx # xxxx is the name of new branch
 3. Edit the related files follow the code style mentioned below
 4. Use **pre-commit hook** to check and format your changes.
 5. Commit your changes
-6. Create a PR with related information
+6. Create a PR to merge it into dev-1.x branch
 
 ```{note}
 If you plan to add some new features that involve large changes, it is encouraged to open an issue for discussion first.
