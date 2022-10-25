@@ -204,7 +204,7 @@ MMSelfSup 可以仅用于 CPU 环境。 在 CPU 模式下，您可以训练、�
 
 [Google Colab](https://research.google.com/) 通常会安装 PyTorch，因此我们只需要使用以下命令安装 MMCV 和 MMSeflSup。
 
-**步骤 0.** 使用 [MIM](https://github.com/open-mmlab/mim) 安装 MMEngine\](https://github.com/open-mmlab/mmengine) 和 [MMCV](https://github.com/open-mmlab/mmcv)。
+**步骤 0.** 使用 [MIM](https://github.com/open-mmlab/mim) 安装 [MMEngine](https://github.com/open-mmlab/mmengine) 和 [MMCV](https://github.com/open-mmlab/mmcv)。
 
 ```shell
 !pip3 install openmim
