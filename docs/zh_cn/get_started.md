@@ -147,7 +147,7 @@ loss = model.forward_train(image, label)
 
 #### 评测基准
 
-[最佳实践](#best-practices)适用于基本用法。 如果您需要使用一些下游任务（例如检测或分割）来评估您的预训练模型，请同时安装 [MMDetection](https://github.com/open-mmlab/mmdetection) 和 [MMSegmentation](https://github.com/open-mmlab/mmsegmentation)。
+[最佳实践](#最佳实践)适用于基本用法。 如果您需要使用一些下游任务（例如检测或分割）来评估您的预训练模型，请同时安装 [MMDetection](https://github.com/open-mmlab/mmdetection) 和 [MMSegmentation](https://github.com/open-mmlab/mmsegmentation)。
 
 如果您不运行 MMDetection 和 MMSegmentation 基准测试，则无需安装它们。
 
