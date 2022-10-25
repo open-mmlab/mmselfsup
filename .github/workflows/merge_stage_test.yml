@@ -38,14 +38,13 @@ jobs:
         run: pip install torch==${{matrix.torch}}+cpu torchvision==${{matrix.torchvision}}+cpu -f https://download.pytorch.org/whl/torch_stable.html
       - name: Install MMEngine
         run: pip install git+https://github.com/open-mmlab/mmengine.git@main
-      - name: Install MMCV
+      - name: Install MMSelfSup dependencies
         run: |
           pip install -U openmim
           mim install 'mmcv>=2.0.0rc1'
           mim install 'mmdet>=3.0.0rc0'
           mim install 'mmsegmentation>=1.0.0rc0'
-      - name: Install other dependencies
-        run: pip install -r requirements/tests.txt
+          pip install -r requirements/tests.txt
       - name: Build and install
         run: rm -rf .eggs && pip install -e .
       - name: Run unittests and generate coverage report
@@ -85,14 +84,13 @@ jobs:
         run: pip install torch==${{matrix.torch}}+cpu torchvision==${{matrix.torchvision}}+cpu -f https://download.pytorch.org/whl/torch_stable.html
       - name: Install MMEngine
         run: pip install git+https://github.com/open-mmlab/mmengine.git@main
-      - name: Install MMCV
+      - name: Install MMSelfSup dependencies
         run: |
           pip install -U openmim
           mim install 'mmcv>=2.0.0rc1'
           mim install 'mmdet>=3.0.0rc0'
           mim install 'mmsegmentation>=1.0.0rc0'
-      - name: Install other dependencies
-        run: pip install -r requirements/tests.txt
+          pip install -r requirements/tests.txt
       - name: Build and install
         run: rm -rf .eggs && pip install -e .
       - name: Run unittests and generate coverage report
@@ -139,7 +137,7 @@ jobs:
       - name: Install system dependencies
         run: |
           apt-get update && apt-get install -y ffmpeg libsm6 libxext6 git ninja-build libglib2.0-0 libsm6 libxrender-dev libxext6
-      - name: Install mmselfsup dependencies
+      - name: Install MMSelfSup dependencies
         run: |
           pip install git+https://github.com/open-mmlab/mmengine.git@main
           pip install -U openmim
@@ -171,7 +169,7 @@ jobs:
         run: pip install lmdb
       - name: Install PyTorch
         run: pip install torch==1.8.1+${{matrix.platform}} torchvision==0.9.1+${{matrix.platform}} -f https://download.pytorch.org/whl/lts/1.8/torch_lts.html
-      - name: Install mmselfsup dependencies
+      - name: Install MMSelfSup dependencies
         run: |
           pip install git+https://github.com/open-mmlab/mmengine.git@main
           pip install -U openmim
