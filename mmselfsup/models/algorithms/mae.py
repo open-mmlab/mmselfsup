@@ -35,7 +35,8 @@ class MAE(BaseModel):
                 inputs: List[torch.Tensor],
                 data_samples: Optional[List[SelfSupDataSample]] = None,
                 **kwargs) -> SelfSupDataSample:
-        """The forward function in testing.
+        """The forward function in testing. It is mainly for image
+        reconstruction.
 
         Args:
             inputs (List[torch.Tensor]): The input images.

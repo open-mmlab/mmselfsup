@@ -50,3 +50,7 @@ def test_mae():
 
     fake_feats = alg(fake_batch_inputs, fake_data_samples, mode='tensor')
     assert list(fake_feats.shape) == [2, 196, 768]
+
+    results = alg(fake_batch_inputs, fake_data_samples, mode='predict')
+    assert list(results.mask.value.shape) == [2, 224, 224, 3]
+    assert list(results.pred.value.shape) == [2, 224, 224, 3]
