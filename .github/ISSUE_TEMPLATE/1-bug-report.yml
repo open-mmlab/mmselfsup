@@ -23,7 +23,7 @@ body:
         - 1.x branch (1.x version, such as `v1.0.0rc2`, or `dev-1.x` branch)
     validations:
       required: true
-  
+
   - type: checkboxes
     attributes:
       label: Prerequisite
@@ -58,7 +58,7 @@ body:
         Preferably a simple and minimal code snippet is provided below, so that we can reproduce the error by running the code.
       placeholder: |
         A clear and concise description of what the bug is.
-    
+
   - type: textarea
     attributes:
       label: Reproduces the problem - code sample
