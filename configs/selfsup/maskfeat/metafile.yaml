@@ -19,8 +19,8 @@ Models:
       Epochs: 300
       Batch Size: 2048
     Results: null
-    Config: configs/selfsup/maskfeat/maskfeat_vit-base-p16_8xb256-coslr-300e_in1k.py
-    Weights: 
+    Config: configs/selfsup/maskfeat/maskfeat_vit-base-p16_8xb256-amp-coslr-300e_in1k.py
+    Weights: https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_vit-base-p16_8xb256-amp-coslr-300e_in1k/maskfeat_vit-base-p16_8xb256-amp-coslr-300e_in1k_20221028-9377f534.pth
     Downstream:
       - Type: Image Classification
         Metadata:
@@ -32,4 +32,4 @@ Models:
             Metrics:
               Top 1 Accuracy: 83.4
         Config: configs/benchmarks/classification/imagenet/vit-base-p16_ft-8xb256-coslr-100e_in1k.py
-        Weights: 
+        Weights: https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_vit-base-p16_8xb256-amp-coslr-300e_in1k/vit-base-p16_ft-8xb256-coslr-100e_in1k/vit-base-p16_ft-8xb256-coslr-100e_in1k_20221028-5134431c.pth

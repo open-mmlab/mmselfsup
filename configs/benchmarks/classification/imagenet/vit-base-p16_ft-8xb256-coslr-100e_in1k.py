@@ -25,7 +25,7 @@ model = dict(
         loss=dict(
             type='LabelSmoothLoss', label_smooth_val=0.1, mode='original'),
         init_cfg=[
-            dict(type='TruncNormal', layer='Linear', std=2e-5, bias=2e-5),
+            dict(type='TruncNormal', layer='Linear', std=0.02, bias=2e-5),
         ]),
     train_cfg=dict(augments=[
         dict(type='Mixup', alpha=0.8),
@@ -78,7 +78,7 @@ test_dataloader = val_dataloader
 optim_wrapper = dict(
     optimizer=dict(
         type='AdamW',
-        lr=0.002 * 8 / 2,
+        lr=0.008,
         weight_decay=0.05,
         eps=1e-8,
         betas=(0.9, 0.999),
@@ -117,3 +117,5 @@ train_cfg = dict(max_epochs=100)
 default_hooks = dict(
     # save checkpoint per epoch.
     checkpoint=dict(type='CheckpointHook', interval=1, max_keep_ckpts=3))
+
+randomness = dict(seed=0)
