@@ -22,21 +22,22 @@ head = dict(
         out_channels=108,
         with_avg_pool=False),
     loss=loss)
+target_generator = dict(
+    type='HOGGenerator', nbins=9, pool=8, gaussian_window=16)
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
-def test_mae():
+def test_maskfeat():
     data_preprocessor = {
         'mean': [0.5, 0.5, 0.5],
         'std': [0.5, 0.5, 0.5],
         'bgr_to_rgb': True
     }
-    hog_para = {'nbins': 9, 'pool': 8, 'gaussian_window': 16}
 
     alg = MaskFeat(
         backbone=backbone,
         head=head,
-        hog_para=hog_para,
+        target_generator=target_generator,
         data_preprocessor=copy.deepcopy(data_preprocessor))
 
     # test forward_train
