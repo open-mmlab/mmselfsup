@@ -1,4 +1,4 @@
-name: 📚 Documentation
+name: 📚 Documentation Issue
 description: Report an issue related to https://mmselfsup.readthedocs.io/en/latest/.
 labels: "Documentation"
 title: "[Docs] "
@@ -6,7 +6,7 @@ title: "[Docs] "
 body:
 - type: textarea
   attributes:
-    label: 📚 The doc issue
+    label: The doc issue
     description: >
       A clear and concise description of what content in https://mmselfsup.readthedocs.io/en/latest/ is an issue.
   validations:
