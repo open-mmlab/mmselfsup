@@ -44,7 +44,7 @@ class MAEPretrainHead(BaseModule):
         return x
 
     def unpatchify(self, x: torch.Tensor) -> torch.Tensor:
-        """
+        """Combine non-overlapped patches into images.
         Args:
             x (torch.Tensor): The shape is (N, L, patch_size**2 *3)
         Returns:
