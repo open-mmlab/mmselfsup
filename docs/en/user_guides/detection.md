@@ -8,11 +8,12 @@ Here, we prefer to use MMDetection to do the detection task. First, make sure yo
 
 ```shell
 pip install openmim
+mim install 'mmdet>=3.0.0rc0'
 ```
 
 It is very easy to install the package.
 
-Besides, please refer to MMDet for [installation](https://github.com/open-mmlab/mmdetection/blob/master/docs/en/get_started.md) and [data preparation](https://github.com/open-mmlab/mmdetection/blob/master/docs/en/1_exist_data_model.md)
+Besides, please refer to MMDet for [installation](https://mmdetection.readthedocs.io/en/dev-3.x/get_started.html) and [data preparation](https://mmdetection.readthedocs.io/en/dev-3.x/user_guides/dataset_prepare.html)
 
 ## Train
 
@@ -30,11 +31,10 @@ bash tools/benchmarks/mmdetection/mim_slurm_train_fpn.sh ${PARTITION} ${CONFIG} 
 
 Remarks:
 
-- `CONFIG`: Use config files under `configs/benchmarks/mmdetection/`. Since repositories of OpenMMLab have support referring config files across different
-  repositories, we can easily leverage the configs from MMDetection like:
+- `CONFIG`: Use config files under `configs/benchmarks/mmdetection/`. Since repositories of OpenMMLab have support referring config files across different repositories, we can easily leverage the configs from MMDetection like:
 
 ```shell
-_base_ = 'mmdet::mask_rcnn/mask_rcnn_r50_caffe_c4_1x_coco.py'
+_base_ = 'mmdet::mask_rcnn/mask-rcnn_r50-caffe-c4_1x_coco.py'
 ```
 
 Writing your config files from scratch is also supported.
@@ -46,8 +46,8 @@ Example:
 
 ```shell
 bash ./tools/benchmarks/mmdetection/mim_dist_train_c4.sh \
-configs/benchmarks/mmdetection/coco/mask_rcnn_r50_c4_mstrain_1x_coco.py \
-work_dir/byol_resnet50_8xb32-accum16-coslr-200e_in1k_20220225-5c8b2c2e.pth 8
+configs/benchmarks/mmdetection/coco/mask-rcnn_r50-c4_ms-1x_coco.py \
+https://download.openmmlab.com/mmselfsup/1.x/byol/byol_resnet50_16xb256-coslr-200e_in1k/byol_resnet50_16xb256-coslr-200e_in1k_20220825-de817331.pth 8
 ```
 
 Or if you want to do detection task with [detectron2](https://github.com/facebookresearch/detectron2), we also provide some config files.
@@ -80,6 +80,6 @@ Example:
 
 ```shell
 bash ./tools/benchmarks/mmdetection/mim_dist_test.sh \
-configs/benchmarks/mmdetection/coco/mask_rcnn_r50_fpn_mstrain_1x_coco.py \
-work_dir/epoch_12.pth 8
+configs/benchmarks/mmdetection/coco/mask-rcnn_r50_fpn_ms-1x_coco.py \
+https://download.openmmlab.com/mmselfsup/1.x/byol/byol_resnet50_16xb256-coslr-200e_in1k/byol_resnet50_16xb256-coslr-200e_in1k_20220825-de817331.pth 8
 ```

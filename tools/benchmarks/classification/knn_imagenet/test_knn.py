@@ -14,7 +14,7 @@ from mmengine.model.wrappers import MMDistributedDataParallel, is_model_wrapper
 from mmengine.runner import load_checkpoint
 from mmengine.utils import mkdir_or_exist
 
-from mmselfsup.evaluation.functional import knn_classifier
+from mmselfsup.evaluation.functional import knn_eval
 from mmselfsup.models.utils import Extractor
 from mmselfsup.registry import MODELS
 from mmselfsup.utils import register_all_modules
@@ -181,8 +181,8 @@ def main():
             train_labels = train_labels.cuda()
             val_labels = val_labels.cuda()
         for k in args.num_knn:
-            top1, top5 = knn_classifier(train_feats, train_labels, val_feats,
-                                        val_labels, k, args.temperature)
+            top1, top5 = knn_eval(train_feats, train_labels, val_feats,
+                                  val_labels, k, args.temperature)
             logger.info(
                 f'{k}-NN classifier result: Top1: {top1}, Top5: {top5}')
 

@@ -1,5 +1,5 @@
-_base_ = 'mmdet::mask_rcnn/mask_rcnn_r50_caffe_c4_1x_coco.py'
-# https://github.com/open-mmlab/mmdetection/blob/dev-3.x/configs/mask_rcnn/mask_rcnn_r50_caffe_c4_1x_coco.py
+_base_ = 'mmdet::mask_rcnn/mask-rcnn_r50-caffe-c4_1x_coco.py'
+# https://github.com/open-mmlab/mmdetection/blob/dev-3.x/configs/mask_rcnn/mask-rcnn_r50-caffe-c4_1x_coco.py
 
 data_preprocessor = dict(
     type='DetDataPreprocessor',
@@ -42,5 +42,5 @@ train_dataloader = dict(dataset=dict(pipeline=train_pipeline))
 train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=12, val_interval=1)
 
 custom_imports = dict(
-    imports=['mmselfsup.evaluation.functional.res_layer_extra_norm'],
+    imports=['mmselfsup.models.utils.res_layer_extra_norm'],
     allow_failed_imports=False)
