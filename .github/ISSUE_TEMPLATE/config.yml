@@ -1,12 +1,12 @@
 blank_issues_enabled: false
 
 contact_links:
-  - name: 📚 MMSelfSup Documentation
+  - name: 📚 MMSelfSup Documentation (官方文档)
     url: https://mmselfsup.readthedocs.io/en/latest/
     about: Check if your question is answered in docs
-  - name: 💬 Forum
+  - name: 💬 Forum (寻求帮助)
     url: https://github.com/open-mmlab/mmselfsup/discussions
     about: Ask general usage questions and discuss with other MMSelfSup community members
-  - name: 🌐 Explore OpenMMLab
+  - name: 🌐 Explore OpenMMLab (官网)
     url: https://openmmlab.com/
     about: Get know more about OpenMMLab
