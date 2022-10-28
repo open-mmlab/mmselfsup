@@ -9,13 +9,13 @@ import torch.nn as nn
 
 
 @torch.no_grad()
-def knn_classifier(train_features: torch.Tensor,
-                   train_labels: torch.Tensor,
-                   test_features: torch.Tensor,
-                   test_labels: torch.Tensor,
-                   k: int,
-                   T: float,
-                   num_classes: int = 1000) -> Tuple[float, float]:
+def knn_eval(train_features: torch.Tensor,
+             train_labels: torch.Tensor,
+             test_features: torch.Tensor,
+             test_labels: torch.Tensor,
+             k: int,
+             T: float,
+             num_classes: int = 1000) -> Tuple[float, float]:
     """Compute accuracy of knn classifier predictions.
 
     Args:
