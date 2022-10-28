@@ -4,6 +4,9 @@ _base_ = [
     '../_base_/schedules/schedule_2x.py', '../_base_/default_runtime.py'
 ]
 
+custom_imports = dict(
+    imports=['mmselfsup.models.utils.res_layer_extra_norm'],
+    allow_failed_imports=False)
 norm_cfg = dict(type='SyncBN', requires_grad=True)
 model = dict(
     backbone=dict(frozen_stages=-1, norm_cfg=norm_cfg, norm_eval=False),
@@ -30,7 +33,3 @@ train_pipeline = [
 ]
 
 data = dict(train=dict(pipeline=train_pipeline))
-
-custom_imports = dict(
-    imports=['tools.benchmarks.mmdetection.res_layer_extra_norm'],
-    allow_failed_imports=False)
