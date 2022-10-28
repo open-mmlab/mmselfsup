@@ -14,10 +14,15 @@ from .sobel import Sobel
 from .transformer_blocks import (CAETransformerRegressorLayer,
                                  MultiheadAttention, TransformerEncoderLayer)
 
+try:
+    from .res_layer_extra_norm import ResLayerExtraNorm
+except ImportError:
+    ResLayerExtraNorm = None
+
 __all__ = [
     'Extractor', 'GatherLayer', 'MultiPooling', 'MultiPrototypes',
     'build_2d_sincos_position_embedding', 'Sobel', 'MultiheadAttention',
     'TransformerEncoderLayer', 'CAETransformerRegressorLayer', 'Encoder',
     'CosineEMA', 'SelfSupDataPreprocessor', 'RelativeLocDataPreprocessor',
-    'RotationPredDataPreprocessor', 'CAEDataPreprocessor'
+    'RotationPredDataPreprocessor', 'CAEDataPreprocessor', 'ResLayerExtraNorm'
 ]
