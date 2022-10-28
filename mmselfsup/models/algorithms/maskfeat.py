@@ -12,8 +12,8 @@ from .base import BaseModel
 class MaskFeat(BaseModel):
     """MaskFeat.
 
-    Implementation of `Masked Feature Prediction for
-    Self-Supervised Visual Pre-Training <https://arxiv.org/abs/2112.09133>`_.
+    Implementation of `Masked Feature Prediction for Self-Supervised Visual
+    Pre-Training <https://arxiv.org/abs/2112.09133>`_.
     """
 
     def extract_feat(self, inputs: List[torch.Tensor],
