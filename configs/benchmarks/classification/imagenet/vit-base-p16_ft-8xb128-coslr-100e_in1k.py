@@ -4,6 +4,7 @@ _base_ = [
     'mmcls::_base_/schedules/imagenet_bs1024_adamw_swin.py',
     'mmcls::_base_/default_runtime.py'
 ]
+# MAE fine-tuning setting
 
 # model settings
 model = dict(

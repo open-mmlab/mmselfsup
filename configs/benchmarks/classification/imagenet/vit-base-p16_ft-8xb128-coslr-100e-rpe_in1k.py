@@ -3,16 +3,19 @@ _base_ = [
     'mmcls::_base_/schedules/imagenet_bs1024_adamw_swin.py',
     'mmcls::_base_/default_runtime.py'
 ]
+# CAE fine-tuning setting
 
 # dataset
 data_preprocessor = dict(
     num_classes=1000,
     # RGB format normalization parameters
-    mean=[123.675, 116.28, 103.53],
-    std=[58.395, 57.12, 57.375],
+    mean=[127.5, 127.5, 127.5],
+    std=[127.5, 127.5, 127.5],
     # convert image from BGR to RGB
     to_rgb=True,
 )
+bgr_mean = data_preprocessor['mean'][::-1]
+bgr_std = data_preprocessor['std'][::-1]
 
 file_client_args = dict(backend='disk')
 train_pipeline = [
@@ -30,15 +33,16 @@ train_pipeline = [
         total_level=10,
         magnitude_level=9,
         magnitude_std=0.5,
-        hparams=dict(pad_val=[104, 116, 124], interpolation='bicubic')),
+        hparams=dict(
+            pad_val=[round(x) for x in bgr_mean], interpolation='bicubic')),
     dict(
         type='RandomErasing',
         erase_prob=0.25,
         mode='rand',
         min_area_ratio=0.02,
         max_area_ratio=1 / 3,
-        fill_color=[103.53, 116.28, 123.675],
-        fill_std=[57.375, 57.12, 58.395]),
+        fill_color=bgr_mean,
+        fill_std=bgr_std),
     dict(type='PackClsInputs'),
 ]
 

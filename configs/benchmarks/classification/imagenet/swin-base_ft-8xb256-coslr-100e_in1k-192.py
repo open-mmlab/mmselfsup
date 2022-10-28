@@ -4,6 +4,7 @@ _base_ = [
     '../_base_/schedules/adamw_coslr-100e_in1k.py',
     'mmcls::_base_/default_runtime.py'
 ]
+# SimMIM fine-tuning setting
 
 # model settings
 model = dict(

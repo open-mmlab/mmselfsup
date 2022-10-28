@@ -1,4 +1,5 @@
 _base_ = 'vit-huge-p16_ft-8xb128-coslr-50e_in1k.py'
+# MAE fine-tuning setting
 
 # model settings
 # MAE ViT-huge set drop_path_rate to 0.3
