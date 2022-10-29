@@ -23,6 +23,9 @@ class BaseModel(_BaseModel):
             loss from processed features. See :mod:`mmcls.models.heads`.
             Notice that if the head is not set, almost all methods cannot be
             used except :meth:`extract_feat`. Defaults to None.
+        target_generator: (dict, optional): The target_generator module to
+            generate targets for self-supervised learning optimization, such as
+            HOG, extracted features from other modules(DALLE, CLIP), etc.
         pretrained (str, optional): The pretrained checkpoint path, support
             local path and remote path. Defaults to None.
         data_preprocessor (Union[dict, nn.Module], optional): The config for
