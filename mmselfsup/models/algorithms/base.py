@@ -25,7 +25,7 @@ class BaseModel(_BaseModel):
             used except :meth:`extract_feat`. Defaults to None.
         target_generator: (dict, optional): The target_generator module to
             generate targets for self-supervised learning optimization, such as
-            HOG, extracted features from other modules(DALLE, CLIP), etc.
+            HOG, extracted features from other modules(DALL-E, CLIP), etc.
         pretrained (str, optional): The pretrained checkpoint path, support
             local path and remote path. Defaults to None.
         data_preprocessor (Union[dict, nn.Module], optional): The config for
