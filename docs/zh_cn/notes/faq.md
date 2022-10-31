@@ -28,7 +28,7 @@ MMCV, MMClassification, MMDetection and MMSegmentation 的版本兼容性如下�
 
 ## DeepCluster 在 A100 GPU
 
-如果您想尝试 [DeepCluster](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/deepcluster/README.md) 在 A100 GPU上，使用 pip 安装 `faiss` 将会引发错误，
+如果您想尝试 [DeepCluster](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/deepcluster/README.md) 在 A100 GPU 上，使用 pip 安装 `faiss` 将会引发错误，
 他在[这里](https://github.com/facebookresearch/faiss/issues/2076)被提及过。
 
 请使用 conda 安装：
