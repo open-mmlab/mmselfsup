@@ -17,7 +17,7 @@
 我们推荐潜在的贡献者使用下面的流程来添加贡献：
 
 1. Fork 并 pull 最新的MMSelfSup仓库，并根据 [get_started](../get_started.md) 来配置环境。
-2. Checkout 一个新的分支 (\*\*不要使用 aster/dev branch 提交 PR)
+2. Checkout 一个新的分支 (\*\*不要使用 master/dev branch 提交 PR)
 
 请从 `dev-1.x` 分支 checkout 一个新的分支，并按照下面指令：
 
@@ -31,7 +31,7 @@ git checkout -b xxxx # xxxx is the name of new branch
 3. 根据后面提到的代码风格编辑相关的文件
 4. 使用 **pre-commit hook** 来检查和格式化您的修改。
 5. 提交您的修改。
-6. 创建一个 PR，并往dev-1.x合入。
+6. 创建一个 PR，并往 dev-1.x 合入。
 
 ```{note}
 如果您计划去增添一些涉及到很大变化的新特性，我们推荐您先创建一个 issue 与我们讨论。
