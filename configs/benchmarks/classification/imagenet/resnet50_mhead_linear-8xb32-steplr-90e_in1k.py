@@ -2,7 +2,7 @@ _base_ = [
     '../_base_/models/resnet50_multihead.py',
     '../_base_/datasets/imagenet.py',
     '../_base_/schedules/sgd_steplr-100e.py',
-    '../_base_/default_runtime.py',
+    'mmcls::_base_/default_runtime.py',
 ]
 
 # lighting params, in order of BGR

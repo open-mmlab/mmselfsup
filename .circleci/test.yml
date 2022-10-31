@@ -57,11 +57,13 @@ jobs:
             python -V
             pip install torch==<< parameters.torch >>+cpu torchvision==<< parameters.torchvision >>+cpu -f https://download.pytorch.org/whl/torch_stable.html
       - run:
-          name: Install mmselfsup dependencies
+          name: Install MMSelfSup dependencies
           command: |
             pip install git+https://github.com/open-mmlab/mmengine.git@main
             pip install -U openmim
-            mim install 'mmcv >= 2.0.0rc1'
+            mim install 'mmcv>=2.0.0rc1'
+            mim install 'mmdet>=3.0.0rc0'
+            mim install 'mmsegmentation>=1.0.0rc0'
             pip install -r requirements/tests.txt
       - run:
           name: Build and install
@@ -101,11 +103,13 @@ jobs:
             docker build .circleci/docker -t mmselfsup:gpu --build-arg PYTORCH=<< parameters.torch >> --build-arg CUDA=<< parameters.cuda >> --build-arg CUDNN=<< parameters.cudnn >>
             docker run --gpus all -t -d -v /home/circleci/project:/mmselfsup -v /home/circleci/mmengine:/mmengine -v /home/circleci/mmclassification:/mmclassification -w /mmselfsup --name mmselfsup mmselfsup:gpu
       - run:
-          name: Install mmselfsup dependencies
+          name: Install MMSelfSup dependencies
           command: |
             docker exec mmselfsup pip install -e /mmengine
             docker exec mmselfsup pip install -U openmim
-            docker exec mmselfsup mim install 'mmcv >= 2.0.0rc1'
+            docker exec mmselfsup mim install 'mmcv>=2.0.0rc1'
+            docker exec mmselfsup mim install 'mmdet>=3.0.0rc0'
+            docker exec mmselfsup mim install 'mmsegmentation>=1.0.0rc0'
             docker exec mmselfsup pip install -r requirements/tests.txt
       - run:
           name: Build and install

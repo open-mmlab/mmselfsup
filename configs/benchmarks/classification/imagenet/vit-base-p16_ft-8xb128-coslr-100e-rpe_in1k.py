@@ -3,20 +3,21 @@ _base_ = [
     'mmcls::_base_/schedules/imagenet_bs1024_adamw_swin.py',
     'mmcls::_base_/default_runtime.py'
 ]
+# CAE fine-tuning setting
 
 # dataset
-preprocess_cfg = dict(
+data_preprocessor = dict(
+    num_classes=1000,
     # RGB format normalization parameters
     mean=[127.5, 127.5, 127.5],
     std=[127.5, 127.5, 127.5],
     # convert image from BGR to RGB
     to_rgb=True,
 )
-bgr_mean = preprocess_cfg['mean'][::-1]
-bgr_std = preprocess_cfg['std'][::-1]
+bgr_mean = data_preprocessor['mean'][::-1]
+bgr_std = data_preprocessor['std'][::-1]
 
 file_client_args = dict(backend='disk')
-
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(
@@ -83,14 +84,11 @@ model = dict(
             type='LabelSmoothLoss', label_smooth_val=0.1, mode='original'),
         init_cfg=dict(type='TruncNormal', layer='Linear', std=2e-5)),
     train_cfg=dict(augments=[
-        dict(type='Mixup', alpha=0.8, num_classes=1000),
-        dict(type='CutMix', alpha=1.0, num_classes=1000)
+        dict(type='Mixup', alpha=0.8),
+        dict(type='CutMix', alpha=1.0)
     ]))
 
 # optimizer wrapper
-custom_imports = dict(
-    imports=['mmselfsup.datasets', 'mmselfsup.engine'],
-    allow_failed_imports=False)
 optim_wrapper = dict(
     optimizer=dict(
         type='AdamW',
