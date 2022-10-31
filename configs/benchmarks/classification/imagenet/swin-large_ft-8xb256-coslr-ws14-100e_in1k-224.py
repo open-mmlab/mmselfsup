@@ -1,4 +1,5 @@
 _base_ = 'swin-base_ft-8xb256-coslr-100e_in1k-224.py'
+# SimMIM fine-tuning setting
 
 # model settings
 model = dict(

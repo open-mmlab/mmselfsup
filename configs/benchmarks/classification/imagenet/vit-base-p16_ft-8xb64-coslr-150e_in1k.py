@@ -1,8 +1,8 @@
 _base_ = [
     '../_base_/models/vit-small-p16.py',
-    '../_base_/datasets/imagenet_mocov3_ft.py',
+    'mmcls::_base_/datasets/imagenet_bs64_swin_224.py',
     '../_base_/schedules/adamw_coslr-100e_in1k.py',
-    '../_base_/default_runtime.py',
+    'mmcls::_base_/default_runtime.py',
 ]
 # MoCoV3 ViT fine-tuning setting
 
@@ -29,8 +29,8 @@ model = dict(
             dict(type='Constant', layer='LayerNorm', val=1., bias=0.),
         ]),
     train_cfg=dict(augments=[
-        dict(type='Mixup', alpha=0.8, num_classes=1000),
-        dict(type='CutMix', alpha=1.0, num_classes=1000)
+        dict(type='Mixup', alpha=0.8),
+        dict(type='CutMix', alpha=1.0)
     ]))
 
 custom_hooks = [dict(type='EMAHook', momentum=4e-5, priority='ABOVE_NORMAL')]

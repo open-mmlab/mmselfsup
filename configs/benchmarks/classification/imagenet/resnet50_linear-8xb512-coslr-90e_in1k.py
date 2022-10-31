@@ -2,7 +2,7 @@ _base_ = [
     '../_base_/models/resnet50.py',
     '../_base_/datasets/imagenet.py',
     '../_base_/schedules/lars_coslr-90e.py',
-    '../_base_/default_runtime.py',
+    'mmcls::_base_/default_runtime.py',
 ]
 # SimSiam linear evaluation setting
 # According to SimSiam paper, this setting can also be used to evaluate
