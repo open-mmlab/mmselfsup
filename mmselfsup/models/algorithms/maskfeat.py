@@ -25,6 +25,7 @@ class MaskFeat(BaseModel):
             inputs (List[torch.Tensor]): The input images and mask.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
+
         Returns:
             Tuple[torch.Tensor]: Neck outputs.
         """

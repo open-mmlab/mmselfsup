@@ -13,7 +13,7 @@ Collections:
     README: configs/selfsup/maskfeat/README.md
 
 Models:
-  - Name: maskfeat_vit-base-p16_8xb256-coslr-300e_in1k
+  - Name: maskfeat_vit-base-p16_8xb256-amp-coslr-300e_in1k
     In Collection: MaskFeat
     Metadata:
       Epochs: 300

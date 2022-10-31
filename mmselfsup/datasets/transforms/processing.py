@@ -1323,6 +1323,7 @@ class MaskFeatMaskGenerator(BaseTransform):
             mask (np.array): Initial mask of shape (mask_window_size,
                 mask_window_size).
             max_mask_patches (int): Maximum number of masked patches required.
+
         Returns:
             int: Number of masking patches.
         """

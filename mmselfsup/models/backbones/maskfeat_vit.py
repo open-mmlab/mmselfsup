@@ -100,6 +100,7 @@ class MaskFeatViT(VisionTransformer):
         Args:
             x (torch.Tensor): Input images.
             mask (torch.Tensor): Input masks.
+
         Returns:
             torch.Tensor: Features with cls_tokens.
         """
