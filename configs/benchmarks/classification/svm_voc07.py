@@ -1,4 +1,3 @@
-custom_imports = dict(imports='mmcls.datasets', allow_failed_imports=False)
 dataset_type = 'ImageList'
 data_root = 'data/VOCdevkit/VOC2007/'
 file_client_args = dict(backend='disk')

@@ -2,7 +2,7 @@ _base_ = [
     '../_base_/models/resnet50.py',
     '../_base_/datasets/imagenet.py',
     '../_base_/schedules/sgd_steplr-100e.py',
-    '../_base_/default_runtime.py',
+    'mmcls::_base_/default_runtime.py',
 ]
 
 # model settings

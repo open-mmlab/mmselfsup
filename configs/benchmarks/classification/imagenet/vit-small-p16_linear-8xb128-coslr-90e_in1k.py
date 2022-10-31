@@ -2,7 +2,7 @@ _base_ = [
     '../_base_/models/vit-small-p16.py',
     '../_base_/datasets/imagenet.py',
     '../_base_/schedules/sgd_coslr-100e.py',
-    '../_base_/default_runtime.py',
+    'mmcls::_base_/default_runtime.py',
 ]
 # MoCoV3 ViT linear probing setting
 
