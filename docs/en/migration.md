@@ -213,7 +213,7 @@ optim_wrapper = dict(
 2. Changes in **`lr_config`**:
 
 - The `lr_config` field is removed and we use new `param_scheduler` to replace it.
-- The `warmup` related arguments are removed, since we use schedulers combination to implement this functionality. The new schedulers combination mechanism is very flexible, and you can use it to design many kinds of learning rate / momentum curves. See [the tutorial](https://mmengine.readthedocs.io/en/latest/tutorials/param_scheduler.html) for more details.
+- The `warmup` related arguments are removed, since we use a separate lr scheduler to implement this functionality. These introduced lr schedulers are very flexible, and you can use them to design many kinds of learning rate / momentum curves. See [the tutorial](https://mmengine.readthedocs.io/en/latest/tutorials/param_scheduler.html) for more details.
 
 <table class="docutils">
 <tr>
