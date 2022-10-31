@@ -15,7 +15,7 @@
 #### 新特性
 
 - 全量支持 `MAE` ([#483](https://github.com/open-mmlab/mmselfsup/pull/483))
-  -全量支持 `SimMIM` ([#487](https://github.com/open-mmlab/mmselfsup/pull/487))
+- 全量支持 `SimMIM` ([#487](https://github.com/open-mmlab/mmselfsup/pull/487))
 - 全量支持 of `MoCoV3` ([#496](https://github.com/open-mmlab/mmselfsup/pull/496))
 
 #### 修复 Bug
