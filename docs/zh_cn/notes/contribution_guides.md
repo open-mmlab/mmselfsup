@@ -6,7 +6,7 @@
     - [Python](#python)
     - [C++ and CUDA](#c-and-cuda)
 
-感谢您对参与MMSelfsup贡献的兴趣。我们欢迎各种形式的贡献，包括但不限于：
+感谢您对参与 MMSelfsup 贡献的兴趣。我们欢迎各种形式的贡献，包括但不限于：
 
 - 修复 bug 或者错误
 - 添加或翻译文档为另外一种语言
@@ -16,8 +16,8 @@
 
 我们推荐潜在的贡献者使用下面的流程来添加贡献：
 
-1. Fork 并 pull 最新的MMSelfSup仓库，并根据 [get_started](../get_started.md) 来配置环境。
-2. Checkout 一个新的分支 (\*\*不要使用 master/dev branch 提交 PR)
+1. Fork 并 pull 最新的 MMSelfSup 仓库，并根据 [get_started](../get_started.md) 来配置环境。
+2. Checkout 一个新的分支 (**不要使用 master/dev branch 提交 PR**)
 
 请从 `dev-1.x` 分支 checkout 一个新的分支，并按照下面指令：
 
@@ -47,7 +47,7 @@ git checkout -b xxxx # xxxx is the name of new branch
 - [flake8](https://github.com/PyCQA/flake8): 一个 linter 工具装饰器.
 - [isort](https://github.com/timothycrosley/isort): 一个为 Python 导入排序的工具。
 - [yapf](https://github.com/google/yapf): 一个为 Python 文件格式化的工具。
-- [codespell](https://github.com/codespell-project/codespell): 一个修改错误拼写的Python工具。
+- [codespell](https://github.com/codespell-project/codespell): 一个修改错误拼写的 Python 工具。
 - [mdformat](https://github.com/executablebooks/mdformat): Mdformat 是一个可选的 Markdorn 的格式化工具，可以让 Markdown 文件中的格式保持一致。
 - [docformatter](https://github.com/myint/docformatter): 一个格式化 docstring 的工具.
 
