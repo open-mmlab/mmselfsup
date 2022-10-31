@@ -2,6 +2,19 @@
 
 ## MMSelfSup
 
+### v0.10.1 (01/11/2022)
+
+#### Improvements
+
+- Update issue template and management file ([#550](https://github.com/open-mmlab/mmselfsup/pull/550), [#512](https://github.com/open-mmlab/mmselfsup/pull/512))
+- Move res-layer to models.utils ([#537](https://github.com/open-mmlab/mmselfsup/pull/537))
+
+#### Docs
+
+- Add MMYOLO description for README ([#541](https://github.com/open-mmlab/mmselfsup/pull/541))
+- Fix typo for README ([#545](https://github.com/open-mmlab/mmselfsup/pull/545))
+- Fix lint of MaskFeat ([#520](https://github.com/open-mmlab/mmselfsup/pull/520))
+
 ### v0.10.0 (30/09/2022)
 
 #### Highlight
