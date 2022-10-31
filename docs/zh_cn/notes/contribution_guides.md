@@ -44,7 +44,7 @@ git checkout -b xxxx # xxxx is the name of new branch
 我们采用 [PEP8](https://www.python.org/dev/peps/pep-0008/) 作为我们的代码风格。
 我们采用一下工具来进行 linting 和 formatting：
 
-- [flake8](https://github.com/PyCQA/flake8): 一个linter工具装饰器.
+- [flake8](https://github.com/PyCQA/flake8): 一个 linter 工具装饰器.
 - [isort](https://github.com/timothycrosley/isort): 一个为 Python 导入排序的工具。
 - [yapf](https://github.com/google/yapf): 一个为 Python 文件格式化的工具。
 - [codespell](https://github.com/codespell-project/codespell): 一个修改错误拼写的Python工具。
@@ -56,7 +56,7 @@ git checkout -b xxxx # xxxx is the name of new branch
 我们使用 [pre-commit hook](https://pre-commit.com/) 来检查和格式化`flake8`, `yapf`, `isort`, `trailing whitespaces`, `markdown files`，自动修改`end-of-files`, `double-quoted-strings`, `python-encoding-pragma`, `mixed-line-ending`, sorts `requirments.txt` 在每一次提交。
 为 pre-commit hook 的配置储存在 [.pre-commit-config](./.pre-commit-config.yaml)。
 
-在您 clone 残酷之后，您需要安装并初始化 pre-commit hook。
+在您 clone 仓库之后，您需要安装并初始化 pre-commit hook。
 
 ```shell
 pip install -U pre-commit
