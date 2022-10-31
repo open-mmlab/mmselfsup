@@ -86,7 +86,7 @@ pip install -v -e .
 # 因此，对代码所做的任何本地修改都将生效，无需重新安装。
 ```
 
-或者，如果您想为 MMSelfSup 做出贡献或体验其正在实验中的功能，请查看 `dev-1.x` 分支：
+或者，如果您想为 MMSelfSup 做出[贡献](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/docs/zh_cn/notes/contribution_guides.md)或体验其正在实验中的功能，请查看 `dev-1.x` 分支：
 
 ```shell
 git checkout dev-1.x
@@ -109,39 +109,6 @@ import mmselfsup
 print(mmselfsup.__version__)
 # 示例输出：1.0.0rc0 或更新版本
 ```
-
-我们还提供以下示例代码来初始化模型并推断演示图像：
-
-```python
-import torch
-
-from mmselfsup.models import build_algorithm
-
-model_config = dict(
-    type='Classification',
-    backbone=dict(
-        type='ResNet',
-        depth=50,
-        in_channels=3,
-        num_stages=4,
-        strides=(1, 2, 2, 2),
-        dilations=(1, 1, 1, 1),
-        out_indices=[4],  # 0: conv-1, x: stage-x
-        norm_cfg=dict(type='BN'),
-        frozen_stages=-1),
-    head=dict(
-        type='ClsHead', with_avg_pool=True, in_channels=2048,
-        num_classes=1000))
-
-model = build_algorithm(model_config).cuda()
-
-image = torch.randn((1, 3, 224, 224)).cuda()
-label = torch.tensor([1]).cuda()
-
-loss = model.forward_train(image, label)
-```
-
-上述代码应在您完成安装后成功运行。
 
 ### 自定义安装
 
