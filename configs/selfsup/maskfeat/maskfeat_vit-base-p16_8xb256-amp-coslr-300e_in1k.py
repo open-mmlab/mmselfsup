@@ -19,6 +19,7 @@ optim_wrapper = dict(
             'mask_token': dict(decay_mult=0.),
             # 'cls_token': dict(decay_mult=0.)
         }),
+    # commented 'pos_embed' and 'cls_token' to avoid loss stuck situation
     clip_grad=dict(max_norm=0.02))
 
 # learning rate scheduler

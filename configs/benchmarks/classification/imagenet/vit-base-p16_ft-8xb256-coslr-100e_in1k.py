@@ -1,35 +1,11 @@
 # mmcls:: means we use the default settings from MMClassification
-_base_ = [
-    'mmcls::_base_/datasets/imagenet_bs64_swin_224.py',
-    'mmcls::_base_/schedules/imagenet_bs1024_adamw_swin.py',
-    'mmcls::_base_/default_runtime.py'
-]
+_base_ = 'vit-base-p16_ft-8xb128-coslr-100e_in1k.py'
 # maskfeat fine-tuning setting
+
 # model settings
 model = dict(
-    type='ImageClassifier',
-    backbone=dict(
-        type='VisionTransformer',
-        arch='base',
-        img_size=224,
-        patch_size=16,
-        drop_path_rate=0.1,
-        avg_token=True,
-        output_cls_token=False,
-        final_norm=False),
-    neck=None,
-    head=dict(
-        type='LinearClsHead',
-        num_classes=1000,
-        in_channels=768,
-        loss=dict(
-            type='LabelSmoothLoss', label_smooth_val=0.1, mode='original'),
-        init_cfg=[
-            dict(type='TruncNormal', layer='Linear', std=0.02, bias=2e-5),
-        ]),
-    train_cfg=dict(augments=[
-        dict(type='Mixup', alpha=0.8),
-        dict(type='CutMix', alpha=1.0),
+    head=dict(init_cfg=[
+        dict(type='TruncNormal', layer='Linear', std=0.02, bias=2e-5),
     ]))
 
 # dataset
@@ -75,23 +51,7 @@ val_dataloader = dict(batch_size=256, dataset=dict(pipeline=test_pipeline))
 test_dataloader = val_dataloader
 
 # optimizer wrapper
-optim_wrapper = dict(
-    optimizer=dict(
-        type='AdamW',
-        lr=0.008,
-        weight_decay=0.05,
-        eps=1e-8,
-        betas=(0.9, 0.999),
-        model_type='vit',  # layer-wise lr decay type
-        layer_decay_rate=0.65),  # layer-wise lr decay factor
-    constructor='mmselfsup.LearningRateDecayOptimWrapperConstructor',
-    paramwise_cfg=dict(
-        norm_decay_mult=0.0,
-        bias_decay_mult=0.0,
-        custom_keys={
-            'pos_embed': dict(decay_mult=0.),
-            'cls_token': dict(decay_mult=0.),
-        }))
+optim_wrapper = dict(optimizer=dict(lr=0.008))
 
 # learning rate scheduler
 param_scheduler = [
