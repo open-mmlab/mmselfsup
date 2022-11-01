@@ -1,3 +1,18 @@
+- [教程一: 了解配置文件](#教程一-了解配置文件)
+  - [配置文件命名规则](#配置文件命名规则)
+    - [算法信息](#算法信息)
+    - [模块信息](#模块信息)
+    - [训练信息](#训练信息)
+    - [数据信息](#数据信息)
+    - [配置文件命名示例](#配置文件命名示例)
+  - [配置文件结构](#配置文件结构)
+  - [继承和修改配置文件](#继承和修改配置文件)
+    - [使用配置中的中间变量](#使用配置中的中间变量)
+    - [忽略基础配置中的字段](#忽略基础配置中的字段)
+    - [使用基础配置中的字段](#使用基础配置中的字段)
+  - [通过脚本参数修改配置](#通过脚本参数修改配置)
+  - [导入用户定义模块](#导入用户定义模块)
+
 # 教程一: 了解配置文件
 
 MMSelfSup 主要是在 python 文件中来设置各种各样的配置。我们配置文件系统的设计融合了模块化和可继承的设计理念，可以让用户轻松方便地完成各种实验配置。所有的配置文件全部位于 `configs` 目录下。如果您想查看配置文件的全貌，您可以使用以下命令 `python tools/misc/print_config.py`。
@@ -45,11 +60,12 @@ MMSelfSup 主要是在 python 文件中来设置各种各样的配置。我们�
 模块信息大部分情况下是有关 backbone 的一些信息. 例如:
 
 - `resnet50`
-- `vit`（会在mocov3中使用）
+- `vit-base-p16`
+- `swin-base`
 
-或则其他一些需要提及的与 backbone 相关的信息. 例如:
+有时候，有些特殊的配置需要在配置文件名中提及，例如:
 
-- `resnet50-nofrz`: 在下游任务中，backbone 权重不会被冻住
+- `resnet50-sobel`: 在诸如线性评测之类的下游任务, 当我们使用的是 DeepCluster 的预训练模型，在经过 Sobel 层之后，模型只接受两层输入
 
 而 `neck_setting`, `head_setting` 和 `loss_setting` 这几个选项是可选的。
 
@@ -64,6 +80,7 @@ MMSelfSup 主要是在 python 文件中来设置各种各样的配置。我们�
 
 - `8xb32-mcrop-2-6-coslr-200e` : `mcrop` 是 SwAV 提出的 pipeline 中的名为 multi-crop 的一部分。2 和 6 表示 2 个 pipeline 分别输出 2 个和 6 个裁剪图，而且裁剪信息记录在数据信息中；
 - `8xb32-accum16-coslr-200e` : `accum16` 表示权重会在梯度累积16个迭代之后更新。
+- `8xb512-amp-coslr-300e` : `amp` 表示使用混合精度训练。
 
 ### 数据信息
 
@@ -101,8 +118,7 @@ swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py
 - schedules
 - runtime
 
-你可以通过继承一些基础配置文件快捷地构建你自己的配置。由 `_base_` 下的组件组成的配置被称为 原始配置（primitive）。
-为了易于理解，我们使用 MoCo v2 作为一个例子，并对它的每一行做出注释。若想了解更多细节，请参考 API 文档。
+所有的基础配置文件定义了训练所需的最基础的元素，例如 train/val/test 循环，优化器。你可以通过继承一些基础配置文件快捷地构建你自己的配置。由 `_base_` 下的组件组成的配置被称为 原始配置（primitive）。为了易于理解，我们使用 MoCo v2 作为一个例子，并对它的每一行做出注释。若想了解更多细节，请参考 API 文档。
 
 配置文件 `configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py` 如下所述：
 
@@ -119,9 +135,7 @@ _base_ = [
 # 例如是 3, ``CheckpointHook`` 将会只保存最近的 3 个 checkpoint 文件
 # 如果在 work_dirs 中超过了 3 个文件, 将会自动删掉时间最久远的那个 checkpoint
 # , 从而保持 checkpoint 文件的数目始终为 3
-default_hooks = dict(
-    checkpoint=dict(type='CheckpointHook', interval=10, max_keep_ckpts=3)
-)
+default_hooks = dict(checkpoint=dict(max_keep_ckpts=3))
 ```
 
 `../_base_/models/mocov2.py` 是 MoCo v2 的基础模型配置。
@@ -135,6 +149,10 @@ model = dict(
     queue_len=65536,
     feat_dim=128,
     momentum=0.999,
+    data_preprocessor=dict(
+        mean=(123.675, 116.28, 103.53),
+        std=(58.395, 57.12, 57.375),
+        bgr_to_rgb=True),
     backbone=dict(
         type='ResNet',
         depth=50,
@@ -147,8 +165,10 @@ model = dict(
         hid_channels=2048,
         out_channels=128,
         with_avg_pool=True),
-    head=dict(type='ContrastiveHead', temperature=0.2),
-    loss=dict(type='mmcls.CrossEntropyLoss'))
+    head=dict(
+        type='ContrastiveHead',
+        loss=dict(type='mmcls.CrossEntropyLoss'),
+        temperature=0.2))
 ```
 
 `../_base_/datasets/imagenet_mocov2.py` 是 MoCo v2 的基础数据集配置。主要写出了
@@ -162,12 +182,10 @@ dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
 file_client_args = dict(backend='disk')
 
-# 因为我们使用的是 MMClassification 中实现的 ``ImageNet``, 所以我们需要设置
-# custom_imports。
-custom_imports = dict(imports='mmcls.datasets', allow_failed_imports=False)
 # mocov2 和 mocov1 的主要差异在于数据增强的不同
 view_pipeline = [
-    dict(type='RandomResizedCrop', size=224, scale=(0.2, 1.)),
+    dict(
+        type='RandomResizedCrop', size=224, scale=(0.2, 1.), backend='pillow'),
     dict(
         type='RandomApply',
         transforms=[
@@ -179,7 +197,11 @@ view_pipeline = [
                 hue=0.1)
         ],
         prob=0.8),
-    dict(type='RandomGrayscale', prob=0.2, keep_channels=True),
+    dict(
+        type='RandomGrayscale',
+        prob=0.2,
+        keep_channels=True,
+        channel_weights=(0.114, 0.587, 0.2989)),
     dict(type='RandomGaussianBlur', sigma_min=0.1, sigma_max=2.0, prob=0.5),
     dict(type='RandomFlip', prob=0.5),
 ]
@@ -192,9 +214,11 @@ train_pipeline = [
 
 train_dataloader = dict(
     batch_size=32,
-    num_workers=4,
+    num_workers=8,
+    drop_last=True,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
+    collate_fn=dict(type='default_collate'),
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
@@ -207,7 +231,8 @@ train_dataloader = dict(
 
 ```python
 # 优化器
-optimizer_wrapper = dict(optimizer=dict(type='SGD', lr=0.03, weight_decay=1e-4, momentum=0.9))
+optimizer = dict(type='SGD', lr=0.03, weight_decay=1e-4, momentum=0.9)
+optim_wrapper = dict(type='OptimWrapper', optimizer=optimizer)
 
 # 学习率调整策略
 # 使用 cosine learning rate decay
@@ -219,7 +244,7 @@ param_scheduler = [
 train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=200)
 ```
 
-`../_base_/default_runtime.py` 是运行时的默认配置。 运行时设置主要包含一些训练中需要使用的基础配置, 例如 default_hooks and log_processor
+`../_base_/default_runtime.py` 是运行时的默认配置。 运行时设置主要包含一些训练中需要使用的基础配置, 例如 default_hooks 和 log_processor
 
 ```python
 default_scope = 'mmselfsup'
@@ -266,7 +291,13 @@ resume = False
 ```python
 _base_ = './mocov2_resnet50_8xb32-coslr-200e_in1k.py'
 
-runner = dict(max_epochs=800)
+
+# 学习率调整器
+param_scheduler = [
+    dict(type='CosineAnnealingLR', T_max=800, by_epoch=True, begin=0, end=800)
+]
+
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=800)
 ```
 
 ### 使用配置中的中间变量
@@ -277,11 +308,6 @@ runner = dict(max_epochs=800)
 
 ```python
 # 数据集配置
-
-# 因为我们使用来源于 MMClassification 中的 ``ImageNet`` , 我们需要设置
-# custom_imports
-custom_imports = dict(imports='mmcls.datasets', allow_failed_imports=False)
-
 # 我们使用来源于 MMClassification 中的 ``ImageNet``, 所以有一个 ``mmcls`` 的前缀
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
@@ -314,9 +340,11 @@ train_pipeline = [
 
 train_dataloader = dict(
     batch_size=32,
-    num_workers=4,
+    num_workers=8,
+    drop_last=True,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
+    collate_fn=dict(type='default_collate'),
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
