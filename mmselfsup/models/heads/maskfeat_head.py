@@ -9,12 +9,10 @@ from mmselfsup.registry import MODELS
 class MaskFeatPretrainHead(BaseModule):
     """Pre-training head for MaskFeat.
 
-    This head builds a predictor, which can be any registered neck component.
-    It also implements construct loss between prediction and target in masked
-        region.
+    It computes reconstruction loss between prediction and target in masked
+    region.
 
     Args:
-        predictor (dict): Config dict for module of predictor.
         loss (dict): Config dict for module of loss functions.
     """
 
@@ -32,6 +30,7 @@ class MaskFeatPretrainHead(BaseModule):
             target (torch.Tensor): Hog features, which is of shape B x L x C.
             mask (torch.Tensor): The mask of the hog features,
                 which is of shape B x H x W.
+
         Returns:
             torch.Tensor: The loss tensor.
         """
