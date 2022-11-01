@@ -49,10 +49,11 @@ def digit_version(version_str: str, length: int = 4):
 
 
 mmcv_minimum_version = '1.4.2'
-mmcv_maximum_version = '1.7.0'
+mmcv_maximum_version = '1.9.0'
 mmcv_version = digit_version(mmcv.__version__)
 
 mmcls_minimum_version = '0.21.0'
+mmcls_maximum_version = '0.27.0'
 mmcls_version = digit_version(mmcls.__version__)
 
 
@@ -61,8 +62,9 @@ assert (mmcv_version >= digit_version(mmcv_minimum_version)
     f'MMCV=={mmcv.__version__} is used but incompatible. ' \
     f'Please install mmcv>={mmcv_minimum_version}, <{mmcv_maximum_version}.'
 
-assert mmcls_version >= digit_version(mmcls_minimum_version), \
+assert (mmcls_version >= digit_version(mmcls_minimum_version)
+        and mmcls_version < digit_version(mmcls_maximum_version)), \
     f'MMClassification=={mmcls.__version__} is used but incompatible. ' \
-    f'Please install mmcls>={mmcls_minimum_version}.'
+    f'Please install mmcls>={mmcls_minimum_version}, <{mmcls_maximum_version}.'
 
 __all__ = ['__version__', 'digit_version']

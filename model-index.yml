@@ -12,6 +12,8 @@ Import:
   - configs/selfsup/simclr/metafile.yml
   - configs/selfsup/simsiam/metafile.yml
   - configs/selfsup/swav/metafile.yml
-  - configs/selfsup/mae/metafile.yaml
+  - configs/selfsup/mae/metafile.yml
   - configs/selfsup/simmim/metafile.yml
   - configs/selfsup/barlowtwins/metafile.yml
+  - configs/selfsup/cae/metafile.yml
+  - configs/selfsup/maskfeat/metafile.yml
