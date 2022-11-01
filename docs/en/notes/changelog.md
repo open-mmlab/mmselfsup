@@ -2,6 +2,33 @@
 
 ## MMSelfSup
 
+### v1.0.0rc3 (01/11/2022)
+
+The `master` branch is still 0.x version and we will checkout a new `1.x` branch to release 1.x version. The two versions will be maintained simultaneously in the future.
+
+We briefly list the major breaking changes here. Please refer to the [migration guide](../migration.md) for details and migration instructions.
+
+#### Highlight
+
+- Support `MaskFeat`
+
+#### New Features
+
+- Support `MaskFeat` ([#494](https://github.com/open-mmlab/mmselfsup/pull/494))
+
+
+#### Bug Fixes
+
+- Fix classification configs ([#488](https://github.com/open-mmlab/mmselfsup/pull/488))
+
+#### Improvements
+
+- Refactor colab tutorial ([#470](https://github.com/open-mmlab/mmselfsup/pull/470)))
+
+#### Docs
+
+- Add advanced_guides/engine.md ([#454](https://github.com/open-mmlab/mmselfsup/pull/454))
+
 ### v1.0.0rc2 (12/10/2022)
 
 The `master` branch is still 0.x version and we will checkout a new `1.x` branch to release 1.x version. The two versions will be maintained simultaneously in the future.
