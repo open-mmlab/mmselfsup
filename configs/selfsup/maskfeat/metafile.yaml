@@ -20,7 +20,7 @@ Models:
       Batch Size: 2048
     Results: null
     Config: configs/selfsup/maskfeat/maskfeat_vit-base-p16_8xb256-amp-coslr-300e_in1k.py
-    Weights: https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_vit-base-p16_8xb256-amp-coslr-300e_in1k/maskfeat_vit-base-p16_8xb256-amp-coslr-300e_in1k_20221028-9377f534.pth
+    Weights: https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_vit-base-p16_8xb256-amp-coslr-300e_in1k/maskfeat_vit-base-p16_8xb256-amp-coslr-300e_in1k_20221101-6dfc8bf3.pth
     Downstream:
       - Type: Image Classification
         Metadata:
