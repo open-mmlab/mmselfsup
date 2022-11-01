@@ -83,11 +83,13 @@ Find more new features in [1.x branch](https://github.com/open-mmlab/mmselfsup/t
 
 ### Stable version
 
-MMSelfSup **v0.10.0** was released in 30/09/2022.
+MMSelfSup **v0.10.1** was released in 01/11/2022.
 
 Highlights of the new version:
 
 - Support MaskFeat
+- Update issue form
+- Fix some typo in documents
 
 Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
 

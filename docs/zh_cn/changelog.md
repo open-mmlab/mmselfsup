@@ -2,6 +2,19 @@
 
 ## MMSelfSup
 
+### v0.10.1 (01/11/2022)
+
+#### Improvements
+
+- 更新 issue 模板和相关文件 ([#550](https://github.com/open-mmlab/mmselfsup/pull/550), [#512](https://github.com/open-mmlab/mmselfsup/pull/512))
+- 移动 res-layer 到 models.utils 文件夹 ([#537](https://github.com/open-mmlab/mmselfsup/pull/537))
+
+#### Docs
+
+- 增加 MMYOLO 的描述 ([#541](https://github.com/open-mmlab/mmselfsup/pull/541))
+- 修复部分 README 的错误 ([#545](https://github.com/open-mmlab/mmselfsup/pull/545))
+- 修复 MaskFeat 的相关链接 ([#520](https://github.com/open-mmlab/mmselfsup/pull/520))
+
 ### v0.10.0 (30/09/2022)
 
 #### 亮点
