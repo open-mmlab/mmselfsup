@@ -6,13 +6,14 @@ model = dict(
         std=[58.395, 57.12, 57.375],
         bgr_to_rgb=True),
     backbone=dict(type='MaskFeatViT', arch='b', patch_size=16),
+    neck=dict(
+        type='LinearNeck',
+        in_channels=768,
+        out_channels=108,
+        with_avg_pool=False,
+        init_cfg=dict(type='TruncNormal', layer='Linear', std=0.02, bias=0)),
     head=dict(
         type='MaskFeatPretrainHead',
-        predictor=dict(
-            type='LinearNeck',
-            in_channels=768,
-            out_channels=108,
-            with_avg_pool=False),
-        loss=dict(type='MaskFeatReconstructionLoss')),
+        loss=dict(type='PixelReconstructionLoss', criterion='L2')),
     target_generator=dict(
         type='HOGGenerator', nbins=9, pool=8, gaussian_window=16))

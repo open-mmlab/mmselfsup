@@ -1,6 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import torch
-import torch.nn as nn
 from mmengine.model import BaseModule
 
 from mmselfsup.registry import MODELS
@@ -19,16 +18,11 @@ class MaskFeatPretrainHead(BaseModule):
         loss (dict): Config dict for module of loss functions.
     """
 
-    def __init__(self, predictor: dict, loss: dict) -> None:
+    def __init__(self, loss: dict) -> None:
         super().__init__()
-        self.predictor = MODELS.build(predictor)
         self.loss = MODELS.build(loss)
 
-    def init_weights(self):
-        nn.init.constant_(self.predictor.fc.bias, 0)
-        nn.init.trunc_normal_(self.predictor.fc.weight, std=0.02)
-
-    def forward(self, latent: torch.Tensor, target: torch.Tensor,
+    def forward(self, pred: torch.Tensor, target: torch.Tensor,
                 mask: torch.Tensor) -> torch.Tensor:
         """Forward head.
 
@@ -41,9 +35,6 @@ class MaskFeatPretrainHead(BaseModule):
         Returns:
             torch.Tensor: The loss tensor.
         """
-        B, L, C = latent.shape
-        pred = self.predictor([latent.view(B * L, C)])
-        pred = pred[0].view(B, L, -1)
         mask = mask.flatten(1).bool()
         loss = self.loss(pred[:, 1:], target, mask)
 

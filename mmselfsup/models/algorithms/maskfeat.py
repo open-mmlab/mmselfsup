@@ -53,8 +53,11 @@ class MaskFeat(BaseModel):
             [data_sample.mask.value for data_sample in data_samples])
 
         latent = self.backbone(img, mask)
+        B, L, C = latent.shape
+        pred = self.neck([latent.view(B * L, C)])
+        pred = pred[0].view(B, L, -1)
         hog = self.target_generator(img)
 
-        loss = self.head(latent, hog, mask)
+        loss = self.head(pred, hog, mask)
         losses = dict(loss=loss)
         return losses
