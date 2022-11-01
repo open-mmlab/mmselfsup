@@ -65,17 +65,16 @@ The master branch works with **PyTorch 1.6** or higher.
 
 ## What's New
 
+MMSelfSup **v1.0.0rc1** was released in 01/11/2022.
+
+- Support MaskFeat.
+- Add TargetGenerator.
+- Refine configs and documents.
+
 MMSelfSup **v1.0.0rc2** was released in 12/10/2022.
 
 - Full support of `MAE`, `SimMIM`, `MoCoV3` with different model sizes and different pre-training epochs.
 - Update documents and colab tutorial.
-
-MMSelfSup **v1.0.0rc1** was released in 01/09/2022.
-
-- Based on MMEngine and MMCV.
-- Released with refactor.
-- Refine all documents.
-- Refactor the data pipeline, which is more powerful.
 
 Please refer to [Changelog](https://mmselfsup.readthedocs.io/en/dev-1.x/notes/changelog.html) for details and release history.
 
