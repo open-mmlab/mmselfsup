@@ -13,9 +13,9 @@ from PIL import Image
 
 import mmselfsup.datasets.transforms.processing as mmselfsup_transforms
 from mmselfsup.datasets.transforms import (
-    BEiTMaskGenerator, ColorJitter, MaskFeatMaskGenerator, RandomGaussianBlur,
-    RandomPatchWithLabels, RandomResizedCropAndInterpolationWithTwoPic,
-    RandomSolarize, RotationWithLabels, SimMIMMaskGenerator)
+    BEiTMaskGenerator, ColorJitter, RandomGaussianBlur, RandomPatchWithLabels,
+    RandomResizedCropAndInterpolationWithTwoPic, RandomSolarize,
+    RotationWithLabels, SimMIMMaskGenerator)
 
 
 def test_simmim_mask_gen():
@@ -585,17 +585,3 @@ def test_randomrotation():
         nonzero_transform = len(
             (img - np.array(baseline)[:, :, ::-1]).nonzero())
         assert nonzero == nonzero_transform
-
-
-def test_maskfeat_mask_gen():
-    transform = dict(mask_window_size=14, mask_ratio=0.6)
-    module = MaskFeatMaskGenerator(**transform)
-    results = {}
-
-    results = module(results)
-
-    # test transform
-    assert list(results['mask'].shape) == [14, 14]
-
-    # test repr
-    assert isinstance(str(module), str)
