@@ -9,9 +9,18 @@ from .processing import (BEiTMaskGenerator, ColorJitter, RandomCrop,
 from .wrappers import MultiView
 
 __all__ = [
-    'PackSelfSupInputs', 'RandomGaussianBlur', 'RandomSolarize',
-    'SimMIMMaskGenerator', 'BEiTMaskGenerator', 'ColorJitter',
-    'RandomResizedCropAndInterpolationWithTwoPic', 'PackSelfSupInputs',
-    'MultiView', 'RotationWithLabels', 'RandomPatchWithLabels',
-    'RandomRotation', 'RandomResizedCrop', 'RandomCrop'
+    'PackSelfSupInputs',
+    'RandomGaussianBlur',
+    'RandomSolarize',
+    'SimMIMMaskGenerator',
+    'BEiTMaskGenerator',
+    'ColorJitter',
+    'RandomResizedCropAndInterpolationWithTwoPic',
+    'PackSelfSupInputs',
+    'MultiView',
+    'RotationWithLabels',
+    'RandomPatchWithLabels',
+    'RandomRotation',
+    'RandomResizedCrop',
+    'RandomCrop',
 ]
