@@ -12,7 +12,12 @@ train_pipeline = [
         ratio=(0.75, 1.3333),
         interpolation='bicubic'),
     dict(type='RandomFlip', prob=0.5, direction='horizontal'),
-    dict(type='MaskFeatMaskGenerator', mask_window_size=14, mask_ratio=0.4),
+    dict(
+        type='BEiTMaskGenerator',
+        input_size=14,
+        num_masking_patches=78,
+        min_num_patches=15,
+    ),
     dict(
         type='PackSelfSupInputs',
         algorithm_keys=['mask'],

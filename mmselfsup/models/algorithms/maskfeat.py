@@ -51,6 +51,7 @@ class MaskFeat(BaseModel):
         img = inputs[0]
         mask = torch.stack(
             [data_sample.mask.value for data_sample in data_samples])
+        mask = mask.to(torch.bool)
 
         latent = self.backbone(img, mask)
         B, L, C = latent.shape
