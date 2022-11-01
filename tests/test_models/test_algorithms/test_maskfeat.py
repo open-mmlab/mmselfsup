@@ -13,15 +13,11 @@ from mmselfsup.utils import register_all_modules
 register_all_modules()
 
 backbone = dict(type='MaskFeatViT', arch='b', patch_size=16)
-loss = dict(type='MaskFeatReconstructionLoss')
+neck = dict(
+    type='LinearNeck', in_channels=768, out_channels=108, with_avg_pool=False)
 head = dict(
     type='MaskFeatPretrainHead',
-    predictor=dict(
-        type='LinearNeck',
-        in_channels=768,
-        out_channels=108,
-        with_avg_pool=False),
-    loss=loss)
+    loss=dict(type='PixelReconstructionLoss', criterion='L2'))
 target_generator = dict(
     type='HOGGenerator', nbins=9, pool=8, gaussian_window=16)
 
@@ -36,6 +32,7 @@ def test_maskfeat():
 
     alg = MaskFeat(
         backbone=backbone,
+        neck=neck,
         head=head,
         target_generator=target_generator,
         data_preprocessor=copy.deepcopy(data_preprocessor))
