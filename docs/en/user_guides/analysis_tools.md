@@ -114,7 +114,7 @@ An example of visualization:
 </div>
 
 - The left two pictures are images from contrastive learning data pipeline.
-- The right one is a masked image. 
+- The right one is a masked image.
 
 ## Use t-SNE
 
