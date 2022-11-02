@@ -121,7 +121,9 @@ model = dict(
     init_cfg=...)
 ```
 
-**注意：** `data_preprocessor` 可以被定义在模型字段之外，外部定义将拥有更高优先级，并且覆盖内部定义。例子如下：
+**注意：** `data_preprocessor` 可以被定义在模型字段之外，外部定义将拥有更高优先级，并且覆盖模型字段内部定义。
+
+例如以下写法中，`Runner` 将会基于 `mean=[123.675, 116.28, 103.53]` 和 `std=[58.395, 57.12, 57.375]` 这套参数进行构建 `data_preprocessor`，而忽略 `127.5` 的参数。
 
 ```python
 data_preprocessor=dict(
@@ -130,11 +132,17 @@ data_preprocessor=dict(
     bgr_to_rgb=True)
 model = dict(
     type='MAE',
+    data_preprocessor=dict(
+        mean=[127.5, 127.5, 127.5],
+        std=[127.5, 127.5, 127.5],
+        bgr_to_rgb=True)，
     backbone=...,
     neck=...,
     head=...,
     init_cfg=...)
 ```
+
+相关 MMEngine 代码链接：[Runner](https://github.com/open-mmlab/mmengine/blob/main/mmengine/runner/runner.py#L450) 会获取 `cfg.data_preprocessor`，并且 [合并](https://github.com/open-mmlab/mmengine/blob/main/mmengine/runner/runner.py#L401) 进 `cfg.model`。
 
 2. 在新版本的 `head` 字段中，我们新增加了 `loss`，主要负责损失函数的构建。例子如下：
 
