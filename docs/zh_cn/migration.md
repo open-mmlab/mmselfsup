@@ -217,7 +217,7 @@ optim_wrapper = dict(
 2. **`lr_config`** 的变化：
 
 - `lr_config` 已经被**移除**，并且我们使用新的字段 `param_scheduler` 来代替它。
-- `warmup` 相关字段也被**移除**，因为我们使用调度器组合来完成这项功能。新的调度器组合功能非常灵活，您可以用它设计各种不同的学习率或者动量变化曲线。参考 [教程](https://mmengine.readthedocs.io/zh_CN/latest/tutorials/param_scheduler.html) 获取更多信息。
+- `warmup` 相关字段也被**移除**，因为我们使用学习率调度器组合来完成这项功能。新的调度器组合功能非常灵活，您可以用它设计各种不同的学习率或者动量变化曲线。参考 [教程](https://mmengine.readthedocs.io/zh_CN/latest/tutorials/param_scheduler.html) 获取更多信息。
 
 <table class="docutils">
 <tr>
