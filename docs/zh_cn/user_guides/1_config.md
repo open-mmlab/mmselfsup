@@ -1,158 +1,158 @@
-# Tutorial 1: Learn about Configs
+- [教程一: 了解配置文件](#教程一-了解配置文件)
+  - [配置文件命名规则](#配置文件命名规则)
+    - [算法信息](#算法信息)
+    - [模块信息](#模块信息)
+    - [训练信息](#训练信息)
+    - [数据信息](#数据信息)
+    - [配置文件命名示例](#配置文件命名示例)
+  - [配置文件结构](#配置文件结构)
+  - [继承和修改配置文件](#继承和修改配置文件)
+    - [使用配置中的中间变量](#使用配置中的中间变量)
+    - [忽略基础配置中的字段](#忽略基础配置中的字段)
+    - [使用基础配置中的字段](#使用基础配置中的字段)
+  - [通过脚本参数修改配置](#通过脚本参数修改配置)
+  - [导入用户定义模块](#导入用户定义模块)
 
-MMSelfSup mainly uses python files as configs. The design of our configuration file system integrates modularity and inheritance, facilitating users to conduct various experiments. All configuration files are placed in the `configs` folder. If you wish to inspect the config file in summary, you may run `python tools/misc/print_config.py` to see the complete config.
+# 教程一: 了解配置文件
 
-- [Tutorial 1: Learn about Configs](#tutorial-1-learn-about-configs)
-  - [Config File and Checkpoint Naming Convention](#config-file-and-checkpoint-naming-convention)
-    - [Algorithm information](#algorithm-information)
-    - [Module information](#module-information)
-    - [Training information](#training-information)
-    - [Data information](#data-information)
-    - [Config File Name Example](#config-file-name-example)
-  - [Config File Structure](#config-file-structure)
-  - [Inherit and Modify Config File](#inherit-and-modify-config-file)
-    - [Use intermediate variables in configs](#use-intermediate-variables-in-configs)
-    - [Ignore some fields in the base configs](#ignore-some-fields-in-the-base-configs)
-    - [Use some fields in the base configs](#use-some-fields-in-the-base-configs)
-  - [Modify config through script arguments](#modify-config-through-script-arguments)
-  - [Import modules from other MM-codebases](#import-modules-from-other-mm-codebases)
+MMSelfSup 主要是在 python 文件中来设置各种各样的配置。我们配置文件系统的设计融合了模块化和可继承的设计理念，可以让用户轻松方便地完成各种实验配置。所有的配置文件全部位于 `configs` 目录下。如果您想查看配置文件的全貌，您可以使用以下命令 `python tools/misc/print_config.py`。
 
-## Config File and Checkpoint Naming Convention
+## 配置文件命名规则
 
-We follow conventions below to name config files. Contributors are advised to follow the same conventions. The name of config file is divided into four parts: `algorithm info`, `module information`, `training information` and `data information`. Logically, different parts are concatenated by underscores `'_'`, and info belonging to the same part is concatenated by dashes `'-'`.
+我们使用以下规则来命名我们的配置文件，社区贡献者建议遵循这个规则来贡献您的代码。简单来说，配置文件的名字主要划分为四个部分: `algorithm info`, `module information`, `training information` 和 `data information`。不同部分通过下划线 `_` 来进行相连，而属于同一个部分的内容，通过中横线 `-`来进行相连。
 
-The following example is for illustration:
+我们使用以下一个实例让大家有一个清晰的认识
 
 ```
 {algorithm_info}_{module_info}_{training_info}_{data_info}.py
 ```
 
-- `algorithm_info`：Algorithm information includes algorithm name, such as simclr, mocov2, etc;
-- `module_info`： Module information denotes backbones, necks, heads and losses;
-- `training_info`：Training information, e.g. some training schedules, including batch size, lr schedule, data augment;
-- `data_info`：Data information, e.g. dataset name, input size;
+- `algorithm_info`：与算法相关的一些信息，例如算法名;
+- `module_info`： 模块相关的一些信息，例如与loss, head相关的信息;
+- `training_info`：训练相关的信息, 例如 batch size, 学习率调整器和数据增强策略。
+- `data_info`：数据相关信息, 例如数据集名，输入图片的大小;
 
-We detail the naming convention for each part in the name of the config file:
+在下面几个章节，我们将对文件名中的各个部分进行详细的说明：
 
-### Algorithm information
+### 算法信息
 
 ```
 {algorithm}-{misc}
 ```
 
-`algorithm` generally denotes the abbreviation for the paper and its version. For example:
+`algorithm` 通常情况下是算法名字的缩写和版本号. 例如:
 
-- `relative-loc` : The different word is concatenated by dashes `'-'`
+- `relative-loc` : 算法名中不同的部分通过中横线 `-`相连
 - `simclr`
 - `mocov2`
 
-`misc` offers some other algorithm related information.
+`misc` 描述了算法的一些其他信息
 
 - `npid-ensure-neg`
 - `deepcluster-sobel`
 
-### Module information
+### 模块信息
 
 ```
 {backbone_setting}-{neck_setting}-{head_setting}-{loss_setting}
 ```
 
-The module information mainly includes the backbone information. E.g:
+模块信息大部分情况下是有关 backbone 的一些信息. 例如:
 
 - `resnet50`
-- `vit`（will be used in mocov3）
+- `vit-base-p16`
+- `swin-base`
 
-Or there are some special settings which is needed to be mentioned in the config name. E.g:
+有时候，有些特殊的配置需要在配置文件名中提及，例如:
 
-- `resnet50-nofrz`: In some downstream tasks，the backbone will not froze stages while training
+- `resnet50-sobel`: 在诸如线性评测之类的下游任务, 当我们使用的是 DeepCluster 的预训练模型，在经过 Sobel 层之后，模型只接受两层输入
 
-While `neck_setting`, `head_setting` and `loss_setting` are optional.
+而 `neck_setting`, `head_setting` 和 `loss_setting` 这几个选项是可选的。
 
-### Training information
+### 训练信息
 
-Training related settings，including batch size, lr schedule, data augment, etc.
+训练相关的一些配置，包括 batch size, 学习率调整方案和数据增强等。
 
-- Batch size, and the format is `{gpu x batch_per_gpu}`，like `8xb32`;
-- Training recipes, and they will be arranged in the order `{pipeline aug}-{train aug}-{scheduler}-{epochs}`.
+- Batch size, 其格式为 `{gpu x batch_per_gpu}`，如 `8xb32`;
+- 训练配置, 他们需要以下面这个格式来进行书写 `{pipeline aug}-{train aug}-{scheduler}-{epochs}`
 
-E.g:
+如：
 
-- `8xb32-mcrop-2-6-coslr-200e` : `mcrop` is proposed in SwAV named multi-crop，part of pipeline. 2 and 6 means that 2 pipelines will output 2 and 6 crops correspondingly，the crop size is recorded in data information;
-- `8xb32-accum16-coslr-200e` : `accum16` means the gradient will accumulate for 16 iterations，then the weights will be updated.
+- `8xb32-mcrop-2-6-coslr-200e` : `mcrop` 是 SwAV 提出的 pipeline 中的名为 multi-crop 的一部分。2 和 6 表示 2 个 pipeline 分别输出 2 个和 6 个裁剪图，而且裁剪信息记录在数据信息中；
+- `8xb32-accum16-coslr-200e` : `accum16` 表示权重会在梯度累积16个迭代之后更新。
+- `8xb512-amp-coslr-300e` : `amp` 表示使用混合精度训练。
 
-### Data information
+### 数据信息
 
-Data information contains the dataset, input size, etc. E.g:
+数据信息包含数据集，输入大小等。例如：
 
-- `in1k` : `ImageNet1k` dataset, default to use the input image size of 224x224
-- `in1k-384px` : Indicates that the input image size is 384x384
+- `in1k` : `ImageNet1k` 数据集，默认使用的输入图像大小是 224x224
+- `in1k-384px` : 表示输入图像大小是384x384
 - `cifar10`
-- `inat18` : `iNaturalist2018` dataset, and it has 8142 classes
+- `inat18` : `iNaturalist2018` 数据集，包含 8142 类
 - `places205`
 
-### Config File Name Example
+### 配置文件命名示例
 
-Here, we give a concret file name to explain the naming conventions.
+这一节，我们通过一个具体的例子来说明文件命名的规则:
 
 ```
 swav_resnet50_8xb32-mcrop-2-6-coslr-200e_in1k-224-96.py
 ```
 
-- `swav`: Algorithm information
-- `resnet50`: Module information
-- `8xb32-mcrop-2-6-coslr-200e`: Training information
-  - `8xb32`: Use 8 GPUs in total，and the batch size is 32 per GPU
-  - `mcrop-2-6`:Use multi-crop data augment method
-  - `coslr`: Use cosine learning rate scheduler
-  - `200e`: Train the model for 200 epoch
-- `in1k-224-96`: Data information，trained on ImageNet1k dataset，and the input sizes are 224x224 and 96x96
+- `swav`: 算法信息
+- `resnet50`: 模块信息
+- `8xb32-mcrop-2-6-coslr-200e`: 训练信息
+  - `8xb32`: 共使用 8 张 GPU，每张 GPU 上的 batch size 是 32
+  - `mcrop-2-6`: 使用 multi-crop 数据增强方法
+  - `coslr`: 使用余弦学习率调度器
+  - `200e`: 训练模型200个周期
+- `in1k-224-96`: 数据信息，在 ImageNet1k 数据集上训练，输入大小是 224x224 和 96x96
 
-## Config File Structure
+## 配置文件结构
 
-There are four kinds of basic files in the `configs/_base_`, namely：
+在 `configs/_base_` 文件夹中, 有 4 种类型的基础组件文件，即：
 
 - models
 - datasets
 - schedules
 - runtime
 
-All these basic files define the basic elements, such as train/val/test loop and optimizer, to run the experiment.
-You can easily build your own training config file by inheriting some base config files. And the configs that are composed by components from `_base_` are called _primitive_.
+所有的基础配置文件定义了训练所需的最基础的元素，例如 train/val/test 循环，优化器。你可以通过继承一些基础配置文件快捷地构建你自己的配置。由 `_base_` 下的组件组成的配置被称为 原始配置（primitive）。为了易于理解，我们使用 MoCo v2 作为一个例子，并对它的每一行做出注释。若想了解更多细节，请参考 API 文档。
 
-For easy understanding, we use MoCo v2 as a example and comment the meaning of each line. For more detaile, please refer to the API documentation.
-
-The config file `configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py` is displayed below.
+配置文件 `configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py` 如下所述：
 
 ```python
 _base_ = [
-    '../_base_/models/mocov2.py',                  # model
-    '../_base_/datasets/imagenet_mocov2.py',       # data
-    '../_base_/schedules/sgd_coslr-200e_in1k.py',  # training schedule
-    '../_base_/default_runtime.py',                # runtime setting
+    '../_base_/models/mocov2.py',                  # 模型
+    '../_base_/datasets/imagenet_mocov2.py',       # 数据
+    '../_base_/schedules/sgd_coslr-200e_in1k.py',  # 训练调度
+    '../_base_/default_runtime.py',                # 运行时设置
 ]
 
-# Here we inherit the default runtime settings and modify the ``CheckpointHook``.
-# The max_keep_ckpts controls the max number of ckpt file in your work_dirs
-# If it is 3, the ``CheckpointHook`` will save the latest 3 checkpoints.
-# If there are more than 3 checkpoints in work_dirs, it will remove the oldest
-# one to keep the total number as 3.
-default_hooks = dict(
-    checkpoint=dict(type='CheckpointHook', interval=10, max_keep_ckpts=3)
-)
+# 我们继承了默认的运行时设置，同时修改了  ``CheckpointHook``.
+# max_keep_ckpts 控制在 work_dirs 中最多保存多少个 checkpoint 文件
+# 例如是 3, ``CheckpointHook`` 将会只保存最近的 3 个 checkpoint 文件
+# 如果在 work_dirs 中超过了 3 个文件, 将会自动删掉时间最久远的那个 checkpoint
+# , 从而保持 checkpoint 文件的数目始终为 3
+default_hooks = dict(checkpoint=dict(max_keep_ckpts=3))
 ```
 
-`../_base_/models/mocov2.py` is the base configuration file for the model of MoCo v2.
+`../_base_/models/mocov2.py` 是 MoCo v2 的基础模型配置。
 
 ```python
-# type='MoCo' specifies we will use the model of MoCo. And we
-# split the model into four parts, which are backbone, neck, head
-# and loss. 'queue_len', 'feat_dim' and 'momentum' are required
-# by MoCo during the training process.
+# type='MoCo' 指代我们使用 MoCo 这个算法。 我们将改算法分为四个部分：
+# backbone, neck, head 和 loss。'queue_len', 'feat_dim' and 'momentum' 是另外
+# 几个 MoCo 需要的参数。
 model = dict(
     type='MoCo',
     queue_len=65536,
     feat_dim=128,
     momentum=0.999,
+    data_preprocessor=dict(
+        mean=(123.675, 116.28, 103.53),
+        std=(58.395, 57.12, 57.375),
+        bgr_to_rgb=True),
     backbone=dict(
         type='ResNet',
         depth=50,
@@ -165,28 +165,27 @@ model = dict(
         hid_channels=2048,
         out_channels=128,
         with_avg_pool=True),
-    head=dict(type='ContrastiveHead', temperature=0.2),
-    loss=dict(type='mmcls.CrossEntropyLoss'))
+    head=dict(
+        type='ContrastiveHead',
+        loss=dict(type='mmcls.CrossEntropyLoss'),
+        temperature=0.2))
 ```
 
-`../_base_/datasets/imagenet_mocov2.py` is the base configuration file for
-the dataset of MoCo v2. The configuration file specifies the configuration
-for dataset and dataloader.
+`../_base_/datasets/imagenet_mocov2.py` 是 MoCo v2 的基础数据集配置。主要写出了
+与 dataset 和 dataloader 相关的信息。
 
 ```python
-# dataset settings
-# We use the ``ImageNet`` dataset implemented by mmclassification, so there
-# is a ``mmcls`` prefix.
+# dataset 配置
+# 我们使用 MMClassification 中实现的 ``ImageNet`` dataset 数据集, 所以
+# 这里有一个 ``mmcls`` 前缀.
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
 file_client_args = dict(backend='disk')
 
-# Since we use ``ImageNet`` from mmclassification, we need set the
-# custom_imports here.
-custom_imports = dict(imports='mmcls.datasets', allow_failed_imports=False)
-# The difference between mocov2 and mocov1 is the transforms in the pipeline
+# mocov2 和 mocov1 的主要差异在于数据增强的不同
 view_pipeline = [
-    dict(type='RandomResizedCrop', size=224, scale=(0.2, 1.)),
+    dict(
+        type='RandomResizedCrop', size=224, scale=(0.2, 1.), backend='pillow'),
     dict(
         type='RandomApply',
         transforms=[
@@ -198,7 +197,11 @@ view_pipeline = [
                 hue=0.1)
         ],
         prob=0.8),
-    dict(type='RandomGrayscale', prob=0.2, keep_channels=True),
+    dict(
+        type='RandomGrayscale',
+        prob=0.2,
+        keep_channels=True,
+        channel_weights=(0.114, 0.587, 0.2989)),
     dict(type='RandomGaussianBlur', sigma_min=0.1, sigma_max=2.0, prob=0.5),
     dict(type='RandomFlip', prob=0.5),
 ]
@@ -211,9 +214,11 @@ train_pipeline = [
 
 train_dataloader = dict(
     batch_size=32,
-    num_workers=4,
+    num_workers=8,
+    drop_last=True,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
+    collate_fn=dict(type='default_collate'),
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
@@ -222,24 +227,24 @@ train_dataloader = dict(
         pipeline=train_pipeline))
 ```
 
-`../_base_/schedules/sgd_coslr-200e_in1k.py` is the base configuration file for
-the training schedules of MoCo v2.
+`../_base_/schedules/sgd_coslr-200e_in1k.py` 是 MoCo v2 的基础调度配置。
 
 ```python
-# optimizer
-optimizer_wrapper = dict(optimizer=dict(type='SGD', lr=0.03, weight_decay=1e-4, momentum=0.9))
+# 优化器
+optimizer = dict(type='SGD', lr=0.03, weight_decay=1e-4, momentum=0.9)
+optim_wrapper = dict(type='OptimWrapper', optimizer=optimizer)
 
-# learning rate scheduler
-# use cosine learning rate decay here
+# 学习率调整策略
+# 使用 cosine learning rate decay
 param_scheduler = [
     dict(type='CosineAnnealingLR', T_max=200, by_epoch=True, begin=0, end=200)
 ]
 
-# loop settings
+# 循环设置
 train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=200)
 ```
 
-`../_base_/default_runtime.py` contains the default runtime settings. The runtime settings include some basic components during training, such as default_hooks and log_processor
+`../_base_/default_runtime.py` 是运行时的默认配置。 运行时设置主要包含一些训练中需要使用的基础配置, 例如 default_hooks 和 log_processor
 
 ```python
 default_scope = 'mmselfsup'
@@ -269,47 +274,46 @@ visualizer = dict(
     type='SelfSupVisualizer',
     vis_backends=vis_backends,
     name='visualizer')
-# custom_hooks = [dict(type='SelfSupVisualizationHook', interval=10)]
 
 log_level = 'INFO'
 load_from = None
 resume = False
 ```
 
-## Inherit and Modify Config File
+## 继承和修改配置文件
 
-For easy understanding, we recommend contributors to inherit from existing configurations.
+为了易于理解，我们推荐贡献者从现有方法继承。
 
-For all configs under the same folder, it is recommended to have only **one** _primitive_ config. All other configs should inherit from the _primitive_ config. In this way, the maximum of inheritance level is 3.
+对于同一个文件夹下的所有配置，我们推荐只使用**一个**原始（primitive） 配置。其他所有配置应当从 原始（primitive） 配置继承。这样最大的继承层次为 3。
 
-For example, if your config file is based on MoCo v2 with some other modification, you can first inherit the basic configuration of MoCo v2 by specifying `_base_ ='./mocov2_resnet50_8xb32-coslr-200e_in1k.py.py'` (The path relative to your config file), and then modify the necessary parameters in your customized config file. A more specific example, now we want to use almost all configs in `configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py.py`, except for changing the training epochs from 200 to 800, you can create a new config file `configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-800e_in1k.py.py` with content as below:
+例如，如果你的配置文件是基于 MoCo v2 做一些修改， 首先你可以通过指定 `_base_ ='./mocov2_resnet50_8xb32-coslr-200e_in1k.py.py'` （相对于你的配置文件的路径）继承基本的 MoCo v2 结构，接着在配置文件中修改一些必要的参数。 现在，我们举一个更具体的例子，我们想使用 `configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py.py`中几乎所有的配置，但是将训练周期数从 200 修改为 800，修改学习率衰减的时机和数据集路径，你可以创建一个名为 `configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-800e_in1k.py.py` 的新配置文件，内容如下：
 
 ```python
 _base_ = './mocov2_resnet50_8xb32-coslr-200e_in1k.py'
 
-runner = dict(max_epochs=800)
+
+# 学习率调整器
+param_scheduler = [
+    dict(type='CosineAnnealingLR', T_max=800, by_epoch=True, begin=0, end=800)
+]
+
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=800)
 ```
 
-### Use intermediate variables in configs
+### 使用配置中的中间变量
 
-Some intermediate variables are used in the configuration file. The intermediate variables make the configuration file more clear and easier to modify.
+在配置文件中使用一些中间变量会使配置文件更加清晰和易于修改。
 
-For example, `dataset_type`, `train_pipeline`, `file_client_args` are the intermediate variables of the data. We first need to define them and then pass them to `data`.
+例如 `dataset_type`, `train_pipeline`, `file_client_args` 是数据中的中间变量。 我们先定义它们再将它们传进 `data`.
 
 ```python
-# dataset settings
-
-# Since we use ``ImageNet`` from mmclassification, we need set the
-# custom_imports here.
-custom_imports = dict(imports='mmcls.datasets', allow_failed_imports=False)
-
-# We use the ``ImageNet`` dataset implemented by mmclassification, so there
-# is a ``mmcls`` prefix.
+# 数据集配置
+# 我们使用来源于 MMClassification 中的 ``ImageNet``, 所以有一个 ``mmcls`` 的前缀
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
 file_client_args = dict(backend='disk')
 
-# The difference between mocov2 and mocov1 is the transforms in the pipeline
+# mocov2 和 mocov1 的不同主要来自于数据增强
 view_pipeline = [
     dict(type='RandomResizedCrop', size=224, scale=(0.2, 1.)),
     dict(
@@ -336,9 +340,11 @@ train_pipeline = [
 
 train_dataloader = dict(
     batch_size=32,
-    num_workers=4,
+    num_workers=8,
+    drop_last=True,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
+    collate_fn=dict(type='default_collate'),
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
@@ -347,11 +353,9 @@ train_dataloader = dict(
         pipeline=train_pipeline))
 ```
 
-### Ignore some fields in the base configs
+### 忽略基础配置中的字段
 
-Sometimes, you need to set `_delete_=True` to ignore some domain content in the basic configuration file. You can refer to [mmengine](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/config.md) for more instructions.
-
-The following is an example. If you want to use `MoCoV2Neck` in simclr, just using inheritance and directly modifying it will report `get unexcepected keyword 'num_layers'` error, because the `'num_layers'` field of the basic config in `model.neck` domain information is reserved, and you need to add `_delete_=True` to ignore the original content of `model.neck` in the basic configuration file:
+有时候，你需要设置 `_delete_=True` 来忽略基础配置文件中一些域的内容。 您可以参考 [mmengine](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/config.md) 获得更多说明。 接下来是一个例子。如果你希望在 SimCLR 使用中 `MoCoV2Neck`, 仅仅继承并直接修改将会报 `get unexcepected keyword 'num_layers'` 错误， 因为在 `model.neck` 域信息中，基础配置 `num_layers` 字段被保存下来了， 你需要添加 `_delete_=True` 来忽略 `model.neck` 在基础配置文件中的有关字段的内容：
 
 ```python
 _base_ = 'simclr_resnet50_8xb32-coslr-200e_in1k.py'
@@ -366,11 +370,10 @@ model = dict(
         with_avg_pool=True))
 ```
 
-### Use some fields in the base configs
+### 使用基础配置中的字段
 
-Sometimes, you may refer to some fields in the `_base_` config, so as to avoid duplication of definitions. You can refer to [mmengine](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/config.md) for some more instructions.
-
-The following is an example of using the `num_classes` variable in the base configuration file, please refer to `configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py`.
+有时候，你可能引用 `_base_` 配置中一些字段, 以避免重复定义。 你可以参考 [mmengine](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/config.md) 获取更多的说明。
+下面是一个使用基础配置文件中 `num_classes` 的例子, 请参考 `configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py`.
 
 ```python
 _base_ = [
@@ -388,34 +391,33 @@ model = dict(
 
 ```
 
-## Modify config through script arguments
+## 通过脚本参数修改配置
 
-When users use the script "tools/train.py" or "tools/test.py" to submit tasks or use some other tools, they can directly modify the content of the configuration file used by specifying the `--cfg-options` parameter.
+当用户使用脚本 "tools/train.py" 或 "tools/test.py" 提交任务，或者其他工具时，可以通过指定 `--cfg-options` 参数来直接修改配置文件中内容。
 
-- Update config keys of dict chains.
+- 更新字典链中的配置的键
 
-  The config options can be specified following the order of the dict keys in the original config.
-  For example, `--cfg-options model.backbone.norm_eval=False` changes the all BN modules in model backbones to `train` mode.
+  配置项可以通过遵循原始配置中键的层次顺序指定。例如，`--cfg-options model.backbone.norm_eval=False` 改变模型 backbones 中的所有 BN 模块为 `train` 模式。
 
-- Update keys inside a list of configs.
+- 更新列表中配置的键
 
-  Some config dicts are composed as a list in your config. For example, the training pipeline `data.train.pipeline` is normally a list
-  e.g. `[dict(type='LoadImageFromFile'), dict(type='TopDownRandomFlip', flip_prob=0.5), ...]`. If you want to change `'flip_prob=0.5'` to `'flip_prob=0.0'` in the pipeline,
-  you may specify `--cfg-options data.train.pipeline.1.flip_prob=0.0`.
+  你的配置中的一些配置字典是由列表组成。例如，训练 pipeline `data.train.pipeline` 通常是一个列表。
+  例如 `[dict(type='LoadImageFromFile'), dict(type='TopDownRandomFlip', flip_prob=0.5), ...]`。 如果你想要在 pipeline 中将 `'flip_prob=0.5'` 修改为 `'flip_prob=0.0'` ，
+  您可以指定 `--cfg-options data.train.pipeline.1.flip_prob=0.0`.
 
-- Update values of list/tuples.
+- 更新 list/tuples 中的值
 
-  If the value to be updated is a list or a tuple. For example, some configuration files contain `param_scheduler = "[dict(type='CosineAnnealingLR',T_max=200,by_epoch=True,begin=0,end=200)]"`. If you want to change this key, you may specify `--cfg-options param_scheduler = "[dict(type='LinearLR',start_factor=1e-4, by_epoch=True,begin=0,end=40,convert_to_iter_based=True)]"`. Note that the quotation mark " is necessary to support list/tuple data types, and that **NO** white space is allowed inside the quotation marks in the specified value.
+  如果想要更新的值是一个列表或者元组。 例如, 一些配置文件中包含 `param_scheduler = "[dict(type='CosineAnnealingLR',T_max=200,by_epoch=True,begin=0,end=200)]"`。 如果你想要改变这个键，你可以指定 `--cfg-options param_scheduler = "[dict(type='LinearLR',start_factor=1e-4, by_epoch=True,begin=0,end=40,convert_to_iter_based=True)]"`。 注意, " 是必要的, 并且在指定值的时候，在引号中不能存在空白字符。
 
-## Import modules from other MM-codebases
+## 导入用户定义模块
 
 ```{note}
-This part may only be used when using other MM-codebase, like mmcls as a third party library to build your own project, and beginners can skip it.
+这部分内容初学者可以跳过，只在使用其他 MM-codebase 时会用到，例如使用 mmcls 作为第三方库来构建你的工程。
 ```
 
-You may use other MM-codebase to complete your project and create new classes of datasets, models, data enhancements, etc. in the project. In order to streamline the code, you can use MM-codebase as a third-party library, you just need to keep your own extra code and import your own custom module in the configuration files. For examples, you may refer to [OpenMMLab Algorithm Competition Project](https://github.com/zhangrui-wolf/openmmlab-competition-2021) .
+这部分内容初学者可以跳过，只在使用其他 MM-codebase 时会用到，例如使用 mmcls 作为第三方库来构建你的工程。 i为了简化代码，你可以使用 MM-codebase 作为第三方库，只需要保存你自己额外的代码，并在配置文件中导入自定义模块。你可以参考 [OpenMMLab Algorithm Competition Project](https://github.com/zhangrui-wolf/openmmlab-competition-2021) 中的例子.
 
-Add the following code to your own configuration files:
+在你自己的配置文件中添加如下所述的代码：
 
 ```python
 custom_imports = dict(
