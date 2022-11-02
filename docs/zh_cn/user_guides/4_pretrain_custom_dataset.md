@@ -1,29 +1,29 @@
-# Tutorial 4: Pretrain with Custom Dataset
+# 教程 4: 使用自定义数据集进行预训练
 
-- [Tutorial 4: Pretrain with Custom Dataset](#tutorial-4-pretrain-with-custom-dataset)
-  - [Train MAE on Custom Dataset](#train-mae-on-custom-dataset)
-    - [Get the path of custom dataset](#get-the-path-of-custom-dataset)
-    - [Choose one config as template](#choose-one-config-as-template)
-    - [Edit the dataset related config](#edit-the-dataset-related-config)
-  - [Train MAE on COCO Dataset](#train-mae-on-coco-dataset)
-  - [Train SimCLR on Custom Dataset](#train-simclr-on-custom-dataset)
-  - [Load Pre-trained Model to Speedup Convergence](#load-pre-trained-model-to-speedup-convergence)
+- [教程 4: 使用自定义数据集进行预训练](#教程-4-使用自定义数据集进行预训练)
+  - [在自定义数据集上使用MAE算法进行预训练](#在自定义数据集上使用mae算法进行预训练)
+    - [第一步：获取自定义数据路径](#第一步获取自定义数据路径)
+    - [第二步：选择一个配置文件作为模板](#第二步选择一个配置文件作为模板)
+    - [第三步：修改数据集相关的配置](#第三步修改数据集相关的配置)
+  - [在COCO数据集上使用MAE算法进行预训练](#在coco数据集上使用mae算法进行预训练)
+  - [在自定义数据集上使用SimCLR算法进行预训练](#在自定义数据集上使用simclr算法进行预训练)
+  - [使用MMSelfSup提供的预训练模型来加速收敛](#使用mmselfsup提供的预训练模型来加速收敛)
 
-In this tutorial, we provide some tips on how to conduct self-supervised learning on your own dataset(without the need of label).
+在本教程中，我们将介绍如何使用自定义数据集(无需标注)进行自监督预训练。
 
-## Train MAE on Custom Dataset
+## 在自定义数据集上使用MAE算法进行预训练
 
-In MMSelfSup, We support the `CustomDataset` from MMClassification(similar to the `ImageFolder` in `torchvision`),  which is able to read the images within the specified folder directly. You only need to prepare the path information of the custom dataset and edit the config.
+在MMSelfSup中, 我们支持用户直接调用MMClassification的`CustomDataset`(类似于`torchvision`的`ImageFolder`), 该数据集能自动的读取给的路径下的图片。你只需要准备你的数据集路径，并修改配置文件，即可轻松使用MMSelfSup进行预训练。
 
-### Get the path of custom dataset
+### 第一步：获取自定义数据路径
 
-It should be like `data/custom_dataset/`
+路径应类似这种形式： `data/custom_dataset/`
 
-### Choose one config as template
+### 第二步：选择一个配置文件作为模板
 
-Here, we would like to use `configs/selfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k.py` as the example. We first copy this config file and rename it as `mae_vit-base-p16_8xb512-coslr-400e_${custom_dataset}.py`.
+在本教程中，我们使用 `configs/selfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k.py`作为一个示例进行讲解。我们首先复制这个配置文件，将新复制的文件命名为`mae_vit-base-p16_8xb512-coslr-400e_${custom_dataset}.py`.
 
-The content of this config is:
+这个配置文件的内容如下：
 
 ```python
 _base_ = [
@@ -82,19 +82,19 @@ randomness = dict(seed=0, diff_rank_seed=True)
 resume = True
 ```
 
-### Edit the dataset related config
+### 第三步：修改数据集相关的配置
 
-The dataset related config is defined in `'../_base_/datasets/imagenet_mae.py'` in `_base_`. We then copy the content of dataset config file into our created file `mae_vit-base-p16_8xb512-coslr-400e_${custom_dataset}.py`.
+数据集相关的配置是定义在 `_base_`的`'../_base_/datasets/imagenet_mae.py'` 文件内。我们直接将其内容复制到刚刚创建的新的配置文件 `mae_vit-base-p16_8xb512-coslr-400e_${custom_dataset}.py` 中.
 
-- Then we remove the `'../_base_/datasets/imagenet_mae.py'` in `_base_`.
-- Set the `dataset_type = 'mmcls.CustomDataset'`, and the path of the custom dataset ` data_root = /dataset/my_custom_dataset`.
-- Remove the `ann_file` in `train_dataloader`, and edit the `data_prefix` if needed.
+- 此时我们删除 `_base_`的 `'../_base_/datasets/imagenet_mae.py'`。
+- 修改`dataset_type = 'mmcls.CustomDataset'`和` data_root = /dataset/my_custom_dataset`.
+- 删除 `train_dataloader`中的 `ann_file` ，同时根据自己的实际情况决定是否需要设定 `data_prefix`。
 
 ```{note}
-The `CustomDataset` is implemented in MMClassification, and we set the `dataset_type=mmcls.CustomDataset`.
+`CustomDataset` 是在MMClassification实现的, 因此我们使用这种方式 `dataset_type=mmcls.CustomDataset` 来使用这个类。
 ```
 
-And the edited config will be like this:
+此时，修改后的文件应如下：
 
 ```python
 # >>>>>>>>>>>>>>>>>>>>> Start of Changed >>>>>>>>>>>>>>>>>>>>>>>>>
@@ -184,15 +184,15 @@ randomness = dict(seed=0, diff_rank_seed=True)
 resume = True
 ```
 
-By using the edited config file, you are able to train a self-supervised model with MAE algorithm on the custom dataset.
+使用上述配置文件，你就能够轻松的在自定义数据集上使用MAE算法来进行预训练了。
 
-## Train MAE on COCO Dataset
+## 在COCO数据集上使用MAE算法进行预训练
 
 ```{note}
-You need to install MMDetection to use the `mmdet.CocoDataset` follow this [documentation](https://github.com/open-mmlab/mmdetection/blob/3.x/docs/en/get_started.md)
+你可能需要参考[文档](https://github.com/open-mmlab/mmdetection/blob/3.x/docs/en/get_started.md)安装MMDetection 来使用 `mmdet.CocoDataset`。
 ```
 
-Follow the aforementioned idea, we also present an example of how to train MAE on COCO dataset.  The edited file will be like this:
+与在自定义数据集上进行预训练类似，我们在本教程中也提供了一个使用COCO数据集进行预训练的示例。修改后的文件如下：
 
 ```python
 # >>>>>>>>>>>>>>>>>>>>> Start of Changed >>>>>>>>>>>>>>>>>>>>>>>>>
@@ -281,12 +281,11 @@ randomness = dict(seed=0, diff_rank_seed=True)
 resume = True
 ```
 
-## Train SimCLR on Custom Dataset
+## 在自定义数据集上使用SimCLR算法进行预训练
 
-We provide an example of using SimCLR on custom dataset, the main idea is similar to the [Train MAE on Custom Dataset
-](#train-mae-on-custom-dataset).
+我们也提供了一个使用SimCLR在自定义数据集上进行预训练的配置文件，主要思路与 [在自定义数据集上使用MAE算法进行预训练](#在自定义数据集上使用mae算法进行预训练) 是类似的。
 
-The template config is `configs/selfsup/simclr/simclr_resnet50_8xb32-coslr-200e_in1k.py`. And the edited config is:
+我们使用的模板是 `configs/selfsup/simclr/simclr_resnet50_8xb32-coslr-200e_in1k.py`，你可以根据自己的需要从配置文件仓库里选择合适的文件作为模板，其修改后的内容如下:
 
 ```python
 # >>>>>>>>>>>>>>>>>>>>> Start of Changed >>>>>>>>>>>>>>>>>>>>>>>>>
@@ -365,14 +364,14 @@ default_hooks = dict(
 
 ```
 
-## Load pre-trained model to speedup convergence
+## 使用MMSelfSup提供的预训练模型来加速收敛
 
-To speedup the convergence of the model on your own dataset. You may use the pre-trained model as the initialization for the model's weight. You just need to specify the url of the pre-trained model via command. You can find our provide pre-trained checkpoint here: [Model Zoo](https://mmselfsup.readthedocs.io/en/1.x/model_zoo.html)
+在具体应用中，我们可以使用MMSelfSup已经提供的预训练模型来加速自定义数据集上的训练速度。你可以考虑使用这些预训练模型作为初始化。具体来讲，你只需要从 [模型库](https://mmselfsup.readthedocs.io/en/1.x/model_zoo.html) 中选择一个合适模型，获取模型权重的URL链接，并在启动训练的时候，指定这个链接作为预训练模型。
 
 ```bash
 bash tools/dist_train.sh ${CONFIG} ${GPUS} --cfg-options model.pretrained=${PRETRAIN}
 ```
 
-- `CONFIG`: the edited config path
-- `GPUS`: the number of GPU
-- `PRETRAIN`: the checkpoint url of pre-trained model provided by MMSelfSup
+- `CONFIG`: 修改后的配置文件
+- `GPUS`: 使用的GPU数
+- `PRETRAIN`: MMSelfSup提供的预训练模型文件的URL
