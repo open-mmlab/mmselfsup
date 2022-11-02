@@ -75,7 +75,7 @@ bash tools/dataset_converters/prepare_voc07_cls.sh $YOUR_DATA_ROOT
 
 ## 准备 CIFAR10 数据集
 
-如果没有找到 CIFAR10 系统将会自动下载。此外，由 `MMSelfSup` 实现的 `dataset` 也会自动将 CIFAR10 转换为适当的格式。
+`MMSelfSup` 使用由 `MMClassification` 实现的 [`CIFAR10`](https://github.com/open-mmlab/mmclassification/blob/1.x/mmcls/datasets/cifar.py)。此外，　`MMClassification` 支持自动下载 `CIFAR10`数据集，您只需在 `data_root` 字段中指定下载文件夹即可。 并且通过指定 `test_mode=False` / `test_mode=True` 来使用训练数据集或测试数据集。
 
 ## 准备检测和分割数据集
 
