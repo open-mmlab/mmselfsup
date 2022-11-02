@@ -18,7 +18,9 @@ It is recommended to learn the basic concept of visualization in [engine.md](htt
 
 OpenMMLab 2.0 introduces the visualization object `Visualizer` and several visualization backends `VisBackend`. The diagram below shows the relationship between `Visualizer` and  `VisBackend`,
 
-![img](https://user-images.githubusercontent.com/17425982/163327736-f7cb3b16-ef07-46bc-982a-3cc7495e6c82.png)
+<div align="center">
+<img src="https://user-images.githubusercontent.com/17425982/163327736-f7cb3b16-ef07-46bc-982a-3cc7495e6c82.png" width="800" />
+</div>
 
 ## What Visualization do in MMSelfsup
 
@@ -58,6 +60,12 @@ vis_backends = [dict(type='TensorboardVisBackend')]
 visualizer = dict(
     type='SelfSupVisualizer', vis_backends=vis_backends, name='visualizer')
 ```
+E.g.
+
+<div align="center">
+<img src="https://user-images.githubusercontent.com/36138628/199388357-5d1cc7b4-07b8-41b1-ac66-12ec8ef009da.png" width="400" />
+</div>
+
 
 **Wandb**
 
@@ -68,6 +76,12 @@ visualizer = dict(
 ```
 
 Note that when multiple visualization backends exist for `vis_backends`, only `WandbVisBackend` is valid.
+
+E.g.
+
+<div align="center">
+<img src="https://user-images.githubusercontent.com/36138628/199388643-288cf83f-0faa-4f34-a5d0-bf53c7bb3e08.png" width="600" />
+</div>
 
 ## Customize Visualization
 

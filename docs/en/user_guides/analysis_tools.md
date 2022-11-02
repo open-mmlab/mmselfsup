@@ -53,7 +53,9 @@ log file. Run `pip install seaborn` first to install the dependency.
 python tools/analysis_tools/analyze_logs.py plot_curve [--keys ${KEYS}] [--title ${TITLE}] [--legend ${LEGEND}] [--backend ${BACKEND}] [--style ${STYLE}] [--out ${OUT_FILE}]
 ```
 
-![loss curve image](https://raw.githubusercontent.com/open-mmlab/mmdetection/master/resources/loss_curve.png)
+<div align="center">
+<img src="https://raw.githubusercontent.com/open-mmlab/mmdetection/master/resources/loss_curve.png" width="400" />
+</div>
 
 Examples:
 
@@ -105,6 +107,12 @@ An example:
 python tools/misc/browse_dataset.py configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py
 ```
 
+An example of visualization:
+
+<div align="center">
+<img src="https://user-images.githubusercontent.com/36138628/199387454-219e6f6c-fbb7-43bb-b319-61d3e6266abc.png" width="600" />
+</div>
+
 ## Use t-SNE
 
 We provide an off-the-shelf tool to visualize the quality of image representations by t-SNE.
@@ -125,3 +133,9 @@ An example:
 ```shell
 python tools/analysis_tools/visualize_tsne.py configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py --checkpoint epoch_100.pth --work-dir work_dirs/selfsup/simsiam_resnet50_8xb32-coslr-200e_in1k
 ```
+
+An example of visualization:
+
+<div align="center">
+<img src="https://user-images.githubusercontent.com/36138628/199388251-476a5ad2-f9c1-4dfb-afe2-73cf41b5793b.jpg" width="800" />
+</div>
