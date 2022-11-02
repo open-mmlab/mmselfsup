@@ -1,11 +1,11 @@
 # 教程 3: 使用现有模型进行预训练
 
 - [教程 3: 使用现有模型进行预训练](#教程-3-使用现有模型进行预训练)
-  - [使用单卡训练](#使用单卡训练)
-  - [使用 CPU 训练](#使用-cpu-训练)
-  - [使用多卡训练](#使用多卡训练)
-  - [使用用多台机器训练](#使用用多台机器训练)
-  - [在一台机器上启动多个任务](#在一台机器上启动多个任务)
+    - [使用单卡训练](#使用单卡训练)
+    - [使用 CPU 训练](#使用-cpu-训练)
+    - [使用多卡训练](#使用多卡训练)
+    - [使用用多台机器训练](#使用用多台机器训练)
+    - [在一台机器上启动多个任务](#在一台机器上启动多个任务)
 
 本文档提供有关如何运行算法以及如何使用 MMSelfSup 中的一些工具的基本用法。有关安装说明和数据准备，请参阅 [install.md](install.md) 和 [prepare_data.md](prepare_data.md)。
 
@@ -32,7 +32,7 @@ export CUDA_VISIBLE_DEVICES=-1
 python tools/train.py ${CONFIG_FILE} [optional arguments]
 ```
 
-**注意**。我们不建议用户使用CPU进行训练，因为它太慢了。我们支持这个功能，是为了允许用户在没有GPU的机器上进行调试，以方便用户。
+**注意**。我们不建议用户使用CPU进行训练，因为它太慢了。我们支持这个功能，是为了方便用户在没有GPU的机器上进行调试。
 
 ### 使用多卡训练
 
@@ -42,8 +42,8 @@ sh tools/dist_train.sh ${CONFIG_FILE} ${GPUS} [optional arguments]
 
 可选参数：
 
-- `--work-dir`：指示您的自定义工作目录以保存checkpoints 和日志。
-- `--resume`：自动在你的工作目录中查找最新的checkpoints。或者设置 `--resume ${CHECKPOINT_PATH}` 来加载特定的 checkpoints 文件。
+- `--work-dir`：指示您的自定义工作目录以保存 checkpoints 和日志。
+- `--resume`：自动在你的工作目录中查找最新的 checkpoints。或者设置 `--resume ${CHECKPOINT_PATH}` 来加载特定的 checkpoints 文件。
 - `--amp`：启用自动混合精度训练。
 - `--cfg-options`：设置 `--cfg-options` 将修改原始配置。例如，设置 `--cfg-options randomness.seed=0` 将为随机数设置种子。
 
@@ -88,7 +88,7 @@ NNODES=2 NODE_RANK=1 PORT=${MASTER_PORT} MASTER_ADDR=${MASTER_ADDR} sh tools/dis
 
 ### 在一台机器上启动多个任务
 
-如果你在一台机器上启动多个任务，例如，在一台有 8 个 GPU 的机器上启动 2 个 4-GPU 的训练任务，你需要为每个任务指定不同的端口（默认为29500）以避免通信冲突。
+如果你在一台机器上启动多个任务，例如，在一台有 8 个 GPU 的机器上启动 2 个分别使用４块 GPU 的训练任务，你需要为每个任务指定不同的端口（默认为29500）以避免通信冲突。
 
 如果你使用 `dist_train.sh` 来启动训练任务。
 
