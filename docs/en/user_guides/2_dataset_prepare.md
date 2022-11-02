@@ -75,7 +75,7 @@ bash tools/dataset_converters/prepare_voc07_cls.sh $YOUR_DATA_ROOT
 
 ## Prepare CIFAR10
 
-CIFAR10 will be downloaded automatically if it is not found. In addition, `dataset` implemented by `MMSelfSup` will also automatically structure CIFAR10 to the appropriate format.
+`MMSelfSup` uses [`CIFAR10`](https://github.com/open-mmlab/mmclassification/blob/1.x/mmcls/datasets/cifar.py) implemented by `MMClassification`. In addition, `MMClassification` supports automatic download of the `CIFAR10` dataset, you just need to specify the download folder in the `data_root` field. And specify `test_mode=False` / `test_mode=True` to use the training or test dataset. For more details, please refer to [docs](https://github.com/open-mmlab/mmclassification/blob/1.x/docs/en/user_guides/dataset_prepare.md#cifar) in `MMClassification`.
 
 ## Prepare datasets for detection and segmentation
 
