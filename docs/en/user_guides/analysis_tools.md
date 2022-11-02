@@ -113,6 +113,9 @@ An example of visualization:
 <img src="https://user-images.githubusercontent.com/36138628/199387454-219e6f6c-fbb7-43bb-b319-61d3e6266abc.png" width="600" />
 </div>
 
+- The left two pictures are images from contrastive learning data pipeline.
+- The right one is a masked image. 
+
 ## Use t-SNE
 
 We provide an off-the-shelf tool to visualize the quality of image representations by t-SNE.
