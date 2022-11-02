@@ -125,7 +125,7 @@ model = dict(
     init_cfg=...)
 ```
 
-**NOTE:** `data_preprocessor` can be defined outside the model dict, which has higher priority than it in model dict. 
+**NOTE:** `data_preprocessor` can be defined outside the model dict, which has higher priority than it in model dict.
 
 For example bwlow, `Runner` would build `data_preprocessor` based on `mean=[123.675, 116.28, 103.53]` and `std=[58.395, 57.12, 57.375]`, but omit the `127.5` of mean and std.
 
