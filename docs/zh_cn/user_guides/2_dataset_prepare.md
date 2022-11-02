@@ -75,7 +75,7 @@ bash tools/dataset_converters/prepare_voc07_cls.sh $YOUR_DATA_ROOT
 
 ## 准备 CIFAR10 数据集
 
-`MMSelfSup` 使用由 `MMClassification` 实现的[`CIFAR10`](https://github.com/open-mmlab/mmclassification/blob/1.x/mmcls/datasets/cifar.py)。此外，`MMClassification` 支持自动下载 `CIFAR10` 数据集，您只需在 `data_root` 字段中指定下载文件夹即可。 并且通过指定 `test_mode=False` / `test_mode=True` 来使用训练数据集或测试数据集。对于更多细节请参考 `MMClassification` 中的[文档](https://github.com/open-mmlab/mmclassification/blob/1.x/docs/en/user_guides/dataset_prepare.md#cifar)。
+`MMSelfSup` 使用由 `MMClassification` 实现的[`CIFAR10`](https://github.com/open-mmlab/mmclassification/blob/1.x/mmcls/datasets/cifar.py)。此外，`MMClassification` 支持自动下载 `CIFAR10` 数据集，您只需在 `data_root` 字段中指定下载文件夹即可。 并且通过指定 `test_mode=False` / `test_mode=True` 来使用训练数据集或测试数据集。对于更多细节，请参考 `MMClassification` 中的[文档](https://github.com/open-mmlab/mmclassification/blob/1.x/docs/en/user_guides/dataset_prepare.md#cifar)。
 
 ## 准备检测和分割数据集
 
