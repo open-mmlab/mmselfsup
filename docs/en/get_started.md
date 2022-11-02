@@ -86,7 +86,7 @@ pip install -v -e .
 # thus any local modifications made to the code will take effect without reinstallation.
 ```
 
-Optionally, if you want to contribute to MMSelfSup or experience experimental functions, please checkout to the `dev-1.x` branch:
+Optionally, if you want to [contribute](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/docs/en/notes/contribution_guide.md) to MMSelfSup or experience experimental functions, please checkout to the `dev-1.x` branch:
 
 ```shell
 git checkout dev-1.x
@@ -109,39 +109,6 @@ import mmselfsup
 print(mmselfsup.__version__)
 # Example output: 1.0.0rc0 or newer
 ```
-
-We also provide the following sample code to initialize a model and inference a demo image.
-
-```python
-import torch
-
-from mmselfsup.models import build_algorithm
-
-model_config = dict(
-    type='Classification',
-    backbone=dict(
-        type='ResNet',
-        depth=50,
-        in_channels=3,
-        num_stages=4,
-        strides=(1, 2, 2, 2),
-        dilations=(1, 1, 1, 1),
-        out_indices=[4],  # 0: conv-1, x: stage-x
-        norm_cfg=dict(type='BN'),
-        frozen_stages=-1),
-    head=dict(
-        type='ClsHead', with_avg_pool=True, in_channels=2048,
-        num_classes=1000))
-
-model = build_algorithm(model_config).cuda()
-
-image = torch.randn((1, 3, 224, 224)).cuda()
-label = torch.tensor([1]).cuda()
-
-loss = model.forward_train(image, label)
-```
-
-The above code is supposed to run successfully upon you finish the installation.
 
 ### Customize installation
 
