@@ -60,12 +60,12 @@ vis_backends = [dict(type='TensorboardVisBackend')]
 visualizer = dict(
     type='SelfSupVisualizer', vis_backends=vis_backends, name='visualizer')
 ```
+
 E.g.
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/36138628/199388357-5d1cc7b4-07b8-41b1-ac66-12ec8ef009da.png" width="400" />
 </div>
-
 
 **Wandb**
 
