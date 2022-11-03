@@ -22,7 +22,7 @@ The community has witnessed rapid development of SSL in the past few years. Our 
 MMSelfSup follows the modular designed architecture as other OpenMMLab projects. the overall framework is illustrated below:
 
 <div align="center">
-  <img src="https://user-images.githubusercontent.com/36138628/187197848-e518052f-b75e-4981-bed7-d71dc1a5a0fb.jpg" width="500"/>
+  <img src="https://user-images.githubusercontent.com/36138628/199443908-e7fd3670-108b-46eb-b200-d76f25e5621b.jpg" width="500"/>
 </div>
 
 - **Datasets** provides the support for various datasets, with many useful augmentation strategy.
