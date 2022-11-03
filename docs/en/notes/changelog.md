@@ -16,6 +16,7 @@ We briefly list the major breaking changes here. Please refer to the [migration 
 
 - Support `MaskFeat` ([#494](https://github.com/open-mmlab/mmselfsup/pull/494))
 - Add Hog generator ([#518](https://github.com/open-mmlab/mmselfsup/pull/518))
+
 #### Bug Fixes
 
 - Fix fine-tuning config of MAE-H-448 ([#509](https://github.com/open-mmlab/mmselfsup/pull/509))
