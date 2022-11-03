@@ -15,19 +15,21 @@ We briefly list the major breaking changes here. Please refer to the [migration 
 #### New Features
 
 - Support `MaskFeat` ([#494](https://github.com/open-mmlab/mmselfsup/pull/494))
-
-
+- Add Hog generator ([#518](https://github.com/open-mmlab/mmselfsup/pull/518))
 #### Bug Fixes
 
-- Fix classification configs ([#488](https://github.com/open-mmlab/mmselfsup/pull/488))
+- Fix fine-tuning config of MAE-H-448 ([#509](https://github.com/open-mmlab/mmselfsup/pull/509))
 
 #### Improvements
 
-- Refactor colab tutorial ([#470](https://github.com/open-mmlab/mmselfsup/pull/470)))
+- Refactor evaluation folder and related configs ([#538](https://github.com/open-mmlab/mmselfsup/pull/538)))
+- Refine configs ([#547](https://github.com/open-mmlab/mmselfsup/pull/547)))
 
 #### Docs
 
-- Add advanced_guides/engine.md ([#454](https://github.com/open-mmlab/mmselfsup/pull/454))
+- Add custom dataset tutorial ([#522](https://github.com/open-mmlab/mmselfsup/pull/522))
+- Refactor add_modules.md ([#524](https://github.com/open-mmlab/mmselfsup/pull/524))
+- Translate some documentation to Chinese
 
 ### v1.0.0rc2 (12/10/2022)
 
