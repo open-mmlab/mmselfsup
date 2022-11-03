@@ -61,13 +61,8 @@ For more details about the annotation files and the structure of each subfolder,
 
 ### Use datasets from other MM-repos in your config
 
-Since MMSelfSup does not implement these datasets from other MM-repos, you should `custom import` them in your config:
-
 ```python
 # Use ImageNet dataset from MMClassification
-
-# Custom import ImageNet from MMClassfication
-custom_imports=dict(imports='mmcls.datasets', allow_failed_imports=False)
 # Use ImageNet in your dataloader
 # For simplicity, we only provide the config related to importting ImageNet
 # from MMClassification, instead of the full configuration for the dataloader.
@@ -78,9 +73,6 @@ train_dataloader=dict(dataset=dict(type='mmcls.ImageNet', ...), ...)
 
 ```python
 # Use ADE20KDataset dataset from MMSegmentation
-
-# Custom import ADE20KDataset from MMSegmentation
-custom_imports=dict(imports='mmseg.datasets', allow_failed_imports=False)
 # Use ADE20KDataset in your dataloader
 # For simplicity, we only provide the config related to importting ADE20KDataset
 # from MMSegmentation, instead of the full configuration for the dataloader.
@@ -90,10 +82,6 @@ train_dataloader=dict(dataset=dict(type='mmseg.ADE20KDataset', ...), ...)
 ```
 
 ```python
-# Use CocoDataset dataset from MMDetection
-
-# Custom import CocoDataset from MMDetection
-custom_imports=dict(imports='mmdet.datasets', allow_failed_imports=False)
 # Use CocoDataset in your dataloader
 # For simplicity, we only provide the config related to importting CocoDataset
 # from MMDetection, instead of the full configuration for the dataloader.
@@ -101,8 +89,6 @@ custom_imports=dict(imports='mmdet.datasets', allow_failed_imports=False)
 # MMDetection
 train_dataloader=dict(dataset=dict(type='mmdet.CocoDataset', ...), ...)
 ```
-
-Note: if you use datasets from `MMSelfSup`, you can just use it without `custom import` in your config. For example,
 
 ```python
 # Use dataset in MMSelfSup, for example ``DeepClusterImageNet``
