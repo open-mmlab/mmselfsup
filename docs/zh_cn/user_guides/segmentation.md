@@ -8,11 +8,12 @@ For semantic segmentation task, we use MMSegmentation. First, make sure you have
 
 ```shell
 pip install openmim
+mim install 'mmsegmentation>=1.0.0rc0'
 ```
 
 It is very easy to install the package.
 
-Besides, please refer to MMSegmentation for [installation](https://github.com/open-mmlab/mmsegmentation/blob/dev-1.x/docs/en/get_started.md) and [data preparation](https://github.com/open-mmlab/mmsegmentation/blob/dev-1.x/docs/en/user_guides/2_dataset_prepare.md).
+Besides, please refer to MMSegmentation for [installation](https://mmsegmentation.readthedocs.io/en/dev-1.x/get_started.html) and [data preparation](https://mmsegmentation.readthedocs.io/en/dev-1.x/user_guides/2_dataset_prepare.html).
 
 ## Train
 
@@ -32,7 +33,7 @@ Remarks:
   repositories, we can easily leverage the configs from MMSegmentation like:
 
 ```shell
-_base_ = 'mmseg::fcn/fcn_r50-d8_769x769_40k_cityscapes.py'
+_base_ = 'mmseg::fcn/fcn_r50-d8_4xb2-40k_cityscapes-769x769.py'
 ```
 
 Writing your config files from scratch is also supported.
@@ -44,8 +45,8 @@ Example:
 
 ```shell
 bash ./tools/benchmarks/mmsegmentation/mim_dist_train.sh \
-configs/benchmarks/mmsegmentation/voc12aug/fcn_r50-d8_512x512_20k_voc12aug.py \
-work_dir/byol_resnet50_8xb32-accum16-coslr-200e_in1k_20220225-5c8b2c2e.pth 4
+configs/benchmarks/mmsegmentation/voc12aug/fcn_r50-d8_4xb4-20k_voc12aug-512x512.py \
+https://download.openmmlab.com/mmselfsup/1.x/byol/byol_resnet50_16xb256-coslr-200e_in1k/byol_resnet50_16xb256-coslr-200e_in1k_20220825-de817331.pth 4
 ```
 
 ## Test
@@ -68,6 +69,6 @@ Example:
 
 ```shell
 bash ./tools/benchmarks/mmsegmentation/mim_dist_test.sh \
-configs/benchmarks/mmsegmentation/voc12aug/fcn_r50-d8_512x512_20k_voc12aug.py \
-work_dir/iter_20000.pth 4
+configs/benchmarks/mmsegmentation/voc12aug/fcn_r50-d8_4xb4-20k_voc12aug-512x512.py \
+https://download.openmmlab.com/mmselfsup/1.x/byol/byol_resnet50_16xb256-coslr-200e_in1k/byol_resnet50_16xb256-coslr-200e_in1k_20220825-de817331.pth 4
 ```

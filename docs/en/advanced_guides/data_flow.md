@@ -29,7 +29,6 @@ In MMSelfSup, before feeding into the model, data should go through a series of 
 pack these data from previous transformations into a dictionary. The dictionary contains two parts, namely, `inputs` and `data_samples`.
 
 ```python
-
 # We omit some unimportant code here
 
 class PackSelfSupInputs(BaseTransform):
