@@ -23,6 +23,8 @@ It should be like `data/custom_dataset/`
 
 Here, we would like to use `configs/selfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k.py` as the example. We first copy this config file and rename it as `mae_vit-base-p16_8xb512-coslr-400e_${custom_dataset}.py`.
 
+- `custom_dataset`: indicate which dataset you used, e.g.,`in1k` for ImageNet dataset, `coco` for COCO dataset
+
 The content of this config is:
 
 ```python

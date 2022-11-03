@@ -23,6 +23,8 @@
 
 在本教程中，我们使用 `configs/selfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k.py`作为一个示例进行讲解。我们首先复制这个配置文件，将新复制的文件命名为`mae_vit-base-p16_8xb512-coslr-400e_${custom_dataset}.py`.
 
+- `custom_dataset`: 表明你用的那个数据集。例如，用 `in1k` 代表ImageNet 数据集，`coco` 代表COCO数据集。
+
 这个配置文件的内容如下：
 
 ```python
