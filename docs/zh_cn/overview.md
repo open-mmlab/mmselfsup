@@ -21,7 +21,7 @@
 与其他OpenMMLab的项目类似，MMSelfSup基于模块化设计的准则，整体的架构设计如下图所示：
 
 <div align="center">
-  <img src="https://user-images.githubusercontent.com/36138628/187197848-e518052f-b75e-4981-bed7-d71dc1a5a0fb.jpg" width="500"/>
+  <img src="https://user-images.githubusercontent.com/36138628/199443908-e7fd3670-108b-46eb-b200-d76f25e5621b.jpg" width="500"/>
 </div>
 
 - **Datasets** 支持各类数据集，同时提供丰富的数据增强策略。
