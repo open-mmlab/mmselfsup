@@ -86,7 +86,7 @@ val_dataloader = ...
 </tr>
 </table>
 
-Besides, we remove the key of `data_source` to keep the pipeline format consistent with that in other OpenMMLab projects. Please refer to [Config](user_guides/1_config.md) for more details.
+Besides, we **remove** the key of `data_source` to keep the pipeline format consistent with that in other OpenMMLab projects. Please refer to [Config](user_guides/1_config.md) for more details.
 
 Changes in **`pipeline`**:
 
@@ -124,6 +124,29 @@ model = dict(
     head=...,
     init_cfg=...)
 ```
+
+**NOTE:** `data_preprocessor` can be defined outside the model dict, which has higher priority than it in model dict.
+
+For example bwlow, `Runner` would build `data_preprocessor` based on `mean=[123.675, 116.28, 103.53]` and `std=[58.395, 57.12, 57.375]`, but omit the `127.5` of mean and std.
+
+```python
+data_preprocessor=dict(
+    mean=[123.675, 116.28, 103.53],
+    std=[58.395, 57.12, 57.375],
+    bgr_to_rgb=True)
+model = dict(
+    type='MAE',
+    data_preprocessor=dict(
+        mean=[127.5, 127.5, 127.5],
+        std=[127.5, 127.5, 127.5],
+        bgr_to_rgb=True)，
+    backbone=...,
+    neck=...,
+    head=...,
+    init_cfg=...)
+```
+
+Related codes in MMEngine: [Runner](https://github.com/open-mmlab/mmengine/blob/main/mmengine/runner/runner.py#L450) could get key `cfg.data_preprocessor` in `cfg` directly and [merge](https://github.com/open-mmlab/mmengine/blob/main/mmengine/runner/runner.py#L401) it to `cfg.model`.
 
 2. There is a new key `loss` in `head` in MMSelfSup 1.x, to determine the loss function of the algorithm. For example:
 
@@ -168,7 +191,7 @@ optimizer = dict(
     type='AdamW',
     lr=0.0015,
     weight_decay=0.3,
-    paramwise_cfg = dict(
+    paramwise_options = dict(
         norm_decay_mult=0.0,
         bias_decay_mult=0.0,
     ))
@@ -198,10 +221,7 @@ optim_wrapper = dict(
 2. Changes in **`lr_config`**:
 
 - The `lr_config` field is removed and we use new `param_scheduler` to replace it.
-- The `warmup` related arguments are removed, since we use schedulers combination to implement this
-  functionality.
-  The new schedulers combination mechanism is very flexible, and you can use it to design many kinds of learning
-  rate / momentum curves. See [the tutorial](TODO) for more details.
+- The `warmup` related arguments are removed, since we use a separate lr scheduler to implement this functionality. These introduced lr schedulers are very flexible, and you can use them to design many kinds of learning rate / momentum curves. See [the tutorial](https://mmengine.readthedocs.io/en/latest/tutorials/param_scheduler.html) for more details.
 
 <table class="docutils">
 <tr>
@@ -242,7 +262,7 @@ param_scheduler = [
 </tr>
 </table>
 
-3. Changes in **`runner`**:
+1. Changes in **`runner`**:
 
 Most configuration in the original `runner` field is moved to `train_cfg`, `val_cfg` and `test_cfg`, which
 configure the loop in training, validation and test.
@@ -362,7 +382,7 @@ env_cfg = dict(
 
 The visualizer is a new design in OpenMMLab 2.0 architecture. We use a
 visualizer instance in the runner to handle results & log visualization and save to different backends.
-See the [MMEngine tutorial](TODO) for more details.
+See the [MMEngine visualization tutorial](https://mmengine.readthedocs.io/en/latest/advanced_tutorials/visualization.html) for more details.
 
 ```python
 visualizer = dict(
@@ -375,7 +395,7 @@ visualizer = dict(
 )
 ```
 
-6. New field **`default_scope`**: The start point to search module for all registries. The `default_scope` in MMSelfSup is `mmselfsup`. See [the registry tutorial](TODO) for more details.
+1. New field **`default_scope`**: The start point to search module for all registries. The `default_scope` in MMSelfSup is `mmselfsup`. See [the registry tutorial](https://mmengine.readthedocs.io/en/latest/tutorials/registry.html) for more details.
 
 ## Package
 
