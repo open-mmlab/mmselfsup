@@ -5,7 +5,7 @@ import subprocess
 from pathlib import Path
 
 import torch
-from mmcv import digit_version
+from mmengine import digit_version
 
 
 def parse_args():
