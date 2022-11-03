@@ -2,6 +2,36 @@
 
 ## MMSelfSup
 
+### v1.0.0rc3 (01/11/2022)
+
+The `master` branch is still 0.x version and we will checkout a new `1.x` branch to release 1.x version. The two versions will be maintained simultaneously in the future.
+
+We briefly list the major breaking changes here. Please refer to the [migration guide](../migration.md) for details and migration instructions.
+
+#### Highlight
+
+- Support `MaskFeat`
+
+#### New Features
+
+- Support `MaskFeat` ([#494](https://github.com/open-mmlab/mmselfsup/pull/494))
+- Add Hog generator ([#518](https://github.com/open-mmlab/mmselfsup/pull/518))
+
+#### Bug Fixes
+
+- Fix fine-tuning config of MAE-H-448 ([#509](https://github.com/open-mmlab/mmselfsup/pull/509))
+
+#### Improvements
+
+- Refactor evaluation folder and related configs ([#538](https://github.com/open-mmlab/mmselfsup/pull/538)))
+- Refine configs ([#547](https://github.com/open-mmlab/mmselfsup/pull/547)))
+
+#### Docs
+
+- Add custom dataset tutorial ([#522](https://github.com/open-mmlab/mmselfsup/pull/522))
+- Refactor add_modules.md ([#524](https://github.com/open-mmlab/mmselfsup/pull/524))
+- Translate some documentation to Chinese
+
 ### v1.0.0rc2 (12/10/2022)
 
 The `master` branch is still 0.x version and we will checkout a new `1.x` branch to release 1.x version. The two versions will be maintained simultaneously in the future.
