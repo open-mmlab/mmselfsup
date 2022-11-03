@@ -2,9 +2,9 @@
 
 - [Tutorial 4: Pretrain with Custom Dataset](#tutorial-4-pretrain-with-custom-dataset)
   - [Train MAE on Custom Dataset](#train-mae-on-custom-dataset)
-    - [Get the path of custom dataset](#get-the-path-of-custom-dataset)
-    - [Choose one config as template](#choose-one-config-as-template)
-    - [Edit the dataset related config](#edit-the-dataset-related-config)
+    - [Step-1: Get the path of custom dataset](#step-1-get-the-path-of-custom-dataset)
+    - [Step-2: Choose one config as template](#step-2-choose-one-config-as-template)
+    - [Step-3: Edit the dataset related config](#step-3-edit-the-dataset-related-config)
   - [Train MAE on COCO Dataset](#train-mae-on-coco-dataset)
   - [Train SimCLR on Custom Dataset](#train-simclr-on-custom-dataset)
   - [Load Pre-trained Model to Speedup Convergence](#load-pre-trained-model-to-speedup-convergence)
@@ -15,13 +15,15 @@ In this tutorial, we provide some tips on how to conduct self-supervised learnin
 
 In MMSelfSup, We support the `CustomDataset` from MMClassification(similar to the `ImageFolder` in `torchvision`),  which is able to read the images within the specified folder directly. You only need to prepare the path information of the custom dataset and edit the config.
 
-### Get the path of custom dataset
+### Step-1: Get the path of custom dataset
 
 It should be like `data/custom_dataset/`
 
-### Choose one config as template
+### Step-2: Choose one config as template
 
 Here, we would like to use `configs/selfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k.py` as the example. We first copy this config file and rename it as `mae_vit-base-p16_8xb512-coslr-400e_${custom_dataset}.py`.
+
+- `custom_dataset`: indicate which dataset you used, e.g.,`in1k` for ImageNet dataset, `coco` for COCO dataset
 
 The content of this config is:
 
@@ -82,7 +84,7 @@ randomness = dict(seed=0, diff_rank_seed=True)
 resume = True
 ```
 
-### Edit the dataset related config
+### Step-3: Edit the dataset related config
 
 The dataset related config is defined in `'../_base_/datasets/imagenet_mae.py'` in `_base_`. We then copy the content of dataset config file into our created file `mae_vit-base-p16_8xb512-coslr-400e_${custom_dataset}.py`.
 
