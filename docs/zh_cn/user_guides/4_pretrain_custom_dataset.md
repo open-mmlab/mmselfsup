@@ -11,7 +11,7 @@
 
 在本教程中，我们将介绍如何使用自定义数据集(无需标注)进行自监督预训练。
 
-## 在自定义数据集上使用MAE算法进行预训练
+## 在自定义数据集上使用 MAE 算法进行预训练
 
 在MMSelfSup中, 我们支持用户直接调用MMClassification的`CustomDataset`(类似于`torchvision`的`ImageFolder`), 该数据集能自动的读取给的路径下的图片。你只需要准备你的数据集路径，并修改配置文件，即可轻松使用MMSelfSup进行预训练。
 
