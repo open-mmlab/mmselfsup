@@ -65,10 +65,9 @@ The master branch works with **PyTorch 1.6** or higher.
 
 ## What's New
 
-MMSelfSup **v1.0.0rc1** was released in 01/11/2022.
+MMSelfSup **v1.0.0rc3** was released in 01/11/2022.
 
 - Support MaskFeat.
-- Add TargetGenerator.
 - Refine configs and documents.
 
 MMSelfSup **v1.0.0rc2** was released in 12/10/2022.
@@ -133,6 +132,7 @@ Supported algorithms:
 - [x] [MoCo v3 (ICCV'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mocov3)
 - [x] [MAE (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mae)
 - [x] [SimMIM (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/simmim)
+- [x] [MaskFeat (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/maskfeat)
 - [x] [CAE (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/cae)
 
 More algorithms are in our plan.
@@ -185,11 +185,13 @@ This project is released under the [Apache 2.0 license](LICENSE).
 
 - [MMEngine](https://github.com/open-mmlab/mmengine): OpenMMLab foundational library for training deep learning models.
 - [MMCV](https://github.com/open-mmlab/mmcv): OpenMMLab foundational library for computer vision.
+- [MMEval](https://github.com/open-mmlab/mmeval): A unified evaluation library for multiple machine learning libraries.
 - [MIM](https://github.com/open-mmlab/mim): MIM installs OpenMMLab packages.
 - [MMClassification](https://github.com/open-mmlab/mmclassification): OpenMMLab image classification toolbox and benchmark.
 - [MMDetection](https://github.com/open-mmlab/mmdetection): OpenMMLab detection toolbox and benchmark.
 - [MMDetection3D](https://github.com/open-mmlab/mmdetection3d): OpenMMLab's next-generation platform for general 3D object detection.
 - [MMRotate](https://github.com/open-mmlab/mmrotate): OpenMMLab rotated object detection toolbox and benchmark.
+- [MMYOLO](https://github.com/open-mmlab/mmyolo): OpenMMLab YOLO series toolbox and benchmark.
 - [MMSegmentation](https://github.com/open-mmlab/mmsegmentation): OpenMMLab semantic segmentation toolbox and benchmark.
 - [MMOCR](https://github.com/open-mmlab/mmocr): OpenMMLab text detection, recognition, and understanding toolbox.
 - [MMPose](https://github.com/open-mmlab/mmpose): OpenMMLab pose estimation toolbox and benchmark.
