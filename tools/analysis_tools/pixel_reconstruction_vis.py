@@ -13,10 +13,8 @@ from mmengine.dataset import Compose, default_collate
 from mmselfsup.apis import inference_model, init_model
 from mmselfsup.utils import register_all_modules
 
-# imagenet_mean = np.array([0.485, 0.456, 0.406])
-# imagenet_std = np.array([0.229, 0.224, 0.225])
-imagenet_mean = np.array([123.675, 116.28, 103.53]),
-imagenet_std = np.array([58.395, 57.12, 57.375]),
+imagenet_mean = np.array([0.485, 0.456, 0.406])
+imagenet_std = np.array([0.229, 0.224, 0.225])
 
 
 def show_image(img: torch.Tensor, title: str = '') -> None:
@@ -51,31 +49,35 @@ def save_images(x: torch.Tensor, img_masked: torch.Tensor, y: torch.Tensor,
 
 
 def recover_norm(img: torch.Tensor,
-                 mean: np.ndarray = np.array([0.485, 0.456, 0.406]),
-                 std: np.ndarray = np.array([0.229, 0.224, 0.225])):
-    img = torch.clip((img * std + mean) * 255, 0, 255).int()
+                 mean: np.ndarray = imagenet_mean,
+                 std: np.ndarray = imagenet_std):
+    if mean is not None and std is not None:
+        img = torch.clip((img * std + mean) * 255, 0, 255).int()
     return img
 
 
 def post_process(
-    x: torch.Tensor,
-    y: torch.Tensor,
+    ori_img: torch.Tensor,
+    pred_img: torch.Tensor,
     mask: torch.Tensor,
+    mean: np.ndarray = imagenet_mean,
+    std: np.ndarray = imagenet_std
 ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
     # channel conversion
-    x = torch.einsum('nchw->nhwc', x.cpu())
+    ori_img = torch.einsum('nchw->nhwc', ori_img.cpu())
     # masked image
-    img_masked = x * (1 - mask)
+    img_masked = ori_img * (1 - mask)
     # reconstructed image pasted with visible patches
-    img_paste = x * (1 - mask) + y * mask
+    img_paste = ori_img * (1 - mask) + pred_img * mask
 
     # muptiply std and add mean to each image
-    x = recover_norm(x[0])
+    ori_img = recover_norm(ori_img[0])
     img_masked = recover_norm(img_masked[0])
-    y = recover_norm(y[0])
+
+    pred_img = recover_norm(pred_img[0])
     img_paste = recover_norm(img_paste[0])
 
-    return x, img_masked, y, img_paste
+    return ori_img, img_masked, pred_img, img_paste
 
 
 def main():
@@ -90,6 +92,12 @@ def main():
         help='Use vis_pipeline defines in config. For some algorithms, like '
         'SimMIM, they generate mask in data pipeline, thus apply pipeline in '
         'config to obtain the mask.')
+    parser.add_argument(
+        '--norm-pix',
+        action='store_true',
+        help='MAE uses `norm_pix_loss` for optimization in pre-training, thus '
+        'the visualization process also need to turn it on to compute patch '
+        'mean and std to reconstruct the original images.')
     parser.add_argument(
         '--device', default='cuda:0', help='Device used for inference')
     args = parser.parse_args()
@@ -124,12 +132,22 @@ def main():
     data = default_collate([data])
     img, _ = model.data_preprocessor(data, False)
 
+    if args.norm_pix:
+        # for MAE reconstruction
+        img_embedding = model.head.patchify(img[0])
+        # normalize the target image
+        mean = img_embedding.mean(dim=-1, keepdim=True)
+        std = (img_embedding.var(dim=-1, keepdim=True) + 1.e-6)**.5
+    else:
+        mean = imagenet_mean
+        std = imagenet_std
+
     # get reconstruction image
     features = inference_model(model, args.img_path)
-    results = model.reconstruct(features)
+    results = model.reconstruct(features, mean=mean, std=std)
 
-    x, img_masked, y, img_paste = post_process(img[0], results.pred.value,
-                                               results.mask.value)
+    x, img_masked, y, img_paste = post_process(
+        img[0], results.pred.value, results.mask.value, mean=mean, std=std)
 
     save_images(x, img_masked, y, img_paste, args.out_file)
 
