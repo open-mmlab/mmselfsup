@@ -119,7 +119,7 @@ class BaseModel(_BaseModel):
                   or ``dict of tensor for custom use.
         """
         if mode == 'tensor':
-            feats = self.extract_feat(inputs)
+            feats = self.extract_feat(inputs, data_samples)
             return feats
         elif mode == 'loss':
             return self.loss(inputs, data_samples)
