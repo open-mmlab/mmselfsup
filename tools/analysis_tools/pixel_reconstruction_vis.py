@@ -1,6 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 # Modified from https://colab.research.google.com/github/facebookresearch/mae
 # /blob/main/demo/mae_visualize.ipynb
+import random
 from argparse import ArgumentParser
 from typing import Tuple
 
@@ -107,6 +108,11 @@ def main():
         'turn this on to visualize the target instead of RGB image.')
     parser.add_argument(
         '--device', default='cuda:0', help='Device used for inference')
+    parser.add_argument(
+        '--seed',
+        type=int,
+        default=0,
+        help='The random seed for visualization')
     args = parser.parse_args()
 
     register_all_modules()
@@ -116,7 +122,10 @@ def main():
     print('Model loaded.')
 
     # make random mask reproducible (comment out to make it change)
-    torch.manual_seed(0)
+    random.seed(args.seed)
+    np.random.seed(args.seed)
+    torch.manual_seed(args.seed)
+
     print('Pixel reconstruction.')
 
     if args.use_vis_pipeline:
