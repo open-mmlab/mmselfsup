@@ -15,10 +15,10 @@ class HOGGenerator(BaseModule):
     """Generate HOG feature for images.
 
     This module is used in MaskFeat to generate HOG feature. The code is
-    modified from this `file
+    modified from file `slowfast/models/operators.py
     <https://github.com/facebookresearch/SlowFast/blob/main/slowfast/models/operators.py>`_.
-    Here is the link `HOG wikipedia
-    <https://en.m.wikipedia.org/wiki/Histogram_of_oriented_gradients>`_.
+    Here is the link of `HOG wikipedia
+    <https://en.wikipedia.org/wiki/Histogram_of_oriented_gradients>`_.
 
     Args:
         nbins (int): Number of bin. Defaults to 9.
