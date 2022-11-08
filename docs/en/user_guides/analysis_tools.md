@@ -169,7 +169,7 @@ Arguments:
 An example:
 
 ```shell
-python tools/analysis_tools/pixel_reconstruction_vis.py configs/selfsup/mae/mae_vit-huge-p16_8xb512-amp-coslr-1600e_in1k.py --checkpoint https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k_20220916-ff848775.pth --img-path data/imagenet/val/ILSVRC2012_val_00000003.JPEG --out-file test_mae.jpg
+python tools/analysis_tools/pixel_reconstruction_vis.py configs/selfsup/mae/mae_vit-huge-p16_8xb512-amp-coslr-1600e_in1k.py --checkpoint https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k_20220916-ff848775.pth --img-path data/imagenet/val/ILSVRC2012_val_00000003.JPEG --out-file test_mae.jpg --norm-pix
 
 
 # As for SimMIM, it generates the mask in data pipeline, thus we use '--use-vis-pipeline' to apply 'vis_pipeline' defined in config instead of the pipeline defined in script.
