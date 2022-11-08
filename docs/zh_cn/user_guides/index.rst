@@ -1,4 +1,4 @@
-Pretrain
+预训练
 **************
 
 .. toctree::
@@ -9,7 +9,7 @@ Pretrain
    3_pretrain.md
    4_pretrain_custom_dataset.md
 
-Downstream Tasks
+下游任务
 **************
 
 .. toctree::
@@ -19,7 +19,7 @@ Downstream Tasks
    detection.md
    segmentation.md
 
-Useful Tools
+便捷工具
 ************
 
 .. toctree::
