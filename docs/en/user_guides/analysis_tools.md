@@ -9,6 +9,7 @@
   - [Log Analysis](#log-analysis)
   - [Visualize Datasets](#visualize-datasets)
   - [Use t-SNE](#use-t-sne)
+  - [Pixel Reconstruction Visualization](#pixel-reconstruction-visualization)
 
 ## Count number of parameters
 
@@ -141,4 +142,54 @@ An example of visualization:
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/36138628/199388251-476a5ad2-f9c1-4dfb-afe2-73cf41b5793b.jpg" width="800" />
+</div>
+
+## Pixel Reconstruction Visualization
+
+We provide several pixel reconstruction visualization for listed algorithms:
+
+- MAE
+- SimMIM
+- MaskFeat
+
+Users can run command below to visualize the reconstruction.
+
+```shell
+python tools/analysis_tools/pixel_reconstruction_vis.py ${CONFIG_FILE} --checkpoint ${CKPT_PATH} --img-path ${IMAGE_PATH} --out-file ${OUTPUT_PATH}
+```
+
+Arguments:
+
+- `CONFIG_FILE`: config file for the pre-trained model.
+- `CKPT_PATH`: the path of model's checkpoint.
+- `IMAGE_PATH`: the input image path.
+- `OUTPUT_PATH`: the output image path, including 4 sub-images.
+- `[optional arguments]`: for optional arguments, you can refer to [pixel_reconstruction_vis.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/pixel_reconstruction_vis.py)
+
+An example:
+
+```shell
+python tools/analysis_tools/pixel_reconstruction_vis.py configs/selfsup/mae/mae_vit-huge-p16_8xb512-amp-coslr-1600e_in1k.py --checkpoint https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k_20220916-ff848775.pth --img-path data/imagenet/val/ILSVRC2012_val_00000003.JPEG --out-file test_mae.jpg
+
+
+# As for SimMIM, it generates the mask in data pipeline, thus we use '--use-vis-pipeline' to apply 'vis_pipeline' defined in config instead of the pipeline defined in script.
+python tools/analysis_tools/pixel_reconstruction_vis.py configs/selfsup/simmim/simmim_swin-large_16xb128-amp-coslr-800e_in1k-192.py --checkpoint https://download.openmmlab.com/mmselfsup/1.x/simmim/simmim_swin-large_16xb128-amp-coslr-800e_in1k-192/simmim_swin-large_16xb128-amp-coslr-800e_in1k-192_20220916-4ad216d3.pth --img-path data/imagenet/val/ILSVRC2012_val_00000003.JPEG --out-file test_simmim.jpg --use-vis-pipeline
+```
+
+Results of MAE:
+
+<div align="center">
+<img src="https://user-images.githubusercontent.com/36138628/200465826-83f316ed-5a46-46a9-b665-784b5332d348.jpg" width="800" />
+</div>
+
+Results of SimMIM:
+
+<div align="center">
+<img src="https://user-images.githubusercontent.com/36138628/200466133-b77bc9af-224b-4810-863c-eed81ddd1afa.jpg" width="800" />
+</div>
+
+Results of MaskFeat:
+
+<div align="center">
+<img src="https://user-images.githubusercontent.com/36138628/200465876-7e7dcb6f-5e8d-4d80-b300-9e1847cb975f.jpg" width="800" />
 </div>
