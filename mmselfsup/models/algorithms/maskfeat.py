@@ -17,8 +17,10 @@ class MaskFeat(BaseModel):
     Pre-Training <https://arxiv.org/abs/2112.09133>`_.
     """
 
-    def extract_feat(self, inputs: List[torch.Tensor],
+    def extract_feat(self,
+                     inputs: List[torch.Tensor],
                      data_samples: List[SelfSupDataSample],
+                     compute_hog: bool = True,
                      **kwarg) -> Tuple[torch.Tensor]:
         """The forward function to extract features from neck.
 
@@ -26,6 +28,8 @@ class MaskFeat(BaseModel):
             inputs (List[torch.Tensor]): The input images and mask.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
+            compute_hog (bool): Whether to compute hog during extraction. If
+                True, the batch size of inputs need to be 1. Defaults to True.
 
         Returns:
             Tuple[torch.Tensor]: Neck outputs.
@@ -39,11 +43,13 @@ class MaskFeat(BaseModel):
         pred = pred[0].view(B, L, -1)
 
         # compute hog
-        _ = self.target_generator(img)
-        hog_image = torch.from_numpy(
-            self.target_generator.generate_hog_image(
-                self.target_generator.out)).unsqueeze(0).unsqueeze(0)
-        self.target = hog_image.expand(-1, 3, -1, -1)
+        if compute_hog:
+            assert img.size(0) == 1, 'Currently only support batch size 1.'
+            _ = self.target_generator(img)
+            hog_image = torch.from_numpy(
+                self.target_generator.generate_hog_image(
+                    self.target_generator.out)).unsqueeze(0).unsqueeze(0)
+            self.target = hog_image.expand(-1, 3, -1, -1)
 
         return pred[:, 1:, :]  # remove cls token
 
@@ -111,10 +117,11 @@ class MaskFeat(BaseModel):
         hog_image = torch.from_numpy(
             self.target_generator.generate_hog_image(hog_out))
         hog_image = hog_image.unsqueeze(0).unsqueeze(0)
-        pred = torch.einsum('nchw->nhwc',
-                            hog_image).detach().cpu().expand(-1, -1, -1, 3)
+        pred = torch.einsum('nchw->nhwc', hog_image).expand(-1, -1, -1,
+                                                            3).detach().cpu()
 
-        mask = self.mask.detach()
+        # transform patch mask to pixel mask
+        mask = self.mask
         patch_dim_1 = int(self.backbone.patch_embed.init_input_size[0] //
                           self.backbone.patch_resolution[0])
         patch_dim_2 = int(self.backbone.patch_embed.init_input_size[1] //

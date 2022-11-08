@@ -120,8 +120,10 @@ class HOGGenerator(BaseModule):
         return self._reshape(self.out)
 
     def generate_hog_image(self, hog_out):
+        assert hog_out.size(0) == 1 and hog_out.size(1) == 3, \
+            'Check the input batch size and the channcel number'
         hog_image = np.zeros([self.h, self.w])
-        cell_gradient = np.array(hog_out.mean(dim=1).squeeze().cpu())
+        cell_gradient = np.array(hog_out.mean(dim=1).squeeze().detach().cpu())
         cell_width = self.pool / 2
         max_mag = np.array(cell_gradient).max()
         angle_gap = 360 / self.nbins

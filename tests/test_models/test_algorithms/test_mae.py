@@ -48,9 +48,14 @@ def test_mae():
     fake_outputs = alg(fake_batch_inputs, fake_data_samples, mode='loss')
     assert isinstance(fake_outputs['loss'].item(), float)
 
+    # test extraction
     fake_feats = alg(fake_batch_inputs, fake_data_samples, mode='tensor')
     assert list(fake_feats.shape) == [2, 196, 768]
 
-    results = alg(fake_batch_inputs, fake_data_samples, mode='predict')
+    # test reconstruct
+    mean = fake_feats.mean(dim=-1, keepdim=True)
+    std = (fake_feats.var(dim=-1, keepdim=True) + 1.e-6)**.5
+    results = alg.reconstruct(
+        fake_feats, fake_data_samples, mean=mean, std=std)
     assert list(results.mask.value.shape) == [2, 224, 224, 3]
     assert list(results.pred.value.shape) == [2, 224, 224, 3]

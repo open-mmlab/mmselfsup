@@ -77,6 +77,7 @@ class SimMIM(BaseModel):
         """
         pred = torch.einsum('nchw->nhwc', features).detach().cpu()
 
+        # transform patch mask to pixel mask
         mask = self.mask.detach()
         p1 = int(self.backbone.patch_embed.init_input_size[0] //
                  self.backbone.patch_resolution[0])
