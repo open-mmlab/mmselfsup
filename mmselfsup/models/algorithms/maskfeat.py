@@ -99,7 +99,7 @@ class MaskFeat(BaseModel):
         # recover to HOG description from feature embeddings
         unfold_size = self.target_generator.unfold_size
         tmp4 = features.unflatten(2,
-                                  (int(features.shape[2] // unfold_size**2),
+                                  (features.shape[2] // unfold_size**2,
                                    unfold_size, unfold_size))  # 1,196,27,2,2
         tmp3 = tmp4.unflatten(1, self.backbone.patch_resolution)
 
