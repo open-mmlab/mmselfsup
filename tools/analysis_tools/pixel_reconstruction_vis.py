@@ -1,5 +1,4 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-# Copyright (c) Meta Platforms, Inc. and affiliates.
 # Modified from https://colab.research.google.com/github/facebookresearch/mae
 # /blob/main/demo/mae_visualize.ipynb
 from argparse import ArgumentParser
@@ -27,19 +26,20 @@ def show_image(img: torch.Tensor, title: str = '') -> None:
     return
 
 
-def save_images(x: torch.Tensor, img_masked: torch.Tensor, y: torch.Tensor,
-                img_paste: torch.Tensor, out_file: str) -> None:
+def save_images(original_img: torch.Tensor, img_masked: torch.Tensor,
+                pred_img: torch.Tensor, img_paste: torch.Tensor,
+                out_file: str) -> None:
     # make the plt figure larger
     plt.rcParams['figure.figsize'] = [24, 6]
 
     plt.subplot(1, 4, 1)
-    show_image(x, 'original')
+    show_image(original_img, 'original')
 
     plt.subplot(1, 4, 2)
     show_image(img_masked, 'masked')
 
     plt.subplot(1, 4, 3)
-    show_image(y, 'reconstruction')
+    show_image(pred_img, 'reconstruction')
 
     plt.subplot(1, 4, 4)
     show_image(img_paste, 'reconstruction + visible')
@@ -57,27 +57,27 @@ def recover_norm(img: torch.Tensor,
 
 
 def post_process(
-    ori_img: torch.Tensor,
+    original_img: torch.Tensor,
     pred_img: torch.Tensor,
     mask: torch.Tensor,
     mean: np.ndarray = imagenet_mean,
     std: np.ndarray = imagenet_std
 ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
     # channel conversion
-    ori_img = torch.einsum('nchw->nhwc', ori_img.cpu())
+    original_img = torch.einsum('nchw->nhwc', original_img.cpu())
     # masked image
-    img_masked = ori_img * (1 - mask)
+    img_masked = original_img * (1 - mask)
     # reconstructed image pasted with visible patches
-    img_paste = ori_img * (1 - mask) + pred_img * mask
+    img_paste = original_img * (1 - mask) + pred_img * mask
 
     # muptiply std and add mean to each image
-    ori_img = recover_norm(ori_img[0])
+    original_img = recover_norm(original_img[0])
     img_masked = recover_norm(img_masked[0])
 
     pred_img = recover_norm(pred_img[0])
     img_paste = recover_norm(img_paste[0])
 
-    return ori_img, img_masked, pred_img, img_paste
+    return original_img, img_masked, pred_img, img_paste
 
 
 def main():
@@ -89,15 +89,22 @@ def main():
     parser.add_argument(
         '--use-vis-pipeline',
         action='store_true',
-        help='Use vis_pipeline defines in config. For some algorithms, like '
-        'SimMIM, they generate mask in data pipeline, thus apply pipeline in '
-        'config to obtain the mask.')
+        help='Use vis_pipeline defined in config. For some algorithms, such '
+        'as SimMIM and MaskFeat, they generate mask in data pipeline, thus '
+        'the visualization process applies vis_pipeline in config to obtain '
+        'the mask.')
     parser.add_argument(
         '--norm-pix',
         action='store_true',
         help='MAE uses `norm_pix_loss` for optimization in pre-training, thus '
-        'the visualization process also need to turn it on to compute patch '
-        'mean and std to reconstruct the original images.')
+        'the visualization process also need to compute mean and std of each '
+        'patch embedding while reconstructing the original images.')
+    parser.add_argument(
+        '--target-generator',
+        action='store_true',
+        help='Some algorithms use target_generator for optimization in '
+        'pre-training, such as MaskFeat, thus the visualization process could '
+        'turn this on to visualize the target instead of RGB image.')
     parser.add_argument(
         '--device', default='cuda:0', help='Device used for inference')
     args = parser.parse_args()
@@ -146,10 +153,16 @@ def main():
     features = inference_model(model, args.img_path)
     results = model.reconstruct(features, mean=mean, std=std)
 
-    x, img_masked, y, img_paste = post_process(
-        img[0], results.pred.value, results.mask.value, mean=mean, std=std)
+    original_target = model.target if args.target_generator else img[0]
 
-    save_images(x, img_masked, y, img_paste, args.out_file)
+    original_img, img_masked, pred_img, img_paste = post_process(
+        original_target,
+        results.pred.value,
+        results.mask.value,
+        mean=mean,
+        std=std)
+
+    save_images(original_img, img_masked, pred_img, img_paste, args.out_file)
 
 
 if __name__ == '__main__':

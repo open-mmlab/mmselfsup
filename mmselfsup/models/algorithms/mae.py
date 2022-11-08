@@ -35,13 +35,13 @@ class MAE(BaseModel):
         return pred
 
     def reconstruct(self,
-                    features: List[torch.Tensor],
+                    features: torch.Tensor,
                     data_samples: Optional[List[SelfSupDataSample]] = None,
                     **kwargs) -> SelfSupDataSample:
         """The function is for image reconstruction.
 
         Args:
-            features (List[torch.Tensor]): The input images.
+            features (torch.Tensor): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
