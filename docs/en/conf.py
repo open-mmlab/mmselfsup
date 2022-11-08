@@ -77,8 +77,47 @@ html_theme_options = {
             'name': 'GitHub',
             'url': 'https://github.com/open-mmlab/mmselfsup'
         },
+        {
+            'name':
+            'Upstream',
+            'children': [
+                {
+                    'name':
+                    'MMEngine',
+                    'url':
+                    'https://github.com/open-mmlab/mmengine',
+                    'description':
+                    'Foundational library for training deep '
+                    'learning models'
+                },
+                {
+                    'name': 'MMCV',
+                    'url': 'https://github.com/open-mmlab/mmcv',
+                    'description': 'Foundational library for computer vision'
+                },
+            ]
+        },
+        {
+            'name':
+            'Version',
+            'children': [
+                {
+                    'name': 'MMSelfSup 0.x',
+                    'url': 'https://mmselfsup.readthedocs.io/zh_CN/latest/',
+                    'description': 'Main branch docs'
+                },
+                {
+                    'name': 'MMSelfSup 1.x',
+                    'url': 'https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/',
+                    'description': '1.x branch docs'
+                },
+            ],
+            'active':
+            True,
+        },
     ],
-    'menu_lang': 'en'
+    'menu_lang':
+    'en'
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
