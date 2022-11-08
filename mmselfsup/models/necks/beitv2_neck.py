@@ -37,7 +37,7 @@ class BEiTV2Neck(BaseModule):
                  layer_scale_init_value: float = 0.1,
                  drop_rate: float = 0.,
                  drop_path_rate: float = 0.,
-                 norm_cfg: dict = dict(type='LN',eps=1e-6),
+                 norm_cfg: dict = dict(type='LN', eps=1e-6),
                  shared_lm_head: bool = True,
                  init_cfg: dict = None) -> None:
         super().__init__(init_cfg=init_cfg)

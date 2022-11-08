@@ -16,7 +16,7 @@ model = dict(
         num_classes=8192,
         embed_dims=768,
         arch='base',
-        drop_path_rate = 0.1,
+        drop_path_rate=0.1,
         shared_lm_head=True,
     ),
     head=dict(

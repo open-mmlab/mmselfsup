@@ -4,8 +4,7 @@ from typing import Sequence
 import numpy as np
 import torch
 import torch.nn as nn
-from mmcls.models.backbones.beit import \
-    BEiTTransformerEncoderLayer
+from mmcls.models.backbones.beit import BEiTTransformerEncoderLayer
 from mmcls.models.backbones.vision_transformer import \
     TransformerEncoderLayer as _TransformerEncoderLayer
 from mmcls.models.utils import MultiheadAttention as _MultiheadAttention
@@ -605,7 +604,7 @@ class BEiTV2CLSPretrainLayers(BaseModule):
                 'num_heads': 12,
                 'feedforward_channels': 768 * 4,
                 'early_layers': 9,
-                'depth' : 12
+                'depth': 12
             }),
     }
 
@@ -639,7 +638,8 @@ class BEiTV2CLSPretrainLayers(BaseModule):
         depth = self.arch_settings['depth']
 
         # stochastic depth decay rule
-        dpr = np.linspace(0, drop_path_rate, max(depth, early_layers + self.num_layers))
+        dpr = np.linspace(0, drop_path_rate,
+                          max(depth, early_layers + self.num_layers))
 
         self.layers = ModuleList()
         for i in range(early_layers, early_layers + self.num_layers):
