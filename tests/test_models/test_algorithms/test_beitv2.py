@@ -16,7 +16,6 @@ backbone = dict(
     out_indices=[-4, -1],
     drop_path_rate=0.1,
     final_norm=False,
-    beit_style=True,
     layer_scale_init_value=0.1,
 )
 neck = dict(

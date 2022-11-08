@@ -12,7 +12,6 @@ backbone = dict(
     patch_size=16,
     drop_path_rate=0.1,
     final_norm=True,
-    beit_style=True,
     layer_scale_init_value=0.1,
 )
 

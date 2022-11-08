@@ -6,7 +6,7 @@ import math
 
 import torch
 from einops import rearrange
-from mmcls.models import VisionTransformer
+from mmcls.models import BEiT
 from torch import nn
 
 from mmselfsup.models.utils import NormEMAVectorQuantizer
@@ -21,14 +21,12 @@ def get_model_default_params():
         out_indices=-1,
         drop_rate=0.,
         drop_path_rate=0.,
-        qkv_bias=True,
         norm_cfg=dict(type='LN', eps=1e-6),
         final_norm=True,
         with_cls_token=False,
         avg_token=False,
         frozen_stages=-1,
         output_cls_token=False,
-        beit_style=True,
         use_abs_pos_emb=True,
         use_rel_pos_bias=False,
         use_shared_rel_pos_bias=False,
@@ -52,7 +50,7 @@ class VQKD(nn.Module):
         self.encoder_config['img_size'] = img_size
 
         # encoder params
-        self.encoder = VisionTransformer(**self.encoder_config)
+        self.encoder = BEiT(**self.encoder_config)
 
         self.quantize = NormEMAVectorQuantizer(
             n_embed=self.n_embed,

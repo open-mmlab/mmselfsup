@@ -2,7 +2,7 @@
 import math
 
 import torch
-from mmcls.models import VisionTransformer, resize_pos_embed
+from mmcls.models import BEiT, resize_pos_embed
 from mmengine.model.weight_init import trunc_normal_
 from torch import nn
 
@@ -10,7 +10,7 @@ from mmselfsup.registry import MODELS
 
 
 @MODELS.register_module()
-class BEiTViT(VisionTransformer):
+class BEiTViT(BEiT):
     """Vision Transformer for BEiT pre-training.
 
     Rewritten version of: `An Image is Worth 16x16 Words: Transformers
@@ -54,7 +54,6 @@ class BEiTViT(VisionTransformer):
             -1 means not freezing any parameters. Defaults to -1.
         output_cls_token (bool): Whether output the cls_token. If set True,
             ``with_cls_token`` must be True. Defaults to True.
-        beit_style (bool): Whether or not use BEiT-style. Defaults to True.
         use_abs_pos_emb (bool): Whether or not use absolute position embedding.
             Defaults to False.
         use_rel_pos_bias (bool): Whether or not use relative position bias.
@@ -80,14 +79,12 @@ class BEiTViT(VisionTransformer):
                  out_indices: int = -1,
                  drop_rate: float = 0,
                  drop_path_rate: float = 0,
-                 qkv_bias: bool = True,
                  norm_cfg: dict = dict(type='LN', eps=1e-6),
                  final_norm: bool = True,
                  with_cls_token: bool = True,
                  avg_token: bool = False,
                  frozen_stages: int = -1,
                  output_cls_token: bool = True,
-                 beit_style: bool = True,
                  use_abs_pos_emb: bool = False,
                  use_rel_pos_bias: bool = False,
                  use_shared_rel_pos_bias: bool = True,
@@ -104,14 +101,12 @@ class BEiTViT(VisionTransformer):
             out_indices=out_indices,
             drop_rate=drop_rate,
             drop_path_rate=drop_path_rate,
-            qkv_bias=qkv_bias,
             norm_cfg=norm_cfg,
             final_norm=final_norm,
             with_cls_token=with_cls_token,
             avg_token=avg_token,
             frozen_stages=frozen_stages,
             output_cls_token=output_cls_token,
-            beit_style=beit_style,
             use_abs_pos_emb=use_abs_pos_emb,
             use_shared_rel_pos_bias=use_shared_rel_pos_bias,
             use_rel_pos_bias=use_rel_pos_bias,

@@ -8,7 +8,6 @@ model = dict(
         out_indices=[-4, -1],
         drop_path_rate=0.1,
         final_norm=False,
-        beit_style=True,
         layer_scale_init_value=0.1,
     ),
     neck=dict(
@@ -17,6 +16,7 @@ model = dict(
         num_classes=8192,
         embed_dims=768,
         arch='base',
+        drop_path_rate = 0.1,
         shared_lm_head=True,
     ),
     head=dict(
