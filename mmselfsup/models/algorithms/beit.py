@@ -29,14 +29,16 @@ class BEiT(BaseModel):
                  backbone: dict,
                  neck: dict,
                  head: dict,
+                 target_generator: dict,
                  data_preprocessor: Optional[dict] = None,
-                 init_cfg: dict = None,
                  use_shared_rel_pos_bias: bool = True,
+                 init_cfg: Optional[dict] = None,
                  **kwargs) -> None:
         super().__init__(
             backbone=backbone,
             neck=neck,
             head=head,
+            target_generator=target_generator,
             data_preprocessor=data_preprocessor,
             init_cfg=init_cfg)
 
@@ -66,13 +68,19 @@ class BEiT(BaseModel):
         """
         mask = torch.stack(
             [data_sample.mask.value for data_sample in data_samples])
-        rel_pos_bias = self.shared_rel_pos_bias().to(mask.device)
+        rel_pos_bias = self.shared_rel_pos_bias().to(
+            mask.device) if self.shared_rel_pos_bias is not None else None
 
         img_latent = self.backbone(batch_inputs[0], mask, rel_pos_bias)
-        logits = self.neck(img_latent, rel_pos_bias=rel_pos_bias)
+        feats, feats_cls_pt = self.neck(img_latent, rel_pos_bias=rel_pos_bias)
 
         # batch_inputs[1] is the target image
-        loss = self.head(logits, batch_inputs[1], mask)
+        with torch.no_grad():
+            target = self.target_generator(batch_inputs[1])
+            target = target.detach()
+
+        # compute loss
+        loss = self.head(feats, feats_cls_pt, target, mask)
         if isinstance(loss, torch.Tensor):
             losses = dict(loss=loss)
             return losses

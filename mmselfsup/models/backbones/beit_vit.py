@@ -121,14 +121,16 @@ class BEiTViT(BEiT):
     def init_weights(self) -> None:
         """Initialize position embedding, patch embedding and cls token."""
         super().init_weights()
-        if not (isinstance(self.init_cfg, dict)
+
+        if (isinstance(self.init_cfg, dict)
                 and self.init_cfg['type'] == 'Pretrained'):
-            if self.pos_embed is not None:  # None
-                trunc_normal_(self.pos_embed, std=0.02)
-            trunc_normal_(self.cls_token, std=.02)
-            trunc_normal_(self.mask_token, std=0.02)
-            self.apply(self._init_weights)
-            self.fix_init_weight()
+            # Suppress default init if use pretrained model.
+            return
+
+        trunc_normal_(self.cls_token, std=.02)
+        trunc_normal_(self.mask_token, std=0.02)
+        self.apply(self._init_weights)
+        self.fix_init_weight()
 
     def fix_init_weight(self) -> None:
 

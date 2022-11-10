@@ -1,11 +1,13 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-# Copied from https://github.com/microsoft/unilm/
-# blob/master/beit2/norm_ema_quantizer.py
+# Copyright (c) 2022 Microsoft
+
+# Modified from
+# https://github.com/microsoft/unilm/blob/master/beit2/norm_ema_quantizer.py
 import torch
-import torch.distributed as distributed
 import torch.nn as nn
 import torch.nn.functional as F
 from einops import rearrange, repeat
+from mmengine.dist import all_reduce
 
 
 def l2norm(t):
@@ -89,7 +91,6 @@ class EmbeddingEMA(nn.Module):
         self.cluster_size = nn.Parameter(
             torch.zeros(num_tokens), requires_grad=False)
         self.embed_avg = nn.Parameter(weight.clone(), requires_grad=False)
-        # self.register_buffer('initted', torch.Tensor([not kmeans_init]))
         self.update = True
 
     @torch.jit.ignore
@@ -133,7 +134,7 @@ def norm_ema_inplace(moving_avg, new, decay):
 class NormEMAVectorQuantizer(nn.Module):
 
     def __init__(self,
-                 n_embed,
+                 num_embed,
                  embedding_dim,
                  beta,
                  decay=0.99,
@@ -143,7 +144,7 @@ class NormEMAVectorQuantizer(nn.Module):
                  codebook_init_path=''):
         super().__init__()
         self.codebook_dim = embedding_dim
-        self.num_tokens = n_embed
+        self.num_tokens = num_embed
         self.beta = beta
         self.decay = decay
 
@@ -154,13 +155,7 @@ class NormEMAVectorQuantizer(nn.Module):
 
         self.statistic_code_usage = statistic_code_usage
         if statistic_code_usage:
-            self.register_buffer('cluster_size', torch.zeros(n_embed))
-        if distributed.is_available() and distributed.is_initialized():
-            print('ddp is enable, so use ddp_reduce to sync the \
-                statistic_code_usage for each gpu!')
-            self.all_reduce_fn = distributed.all_reduce
-        else:
-            self.all_reduce_fn = nn.Identity()
+            self.register_buffer('cluster_size', torch.zeros(num_embed))
 
     def reset_cluster_size(self, device):
         if self.statistic_code_usage:
@@ -190,14 +185,14 @@ class NormEMAVectorQuantizer(nn.Module):
         if not self.training:
             with torch.no_grad():
                 cluster_size = encodings.sum(0)
-                self.all_reduce_fn(cluster_size)
+                all_reduce(cluster_size)
                 ema_inplace(self.cluster_size, cluster_size, self.decay)
 
         if self.training and self.embedding.update:
             # EMA cluster size
 
             bins = encodings.sum(0)
-            self.all_reduce_fn(bins)
+            all_reduce(bins)
 
             # self.embedding.cluster_size_ema_update(bins)
             ema_inplace(self.cluster_size, bins, self.decay)
@@ -206,7 +201,7 @@ class NormEMAVectorQuantizer(nn.Module):
             bins = bins.masked_fill(zero_mask, 1.)
 
             embed_sum = z_flattened.t() @ encodings
-            self.all_reduce_fn(embed_sum)
+            all_reduce(embed_sum)
 
             embed_normalized = (embed_sum / bins.unsqueeze(0)).t()
             embed_normalized = l2norm(embed_normalized)

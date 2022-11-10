@@ -595,56 +595,53 @@ class RelativePositionBias(BaseModule):
             2, 0, 1).contiguous()  # nH, Wh*Ww, Wh*Ww
 
 
-class BEiTV2CLSPretrainLayers(BaseModule):
+class BEiTV2ClsPretrainLayers(BaseModule):
     arch_zoo = {
         **dict.fromkeys(
             ['b', 'base'], {
                 'embed_dims': 768,
-                'num_layers': 2,
                 'num_heads': 12,
                 'feedforward_channels': 768 * 4,
-                'early_layers': 9,
                 'depth': 12
             }),
     }
 
     def __init__(
             self,
-            arch: str = 'base',
+            num_layers: int = 2,
+            early_layers: int = 9,
+            backbone_arch: str = 'base',
             layer_scale_init_value: float = 0.1,
             drop_rate: float = 0.,
             drop_path_rate: float = 0.,
-            norm_cfg: dict = dict(type='LN'),
+            norm_cfg: dict = dict(type='LN', eps=1e-6),
     ) -> None:
-
         super().__init__()
 
-        if isinstance(arch, str):
-            arch = arch.lower()
-            assert arch in set(self.arch_zoo), \
-                f'Arch {arch} is not in default archs {set(self.arch_zoo)}'
-            self.arch_settings = self.arch_zoo[arch]
+        if isinstance(backbone_arch, str):
+            backbone_arch = backbone_arch.lower()
+            assert backbone_arch in set(self.arch_zoo), \
+                (f'Arch {backbone_arch} is not in default archs '
+                 f'{set(self.arch_zoo)}')
+            self.arch_settings = self.arch_zoo[backbone_arch]
         else:
             essential_keys = {
                 'embed_dims', 'num_layers', 'num_heads', 'feedforward_channels'
             }
-            assert isinstance(arch, dict) and essential_keys <= set(arch), \
-                f'Custom arch needs a dict with keys {essential_keys}'
-            self.arch_settings = arch
-
-        self.embed_dims = self.arch_settings['embed_dims']
-        self.num_layers = self.arch_settings['num_layers']
-        early_layers = self.arch_settings['early_layers']
-        depth = self.arch_settings['depth']
+            assert isinstance(backbone_arch, dict) and essential_keys <= set(
+                backbone_arch
+            ), f'Custom arch needs a dict with keys {essential_keys}'
+            self.arch_settings = backbone_arch
 
         # stochastic depth decay rule
+        depth = self.arch_settings['depth']
         dpr = np.linspace(0, drop_path_rate,
-                          max(depth, early_layers + self.num_layers))
+                          max(depth, early_layers + num_layers))
 
         self.layers = ModuleList()
-        for i in range(early_layers, early_layers + self.num_layers):
+        for i in range(early_layers, early_layers + num_layers):
             _layer_cfg = dict(
-                embed_dims=self.embed_dims,
+                embed_dims=self.arch_settings['embed_dims'],
                 num_heads=self.arch_settings['num_heads'],
                 feedforward_channels=self.
                 arch_settings['feedforward_channels'],

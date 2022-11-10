@@ -12,7 +12,7 @@ from mmselfsup.registry import MODELS
 class BEiTLoss(BaseModule):
     """Loss function for BEiT.
 
-    Compute the main loss.
+    The BEiTLoss supports 2 diffenrent logits shared 1 target, like BEiT v2.
     """
 
     def __init__(self) -> None:
