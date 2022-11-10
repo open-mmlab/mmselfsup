@@ -70,6 +70,11 @@ memories
 .. automodule:: mmselfsup.models.memories
     :members:
 
+target_generators
+^^^^^^^^^^
+.. automodule:: mmselfsup.models.target_generators
+    :members:
+
 utils
 ^^^^^^^^^^
 .. automodule:: mmselfsup.models.utils
