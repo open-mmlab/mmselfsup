@@ -1,5 +1,4 @@
 # dataset settings
-custom_imports = dict(imports='mmcls.datasets', allow_failed_imports=False)
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
 file_client_args = dict(backend='disk')
@@ -32,9 +31,15 @@ train_pipeline = [
         meta_keys=['img_path'])
 ]
 
+data_preprocessor = dict(
+    type='CAEDataPreprocessor',
+    mean=(123.675, 116.28, 103.53),
+    std=(58.395, 57.12, 57.375),
+    bgr_to_rgb=True)
+
 train_dataloader = dict(
     batch_size=256,
-    num_workers=4,
+    num_workers=8,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
     collate_fn=dict(type='default_collate'),

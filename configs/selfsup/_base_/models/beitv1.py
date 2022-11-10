@@ -19,9 +19,4 @@ model = dict(
         type='BEiTHead',
         tokenizer_type='dall-e',
         tokenizer_path='beit_ckpt/dalle_encoder.pth',
-        loss=dict(type='BEiTLoss')),
-    data_preprocessor=dict(
-        type='mmselfsup.CAEDataPreprocessor',
-        mean=[124, 117, 104],
-        std=[59, 58, 58],
-        bgr_to_rgb=True))
+        loss=dict(type='BEiTLoss')))
