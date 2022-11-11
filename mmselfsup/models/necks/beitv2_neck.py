@@ -1,12 +1,10 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import math
-from typing import Optional, Tuple
+from typing import List, Optional, Tuple, Union
 
 import torch
-import torch.nn as nn
 from mmcv.cnn import build_norm_layer
 from mmengine.model import BaseModule
-from mmengine.model.weight_init import trunc_normal_
 
 from mmselfsup.models.utils import BEiTV2ClsPretrainLayers
 from mmselfsup.registry import MODELS
@@ -19,18 +17,33 @@ class BEiTV2Neck(BaseModule):
     This module construct the decoder for the final prediction.
 
     Args:
+        num_layers (int): Number of encoder layers of neck. Defaults to 2.
+        early_layers (int): The layer index of the early output from the
+            backbone. Defaults to 9.
+        backbone_arch (str): Vision Transformer architecture. Defaults to base.
+        drop_rate (float): Probability of an element to be zeroed.
+            Defaults to 0.
+        drop_path_rate (float): stochastic depth rate. Defaults to 0.
+        layer_scale_init_value (float): The initialization value for the
+            learnable scaling of attention and FFN. Defaults to 0.1.
+        norm_cfg (dict): Config dict for normalization layer.
+            Defaults to ``dict(type='LN')``.
+        init_cfg (dict, optional): Initialization config dict.
+            Defaults to None.
     """
 
-    def __init__(self,
-                 num_layers: int = 2,
-                 early_layers: int = 9,
-                 embed_dims: int = 768,
-                 backbone_arch: str = 'base',
-                 layer_scale_init_value: float = 0.1,
-                 drop_rate: float = 0.,
-                 drop_path_rate: float = 0.,
-                 norm_cfg: dict = dict(type='LN', eps=1e-6),
-                 init_cfg: Optional[dict] = None) -> None:
+    def __init__(
+        self,
+        num_layers: int = 2,
+        early_layers: int = 9,
+        backbone_arch: str = 'base',
+        drop_rate: float = 0.,
+        drop_path_rate: float = 0.,
+        layer_scale_init_value: float = 0.1,
+        norm_cfg: dict = dict(type='LN', eps=1e-6),
+        init_cfg: Optional[Union[dict, List[dict]]] = dict(
+            type='TruncNormal', layer='Linear', std=0.02, bias=0)
+    ) -> None:
         super().__init__(init_cfg=init_cfg)
         self.early_layers = early_layers
 
@@ -44,6 +57,7 @@ class BEiTV2Neck(BaseModule):
             norm_cfg=norm_cfg)
         self.fix_init_cls_pt_weight()
 
+        embed_dims = self.cls_pt_layers.arch_settings['embed_dims']
         _, norm = build_norm_layer(norm_cfg, embed_dims)
         self.add_module('norm', norm)
 
@@ -57,16 +71,6 @@ class BEiTV2Neck(BaseModule):
                     self.early_layers + layer_id + 1)
             rescale(layer.ffn.layers[1].weight.data,
                     self.early_layers + layer_id + 1)
-
-    def init_weights(self) -> None:
-        super().init_weights()
-        self.apply(self._init_weights)
-
-    def _init_weights(self, m: nn.Module) -> None:
-        if isinstance(m, nn.Linear):
-            trunc_normal_(m.weight, std=0.02)
-            if isinstance(m, nn.Linear) and m.bias is not None:
-                nn.init.constant_(m.bias, 0)
 
     def forward(self, inputs: Tuple[torch.Tensor], **kwargs) -> tuple:
         """Get the latent prediction and final prediction.

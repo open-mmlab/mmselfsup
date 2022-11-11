@@ -72,15 +72,21 @@ class BEiT(BaseModel):
             mask.device) if self.shared_rel_pos_bias is not None else None
 
         img_latent = self.backbone(batch_inputs[0], mask, rel_pos_bias)
-        feats, feats_cls_pt = self.neck(img_latent, rel_pos_bias=rel_pos_bias)
 
         # batch_inputs[1] is the target image
         with torch.no_grad():
             target = self.target_generator(batch_inputs[1])
             target = target.detach()
 
-        # compute loss
-        loss = self.head(feats, feats_cls_pt, target, mask)
+        if self.with_neck:
+            # BEiT v2
+            feats, feats_cls_pt = self.neck(
+                img_latent, rel_pos_bias=rel_pos_bias)
+            loss = self.head(feats, feats_cls_pt, target, mask)
+        else:
+            # BEiT v1
+            loss = self.head(img_latent[0], target, mask)
+
         if isinstance(loss, torch.Tensor):
             losses = dict(loss=loss)
             return losses

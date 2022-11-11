@@ -1,6 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from .avgpool2d_neck import AvgPool2dNeck
-from .beitv1_neck import BEiTv1Neck
 from .beitv2_neck import BEiTV2Neck
 from .cae_neck import CAENeck
 from .densecl_neck import DenseCLNeck
@@ -14,8 +13,7 @@ from .simmim_neck import SimMIMNeck
 from .swav_neck import SwAVNeck
 
 __all__ = [
-    'AvgPool2dNeck', 'BEiTv1Neck', 'DenseCLNeck', 'LinearNeck', 'MoCoV2Neck',
+    'AvgPool2dNeck', 'BEiTV2Neck', 'DenseCLNeck', 'LinearNeck', 'MoCoV2Neck',
     'NonLinearNeck', 'ODCNeck', 'RelativeLocNeck', 'SwAVNeck',
-    'MAEPretrainDecoder', 'SimMIMNeck', 'CAENeck', 'ClsBatchNormNeck',
-    'BEiTV2Neck'
+    'MAEPretrainDecoder', 'SimMIMNeck', 'CAENeck', 'ClsBatchNormNeck'
 ]

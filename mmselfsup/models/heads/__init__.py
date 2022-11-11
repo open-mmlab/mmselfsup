@@ -1,5 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from .beit_head import BEiTHead
+from .beitv1_head import BEiTV1Head
+from .beitv2_head import BEiTV2Head
 from .cae_head import CAEHead
 from .cls_head import ClsHead
 from .contrastive_head import ContrastiveHead
@@ -12,7 +13,8 @@ from .simmim_head import SimMIMHead
 from .swav_head import SwAVHead
 
 __all__ = [
-    'BEiTHead', 'ContrastiveHead', 'ClsHead', 'LatentPredictHead',
-    'LatentCrossCorrelationHead', 'MultiClsHead', 'MAEPretrainHead',
-    'MoCoV3Head', 'SimMIMHead', 'CAEHead', 'SwAVHead', 'MaskFeatPretrainHead'
+    'BEiTV1Head', 'BEiTV2Head', 'ContrastiveHead', 'ClsHead',
+    'LatentPredictHead', 'LatentCrossCorrelationHead', 'MultiClsHead',
+    'MAEPretrainHead', 'MoCoV3Head', 'SimMIMHead', 'CAEHead', 'SwAVHead',
+    'MaskFeatPretrainHead'
 ]
