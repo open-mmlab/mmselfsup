@@ -1,8 +1,8 @@
 # dataset settings
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
-file_client_args = dict(backend='disk')
-
+data_root = 'sproject:s3://openmmlab/datasets/classification/imagenet/'
+file_client_args = dict(backend='petrel')
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(
@@ -32,9 +32,11 @@ train_pipeline = [
 ]
 
 data_preprocessor = dict(
-    type='CAEDataPreprocessor',
+    type='TwoNormDataPreprocessor',
     mean=(123.675, 116.28, 103.53),
     std=(58.395, 57.12, 57.375),
+    second_mean=(-20.4, -20.4, -20.4),
+    second_std=(204., 204., 204.),
     bgr_to_rgb=True)
 
 train_dataloader = dict(

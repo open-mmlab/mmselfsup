@@ -1,7 +1,7 @@
 _base_ = [
-    '../_base_/models/beitv2.py',
+    '../_base_/models/beitv2_vit-base-p16.py',
     '../_base_/datasets/imagenet_beitv2.py',
-    '../_base_/schedules/adamw_coslr-200e_in1k.py',
+    '../_base_/schedules/adamw_coslr-300e_in1k.py',
     '../_base_/default_runtime.py',
 ]
 
@@ -42,8 +42,6 @@ param_scheduler = [
 ]
 
 # runtime settings
-# pre-train for 300 epochs
-train_cfg = dict(max_epochs=300)
 default_hooks = dict(
     logger=dict(type='LoggerHook', interval=100),
     # only keeps the latest 3 checkpoints

@@ -22,6 +22,8 @@ vqkd_encoder = dict(
     layer_cfgs=dict(),
     init_cfg=None)
 
+layer_scale_init_value = 0.1
+drop_path_rate = 0.
 model = dict(
     type='BEiT',
     backbone=dict(
@@ -29,20 +31,20 @@ model = dict(
         arch='base',
         patch_size=16,
         out_indices=[-4, -1],
-        drop_path_rate=0.,
+        drop_path_rate=drop_path_rate,
         final_norm=False,
-        layer_scale_init_value=0.1,
+        layer_scale_init_value=layer_scale_init_value,
     ),
     neck=dict(
         type='BEiTV2Neck',
         num_layers=2,
         early_layers=9,
-        embed_dims=768,
         backbone_arch='base',
-        drop_path_rate=0.,
+        drop_path_rate=drop_path_rate,
+        layer_scale_init_value=layer_scale_init_value,
     ),
     head=dict(
-        type='BEiTHead',
+        type='BEiTV2Head',
         embed_dims=768,
         num_embed=8192,
         loss=dict(type='BEiTLoss')),
