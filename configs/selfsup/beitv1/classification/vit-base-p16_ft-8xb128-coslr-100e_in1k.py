@@ -4,7 +4,12 @@ _base_ = [
     'mmcls::_base_/schedules/imagenet_bs1024_adamw_swin.py',
     'mmcls::_base_/default_runtime.py'
 ]
-# MAE fine-tuning setting
+data_preprocessor = dict(
+    num_classes=1000,
+    mean=[127.5, 127.5, 127.5],
+    std=[127.5, 127.5, 127.5],
+    to_rgb=True,
+)
 
 # model settings
 model = dict(
@@ -57,6 +62,7 @@ train_pipeline = [
         magnitude_level=9,
         magnitude_std=0.5,
         hparams=dict(pad_val=[104, 116, 124], interpolation='bicubic')),
+    dict(type='ColorJitter', brightness=0.4, contrast=0.4, saturation=0.4),
     dict(
         type='RandomErasing',
         erase_prob=0.25,
@@ -87,19 +93,21 @@ test_dataloader = val_dataloader
 optim_wrapper = dict(
     optimizer=dict(
         type='AdamW',
-        lr=5e-4,
+        lr=4e-3,
         weight_decay=0.05,
         eps=1e-8,
         betas=(0.9, 0.999),
-        model_type='vit',  # layer-wise lr decay type
-        layer_decay_rate=0.65),  # layer-wise lr decay factor
+        model_type='vit',
+        layer_decay_rate=0.65),
     constructor='mmselfsup.LearningRateDecayOptimWrapperConstructor',
     paramwise_cfg=dict(
+        _delete_=True,
         norm_decay_mult=0.0,
         bias_decay_mult=0.0,
         custom_keys={
             '.cls_token': dict(decay_mult=0.0),
             '.pos_embed': dict(decay_mult=0.0),
+            '.gamma': dict(decay_mult=0.0),
         }))
 
 # learning rate scheduler

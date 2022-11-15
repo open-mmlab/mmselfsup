@@ -54,6 +54,7 @@ train_pipeline = [
         magnitude_level=9,
         magnitude_std=0.5,
         hparams=dict(pad_val=[104, 116, 124], interpolation='bicubic')),
+    dict(type='ColorJitter', brightness=0.4, contrast=0.4, saturation=0.4),
     dict(
         type='RandomErasing',
         erase_prob=0.25,
@@ -92,11 +93,13 @@ optim_wrapper = dict(
         layer_decay_rate=0.75),  # layer-wise lr decay factor
     constructor='mmselfsup.LearningRateDecayOptimWrapperConstructor',
     paramwise_cfg=dict(
+        _delete_=True,
         norm_decay_mult=0.0,
         bias_decay_mult=0.0,
         custom_keys={
             '.cls_token': dict(decay_mult=0.0),
             '.pos_embed': dict(decay_mult=0.0),
+            '.gamma': dict(decay_mult=0.0),
         }))
 
 # learning rate scheduler
