@@ -81,7 +81,6 @@ class BEiTViT(BEiT):
                  drop_path_rate: float = 0,
                  norm_cfg: dict = dict(type='LN', eps=1e-6),
                  final_norm: bool = True,
-                 with_cls_token: bool = True,
                  avg_token: bool = False,
                  frozen_stages: int = -1,
                  output_cls_token: bool = True,
@@ -103,7 +102,6 @@ class BEiTViT(BEiT):
             drop_path_rate=drop_path_rate,
             norm_cfg=norm_cfg,
             final_norm=final_norm,
-            with_cls_token=with_cls_token,
             avg_token=avg_token,
             frozen_stages=frozen_stages,
             output_cls_token=output_cls_token,
@@ -127,7 +125,7 @@ class BEiTViT(BEiT):
             # Suppress default init if use pretrained model.
             return
 
-        trunc_normal_(self.cls_token, std=.02)
+        trunc_normal_(self.cls_token, std=0.02)
         trunc_normal_(self.mask_token, std=0.02)
         self.apply(self._init_weights)
         self.fix_init_weight()
@@ -154,8 +152,7 @@ class BEiTViT(BEiT):
             if m.bias is not None:
                 nn.init.constant_(m.bias, 0)
 
-    def forward(self, x: torch.Tensor, mask: torch.Tensor,
-                rel_pos_bias: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
         B = x.shape[0]
         x, patch_resolution = self.patch_embed(x)
 
@@ -177,13 +174,12 @@ class BEiTViT(BEiT):
                 num_extra_tokens=self.num_extra_tokens)
         x = self.drop_after_pos(x)
 
-        if not self.with_cls_token:
-            # Remove class token for transformer encoder input
-            x = x[:, 1:]
+        self.shared_rel_pos_bias = self.rel_pos_bias().to(
+            mask.device) if self.rel_pos_bias is not None else None
 
         outs = []
         for i, layer in enumerate(self.layers):
-            x = layer(x, rel_pos_bias=rel_pos_bias)
+            x = layer(x, rel_pos_bias=self.shared_rel_pos_bias)
 
             if i == len(self.layers) - 1 and self.final_norm:
                 x = self.norm1(x)

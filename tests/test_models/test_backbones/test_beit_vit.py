@@ -5,7 +5,6 @@ import pytest
 import torch
 
 from mmselfsup.models.backbones import BEiTViT
-from mmselfsup.models.utils import RelativePositionBias
 
 backbone = dict(
     arch='base',
@@ -23,7 +22,6 @@ def test_beit_vit():
     fake_inputs = torch.randn((2, 3, 224, 224))
     fake_mask = torch.zeros((2, 196))
     fake_mask[:, 75:150] = 1
-    rel_pos_bias = RelativePositionBias(window_size=[14, 14], num_heads=12)()
-    fake_outputs = beit_backbone(fake_inputs, fake_mask, rel_pos_bias)
+    fake_outputs = beit_backbone(fake_inputs, fake_mask)
 
     assert list(fake_outputs[0].shape) == [2, 197, 768]
