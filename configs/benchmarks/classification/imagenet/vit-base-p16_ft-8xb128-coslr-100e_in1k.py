@@ -32,7 +32,15 @@ model = dict(
         dict(type='CutMix', alpha=1.0)
     ]))
 
-file_client_args = dict(backend='disk')
+# file_client_args = dict(backend='disk')
+file_client_args = dict(
+    backend='petrel',
+    path_mapping=dict({
+        './data/imagenet':
+        's3://openmmlab/datasets/classification/imagenet',
+        'data/imagenet':
+        's3://openmmlab/datasets/classification/imagenet'
+    }))
 
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
