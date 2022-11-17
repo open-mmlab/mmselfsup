@@ -129,4 +129,4 @@ default_hooks = dict(
 
 train_cfg = dict(by_epoch=True, max_epochs=100)
 
-randomness = dict(seed=0)
+randomness = dict(seed=0, diff_rank_seed=True)

@@ -54,9 +54,10 @@ test_pipeline = [
     dict(type='CenterCrop', crop_size=224),
     dict(type='PackClsInputs'),
 ]
-train_dataloader = dict(batch_size=2048, dataset=dict(pipeline=train_pipeline))
-val_dataloader = dict(dataset=dict(pipeline=test_pipeline))
-test_dataloader = dict(dataset=dict(pipeline=test_pipeline))
+train_dataloader = dict(
+    batch_size=2048, dataset=dict(pipeline=train_pipeline), drop_last=True)
+val_dataloader = dict(dataset=dict(pipeline=test_pipeline), drop_last=False)
+test_dataloader = dict(dataset=dict(pipeline=test_pipeline), drop_last=False)
 
 # optimizer
 optimizer = dict(type='mmselfsup.LARS', lr=6.4, weight_decay=0.0, momentum=0.9)
