@@ -6,7 +6,7 @@ numpy
 packaging
 scipy
 six
-sklearn
+scikit-learn
 tensorboard
 timm
 tqdm
