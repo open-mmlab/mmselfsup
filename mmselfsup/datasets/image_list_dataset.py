@@ -3,7 +3,7 @@ from typing import List, Optional, Union
 
 import numpy as np
 from mmcls.datasets import CustomDataset
-from mmengine import FileClient
+from mmengine.fileio import join_path
 
 from mmselfsup.registry import DATASETS
 
@@ -48,7 +48,7 @@ class ImageList(CustomDataset):
             ...
 
     Args:
-        ann_file (str): Annotation file path. Defaults to None.
+        ann_file (str): Annotation file path.
         metainfo (dict, optional): Meta information for dataset, such as class
             information. Defaults to None.
         data_root (str): The root directory for ``data_prefix`` and
@@ -62,7 +62,7 @@ class ImageList(CustomDataset):
     IMG_EXTENSIONS = ('.jpg', '.jpeg', '.png', '.ppm', '.bmp', '.pgm', '.tif')
 
     def __init__(self,
-                 ann_file: str = '',
+                 ann_file: str,
                  metainfo: Optional[dict] = None,
                  data_root: str = '',
                  data_prefix: Union[str, dict] = '',
@@ -76,32 +76,24 @@ class ImageList(CustomDataset):
             **kwargs)
 
     def load_data_list(self) -> List[dict]:
-        """Rewrite load_data_list() function for supporting a list of
-        annotation files and unlabeled data.
+        """Rewrite load_data_list() function for supporting annotation files
+        with unlabeled data.
 
         Returns:
             List[dict]: A list of data information.
         """
-        if self.img_prefix is not None:
-            file_client = FileClient.infer_client(uri=self.img_prefix)
-
-        assert self.ann_file is not None
-        if not isinstance(self.ann_file, list):
-            self.ann_file = [self.ann_file]
+        assert self.ann_file != ''
+        with open(self.ann_file, 'r') as f:
+            self.samples = f.readlines()
+        self.has_labels = len(self.samples[0].split()) == 2
 
         data_list = []
-        for ann_file in self.ann_file:
-            with open(ann_file, 'r') as f:
-                self.samples = f.readlines()
-            self.has_labels = len(self.samples[0].split()) == 2
-
-            for sample in self.samples:
-                info = {'img_prefix': self.img_prefix}
-                sample = sample.split()
-                info['img_path'] = file_client.join_path(
-                    self.img_prefix, sample[0])
-                info['img_info'] = {'filename': sample[0]}
-                labels = sample[1] if self.has_labels else -1
-                info['gt_label'] = np.array(labels, dtype=np.int64)
-                data_list.append(info)
+        for sample in self.samples:
+            info = {'img_prefix': self.img_prefix}
+            sample = sample.split()
+            info['img_path'] = join_path(self.img_prefix, sample[0])
+            info['img_info'] = {'filename': sample[0]}
+            labels = sample[1] if self.has_labels else -1
+            info['gt_label'] = np.array(labels, dtype=np.int64)
+            data_list.append(info)
         return data_list
