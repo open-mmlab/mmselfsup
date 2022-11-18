@@ -1,6 +1,6 @@
 faiss-cpu
 mmcv>=1.4.2
 mmselfsup
-sklearn
+scikit-learn
 torch
 torchvision
