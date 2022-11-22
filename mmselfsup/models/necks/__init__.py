@@ -11,9 +11,11 @@ from .odc_neck import ODCNeck
 from .relative_loc_neck import RelativeLocNeck
 from .simmim_neck import SimMIMNeck
 from .swav_neck import SwAVNeck
+from .milan_neck import MILANPretrainDecoder
 
 __all__ = [
     'AvgPool2dNeck', 'BEiTV2Neck', 'DenseCLNeck', 'LinearNeck', 'MoCoV2Neck',
     'NonLinearNeck', 'ODCNeck', 'RelativeLocNeck', 'SwAVNeck',
-    'MAEPretrainDecoder', 'SimMIMNeck', 'CAENeck', 'ClsBatchNormNeck'
+    'MAEPretrainDecoder', 'SimMIMNeck', 'CAENeck', 'ClsBatchNormNeck',
+    'MILANPretrainDecoder'
 ]

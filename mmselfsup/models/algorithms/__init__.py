@@ -18,9 +18,10 @@ from .simclr import SimCLR
 from .simmim import SimMIM
 from .simsiam import SimSiam
 from .swav import SwAV
+from .milan import MILAN
 
 __all__ = [
     'BaseModel', 'BarlowTwins', 'BEiT', 'BYOL', 'DeepCluster', 'DenseCL',
     'MoCo', 'NPID', 'ODC', 'RelativeLoc', 'RotationPred', 'SimCLR', 'SimSiam',
-    'SwAV', 'MAE', 'MoCoV3', 'SimMIM', 'CAE', 'MaskFeat'
+    'SwAV', 'MAE', 'MoCoV3', 'SimMIM', 'CAE', 'MaskFeat', 'MILAN'
 ]
