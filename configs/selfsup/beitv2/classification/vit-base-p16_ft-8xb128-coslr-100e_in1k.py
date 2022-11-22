@@ -4,7 +4,6 @@ _base_ = [
     'mmcls::_base_/schedules/imagenet_bs1024_adamw_swin.py',
     'mmcls::_base_/default_runtime.py'
 ]
-# MAE fine-tuning setting
 
 # model settings
 model = dict(
@@ -58,7 +57,6 @@ train_pipeline = [
         magnitude_level=9,
         magnitude_std=0.5,
         hparams=dict(pad_val=[104, 116, 124], interpolation='bicubic')),
-    dict(type='ColorJitter', brightness=0.4, contrast=0.4, saturation=0.4),
     dict(
         type='RandomErasing',
         erase_prob=0.25,
@@ -118,7 +116,6 @@ param_scheduler = [
         convert_to_iter_based=True),
     dict(
         type='CosineAnnealingLR',
-        T_max=10,
         by_epoch=True,
         begin=20,
         end=100,

@@ -15,7 +15,7 @@ optim_wrapper = dict(
     clip_grad=dict(max_norm=3.0),
     paramwise_cfg=dict(
         custom_keys={
-            'norm': dict(decay_mult=0.0),
+            'ln': dict(decay_mult=0.0),
             'bias': dict(decay_mult=0.0),
             'gamma': dict(decay_mult=0.0),
             'pos_embed': dict(decay_mult=0.0),
