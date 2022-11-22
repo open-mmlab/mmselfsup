@@ -5,6 +5,7 @@ import platform
 import pytest
 import torch
 from mmengine.structures import InstanceData
+from mmengine.utils import digit_version
 
 from mmselfsup.models.algorithms.maskfeat import MaskFeat
 from mmselfsup.structures import SelfSupDataSample
@@ -22,6 +23,8 @@ target_generator = dict(
     type='HOGGenerator', nbins=9, pool=8, gaussian_window=16)
 
 
+@pytest.mark.skipif(
+    torch.__version__ < digit_version('1.7.0'), reason='torch version')
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_maskfeat():
     data_preprocessor = {
