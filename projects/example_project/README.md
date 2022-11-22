@@ -17,7 +17,7 @@ This is an example README for community `projects/`. We have provided detailed e
 Author: @xxx.
 This is an implementation of \[XXX\]. -->
 
-This project implements a dummy MAE wrapper, which literally does nothing new but prints "hello world" during initialization.
+This project implements a dummy MAE wrapper, which prints "Welcome to MMSelfSup" during initialization.
 
 ## Usage
 
