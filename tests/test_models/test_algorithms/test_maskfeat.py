@@ -24,7 +24,8 @@ target_generator = dict(
 
 
 @pytest.mark.skipif(
-    torch.__version__ < digit_version('1.7.0'), reason='torch version')
+    digit_version(torch.__version__) < digit_version('1.7.0'),
+    reason='torch version')
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_maskfeat():
     data_preprocessor = {
