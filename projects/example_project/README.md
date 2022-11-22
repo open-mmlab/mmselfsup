@@ -1,6 +1,6 @@
 # Dummy MAE Wrapper
 
-This is an example README for community `projects/`. We have provided detailed explanations for each field in the form of html comments, which are visible when you read the source of this README file. If you wish to submit your project to our main repository, then all the fields in this README are mandatory for others to understand what you have achieved in this implementation. 
+This is an example README for community `projects/`. We have provided detailed explanations for each field in the form of html comments, which are visible when you read the source of this README file. If you wish to submit your project to our main repository, then all the fields in this README are mandatory for others to understand what you have achieved in this implementation.
 
 - [Dummy MAE Wrapper](#dummy-mae-wrapper)
   - [Description](#description)
@@ -139,4 +139,3 @@ A project does not necessarily have to be finished in a single PR, but it's esse
     <!-- It will be parsed by MIM and Inferencer. [Example](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/mae/metafile.yml). In particular, you may have to refactor this README into a standard one. [Example](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/mae/README.md) -->
 
   - [ ] Refactor and Move your modules into the core package following the codebase's file hierarchy structure.
-
