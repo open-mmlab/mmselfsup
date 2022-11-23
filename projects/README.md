@@ -2,13 +2,11 @@
 
 In this folder, we welcome all contribution of self-supervised learning algorithms from community.
 
-Here, the requirements are not that strict in core package. Thus, it is able to implement algorithms efficiently and contribute to MMSelfSup. We appreciate all contributors to make MMSelfSup greater.
+Here, these requirements, e.g. code standards, are not that strict as in core package. Thus, developers from the community can implement their algorithms much more easily and efficiently in MMSelfSup. We appreciate all contributions from community to make MMSelfSup greater.
 
-For more details, we provide some documentation listed below:
+We give some [instructions](./example_project/README.md) to implement your algorithms under `example_project` folder.
 
-- [Example Project README](./example_project/README.md)
-
-  The explanation and milestons for example projects.
+We also provide some documentation listed below:
 
 - [Advanced Guides](https://mmselfsup.readthedocs.io/en/dev-1.x/advanced_guides/index.html)
 
