@@ -12,19 +12,12 @@ class MILANPretrainHead(BaseModule):
         super().__init__()
         self.loss = MODELS.build(loss)
 
-    def forward(self, pred: torch.Tensor, target: torch.Tensor,
-                mask: torch.Tensor) -> torch.Tensor:
-        """Forward function of MAE head.
-
-        Args:
-            pred (torch.Tensor): The reconstructed image.
-            target (torch.Tensor): The target image.
-            mask (torch.Tensor): The mask of the target image.
-
-        Returns:
-            torch.Tensor: The reconstruction loss.
-        """
-        target = self.construct_target(target)
-        loss = self.loss(pred, target, mask)
-
+    def forward(
+        self,
+        pred: torch.Tensor,
+        target: torch.Tensor,
+    ) -> torch.Tensor:
+        pred = pred / pred.norm(dim=2, keepdim=True)
+        target = target / target.norm(dim=2, keepdim=True)
+        loss = self.loss(pred, target)
         return loss
