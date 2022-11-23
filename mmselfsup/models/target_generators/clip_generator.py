@@ -11,8 +11,7 @@ class CLIPGenerator(BaseModule):
 
     def __init__(self, tokenizer_path: str) -> None:
         super().__init__()
-        self.tokenizer = build_clip_model(tokenizer_path, False)
-        self.tokenizer.eval()
+        self.tokenizer = build_clip_model(torch.load(tokenizer_path), False)
 
     @torch.no_grad()
     def forward(self, x: torch.Tensor) -> torch.Tensor:

@@ -1,8 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List
 
 import torch
-from mmengine.structures import BaseDataElement
 
 from mmselfsup.registry import MODELS
 from mmselfsup.structures import SelfSupDataSample
@@ -16,54 +15,6 @@ class MILAN(BaseModel):
     Implementation of `MILAN: Masked Image Pretraining on Language Assisted 
     Representation <https://arxiv.org/abs/2208.06049>`_.
     """
-
-    def extract_feat(self, inputs: List[torch.Tensor],
-                     **kwarg) -> Tuple[torch.Tensor]:
-        """The forward function to extract features from neck.
-
-        Args:
-            inputs (List[torch.Tensor]): The input images.
-
-        Returns:
-            Tuple[torch.Tensor]: Neck outputs.
-        """
-        latent, _, ids_restore = self.backbone(inputs[0])
-        pred = self.neck(latent, ids_restore)
-        return pred
-
-    def predict(self,
-                inputs: List[torch.Tensor],
-                data_samples: Optional[List[SelfSupDataSample]] = None,
-                **kwargs) -> SelfSupDataSample:
-        """The forward function in testing. It is mainly for image
-        reconstruction.
-
-        Args:
-            inputs (List[torch.Tensor]): The input images.
-            data_samples (List[SelfSupDataSample]): All elements required
-                during the forward function.
-
-        Returns:
-            SelfSupDataSample: The prediction from model.
-        """
-
-        latent, mask, ids_restore = self.backbone(inputs[0])
-        pred = self.neck(latent, ids_restore)
-
-        pred = self.head.unpatchify(pred)
-        pred = torch.einsum('nchw->nhwc', pred).detach().cpu()
-
-        mask = mask.detach()
-        mask = mask.unsqueeze(-1).repeat(1, 1, self.head.patch_size**2 *
-                                         3)  # (N, H*W, p*p*3)
-        mask = self.head.unpatchify(mask)  # 1 is removing, 0 is keeping
-        mask = torch.einsum('nchw->nhwc', mask).detach().cpu()
-
-        results = SelfSupDataSample()
-        results.mask = BaseDataElement(**dict(value=mask))
-        results.pred = BaseDataElement(**dict(value=pred))
-
-        return results
 
     def loss(self, inputs: List[torch.Tensor],
              data_samples: List[SelfSupDataSample],
@@ -80,8 +31,11 @@ class MILAN(BaseModel):
         """
         # ids_restore: the same as that in original repo, which is used
         # to recover the original order of tokens in decoder.
-        latent, mask, ids_restore = self.backbone(inputs[0])
-        pred = self.neck(latent, ids_restore)
-        loss = self.head(pred, inputs[0], mask)
+        clip_feature, importance = self.target_generator(inputs[0])
+        importance = importance[:, 0, 1:]
+        latent, mask, ids_restore, ids_shuffle, ids_keep, ids_dump = self.backbone(
+            inputs[0], importance)
+        pred = self.neck(latent, ids_restore, ids_keep, ids_dump)
+        loss = self.head(pred, clip_feature)
         losses = dict(loss=loss)
         return losses

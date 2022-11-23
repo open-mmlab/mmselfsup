@@ -103,7 +103,7 @@ class PromptMultiheadAttention(_MultiheadAttention):
         attn = attn.softmax(dim=-1)
         attn = self.attn_drop(attn)
 
-        x = (attn @ v).transpose(1, 2).reshape(B, N, self.embed_dims)
+        x = (attn @ v).transpose(1, 2).reshape(B, x.shape[1], self.embed_dims)
         x = self.proj(x)
         x = self.out_drop(self.gamma1(self.proj_drop(x)))
 
@@ -153,10 +153,9 @@ class PromptTransformerEncoderLayer(_TransformerEncoderLayer):
                  act_cfg=dict(type='GELU'),
                  norm_cfg=dict(type='LN'),
                  init_cfg=None):
-        super(TransformerEncoderLayer,
-              self).__init__(embed_dims, num_heads, feedforward_channels,
-                             drop_rate, attn_drop_rate, drop_path_rate,
-                             num_fcs, qkv_bias, act_cfg, norm_cfg, init_cfg)
+        super().__init__(embed_dims, num_heads, feedforward_channels,
+                         drop_rate, attn_drop_rate, drop_path_rate, num_fcs,
+                         qkv_bias, act_cfg, norm_cfg, init_cfg)
 
         self.attn = PromptMultiheadAttention(
             embed_dims=embed_dims,
