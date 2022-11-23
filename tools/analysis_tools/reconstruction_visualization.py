@@ -126,7 +126,7 @@ def main():
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
 
-    print('Pixel reconstruction.')
+    print('Reconstruction visualization.')
 
     if args.use_vis_pipeline:
         model.cfg.test_dataloader = dict(
