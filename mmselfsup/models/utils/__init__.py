@@ -16,6 +16,7 @@ from .transformer_blocks import (CAETransformerRegressorLayer,
                                  MultiheadAttention, TransformerEncoderLayer,
                                  PromptTransformerEncoderLayer)
 from .vector_quantizer import NormEMAVectorQuantizer
+from .clip import build_clip_model
 
 try:
     from .res_layer_extra_norm import ResLayerExtraNorm
@@ -29,5 +30,5 @@ __all__ = [
     'CosineEMA', 'SelfSupDataPreprocessor', 'RelativeLocDataPreprocessor',
     'RotationPredDataPreprocessor', 'CAEDataPreprocessor', 'ResLayerExtraNorm',
     'NormEMAVectorQuantizer', 'TwoNormDataPreprocessor',
-    'PromptTransformerEncoderLayer'
+    'PromptTransformerEncoderLayer', 'build_clip_model'
 ]
