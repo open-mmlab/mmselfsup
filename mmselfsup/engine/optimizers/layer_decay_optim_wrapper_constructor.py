@@ -66,11 +66,8 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
 
     Note: Currently, this optimizer constructor is built for ViT and Swin.
 
-    In addition to applying layer-wise learning rate decay schedule, this
-    module will not apply weight decay to ``normalization parameters``,
-    ``bias``, ``position embedding``, ``class token``, and
-    ``relative position bias table, automatically. What's more, the
-    ``paramwise_cfg`` in the base module will be ignored.
+    In addition to applying layer-wise learning rate decay schedule, the
+    paramwise_cfg only supports weight decay customization.
     """
 
     def add_params(self, params: List[dict], module: nn.Module,
@@ -87,14 +84,19 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
             optimizer_cfg (dict): The configuration of optimizer.
             prefix (str): The prefix of the module.
         """
+        # get param-wise options
+        custom_keys = self.paramwise_cfg.get('custom_keys', {})
+        # first sort with alphabet order and then sort with reversed len of str
+        sorted_keys = sorted(sorted(custom_keys.keys()), key=len, reverse=True)
+
+        # get logger
         logger = MMLogger.get_current_instance()
 
         # Check if self.param_cfg is not None
         if len(self.paramwise_cfg) > 0:
-            logger.info('The paramwise_cfg will be ignored, and normalization \
-                parameters, bias, position embedding, class token and \
-                    relative position bias table will not be decayed by \
-                        default.')
+            logger.info(
+                'The paramwise_cfg only supports weight decay customization '
+                'in LearningRateDecayOptimWrapperConstructor. ')
 
         model_type = optimizer_cfg.pop('model_type', None)
         # model_type should not be None
@@ -111,7 +113,6 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
         elif model_type == 'swin':
             num_layers = sum(module.backbone.depths) + 2
 
-        weight_decay = self.base_wd
         # if layer_decay_rate is not provided, not decay
         decay_rate = optimizer_cfg.pop('layer_decay_rate', 1.0)
         parameter_groups = {}
@@ -119,16 +120,18 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
         for name, param in module.named_parameters():
             if not param.requires_grad:
                 continue  # frozen weights
-            # will not decay normalization params, bias, position embedding
-            # class token, relative position bias table
-            if len(param.shape) == 1 or name.endswith('.bias') or name in (
-                    'backbone.pos_embed', 'backbone.cls_token'
-            ) or 'relative_position_bias_table' in name:
+
+            this_weight_decay = None
+            for key in sorted_keys:
+                if key in name:
+                    if self.base_wd is not None:
+                        decay_mult = custom_keys[key].get('decay_mult', 1.)
+                        this_weight_decay = self.base_wd * decay_mult
+
+            if this_weight_decay == 0:
                 group_name = 'no_decay'
-                this_weight_decay = 0.
             else:
                 group_name = 'decay'
-                this_weight_decay = weight_decay
 
             if model_type == 'vit':
                 layer_id = get_layer_id_for_vit(name, num_layers)
@@ -178,6 +181,7 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
         # set param-wise lr and weight decay recursively
         params: List = []
         self.add_params(params, model, optimizer_cfg)
+        breakpoint()
         optimizer_cfg['params'] = params
 
         optimizer = OPTIMIZERS.build(optimizer_cfg)
