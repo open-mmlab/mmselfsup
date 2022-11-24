@@ -117,16 +117,16 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
         decay_rate = optimizer_cfg.pop('layer_decay_rate', 1.0)
         parameter_groups = {}
 
+        assert self.base_wd is not None
         for name, param in module.named_parameters():
             if not param.requires_grad:
                 continue  # frozen weights
 
-            this_weight_decay = None
+            this_weight_decay = self.base_wd
             for key in sorted_keys:
                 if key in name:
-                    if self.base_wd is not None:
-                        decay_mult = custom_keys[key].get('decay_mult', 1.)
-                        this_weight_decay = self.base_wd * decay_mult
+                    decay_mult = custom_keys[key].get('decay_mult', 1.)
+                    this_weight_decay = self.base_wd * decay_mult
 
             if this_weight_decay == 0:
                 group_name = 'no_decay'
@@ -181,7 +181,6 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
         # set param-wise lr and weight decay recursively
         params: List = []
         self.add_params(params, model, optimizer_cfg)
-        breakpoint()
         optimizer_cfg['params'] = params
 
         optimizer = OPTIMIZERS.build(optimizer_cfg)

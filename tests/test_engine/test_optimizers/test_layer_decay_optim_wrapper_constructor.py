@@ -12,7 +12,7 @@ class ToyViTBackbone(nn.Module):
     def __init__(self):
         super().__init__()
         self.cls_token = nn.Parameter(torch.ones(1))
-        self.patch_embed = nn.Parameter(torch.ones(1))
+        self.pos_embed = nn.Parameter(torch.ones(1))
         self.layers = nn.ModuleList()
         for _ in range(2):
             layer = nn.Conv2d(3, 3, 1)
@@ -87,32 +87,47 @@ def test_learning_rate_decay_optimizer_wrapper_constructor():
             weight_decay=base_wd,
             model_type='vit',
             layer_decay_rate=2.0))
+    paramwise_cfg = dict(
+        custom_keys={
+            '.bias': dict(decay_mult=0.0),
+            '.cls_token': dict(decay_mult=0.0),
+            '.pos_embed': dict(decay_mult=0.0),
+        })
 
     # test when model_type is None
     with pytest.raises(AssertionError):
         optimizer_wrapper_constructor = LearningRateDecayOptimWrapperConstructor(  # noqa
-            optim_wrapper_cfg=optim_wrapper_cfg)
+            optim_wrapper_cfg=optim_wrapper_cfg,
+            paramwise_cfg=paramwise_cfg)
         optim_wrapper_cfg['optimizer']['model_type'] = None
         optimizer_wrapper = optimizer_wrapper_constructor(model)
 
     # test when model_type is invalid
     with pytest.raises(AssertionError):
         optimizer_wrapper_constructor = LearningRateDecayOptimWrapperConstructor(  # noqa
-            optim_wrapper_cfg=optim_wrapper_cfg)
+            optim_wrapper_cfg=optim_wrapper_cfg,
+            paramwise_cfg=paramwise_cfg)
         optim_wrapper_cfg['optimizer']['model_type'] = 'invalid'
         optimizer_wrapper = optimizer_wrapper_constructor(model)
 
     # test vit
     optimizer_wrapper_constructor = LearningRateDecayOptimWrapperConstructor(
-        optim_wrapper_cfg=optim_wrapper_cfg)
+        optim_wrapper_cfg=optim_wrapper_cfg, paramwise_cfg=paramwise_cfg)
     optim_wrapper_cfg['optimizer']['model_type'] = 'vit'
     optimizer_wrapper = optimizer_wrapper_constructor(model)
     check_optimizer_lr_wd(optimizer_wrapper, expected_layer_wise_wd_lr_vit)
 
     # test swin
+    paramwise_cfg = dict(
+        custom_keys={
+            '.norm': dict(decay_mult=0.0),
+            '.bias': dict(decay_mult=0.0),
+            '.absolute_pos_embed': dict(decay_mult=0.0),
+            '.relative_position_bias_table': dict(decay_mult=0.0)
+        })
     model = ToySwin()
     optimizer_wrapper_constructor = LearningRateDecayOptimWrapperConstructor(
-        optim_wrapper_cfg=optim_wrapper_cfg)
+        optim_wrapper_cfg=optim_wrapper_cfg, paramwise_cfg=paramwise_cfg)
     optim_wrapper_cfg['optimizer']['model_type'] = 'swin'
     optimizer_wrapper = optimizer_wrapper_constructor(model)
     assert optimizer_wrapper.optimizer.param_groups[-1]['lr_scale'] == 1.0
