@@ -9,7 +9,7 @@ vqkd_encoder = dict(
     drop_path_rate=0.,
     norm_cfg=dict(type='LN', eps=1e-6),
     final_norm=True,
-    with_cls_token=False,
+    with_cls_token=True,
     avg_token=False,
     frozen_stages=-1,
     output_cls_token=False,
@@ -23,7 +23,7 @@ vqkd_encoder = dict(
     init_cfg=None)
 
 layer_scale_init_value = 0.1
-drop_path_rate = 0.
+drop_path_rate = 0.  # 0. for 300 epochs and 0.1 for 1600 epochs.
 model = dict(
     type='BEiT',
     backbone=dict(
