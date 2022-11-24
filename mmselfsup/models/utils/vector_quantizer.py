@@ -1,8 +1,9 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 # Copyright (c) 2022 Microsoft
-
 # Modified from
 # https://github.com/microsoft/unilm/blob/master/beit2/norm_ema_quantizer.py
+from typing import Optional, Tuple
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -10,15 +11,25 @@ from einops import rearrange, repeat
 from mmengine.dist import all_reduce
 
 
-def l2norm(t):
-    return F.normalize(t, p=2, dim=-1)
+def l2norm(x: torch.Tensor) -> torch.Tensor:
+    return F.normalize(x, p=2, dim=-1)
 
 
-def ema_inplace(moving_avg, new, decay):
+def ema_inplace(moving_avg: torch.Tensor, new: torch.Tensor,
+                decay: torch.Tensor) -> None:
+    """Update moving average."""
     moving_avg.data.mul_(decay).add_(new, alpha=(1 - decay))
 
 
-def sample_vectors(samples, num):
+def norm_ema_inplace(moving_avg: torch.Tensor, new: torch.Tensor,
+                     decay: torch.Tensor) -> None:
+    """Update moving average with norm data."""
+    moving_avg.data.mul_(decay).add_(new, alpha=(1 - decay))
+    moving_avg.data.copy_(l2norm(moving_avg.data))
+
+
+def sample_vectors(samples: torch.Tensor, num: int) -> torch.Tensor:
+    """Sample vectors according to the given number."""
     num_samples, device = samples.shape[0], samples.device
 
     if num_samples >= num:
@@ -29,7 +40,11 @@ def sample_vectors(samples, num):
     return samples[indices]
 
 
-def kmeans(samples, num_clusters, num_iters=10, use_cosine_sim=False):
+def kmeans(samples: torch.Tensor,
+           num_clusters: int,
+           num_iters: int = 10,
+           use_cosine_sim: bool = False) -> Tuple[torch.Tensor, torch.Tensor]:
+    """Run k-means algorithm."""
     dim, dtype, _ = samples.shape[-1], samples.dtype, samples.device
 
     means = sample_vectors(samples, num_clusters)
@@ -60,20 +75,27 @@ def kmeans(samples, num_clusters, num_iters=10, use_cosine_sim=False):
 
 
 class EmbeddingEMA(nn.Module):
+    """The codebook of embedding vectors.
+
+    Args:
+        num_tokens (int): Number of embedding vectors in the codebook.
+        codebook_dim (int) : The dimension of embedding vectors in the
+            codebook.
+        kmeans_init (bool): Whether to use k-means to initialize the
+            VectorQuantizer. Defaults to True.
+        codebook_init_path (str): The initialization checkpoint for codebook.
+            Defaults to None.
+    """
 
     def __init__(self,
-                 num_tokens,
-                 codebook_dim,
-                 decay=0.99,
-                 eps=1e-5,
-                 kmeans_init=True,
-                 codebook_init_path=''):
+                 num_tokens: int,
+                 codebook_dim: int,
+                 kmeans_init: bool = True,
+                 codebook_init_path: Optional[str] = None):
         super().__init__()
         self.num_tokens = num_tokens
         self.codebook_dim = codebook_dim
-        self.decay = decay
-        self.eps = eps
-        if codebook_init_path == '':
+        if codebook_init_path is None:
             if not kmeans_init:
                 weight = torch.randn(num_tokens, codebook_dim)
                 weight = l2norm(weight)
@@ -88,83 +110,76 @@ class EmbeddingEMA(nn.Module):
             self.register_buffer('initted', torch.Tensor([True]))
 
         self.weight = nn.Parameter(weight, requires_grad=False)
-        self.cluster_size = nn.Parameter(
-            torch.zeros(num_tokens), requires_grad=False)
-        self.embed_avg = nn.Parameter(weight.clone(), requires_grad=False)
         self.update = True
 
     @torch.jit.ignore
-    def init_embed_(self, data):
+    def init_embed_(self, data: torch.Tensor) -> None:
+        """Initialize embedding vectors of codebook."""
         if self.initted:
             return
-        print('Performing Kemans init for codebook')
-        embed, cluster_size = kmeans(
-            data, self.num_tokens, 10, use_cosine_sim=True)
+        print('Performing K-means init for codebook')
+        embed, _ = kmeans(data, self.num_tokens, 10, use_cosine_sim=True)
         self.weight.data.copy_(embed)
-        self.cluster_size.data.copy_(cluster_size)
         self.initted.data.copy_(torch.Tensor([True]))
 
-    def forward(self, embed_id):
+    def forward(self, embed_id: torch.Tensor) -> torch.Tensor:
+        """Get embedding vectors."""
         return F.embedding(embed_id, self.weight)
-
-    def cluster_size_ema_update(self, new_cluster_size):
-        self.cluster_size.data.mul_(self.decay).add_(
-            new_cluster_size, alpha=1 - self.decay)
-
-    def embed_avg_ema_update(self, new_embed_avg):
-        self.embed_avg.data.mul_(self.decay).add_(
-            new_embed_avg, alpha=1 - self.decay)
-
-    def weight_update(self, num_tokens):
-        n = self.cluster_size.sum()
-        smoothed_cluster_size = ((self.cluster_size + self.eps) /
-                                 (n + num_tokens * self.eps) * n)
-        # normalize embedding average with smoothed cluster size
-        embed_normalized = self.embed_avg / smoothed_cluster_size.unsqueeze(1)
-        # embed_normalized = l2norm(self.embed_avg
-        # / smoothed_cluster_size.unsqueeze(1))
-        self.weight.data.copy_(embed_normalized)
-
-
-def norm_ema_inplace(moving_avg, new, decay):
-    moving_avg.data.mul_(decay).add_(new, alpha=(1 - decay))
-    moving_avg.data.copy_(l2norm(moving_avg.data))
 
 
 class NormEMAVectorQuantizer(nn.Module):
+    """Normed EMA vector quantizer module.
+
+    Args:
+        num_embed (int): Number of embedding vectors in the codebook. Defaults
+            to 8192.
+        embed_dims (int) : The dimension of embedding vectors in the codebook.
+            Defaults to 32.
+        beta (float): The mutiplier for VectorQuantizer embedding loss.
+            Defaults to 1.
+        decay (float): The decay parameter of EMA. Defaults to 0.99.
+        statistic_code_usage (bool): Whether to use cluster_size to record
+            statistic. Defaults to True.
+        kmeans_init (bool): Whether to use k-means to initialize the
+            VectorQuantizer. Defaults to True.
+        codebook_init_path (str): The initialization checkpoint for codebook.
+            Defaults to None.
+    """
 
     def __init__(self,
-                 num_embed,
-                 embedding_dim,
-                 beta,
-                 decay=0.99,
-                 eps=1e-5,
-                 statistic_code_usage=True,
-                 kmeans_init=False,
-                 codebook_init_path=''):
+                 num_embed: int,
+                 embed_dims: int,
+                 beta: float,
+                 decay: float = 0.99,
+                 statistic_code_usage: bool = True,
+                 kmeans_init: bool = True,
+                 codebook_init_path: Optional[str] = None) -> None:
         super().__init__()
-        self.codebook_dim = embedding_dim
+        self.codebook_dim = embed_dims
         self.num_tokens = num_embed
         self.beta = beta
         self.decay = decay
 
         # learnable = True if orthogonal_reg_weight > 0 else False
-        self.embedding = EmbeddingEMA(self.num_tokens, self.codebook_dim,
-                                      decay, eps, kmeans_init,
-                                      codebook_init_path)
+        self.embedding = EmbeddingEMA(
+            num_tokens=self.num_tokens,
+            codebook_dim=self.codebook_dim,
+            kmeans_init=kmeans_init,
+            codebook_init_path=codebook_init_path)
 
         self.statistic_code_usage = statistic_code_usage
         if statistic_code_usage:
             self.register_buffer('cluster_size', torch.zeros(num_embed))
 
     def reset_cluster_size(self, device):
+
         if self.statistic_code_usage:
             self.register_buffer('cluster_size', torch.zeros(self.num_tokens))
             self.cluster_size = self.cluster_size.to(device)
 
     def forward(self, z):
-        # reshape z -> (batch, height, width, channel) and flatten
-        # z, 'b c h w -> b h w c'
+        """Forward function."""
+        # reshape z -> (batch, height, width, channel)
         z = rearrange(z, 'b c h w -> b h w c')
         z = l2norm(z)
         z_flattened = z.reshape(-1, self.codebook_dim)
@@ -189,12 +204,9 @@ class NormEMAVectorQuantizer(nn.Module):
                 ema_inplace(self.cluster_size, cluster_size, self.decay)
 
         if self.training and self.embedding.update:
-            # EMA cluster size
-
+            # update cluster size with EMA
             bins = encodings.sum(0)
             all_reduce(bins)
-
-            # self.embedding.cluster_size_ema_update(bins)
             ema_inplace(self.cluster_size, bins, self.decay)
 
             zero_mask = (bins == 0)
@@ -205,10 +217,11 @@ class NormEMAVectorQuantizer(nn.Module):
 
             embed_normalized = (embed_sum / bins.unsqueeze(0)).t()
             embed_normalized = l2norm(embed_normalized)
-
             embed_normalized = torch.where(zero_mask[..., None],
                                            self.embedding.weight,
                                            embed_normalized)
+
+            # Update embedding vectors with EMA
             norm_ema_inplace(self.embedding.weight, embed_normalized,
                              self.decay)
 
@@ -219,6 +232,5 @@ class NormEMAVectorQuantizer(nn.Module):
         z_q = z + (z_q - z).detach()
 
         # reshape back to match original input shape
-        # z_q, 'b h w c -> b c h w'
         z_q = rearrange(z_q, 'b h w c -> b c h w')
         return z_q, loss, encoding_indices

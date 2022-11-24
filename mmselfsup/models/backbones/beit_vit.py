@@ -131,6 +131,7 @@ class BEiTViT(BEiT):
         self.fix_init_weight()
 
     def fix_init_weight(self) -> None:
+        """Rescale the initialized weights."""
 
         def rescale(param, layer_id):
             param.div_(math.sqrt(2.0 * layer_id))
@@ -140,6 +141,7 @@ class BEiTViT(BEiT):
             rescale(layer.ffn.layers[1].weight.data, layer_id + 1)
 
     def _init_weights(self, m: nn.Module) -> None:
+        """Helper function to initialize weights."""
         if isinstance(m, nn.Linear):
             trunc_normal_(m.weight, std=0.02)
             if isinstance(m, nn.Linear) and m.bias is not None:
@@ -153,6 +155,7 @@ class BEiTViT(BEiT):
                 nn.init.constant_(m.bias, 0)
 
     def forward(self, x: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
+        """The BEiT style forward function."""
         B = x.shape[0]
         x, patch_resolution = self.patch_embed(x)
 

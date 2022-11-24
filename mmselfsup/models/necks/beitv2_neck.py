@@ -6,7 +6,7 @@ import torch
 from mmcv.cnn import build_norm_layer
 from mmengine.model import BaseModule
 
-from mmselfsup.models.utils import BEiTV2ClsPretrainLayers
+from mmselfsup.models.utils import PatchAggregation
 from mmselfsup.registry import MODELS
 
 
@@ -50,7 +50,7 @@ class BEiTV2Neck(BaseModule):
         super().__init__(init_cfg=init_cfg)
         self.early_layers = early_layers
 
-        self.cls_pt_layers = BEiTV2ClsPretrainLayers(
+        self.patch_aggregation = PatchAggregation(
             num_layers=num_layers,
             early_layers=early_layers,
             backbone_arch=backbone_arch,
@@ -61,16 +61,17 @@ class BEiTV2Neck(BaseModule):
             norm_cfg=norm_cfg)
         self.fix_init_cls_pt_weight()
 
-        embed_dims = self.cls_pt_layers.arch_settings['embed_dims']
+        embed_dims = self.patch_aggregation.arch_settings['embed_dims']
         _, norm = build_norm_layer(norm_cfg, embed_dims)
         self.add_module('norm', norm)
 
     def fix_init_cls_pt_weight(self):
+        """Rescale the initialized weights."""
 
         def rescale(param, layer_id):
             param.div_(math.sqrt(2.0 * layer_id))
 
-        for layer_id, layer in enumerate(self.cls_pt_layers.layers):
+        for layer_id, layer in enumerate(self.patch_aggregation.layers):
             rescale(layer.attn.proj.weight.data,
                     self.early_layers + layer_id + 1)
             rescale(layer.ffn.layers[1].weight.data,
@@ -90,8 +91,8 @@ class BEiTV2Neck(BaseModule):
 
         early_states, x = inputs[0], inputs[1]
         x_cls_pt = torch.cat([x[:, [0]], early_states[:, 1:]], dim=1)
-        for blk in self.cls_pt_layers.layers:
-            x_cls_pt = blk(x_cls_pt, rel_pos_bias=rel_pos_bias)
+        for layer in self.patch_aggregation.layers:
+            x_cls_pt = layer(x_cls_pt, rel_pos_bias=rel_pos_bias)
 
         # shared norm
         x, x_cls_pt = self.norm(x), self.norm(x_cls_pt)

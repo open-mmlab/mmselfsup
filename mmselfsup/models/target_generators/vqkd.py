@@ -25,7 +25,7 @@ class VQKD(BaseModule):
             VQKD only support to build encoder. Defaults to None.
         num_embed (int): Number of embedding vectors in the codebook. Defaults
             to 8192.
-        embed_dim (int) : The dimension of embedding vectors in the codebook.
+        embed_dims (int) : The dimension of embedding vectors in the codebook.
             Defaults to 32.
         decay (float): The decay parameter of EMA. Defaults to 0.99.
         beta (float): The mutiplier for VectorQuantizer loss. Defaults to 1.
@@ -39,7 +39,7 @@ class VQKD(BaseModule):
                  encoder_config: dict,
                  decoder_config: Optional[dict] = None,
                  num_embed: int = 8192,
-                 embed_dim: int = 32,
+                 embed_dims: int = 32,
                  decay: float = 0.99,
                  beta: float = 1.0,
                  quantize_kmeans_init: bool = True,
@@ -52,21 +52,21 @@ class VQKD(BaseModule):
 
         self.quantize = NormEMAVectorQuantizer(
             num_embed=num_embed,
-            embedding_dim=embed_dim,
+            embed_dims=embed_dims,
             beta=beta,
-            kmeans_init=quantize_kmeans_init,
             decay=decay,
+            kmeans_init=quantize_kmeans_init,
         )
 
         # task layer
         self.encode_task_layer = nn.Sequential(
             nn.Linear(self.encoder.arch_settings['embed_dims'],
                       self.encoder.arch_settings['embed_dims']), nn.Tanh(),
-            nn.Linear(self.encoder.arch_settings['embed_dims'], embed_dim))
+            nn.Linear(self.encoder.arch_settings['embed_dims'], embed_dims))
 
     def get_tokens(self, x):
-
-        quantize, embed_ind, loss = self.encode(x)
+        """Get tokens for beit pre-training."""
+        _, embed_ind, _ = self.encode(x)
         output = {}
         output['token'] = embed_ind.view(x.shape[0], -1)
         output['input_img'] = x
@@ -74,6 +74,7 @@ class VQKD(BaseModule):
         return output
 
     def encode(self, x):
+        """Encode the input images and get corresponding results."""
         encoder_features = self.encoder(x)[0]
         B, C, N1, N2 = encoder_features.shape
         encoder_features = encoder_features.permute(0, 2, 3,
@@ -93,6 +94,9 @@ class VQKD(BaseModule):
 
         return quantize, embed_ind, loss
 
-    def forward(self, x):
-        # for beit pre-training
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """The forward function.
+
+        Currently, only support to get tokens.
+        """
         return self.get_tokens(x)['token']

@@ -12,9 +12,9 @@ from .multi_pooling import MultiPooling
 from .multi_prototypes import MultiPrototypes
 from .position_embedding import build_2d_sincos_position_embedding
 from .sobel import Sobel
-from .transformer_blocks import (BEiTV2ClsPretrainLayers,
-                                 CAETransformerRegressorLayer,
-                                 MultiheadAttention, TransformerEncoderLayer)
+from .transformer_blocks import (CAETransformerRegressorLayer,
+                                 MultiheadAttention, PatchAggregation,
+                                 TransformerEncoderLayer)
 from .vector_quantizer import NormEMAVectorQuantizer
 
 try:
@@ -39,7 +39,7 @@ __all__ = [
     'RotationPredDataPreprocessor',
     'CAEDataPreprocessor',
     'ResLayerExtraNorm',
-    'BEiTV2ClsPretrainLayers',
+    'PatchAggregation',
     'NormEMAVectorQuantizer',
     'TwoNormDataPreprocessor',
 ]

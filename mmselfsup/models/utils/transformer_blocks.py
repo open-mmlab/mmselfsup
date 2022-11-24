@@ -536,14 +536,45 @@ class CrossMultiheadAttention(BaseModule):
         return x
 
 
-class BEiTV2ClsPretrainLayers(BaseModule):
+class PatchAggregation(BaseModule):
+    """Patch aggregation in BEiT v2, built with BEiTTransformerEncoderLayer.
+
+    The module favors pushing the global information to cls_token, because it
+    only utilizes the shallow layers' output features from backbone to do the
+    reconstruction and decrease the additional MIM loss. The module is
+    discarded after pretraining.
+
+    Args:
+        num_layers (int): The number of transformer encoder layers. Defaults
+            to 2.
+        early_layers (int): The output layer index of backbone, used for
+            computing drop_path_rate. Defaults to 9.
+        backbone_arch (str): Vision Transformer architecture, choose from
+            'base' and 'large'. Defaults to base.
+        layer_scale_init_value (float): The initialization value for
+            the learnable scaling of attention and FFN. Defaults to 0.1.
+        drop_rate (float): Probability of an element to be zeroed.
+            Defaults to 0.
+        drop_path_rate (float): stochastic depth rate. Defaults to 0.
+        use_rel_pos_bias (bool): Whether to use relative position bias. 
+            Defaults to False.
+        norm_cfg (dict): Config dict for normalization layer.
+            Defaults to ``dict(type='LN', eps=1e-6)``.
+    """
     arch_zoo = {
         **dict.fromkeys(
             ['b', 'base'], {
                 'embed_dims': 768,
+                'depth': 12,
                 'num_heads': 12,
-                'feedforward_channels': 768 * 4,
-                'depth': 12
+                'feedforward_channels': 3072,
+            }),
+        **dict.fromkeys(
+            ['l', 'large'], {
+                'embed_dims': 1024,
+                'depth': 24,
+                'num_heads': 16,
+                'feedforward_channels': 4096,
             }),
     }
 
@@ -597,6 +628,7 @@ class BEiTV2ClsPretrainLayers(BaseModule):
 
     def forward(self, x: torch.Tensor,
                 shared_rel_pos_bias: torch.Tensor) -> torch.Tensor:
+        """Forward function."""
         for layer in self.layers:
             x = layer(x, rel_pos_bias=shared_rel_pos_bias)
         return x
