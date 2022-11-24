@@ -20,7 +20,7 @@ Models:
       Batch Size: 2048
     Results: null
     Config: configs/selfsup/beitv1/beitv1_vit-base-p16_8xb256-amp-coslr-300e_in1k.py
-    Weights: 
+    Weights:
     Downstream:
       - Type: Image Classification
         Metadata:
@@ -32,4 +32,4 @@ Models:
             Metrics:
               Top 1 Accuracy: 83.2
         Config: configs/selfsup/beitv1/classification/vit-base-p16_ft-8xb128-coslr-100e_in1k.py
-        Weights: 
+        Weights:

@@ -26,8 +26,8 @@ class BEiTV2Neck(BaseModule):
         drop_path_rate (float): stochastic depth rate. Defaults to 0.
         layer_scale_init_value (float): The initialization value for the
             learnable scaling of attention and FFN. Defaults to 0.1.
-        use_rel_pos_bias (bool): Whether to use unique relative postion bias,
-            if False, use shared relative postion bias defined in backbone.
+        use_rel_pos_bias (bool): Whether to use unique relative position bias,
+            if False, use shared relative position bias defined in backbone.
         norm_cfg (dict): Config dict for normalization layer.
             Defaults to ``dict(type='LN')``.
         init_cfg (dict, optional): Initialization config dict.
@@ -82,7 +82,7 @@ class BEiTV2Neck(BaseModule):
 
         Args:
             x (Tuple[torch.Tensor]): Features of tokens.
-            rel_pos_bias (torch.Tensor): Shared relative postion bias table.
+            rel_pos_bias (torch.Tensor): Shared relative position bias table.
 
         Returns:
             Tuple[torch.Tensor, torch.Tensor]: Final prediction.

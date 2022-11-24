@@ -15,7 +15,7 @@ class BEiTV2Head(BaseModule):
     Compute the logits and the cross entropy loss.
 
     Args:
-        embed_dims (int): The dimenstion of embedding.
+        embed_dims (int): The dimension of embedding.
         num_embed (int): The number of classification types.
         loss (dict): The config of loss.
         init_cfg (dict or List[dict], optional): Initialization config dict.
