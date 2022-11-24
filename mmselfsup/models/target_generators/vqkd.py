@@ -25,11 +25,12 @@ class VQKD(BaseModule):
             VQKD only support to build encoder. Defaults to None.
         num_embed (int): Number of embedding vectors in the codebook. Defaults
             to 8192.
-        embed_dim (int) : The dimension of embeddings in the codebook. Defaults
-            to 32.
-        decay (float): The decay parameter of EMA.
+        embed_dim (int) : The dimension of embedding vectors in the codebook.
+            Defaults to 32.
+        decay (float): The decay parameter of EMA. Defaults to 0.99.
+        beta (float): The mutiplier for VectorQuantizer loss. Defaults to 1.
         quantize_kmeans_init (bool): Whether to use k-means to initialize the
-            VectorQuantizer.
+            VectorQuantizer. Defaults to True.
         init_cfg (dict or List[dict], optional): Initialization config dict.
             Defaults to None.
     """  # noqa: E501
@@ -40,6 +41,7 @@ class VQKD(BaseModule):
                  num_embed: int = 8192,
                  embed_dim: int = 32,
                  decay: float = 0.99,
+                 beta: float = 1.0,
                  quantize_kmeans_init: bool = True,
                  init_cfg: Optional[dict] = None) -> None:
         super().__init__(init_cfg=init_cfg)
@@ -51,7 +53,7 @@ class VQKD(BaseModule):
         self.quantize = NormEMAVectorQuantizer(
             num_embed=num_embed,
             embedding_dim=embed_dim,
-            beta=1.0,
+            beta=beta,
             kmeans_init=quantize_kmeans_init,
             decay=decay,
         )

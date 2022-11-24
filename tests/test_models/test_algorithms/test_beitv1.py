@@ -5,8 +5,17 @@ import pytest
 import torch
 from mmengine.structures import InstanceData
 
-from mmselfsup.models.algorithms import BEiT
+from mmselfsup.models import BEiT
 from mmselfsup.structures import SelfSupDataSample
+from mmselfsup.utils import register_all_modules
+
+data_preprocessor = dict(
+    type='TwoNormDataPreprocessor',
+    mean=(123.675, 116.28, 103.53),
+    std=(58.395, 57.12, 57.375),
+    second_mean=(-20.4, -20.4, -20.4),
+    second_std=(204., 204., 204.),
+    bgr_to_rgb=True)
 
 # model settings
 backbone = dict(
@@ -15,35 +24,27 @@ backbone = dict(
     patch_size=16,
     drop_path_rate=0.1,
     final_norm=True,
-    beit_style=True,
     layer_scale_init_value=0.1,
 )
-neck = dict(
-    type='BEiTNeck',
-    num_classes=8192,
-    embed_dims=768,
-)
+neck = None
 head = dict(
-    type='BEiTHead',
-    tokenizer_type='dall-e',
-    tokenizer_path='beit_ckpt/dalle_encoder.pth',
+    type='BEiTV1Head',
+    embed_dims=768,
+    num_embed=8192,
     loss=dict(type='BEiTLoss'))
-
-data_preprocessor = dict(
-    type='mmselfsup.CAEDataPreprocessor',
-    mean=[124, 117, 104],
-    std=[59, 58, 58],
-    bgr_to_rgb=True)
+target_generator = dict(type='DALL-E')
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
-def test_beit():
+def test_beitv1():
+    register_all_modules()
+
     model = BEiT(
         backbone=backbone,
         neck=neck,
         head=head,
+        target_generator=target_generator,
         data_preprocessor=data_preprocessor)
-    # model.init_weights()
 
     fake_img = torch.rand((1, 3, 224, 224))
     fake_target_img = torch.rand((1, 3, 112, 112))

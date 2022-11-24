@@ -10,12 +10,12 @@ from .extractor import Extractor
 from .gather_layer import GatherLayer
 from .multi_pooling import MultiPooling
 from .multi_prototypes import MultiPrototypes
-from .norm_ema_quantizer import NormEMAVectorQuantizer
 from .position_embedding import build_2d_sincos_position_embedding
 from .sobel import Sobel
 from .transformer_blocks import (BEiTV2ClsPretrainLayers,
                                  CAETransformerRegressorLayer,
                                  MultiheadAttention, TransformerEncoderLayer)
+from .vector_quantizer import NormEMAVectorQuantizer
 
 try:
     from .res_layer_extra_norm import ResLayerExtraNorm
@@ -23,11 +23,23 @@ except ImportError:
     ResLayerExtraNorm = None
 
 __all__ = [
-    'Extractor', 'GatherLayer', 'MultiPooling', 'MultiPrototypes',
-    'build_2d_sincos_position_embedding', 'Sobel', 'MultiheadAttention',
-    'TransformerEncoderLayer', 'CAETransformerRegressorLayer', 'Encoder',
-    'CosineEMA', 'SelfSupDataPreprocessor', 'RelativeLocDataPreprocessor',
-    'RotationPredDataPreprocessor', 'CAEDataPreprocessor', 'ResLayerExtraNorm',
-    'BEiTV2ClsPretrainLayers', 'NormEMAVectorQuantizer',
-    'TwoNormDataPreprocessor'
+    'Extractor',
+    'GatherLayer',
+    'MultiPooling',
+    'MultiPrototypes',
+    'build_2d_sincos_position_embedding',
+    'Sobel',
+    'MultiheadAttention',
+    'TransformerEncoderLayer',
+    'CAETransformerRegressorLayer',
+    'Encoder',
+    'CosineEMA',
+    'SelfSupDataPreprocessor',
+    'RelativeLocDataPreprocessor',
+    'RotationPredDataPreprocessor',
+    'CAEDataPreprocessor',
+    'ResLayerExtraNorm',
+    'BEiTV2ClsPretrainLayers',
+    'NormEMAVectorQuantizer',
+    'TwoNormDataPreprocessor',
 ]

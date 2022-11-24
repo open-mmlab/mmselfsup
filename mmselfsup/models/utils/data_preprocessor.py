@@ -280,7 +280,7 @@ class TwoNormDataPreprocessor(SelfSupDataPreprocessor):
                 value of ``training``.
         Returns:
             Tuple[torch.Tensor, Optional[list]]: Data in the same format as the
-            model input.
+                model input.
         """
         data = [val for _, val in data.items()]
         batch_inputs, batch_data_samples = self.cast_data(data)

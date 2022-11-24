@@ -19,6 +19,7 @@ backbone = dict(
 def test_beit_vit():
     beit_backbone = BEiTViT(**backbone)
     beit_backbone.init_weights()
+
     fake_inputs = torch.randn((2, 3, 224, 224))
     fake_mask = torch.zeros((2, 196))
     fake_mask[:, 75:150] = 1
