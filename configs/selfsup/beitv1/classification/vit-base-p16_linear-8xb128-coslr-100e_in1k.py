@@ -1,6 +1,6 @@
 # mmcls:: means we use the default settings from MMClassification
 _base_ = [
-    'mmcls::_base_/datasets/imagenet_32.py',
+    'mmcls::_base_/datasets/imagenet_bs32.py',
     'mmcls::_base_/schedules/imagenet_bs1024_adamw_swin.py',
     'mmcls::_base_/default_runtime.py'
 ]
@@ -22,22 +22,31 @@ model = dict(
         patch_size=16,
         drop_rate=0.,
         drop_path_rate=0.,
-        avg_token=True,
-        output_cls_token=False,
+        final_norm=True,
+        avg_token=False,
+        frozen_stages=12,
+        output_cls_token=True,
         use_abs_pos_emb=False,
         use_rel_pos_bias=True,
-        use_shared_rel_pos_bias=True),
-    neck=dict(type='mmselfsup.ClsBatchNormNeck', input_features=768),
+        use_shared_rel_pos_bias=False),
+    neck=dict(type='TransformerTokenMergeNeck', mode='concat'),
     head=dict(
-        type='VisionTransformerClsHead',
+        type='LinearClsHead',
         num_classes=1000,
-        in_channels=768,
+        in_channels=1536,
         loss=dict(type='CrossEntropyLoss'),
         init_cfg=[dict(type='TruncNormal', layer='Linear', std=0.01)]),
 )
 
 # dataset settings
-file_client_args = dict(backend='disk')
+file_client_args = dict(
+    backend='petrel',
+    path_mapping=dict({
+        './data/':
+        'sproject:s3://openmmlab/datasets/classification/',
+        'data/':
+        'sproject:s3://openmmlab/datasets/classification/'
+    }))
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(type='RandomResizedCrop', scale=224, backend='pillow'),
@@ -63,7 +72,6 @@ optim_wrapper = dict(
 param_scheduler = [
     dict(
         type='CosineAnnealingLR',
-        T_max=100,
         by_epoch=True,
         begin=0,
         end=100,

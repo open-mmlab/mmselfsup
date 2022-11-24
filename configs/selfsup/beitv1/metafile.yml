@@ -1,0 +1,35 @@
+Collections:
+  - Name: BEiT
+    Metadata:
+      Training Data: ImageNet-1k
+      Training Techniques:
+        - AdamW
+      Training Resources: 8x A100-80G GPUs
+      Architecture:
+        - ViT
+    Paper:
+        URL: https://arxiv.org/abs/2112.09133v1
+        Title: "BEiT: BERT Pre-Training of Image Transformers"
+    README: configs/selfsup/beitv1/README.md
+
+Models:
+  - Name: beitv1_vit-base-p16_8xb256-amp-coslr-300e_in1k
+    In Collection: BEiT
+    Metadata:
+      Epochs: 300
+      Batch Size: 2048
+    Results: null
+    Config: configs/selfsup/beitv1/beitv1_vit-base-p16_8xb256-amp-coslr-300e_in1k.py
+    Weights: 
+    Downstream:
+      - Type: Image Classification
+        Metadata:
+          Epochs: 100
+          Batch Size: 1024
+        Results:
+          - Task: Fine-tuning
+            Dataset: ImageNet-1k
+            Metrics:
+              Top 1 Accuracy: 83.2
+        Config: configs/selfsup/beitv1/classification/vit-base-p16_ft-8xb128-coslr-100e_in1k.py
+        Weights: 
