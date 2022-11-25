@@ -556,7 +556,7 @@ class PatchAggregation(BaseModule):
         drop_rate (float): Probability of an element to be zeroed.
             Defaults to 0.
         drop_path_rate (float): stochastic depth rate. Defaults to 0.
-        use_rel_pos_bias (bool): Whether to use relative position bias. 
+        use_rel_pos_bias (bool): Whether to use relative position bias.
             Defaults to False.
         norm_cfg (dict): Config dict for normalization layer.
             Defaults to ``dict(type='LN', eps=1e-6)``.

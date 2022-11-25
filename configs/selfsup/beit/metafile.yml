@@ -30,6 +30,6 @@ Models:
           - Task: Fine-tuning
             Dataset: ImageNet-1k
             Metrics:
-              Top 1 Accuracy: 
-        Config: 
+              Top 1 Accuracy:
+        Config:
         Weights:
