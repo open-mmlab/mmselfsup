@@ -37,7 +37,7 @@ model = dict(
         num_classes=1000,
         in_channels=1536,
         loss=dict(type='CrossEntropyLoss'),
-        init_cfg=[dict(type='TruncNormal', layer='Linear', std=0.01)]),
+        init_cfg=[dict(type='Normal', layer='Linear', std=0.01)]),
 )
 
 # dataset settings
@@ -67,18 +67,12 @@ test_dataloader = dict(dataset=dict(pipeline=test_pipeline))
 
 # optimizer
 optimizer = dict(type='AdamW', lr=4e-3, weight_decay=1e-4)
-optim_wrapper = dict(
-    _delete_=True, type='AmpOptimWrapper', optimizer=optimizer)
+optim_wrapper = dict(_delete_=True, type='OptimWrapper', optimizer=optimizer)
 
 # learning rate scheduler
 param_scheduler = [
     dict(
-        type='CosineAnnealingLR',
-        by_epoch=True,
-        begin=0,
-        end=100,
-        eta_min=0.0,
-        convert_to_iter_based=True)
+        type='CosineAnnealingLR', by_epoch=True, begin=0, end=100, eta_min=0.0)
 ]
 
 # runtime settings
