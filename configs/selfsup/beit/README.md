@@ -35,15 +35,15 @@ Here, we report the results of the model on ImageNet, the details are below:
 	</tr>
   </thead>
   <tr>
-      <td>BEiT v1</td>
+      <td>BEiT</td>
 	    <td>ViT-base</td>
 	    <td>300</td>
       <td>2048</td>
       <td>/</td>
       <td>83.2*</td>
-      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/beitv1/beitv1_vit-base-p16_8xb256-amp-coslr-300e_in1k.py'>config</a> | <a href=''>model</a> | <a href=''>log</a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/beit/beit_vit-base-p16_8xb256-amp-coslr-300e_in1k.py'>config</a> | <a href=''>model</a> | <a href=''>log</a></td>
       <td>/</td>
-      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup//beitv1/classification/vit-base-p16_ft-8xb128-coslr-100e_in1k.py'>config</a> | <a href=''>model</a> | <a href=''>log</a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/beit/classification/vit-base-p16_ft-8xb128-coslr-100e_in1k.py'>config</a> | <a href=''>model</a> | <a href=''>log</a></td>
 	</tr>
   </tbody>
 </table>

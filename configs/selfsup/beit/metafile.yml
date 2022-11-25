@@ -8,18 +8,18 @@ Collections:
       Architecture:
         - ViT
     Paper:
-        URL: https://arxiv.org/abs/2112.09133v1
+        URL: https://arxiv.org/abs/2106.08254
         Title: "BEiT: BERT Pre-Training of Image Transformers"
-    README: configs/selfsup/beitv1/README.md
+    README: configs/selfsup/beit/README.md
 
 Models:
-  - Name: beitv1_vit-base-p16_8xb256-amp-coslr-300e_in1k
+  - Name: beit_vit-base-p16_8xb256-amp-coslr-300e_in1k
     In Collection: BEiT
     Metadata:
       Epochs: 300
       Batch Size: 2048
     Results: null
-    Config: configs/selfsup/beitv1/beitv1_vit-base-p16_8xb256-amp-coslr-300e_in1k.py
+    Config: configs/selfsup/beit/beit_vit-base-p16_8xb256-amp-coslr-300e_in1k.py
     Weights:
     Downstream:
       - Type: Image Classification
@@ -31,5 +31,5 @@ Models:
             Dataset: ImageNet-1k
             Metrics:
               Top 1 Accuracy: 83.2
-        Config: configs/selfsup/beitv1/classification/vit-base-p16_ft-8xb128-coslr-100e_in1k.py
+        Config: configs/selfsup/beit/classification/vit-base-p16_ft-8xb128-coslr-100e_in1k.py
         Weights:

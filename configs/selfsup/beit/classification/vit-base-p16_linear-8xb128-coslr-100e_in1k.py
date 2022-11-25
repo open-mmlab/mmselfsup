@@ -4,6 +4,7 @@ _base_ = [
     'mmcls::_base_/schedules/imagenet_bs1024_adamw_swin.py',
     'mmcls::_base_/default_runtime.py'
 ]
+# follow the BEiT latest version on Sep.2022
 
 data_preprocessor = dict(
     num_classes=1000,
@@ -20,6 +21,7 @@ model = dict(
         arch='base',
         img_size=224,
         patch_size=16,
+        out_indices=-4,
         drop_rate=0.,
         drop_path_rate=0.,
         final_norm=True,
@@ -59,8 +61,8 @@ test_pipeline = [
     dict(type='CenterCrop', crop_size=224),
     dict(type='PackClsInputs'),
 ]
-train_dataloader = dict(batch_size=128, dataset=dict(pipeline=train_pipeline))
-val_dataloader = dict(batch_size=128, dataset=dict(pipeline=test_pipeline))
+train_dataloader = dict(batch_size=256, dataset=dict(pipeline=train_pipeline))
+val_dataloader = dict(batch_size=256, dataset=dict(pipeline=test_pipeline))
 test_dataloader = dict(dataset=dict(pipeline=test_pipeline))
 
 # optimizer
