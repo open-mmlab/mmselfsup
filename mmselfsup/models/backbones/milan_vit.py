@@ -58,7 +58,7 @@ class MILANViT(MAEViT):
         # unshuffle to get the binary mask
         mask = torch.gather(mask, dim=1, index=ids_restore)
 
-        return x_masked, mask, ids_restore, ids_shuffle, ids_keep, ids_dump
+        return x_masked, ids_restore, ids_keep, ids_dump
 
     def forward(
         self, x: torch.Tensor, importance: torch.Tensor
@@ -110,4 +110,4 @@ class MILANViT(MAEViT):
         # Use final norm
         x = self.norm1(x)
 
-        return x, mask, ids_restore, ids_shuffle, ids_keep, ids_dump
+        return x, ids_restore, ids_keep, ids_dump

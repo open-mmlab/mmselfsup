@@ -33,7 +33,7 @@ class MILAN(BaseModel):
         # to recover the original order of tokens in decoder.
         clip_feature, importance = self.target_generator(inputs[0])
         importance = importance[:, 0, 1:]
-        latent, mask, ids_restore, ids_shuffle, ids_keep, ids_dump = self.backbone(
+        latent, ids_restore, ids_keep, ids_dump = self.backbone(
             inputs[0], importance)
         pred = self.neck(latent, ids_restore, ids_keep, ids_dump)
         loss = self.head(pred, clip_feature)
