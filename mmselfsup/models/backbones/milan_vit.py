@@ -97,7 +97,7 @@ class MILANViT(MAEViT):
         x = x + self.pos_embed[:, 1:, :]
 
         # masking: length -> length * mask_ratio
-        x, mask, ids_restore, ids_shuffle, ids_keep, ids_dump = self.attention_masking(
+        x, ids_restore, ids_keep, ids_dump = self.attention_masking(
             x, self.mask_ratio, importance)
 
         # append cls token
