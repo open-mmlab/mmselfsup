@@ -4,6 +4,8 @@ _base_ = [
     'mmcls::_base_/schedules/imagenet_bs1024_adamw_swin.py',
     'mmcls::_base_/default_runtime.py'
 ]
+# Fine-tuning 30 epoch is for models which have intermediate fine-tuning
+# on ImageNet-21k after self-supervised pretrain.
 
 # model settings
 model = dict(

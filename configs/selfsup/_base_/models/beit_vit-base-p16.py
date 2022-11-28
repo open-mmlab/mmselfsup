@@ -18,4 +18,7 @@ model = dict(
     target_generator=dict(
         type='DALL-E',
         init_cfg=dict(
-            type='Pretrained', checkpoint='beit_ckpt/dalle_encoder.pth')))
+            type='Pretrained',
+            checkpoint=  # noqa: E251
+            'https://download.openmmlab.com/mmselfsup/1.x/target_generator_ckpt/dalle_encoder.pth',  # noqa: E501
+        )))

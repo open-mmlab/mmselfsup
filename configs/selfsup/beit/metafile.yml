@@ -1,5 +1,5 @@
 Collections:
-  - Name: BEiTv2
+  - Name: BEiT
     Metadata:
       Training Data: ImageNet-1k
       Training Techniques:
@@ -8,19 +8,19 @@ Collections:
       Architecture:
         - ViT
     Paper:
-        URL: https://arxiv.org/abs/2208.06366
-        Title: 'BEiT v2: Masked Image Modeling with Vector-Quantized Visual Tokenizers'
-    README: configs/selfsup/beitv2/README.md
+        URL: https://arxiv.org/abs/2106.08254
+        Title: "BEiT: BERT Pre-Training of Image Transformers"
+    README: configs/selfsup/beit/README.md
 
 Models:
-  - Name: beitv2_vit-base-p16_8xb256-amp-coslr-300e_in1k
-    In Collection: BEiTv2
+  - Name: beit_vit-base-p16_8xb256-amp-coslr-300e_in1k
+    In Collection: BEiT
     Metadata:
       Epochs: 300
       Batch Size: 2048
     Results: null
-    Config: configs/selfsup/beitv2/beitv2_vit-base-p16_8xb256-amp-coslr-300e_in1k.py
-    Weights:
+    Config: configs/selfsup/beit/beit_vit-base-p16_8xb256-amp-coslr-300e_in1k.py
+    Weights: https://download.openmmlab.com/mmselfsup/1.x/beit/beit_vit-base-p16_8xb256-amp-coslr-300e_in1k/beit_vit-base-p16_8xb256-amp-coslr-300e_in1k_20221128-ab79e626.pth
     Downstream:
       - Type: Image Classification
         Metadata:
@@ -30,6 +30,6 @@ Models:
           - Task: Fine-tuning
             Dataset: ImageNet-1k
             Metrics:
-              Top 1 Accuracy:
-        Config:
-        Weights:
+              Top 1 Accuracy: 83.1
+        Config: configs/selfsup/beit/classification/vit-base-p16_ft-8xb128-coslr-100e_in1k.py
+        Weights: https://download.openmmlab.com/mmselfsup/1.x/beit/beit_vit-base-p16_8xb256-amp-coslr-300e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k_20221128-0ca393e9.pth
