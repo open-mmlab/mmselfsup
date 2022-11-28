@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Sequence
+from typing import Sequence, Optional, Union, List
 
 import torch
 import torch.nn as nn
@@ -42,29 +42,32 @@ class PromptMultiheadAttention(_MultiheadAttention):
         return_attention (bool): If True, return the attention map, computed by
             the cross attention between the class token and all other tokens.
             Defaults to False.
-        init_cfg (dict, optional): The Config for initialization.
-            Defaults to None.
+        init_cfg (Union[List[dict], dict], optional): The Config for 
+            initialization. Defaults to None.
     """
 
     def __init__(self,
-                 embed_dims,
-                 num_heads,
-                 input_dims=None,
-                 attn_drop=0,
-                 proj_drop=0,
-                 dropout_layer=dict(type='Dropout', drop_prob=0.),
-                 qkv_bias=True,
-                 qk_scale=None,
-                 proj_bias=True,
-                 v_shortcut=False,
-                 use_layer_scale=False,
-                 init_cfg=None) -> None:
+                 embed_dims: int,
+                 num_heads: int,
+                 input_dims: Optional[int] = None,
+                 attn_drop: float = 0,
+                 proj_drop: float = 0,
+                 dropout_layer: dict = dict(type='Dropout', drop_prob=0.),
+                 qkv_bias: bool = True,
+                 qk_scale: Optional[float] = None,
+                 proj_bias: bool = True,
+                 v_shortcut: bool = False,
+                 use_layer_scale: bool = False,
+                 init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
         super().__init__(embed_dims, num_heads, input_dims, attn_drop,
                          proj_drop, dropout_layer, qkv_bias, qk_scale,
                          proj_bias, v_shortcut, use_layer_scale, init_cfg)
         # no longer need qkv
         del self.qkv
+
+        # to project the mask tokens
         self.q = nn.Linear(embed_dims, embed_dims, bias=qkv_bias)
+        # to project al the tokens
         self.kv = nn.Linear(embed_dims, embed_dims * 2, bias=qkv_bias)
 
     def forward(self, x: torch.Tensor, visible_tokens: torch.Tensor,
@@ -72,14 +75,14 @@ class PromptMultiheadAttention(_MultiheadAttention):
         """Forward function for `PromptMultiheadAttention`.
         
         Args:
-            x (Tensor): Input features with shape (num_patches, embed_dims).
-            visible_tokens (Tensor): The visible tokens from encoder with shape
-                (num_patches, embed_dims).
-            ids_restore (Tensor): The ids of visible tokens in the original
-                image with shape (num_patches,).
+            x (torch.Tensor): Mask token features with shape N x L_m x C.
+            visible_tokens (torch.Tensor): The visible tokens features from 
+                encoder with shape N x L_v x C.
+            ids_restore (torch.Tensor): The ids of all tokens in the original
+                image with shape N x L.
 
         Returns:
-            Tensor: Output features with shape (num_patches, embed_dims).
+            torch Tensor: Output features with shape N x L x C.
         """
         x_ = torch.cat([visible_tokens[:, 1:, :], x], dim=1)
         assert x_.shape[1] == ids_restore.shape[1]
@@ -90,7 +93,7 @@ class PromptMultiheadAttention(_MultiheadAttention):
         x_ = torch.cat([visible_tokens[:, :1, :], x_], dim=1)
 
         # full sequence shape
-        B, N, _ = x_.shape
+        B, _, _ = x_.shape
         q = self.q(x).reshape(B, x.shape[1], self.num_heads,
                               self.head_dims).permute(0, 2, 1, 3)
         kv = self.kv(x_).reshape(B, x_.shape[1], 2, self.num_heads,
@@ -140,17 +143,17 @@ class PromptTransformerEncoderLayer(_TransformerEncoderLayer):
     """
 
     def __init__(self,
-                 embed_dims,
-                 num_heads,
-                 feedforward_channels,
-                 drop_rate=0.,
-                 attn_drop_rate=0.,
-                 drop_path_rate=0.,
-                 num_fcs=2,
-                 qkv_bias=True,
-                 act_cfg=dict(type='GELU'),
-                 norm_cfg=dict(type='LN'),
-                 init_cfg=None):
+                 embed_dims: int,
+                 num_heads: int,
+                 feedforward_channels=int,
+                 drop_rate: float = 0.,
+                 attn_drop_rate: float = 0.,
+                 drop_path_rate: float = 0.,
+                 num_fcs: int = 2,
+                 qkv_bias: bool = True,
+                 act_cfg: dict = dict(type='GELU'),
+                 norm_cfg: dict = dict(type='LN'),
+                 init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
         super().__init__(embed_dims, num_heads, feedforward_channels,
                          drop_rate, attn_drop_rate, drop_path_rate, num_fcs,
                          qkv_bias, act_cfg, norm_cfg, init_cfg)
@@ -165,17 +168,17 @@ class PromptTransformerEncoderLayer(_TransformerEncoderLayer):
 
     def forward(self, x: torch.Tensor, visible_tokens: torch.Tensor,
                 ids_restore: torch.Tensor) -> torch.Tensor:
-        """Forward function for `PromptTransformerEncoderLayer`.
-
-        Args:
-            x (Tensor): Input features with shape (num_patches, embed_dims).
-            visible_tokens (Tensor): The visible tokens from encoder with shape
-                (num_patches, embed_dims).
-            ids_restore (Tensor): The ids of visible tokens in the original
-                image with shape (num_patches,).
+        """Forward function for `PromptMultiheadAttention`.
         
+        Args:
+            x (torch.Tensor): Mask token features with shape N x L_m x C.
+            visible_tokens (torch.Tensor): The visible tokens features from 
+                encoder with shape N x L_v x C.
+            ids_restore (torch.Tensor): The ids of all tokens in the original
+                image with shape N x L.
+
         Returns:
-            Tensor: Output features with shape (num_patches, embed_dims).
+            torch Tensor: Output features with shape N x L x C.
         """
         x = x + self.attn(self.norm1(x), visible_tokens, ids_restore)
         x = self.ffn(self.norm2(x), identity=x)
