@@ -32,7 +32,7 @@
    :caption: 模型库
    :glob:
 
-   modelzoo_statistics.md
+   model_zoo_statistics.md
    model_zoo.md
    papers/*
 

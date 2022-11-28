@@ -30,7 +30,7 @@ Welcome to MMSelfSup's documentation!
    :caption: Model Zoo
    :glob:
 
-   modelzoo_statistics.md
+   model_zoo_statistics.md
    model_zoo.md
    papers/*
 
