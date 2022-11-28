@@ -3,15 +3,9 @@
 All models and part of benchmark results are recorded below.
 
 - [Model Zoo](#model-zoo)
-  - [Statistics](#statistics)
   - [Benchmarks](#benchmarks)
     - [ImageNet](#imagenet)
 
-## Statistics
-
-- Number of papers: 18
-
-- Number of checkpoints: 62
 
 ## Benchmarks
 
