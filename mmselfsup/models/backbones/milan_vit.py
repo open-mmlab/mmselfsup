@@ -1,17 +1,20 @@
-from .mae_vit import MAEViT
-import torch
+# Copyright (c) OpenMMLab. All rights reserved.
 from typing import Tuple
+
+import torch
+
 from mmselfsup.registry import MODELS
+from .mae_vit import MAEViT
 
 
 @MODELS.register_module()
 class MILANViT(MAEViT):
     """MILANViT.
 
-    Implementation of the encoder for `MILAN: Masked Image Pretraining on 
-    Language Assisted Representation <https://arxiv.org/abs/2208.06049>`_.
-    This module inherits from MAEViT and only overrides the forward function
-    and replace random masking with attention masking.
+    Implementation of the encoder for `MILAN: Masked Image Pretraining on
+    Language Assisted Representation <https://arxiv.org/abs/2208.06049>`_. This
+    module inherits from MAEViT and only overrides the forward function and
+    replace random masking with attention masking.
     """
 
     def attention_masking(
@@ -23,14 +26,14 @@ class MILANViT(MAEViT):
         This is what is different from MAEViT, which uses random masking.
         attention masking generates attention mask for MILAN, according to
         importance. The higher the importance, the more likely the patch is
-        kept. 
+        kept.
 
         Args:
             x (torch.Tensor): Input images, which is of shape B x L x C.
             mask_ratio (float): The ratio of patches to be masked.
             importance (torch.Tensor): Importance of each patch, which is of
                 shape B x L.
-        
+
         Returns:
             Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor
                 torch.Tensor, torch.Tensor]: masked image, mask, the ids to
@@ -70,18 +73,18 @@ class MILANViT(MAEViT):
         importance. The higher the importance, the more likely the patch is
         kept. The importance is calculated by CLIP. The higher the CLIP score,
         the more likely the patch is kept. The CLIP score is calculated by
-        by cross attention between the class token and all other tokens from 
+        by cross attention between the class token and all other tokens from
         the last layer.
 
         Args:
             x (torch.Tensor): Input images, which is of shape B x C x H x W.
             importance (torch.Tensor): Importance of each patch, which is of
                 shape B x L.
-        
+
         Returns:
             Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor
                 torch.Tensor, torch.Tensor]: masked image, the ids to
-                restore original image, ids of the kept patches, ids of the 
+                restore original image, ids of the kept patches, ids of the
                 removed patches.
                 - x (torch.Tensor): hidden features, which is of shape
                     B x (L * mask_ratio) x C.

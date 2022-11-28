@@ -21,7 +21,7 @@ model = dict(
         loss=dict(type='MILANReconstructionLoss')),
     target_generator=dict(
         type='CLIPGenerator',
-        tokenizer_path=
+        tokenizer_path=  # noqa
         '/mnt/cache/liuyuan/research/MILAN/work_dirs/clip_vit_base_16.pth.tar'
     ),
     init_cfg=None)

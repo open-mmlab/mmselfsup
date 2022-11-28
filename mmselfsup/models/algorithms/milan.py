@@ -12,7 +12,7 @@ from .base import BaseModel
 class MILAN(BaseModel):
     """MILAN.
 
-    Implementation of `MILAN: Masked Image Pretraining on Language Assisted 
+    Implementation of `MILAN: Masked Image Pretraining on Language Assisted
     Representation <https://arxiv.org/abs/2208.06049>`_.
     """
 

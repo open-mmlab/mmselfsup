@@ -1,5 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from typing import Tuple
+
 import torch
 from mmengine.model import BaseModule
 
@@ -10,9 +11,9 @@ from ..utils import build_clip_model
 @MODELS.register_module()
 class CLIPGenerator(BaseModule):
     """Get the features and attention from the last layer of CLIP.
-    
+
     This module is used to generate target features in masked image modeling.
-    
+
     Args:
         tokenizer_path (str): The path of the checkpoint of CLIP.
     """
@@ -24,7 +25,7 @@ class CLIPGenerator(BaseModule):
     @torch.no_grad()
     def forward(self, x: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
         """Get the features and attention from the last layer of CLIP.
-        
+
         Args:
             x (torch.Tensor): The input image, which is of shape (N, 3, H, W).
 

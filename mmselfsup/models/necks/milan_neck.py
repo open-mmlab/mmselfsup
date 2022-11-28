@@ -1,16 +1,19 @@
-from .mae_neck import MAEPretrainDecoder
+# Copyright (c) OpenMMLab. All rights reserved.
 from typing import List, Optional, Union
-from torch import nn
+
 import torch
-from ..utils import PromptTransformerEncoderLayer
+from torch import nn
+
 from mmselfsup.registry import MODELS
+from ..utils import PromptTransformerEncoderLayer
+from .mae_neck import MAEPretrainDecoder
 
 
 @MODELS.register_module()
 class MILANPretrainDecoder(MAEPretrainDecoder):
     """Prompt decoder for MILAN.
 
-    This decoder is used in MILAN pretraining, which will not update these 
+    This decoder is used in MILAN pretraining, which will not update these
     visible tokens from the encoder.
 
     Args:
@@ -64,16 +67,16 @@ class MILANPretrainDecoder(MAEPretrainDecoder):
                 ids_keep: torch.Tensor,
                 ids_dump: torch.Tensor) -> torch.Tensor:
         """Forward function.
-        
+
         Args:
             x (torch.Tensor): The input features, which is of shape (N, L, C).
-            ids_restore (torch.Tensor): The indices to restore these tokens 
+            ids_restore (torch.Tensor): The indices to restore these tokens
                 to the original image.
             ids_keep (torch.Tensor): The indices of tokens to be kept.
             ids_dump (torch.Tensor): The indices of tokens to be masked.
 
         Returns:
-            torch.Tensor: The reconstructed features, which is of shape 
+            torch.Tensor: The reconstructed features, which is of shape
                 (N, L, C).
         """
         # embed tokens

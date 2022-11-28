@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Sequence, Optional, Union, List
+from typing import List, Optional, Sequence, Union
 
 import torch
 import torch.nn as nn
@@ -15,7 +15,7 @@ from torch.nn import functional as F
 
 class PromptMultiheadAttention(_MultiheadAttention):
     """Prompt Multihead Attention for MILAN.
-    
+
     This module is specific for the prompt encoder in MILAN. It will not update
     the visible tokens from the encoder.
 
@@ -42,7 +42,7 @@ class PromptMultiheadAttention(_MultiheadAttention):
         return_attention (bool): If True, return the attention map, computed by
             the cross attention between the class token and all other tokens.
             Defaults to False.
-        init_cfg (Union[List[dict], dict], optional): The Config for 
+        init_cfg (Union[List[dict], dict], optional): The Config for
             initialization. Defaults to None.
     """
 
@@ -73,10 +73,10 @@ class PromptMultiheadAttention(_MultiheadAttention):
     def forward(self, x: torch.Tensor, visible_tokens: torch.Tensor,
                 ids_restore: torch.Tensor) -> torch.Tensor:
         """Forward function for `PromptMultiheadAttention`.
-        
+
         Args:
             x (torch.Tensor): Mask token features with shape N x L_m x C.
-            visible_tokens (torch.Tensor): The visible tokens features from 
+            visible_tokens (torch.Tensor): The visible tokens features from
                 encoder with shape N x L_v x C.
             ids_restore (torch.Tensor): The ids of all tokens in the original
                 image with shape N x L.
@@ -115,7 +115,7 @@ class PromptMultiheadAttention(_MultiheadAttention):
 
 class PromptTransformerEncoderLayer(_TransformerEncoderLayer):
     """Prompt Transformer Encoder Layer for MILAN.
-    
+
     This module is specific for the prompt encoder in MILAN. It will not update
     the visible tokens from the encoder.
 
@@ -169,10 +169,10 @@ class PromptTransformerEncoderLayer(_TransformerEncoderLayer):
     def forward(self, x: torch.Tensor, visible_tokens: torch.Tensor,
                 ids_restore: torch.Tensor) -> torch.Tensor:
         """Forward function for `PromptMultiheadAttention`.
-        
+
         Args:
             x (torch.Tensor): Mask token features with shape N x L_m x C.
-            visible_tokens (torch.Tensor): The visible tokens features from 
+            visible_tokens (torch.Tensor): The visible tokens features from
                 encoder with shape N x L_v x C.
             ids_restore (torch.Tensor): The ids of all tokens in the original
                 image with shape N x L.

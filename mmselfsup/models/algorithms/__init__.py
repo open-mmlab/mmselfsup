@@ -8,6 +8,7 @@ from .deepcluster import DeepCluster
 from .densecl import DenseCL
 from .mae import MAE
 from .maskfeat import MaskFeat
+from .milan import MILAN
 from .moco import MoCo
 from .mocov3 import MoCoV3
 from .npid import NPID
@@ -18,7 +19,6 @@ from .simclr import SimCLR
 from .simmim import SimMIM
 from .simsiam import SimSiam
 from .swav import SwAV
-from .milan import MILAN
 
 __all__ = [
     'BaseModel', 'BarlowTwins', 'BEiT', 'BYOL', 'DeepCluster', 'DenseCL',
