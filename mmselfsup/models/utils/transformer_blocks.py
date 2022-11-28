@@ -58,12 +58,10 @@ class PromptMultiheadAttention(_MultiheadAttention):
                  proj_bias=True,
                  v_shortcut=False,
                  use_layer_scale=False,
-                 return_attention=False,
                  init_cfg=None) -> None:
         super().__init__(embed_dims, num_heads, input_dims, attn_drop,
                          proj_drop, dropout_layer, qkv_bias, qk_scale,
-                         proj_bias, v_shortcut, use_layer_scale,
-                         return_attention, init_cfg)
+                         proj_bias, v_shortcut, use_layer_scale, init_cfg)
         # no longer need qkv
         del self.qkv
         self.q = nn.Linear(embed_dims, embed_dims, bias=qkv_bias)
