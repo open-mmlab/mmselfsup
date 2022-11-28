@@ -13,3 +13,12 @@ Collections:
         URL: https://arxiv.org/abs/1911.05722
         Title: "Momentum Contrast for Unsupervised Visual Representation Learning"
     README: configs/selfsup/mocov1/README.md
+
+Models:
+  - Name: moco_resnet50_8xb32-coslr-200e_in1k
+    In Collection: MoCo
+    Metadata:
+      Epochs: 200
+      Batch Size: 256
+    Results: null
+    Config: configs/selfsup/mocov1/mocov1_resnet50_8xb32-coslr-200e_in1k.py
