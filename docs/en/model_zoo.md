@@ -6,7 +6,6 @@ All models and part of benchmark results are recorded below.
   - [Benchmarks](#benchmarks)
     - [ImageNet](#imagenet)
 
-
 ## Benchmarks
 
 ### ImageNet

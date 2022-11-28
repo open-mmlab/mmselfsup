@@ -35,7 +35,6 @@ Besides, k=1 to 96 indicates the hyper-parameter of Low-shot SVM.
 
 The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map is pooled to the specific dimensions and then follows a Linear layer to do the classification. Please refer to [resnet50_mhead_linear-8xb32-steplr-90e_in1k](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/benchmarks/classification/imagenet/resnet50_mhead_linear-8xb32-steplr-90e_in1k.py) for details of config.
 
-
 | Self-Supervised Config                                                                                                                          | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 |
 | ----------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- |
 | [resnet50_8xb32-coslr-100e](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py) | 16.27    | 33.77    | 45.80    | 60.83    | 68.21    |

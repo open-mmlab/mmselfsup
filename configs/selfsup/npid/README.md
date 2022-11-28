@@ -18,7 +18,6 @@ Our method is also remarkable for consistently improving test performance with m
 
 ## Results and Models
 
-
 In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models are pre-trained on ImageNet-1k dataset.
 
 ### Classification
