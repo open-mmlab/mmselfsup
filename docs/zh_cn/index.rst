@@ -3,10 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to MMSelfSup's documentation!
+欢迎来到 MMSelfSup 的中文文档!
 =====================================
-
-中文文档在持续翻译中，敬请期待，同时我们也鼓励社区开发者们参与到翻译中来
 
 .. toctree::
    :maxdepth: 1
