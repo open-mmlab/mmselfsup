@@ -9,7 +9,7 @@ MMSELFSUP_ROOT = Path(__file__).absolute().parents[2]
 PAPERS_ROOT = Path('papers')  # Path to save generated paper pages.
 GITHUB_PREFIX = 'https://github.com/open-mmlab/mmselfsup/blob/1.x/'
 MODELZOO_TEMPLATE = """
-# Model Zoo Statistics
+# 模型库数据汇总
 
 * Number of papers: {num_papers}
 {type_msg}
