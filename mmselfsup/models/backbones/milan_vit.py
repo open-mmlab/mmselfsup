@@ -11,7 +11,7 @@ class MILANViT(MAEViT):
     Implementation of the encoder for `MILAN: Masked Image Pretraining on 
     Language Assisted Representation <https://arxiv.org/abs/2208.06049>`_.
     This module inherits from MAEViT and only overrides the forward function
-    and replace random mask with attention mask.
+    and replace random masking with attention masking.
     """
 
     def attention_masking(
@@ -21,12 +21,12 @@ class MILANViT(MAEViT):
         """Generate attention mask for MILAN.
 
         This is what is different from MAEViT, which uses random masking.
-        attention_masking generates attention mask for MILAN, according to
+        attention masking generates attention mask for MILAN, according to
         importance. The higher the importance, the more likely the patch is
         kept. 
 
         Args:
-            x (torch.Tensor): Input images, which is of shape B x L x C.S
+            x (torch.Tensor): Input images, which is of shape B x L x C.
             mask_ratio (float): The ratio of patches to be masked.
             importance (torch.Tensor): Importance of each patch, which is of
                 shape B x L.
@@ -80,14 +80,12 @@ class MILANViT(MAEViT):
         
         Returns:
             Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor
-                torch.Tensor, torch.Tensor]: masked image, mask, the ids to
-                restore original image, ids of the shuffled patches, ids of
-                the kept patches, ids of the removed patches.
+                torch.Tensor, torch.Tensor]: masked image, the ids to
+                restore original image, ids of the kept patches, ids of the 
+                removed patches.
                 - x (torch.Tensor): hidden features, which is of shape
                     B x (L * mask_ratio) x C.
-                - mask (torch.Tensor): mask used to mask image.
                 - ids_restore (torch.Tensor): ids to restore original image.
-                - ids_shuffle (torch.Tensor): ids of the shuffled patches.
                 - ids_keep (torch.Tensor): ids of the kept patches.
                 - ids_dump (torch.Tensor): ids of the removed patches.
         """

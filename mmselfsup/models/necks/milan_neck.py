@@ -63,6 +63,19 @@ class MILANPretrainDecoder(MAEPretrainDecoder):
     def forward(self, x: torch.Tensor, ids_restore: torch.Tensor,
                 ids_keep: torch.Tensor,
                 ids_dump: torch.Tensor) -> torch.Tensor:
+        """Forward function.
+        
+        Args:
+            x (torch.Tensor): The input features, which is of shape (N, L, C).
+            ids_restore (torch.Tensor): The indices to restore these tokens 
+                to the original image.
+            ids_keep (torch.Tensor): The indices of tokens to be kept.
+            ids_dump (torch.Tensor): The indices of tokens to be masked.
+
+        Returns:
+            torch.Tensor: The reconstructed features, which is of shape 
+                (N, L, C).
+        """
         # embed tokens
         x = self.decoder_embed(x)
 
@@ -92,7 +105,7 @@ class MILANPretrainDecoder(MAEPretrainDecoder):
             x[:, 1:, :],
             dim=1,
             index=ids_dump.unsqueeze(-1).repeat(1, 1, x.shape[-1]))
-            
+
         for blk in self.decoder_blocks:
             x = blk(x, visible_tokens, ids_restore)
 
