@@ -137,9 +137,6 @@ class VisionTransformer(nn.Module):
         if finetune is False:
             self.ln_post = LayerNorm(width)
             self.proj = nn.Parameter(scale * torch.randn(width, output_dim))
-        else:
-            self.head = nn.Linear(768, 1000)
-            self.fc_norm = LayerNorm(768, eps=1e-6)
 
         self.average_targets = average_targets
 
@@ -160,30 +157,11 @@ class VisionTransformer(nn.Module):
         x, attention, z = self.transformer(x)
         x = x.permute(1, 0, 2)  # LND -> NLD
 
-        if self.finetune is False:
-            # x = self.ln_post(x[:, 0, :])
-            x = self.ln_post(x)
-            if self.proj is not None:
-                x = x @ self.proj
-        else:
-            x = x[:, 1:, :].mean(dim=1)  # global pool without cls token
-            x = self.fc_norm(x)
-            x = self.head(x)
+        x = self.ln_post(x)
+        if self.proj is not None:
+            x = x @ self.proj
 
-        if self.average_targets == 1:
-            return x, attention
-        else:
-            assert self.average_targets > 1
-            assert len(z) == 12
-            target_layers = []
-            for i in range(self.average_targets):
-                target_layers.append(12 - i)
-            targets = [z[i] for i in target_layers]
-            targets = [self.ln_post(val) for val in targets]
-            targets = sum(targets) / len(targets)
-            targets = self.ln_post(targets)
-            targets = targets @ self.proj
-            return x, attention, targets
+        return x, attention
 
 
 class CLIP(nn.Module):
@@ -286,23 +264,6 @@ def build_clip_model(state_dict: dict, finetune=False, average_targets=1):
         grid_size = round(
             (state_dict['visual.positional_embedding'].shape[0] - 1)**0.5)
         image_resolution = vision_patch_size * grid_size
-    else:
-        counts: list = [
-            len(
-                set(
-                    k.split('.')[2] for k in state_dict
-                    if k.startswith(f'visual.layer{b}')))
-            for b in [1, 2, 3, 4]
-        ]
-        vision_layers = tuple(counts)
-        vision_width = state_dict['visual.layer1.0.conv1.weight'].shape[0]
-        output_width = round(
-            (state_dict['visual.attnpool.positional_embedding'].shape[0] -
-             1)**0.5)
-        vision_patch_size = None
-        assert output_width**2 + 1 == state_dict[
-            'visual.attnpool.positional_embedding'].shape[0]
-        image_resolution = output_width * 32
 
     embed_dim = state_dict['text_projection'].shape[1]
     context_length = state_dict['positional_embedding'].shape[0]

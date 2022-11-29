@@ -107,9 +107,6 @@ class PromptMultiheadAttention(_MultiheadAttention):
         x = (attn @ v).transpose(1, 2).reshape(B, x.shape[1], self.embed_dims)
         x = self.proj(x)
         x = self.out_drop(self.gamma1(self.proj_drop(x)))
-
-        if self.v_shortcut:
-            x = v.squeeze(1) + x
         return x
 
 
