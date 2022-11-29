@@ -1,6 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import copy
 import platform
+from unittest.mock import MagicMock
 
 import pytest
 import torch
@@ -24,10 +25,10 @@ neck = dict(
 )
 loss = dict(type='MILANReconstructionLoss')
 head = dict(type='MILANPretrainHead', loss=loss)
-target_generator = dict(
-    type='CLIPGenerator',
-    tokenizer_path=  # noqa
-    'milan_ckpt/clip_vit_base_16.pth.tar')
+# target_generator = dict(
+#     type='CLIPGenerator',
+#     tokenizer_path=  # noqa
+#     'milan_ckpt/clip_vit_base_16.pth.tar')
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
@@ -42,8 +43,11 @@ def test_mae():
         backbone=backbone,
         neck=neck,
         head=head,
-        target_generator=target_generator,
         data_preprocessor=copy.deepcopy(data_preprocessor))
+
+    target_generator = MagicMock(
+        return_value=(torch.ones(2, 197, 512), torch.ones(2, 197, 197)))
+    alg.target_generator = target_generator
 
     fake_data = {
         'inputs': [torch.randn((2, 3, 224, 224))],
