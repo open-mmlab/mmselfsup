@@ -1,6 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from collections import OrderedDict
-from typing import Tuple, Union
+from typing import Optional, Tuple, Union
 
 import numpy as np
 import torch
@@ -10,25 +10,36 @@ from torch import nn
 class LayerNorm(nn.LayerNorm):
     """Subclass torch's LayerNorm to handle fp16."""
 
-    def forward(self, x: torch.Tensor):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Forward function."""
         orig_type = x.dtype
         ret = super().forward(x.type(torch.float32))
         return ret.type(orig_type)
 
 
 class QuickGELU(nn.Module):
+    """A faster version of GELU."""
 
-    def forward(self, x: torch.Tensor):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Forward function."""
         return x * torch.sigmoid(1.702 * x)
 
 
 class ResidualAttentionBlock(nn.Module):
+    """Residual Attention Block (RAB).
+
+    Args:
+        d_model (int): The feature dimension.
+        n_head (int): The number of attention heads.
+        attn_mask (torch.Tensor, optional): The attention mask.
+            Defaults to None.
+    """
 
     def __init__(self,
                  d_model: int,
                  n_head: int,
-                 attn_mask: torch.Tensor = None,
-                 return_attention=False):
+                 attn_mask: Optional[torch.Tensor] = None,
+                 return_attention: bool = False) -> None:
         super().__init__()
 
         self.attn = nn.MultiheadAttention(d_model, n_head)
@@ -42,7 +53,8 @@ class ResidualAttentionBlock(nn.Module):
 
         self.return_attention = return_attention
 
-    def attention(self, x: torch.Tensor):
+    def attention(self, x: torch.Tensor) -> torch.Tensor:
+        """Attention function."""
         self.attn_mask = self.attn_mask.to(
             dtype=x.dtype,
             device=x.device) if self.attn_mask is not None else None
@@ -61,7 +73,10 @@ class ResidualAttentionBlock(nn.Module):
                 need_weights=self.return_attention,
                 attn_mask=self.attn_mask)[0]
 
-    def forward(self, x: torch.Tensor):
+    def forward(
+        self, x: torch.Tensor
+    ) -> Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]:
+        """Forward function."""
         if self.return_attention:
             x_, attention = self.attention(self.ln_1(x))
             x = x + x_
@@ -74,12 +89,20 @@ class ResidualAttentionBlock(nn.Module):
 
 
 class Transformer(nn.Module):
+    """Transformer.
+
+    Args:
+        width (int): The feature dimension.
+        layers (int): The number of layers.
+        heads (int): The number of attention heads.
+        attn_mask (torch.Tensor, optional): The attention mask.
+    """
 
     def __init__(self,
                  width: int,
                  layers: int,
                  heads: int,
-                 attn_mask: torch.Tensor = None):
+                 attn_mask: Optional[torch.Tensor] = None) -> None:
         super().__init__()
         self.width = width
         self.layers = layers
@@ -91,8 +114,10 @@ class Transformer(nn.Module):
             ResidualAttentionBlock(
                 width, heads, attn_mask, return_attention=True))
 
-    def forward(self, x: torch.Tensor):
-        # return self.resblocks(x)
+    def forward(
+            self, x: torch.Tensor
+    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        """Forward function."""
         z = []
         for idx, blk in enumerate(self.resblocks):
             if idx < self.layers - 1:
@@ -105,6 +130,18 @@ class Transformer(nn.Module):
 
 
 class VisionTransformer(nn.Module):
+    """Vision Transformer for CLIP.
+
+    Args:
+        input_resolution (int): The image size.
+        patch_size (int): The patch size.
+        width (int): The feature dimension.
+        layers (int): The number of layers.
+        heads (int): The number of attention heads.
+        out_dim (int): The output dimension.
+        fineturn (bool): Whether to fineturn the model.
+        average_target (bool): Whether to average the target.
+    """
 
     def __init__(self,
                  input_resolution: int,
@@ -114,7 +151,7 @@ class VisionTransformer(nn.Module):
                  heads: int,
                  output_dim: int,
                  finetune=False,
-                 average_targets=1):
+                 average_targets: int = 1) -> None:
         super().__init__()
         self.input_resolution = input_resolution
         self.output_dim = output_dim
@@ -140,7 +177,8 @@ class VisionTransformer(nn.Module):
 
         self.average_targets = average_targets
 
-    def forward(self, x: torch.Tensor):
+    def forward(self, x: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+        """Forward function."""
         x = self.conv1(x)  # shape = [*, width, grid, grid]
         x = x.reshape(x.shape[0], x.shape[1],
                       -1)  # shape = [*, width, grid ** 2]
@@ -165,24 +203,39 @@ class VisionTransformer(nn.Module):
 
 
 class CLIP(nn.Module):
+    """CLIP.
+
+    Args:
+        embed_dim (int): The embedding dimension.
+        image_resolution (int): The image size.
+        vision_layers (int): The number of layers in the vision transformer.
+        vision_width (int): The feature dimension in the vision transformer.
+        vision_patch_size (int): The patch size in the vision transformer.
+        context_length (int): The context length.
+        vocab_size (int): The vocabulary size.
+        transformer_width (int): The feature dimension in the text transformer.
+        transformer_heads (int): The number of attention heads in the
+            text transformer.
+        transformer_layers (int): The number of layers in the text transformer.
+        fineturn (bool): Whether to fineturn the model.
+        average_target (bool): Whether to average the target.
+    """
 
     def __init__(
         self,
         embed_dim: int,
-        # vision
         image_resolution: int,
         vision_layers: Union[Tuple[int, int, int, int], int],
         vision_width: int,
         vision_patch_size: int,
-        # text
         context_length: int,
         vocab_size: int,
         transformer_width: int,
         transformer_heads: int,
         transformer_layers: int,
-        finetune=False,
-        average_targets=1,
-    ):
+        finetune: bool = False,
+        average_targets: int = 1,
+    ) -> None:
         super().__init__()
 
         self.context_length = context_length
@@ -217,7 +270,12 @@ class CLIP(nn.Module):
 
         self.initialize_parameters()
 
-    def initialize_parameters(self):
+    def initialize_parameters(self) -> None:
+        """Initialize the parameters.
+
+        The pretrained weight will override the initialized parameters by this
+        function.
+        """
         nn.init.normal_(self.token_embedding.weight, std=0.02)
         nn.init.normal_(self.positional_embedding, std=0.01)
 
@@ -235,7 +293,8 @@ class CLIP(nn.Module):
             nn.init.normal_(
                 self.text_projection, std=self.transformer.width**-0.5)
 
-    def build_attention_mask(self):
+    def build_attention_mask(self) -> torch.Tensor:
+        """Build the attention mask."""
         # lazily create causal attention mask, with full attention between the
         # vision tokens pytorch uses additive attention mask; fill with -inf
         mask = torch.empty(self.context_length, self.context_length)
@@ -244,14 +303,39 @@ class CLIP(nn.Module):
         return mask
 
     @property
-    def dtype(self):
+    def dtype(self) -> torch.dtype:
+        """Get the dtype."""
         return self.visual.conv1.weight.dtype
 
-    def encode_image(self, image):
+    def encode_image(self,
+                     image: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+        """Encode the image.
+
+        Get the feature and attention mask from the last layer of the visual
+        branch of CLIP.
+
+        Args:
+            image (torch.Tensor): The image tensor with shape NCHW.
+
+        Returns:
+            Tuple[torch.Tensor, torch.Tensor]: The feature and attention mask.
+        """
         return self.visual(image.type(self.dtype))
 
 
-def build_clip_model(state_dict: dict, finetune=False, average_targets=1):
+def build_clip_model(state_dict: dict,
+                     finetune: bool = False,
+                     average_targets: int = 1) -> nn.Module:
+    """Build the CLIP model.
+
+    Args:
+        state_dict (dict): The pretrained state dict.
+        finetune (bool): Whether to fineturn the model.
+        average_targets (bool): Whether to average the target.
+
+    Returns:
+        nn.Module: The CLIP model.
+    """
     vit = 'visual.proj' in state_dict
 
     if vit:

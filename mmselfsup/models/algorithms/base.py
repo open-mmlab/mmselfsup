@@ -71,14 +71,17 @@ class BaseModel(_BaseModel):
 
     @property
     def with_neck(self) -> bool:
+        """Check if the model has a neck module."""
         return hasattr(self, 'neck') and self.neck is not None
 
     @property
     def with_head(self) -> bool:
+        """Check if the model has a head module."""
         return hasattr(self, 'head') and self.head is not None
 
     @property
     def with_target_generator(self) -> bool:
+        """Check if the model has a target_generator module."""
         return hasattr(
             self, 'target_generator') and self.target_generator is not None
 
