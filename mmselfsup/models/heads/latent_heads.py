@@ -48,9 +48,10 @@ class LatentPredictHead(BaseModule):
 
 @MODELS.register_module()
 class LatentCrossCorrelationHead(BaseModule):
-    """Head for latent feature cross correlation. Part of the code is borrowed
-    from:
-    `https://github.com/facebookresearch/barlowtwins/blob/main/main.py>`_.
+    """Head for latent feature cross correlation.
+
+    Part of the code is borrowed from `script
+    <https://github.com/facebookresearch/barlowtwins/blob/main/main.py>`_.
 
     Args:
         in_channels (int): Number of input channels.

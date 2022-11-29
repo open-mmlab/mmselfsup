@@ -17,9 +17,9 @@ class SwAVLoss(BaseModule):
     """The Loss for SwAV.
 
     This Loss contains clustering and sinkhorn algorithms to compute Q codes.
-    Part of the code is borrowed from:
-    `<https://github.com/facebookresearch/swav`_.
-    The queue is built in `core/hooks/swav_hook.py`.
+    Part of the code is borrowed from `script
+    <https://github.com/facebookresearch/swav>`_.
+    The queue is built in `engine/hooks/swav_hook.py`.
 
     Args:
         feat_dim (int): feature dimension of the prototypes.

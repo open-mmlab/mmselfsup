@@ -17,7 +17,7 @@ class ODC(BaseModel):
     Official implementation of `Online Deep Clustering for Unsupervised
     Representation Learning <https://arxiv.org/abs/2006.10645>`_.
     The operation w.r.t. memory bank and loss re-weighting is in
-     `engine/hooks/odc_hook.py`.
+    `engine/hooks/odc_hook.py`.
 
     Args:
         backbone (dict): Config dict for module of backbone.
