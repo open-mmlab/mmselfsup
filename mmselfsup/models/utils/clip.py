@@ -83,7 +83,6 @@ class Transformer(nn.Module):
         super().__init__()
         self.width = width
         self.layers = layers
-        # self.resblocks = nn.Sequential(*[ResidualAttentionBlock(width, heads, attn_mask) for _ in range(layers)]) # noqa
         self.resblocks = nn.ModuleList()
         for _ in range(layers - 1):
             self.resblocks.append(
@@ -143,10 +142,6 @@ class VisionTransformer(nn.Module):
             self.fc_norm = LayerNorm(768, eps=1e-6)
 
         self.average_targets = average_targets
-
-    @torch.jit.ignore
-    def no_weight_decay(self):
-        return {'positional_embedding', 'class_embedding'}
 
     def forward(self, x: torch.Tensor):
         x = self.conv1(x)  # shape = [*, width, grid, grid]
@@ -277,68 +272,6 @@ class CLIP(nn.Module):
     def encode_image(self, image):
         return self.visual(image.type(self.dtype))
 
-    def encode_text(self, text):
-        x = self.token_embedding(text).type(
-            self.dtype)  # [batch_size, n_ctx, d_model]
-
-        x = x + self.positional_embedding.type(self.dtype)
-        x = x.permute(1, 0, 2)  # NLD -> LND
-        x, _, _ = self.transformer(x)
-        x = x.permute(1, 0, 2)  # LND -> NLD
-        x = self.ln_final(x).type(self.dtype)
-
-        # x.shape = [batch_size, n_ctx, transformer.width]
-        # take features from the eot embedding (eot_token is the highest
-        # number in each sequence)
-        x = x[torch.arange(x.shape[0]),
-              text.argmax(dim=-1)] @ self.text_projection
-
-        return x
-
-    def forward(self, image, text):
-        image_features = self.encode_image(image)
-        text_features = self.encode_text(text)
-
-        # normalized features
-        image_features = image_features / image_features.norm(
-            dim=1, keepdim=True)
-        text_features = text_features / text_features.norm(dim=1, keepdim=True)
-
-        # cosine similarity as logits
-        logit_scale = self.logit_scale.exp()
-        logits_per_image = logit_scale * image_features @ text_features.t()
-        logits_per_text = logits_per_image.t()
-
-        # shape = [global_batch_size, global_batch_size]
-        return logits_per_image, logits_per_text
-
-
-def convert_weights(model: nn.Module):
-    """Convert applicable model parameters to fp16."""
-
-    def _convert_weights_to_fp16(module):
-        if isinstance(module, (nn.Conv1d, nn.Conv2d, nn.Linear)):
-            module.weight.data = module.weight.data.half()
-            if module.bias is not None:
-                module.bias.data = module.bias.data.half()
-
-        if isinstance(module, nn.MultiheadAttention):
-            for attr in [
-                    *[f'{s}_proj_weight' for s in ['in', 'q', 'k', 'v']],
-                    'in_proj_bias', 'bias_k', 'bias_v'
-            ]:
-                tensor = getattr(module, attr)
-                if tensor is not None:
-                    tensor.data = tensor.data.half()
-
-        for name in ['text_projection', 'proj']:
-            if hasattr(module, name):
-                attr = getattr(module, name)
-                if attr is not None:
-                    attr.data = attr.data.half()
-
-    model.apply(_convert_weights_to_fp16)
-
 
 def build_clip_model(state_dict: dict, finetune=False, average_targets=1):
     vit = 'visual.proj' in state_dict
@@ -399,7 +332,7 @@ def build_clip_model(state_dict: dict, finetune=False, average_targets=1):
     for key in ['input_resolution', 'context_length', 'vocab_size']:
         if key in state_dict:
             del state_dict[key]
-    # convert_weights(model)
+
     msg = model.load_state_dict(state_dict, strict=False)
     print('Load CLIP model:', msg)
     return model.eval()
