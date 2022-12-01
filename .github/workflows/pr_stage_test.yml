@@ -98,7 +98,7 @@ jobs:
         run: |
           python setup.py check -m -s
           TORCH_CUDA_ARCH_LIST=7.0 pip install -e .
-    
+
   build_cu116:
     runs-on: ubuntu-18.04
     container:
