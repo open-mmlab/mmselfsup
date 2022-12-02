@@ -140,7 +140,7 @@ An example of visualization:
 <img src="https://user-images.githubusercontent.com/36138628/199388251-476a5ad2-f9c1-4dfb-afe2-73cf41b5793b.jpg" width="800" />
 </div>
 
-## Visualize Low-level Feature Reconstruction 
+## Visualize Low-level Feature Reconstruction
 
 We provide several reconstruction visualization for listed algorithms:
 
