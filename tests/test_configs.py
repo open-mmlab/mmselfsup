@@ -16,7 +16,7 @@ def get_config_list(path, file_list):
 
 
 def test_configs():
-    path = osp.join(osp.dirname(__file__), '..', 'configs', 'benchmarks')
+    path = osp.join(osp.dirname(__file__), '..', 'configs')
     config_list = []
     get_config_list(path, config_list)
 
