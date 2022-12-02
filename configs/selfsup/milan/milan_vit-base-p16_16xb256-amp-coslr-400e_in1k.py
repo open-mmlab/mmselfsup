@@ -22,7 +22,7 @@ model = dict(
     target_generator=dict(
         type='CLIPGenerator',
         tokenizer_path=  # noqa
-        '/mnt/cache/liuyuan/research/MILAN/work_dirs/clip_vit_base_16.pth.tar'
+        './milan_ckpt/clip_vit_base_16.pth.tar'
     ),
     init_cfg=None)
 
