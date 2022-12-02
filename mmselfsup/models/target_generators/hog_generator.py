@@ -119,9 +119,11 @@ class HOGGenerator(BaseModule):
 
         return self._reshape(self.out)
 
-    def generate_hog_image(self, hog_out):
+    def generate_hog_image(self, hog_out: torch.Tensor) -> np.ndarray:
+        """Generate HOG image according to HOG features."""
         assert hog_out.size(0) == 1 and hog_out.size(1) == 3, \
-            'Check the input batch size and the channcel number'
+            'Check the input batch size and the channcel number, only support'\
+            '"batch_size = 1".'
         hog_image = np.zeros([self.h, self.w])
         cell_gradient = np.array(hog_out.mean(dim=1).squeeze().detach().cpu())
         cell_width = self.pool / 2
