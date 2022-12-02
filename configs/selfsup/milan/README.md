@@ -1,8 +1,8 @@
 # MILAN
 
 > [MILAN: Masked Image Pretraining on
-Language Assisted Representation
-](https://arxiv.org/pdf/2208.06049)
+> Language Assisted Representation
+> ](https://arxiv.org/pdf/2208.06049)
 
 <!-- [ALGORITHM] -->
 

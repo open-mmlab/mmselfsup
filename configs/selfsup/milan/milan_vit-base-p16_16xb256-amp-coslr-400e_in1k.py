@@ -22,8 +22,7 @@ model = dict(
     target_generator=dict(
         type='CLIPGenerator',
         tokenizer_path=  # noqa
-        './milan_ckpt/clip_vit_base_16.pth.tar'
-    ),
+        './milan_ckpt/clip_vit_base_16.pth.tar'),
     init_cfg=None)
 
 # dataset 8 x 512
