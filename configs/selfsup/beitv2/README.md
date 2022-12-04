@@ -54,9 +54,7 @@ Here, we report the results of the model on ImageNet, the details are below:
 @article{beitv2,
     title={{BEiT v2}: Masked Image Modeling with Vector-Quantized Visual Tokenizers},
     author={Zhiliang Peng and Li Dong and Hangbo Bao and Qixiang Ye and Furu Wei},
-    year={2022},
-    eprint={2208.06366},
-    archivePrefix={arXiv},
-    primaryClass={cs.CV}
+    journal={ArXiv},
+    year={2022}
 }
 ```
