@@ -11,7 +11,7 @@ All models and part of benchmark results are recorded below.
 
 - Number of papers: 18
 
-- Number of checkpoints: 64
+- Number of checkpoints: 62
 
 ## Benchmarks
 
