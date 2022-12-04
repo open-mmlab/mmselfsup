@@ -7,7 +7,7 @@ Visualization can give an intuitive interpretation of the performance of the mod
 - [Visualization](#visualization)
   - [How visualization is implemented](#how-visualization-is-implemented)
   - [What Visualization do in MMSelfsup](#what-visualization-do-in-mmselfsup)
-  - [Use different storage backends](#use-different-storage-backends)
+  - [Use Different Storage Backends](#use-different-storage-backends)
   - [Customize Visualization](#customize-visualization)
   - [Visualize Datasets](#visualize-datasets)
   - [Visualize t-SNE](#visualize-t-sne)
@@ -46,7 +46,7 @@ def after_train_iter(...):
 
 The function [`add_datasample()`](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/visualization/selfsup_visualizer.py#L151) is impleted in [`SelfSupVisualizer`](mmselfsup.visualization.SelfSupVisualizer), and it is mainly used in [browse_dataset.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/browse_dataset.py) for browsing dataset. More tutorial is in [analysis_tools.md](analysis_tools.md)
 
-## Use different storage backends
+## Use Different Storage Backends
 
 If you want to use a different backend (Wandb, Tensorboard, or a custom backend with a remote window), just change the `vis_backends` in the config, as follows:
 
@@ -151,7 +151,10 @@ We provide several reconstruction visualization for listed algorithms:
 Users can run command below to visualize the reconstruction.
 
 ```shell
-python tools/analysis_tools/visualize_reconstruction.py ${CONFIG_FILE} --checkpoint ${CKPT_PATH} --img-path ${IMAGE_PATH} --out-file ${OUTPUT_PATH}
+python tools/analysis_tools/visualize_reconstruction.py ${CONFIG_FILE} \
+    --checkpoint ${CKPT_PATH} \
+    --img-path ${IMAGE_PATH} \
+    --out-file ${OUTPUT_PATH}
 ```
 
 Arguments:
@@ -165,11 +168,19 @@ Arguments:
 An example:
 
 ```shell
-python tools/analysis_tools/visualize_reconstruction.py configs/selfsup/mae/mae_vit-huge-p16_8xb512-amp-coslr-1600e_in1k.py --checkpoint https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k_20220916-ff848775.pth --img-path data/imagenet/val/ILSVRC2012_val_00000003.JPEG --out-file test_mae.jpg --norm-pix
+python tools/analysis_tools/visualize_reconstruction.py configs/selfsup/mae/mae_vit-huge-p16_8xb512-amp-coslr-1600e_in1k.py \
+    --checkpoint https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k/mae_vit-huge-p16_8xb512-fp16-coslr-1600e_in1k_20220916-ff848775.pth \
+    --img-path data/imagenet/val/ILSVRC2012_val_00000003.JPEG \
+    --out-file test_mae.jpg \
+    --norm-pix
 
 
 # As for SimMIM, it generates the mask in data pipeline, thus we use '--use-vis-pipeline' to apply 'vis_pipeline' defined in config instead of the pipeline defined in script.
-python tools/analysis_tools/visualize_reconstruction.py configs/selfsup/simmim/simmim_swin-large_16xb128-amp-coslr-800e_in1k-192.py --checkpoint https://download.openmmlab.com/mmselfsup/1.x/simmim/simmim_swin-large_16xb128-amp-coslr-800e_in1k-192/simmim_swin-large_16xb128-amp-coslr-800e_in1k-192_20220916-4ad216d3.pth --img-path data/imagenet/val/ILSVRC2012_val_00000003.JPEG --out-file test_simmim.jpg --use-vis-pipeline
+python tools/analysis_tools/visualize_reconstruction.py configs/selfsup/simmim/simmim_swin-large_16xb128-amp-coslr-800e_in1k-192.py \
+    --checkpoint https://download.openmmlab.com/mmselfsup/1.x/simmim/simmim_swin-large_16xb128-amp-coslr-800e_in1k-192/simmim_swin-large_16xb128-amp-coslr-800e_in1k-192_20220916-4ad216d3.pth \
+    --img-path data/imagenet/val/ILSVRC2012_val_00000003.JPEG \
+    --out-file test_simmim.jpg \
+    --use-vis-pipeline
 ```
 
 Results of MAE:
