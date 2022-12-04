@@ -91,12 +91,20 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
 
         # get logger
         logger = MMLogger.get_current_instance()
+        logger.warning(
+            'LearningRateDecayOptimWrapperConstructor is refactored in '
+            'v1.0.0rc4, which need to configure zero weight decay manuaally. '
+            'The previous versions would set zero weight decay according to '
+            'the dimension of parameter. Please specify weight decay settings '
+            'of different layers in config if needed.')
 
         # Check if self.param_cfg is not None
         if len(self.paramwise_cfg) > 0:
             logger.info(
                 'The paramwise_cfg only supports weight decay customization '
-                'in LearningRateDecayOptimWrapperConstructor. ')
+                'in LearningRateDecayOptimWrapperConstructor, please indicate '
+                'the specific weight decay settings of different layers in '
+                'config if needed.')
 
         model_type = optimizer_cfg.pop('model_type', None)
         # model_type should not be None

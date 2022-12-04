@@ -19,14 +19,14 @@ optim_wrapper = dict(
     optimizer=dict(
         type='AdamW', lr=5e-3, model_type='swin', layer_decay_rate=0.9),
     clip_grad=dict(max_norm=5.0),
+    constructor='mmselfsup.LearningRateDecayOptimWrapperConstructor',
     paramwise_cfg=dict(
-        norm_decay_mult=0.0,
-        bias_decay_mult=0.0,
         custom_keys={
+            '.norm': dict(decay_mult=0.0),
+            '.bias': dict(decay_mult=0.0),
             '.absolute_pos_embed': dict(decay_mult=0.0),
             '.relative_position_bias_table': dict(decay_mult=0.0)
-        }),
-    constructor='mmselfsup.LearningRateDecayOptimWrapperConstructor')
+        }))
 
 # learning rate scheduler
 param_scheduler = [

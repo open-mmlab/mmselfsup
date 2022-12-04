@@ -88,9 +88,9 @@ optim_wrapper = dict(
         layer_decay_rate=0.65),  # layer-wise lr decay factor
     constructor='mmselfsup.LearningRateDecayOptimWrapperConstructor',
     paramwise_cfg=dict(
-        norm_decay_mult=0.0,
-        bias_decay_mult=0.0,
         custom_keys={
+            '.ln': dict(decay_mult=0.0),
+            '.bias': dict(decay_mult=0.0),
             '.cls_token': dict(decay_mult=0.0),
             '.pos_embed': dict(decay_mult=0.0)
         }))
