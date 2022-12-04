@@ -1,5 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import math
+from typing import List, Optional, Union
 
 import torch
 from mmcls.models import BEiT, resize_pos_embed
@@ -91,7 +92,7 @@ class BEiTViT(BEiT):
                  interpolate_mode: str = 'bicubic',
                  patch_cfg: dict = dict(padding=0),
                  layer_cfgs: dict = dict(),
-                 init_cfg: dict = None) -> None:
+                 init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
         super().__init__(
             arch=arch,
             img_size=img_size,

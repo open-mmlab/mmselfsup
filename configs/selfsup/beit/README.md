@@ -51,12 +51,10 @@ Here, we report the results of the model on ImageNet, the details are below:
 ## Citation
 
 ```bibtex
-@article{beit,
-    title={{BEiT}: {BERT} Pre-Training of Image Transformers},
-    author={Hangbo Bao and Li Dong and Furu Wei},
-    year={2021},
-    eprint={2106.08254},
-    archivePrefix={arXiv},
-    primaryClass={cs.CV}
+@inproceedings{bao2022beit,
+    title={{BE}iT: {BERT} Pre-Training of Image Transformers},
+    author={Hangbo Bao and Li Dong and Songhao Piao and Furu Wei},
+    booktitle={International Conference on Learning Representations},
+    year={2022},
 }
 ```

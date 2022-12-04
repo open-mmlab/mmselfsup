@@ -9,7 +9,7 @@ All models and part of benchmark results are recorded below.
 
 ## Statistics
 
-- Number of papers: 19
+- Number of papers: 18
 
 - Number of checkpoints: 64
 

@@ -31,14 +31,7 @@ model = dict(
         init_cfg=[dict(type='TruncNormal', layer='Linear', std=0.02)]),
 )
 
-file_client_args = dict(
-    backend='petrel',
-    path_mapping=dict({
-        './data/':
-        'sproject:s3://openmmlab/datasets/classification/',
-        'data/':
-        'sproject:s3://openmmlab/datasets/classification/'
-    }))
+file_client_args = dict(backend='disk')
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(

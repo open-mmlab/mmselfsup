@@ -56,7 +56,6 @@ class BEiT(BaseModel):
         elif isinstance(loss, Tuple):
             loss_1, loss_2 = loss[0], loss[1]
             losses = dict()
-            losses['loss'] = loss_1 + loss_2
             losses['loss_1'] = loss_1
             losses['loss_2'] = loss_2
             return losses
