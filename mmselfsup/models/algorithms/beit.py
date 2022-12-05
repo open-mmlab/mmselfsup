@@ -56,6 +56,8 @@ class BEiT(BaseModel):
         elif isinstance(loss, Tuple):
             loss_1, loss_2 = loss[0], loss[1]
             losses = dict()
+            # the key with prefix 'loss', like loss_1 and loss_2, will be used
+            # as the final criterion
             losses['loss_1'] = loss_1
             losses['loss_2'] = loss_2
             return losses

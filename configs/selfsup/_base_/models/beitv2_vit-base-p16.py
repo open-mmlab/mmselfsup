@@ -34,7 +34,11 @@ model = dict(
         drop_path_rate=drop_path_rate,
         final_norm=False,
         layer_scale_init_value=layer_scale_init_value,
-    ),
+        init_cfg=[
+            dict(type='TruncNormal', std=0.02, layer='Linear'),
+            dict(type='TruncNormal', std=0.02, layer='Conv2d'),
+            dict(type='Constant', layer='LayerNorm', val=1.0, bias=0.0)
+        ]),
     neck=dict(
         type='BEiTV2Neck',
         num_layers=2,

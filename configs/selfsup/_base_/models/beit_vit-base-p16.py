@@ -8,7 +8,11 @@ model = dict(
         drop_path_rate=0.1,
         final_norm=True,
         layer_scale_init_value=0.1,
-    ),
+        init_cfg=[
+            dict(type='TruncNormal', std=0.02, layer='Linear'),
+            dict(type='TruncNormal', std=0.02, layer='Conv2d'),
+            dict(type='Constant', layer='LayerNorm', val=1.0, bias=0.0)
+        ]),
     neck=None,
     head=dict(
         type='BEiTV1Head',

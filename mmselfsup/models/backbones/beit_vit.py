@@ -1,6 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import math
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Tuple
 
 import torch
 from mmcls.models import BEiT, resize_pos_embed
@@ -128,7 +128,6 @@ class BEiTViT(BEiT):
 
         trunc_normal_(self.cls_token, std=0.02)
         trunc_normal_(self.mask_token, std=0.02)
-        self.apply(self._init_weights)
         self.fix_init_weight()
 
     def fix_init_weight(self) -> None:
@@ -141,27 +140,22 @@ class BEiTViT(BEiT):
             rescale(layer.attn.proj.weight.data, layer_id + 1)
             rescale(layer.ffn.layers[1].weight.data, layer_id + 1)
 
-    def _init_weights(self, m: nn.Module) -> None:
-        """Helper function to initialize weights."""
-        if isinstance(m, nn.Linear):
-            trunc_normal_(m.weight, std=0.02)
-            if isinstance(m, nn.Linear) and m.bias is not None:
-                nn.init.constant_(m.bias, 0)
-        elif isinstance(m, nn.LayerNorm):
-            nn.init.constant_(m.bias, 0)
-            nn.init.constant_(m.weight, 1.0)
-        elif isinstance(m, nn.Conv2d):
-            trunc_normal_(m.weight, std=0.02)
-            if m.bias is not None:
-                nn.init.constant_(m.bias, 0)
+    def forward(self, x: torch.Tensor,
+                mask: torch.Tensor) -> Tuple[torch.Tensor]:
+        """The BEiT style forward function.
 
-    def forward(self, x: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
-        """The BEiT style forward function."""
-        B = x.shape[0]
+        Args:
+            x (torch.Tensor): Input images, which is of shape (B x C x H x W).
+            mask (torch.Tensor): Mask for input, which is of shape
+                (B x patch_resolution[0] x patch_resolution[1]).
+
+        Returns:
+            Tuple[torch.Tensor]: Hidden features.
+        """
         x, patch_resolution = self.patch_embed(x)
 
         # replace the masked visual tokens by mask_token
-        L = x.shape[1]
+        B, L, _ = x.shape
         mask_token = self.mask_token.expand(B, L, -1)
         w = mask.flatten(1).unsqueeze(-1).type_as(mask_token)
         x = x * (1. - w) + mask_token * w
