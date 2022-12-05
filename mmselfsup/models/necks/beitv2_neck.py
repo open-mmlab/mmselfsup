@@ -106,7 +106,7 @@ class BEiTV2Neck(BaseModule):
 
         self.rescale_patch_aggregation_init_weight()
 
-        embed_dims = self.patch_aggregation.arch_settings['embed_dims']
+        embed_dims = self.arch_settings['embed_dims']
         _, norm = build_norm_layer(norm_cfg, embed_dims)
         self.add_module('norm', norm)
 
@@ -135,7 +135,7 @@ class BEiTV2Neck(BaseModule):
               - ``x``: The final layer features from backbone, which are normed
                 in ``BEiTV2Neck``.
               - ``x_cls_pt``: The early state features from backbone, which are
-                consit of final layer cls_token and early state patch_tokens
+                consist of final layer cls_token and early state patch_tokens
                 from backbone and sent to PatchAggregation layers in the neck.
         """
 
