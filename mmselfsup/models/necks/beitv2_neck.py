@@ -2,11 +2,13 @@
 import math
 from typing import List, Optional, Tuple, Union
 
+import numpy as np
 import torch
+import torch.nn as nn
+from mmcls.models.backbones.beit import BEiTTransformerEncoderLayer
 from mmcv.cnn import build_norm_layer
 from mmengine.model import BaseModule
 
-from mmselfsup.models.utils import PatchAggregation
 from mmselfsup.registry import MODELS
 
 
@@ -33,6 +35,22 @@ class BEiTV2Neck(BaseModule):
         init_cfg (dict, optional): Initialization config dict.
             Defaults to None.
     """
+    arch_zoo = {
+        **dict.fromkeys(
+            ['b', 'base'], {
+                'embed_dims': 768,
+                'depth': 12,
+                'num_heads': 12,
+                'feedforward_channels': 3072,
+            }),
+        **dict.fromkeys(
+            ['l', 'large'], {
+                'embed_dims': 1024,
+                'depth': 24,
+                'num_heads': 16,
+                'feedforward_channels': 4096,
+            }),
+    }
 
     def __init__(
         self,
@@ -48,30 +66,57 @@ class BEiTV2Neck(BaseModule):
             type='TruncNormal', layer='Linear', std=0.02, bias=0)
     ) -> None:
         super().__init__(init_cfg=init_cfg)
-        self.early_layers = early_layers
 
-        self.patch_aggregation = PatchAggregation(
-            num_layers=num_layers,
-            early_layers=early_layers,
-            backbone_arch=backbone_arch,
-            layer_scale_init_value=layer_scale_init_value,
-            drop_rate=drop_rate,
-            drop_path_rate=drop_path_rate,
-            use_rel_pos_bias=use_rel_pos_bias,
-            norm_cfg=norm_cfg)
-        self.fix_init_cls_pt_weight()
+        if isinstance(backbone_arch, str):
+            backbone_arch = backbone_arch.lower()
+            assert backbone_arch in set(self.arch_zoo), \
+                (f'Arch {backbone_arch} is not in default archs '
+                 f'{set(self.arch_zoo)}')
+            self.arch_settings = self.arch_zoo[backbone_arch]
+        else:
+            essential_keys = {
+                'embed_dims', 'num_layers', 'num_heads', 'feedforward_channels'
+            }
+            assert isinstance(backbone_arch, dict) and essential_keys <= set(
+                backbone_arch
+            ), f'Custom arch needs a dict with keys {essential_keys}'
+            self.arch_settings = backbone_arch
+
+        # stochastic depth decay rule
+        self.early_layers = early_layers
+        depth = self.arch_settings['depth']
+        dpr = np.linspace(0, drop_path_rate,
+                          max(depth, early_layers + num_layers))
+
+        self.patch_aggregation = nn.ModuleList()
+        for i in range(early_layers, early_layers + num_layers):
+            _layer_cfg = dict(
+                embed_dims=self.arch_settings['embed_dims'],
+                num_heads=self.arch_settings['num_heads'],
+                feedforward_channels=self.
+                arch_settings['feedforward_channels'],
+                drop_rate=drop_rate,
+                drop_path_rate=dpr[i],
+                norm_cfg=norm_cfg,
+                layer_scale_init_value=layer_scale_init_value,
+                window_size=None,
+                use_rel_pos_bias=use_rel_pos_bias)
+            self.patch_aggregation.append(
+                BEiTTransformerEncoderLayer(**_layer_cfg))
+
+        self.rescale_patch_aggregation_init_weight()
 
         embed_dims = self.patch_aggregation.arch_settings['embed_dims']
         _, norm = build_norm_layer(norm_cfg, embed_dims)
         self.add_module('norm', norm)
 
-    def fix_init_cls_pt_weight(self):
+    def rescale_patch_aggregation_init_weight(self):
         """Rescale the initialized weights."""
 
         def rescale(param, layer_id):
             param.div_(math.sqrt(2.0 * layer_id))
 
-        for layer_id, layer in enumerate(self.patch_aggregation.layers):
+        for layer_id, layer in enumerate(self.patch_aggregation):
             rescale(layer.attn.proj.weight.data,
                     self.early_layers + layer_id + 1)
             rescale(layer.ffn.layers[1].weight.data,
@@ -96,7 +141,7 @@ class BEiTV2Neck(BaseModule):
 
         early_states, x = inputs[0], inputs[1]
         x_cls_pt = torch.cat([x[:, [0]], early_states[:, 1:]], dim=1)
-        for layer in self.patch_aggregation.layers:
+        for layer in self.patch_aggregation:
             x_cls_pt = layer(x_cls_pt, rel_pos_bias=rel_pos_bias)
 
         # shared norm

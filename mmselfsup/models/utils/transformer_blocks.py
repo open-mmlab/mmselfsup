@@ -1,17 +1,15 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from typing import Sequence
 
-import numpy as np
 import torch
 import torch.nn as nn
-from mmcls.models.backbones.beit import BEiTTransformerEncoderLayer
 from mmcls.models.backbones.vision_transformer import \
     TransformerEncoderLayer as _TransformerEncoderLayer
 from mmcls.models.utils import MultiheadAttention as _MultiheadAttention
 from mmcv.cnn import build_norm_layer
 from mmcv.cnn.bricks.drop import build_dropout
 from mmcv.cnn.bricks.transformer import FFN
-from mmengine.model import BaseModule, ModuleList
+from mmengine.model import BaseModule
 from torch.nn import functional as F
 
 
@@ -533,102 +531,4 @@ class CrossMultiheadAttention(BaseModule):
         x = self.proj(x)
         x = self.proj_drop(x)
 
-        return x
-
-
-class PatchAggregation(BaseModule):
-    """Patch aggregation in BEiT v2, built with BEiTTransformerEncoderLayer.
-
-    The module favors pushing the global information to cls_token, because it
-    only utilizes the shallow layers' output features from backbone to do the
-    reconstruction and decrease the additional MIM loss. The module is
-    discarded after pretraining.
-
-    Args:
-        num_layers (int): The number of transformer encoder layers. Defaults
-            to 2.
-        early_layers (int): The output layer index of backbone, used for
-            computing drop_path_rate. Defaults to 9.
-        backbone_arch (str): Vision Transformer architecture, choose from
-            'base' and 'large'. Defaults to base.
-        layer_scale_init_value (float): The initialization value for
-            the learnable scaling of attention and FFN. Defaults to 0.1.
-        drop_rate (float): Probability of an element to be zeroed.
-            Defaults to 0.
-        drop_path_rate (float): stochastic depth rate. Defaults to 0.
-        use_rel_pos_bias (bool): Whether to use relative position bias.
-            Defaults to False.
-        norm_cfg (dict): Config dict for normalization layer.
-            Defaults to ``dict(type='LN', eps=1e-6)``.
-    """
-    arch_zoo = {
-        **dict.fromkeys(
-            ['b', 'base'], {
-                'embed_dims': 768,
-                'depth': 12,
-                'num_heads': 12,
-                'feedforward_channels': 3072,
-            }),
-        **dict.fromkeys(
-            ['l', 'large'], {
-                'embed_dims': 1024,
-                'depth': 24,
-                'num_heads': 16,
-                'feedforward_channels': 4096,
-            }),
-    }
-
-    def __init__(
-            self,
-            num_layers: int = 2,
-            early_layers: int = 9,
-            backbone_arch: str = 'base',
-            layer_scale_init_value: float = 0.1,
-            drop_rate: float = 0.,
-            drop_path_rate: float = 0.,
-            use_rel_pos_bias: bool = False,
-            norm_cfg: dict = dict(type='LN', eps=1e-6),
-    ) -> None:
-        super().__init__()
-
-        if isinstance(backbone_arch, str):
-            backbone_arch = backbone_arch.lower()
-            assert backbone_arch in set(self.arch_zoo), \
-                (f'Arch {backbone_arch} is not in default archs '
-                 f'{set(self.arch_zoo)}')
-            self.arch_settings = self.arch_zoo[backbone_arch]
-        else:
-            essential_keys = {
-                'embed_dims', 'num_layers', 'num_heads', 'feedforward_channels'
-            }
-            assert isinstance(backbone_arch, dict) and essential_keys <= set(
-                backbone_arch
-            ), f'Custom arch needs a dict with keys {essential_keys}'
-            self.arch_settings = backbone_arch
-
-        # stochastic depth decay rule
-        depth = self.arch_settings['depth']
-        dpr = np.linspace(0, drop_path_rate,
-                          max(depth, early_layers + num_layers))
-
-        self.layers = ModuleList()
-        for i in range(early_layers, early_layers + num_layers):
-            _layer_cfg = dict(
-                embed_dims=self.arch_settings['embed_dims'],
-                num_heads=self.arch_settings['num_heads'],
-                feedforward_channels=self.
-                arch_settings['feedforward_channels'],
-                drop_rate=drop_rate,
-                drop_path_rate=dpr[i],
-                norm_cfg=norm_cfg,
-                layer_scale_init_value=layer_scale_init_value,
-                window_size=None,
-                use_rel_pos_bias=use_rel_pos_bias)
-            self.layers.append(BEiTTransformerEncoderLayer(**_layer_cfg))
-
-    def forward(self, x: torch.Tensor,
-                shared_rel_pos_bias: torch.Tensor) -> torch.Tensor:
-        """Forward function."""
-        for layer in self.layers:
-            x = layer(x, rel_pos_bias=shared_rel_pos_bias)
         return x

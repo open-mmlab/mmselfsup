@@ -128,9 +128,9 @@ class BEiTViT(BEiT):
 
         trunc_normal_(self.cls_token, std=0.02)
         trunc_normal_(self.mask_token, std=0.02)
-        self.fix_init_weight()
+        self.rescale_init_weight()
 
-    def fix_init_weight(self) -> None:
+    def rescale_init_weight(self) -> None:
         """Rescale the initialized weights."""
 
         def rescale(param, layer_id):
