@@ -1,4 +1,4 @@
-_base_ = 'vit-base-p16_ft-8xb128-coslr-100e_in1k.py'
+_base_ = '../../../benchmarks/classification/vit-base-p16_ft-8xb128-coslr-100e_in1k.py'  # noqa: E501
 
 # model settings
 model = dict(

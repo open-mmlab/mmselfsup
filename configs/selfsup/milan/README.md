@@ -29,7 +29,7 @@ segmentation task, MILAN achieves 52.7 mIoU using ViT-B/16 backbone on
 ADE20K dataset, outperforming previous masked pretraining results by 4 points.
 
 <div align="center">
-<img src="https://user-images.githubusercontent.com/30762564/205210369-41a65c4c-bcd4-4147-91ea-c6c9061ab455.png" width="40%"/>
+<img src="https://user-images.githubusercontent.com/30762564/205210369-41a65c4c-bcd4-4147-91ea-c6c9061ab455.png" width="80%"/>
 </div>
 
 ## Prerequisite

@@ -1,9 +1,11 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+# Modified from https://github.com/zejiangh/MILAN
 from collections import OrderedDict
 from typing import Optional, Tuple, Union
 
 import numpy as np
 import torch
+from mmengine.logging import MMLogger
 from torch import nn
 
 
@@ -379,5 +381,5 @@ def build_clip_model(state_dict: dict,
             del state_dict[key]
 
     msg = model.load_state_dict(state_dict, strict=False)
-    print('Load CLIP model:', msg)
+    MMLogger.get_current_instance().info(f'Load CLIP model: {msg}')
     return model.eval()

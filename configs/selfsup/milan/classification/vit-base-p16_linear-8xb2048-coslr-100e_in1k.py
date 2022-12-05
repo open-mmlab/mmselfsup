@@ -1,4 +1,4 @@
-_base_ = 'vit-base-p16_linear-8xb2048-coslr-90e_in1k.py'
+_base_ = '../../../benchmarks/classification/vit-base-p16_linear-8xb2048-coslr-90e_in1k.py'  # noqa: E501
 
 # optimizer
 optimizer = dict(type='mmselfsup.LARS', lr=3.2, weight_decay=0.0, momentum=0.9)

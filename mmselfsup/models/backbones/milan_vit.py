@@ -24,7 +24,7 @@ class MILANViT(MAEViT):
         """Generate attention mask for MILAN.
 
         This is what is different from MAEViT, which uses random masking.
-        attention masking generates attention mask for MILAN, according to
+        Attention masking generates attention mask for MILAN, according to
         importance. The higher the importance, the more likely the patch is
         kept.
 
