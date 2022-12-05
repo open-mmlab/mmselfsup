@@ -15,11 +15,14 @@ optim_wrapper = dict(
     clip_grad=dict(max_norm=3.0),
     paramwise_cfg=dict(
         custom_keys={
-            'ln': dict(decay_mult=0.0),
-            'bias': dict(decay_mult=0.0),
-            'gamma': dict(decay_mult=0.0),
-            'pos_embed': dict(decay_mult=0.0),
-            'cls_token': dict(decay_mult=0.0),
+            # the following configurations are designed for BEiT
+            '.ln': dict(decay_mult=0.0),
+            '.bias': dict(decay_mult=0.0),
+            'q_bias': dict(decay_mult=0.0),
+            'v_bias': dict(decay_mult=0.0),
+            '.cls_token': dict(decay_mult=0.0),
+            '.pos_embed': dict(decay_mult=0.0),
+            '.gamma': dict(decay_mult=0.0),
         }))
 
 # learning rate scheduler

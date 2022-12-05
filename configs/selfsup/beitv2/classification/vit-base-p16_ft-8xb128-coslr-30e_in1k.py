@@ -88,6 +88,7 @@ optim_wrapper = dict(
     paramwise_cfg=dict(
         _delete_=True,
         custom_keys={
+            # the following configurations are designed for BEiTs
             '.ln': dict(decay_mult=0.0),
             '.bias': dict(decay_mult=0.0),
             'q_bias': dict(decay_mult=0.0),

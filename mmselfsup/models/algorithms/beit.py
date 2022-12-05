@@ -54,6 +54,10 @@ class BEiT(BaseModel):
             losses = dict(loss=loss)
             return losses
         elif isinstance(loss, Tuple):
+            # the loss_1 and loss_2 are general reconstruction loss (patch
+            # feature vectors from last layer of backbone) and early state
+            # reconstruction loss (patch feature vectors from intermediate
+            # layer of backbone)
             loss_1, loss_2 = loss[0], loss[1]
             losses = dict()
             # the key with prefix 'loss', like loss_1 and loss_2, will be used

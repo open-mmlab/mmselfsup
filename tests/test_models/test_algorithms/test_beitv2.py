@@ -95,4 +95,5 @@ def test_beitv2():
 
     fake_batch_inputs, fake_data_samples = model.data_preprocessor(fake_data)
     fake_outputs = model(fake_batch_inputs, fake_data_samples, mode='loss')
-    assert isinstance(fake_outputs['loss'].item(), float)
+    assert isinstance(fake_outputs['loss_1'].item(), float)
+    assert isinstance(fake_outputs['loss_2'].item(), float)
