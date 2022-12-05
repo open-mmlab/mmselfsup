@@ -1,6 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import math
-from typing import Optional
+from typing import Optional, Tuple
 
 import torch
 from einops import rearrange
@@ -64,7 +64,7 @@ class VQKD(BaseModule):
                       self.encoder.arch_settings['embed_dims']), nn.Tanh(),
             nn.Linear(self.encoder.arch_settings['embed_dims'], embed_dims))
 
-    def get_tokens(self, x):
+    def get_tokens(self, x: torch.Tensor) -> dict:
         """Get tokens for beit pre-training."""
         _, embed_ind, _ = self.encode(x)
         output = {}
@@ -73,7 +73,9 @@ class VQKD(BaseModule):
 
         return output
 
-    def encode(self, x):
+    def encode(
+            self, x: torch.Tensor
+    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """Encode the input images and get corresponding results."""
         encoder_features = self.encoder(x)[0]
         B, C, N1, N2 = encoder_features.shape

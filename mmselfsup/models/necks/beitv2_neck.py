@@ -78,7 +78,7 @@ class BEiTV2Neck(BaseModule):
                     self.early_layers + layer_id + 1)
 
     def forward(self, inputs: Tuple[torch.Tensor], rel_pos_bias: torch.Tensor,
-                **kwargs) -> tuple:
+                **kwargs) -> Tuple[torch.Tensor, torch.Tensor]:
         """Get the latent prediction and final prediction.
 
         Args:
@@ -86,7 +86,12 @@ class BEiTV2Neck(BaseModule):
             rel_pos_bias (torch.Tensor): Shared relative position bias table.
 
         Returns:
-            Tuple[torch.Tensor, torch.Tensor]: Final prediction.
+            Tuple[torch.Tensor, torch.Tensor]:
+              - ``x``: The final layer features from backbone, which are normed
+                in ``BEiTV2Neck``.
+              - ``x_cls_pt``: The early state features from backbone, which are
+                consit of final layer cls_token and early state patch_tokens
+                from backbone and sent to PatchAggregation layers in the neck.
         """
 
         early_states, x = inputs[0], inputs[1]

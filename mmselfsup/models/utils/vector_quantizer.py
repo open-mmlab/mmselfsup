@@ -11,10 +11,6 @@ from einops import rearrange, repeat
 from mmengine.dist import all_reduce
 
 
-def l2norm(x: torch.Tensor) -> torch.Tensor:
-    return F.normalize(x, p=2, dim=-1)
-
-
 def ema_inplace(moving_avg: torch.Tensor, new: torch.Tensor,
                 decay: torch.Tensor) -> None:
     """Update moving average."""
@@ -25,7 +21,7 @@ def norm_ema_inplace(moving_avg: torch.Tensor, new: torch.Tensor,
                      decay: torch.Tensor) -> None:
     """Update moving average with norm data."""
     moving_avg.data.mul_(decay).add_(new, alpha=(1 - decay))
-    moving_avg.data.copy_(l2norm(moving_avg.data))
+    moving_avg.data.copy_(F.normalize(moving_avg.data, p=2, dim=-1))
 
 
 def sample_vectors(samples: torch.Tensor, num: int) -> torch.Tensor:
@@ -67,7 +63,7 @@ def kmeans(samples: torch.Tensor,
         new_means = new_means / bins_min_clamped[..., None]
 
         if use_cosine_sim:
-            new_means = l2norm(new_means)
+            new_means = F.normalize(new_means, p=2, dim=-1)
 
         means = torch.where(zero_mask[..., None], means, new_means)
 
@@ -98,7 +94,7 @@ class EmbeddingEMA(nn.Module):
         if codebook_init_path is None:
             if not kmeans_init:
                 weight = torch.randn(num_tokens, codebook_dim)
-                weight = l2norm(weight)
+                weight = F.normalize(weight, p=2, dim=-1)
             else:
                 weight = torch.zeros(num_tokens, codebook_dim)
             self.register_buffer('initted', torch.Tensor([not kmeans_init]))
@@ -181,7 +177,7 @@ class NormEMAVectorQuantizer(nn.Module):
         """Forward function."""
         # reshape z -> (batch, height, width, channel)
         z = rearrange(z, 'b c h w -> b h w c')
-        z = l2norm(z)
+        z = F.normalize(z, p=2, dim=-1)
         z_flattened = z.reshape(-1, self.codebook_dim)
 
         self.embedding.init_embed_(z_flattened)
@@ -216,7 +212,7 @@ class NormEMAVectorQuantizer(nn.Module):
             all_reduce(embed_sum)
 
             embed_normalized = (embed_sum / bins.unsqueeze(0)).t()
-            embed_normalized = l2norm(embed_normalized)
+            embed_normalized = F.normalize(embed_normalized, p=2, dim=-1)
             embed_normalized = torch.where(zero_mask[..., None],
                                            self.embedding.weight,
                                            embed_normalized)

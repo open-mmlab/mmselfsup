@@ -141,20 +141,6 @@ class CAEDataPreprocessor(SelfSupDataPreprocessor):
     normalization parameters.
     """
 
-    def __init__(self,
-                 mean: Optional[Sequence[Union[float, int]]] = None,
-                 std: Optional[Sequence[Union[float, int]]] = None,
-                 pad_size_divisor: int = 1,
-                 pad_value: Union[float, int] = 0,
-                 bgr_to_rgb: bool = False,
-                 rgb_to_bgr: bool = False,
-                 non_blocking: Optional[bool] = False):
-        super().__init__(mean, std, pad_size_divisor, pad_value, bgr_to_rgb,
-                         rgb_to_bgr, non_blocking)
-        import warnings
-        warnings.warn('CAEDataPreprocessor is going to be deprecated. Please'
-                      'use TwoNormDataPreprocessor instead of it.')
-
     def forward(
             self,
             data: dict,
