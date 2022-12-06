@@ -7,8 +7,6 @@
   - [Publish a model](#publish-a-model)
   - [Reproducibility](#reproducibility)
   - [Log Analysis](#log-analysis)
-  - [Visualize Datasets](#visualize-datasets)
-  - [Use t-SNE](#use-t-sne)
 
 ## Count number of parameters
 
@@ -92,53 +90,3 @@ Examples:
   time std over epochs is 0.0028
   average iter time: 1.1959 s/iter
   ```
-
-## Visualize Datasets
-
-`tools/misc/browse_dataset.py` helps the user to browse a mmselfsup dataset (transformed images) visually, or save the image to a designated directory.
-
-```shell
-python tools/misc/browse_dataset.py ${CONFIG} [-h] [--skip-type ${SKIP_TYPE[SKIP_TYPE...]}] [--output-dir ${OUTPUT_DIR}] [--not-show] [--show-interval ${SHOW_INTERVAL}]
-```
-
-An example:
-
-```shell
-python tools/misc/browse_dataset.py configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py
-```
-
-An example of visualization:
-
-<div align="center">
-<img src="https://user-images.githubusercontent.com/36138628/199387454-219e6f6c-fbb7-43bb-b319-61d3e6266abc.png" width="600" />
-</div>
-
-- The left two pictures are images from contrastive learning data pipeline.
-- The right one is a masked image.
-
-## Use t-SNE
-
-We provide an off-the-shelf tool to visualize the quality of image representations by t-SNE.
-
-```shell
-python tools/analysis_tools/visualize_tsne.py ${CONFIG_FILE} --checkpoint ${CKPT_PATH} --work-dir ${WORK_DIR} [optional arguments]
-```
-
-Arguments:
-
-- `CONFIG_FILE`: config file for the pre-trained model.
-- `CKPT_PATH`: the path of model's checkpoint.
-- `WORK_DIR`: the directory to save the results of visualization.
-- `[optional arguments]`: for optional arguments, you can refer to [visualize_tsne.py](https://github.com/open-mmlab/mmselfsup/blob/master/tools/analysis_tools/visualize_tsne.py)
-
-An example:
-
-```shell
-python tools/analysis_tools/visualize_tsne.py configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py --checkpoint epoch_100.pth --work-dir work_dirs/selfsup/simsiam_resnet50_8xb32-coslr-200e_in1k
-```
-
-An example of visualization:
-
-<div align="center">
-<img src="https://user-images.githubusercontent.com/36138628/199388251-476a5ad2-f9c1-4dfb-afe2-73cf41b5793b.jpg" width="800" />
-</div>
