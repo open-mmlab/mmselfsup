@@ -93,7 +93,7 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
         logger = MMLogger.get_current_instance()
         logger.warning(
             'LearningRateDecayOptimWrapperConstructor is refactored in '
-            'v1.0.0rc4, which need to configure zero weight decay manuaally. '
+            'v1.0.0rc4, which need to configure zero weight decay manually. '
             'The previous versions would set zero weight decay according to '
             'the dimension of parameter. Please specify weight decay settings '
             'of different layers in config if needed.')
