@@ -31,7 +31,5 @@ class MILANPretrainHead(BaseModule):
         Returns:
             torch.Tensor: the reconstructed loss.
         """
-        pred = pred / pred.norm(dim=2, keepdim=True)
-        target = target / target.norm(dim=2, keepdim=True)
         loss = self.loss(pred, target)
         return loss

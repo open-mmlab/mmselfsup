@@ -18,7 +18,9 @@ model = dict(
     head=dict(
         _delete_=True,
         type='MILANPretrainHead',
-        loss=dict(type='MILANReconstructionLoss')),
+        loss=dict(
+            type='CosineSimilarityLoss', shift_factor=2.0, scale_factor=2.0),
+    ),
     target_generator=dict(
         type='CLIPGenerator',
         tokenizer_path=  # noqa

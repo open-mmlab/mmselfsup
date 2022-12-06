@@ -32,11 +32,6 @@ ADE20K dataset, outperforming previous masked pretraining results by 4 points.
 <img src="https://user-images.githubusercontent.com/30762564/205210369-41a65c4c-bcd4-4147-91ea-c6c9061ab455.png" width="80%"/>
 </div>
 
-## Prerequisite
-
-Create a new folder `milan_ckpt` under the root directory and download the
-[weights](https://download.openmmlab.com/mmselfsup/1.x/target_generator_ckpt/clip_vit_base_16.pth.tar) for `CLIP` to that folder
-
 ## Models and Benchmarks
 
 Here, we report the results of the model, which is pre-trained on ImageNet-1k
@@ -74,6 +69,7 @@ for 400 epochs, the details are below:
 	</tr>
 </tbody>
 </table>
+
 ## Citation
 
 ```bibtex

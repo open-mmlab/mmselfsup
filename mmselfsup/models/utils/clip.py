@@ -30,6 +30,10 @@ class QuickGELU(nn.Module):
 class ResidualAttentionBlock(nn.Module):
     """Residual Attention Block (RAB).
 
+    This module implements the same function as the MultiheadAttention in
+    MMClassification, but with a different interface, which is mainly used
+    in CLIP.
+
     Args:
         d_model (int): The feature dimension.
         n_head (int): The number of attention heads.
@@ -92,6 +96,8 @@ class ResidualAttentionBlock(nn.Module):
 
 class Transformer(nn.Module):
     """Transformer.
+
+    Both visual and text branches use this transformer.
 
     Args:
         width (int): The feature dimension.
