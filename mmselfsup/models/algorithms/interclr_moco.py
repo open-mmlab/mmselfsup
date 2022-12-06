@@ -245,27 +245,27 @@ class InterCLRMoCo(BaseModel):
             pos_label = pos_label.cuda().unsqueeze(1)
             similarity = torch.mm(feat_norm.detach(),
                                   self.memory_bank.feature_bank.permute(1, 0))
-            _, I = torch.topk(
+            _, neg_I = torch.topk(
                 similarity, self.semihard_neg_pool_num, dim=1, sorted=False)
             weights = torch.ones((bs, self.semihard_neg_pool_num),
                                  dtype=torch.float,
                                  device='cuda')
             neg_i = torch.multinomial(weights, self.neg_num)
-            neg_idx = torch.gather(I, 1, neg_i)
+            neg_idx = torch.gather(neg_I, 1, neg_i)
             while True:
                 neg_label = self.memory_bank.label_bank[neg_idx.cpu()].cuda()
                 pos_in_neg_idx = (neg_label == pos_label)
                 if pos_in_neg_idx.sum().item() > 0:
                     neg_i = torch.multinomial(weights, self.neg_num)
                     neg_idx[pos_in_neg_idx] = torch.gather(
-                        I, 1, neg_i)[pos_in_neg_idx]
+                        neg_I, 1, neg_i)[pos_in_neg_idx]
                 else:
                     break
         elif self.neg_sampling == 'semieasy':
             pos_label = pos_label.cuda().unsqueeze(1)
             similarity = torch.mm(feat_norm.detach(),
                                   self.memory_bank.feature_bank.permute(1, 0))
-            _, I = torch.topk(
+            _, neg_I = torch.topk(
                 similarity,
                 self.semieasy_neg_pool_num,
                 dim=1,
@@ -275,14 +275,14 @@ class InterCLRMoCo(BaseModel):
                                  dtype=torch.float,
                                  device='cuda')
             neg_i = torch.multinomial(weights, self.neg_num)
-            neg_idx = torch.gather(I, 1, neg_i)
+            neg_idx = torch.gather(neg_I, 1, neg_i)
             while True:
                 neg_label = self.memory_bank.label_bank[neg_idx.cpu()].cuda()
                 pos_in_neg_idx = (neg_label == pos_label)
                 if pos_in_neg_idx.sum().item() > 0:
                     neg_i = torch.multinomial(weights, self.neg_num)
                     neg_idx[pos_in_neg_idx] = torch.gather(
-                        I, 1, neg_i)[pos_in_neg_idx]
+                        neg_I, 1, neg_i)[pos_in_neg_idx]
                 else:
                     break
         elif self.neg_sampling == 'hard':
@@ -291,18 +291,18 @@ class InterCLRMoCo(BaseModel):
             maximal_cls_size = np.bincount(
                 self.memory_bank.label_bank.numpy(),
                 minlength=self.num_classes).max().item()
-            _, I = torch.topk(
+            _, neg_I = torch.topk(
                 similarity, self.neg_num + maximal_cls_size, dim=1)
-            I = I.cpu()
-            neg_label = self.memory_bank.label_bank[I].numpy()
+            neg_I = neg_I.cpu()
+            neg_label = self.memory_bank.label_bank[neg_I].numpy()
             neg_idx_list = []
             for i, l in enumerate(pos_label):
                 pos_in_neg_idx = np.where(neg_label[i] == l)[0]
                 if len(pos_in_neg_idx) > 0:
                     neg_idx_pool = torch.from_numpy(
-                        np.delete(I[i].numpy(), pos_in_neg_idx))
+                        np.delete(neg_I[i].numpy(), pos_in_neg_idx))
                 else:
-                    neg_idx_pool = I[i]
+                    neg_idx_pool = neg_I[i]
                 neg_idx_list.append(neg_idx_pool[:self.neg_num])
             neg_idx = torch.stack(neg_idx_list, dim=0).cuda()
         else:
