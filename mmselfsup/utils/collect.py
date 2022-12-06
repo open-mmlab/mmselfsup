@@ -1,7 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from typing import Dict, Optional
 
-import mmcv
+import mmengine
 import numpy as np
 import torch
 from torch.utils.data import DataLoader
@@ -26,7 +26,7 @@ def nondist_forward_collect(func: object, data_loader: DataLoader,
         results_all (Dict(np.ndarray)): The concatenated outputs.
     """
     results = []
-    prog_bar = mmcv.ProgressBar(len(data_loader))
+    prog_bar = mmengine.ProgressBar(len(data_loader))
     for _, data in enumerate(data_loader):
         with torch.no_grad():
             result = func(data)  # output: feat_dict
@@ -65,7 +65,7 @@ def dist_forward_collect(func: object,
     """
     results = []
     if rank == 0:
-        prog_bar = mmcv.ProgressBar(len(data_loader))
+        prog_bar = mmengine.ProgressBar(len(data_loader))
     for _, data in enumerate(data_loader):
         with torch.no_grad():
             result = func(data)  # dict{key: tensor}
