@@ -21,7 +21,7 @@ We briefly list the major breaking changes here. Please refer to the [migration 
 
 #### Bug Fixes
 
-- Fix registery of data preprocessor ([#603](https://github.com/open-mmlab/mmselfsup/pull/603))
+- Fix registry of data preprocessor ([#603](https://github.com/open-mmlab/mmselfsup/pull/603))
 - Fix dependence and key bug ([#611](https://github.com/open-mmlab/mmselfsup/pull/611))
 
 #### Improvements
