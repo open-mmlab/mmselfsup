@@ -23,12 +23,8 @@ neck = dict(
     decoder_num_heads=16,
     mlp_ratio=4.,
 )
-loss = dict(type='MILANReconstructionLoss')
+loss = dict(type='CosineSimilarityLoss', shift_factor=2.0, scale_factor=2.0)
 head = dict(type='MILANPretrainHead', loss=loss)
-# target_generator = dict(
-#     type='CLIPGenerator',
-#     tokenizer_path=  # noqa
-#     'milan_ckpt/clip_vit_base_16.pth.tar')
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
