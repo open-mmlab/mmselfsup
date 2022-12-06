@@ -13,7 +13,7 @@ from mmcls.models.backbones.base_backbone import BaseBackbone
 from mmcls.models.backbones.vision_transformer import TransformerEncoderLayer
 from mmcls.models.utils.attention import WindowMSA
 from mmcls.models.utils.helpers import to_2tuple
-from mmcls.registry import MODELS
+from mmselfsup.registry import MODELS
 from torch.nn import functional as F
 
 
