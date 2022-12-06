@@ -7,6 +7,7 @@ from .contrastive_head import ContrastiveHead
 from .latent_heads import LatentCrossCorrelationHead, LatentPredictHead
 from .mae_head import MAEPretrainHead
 from .maskfeat_head import MaskFeatPretrainHead
+from .milan_head import MILANPretrainHead
 from .mocov3_head import MoCoV3Head
 from .multi_cls_head import MultiClsHead
 from .simmim_head import SimMIMHead
@@ -16,5 +17,5 @@ __all__ = [
     'BEiTV1Head', 'BEiTV2Head', 'ContrastiveHead', 'ClsHead',
     'LatentPredictHead', 'LatentCrossCorrelationHead', 'MultiClsHead',
     'MAEPretrainHead', 'MoCoV3Head', 'SimMIMHead', 'CAEHead', 'SwAVHead',
-    'MaskFeatPretrainHead'
+    'MaskFeatPretrainHead', 'MILANPretrainHead'
 ]

@@ -404,5 +404,17 @@ ImageNet 有多个版本，不过最常用的是 ILSVRC 2012。我们提供了�
       <td>/</td>
       <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/beit/classification/vit-base-p16_ft-8xb128-coslr-100e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/beit/beit_vit-base-p16_8xb256-amp-coslr-300e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k_20221128-0ca393e9.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/beit/beit_vit-base-p16_8xb256-amp-coslr-300e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k_20221127_162126.json'>log</a></td>
 	</tr>
+  <tr>
+<td>MILAN</td>
+	    <td>ViT-base</td>
+	    <td>400</td>
+      <td>4096</td>
+      <td>78.9</td>
+      <td>85.3</td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/milan/milan_vit-base-p16_16xb256-amp-coslr-400e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/milan/milan_vit-base-p16_16xb256-amp-coslr-400e_in1k/milan_vit-base-p16_16xb256-amp-coslr-400e_in1k_20221129-180922e8.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/milan/milan_vit-base-p16_16xb256-amp-coslr-400e_in1k/milan_vit-base-p16_16xb256-amp-coslr-400e_in1k_20221123_112721.json'>log</a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/milan/classification/vit-base-p16_linear-8xb2048-coslr-100e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/milan/milan_vit-base-p16_16xb256-amp-coslr-400e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k-milan_20221129-74ac94fa.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/milan/milan_vit-base-p16_16xb256-amp-coslr-400e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k-milan_20221125_031826.json'>log</a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/milan/classification/vit-base-p16_linear-8xb2048-coslr-100e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/milan/milan_vit-base-p16_16xb256-amp-coslr-400e_in1k/vit-base-p16_linear-8xb2048-coslr-100e_in1k/vit-base-p16_linear-8xb2048-coslr-100e_in1k_20221129-03f26f85.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/milan/milan_vit-base-p16_16xb256-amp-coslr-400e_in1k/vit-base-p16_linear-8xb2048-coslr-100e_in1k/vit-base-p16_linear-8xb2048-coslr-100e_in1k_20221124_215401.json'>log</a></td>
+
+</tr>
 </tbody>
 </table>

@@ -134,6 +134,7 @@ Supported algorithms:
 - [x] [SimMIM (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/simmim)
 - [x] [MaskFeat (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/maskfeat)
 - [x] [CAE (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/cae)
+- [x] [MILAN (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/milan)
 
 More algorithms are in our plan.
 

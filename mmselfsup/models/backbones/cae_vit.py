@@ -111,7 +111,8 @@ class CAEViT(VisionTransformer):
             trunc_normal_(self.cls_token, std=.02)
             self.apply(self._init_weights)
 
-    def _init_weights(self, m):
+    def _init_weights(self, m) -> None:
+        """Initialize the weights."""
         if isinstance(m, nn.Linear):
             nn.init.xavier_uniform_(m.weight)
             if isinstance(m, nn.Linear) and m.bias is not None:

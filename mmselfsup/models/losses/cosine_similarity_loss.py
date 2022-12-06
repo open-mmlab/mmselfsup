@@ -13,10 +13,20 @@ class CosineSimilarityLoss(BaseModule):
 
     Compute the similarity between two features and optimize that similarity as
     loss.
+
+    Args:
+        shift_factor (float): The shift factor of cosine similarity.
+            Default: 0.0.
+        scale_factor (float): The scale factor of cosine similarity.
+            Default: 1.0.
     """
 
-    def __init__(self) -> None:
+    def __init__(self,
+                 shift_factor: float = 0.0,
+                 scale_factor: float = 1.0) -> None:
         super().__init__()
+        self.shift_factor = shift_factor
+        self.scale_factor = scale_factor
 
     def forward(self, pred: torch.Tensor,
                 target: torch.Tensor) -> torch.Tensor:
@@ -29,7 +39,9 @@ class CosineSimilarityLoss(BaseModule):
         Returns:
             torch.Tensor: The cosine similarity loss.
         """
-        pred_norm = nn.functional.normalize(pred, dim=1)
-        target_norm = nn.functional.normalize(target, dim=1)
-        loss = -(pred_norm * target_norm).sum(dim=1).mean()
+        pred_norm = nn.functional.normalize(pred, dim=-1)
+        target_norm = nn.functional.normalize(target, dim=-1)
+        loss = self.shift_factor - self.scale_factor * (
+            pred_norm * target_norm).sum(dim=-1)
+        loss = loss.mean()
         return loss
