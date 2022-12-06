@@ -1,0 +1,40 @@
+# model settings
+model = dict(
+    type='InterCLRMoCo',
+    queue_len=65536,
+    feat_dim=128,
+    momentum=0.999,
+    backbone=dict(
+        type='ResNet',
+        depth=50,
+        in_channels=3,
+        out_indices=[4],  # 0: conv-1, x: stage-x
+        norm_cfg=dict(type='BN')),
+    neck=dict(
+        type='MoCoV2Neck',
+        in_channels=2048,
+        hid_channels=2048,
+        out_channels=128,
+        with_avg_pool=True),
+    head=dict(type='ContrastiveHead', temperature=0.2),
+    memory_bank=dict(
+        type='InterCLRMemory',
+        length=1281167,
+        feat_dim=128,
+        momentum=1.,
+        num_classes=10000,
+        min_cluster=20,
+        debug=False),
+    online_labels=True,
+    neg_num=16384,
+    neg_sampling='semihard',  # 'hard', 'semihard', 'random', 'semieasy'
+    semihard_neg_pool_num=128000,
+    semieasy_neg_pool_num=128000,
+    intra_cos_marign_loss=False,
+    intra_cos_margin=0,
+    inter_cos_marign_loss=True,
+    inter_cos_margin=-0.5,
+    intra_loss_weight=0.75,
+    inter_loss_weight=0.25,
+    share_neck=True,
+    num_classes=10000)
