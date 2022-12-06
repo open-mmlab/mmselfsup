@@ -2,6 +2,39 @@
 
 ## MMSelfSup
 
+### v1.0.0rc4 (07/12/2022)
+
+The `master` branch is still 0.x version and we will checkout a new `1.x` branch to release 1.x version. The two versions will be maintained simultaneously in the future.
+
+We briefly list the major breaking changes here. Please refer to the [migration guide](../migration.md) for details and migration instructions.
+
+#### Highlight
+
+- Support `BEiT` and `MILAN`
+- Support low-level reconstruction visualization
+
+#### New Features
+
+- Support `BEiT` ([#425](https://github.com/open-mmlab/mmselfsup/pull/425))
+- Support `MILAN` ([#600](https://github.com/open-mmlab/mmselfsup/pull/600))
+- Support low-level reconstruction visualization ([#570](https://github.com/open-mmlab/mmselfsup/pull/570))
+
+#### Bug Fixes
+
+- Fix registery of data preprocessor ([#603](https://github.com/open-mmlab/mmselfsup/pull/603))
+- Fix dependence and key bug ([#611](https://github.com/open-mmlab/mmselfsup/pull/611))
+
+#### Improvements
+
+- Refactor file io ([#582](https://github.com/open-mmlab/mmselfsup/pull/582)))
+- Add './projects' folder and an example ([#586](https://github.com/open-mmlab/mmselfsup/pull/586)))
+- Update CI and UT ([#601](https://github.com/open-mmlab/mmselfsup/pull/601)))
+
+#### Docs
+
+- Update readthedocs rst and menu button ([#572](https://github.com/open-mmlab/mmselfsup/pull/572))
+- Add readthedocs algorithm pages and fix some displaying error ([#599](https://github.com/open-mmlab/mmselfsup/pull/599))
+
 ### v1.0.0rc3 (01/11/2022)
 
 The `master` branch is still 0.x version and we will checkout a new `1.x` branch to release 1.x version. The two versions will be maintained simultaneously in the future.
