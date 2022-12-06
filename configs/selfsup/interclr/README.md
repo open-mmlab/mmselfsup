@@ -23,7 +23,7 @@ less stringent decision boundary is more favorable for interimage invariance lea
 work will provide useful experience for devising effective unsupervised inter-image invariance learning.
 
 <div align="center">
-<img src="https://user-images.githubusercontent.com/52497952/205854109-2385b765-e12b-4e22-b7b8-45db6292895b.png" width="700" />
+<img src="https://user-images.githubusercontent.com/52497952/205854109-2385b765-e12b-4e22-b7b8-45db6292895b.png" width="800" />
 </div>
 
 ## Results and Models
