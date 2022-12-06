@@ -107,11 +107,11 @@ class MAEViT(VisionTransformer):
                 Defaults to 0.75.
 
         Returns:
-            Tuple[torch.Tensor, torch.Tensor, torch.Tensor]: masked image,
-                mask and the ids to restore original image.
-                - x_masked (torch.Tensor): masked image.
-                - mask (torch.Tensor): mask used to mask image.
-                - ids_restore (torch.Tensor): ids to restore original image.
+            Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+                masked image, mask and the ids to restore original image.
+                  - x_masked (torch.Tensor): masked image.
+                  - mask (torch.Tensor): mask used to mask image.
+                  - ids_restore (torch.Tensor): ids to restore original image.
         """
         N, L, D = x.shape  # batch, length, dim
         len_keep = int(L * (1 - mask_ratio))
