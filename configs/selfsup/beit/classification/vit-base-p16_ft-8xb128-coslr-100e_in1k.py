@@ -1,21 +1,43 @@
+# mmcls:: means we use the default settings from MMClassification
 _base_ = [
     'mmcls::_base_/datasets/imagenet_bs64_swin_224.py',
     'mmcls::_base_/schedules/imagenet_bs1024_adamw_swin.py',
     'mmcls::_base_/default_runtime.py'
 ]
-# CAE fine-tuning setting
 
-# dataset
 data_preprocessor = dict(
     num_classes=1000,
-    # RGB format normalization parameters
     mean=[127.5, 127.5, 127.5],
     std=[127.5, 127.5, 127.5],
-    # convert image from BGR to RGB
     to_rgb=True,
 )
-bgr_mean = data_preprocessor['mean'][::-1]
-bgr_std = data_preprocessor['std'][::-1]
+
+# model settings
+model = dict(
+    type='ImageClassifier',
+    backbone=dict(
+        type='BEiT',
+        arch='base',
+        img_size=224,
+        patch_size=16,
+        drop_path_rate=0.1,
+        avg_token=True,
+        output_cls_token=False,
+        use_abs_pos_emb=False,
+        use_rel_pos_bias=True,
+        use_shared_rel_pos_bias=False),
+    neck=None,
+    head=dict(
+        type='LinearClsHead',
+        num_classes=1000,
+        in_channels=768,
+        loss=dict(
+            type='LabelSmoothLoss', label_smooth_val=0.1, mode='original'),
+        init_cfg=[dict(type='TruncNormal', layer='Linear', std=0.02)]),
+    train_cfg=dict(augments=[
+        dict(type='Mixup', alpha=0.8),
+        dict(type='CutMix', alpha=1.0)
+    ]))
 
 file_client_args = dict(backend='disk')
 train_pipeline = [
@@ -33,19 +55,17 @@ train_pipeline = [
         total_level=10,
         magnitude_level=9,
         magnitude_std=0.5,
-        hparams=dict(
-            pad_val=[round(x) for x in bgr_mean], interpolation='bicubic')),
+        hparams=dict(pad_val=[104, 116, 124], interpolation='bicubic')),
     dict(
         type='RandomErasing',
         erase_prob=0.25,
         mode='rand',
         min_area_ratio=0.02,
-        max_area_ratio=1 / 3,
-        fill_color=bgr_mean,
-        fill_std=bgr_std),
-    dict(type='PackClsInputs'),
+        max_area_ratio=0.3333333333333333,
+        fill_color=[103.53, 116.28, 123.675],
+        fill_std=[57.375, 57.12, 58.395]),
+    dict(type='PackClsInputs')
 ]
-
 test_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(
@@ -55,55 +75,35 @@ test_pipeline = [
         backend='pillow',
         interpolation='bicubic'),
     dict(type='CenterCrop', crop_size=224),
-    dict(type='PackClsInputs'),
+    dict(type='PackClsInputs')
 ]
-train_dataloader = dict(dataset=dict(pipeline=train_pipeline), batch_size=128)
-val_dataloader = dict(dataset=dict(pipeline=test_pipeline), batch_size=128)
 
-# model settings
-model = dict(
-    type='ImageClassifier',
-    backbone=dict(
-        type='VisionTransformer',
-        arch='base',
-        img_size=224,
-        patch_size=16,
-        beit_style=True,  # use beit-style transformer encoder layer
-        avg_token=True,  # use average token for cls head
-        final_norm=False,  # do not use final norm
-        drop_path_rate=0.1,
-        layer_scale_init_value=0.1,
-        output_cls_token=False,
-        init_cfg=dict(type='Pretrained', checkpoint='')),
-    neck=None,
-    head=dict(
-        type='LinearClsHead',
-        num_classes=1000,
-        in_channels=768,
-        loss=dict(
-            type='LabelSmoothLoss', label_smooth_val=0.1, mode='original'),
-        init_cfg=dict(type='TruncNormal', layer='Linear', std=2e-5)),
-    train_cfg=dict(augments=[
-        dict(type='Mixup', alpha=0.8),
-        dict(type='CutMix', alpha=1.0)
-    ]))
+train_dataloader = dict(batch_size=128, dataset=dict(pipeline=train_pipeline))
+val_dataloader = dict(batch_size=128, dataset=dict(pipeline=test_pipeline))
+test_dataloader = val_dataloader
 
 # optimizer wrapper
 optim_wrapper = dict(
     optimizer=dict(
         type='AdamW',
-        lr=8e-3,
-        betas=(0.9, 0.999),
+        lr=4e-3,
         weight_decay=0.05,
-        model_type='vit',  # layer-wise lr decay type
-        layer_decay_rate=0.65),  # layer-wise lr decay factor
+        eps=1e-8,
+        betas=(0.9, 0.999),
+        model_type='vit',
+        layer_decay_rate=0.65),
     constructor='mmselfsup.LearningRateDecayOptimWrapperConstructor',
     paramwise_cfg=dict(
+        _delete_=True,
         custom_keys={
+            # the following configurations are designed for BEiT
             '.ln': dict(decay_mult=0.0),
             '.bias': dict(decay_mult=0.0),
+            'q_bias': dict(decay_mult=0.0),
+            'v_bias': dict(decay_mult=0.0),
             '.cls_token': dict(decay_mult=0.0),
-            '.pos_embed': dict(decay_mult=0.0)
+            '.pos_embed': dict(decay_mult=0.0),
+            '.gamma': dict(decay_mult=0.0),
         }))
 
 # learning rate scheduler
@@ -113,21 +113,21 @@ param_scheduler = [
         start_factor=1e-4,
         by_epoch=True,
         begin=0,
-        end=5,
+        end=20,
         convert_to_iter_based=True),
     dict(
         type='CosineAnnealingLR',
-        T_max=95,
         by_epoch=True,
-        begin=5,
+        begin=20,
         end=100,
         eta_min=1e-6,
         convert_to_iter_based=True)
 ]
 
+# runtime settings
 default_hooks = dict(
     # save checkpoint per epoch.
-    checkpoint=dict(type='CheckpointHook', interval=1, max_keep_ckpts=3))
+    checkpoint=dict(type='CheckpointHook', interval=1, max_keep_ckpts=2))
 
 train_cfg = dict(by_epoch=True, max_epochs=100)
 
