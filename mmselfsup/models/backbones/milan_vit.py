@@ -35,10 +35,10 @@ class MILANViT(MAEViT):
                 shape B x L.
 
         Returns:
-            Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor
-                torch.Tensor, torch.Tensor]: masked image, mask, the ids to
-                restore original image, ids of the shuffled patches, ids of
-                the kept patches, ids of the removed patches.
+            Tuple[torch.Tensor, ...]:
+                masked image, mask, the ids to restore original image,
+                ids of the shuffled patches, ids of the kept patches,
+                ids of the removed patches.
         """
         N, L, D = x.shape  # batch, length, dim
         len_keep = int(L * (1 - mask_ratio))
@@ -82,15 +82,14 @@ class MILANViT(MAEViT):
                 shape B x L.
 
         Returns:
-            Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor
-                torch.Tensor, torch.Tensor]: masked image, the ids to
-                restore original image, ids of the kept patches, ids of the
-                removed patches.
-                - x (torch.Tensor): hidden features, which is of shape
+            Tuple[torch.Tensor, ...]:
+                masked image, the ids to restore original image, ids of the
+                kept patches, ids of the removed patches.
+                  - x (torch.Tensor): hidden features, which is of shape
                     B x (L * mask_ratio) x C.
-                - ids_restore (torch.Tensor): ids to restore original image.
-                - ids_keep (torch.Tensor): ids of the kept patches.
-                - ids_dump (torch.Tensor): ids of the removed patches.
+                  - ids_restore (torch.Tensor): ids to restore original image.
+                  - ids_keep (torch.Tensor): ids of the kept patches.
+                  - ids_dump (torch.Tensor): ids of the removed patches.
         """
         B = x.shape[0]
         x = self.patch_embed(x)[0]

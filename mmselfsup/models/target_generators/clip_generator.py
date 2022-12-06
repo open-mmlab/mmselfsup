@@ -32,9 +32,9 @@ class CLIPGenerator(BaseModule):
             x (torch.Tensor): The input image, which is of shape (N, 3, H, W).
 
         Returns:
-            Tuple[torch.Tensor, torch.Tensor]: The features and attention from
-                the last layer of CLIP, which are of shape (N, L, C) and
-                (N, L, L), respectively.
+            Tuple[torch.Tensor, torch.Tensor]:
+                The features and attention from the last layer of CLIP,
+                which are of shape (N, L, C) and (N, L, L), respectively.
         """
         # use the visual branch of CLIP to get the features
         clip_features = self.tokenizer.encode_image(x)

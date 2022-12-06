@@ -13,8 +13,8 @@ class BEiT(BaseModel):
     """BEiT v1/v2.
 
     Implementation of `BEiT: BERT Pre-Training of Image Transformers
-    <https://arxiv.org/abs/2106.08254>`_. Implementation of `BEiT v2: Masked
-    Image Modeling with Vector-Quantized Visual Tokenizers
+    <https://arxiv.org/abs/2106.08254>`_ and `BEiT v2: Masked Image Modeling
+    with Vector-Quantized Visual Tokenizers
     <https://arxiv.org/abs/2208.06366>`_.
     """
 
