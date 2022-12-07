@@ -178,7 +178,16 @@ class InterCLRMoCo(BaseModel):
         self.queue_ptr[0] = ptr
 
     def contrast_intra(self, q, k):
-        """Intra-image invariance learning."""
+        """Intra-image invariance learning.
+
+        Args:
+            q (Tensor): Query features with shape (N, C).
+            k (Tensor): Key features with shape (N, C).
+
+        Returns:
+            dict[str, Tensor]: A dictionary of loss components.
+        """
+        # normalize
         q = nn.functional.normalize(q, dim=1)
         k = nn.functional.normalize(k, dim=1)
         # compute logits
@@ -189,10 +198,12 @@ class InterCLRMoCo(BaseModel):
         neg_logits = torch.einsum('nc,ck->nk',
                                   [q, self.queue.clone().detach()])
 
+        # use cosine margin
         if self.intra_cos:
             cosine = pos_logits.clone()
             phi = cosine - self.intra_cos_margin
             pos_logits.copy_(phi)
+        # use arc margin
         if self.intra_arc:
             cosine = pos_logits.clone()
             sine = torch.sqrt((1.0 - cosine**2).clamp(0, 1))
@@ -214,7 +225,16 @@ class InterCLRMoCo(BaseModel):
         return losses
 
     def contrast_inter(self, q, idx):
-        """Inter-image invariance learning."""
+        """Inter-image invariance learning.
+
+        Args:
+            q (Tensor): Query features with shape (N, C).
+            idx (Tensor): Index corresponding to each query.
+
+        Returns:
+            dict[str, Tensor]: A dictionary of loss components.
+        """
+        # normalize
         feat_norm = nn.functional.normalize(q, dim=1)
         bs, feat_dim = feat_norm.shape[:2]
         # positive sampling
@@ -228,7 +248,7 @@ class InterCLRMoCo(BaseModel):
             pos_idx_list.append(pos_idx_pool[pos_i])
         pos_idx = torch.cuda.LongTensor(pos_idx_list)
         # negative sampling
-        if self.neg_sampling == 'random':
+        if self.neg_sampling == 'random':  # random negative sampling
             pos_label = pos_label.cuda().unsqueeze(1)
             neg_idx = self.memory_bank.multinomial.draw(
                 bs * self.neg_num).view(bs, -1)
@@ -241,7 +261,7 @@ class InterCLRMoCo(BaseModel):
                             pos_in_neg_idx.sum().item())
                 else:
                     break
-        elif self.neg_sampling == 'semihard':
+        elif self.neg_sampling == 'semihard':  # semihard negative sampling
             pos_label = pos_label.cuda().unsqueeze(1)
             similarity = torch.mm(feat_norm.detach(),
                                   self.memory_bank.feature_bank.permute(1, 0))
@@ -261,7 +281,7 @@ class InterCLRMoCo(BaseModel):
                         neg_I, 1, neg_i)[pos_in_neg_idx]
                 else:
                     break
-        elif self.neg_sampling == 'semieasy':
+        elif self.neg_sampling == 'semieasy':  # semieasy negative sampling
             pos_label = pos_label.cuda().unsqueeze(1)
             similarity = torch.mm(feat_norm.detach(),
                                   self.memory_bank.feature_bank.permute(1, 0))
@@ -285,7 +305,7 @@ class InterCLRMoCo(BaseModel):
                         neg_I, 1, neg_i)[pos_in_neg_idx]
                 else:
                     break
-        elif self.neg_sampling == 'hard':
+        elif self.neg_sampling == 'hard':  # hard negative sampling
             similarity = torch.mm(feat_norm.detach(),
                                   self.memory_bank.feature_bank.permute(1, 0))
             maximal_cls_size = np.bincount(
@@ -319,10 +339,12 @@ class InterCLRMoCo(BaseModel):
                                   [pos_feat, feat_norm]).unsqueeze(-1)
         neg_logits = torch.bmm(neg_feat, feat_norm.unsqueeze(2)).squeeze(2)
 
+        # use cosine margin
         if self.inter_cos:
             cosine = pos_logits.clone()
             phi = cosine - self.inter_cos_margin
             pos_logits.copy_(phi)
+        # use arc margin
         if self.inter_arc:
             cosine = pos_logits.clone()
             sine = torch.sqrt((1.0 - cosine**2).clamp(0, 1))
@@ -372,6 +394,7 @@ class InterCLRMoCo(BaseModel):
         assert isinstance(img, list)
         im_q = img[0]
         im_k = img[1]
+
         # compute query features
         q_b = self.encoder_q[0](im_q)  # backbone features
         q = self.encoder_q[1](q_b)[0]  # queries: NxC
@@ -397,7 +420,9 @@ class InterCLRMoCo(BaseModel):
 
         idx = idx.cuda()
         self.memory_bank.broadcast_feature_bank()
+        # compute intra loss
         intra_losses = self.contrast_intra(q, k)
+        # compute inter loss
         if self.share_neck:
             inter_losses = self.contrast_inter(q, idx)
         else:
