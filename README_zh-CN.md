@@ -65,15 +65,15 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
 ## 更新
 
+**v1.0.0rc3** 版本已经在 2022.12.07 发布。
+
+- 支持 BEiT 和 MILAN 预训练
+- 支持 low-level 重建可视化
+- 更新模型库算法页面文档
+
 **v1.0.0rc3** 版本已经在 2022.11.01 发布。
 
 - 支持 MaskFeat
-- 更新配置文件和文档
-
-**v1.0.0rc2** 版本已经在 2022.10.12 发布。
-
-- `MAE`, `SimMIM`, `MoCoV3` 算法模型的全量支持（支持多种模型尺寸和预训练轮次）。
-- 更新文档以及教程
 
 请参考 [更新日志](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/notes/changelog.html) 获取更多细节和历史版本信息。
 
@@ -130,6 +130,7 @@ Useful Tools
 - [x] [SimSiam (CVPR'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/simsiam)
 - [x] [Barlow Twins (ICML'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/barlowtwins)
 - [x] [MoCo v3 (ICCV'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mocov3)
+- [x] [BEiT (ICLR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/beit)
 - [x] [MAE (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mae)
 - [x] [SimMIM (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/simmim)
 - [x] [MaskFeat (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/maskfeat)

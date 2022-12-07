@@ -2,7 +2,7 @@ attrs
 einops
 future
 matplotlib
-mmcls>=1.0.0rc0
+mmcls>=1.0.0rc4
 numpy
 packaging
 scikit-learn
