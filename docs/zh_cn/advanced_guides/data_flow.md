@@ -7,6 +7,7 @@
     - [数据预处理器的数据处理](#数据预处理器的数据处理)
 
 数据流（Data Flow）定义了数据在两个独立模块之间传递的方式，如数据加载器（dataloader）模块与模型（model）模块，如下图所示。
+
 <div align="left">
 <img src="https://user-images.githubusercontent.com/30762564/185855134-89f5be9e-39ca-4da4-bd87-7cf26e80ab2f.png" width="70%"/>
 </div>
@@ -81,7 +82,7 @@ class SelfSupDataPreprocessor(ImgDataPreprocessor):
         # 以保障效率
         batch_inputs = [input_.float() for input_ in batch_inputs]
 
-        # 该步骤为归一化。 这与 :class:`mmengine.ImgDataPreprocessor` 有所不同。 
+        # 该步骤为归一化。 这与 :class:`mmengine.ImgDataPreprocessor` 有所不同。
         # 由于某些算法（如 SimCLR ）的图像有多个视图，所以输入中的每项都是一个列表，
         # 其中包含一张图像的多个视图。
         if self._enable_normalize:
