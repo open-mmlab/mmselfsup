@@ -50,5 +50,10 @@ def test_simmim():
 
     # test extract_feat
     fake_inputs, fake_data_samples = model.data_preprocessor(fake_data)
-    fake_feat = model.extract_feat(fake_inputs, fake_data_samples)
-    assert list(fake_feat.shape) == [2, 3, 192, 192]
+    fake_feats = model.extract_feat(fake_inputs, fake_data_samples)
+    assert list(fake_feats.shape) == [2, 3, 192, 192]
+
+    # test reconstruct
+    results = model.reconstruct(fake_feats, fake_data_samples)
+    assert list(results.mask.value.shape) == [2, 192, 192, 3]
+    assert list(results.pred.value.shape) == [2, 192, 192, 3]

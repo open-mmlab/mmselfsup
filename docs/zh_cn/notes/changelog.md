@@ -2,6 +2,39 @@
 
 ## MMSelfSup
 
+### v1.0.0rc4 (07/12/2022)
+
+`master` 仍然是 0.x 版本，我们将会 checkout 一个新的 `1.x` 用来发布 1.x 版本。 未来我们会同时维护两个版本。
+
+我们简要的列出主要的改变。 请参考[迁移文档](../migration.md)来查看细节和迁移指引
+
+#### Highlight
+
+- 支持 `BEiT` 和 `MILAN`
+- 支持 low-level 重建可视化
+
+#### New Features
+
+- 支持 `BEiT` ([#425](https://github.com/open-mmlab/mmselfsup/pull/425))
+- 支持 `MILAN` ([#600](https://github.com/open-mmlab/mmselfsup/pull/600))
+- 支持 low-level 重建可视化 ([#570](https://github.com/open-mmlab/mmselfsup/pull/570))
+
+#### Bug Fixes
+
+- 修复数据预处理潜在的注册问题 ([#603](https://github.com/open-mmlab/mmselfsup/pull/603))
+- 修复代码依赖和字段错误 ([#611](https://github.com/open-mmlab/mmselfsup/pull/611))
+
+#### Improvements
+
+- 重构 file io ([#582](https://github.com/open-mmlab/mmselfsup/pull/582)))
+- 增加 './projects' 文件夹和示例 ([#586](https://github.com/open-mmlab/mmselfsup/pull/586)))
+- 更新 CI 和 UT ([#601](https://github.com/open-mmlab/mmselfsup/pull/601)))
+
+#### Docs
+
+- 更新 readthedocs 和菜单栏 ([#572](https://github.com/open-mmlab/mmselfsup/pull/572))
+- 增加 readthedocs 算法页面并修复部分渲染错误 ([#599](https://github.com/open-mmlab/mmselfsup/pull/599))
+
 ### v1.0.0rc2 (12/10/2022)
 
 `master` 仍然是 0.x 版本，我们将会 checkout 一个新的 `1.x` 用来发布 1.x 版本。 未来我们会同时维护两个版本。

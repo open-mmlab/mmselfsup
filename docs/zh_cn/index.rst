@@ -3,77 +3,66 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to MMSelfSup's documentation!
+欢迎来到 MMSelfSup 中文文档!
 =====================================
 
 中文文档在持续翻译中，敬请期待，同时我们也鼓励社区开发者们参与到翻译中来
 
 .. toctree::
    :maxdepth: 1
-   :caption: 开始你的第一步
+   :caption: 新手入门
 
-   install.md
-   prepare_data.md
+   overview.md
    get_started.md
+
+.. toctree::
+   :maxdepth: 2
+   :caption: 用户指南
+
+   user_guides/index.rst
+
+.. toctree::
+   :maxdepth: 2
+   :caption: 进阶指引
+
+   advanced_guides/index.rst
+
+.. toctree::
+   :maxdepth: 1
+   :caption: 模型库
+   :glob:
+
+   model_zoo_statistics.md
    model_zoo.md
+   papers/*
 
 .. toctree::
    :maxdepth: 1
-   :caption: 分类教程
+   :caption: 迁移文档
 
-   tutorials/0_config.md
-   tutorials/1_new_dataset.md
-   tutorials/2_data_pipeline.md
-   tutorials/3_new_module.md
-   tutorials/4_schedule.md
-   tutorials/5_runtime.md
-   tutorials/6_benchmarks.md
+   migration.md
 
 .. toctree::
-   :maxdepth: 1
-   :caption: 算法模型
-
-   algorithms/byol.md
-   algorithms/deep.md
-   algorithms/dense.md
-   algorithms/moco.md
-   algorithms/npid.md
-   algorithms/odc.md
-   algorithms/rl.md
-   algorithms/rp.md
-   algorithms/simclr.md
-   algorithms/ss.md
-   algorithms/swav.md
-   algorithms/mocov3.md
-   algorithms/mae.md
-   algorithms/simmim.md
-   algorithms/barlowtwins.md
-   algorithms/cae.md
-
-
-.. toctree::
-   :maxdepth: 1
-   :caption: 说明
-
-   changelog.md
-   compatibility.md
-
-
-.. toctree::
-   :caption: 语言切换
-
-   switch_language.md
-
-.. toctree::
-   :caption: 接口文档
+   :caption: API 文档
 
    api.rst
 
+.. toctree::
+   :maxdepth: 1
+   :caption: 记录
 
+   notes/contribution_guide.md
+   notes/changelog.md
+   notes/faq.md
 
+.. toctree::
+   :caption: 切换语言
 
-Indices and tables
+   switch_language.md
+
+导引
 ==================
 
 * :ref:`genindex`
+* :ref:`modindex`
 * :ref:`search`

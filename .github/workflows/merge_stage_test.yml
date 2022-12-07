@@ -9,6 +9,7 @@ on:
       - 'demo/**'
       - '.dev_scripts/**'
       - '.circleci/**'
+      - 'projects/**'
     branches:
       - dev-1.x
 
@@ -164,7 +165,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Upgrade pip
-        run: pip install pip --upgrade
+        run: python.exe -m pip install --upgrade pip
       - name: Install lmdb
         run: pip install lmdb
       - name: Install PyTorch

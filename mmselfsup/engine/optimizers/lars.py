@@ -13,7 +13,7 @@ class LARS(Optimizer):
 
     Based on Algorithm 1 of the following paper by You, Gitman, and Ginsburg.
     `Large Batch Training of Convolutional Networks:
-        <https://arxiv.org/abs/1708.03888>`_.
+    <https://arxiv.org/abs/1708.03888>`_.
 
     Args:
         params (Iterable): Iterable of parameters to optimize or dicts defining

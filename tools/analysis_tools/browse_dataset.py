@@ -2,9 +2,9 @@
 import argparse
 import os.path as osp
 
-import mmcv
+import mmengine
 import numpy as np
-from mmcv import Config, DictAction
+from mmengine import Config, DictAction
 
 from mmselfsup.datasets.builder import build_dataset
 from mmselfsup.registry import VISUALIZERS
@@ -53,25 +53,25 @@ def main():
     visualizer = VISUALIZERS.build(cfg.visualizer)
     visualizer.dataset_meta = dataset.METAINFO
 
-    progress_bar = mmcv.ProgressBar(len(dataset))
+    progress_bar = mmengine.ProgressBar(len(dataset))
     for item in dataset:
-        if 'pseudo_label' in item['data_sample']:
+        if 'pseudo_label' in item['data_samples']:
             # for rotation_pred
-            if 'rot_label' in item['data_sample'].pseudo_label:
+            if 'rot_label' in item['data_samples'].pseudo_label:
                 img = np.concatenate(item['inputs'], axis=-1)
                 img = np.transpose(img, (1, 2, 0))
             # for relative_loc
             else:
                 img = item['inputs'][0].permute(1, 2, 0).numpy()
         # for contrastive learning
-        elif len(item['inputs']) == 2 and 'mask' not in item['data_sample']:
+        elif len(item['inputs']) == 2 and 'mask' not in item['data_samples']:
             img = np.concatenate(item['inputs'], axis=-1)
             img = np.transpose(img, (1, 2, 0))
         # for mask image modeling
         else:
             img = item['inputs'][0].permute(1, 2, 0).numpy()
-        data_sample = item['data_sample']
-        img_path = osp.basename(item['data_sample'].img_path)
+        data_sample = item['data_samples']
+        img_path = osp.basename(item['data_samples'].img_path)
 
         out_file = osp.join(
             args.output_dir,

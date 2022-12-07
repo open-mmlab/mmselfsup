@@ -1,4 +1,4 @@
-Basic Concepts
+基础概念
 ***************
 
 .. toctree::
@@ -13,7 +13,7 @@ Basic Concepts
    engine.md
    conventions.md
 
-Component Customization
+组件模块自定义
 ************************
 
 .. toctree::

@@ -12,6 +12,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
+import subprocess
 import sys
 
 import pytorch_sphinx_theme
@@ -21,7 +22,7 @@ sys.path.insert(0, os.path.abspath('..'))
 # -- Project information -----------------------------------------------------
 
 project = 'MMSelfSup'
-copyright = '2020-2021, OpenMMLab'
+copyright = '2021, OpenMMLab'
 author = 'MMSelfSup Authors'
 
 # The full version, including alpha/beta/rc tags
@@ -77,8 +78,47 @@ html_theme_options = {
             'name': 'GitHub',
             'url': 'https://github.com/open-mmlab/mmselfsup'
         },
+        {
+            'name':
+            'Upstream',
+            'children': [
+                {
+                    'name':
+                    'MMEngine',
+                    'url':
+                    'https://github.com/open-mmlab/mmengine',
+                    'description':
+                    'Foundational library for training deep '
+                    'learning models'
+                },
+                {
+                    'name': 'MMCV',
+                    'url': 'https://github.com/open-mmlab/mmcv',
+                    'description': 'Foundational library for computer vision'
+                },
+            ]
+        },
+        {
+            'name':
+            'Version',
+            'children': [
+                {
+                    'name': 'MMSelfSup 0.x',
+                    'url': 'https://mmselfsup.readthedocs.io/en/latest/',
+                    'description': 'Main branch docs'
+                },
+                {
+                    'name': 'MMSelfSup 1.x',
+                    'url': 'https://mmselfsup.readthedocs.io/en/dev-1.x/',
+                    'description': '1.x branch docs'
+                },
+            ],
+            'active':
+            True,
+        },
     ],
-    'menu_lang': 'en'
+    'menu_lang':
+    'en'
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -95,3 +135,11 @@ myst_enable_extensions = ['colon_fence']
 myst_heading_anchors = 4
 
 master_doc = 'index'
+
+
+def builder_inited_handler(app):
+    subprocess.run(['./stat.py'])
+
+
+def setup(app):
+    app.connect('builder-inited', builder_inited_handler)

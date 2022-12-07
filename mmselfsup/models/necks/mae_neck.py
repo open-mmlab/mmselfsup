@@ -102,6 +102,7 @@ class MAEPretrainDecoder(BaseModule):
 
     @property
     def decoder_norm(self):
+        """The normalization layer of decoder."""
         return getattr(self, self.decoder_norm_name)
 
     def forward(self, x: torch.Tensor,
@@ -178,6 +179,7 @@ class ClsBatchNormNeck(BaseModule):
     def forward(
             self,
             inputs: Tuple[List[torch.Tensor]]) -> Tuple[List[torch.Tensor]]:
+        """The forward function."""
         # Only apply batch norm to cls token, which is the second tensor in
         # each item of the tuple
         inputs = [[input_[0], self.bn(input_[1])] for input_ in inputs]

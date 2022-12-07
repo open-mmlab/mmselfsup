@@ -81,5 +81,6 @@ def inference_model(model: nn.Module,
 
     # forward the model
     with torch.no_grad():
-        results = model.test_step(data)
-    return results
+        inputs, data_samples = model.data_preprocessor(data, False)
+        features = model(inputs, data_samples, mode='tensor')
+    return features

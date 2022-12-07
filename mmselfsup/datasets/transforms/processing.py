@@ -392,9 +392,9 @@ class RandomResizedCropAndInterpolationWithTwoPic(BaseTransform):
 
 @TRANSFORMS.register_module()
 class RandomGaussianBlur(BaseTransform):
-    """GaussianBlur augmentation refers to `SimCLR.
+    """GaussianBlur augmentation refers to SimCLR.
 
-    <https://arxiv.org/abs/2002.05709>`_.
+    `Paper link <https://arxiv.org/abs/2002.05709>`_.
 
     Required Keys:
 
@@ -448,9 +448,9 @@ class RandomGaussianBlur(BaseTransform):
 
 @TRANSFORMS.register_module()
 class RandomSolarize(BaseTransform):
-    """Solarization augmentation refers to `BYOL.
+    """Solarization augmentation refers to BYOL.
 
-    <https://arxiv.org/abs/2006.07733>`_.
+    `Paper link <https://arxiv.org/abs/2006.07733>`_.
 
     Required Keys:
 

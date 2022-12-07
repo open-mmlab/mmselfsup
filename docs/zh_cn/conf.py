@@ -12,6 +12,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
+import subprocess
 import sys
 
 import pytorch_sphinx_theme
@@ -21,7 +22,7 @@ sys.path.insert(0, os.path.abspath('..'))
 # -- Project information -----------------------------------------------------
 
 project = 'MMSelfSup'
-copyright = '2020-2021, OpenMMLab'
+copyright = '2021, OpenMMLab'
 author = 'MMSelfSup Authors'
 
 # The full version, including alpha/beta/rc tags
@@ -77,8 +78,43 @@ html_theme_options = {
             'name': 'GitHub',
             'url': 'https://github.com/open-mmlab/mmselfsup'
         },
+        {
+            'name':
+            '上游库',
+            'children': [
+                {
+                    'name': 'MMEngine',
+                    'url': 'https://github.com/open-mmlab/mmengine',
+                    'description': '深度学习模型训练基础库'
+                },
+                {
+                    'name': 'MMCV',
+                    'url': 'https://github.com/open-mmlab/mmcv',
+                    'description': '基础视觉库'
+                },
+            ]
+        },
+        {
+            'name':
+            '版本',
+            'children': [
+                {
+                    'name': 'MMSelfSup 0.x',
+                    'url': 'https://mmselfsup.readthedocs.io/zh_CN/latest/',
+                    'description': 'Main 分支文档'
+                },
+                {
+                    'name': 'MMSelfSup 1.x',
+                    'url': 'https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/',
+                    'description': '1.x 分支文档'
+                },
+            ],
+            'active':
+            True,
+        },
     ],
-    'menu_lang': 'cn',
+    'menu_lang':
+    'cn',
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -95,3 +131,11 @@ myst_enable_extensions = ['colon_fence']
 myst_heading_anchors = 4
 
 master_doc = 'index'
+
+
+def builder_inited_handler(app):
+    subprocess.run(['./stat.py'])
+
+
+def setup(app):
+    app.connect('builder-inited', builder_inited_handler)
