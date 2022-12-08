@@ -161,9 +161,9 @@ and on semantic segmentation task, following this [project](https://github.com/i
 ```bibtex
 @article{He2021MaskedAA,
   title={Masked Autoencoders Are Scalable Vision Learners},
-  author={Kaiming He an Xinlei Chen and Saining Xie and Yanghao Li and
+  author={Kaiming He and Xinlei Chen and Saining Xie and Yanghao Li and
   Piotr Doll'ar and Ross B. Girshick},
-  journal={ArX
+  journal={arXiv},
   year={2021}
 }
 ```
