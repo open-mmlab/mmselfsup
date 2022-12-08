@@ -57,10 +57,6 @@ The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map
   title={Delving into inter-image invariance for unsupervised visual representations},
   author={Xie, Jiahao and Zhan, Xiaohang and Liu, Ziwei and Ong, Yew-Soon and Loy, Chen Change},
   journal={International Journal of Computer Vision},
-  volume={130},
-  number={12},
-  pages={2994--3013},
-  year={2022},
-  publisher={Springer}
+  year={2022}
 }
 ```
