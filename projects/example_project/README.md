@@ -63,7 +63,7 @@ data/
 
 ### Pre-training Commands
 
-At first, you need to add the current folder the the `PYTHONPATH`, so that Python can find your model files. In `example_project/` root directory, please ;run command below to add it.
+At first, you need to add the current folder to `PYTHONPATH`, so that Python can find your model files. In `example_project/` root directory, please run command below to add it.
 
 ```shell
 export PYTHONPATH=`pwd`:$PYTHONPATH
