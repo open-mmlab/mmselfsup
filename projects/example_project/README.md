@@ -30,20 +30,7 @@ This project implements a dummy MAE wrapper, which prints "Welcome to MMSelfSup"
 
 ### Setup Environment
 
-It requires [PyTorch](https://pytorch.org/get-started/locally/) and the following OpenMMLab packages:
-
-- [MIM](https://github.com/open-mmlab/mim): A command-line tool to manage OpenMMLab packages and experiments.
-- [MMEngine](https://github.com/open-mmlab/mmengine): OpenMMLab foundational library for training deep learning models.
-- [MMCV](https://github.com/open-mmlab/mmcv): OpenMMLab foundational library for computer vision.
-- [MMClassification](https://github.com/open-mmlab/mmclassification): OpenMMLab image classification toolbox and benchmark. Besides classification, it's also a repository to store various backbones.
-
-Assume you have prepared your Python and PyTorch environment, just use the following command to setup the environment.
-
-```bash
-pip install openmim
-mim install mmengine "mmcv>=2.0.0rc1"
-mim install mmselfsup
-```
+Please refer to [Get Started](https://mmselfsup.readthedocs.io/en/1.x/get_started.html) documentation of MMSelfSup.
 
 ### Data Preparation
 
@@ -98,12 +85,7 @@ Note:
 #### On Multiple GPUs with Slurm
 
 ```bash
-# specific command examples
-mim train mmselfsup configs/dummy-mae_vit-base-p16_8xb512-amp-coslr-300e_in1k.py \
-    --work-dir work_dirs/dummy_mae/ \
-    --launcher slurm --gpus 8 \
-    --partition $PARTITION
-
+# a specific command example: 16 GPUs in 2 nodes
 mim train mmselfsup configs/dummy-mae_vit-base-p16_8xb512-amp-coslr-300e_in1k.py \
     --work-dir work_dirs/dummy_mae/ \
     --launcher slurm --gpus 16 --gpus-per-node 8 \
@@ -192,8 +174,12 @@ The Linear Eval and Fine-tuning results are based on ImageNet dataset.
 
 ## Checklist
 
-<!-- Here is a checklist illustrating a usual development workflow of a successful project, and also serves as an overview of this project's progress. The PIC (person in charge) or contributors of this project should check all the items that they believe have been finished, which will further be verified by codebase maintainers via a PR.
+Here is a checklist illustrating a usual development workflow of a successful project, and also serves as an overview of this project's progress.
+
+<!--The PIC (person in charge) or contributors of this project should check all the items that they believe have been finished, which will further be verified by codebase maintainers via a PR.
+
 OpenMMLab's maintainer will review the code to ensure the project's quality. Reaching the first milestone means that this project suffices the minimum requirement of being merged into 'projects/'. But this project is only eligible to become a part of the core package upon attaining the last milestone.
+
 Note that keeping this section up-to-date is crucial not only for this project's developers but the entire community, since there might be some other contributors joining this project and deciding their starting point from this list. It also helps maintainers accurately estimate time and effort on further code polishing, if needed.
 A project does not necessarily have to be finished in a single PR, but it's essential for the project to at least reach the first milestone in its very first PR. -->
 
@@ -239,4 +225,4 @@ A project does not necessarily have to be finished in a single PR, but it's esse
 
     <!-- It will be parsed by MIM and Inferencer. [Example](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/mae/metafile.yml). In particular, you may have to refactor this README into a standard one. [Example](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/mae/README.md) -->
 
-  - [ ] Refactor and Move your modules into the core package following the codebase's file hierarchy structure.
+- [ ] Refactor and Move your modules into the core package following the codebase's file hierarchy structure.
