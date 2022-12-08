@@ -109,11 +109,11 @@ mim train mmcls $CONFIG \
     [optional args]
 
 # a specific command example
-mim train mmcls configs/xxx.py \
+mim train mmcls configs/vit-base-p16_ft-8xb128-coslr-100e_in1k.py \
     --work-dir work_dirs/dummy_mae/classification/
     --launcher pytorch -gpus 8 \
     --cfg-options model.backbone.init_cfg.type=Pretrained \
-    model.backbone.init_cfg.checkpoint=$CHECKPOINT \
+    model.backbone.init_cfg.checkpoint=https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-base-p16_8xb512-fp16-coslr-300e_in1k/mae_vit-base-p16_8xb512-coslr-300e-fp16_in1k_20220829-c2cf66ba.pth \
     model.backbone.init_cfg.prefix="backbone." \
     $PY_ARGS
 ```
