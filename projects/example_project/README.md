@@ -28,7 +28,6 @@ This project implements a dummy MAE wrapper, which prints "Welcome to MMSelfSup"
 
 <!-- For a typical model, this section should contain the commands for dataset prepareation, pre-training, downstream tasks. You are also suggested to dump your environment specification to env.yml by `conda env export > env.yml`. -->
 
-
 ### Setup Environment
 
 It requires [PyTorch](https://pytorch.org/get-started/locally/) and the following OpenMMLab packages:
@@ -67,7 +66,7 @@ data/
 At first, you need to add the current folder the the `PYTHONPATH`, so that Python can find your model files. In `example_project/` root directory, please ;run command below to add it.
 
 ```shell
-export PYTHONPATH=`pwd`:$PYTHONPATH 
+export PYTHONPATH=`pwd`:$PYTHONPATH
 ```
 
 Then run the following commands to train the model:
@@ -92,6 +91,7 @@ mim train mmselfsup configs/dummy-mae_vit-base-p16_8xb512-amp-coslr-300e_in1k.py
 ```
 
 Note:
+
 - CONFIG: the config files under the directory `configs/`
 - WORK_DIR: the working directory to save configs, logs, and checkpoints
 
@@ -111,6 +111,7 @@ mim train mmselfsup configs/dummy-mae_vit-base-p16_8xb512-amp-coslr-300e_in1k.py
 ```
 
 Note:
+
 - CONFIG: the config files under the directory `configs/`
 - WORK_DIR: the working directory to save configs, logs, and checkpoints
 - PARTITION: the slurm partition you are using
@@ -136,6 +137,7 @@ mim train mmcls configs/xxx.py \
 ```
 
 Note:
+
 - CONFIG: the config files under the directory `configs/`
 - WORK_DIR: the working directory to save configs, logs, and checkpoints
 - CHECKPOINT: the pretrained checkpoint of MMSelfSup saved in working directory, like `$WORK_DIR/epoch_300.pth`
