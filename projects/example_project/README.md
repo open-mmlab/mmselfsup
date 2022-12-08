@@ -5,8 +5,13 @@ This is an example README for community `projects/`. We have provided detailed e
 - [Dummy MAE Wrapper](#dummy-mae-wrapper)
   - [Description](#description)
   - [Usage](#usage)
-    - [Pre-training commands](#pre-training-commands)
-    - [Downstream tasks commands](#downstream-tasks-commands)
+    - [Setup Environment](#setup-environment)
+    - [Data Preparation](#data-preparation)
+    - [Pre-training Commands](#pre-training-commands)
+      - [On Local Single GPU](#on-local-single-gpu)
+      - [On Multiple GPUs](#on-multiple-gpus)
+      - [On Multiple GPUs with Slurm](#on-multiple-gpus-with-slurm)
+    - [Downstream Tasks Commands](#downstream-tasks-commands)
   - [Results](#results)
   - [Citation](#citation)
   - [Checklist](#checklist)
@@ -21,26 +26,120 @@ This project implements a dummy MAE wrapper, which prints "Welcome to MMSelfSup"
 
 ## Usage
 
-<!-- For a typical model, this section should contain the commands for training and testing. You are also suggested to dump your environment specification to env.yml by `conda env export > env.yml`. -->
+<!-- For a typical model, this section should contain the commands for dataset prepareation, pre-training, downstream tasks. You are also suggested to dump your environment specification to env.yml by `conda env export > env.yml`. -->
 
-### Pre-training commands
 
-In MMSelfSup's root directory, run the following command to train the model:
+### Setup Environment
+
+It requires [PyTorch](https://pytorch.org/get-started/locally/) and the following OpenMMLab packages:
+
+- [MIM](https://github.com/open-mmlab/mim): A command-line tool to manage OpenMMLab packages and experiments.
+- [MMEngine](https://github.com/open-mmlab/mmengine): OpenMMLab foundational library for training deep learning models.
+- [MMCV](https://github.com/open-mmlab/mmcv): OpenMMLab foundational library for computer vision.
+- [MMClassification](https://github.com/open-mmlab/mmclassification): OpenMMLab image classification toolbox and benchmark. Besides classification, it's also a repository to store various backbones.
+
+Assume you have prepared your Python and PyTorch environment, just use the following command to setup the environment.
 
 ```bash
-python tools/train.py projects/example_project/configs/dummy-mae_vit-base-p16_8xb512-amp-coslr-300e_in1k.py
+pip install openmim
+mim install mmengine "mmcv>=2.0.0rc1"
+mim install mmselfsup
 ```
 
-### Downstream tasks commands
+### Data Preparation
+
+To show the dataset directory or provide the commands for dataset preparation if needed.
+
+For example:
+
+```text
+data/
+└── imagenet
+    ├── train
+    ├── val
+    └── meta
+        ├── train.txt
+        └── val.txt
+```
+
+### Pre-training Commands
+
+At first, you need to add the current folder the the `PYTHONPATH`, so that Python can find your model files. In `example_project/` root directory, please ;run command below to add it.
+
+```shell
+export PYTHONPATH=`pwd`:$PYTHONPATH 
+```
+
+Then run the following commands to train the model:
+
+#### On Local Single GPU
+
+```bash
+mim train mmselfsup $CONFIG --work-dir $WORK_DIR
+
+# a specific command example
+mim train mmselfsup configs/dummy-mae_vit-base-p16_8xb512-amp-coslr-300e_in1k.py \
+    --work-dir work_dirs/dummy_mae/
+```
+
+#### On Multiple GPUs
+
+```bash
+# a specific command examples, 8 GPUs here
+mim train mmselfsup configs/dummy-mae_vit-base-p16_8xb512-amp-coslr-300e_in1k.py \
+    --work-dir work_dirs/dummy_mae/ \
+    --launcher pytorch --gpus 8
+```
+
+Note:
+- CONFIG: the config files under the directory `configs/`
+- WORK_DIR: the working directory to save configs, logs, and checkpoints
+
+#### On Multiple GPUs with Slurm
+
+```bash
+# specific command examples
+mim train mmselfsup configs/dummy-mae_vit-base-p16_8xb512-amp-coslr-300e_in1k.py \
+    --work-dir work_dirs/dummy_mae/ \
+    --launcher slurm --gpus 8 \
+    --partition $PARTITION
+
+mim train mmselfsup configs/dummy-mae_vit-base-p16_8xb512-amp-coslr-300e_in1k.py \
+    --work-dir work_dirs/dummy_mae/ \
+    --launcher slurm --gpus 16 --gpus-per-node 8 \
+    --partition $PARTITION
+```
+
+Note:
+- CONFIG: the config files under the directory `configs/`
+- WORK_DIR: the working directory to save configs, logs, and checkpoints
+- PARTITION: the slurm partition you are using
+
+### Downstream Tasks Commands
 
 In MMSelfSup's root directory, run the following command to train the downstream model:
 
 ```bash
-sh tools/benchmarks/classification/mim_dist_train.sh ${CONFIGS} ${CHECKPOINT} [optional args]
+mim train mmcls $CONFIG \
+    --work-dir $WORK_DIR \
+    --launcher pytorch -gpus 8 \
+    [optional args]
 
-# the example of custom command
-GPUS=1 sh tools/benchmarks/classification/mim_dist_train.sh projects/example_projects/configs/xxx.py ${CHECKPOINT} --work-dir work_dirs/example_projects/classification/
+# a specific command example
+mim train mmcls configs/xxx.py \
+    --work-dir work_dirs/dummy_mae/classification/
+    --launcher pytorch -gpus 8 \
+    --cfg-options model.backbone.init_cfg.type=Pretrained \
+    model.backbone.init_cfg.checkpoint=$CHECKPOINT \
+    model.backbone.init_cfg.prefix="backbone." \
+    $PY_ARGS
 ```
+
+Note:
+- CONFIG: the config files under the directory `configs/`
+- WORK_DIR: the working directory to save configs, logs, and checkpoints
+- CHECKPOINT: the pretrained checkpoint of MMSelfSup saved in working directory, like `$WORK_DIR/epoch_300.pth`
+- PY_ARGS: other optional args
 
 ## Results
 
