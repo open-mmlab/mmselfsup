@@ -14,7 +14,7 @@ model = dict(
         img_size=224,
         patch_size=16,
         # 0.2 for 1600 epochs pretrained models and 0.1 for 300 epochs.
-        drop_path_rate=0.2,
+        drop_path_rate=0.1,
         avg_token=True,
         output_cls_token=False,
         use_abs_pos_emb=False,
@@ -33,7 +33,14 @@ model = dict(
         dict(type='CutMix', alpha=1.0)
     ]))
 
-file_client_args = dict(backend='disk')
+file_client_args = dict(
+    backend='petrel',
+    path_mapping=dict({
+        './data/':
+        'sproject:s3://openmmlab/datasets/classification/',
+        'data/':
+        'sproject:s3://openmmlab/datasets/classification/'
+    }))
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
     dict(
@@ -86,7 +93,7 @@ optim_wrapper = dict(
         betas=(0.9, 0.999),
         model_type='vit',
         # 0.6 for 1600 epochs pretrained models and 0.65 for 300 epochs
-        layer_decay_rate=0.6),
+        layer_decay_rate=0.65),
     constructor='mmselfsup.LearningRateDecayOptimWrapperConstructor',
     paramwise_cfg=dict(
         _delete_=True,
