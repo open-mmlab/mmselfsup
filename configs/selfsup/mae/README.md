@@ -144,7 +144,7 @@ methods that use only ImageNet-1K data. Transfer performance in downstream tasks
 
 ## Evaluating MAE on Detection and Segmentation
 
-If you want to evaluate your model on detection or segmentation task, we provide a [script](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/tools/model_converters/mmcls2timm.py) to convert the model keys from MMClassification style to timm style.
+If you want to evaluate your model on detection or segmentation task, we provide a [script](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/model_converters/mmcls2timm.py) to convert the model keys from MMClassification style to timm style.
 
 ```sh
 cd $MMSELFSUP
