@@ -1,18 +1,20 @@
 # Transforms
 
-- [Transforms](<>)
+- [Transforms]()
   - [Overview of transforms](#overview-of-transforms)
   - [Introduction of `MultiView`](#introduction-of-multiview)
   - [Introduction of `PackSelfSupInputs`](#introduction-of-packselfsupinputs)
 
-## Overview of transforms
 
+## Overview of transforms
 We have introduced how to build a `Pipeline` in [add_transforms](./add_transforms.md). A `Pipeline` contains a series of
 `transforms`. There are three main categories of `transforms` in MMSelfSup:
 1. Transforms about processing the data. The unique transforms in MMSelfSup are defined in [processing.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/processing.py), e.g. `RandomCrop`, `RandomResizedCrop` and `RandomGaussianBlur`.
 We may also use some transforms from other repositories, e.g. `LoadImageFromFile` from MMCV.
 2. The transform wrapper for multiple views of an image. It is defined in [wrappers.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/wrappers.py).
 3. The transform to pack data into a format compatible with the inputs of the algorithm. It is defined in [formatting.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/formatting.py).
+
+The last two transforms will be introduced below.
 
 ## Introduction of `MultiView`
 We build a wrapper named [MultiView](mmselfsup.datasets.transforms.MultiView) for some algorithms e.g. MOCO, SimCLR and SwAV with multi-view image inputs. In the config file, we can 

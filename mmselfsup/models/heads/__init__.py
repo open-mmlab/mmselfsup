@@ -13,6 +13,7 @@ from .multi_cls_head import MultiClsHead
 from .simmim_head import SimMIMHead
 from .swav_head import SwAVHead
 from .mixmim_head import MixMIMPretrainHead
+from .mixmim_head import MixMIMPretrainHead
 
 __all__ = [
     'BEiTV1Head', 'BEiTV2Head', 'ContrastiveHead', 'ClsHead',

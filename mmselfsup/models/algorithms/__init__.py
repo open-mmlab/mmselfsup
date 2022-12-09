@@ -20,6 +20,7 @@ from .simmim import SimMIM
 from .simsiam import SimSiam
 from .swav import SwAV
 from .mixmim import MixMIM
+from .mixmim import MixMIM
 
 __all__ = [
     'BaseModel', 'BarlowTwins', 'BEiT', 'BYOL', 'DeepCluster', 'DenseCL',
