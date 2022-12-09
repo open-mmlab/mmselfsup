@@ -1,4 +1,15 @@
-# This is the official implementation of ViT-L pre-training for the 1st place of FGIA ACCV2022
+# Solution of FGIA ACCV 2022 (1st Place)
+
+## Requirements
+
+```shell
+PyTorch 1.11.0
+torchvision 0.12.0
+CUDA 11.3
+MMEngine >= 0.1.0
+MMCV >= 2.0.0rc0
+MMClassification >= 1.0.0rc1
+```
 
 ## Preparing the dataset
 
