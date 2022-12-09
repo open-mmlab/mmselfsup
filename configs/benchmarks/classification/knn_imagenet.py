@@ -30,6 +30,7 @@ val_dataloader = dict(
         ann_file='meta/val.txt',
         data_prefix='val',
         pipeline=extract_pipeline),
+    collate_fn=dict(type='default_collate'),
     sampler=dict(type='DefaultSampler', shuffle=False),
 )
 

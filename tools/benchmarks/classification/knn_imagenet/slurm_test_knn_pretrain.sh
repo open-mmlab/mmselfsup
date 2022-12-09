@@ -13,9 +13,6 @@ GPUS_PER_NODE=${GPUS_PER_NODE:-8}
 CPUS_PER_TASK=${CPUS_PER_TASK:-5}
 SRUN_ARGS=${SRUN_ARGS:-""}
 
-# set work_dir according to config path and pretrained model to distinguish different models
-WORK_DIR="$(echo ${CFG%.*} | sed -e "s/configs/work_dirs/g")/$(echo $PRETRAIN | rev | cut -d/ -f 1 | rev)"
-
 PYTHONPATH="$(dirname $0)/..":$PYTHONPATH \
 srun -p ${PARTITION} \
     --job-name=${JOB_NAME} \
@@ -26,6 +23,8 @@ srun -p ${PARTITION} \
     --kill-on-bad-exit=1 \
     ${SRUN_ARGS} \
     python -u tools/benchmarks/classification/knn_imagenet/test_knn.py $CFG \
+        --launcher="slurm" \
         --cfg-options model.backbone.init_cfg.type=Pretrained \
         model.backbone.init_cfg.checkpoint=$PRETRAIN \
-        --work-dir $WORK_DIR --launcher="slurm" ${PY_ARGS}
+        model.backbone.init_cfg.prefix='backbone.' \
+        ${PY_ARGS}
