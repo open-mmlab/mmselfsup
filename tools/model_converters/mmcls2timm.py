@@ -71,7 +71,7 @@ def main():
     parser.add_argument('dst', help='save path')
     args = parser.parse_args()
 
-    checkpoint = _load_checkpoint(args.src)
+    checkpoint = _load_checkpoint(args.src, map_location='cpu')
     if 'state_dict' in checkpoint:
         state_dict = checkpoint['state_dict']
     else:
