@@ -2,7 +2,6 @@
 from typing import Dict, List, Tuple
 
 import torch
-
 from mmselfsup.registry import MODELS
 from mmselfsup.structures import SelfSupDataSample
 from ..utils import GatherLayer
@@ -44,7 +43,7 @@ class SimCLR(BaseModel):
         return mask, pos_idx, neg_mask
 
     def extract_feat(self, inputs: List[torch.Tensor],
-                     **kwargs) -> Tuple[torch.Tensor]:
+                     **kwargs) -> Tuple[torch0.Tensor]:
         """Function to extract features from backbone.
 
         Args:

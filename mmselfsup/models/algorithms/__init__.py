@@ -17,9 +17,10 @@ from .simclr import SimCLR
 from .simmim import SimMIM
 from .simsiam import SimSiam
 from .swav import SwAV
+from .dino import DINO
 
 __all__ = [
     'BaseModel', 'BarlowTwins', 'BYOL', 'DeepCluster', 'DenseCL', 'MoCo',
     'NPID', 'ODC', 'RelativeLoc', 'RotationPred', 'SimCLR', 'SimSiam', 'SwAV',
-    'MAE', 'MoCoV3', 'SimMIM', 'CAE', 'MaskFeat'
+    'MAE', 'MoCoV3', 'SimMIM', 'CAE', 'MaskFeat','DINO'
 ]
