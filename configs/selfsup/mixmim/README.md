@@ -50,8 +50,8 @@ Here, we report the results of the model on ImageNet, the details are below:
 	</tr>
   </thead>
   <tr>
-      <td>BEiT</td>
-	    <td>ViT-base</td>
+      <td>MixMIM</td>
+	    <td>MixMIM-base</td>
 	    <td>300</td>
       <td>2048</td>
       <td>84.63</td>
