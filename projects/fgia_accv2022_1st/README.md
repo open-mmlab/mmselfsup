@@ -65,3 +65,5 @@ NNODES=2 NODE_RANK=1 PORT=${MASTER_PORT} MASTER_ADDR=${MASTER_ADDR} bash tools/d
 ```
 
 All these logs and checkpoints will be saved under the folder `work_dirs`in the root.
+
+Then you can use the pre-trained weighted to initialize the model for downstream fine-tuning, following this [project](https://github.com/open-mmlab/mmclassification/tree/dev-1.x/projects/projects/fgia_accv2022_1st) in MMClassification.
