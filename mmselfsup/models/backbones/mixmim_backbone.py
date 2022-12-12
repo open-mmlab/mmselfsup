@@ -20,6 +20,27 @@ from ..utils import build_2d_sincos_position_embedding
 
 
 class MixMIMWindowAttention(WindowMSA):
+    """MixMIM Window Attention.
+
+    Compared with WindowMSA, we add some
+    modifications in ``forward`` to meet the requirement of MixMIM during
+    pretraining.
+    Implements one windown attention in MixMIM.
+    Args:
+        embed_dims (int): The feature dimension.
+        window_size (list): The height and width of the window.
+        num_heads (int): The number of head in attention.
+        qkv_bias (bool): Whether to add bias for qkv in attention modules.
+            Defaults to True.
+        qk_scale (float, optional): Override default qk scale of
+            ``head_dim ** -0.5`` if set. Defaults to None.
+        attn_drop_rate (float): attention drop rate.
+            Defaults to 0.
+        proj_drop_rate (float): Probability of an element to be zeroed.
+            Defaults to 0.
+        init_cfg (dict, optional): Initialization config dict.
+            Defaults to None.
+    """
 
     def __init__(self,
                  embed_dims,
@@ -85,6 +106,29 @@ class MixMIMWindowAttention(WindowMSA):
 
 
 class MixMIMBlock(TransformerEncoderLayer):
+    """MixMIM Block.
+
+    Implements one block in MixMIM.
+    Args:
+        embed_dims (int): The feature dimension.
+        input_resolution (tuple): Input resolution of this layer.
+        num_heads (int): The number of head in attention,
+        window_size (list): The height and width of the window.
+        mlp_ratio (int): The MLP ration in FFN.
+        num_fcs (int): The number of linear layers in a block.
+        qkv_bias (bool): Whether to add bias for qkv in attention modules.
+            Defaults to True.
+        proj_drop_rate (float): Probability of an element to be zeroed.
+            Defaults to 0.
+        attn_drop_rate (float): attention drop rate.
+            Defaults to 0.
+        drop_path_rate (float): stochastic depth rate.
+            Defaults to 0.
+        norm_cfg (dict): Config dict for normalization layer.
+            Defaults to ``dict(type='LN')``.
+        init_cfg (dict, optional): Initialization config dict.
+            Defaults to None.
+    """
 
     def __init__(self,
                  embed_dims,
@@ -191,6 +235,32 @@ class MixMIMBlock(TransformerEncoderLayer):
 
 
 class MixMIMLayer(BaseModule):
+    """Implements one MixMIM layer, which may contains several MixMIM blocks.
+
+    Args:
+        embed_dims (int): The feature dimension.
+        input_resolution (tuple): Input resolution of this layer.
+        depth (int): The number of blocks in this layer.
+        num_heads (int): The number of head in attention,
+        window_size (list): The height and width of the window.
+        mlp_ratio (int): The MLP ration in FFN.
+        qkv_bias (bool): Whether to add bias for qkv in attention modules.
+            Defaults to True.
+        proj_drop_rate (float): Probability of an element to be zeroed.
+            Defaults to 0.
+        attn_drop_rate (float): attention drop rate.
+            Defaults to 0.
+        drop_path_rate (float): stochastic depth rate.
+            Defaults to 0.
+        norm_cfg (dict): Config dict for normalization layer.
+            Defaults to ``dict(type='LN')``.
+        downsample (class, optional): Downsample the output of blocks b
+            y patch merging.Defaults to None.
+        use_checkpoint (bool): Whether use the checkpoint to
+        reduce GPU memory cost.
+        init_cfg (dict, optional): Initialization config dict.
+            Defaults to None.
+    """
 
     def __init__(self,
                  embed_dims,

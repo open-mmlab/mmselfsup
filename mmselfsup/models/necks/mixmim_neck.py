@@ -11,6 +11,28 @@ from .mae_neck import MAEPretrainDecoder
 
 @MODELS.register_module()
 class MixMIMPretrainDecoder(MAEPretrainDecoder):
+    """Decoder for MixMIM Pretraining.
+
+    Some of the code is borrowed from `https://github.com/Sense-X/MixMIM`. # noqa
+
+    Args:
+        num_patches (int): The number of total patches. Defaults to 196.
+        patch_size (int): Image patch size. Defaults to 16.
+        in_chans (int): The channel of input image. Defaults to 3.
+        embed_dim (int): Encoder's embedding dimension. Defaults to 1024.
+        encoder_stride (int): The output stride of MixMIM backbone. Defaults
+            to 32.
+        decoder_embed_dim (int): Decoder's embedding dimension.
+            Defaults to 512.
+        decoder_depth (int): The depth of decoder. Defaults to 8.
+        decoder_num_heads (int): Number of attention heads of decoder.
+            Defaults to 16.
+        mlp_ratio (int): Ratio of mlp hidden dim to decoder's embedding dim.
+            Defaults to 4.
+        norm_cfg (dict): Normalization layer. Defaults to LayerNorm.
+        init_cfg (Union[List[dict], dict], optional): Initialization config
+            dict. Defaults to None.
+    """
 
     def __init__(self,
                  num_patches: int = 196,
