@@ -65,9 +65,9 @@ class MixMIMPretrainDecoder(MAEPretrainDecoder):
         self.decoder_pred = nn.Linear(decoder_embed_dim, encoder_stride**2 * 3)
 
     def init_weights(self) -> None:
+        """Initialize position embedding and mask token of MixMIM decoder."""
         super(MAEPretrainDecoder, self).init_weights()
 
-        # initialize position embedding of MAE decoder
         decoder_pos_embed = build_2d_sincos_position_embedding(
             int(self.num_patches**.5),
             self.decoder_pos_embed.shape[-1],
@@ -77,6 +77,17 @@ class MixMIMPretrainDecoder(MAEPretrainDecoder):
         torch.nn.init.normal_(self.mask_token, std=.02)
 
     def forward(self, x: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
+        """Forward function.
+
+        Args:
+            x (torch.Tensor): The input features, which is of shape (N, L, C).
+            mask (torch.Tensor): The tensor to indicate which tokens a
+                re masked.
+
+        Returns:
+            torch.Tensor: The reconstructed features, which is of shape
+                (N, L, C).
+        """
 
         x = self.decoder_embed(x)
         B, L, C = x.shape

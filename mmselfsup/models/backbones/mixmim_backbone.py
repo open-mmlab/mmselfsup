@@ -569,6 +569,7 @@ class MixMIMTransformerPretrain(MixMIMTransformer):
         self.range_mask_ratio = range_mask_ratio
 
     def init_weights(self):
+        """Initialize position embedding, patch embedding."""
         super(MixMIMTransformer, self).init_weights()
 
         pos_embed = build_2d_sincos_position_embedding(
@@ -590,6 +591,26 @@ class MixMIMTransformerPretrain(MixMIMTransformer):
             nn.init.constant_(m.weight, 1.0)
 
     def random_masking(self, x: torch.Tensor, mask_ratio: float = 0.5):
+        """Generate the mask for MixMIM Pretraining.
+
+        Args:
+            x (torch.Tensor): Image with data augmentation applied, which is
+                of shape B x L x C.
+            mask_ratio (float): The mask ratio of total patches.
+                Defaults to 0.5.
+
+        Returns:
+            Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+                mask_s1, mask_s2, mask_s3, and mask.
+                  - mask_s1 (torch.Tensor): mask with stride of
+                    self.encoder_stride // 8.
+                  - mask_s2 (torch.Tensor): mask with stride of
+                    self.encoder_stride // 4.
+                  - mask_s3 (torch.Tensor): mask with stride of
+                    self.encoder_stride // 2.
+                  - mask (torch.Tensor): mask with stride of
+                    self.encoder_stride.
+        """
 
         B, C, H, W = x.shape
         out_H = H // self.encoder_stride
@@ -620,6 +641,23 @@ class MixMIMTransformerPretrain(MixMIMTransformer):
         return mask_s1, mask_s2, mask_s3, mask
 
     def forward(self, x: torch.Tensor, mask_ratio=0.5):
+        """Generate features for masked images.
+
+        This function generates mask and masks some patches randomly and get
+        the hidden features for visible patches.
+
+        Args:
+            x (torch.Tensor): Input images, which is of shape B x C x H x W.
+
+        Returns:
+            Tuple[torch.Tensor, torch.Tensor]:
+
+            Hidden features and mask.
+
+                - x (torch.Tensor): hidden features, which is of shape
+                  B x L x C.
+                - mask_s4 (torch.Tensor): the mask tensor for the last layer.
+        """
 
         mask_s1, mask_s2, mask_s3, mask_s4 = self.random_masking(x, mask_ratio)
 
