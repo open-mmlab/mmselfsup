@@ -425,6 +425,43 @@ class MixMIMTransformer(BaseBackbone):
 
 @MODELS.register_module()
 class MixMIMTransformerPretrain(MixMIMTransformer):
+    """MixMIM backbone during pretraining.
+    A PyTorch implement of : ` MixMIM: Mixed and Masked Image
+    Modeling for Efficient Visual Representation Learning
+    <https://arxiv.org/abs/2205.13137>`_
+    Args:
+        arch (str | dict): MixMIM architecture. If use string,
+            choose from 'base','large' and 'huge'.
+            If use dict, it should have below keys:
+            - **embed_dims** (int): The dimensions of embedding.
+            - **depths** (int): The number of transformer encoder layers.
+            - **num_heads** (int): The number of heads in attention modules.
+            Defaults to 'base'.
+        mlp_ratio (int): The mlp ratio in FFN.  Defaults to 4.
+        img_size (int | tuple): The expected input image shape. Because we
+            support dynamic input shape, just set the argument to mlp_ratio
+            the most common input image shape. Defaults to 224.
+        patch_size (int | tuple): The patch size in patch embedding.
+            Defaults to 16.
+        in_channels (int): The num of input channels. Defaults to 3.
+        window_size (list): The height and width of the window.
+        qkv_bias (bool): Whether to add bias for qkv in attention modules.
+            Defaults to True.
+        patch_cfg (dict): Extra config dict for patch embedding.
+            Defaults to an empty dict.
+        norm_cfg (dict): Config dict for normalization layer.
+            Defaults to ``dict(type='LN')``.
+        drop_rate (float): Probability of an element to be zeroed.
+            Defaults to 0.
+        drop_path_rate (float): Stochastic depth rate. Defaults to 0.
+        attn_drop_rate (float): Attention drop rate. Defaults to 0.
+        use_checkpoint (bool): Whether use the checkpoint to
+        reduce GPU memory cost
+        range_mask_ratio (float): The range of mask ratio.
+            Defaults to 0.
+        init_cfg (dict, optional): Initialization config dict.
+            Defaults to None.
+    """
 
     def __init__(self,
                  arch='base',
