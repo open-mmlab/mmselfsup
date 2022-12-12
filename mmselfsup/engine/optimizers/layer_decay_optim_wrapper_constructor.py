@@ -83,7 +83,9 @@ def get_layer_id_for_mixmim(var_name: str, max_layer_id: int,
         layer_id = int(var_name.split('.')[2])
         block_id = var_name.split('.')[4]
 
-        if block_id == 'downsample' or block_id == 'reduction' or block_id == 'norm':
+        if block_id == 'downsample' or \
+                block_id == 'reduction' or \
+                block_id == 'norm':
             return sum(depths[:layer_id + 1]) - 1
 
         layer_id = sum(depths[:layer_id]) + int(block_id) + 1
