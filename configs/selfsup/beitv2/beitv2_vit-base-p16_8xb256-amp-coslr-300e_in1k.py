@@ -8,7 +8,6 @@ _base_ = [
 # optimizer wrapper
 # betas: (0.9, 0.98) for 300 epochs and (0.9, 0.999) for 1600 epochs.
 optimizer = dict(type='AdamW', lr=1.5e-3, betas=(0.9, 0.98), weight_decay=0.05)
-
 optim_wrapper = dict(
     type='AmpOptimWrapper',
     loss_scale='dynamic',
