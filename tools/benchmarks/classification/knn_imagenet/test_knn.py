@@ -162,14 +162,16 @@ def main():
         dist_mode=distributed,
         pool_cfg=copy.deepcopy(dataset_cfg.pool_cfg))
     train_feats = extractor_train(model)['feat5']
+    logger.info('Features from train dataset are extracted.')
     val_feats = extractor_val(model)['feat5']
+    logger.info('Features from validation dataset are extracted.')
 
     train_feats = torch.from_numpy(train_feats)
     val_feats = torch.from_numpy(val_feats)
     train_labels = torch.LongTensor(data_loader_train.dataset.get_gt_labels())
     val_labels = torch.LongTensor(data_loader_val.dataset.get_gt_labels())
 
-    logger.info('Features are extracted! Start k-NN classification...')
+    logger.info('Start k-NN classification.')
 
     # run knn
     rank = get_rank()
