@@ -13,6 +13,6 @@ from .simmim_swin import SimMIMSwinTransformer
 
 __all__ = [
     'ResNet', 'ResNetSobel', 'ResNetV1d', 'ResNeXt', 'MAEViT', 'MoCoV3ViT',
-    'SimMIMSwinTransformer', 'CAEViT', 'MixMIMTransformerPretrain',
-    'MixMIMTransformer'
+    'SimMIMSwinTransformer', 'CAEViT', 'MaskFeatViT', 'BEiTViT', 'MILANViT',
+    'MixMIMTransformerPretrain', 'MixMIMTransformer'
 ]
