@@ -1,6 +1,8 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import math
 
+import cv2
+import numpy as np
 import torch
 import torch.nn.functional as F
 from mmengine.model import BaseModule
@@ -13,10 +15,10 @@ class HOGGenerator(BaseModule):
     """Generate HOG feature for images.
 
     This module is used in MaskFeat to generate HOG feature. The code is
-    modified from this `file
+    modified from file `slowfast/models/operators.py
     <https://github.com/facebookresearch/SlowFast/blob/main/slowfast/models/operators.py>`_.
-    Here is the link `HOG wikipedia
-    <https://en.m.wikipedia.org/wiki/Histogram_of_oriented_gradients>`_.
+    Here is the link of `HOG wikipedia
+    <https://en.wikipedia.org/wiki/Histogram_of_oriented_gradients>`_.
 
     Args:
         nbins (int): Number of bin. Defaults to 9.
@@ -61,12 +63,12 @@ class HOGGenerator(BaseModule):
     def _reshape(self, hog_feat: torch.Tensor) -> torch.Tensor:
         """Reshape HOG Features for output."""
         hog_feat = hog_feat.flatten(1, 2)
-        unfold_size = hog_feat.shape[-1] // 14
-        hog_feat = (
-            hog_feat.permute(0, 2, 3,
-                             1).unfold(1, unfold_size, unfold_size).unfold(
-                                 2, unfold_size,
-                                 unfold_size).flatten(1, 2).flatten(2))
+        self.unfold_size = hog_feat.shape[-1] // 14
+        hog_feat = hog_feat.permute(0, 2, 3, 1)
+        hog_feat = hog_feat.unfold(1, self.unfold_size,
+                                   self.unfold_size).unfold(
+                                       2, self.unfold_size, self.unfold_size)
+        hog_feat = hog_feat.flatten(1, 2).flatten(2)
         return hog_feat
 
     @torch.no_grad()
@@ -80,6 +82,7 @@ class HOGGenerator(BaseModule):
             torch.Tensor: Hog features.
         """
         # input is RGB image with shape [B 3 H W]
+        self.h, self.w = x.size(-2), x.size(-1)
         x = F.pad(x, pad=(1, 1, 1, 1), mode='reflect')
         gx_rgb = F.conv2d(
             x, self.weight_x, bias=None, stride=1, padding=0, groups=3)
@@ -112,6 +115,38 @@ class HOGGenerator(BaseModule):
         out = out.unfold(4, self.pool, self.pool)
         out = out.sum(dim=[-1, -2])
 
-        out = F.normalize(out, p=2, dim=2)
+        self.out = F.normalize(out, p=2, dim=2)
 
-        return self._reshape(out)
+        return self._reshape(self.out)
+
+    def generate_hog_image(self, hog_out: torch.Tensor) -> np.ndarray:
+        """Generate HOG image according to HOG features."""
+        assert hog_out.size(0) == 1 and hog_out.size(1) == 3, \
+            'Check the input batch size and the channcel number, only support'\
+            '"batch_size = 1".'
+        hog_image = np.zeros([self.h, self.w])
+        cell_gradient = np.array(hog_out.mean(dim=1).squeeze().detach().cpu())
+        cell_width = self.pool / 2
+        max_mag = np.array(cell_gradient).max()
+        angle_gap = 360 / self.nbins
+
+        for x in range(cell_gradient.shape[1]):
+            for y in range(cell_gradient.shape[2]):
+                cell_grad = cell_gradient[:, x, y]
+                cell_grad /= max_mag
+                angle = 0
+                for magnitude in cell_grad:
+                    angle_radian = math.radians(angle)
+                    x1 = int(x * self.pool +
+                             magnitude * cell_width * math.cos(angle_radian))
+                    y1 = int(y * self.pool +
+                             magnitude * cell_width * math.sin(angle_radian))
+                    x2 = int(x * self.pool -
+                             magnitude * cell_width * math.cos(angle_radian))
+                    y2 = int(y * self.pool -
+                             magnitude * cell_width * math.sin(angle_radian))
+                    magnitude = 0 if magnitude < 0 else magnitude
+                    cv2.line(hog_image, (y1, x1), (y2, x2),
+                             int(255 * math.sqrt(magnitude)))
+                    angle += angle_gap
+        return hog_image

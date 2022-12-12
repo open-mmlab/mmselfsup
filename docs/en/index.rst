@@ -28,8 +28,11 @@ Welcome to MMSelfSup's documentation!
 .. toctree::
    :maxdepth: 1
    :caption: Model Zoo
+   :glob:
 
+   model_zoo_statistics.md
    model_zoo.md
+   papers/*
 
 .. toctree::
    :maxdepth: 1

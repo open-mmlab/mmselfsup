@@ -142,6 +142,19 @@ methods that use only ImageNet-1K data. Transfer performance in downstream tasks
 </tbody>
 </table>
 
+## Evaluating MAE on Detection and Segmentation
+
+If you want to evaluate your model on detection or segmentation task, we provide a [script](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/model_converters/mmcls2timm.py) to convert the model keys from MMClassification style to timm style.
+
+```sh
+cd $MMSELFSUP
+python tools/model_converters/mmcls2timm.py $src_ckpt $dst_ckpt
+```
+
+Then, using this converted ckpt, you can evaluate your model on detection task, following [Detectron2](https://github.com/facebookresearch/detectron2/tree/main/projects/ViTDet)，
+and on semantic segmentation task, following this [project](https://github.com/implus/mae_segmentation). Besides, using the unconverted ckpt, you can use
+[MMSegmentation](https://github.com/open-mmlab/mmsegmentation/tree/master/configs/mae) to evaluate your model.
+
 ## Citation
 
 ```bibtex
@@ -149,7 +162,7 @@ methods that use only ImageNet-1K data. Transfer performance in downstream tasks
   title={Masked Autoencoders Are Scalable Vision Learners},
   author={Kaiming He and Xinlei Chen and Saining Xie and Yanghao Li and
   Piotr Doll'ar and Ross B. Girshick},
-  journal={ArXiv},
+  journal={arXiv},
   year={2021}
 }
 ```

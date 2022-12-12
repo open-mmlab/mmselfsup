@@ -27,10 +27,10 @@ class ExampleModel(BaseModel):
         super(ExampleModel, self).__init__(backbone=backbone)
         self.layer = nn.Linear(1, 1)
 
-    def predict(self,
-                inputs: List[torch.Tensor],
-                data_samples: Optional[List[SelfSupDataSample]] = None,
-                **kwargs) -> SelfSupDataSample:
+    def extract_feat(self,
+                     inputs: List[torch.Tensor],
+                     data_samples: Optional[List[SelfSupDataSample]] = None,
+                     **kwargs) -> SelfSupDataSample:
         out = self.layer(inputs[0])
         return out
 

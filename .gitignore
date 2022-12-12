@@ -64,8 +64,14 @@ instance/
 # Scrapy stuff:
 .scrapy
 
-# Sphinx documentation
-docs/_build/
+# Sphinx documentation (readthedocs)
+src/
+docs/en/_build/
+docs/en/model_zoo_statistics.md
+docs/en/papers/
+docs/zh_cn/_build/
+docs/zh_cn/model_zoo_statistics.md
+docs/zh_cn/papers/
 
 # PyBuilder
 target/
@@ -125,9 +131,3 @@ INFO
 
 # Pytorch
 *.pth
-
-
-# readthedocs
-docs/zh_cn/_build
-src/
-docs/en/_build

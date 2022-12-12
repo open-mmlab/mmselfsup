@@ -17,7 +17,9 @@ class MAE(BaseModel):
     <https://arxiv.org/abs/2111.06377>`_.
     """
 
-    def extract_feat(self, inputs: List[torch.Tensor],
+    def extract_feat(self,
+                     inputs: List[torch.Tensor],
+                     data_samples: Optional[List[SelfSupDataSample]] = None,
                      **kwarg) -> Tuple[torch.Tensor]:
         """The forward function to extract features from neck.
 
@@ -27,33 +29,33 @@ class MAE(BaseModel):
         Returns:
             Tuple[torch.Tensor]: Neck outputs.
         """
-        latent, _, ids_restore = self.backbone(inputs[0])
+        latent, mask, ids_restore = self.backbone(inputs[0])
         pred = self.neck(latent, ids_restore)
+        self.mask = mask
         return pred
 
-    def predict(self,
-                inputs: List[torch.Tensor],
-                data_samples: Optional[List[SelfSupDataSample]] = None,
-                **kwargs) -> SelfSupDataSample:
-        """The forward function in testing. It is mainly for image
-        reconstruction.
+    def reconstruct(self,
+                    features: torch.Tensor,
+                    data_samples: Optional[List[SelfSupDataSample]] = None,
+                    **kwargs) -> SelfSupDataSample:
+        """The function is for image reconstruction.
 
         Args:
-            inputs (List[torch.Tensor]): The input images.
+            features (torch.Tensor): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
         Returns:
             SelfSupDataSample: The prediction from model.
         """
+        mean = kwargs['mean']
+        std = kwargs['std']
+        features = features * std + mean
 
-        latent, mask, ids_restore = self.backbone(inputs[0])
-        pred = self.neck(latent, ids_restore)
-
-        pred = self.head.unpatchify(pred)
+        pred = self.head.unpatchify(features)
         pred = torch.einsum('nchw->nhwc', pred).detach().cpu()
 
-        mask = mask.detach()
+        mask = self.mask.detach()
         mask = mask.unsqueeze(-1).repeat(1, 1, self.head.patch_size**2 *
                                          3)  # (N, H*W, p*p*3)
         mask = self.head.unpatchify(mask)  # 1 is removing, 0 is keeping

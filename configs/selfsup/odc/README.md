@@ -12,9 +12,7 @@ Joint clustering and feature learning methods have shown remarkable performance 
 <img  src="https://user-images.githubusercontent.com/36138628/149722645-8da8e5b2-8846-4554-aa3e-727d286b85cd.png" width="700" />
 </div>
 
-## Results and Models
-
-**Back to [model_zoo.md](https://github.com/open-mmlab/mmselfsup/blob/master/docs/en/model_zoo.md) to download models.**
+## Models and Benchmarks
 
 In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models are pre-trained on ImageNet-1k dataset.
 
@@ -28,35 +26,35 @@ The **Best Layer** indicates that the best results are obtained from which layer
 
 Besides, k=1 to 96 indicates the hyper-parameter of Low-shot SVM.
 
-| Self-Supervised Config                                                                                                                       | Best Layer | SVM   | k=1   | k=2   | k=4   | k=8   | k=16  | k=32  | k=64  | k=96  |
-| -------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
-| [resnet50_8xb64-steplr-440e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py) | feature5   | 78.42 | 32.42 | 40.27 | 49.95 | 59.96 | 65.71 | 69.99 | 73.64 | 75.13 |
+| Self-Supervised Config                                                                                                                    | Best Layer | SVM   | k=1   | k=2   | k=4   | k=8   | k=16  | k=32  | k=64  | k=96  |
+| ----------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
+| [resnet50_8xb64-steplr-440e](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py) | feature5   | 78.42 | 32.42 | 40.27 | 49.95 | 59.96 | 65.71 | 69.99 | 73.64 | 75.13 |
 
 #### ImageNet Linear Evaluation
 
-The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map is pooled to the specific dimensions and then follows a Linear layer to do the classification. Please refer to [resnet50_mhead_linear-8xb32-steplr-90e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/imagenet/resnet50_mhead_linear-8xb32-steplr-90e_in1k.py) for details of config.
+The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map is pooled to the specific dimensions and then follows a Linear layer to do the classification. Please refer to [resnet50_mhead_linear-8xb32-steplr-90e_in1k](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/benchmarks/classification/imagenet/resnet50_mhead_linear-8xb32-steplr-90e_in1k.py) for details of config.
 
-The **AvgPool** result is obtained from Linear Evaluation with GlobalAveragePooling. Please refer to [resnet50_linear-8xb32-steplr-100e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-steplr-100e_in1k.py) for details of config.
+The **AvgPool** result is obtained from Linear Evaluation with GlobalAveragePooling. Please refer to [resnet50_linear-8xb32-steplr-100e_in1k](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-steplr-100e_in1k.py) for details of config.
 
-| Self-Supervised Config                                                                                                                       | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 | AvgPool |
-| -------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- | ------- |
-| [resnet50_8xb64-steplr-440e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py) | 14.76    | 31.82    | 42.44    | 55.76    | 57.70    | 53.42   |
+| Self-Supervised Config                                                                                                                    | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 | AvgPool |
+| ----------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- | ------- |
+| [resnet50_8xb64-steplr-440e](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py) | 14.76    | 31.82    | 42.44    | 55.76    | 57.70    | 53.42   |
 
 #### Places205 Linear Evaluation
 
-The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map is pooled to the specific dimensions and then follows a Linear layer to do the classification. Please refer to [resnet50_mhead_8xb32-steplr-28e_places205.py](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/places205/resnet50_mhead_8xb32-steplr-28e_places205.py) for details of config.
+The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map is pooled to the specific dimensions and then follows a Linear layer to do the classification. Please refer to [resnet50_mhead_8xb32-steplr-28e_places205.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/benchmarks/classification/places205/resnet50_mhead_8xb32-steplr-28e_places205.py) for details of config.
 
-| Self-Supervised Config                                                                                                                       | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 |
-| -------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- |
-| [resnet50_8xb64-steplr-440e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py) | 19.28    | 34.09    | 40.90    | 47.04    | 48.35    |
+| Self-Supervised Config                                                                                                                    | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 |
+| ----------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- |
+| [resnet50_8xb64-steplr-440e](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py) | 19.28    | 34.09    | 40.90    | 47.04    | 48.35    |
 
 #### ImageNet Nearest-Neighbor Classification
 
 The results are obtained from the features after GlobalAveragePooling. Here, k=10 to 200 indicates different number of nearest neighbors.
 
-| Self-Supervised Config                                                                                                                       | k=10 | k=20 | k=100 | k=200 |
-| -------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ---- | ----- | ----- |
-| [resnet50_8xb64-steplr-440e](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py) | 38.5 | 39.1 | 37.8  | 36.9  |
+| Self-Supervised Config                                                                                                                    | k=10 | k=20 | k=100 | k=200 |
+| ----------------------------------------------------------------------------------------------------------------------------------------- | ---- | ---- | ----- | ----- |
+| [resnet50_8xb64-steplr-440e](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py) | 38.5 | 39.1 | 37.8  | 36.9  |
 
 ## Citation
 

@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import List, Optional, Tuple
+from typing import List, Optional, Sequence, Tuple, Union
 
 import torch
 from mmengine.model import ImgDataPreprocessor
@@ -177,5 +177,116 @@ class CAEDataPreprocessor(SelfSupDataPreprocessor):
         if self._enable_normalize:
             batch_inputs = [(batch_inputs[0] - self.mean) / self.std,
                             batch_inputs[1] / 255. * 0.8 + 0.1]
+
+        return batch_inputs, batch_data_samples
+
+
+@MODELS.register_module()
+class TwoNormDataPreprocessor(SelfSupDataPreprocessor):
+    """Image pre-processor for CAE, BEiT v1/v2, etc.
+
+    Compared with the :class:`mmselfsup.SelfSupDataPreprocessor`, this module
+    will normalize the prediction image and target image with different
+    normalization parameters.
+
+    Args:
+        mean (Sequence[float or int], optional): The pixel mean of image
+            channels. If ``bgr_to_rgb=True`` it means the mean value of R,
+            G, B channels. If the length of `mean` is 1, it means all
+            channels have the same mean value, or the input is a gray image.
+            If it is not specified, images will not be normalized. Defaults
+            None.
+        std (Sequence[float or int], optional): The pixel standard deviation of
+            image channels. If ``bgr_to_rgb=True`` it means the standard
+            deviation of R, G, B channels. If the length of `std` is 1,
+            it means all channels have the same standard deviation, or the
+            input is a gray image.  If it is not specified, images will
+            not be normalized. Defaults None.
+        second_mean (Sequence[float or int], optional): The description is
+            like ``mean``, it can be customized for targe image. Defaults None.
+        second_std (Sequence[float or int], optional): The description is
+            like ``std``, it can be customized for targe image. Defaults None.
+        pad_size_divisor (int): The size of padded image should be
+            divisible by ``pad_size_divisor``. Defaults to 1.
+        pad_value (float or int): The padded pixel value. Defaults to 0.
+        bgr_to_rgb (bool): whether to convert image from BGR to RGB.
+            Defaults to False.
+        rgb_to_bgr (bool): whether to convert image from RGB to RGB.
+            Defaults to False.
+        non_blocking (bool): Whether block current process
+            when transferring data to device.
+    """
+
+    def __init__(self,
+                 mean: Optional[Sequence[Union[float, int]]] = None,
+                 std: Optional[Sequence[Union[float, int]]] = None,
+                 second_mean: Sequence[Union[float, int]] = None,
+                 second_std: Sequence[Union[float, int]] = None,
+                 pad_size_divisor: int = 1,
+                 pad_value: Union[float, int] = 0,
+                 bgr_to_rgb: bool = False,
+                 rgb_to_bgr: bool = False,
+                 non_blocking: Optional[bool] = False):
+        super().__init__(
+            mean=mean,
+            std=std,
+            pad_size_divisor=pad_size_divisor,
+            pad_value=pad_value,
+            bgr_to_rgb=bgr_to_rgb,
+            rgb_to_bgr=rgb_to_bgr,
+            non_blocking=non_blocking)
+        assert (second_mean is not None) and (second_std is not None), (
+            'mean and std should not be None while using '
+            '`TwoNormDataPreprocessor`')
+        assert len(second_mean) == 3 or len(second_mean) == 1, (
+            '`mean` should have 1 or 3 values, to be compatible with '
+            f'RGB or gray image, but got {len(second_mean)} values')
+        assert len(second_std) == 3 or len(second_std) == 1, (
+            '`std` should have 1 or 3 values, to be compatible with RGB '  # type: ignore # noqa: E501
+            f'or gray image, but got {len(std)} values')  # type: ignore
+
+        self.register_buffer('second_mean',
+                             torch.tensor(second_mean).view(-1, 1, 1), False)
+        self.register_buffer('second_std',
+                             torch.tensor(second_std).view(-1, 1, 1), False)
+
+    def forward(
+            self,
+            data: dict,
+            training: bool = False
+    ) -> Tuple[List[torch.Tensor], Optional[list]]:
+        """Performs normalization、padding and bgr2rgb conversion based on
+        ``BaseDataPreprocessor``.
+
+        Args:
+            data (dict): data sampled from dataloader.
+            training (bool): Whether to enable training time augmentation. If
+                subclasses override this method, they can perform different
+                preprocessing strategies for training and testing based on the
+                value of ``training``.
+        Returns:
+            Tuple[torch.Tensor, Optional[list]]: Data in the same format as the
+                model input.
+        """
+        data = [val for _, val in data.items()]
+        batch_inputs, batch_data_samples = self.cast_data(data)
+        # channel transform
+        if self._channel_conversion:
+            batch_inputs = [
+                _input[:, [2, 1, 0], ...] for _input in batch_inputs
+            ]
+
+        # Convert to float after channel conversion to ensure
+        # efficiency
+        batch_inputs = [input_.float() for input_ in batch_inputs]
+
+        # Normalization. Here is what is different from
+        # :class:`mmselfsup.SelfSupDataPreprocessor`. Normalize the target
+        # image and prediction image with different normalization params
+        if self._enable_normalize:
+            batch_inputs = [
+                (batch_inputs[0] - self.mean) / self.std,
+                (batch_inputs[1] - self.second_mean) / self.second_std
+            ]
 
         return batch_inputs, batch_data_samples

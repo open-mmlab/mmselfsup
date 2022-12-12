@@ -65,15 +65,15 @@ The master branch works with **PyTorch 1.6** or higher.
 
 ## What's New
 
+MMSelfSup **v1.0.0rc4** was released in 07/12/2022.
+
+- Support BEiT v1 and MILAN.
+- Support low-level reconstruction visualization.
+- Refine documents algorithm pages.
+
 MMSelfSup **v1.0.0rc3** was released in 01/11/2022.
 
 - Support MaskFeat.
-- Refine configs and documents.
-
-MMSelfSup **v1.0.0rc2** was released in 12/10/2022.
-
-- Full support of `MAE`, `SimMIM`, `MoCoV3` with different model sizes and different pre-training epochs.
-- Update documents and colab tutorial.
 
 Please refer to [Changelog](https://mmselfsup.readthedocs.io/en/dev-1.x/notes/changelog.html) for details and release history.
 
@@ -130,10 +130,12 @@ Supported algorithms:
 - [x] [SimSiam (CVPR'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/simsiam)
 - [x] [Barlow Twins (ICML'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/barlowtwins)
 - [x] [MoCo v3 (ICCV'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mocov3)
+- [x] [BEiT (ICLR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/beit)
 - [x] [MAE (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mae)
 - [x] [SimMIM (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/simmim)
 - [x] [MaskFeat (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/maskfeat)
 - [x] [CAE (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/cae)
+- [x] [MILAN (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/milan)
 
 More algorithms are in our plan.
 
