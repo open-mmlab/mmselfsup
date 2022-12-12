@@ -1,6 +1,6 @@
 _base_ = [
     '../_base_/models/mixmim.py',
-    '../_base_/models/imagenet_mixmim.py',
+    '../_base_/datasets/imagenet_mixmim.py',
     '../_base_/schedules/adamw_coslr-200e_in1k.py',
     '../_base_/default_runtime.py',
 ]
