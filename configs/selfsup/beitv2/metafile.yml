@@ -20,7 +20,7 @@ Models:
       Batch Size: 2048
     Results: null
     Config: configs/selfsup/beitv2/beitv2_vit-base-p16_8xb256-amp-coslr-300e_in1k.py
-    Weights:
+    Weights: https://download.openmmlab.com/mmselfsup/1.x/beitv2/beitv2_vit-base-p16_8xb256-amp-coslr-300e_in1k/beitv2_vit-base-p16_8xb256-amp-coslr-300e_in1k_20221212-a157be30.pth
     Downstream:
       - Type: Image Classification
         Metadata:
@@ -30,6 +30,6 @@ Models:
           - Task: Fine-tuning
             Dataset: ImageNet-1k
             Metrics:
-              Top 1 Accuracy:
-        Config:
-        Weights:
+              Top 1 Accuracy: 85.0
+        Config: configs/selfsup/beitv2/classification/vit-base-p16_ft-8xb128-coslr-100e_in1k.py
+        Weights: https://download.openmmlab.com/mmselfsup/1.x/beitv2/beitv2_vit-base-p16_8xb256-amp-coslr-300e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k_20221212-d1c0789e.pth
