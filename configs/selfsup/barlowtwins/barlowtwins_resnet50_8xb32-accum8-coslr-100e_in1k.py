@@ -3,7 +3,7 @@ _base_ = 'barlowtwins_resnet50_8xb256-coslr-300e_in1k.py'
 train_dataloader = dict(batch_size=32)
 
 # optimizer
-optim_wrapper = dict(accumulative_iters=8)
+optim_wrapper = dict(accumulative_counts=8)
 
 # learning rate scheduler
 param_scheduler = [
