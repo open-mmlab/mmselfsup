@@ -6,12 +6,11 @@ import os.path as osp
 import time
 
 import torch
-from mmengine import Runner
 from mmengine.config import Config, DictAction
 from mmengine.dist import get_rank, init_dist
 from mmengine.logging import MMLogger
 from mmengine.model.wrappers import MMDistributedDataParallel, is_model_wrapper
-from mmengine.runner import load_checkpoint
+from mmengine.runner import Runner, load_checkpoint
 from mmengine.utils import mkdir_or_exist
 
 from mmselfsup.evaluation.functional import knn_eval
