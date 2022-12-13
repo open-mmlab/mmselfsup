@@ -22,13 +22,7 @@ from .swav import SwAV
 from .dino import DINO
 
 __all__ = [
-<<<<<<< HEAD
-    'BaseModel', 'BarlowTwins', 'BYOL', 'DeepCluster', 'DenseCL', 'MoCo',
-    'NPID', 'ODC', 'RelativeLoc', 'RotationPred', 'SimCLR', 'SimSiam', 'SwAV',
-    'MAE', 'MoCoV3', 'SimMIM', 'CAE', 'MaskFeat','DINO'
-=======
     'BaseModel', 'BarlowTwins', 'BEiT', 'BYOL', 'DeepCluster', 'DenseCL',
     'MoCo', 'NPID', 'ODC', 'RelativeLoc', 'RotationPred', 'SimCLR', 'SimSiam',
     'SwAV', 'MAE', 'MoCoV3', 'SimMIM', 'CAE', 'MaskFeat', 'MILAN', 'DINO'
->>>>>>> 5d5e19075976afdaf8442e2126b2cc630ea08778
 ]
