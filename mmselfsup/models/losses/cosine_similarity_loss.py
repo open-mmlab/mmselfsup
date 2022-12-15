@@ -28,8 +28,10 @@ class CosineSimilarityLoss(BaseModule):
         self.shift_factor = shift_factor
         self.scale_factor = scale_factor
 
-    def forward(self, pred: torch.Tensor,
-                target: torch.Tensor) -> torch.Tensor:
+    def forward(self,
+                pred: torch.Tensor,
+                target: torch.Tensor,
+                mask: torch.Tensor = None) -> torch.Tensor:
         """Forward function of cosine similarity loss.
 
         Args:
@@ -43,5 +45,9 @@ class CosineSimilarityLoss(BaseModule):
         target_norm = nn.functional.normalize(target, dim=-1)
         loss = self.shift_factor - self.scale_factor * (
             pred_norm * target_norm).sum(dim=-1)
-        loss = loss.mean()
+
+        if mask is None:
+            loss = loss.mean()
+        else:
+            loss = (loss * mask).sum() / mask.sum()
         return loss

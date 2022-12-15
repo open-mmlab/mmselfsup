@@ -55,6 +55,7 @@ class MAEPretrainDecoder(BaseModule):
                  decoder_num_heads: int = 16,
                  mlp_ratio: int = 4,
                  norm_cfg: dict = dict(type='LN', eps=1e-6),
+                 predict_feature_dim: float = None,
                  init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
         super().__init__(init_cfg=init_cfg)
         self.num_patches = num_patches
@@ -85,8 +86,10 @@ class MAEPretrainDecoder(BaseModule):
         self.add_module(self.decoder_norm_name, decoder_norm)
 
         # Used to map features to pixels
+        if predict_feature_dim is None:
+            predict_feature_dim = patch_size**2 * in_chans
         self.decoder_pred = nn.Linear(
-            decoder_embed_dim, patch_size**2 * in_chans, bias=True)
+            decoder_embed_dim, predict_feature_dim, bias=True)
 
     def init_weights(self) -> None:
         """Initialize position embedding and mask token of MAE decoder."""
