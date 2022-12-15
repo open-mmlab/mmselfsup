@@ -48,14 +48,13 @@ class ODCMemory(BaseModule):
         self.min_cluster = min_cluster
         self.debug = kwargs.get('debug', False)
 
-    def init_memory(self, feature: torch.Tensor, label: np.ndarray) -> None:
+    def init_memory(self, feature: np.ndarray, label: np.ndarray) -> None:
         """Initialize memory modules."""
         self.initialized = True
         self.label_bank.copy_(torch.from_numpy(label).long())
         # make sure no empty clusters
         assert (np.bincount(label, minlength=self.num_classes) != 0).all()
         if self.rank == 0:
-            feature = feature.cpu().numpy()
             feature /= (np.linalg.norm(feature, axis=1).reshape(-1, 1) + 1e-10)
             self.feature_bank.copy_(torch.from_numpy(feature))
             centroids = self._compute_centroids()

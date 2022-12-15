@@ -82,7 +82,7 @@ class DeepClusterHook(Hook):
             clustering_algo = _clustering.__dict__[self.clustering_type](
                 **self.clustering_cfg)
             # Features are normalized during clustering
-            features = features['feat']
+            features = features['feat'].cpu().numpy()
             clustering_algo.cluster(features, verbose=True)
             assert isinstance(clustering_algo.labels, np.ndarray)
             new_labels = clustering_algo.labels.astype(np.int64)
