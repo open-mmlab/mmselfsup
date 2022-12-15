@@ -90,8 +90,7 @@ def main():
         cfg.work_dir = args.work_dir
     elif cfg.get('work_dir', None) is None:
         # use config filename as default work_dir if cfg.work_dir is None
-        work_type = args.config.split('/')[1]
-        cfg.work_dir = osp.join('./work_dirs', work_type,
+        cfg.work_dir = osp.join('./work_dirs/benchmarks/knn/',
                                 osp.splitext(osp.basename(args.config))[0])
 
     # init distributed env first, since logger depends on the dist info.
@@ -102,12 +101,11 @@ def main():
         init_dist(args.launcher)
 
     # create work_dir
-    knn_work_dir = osp.join(cfg.work_dir, 'knn/')
-    mkdir_or_exist(osp.abspath(knn_work_dir))
+    mkdir_or_exist(osp.abspath(cfg.work_dir))
 
     # init the logger before other steps
     timestamp = time.strftime('%Y%m%d_%H%M%S', time.localtime())
-    log_file = osp.join(knn_work_dir, f'knn_{timestamp}.log')
+    log_file = osp.join(cfg.work_dir, f'knn_{timestamp}.log')
     logger = MMLogger.get_instance(
         'mmselfsup',
         logger_name='mmselfsup',
@@ -161,26 +159,22 @@ def main():
         seed=args.seed,
         dist_mode=distributed,
         pool_cfg=copy.deepcopy(dataset_cfg.pool_cfg))
-    train_feats = extractor_train(model)['feat5']
+    train_feats = extractor_train(model)
     logger.info('Features from train dataset are extracted.')
-    val_feats = extractor_val(model)['feat5']
+    val_feats = extractor_val(model)
     logger.info('Features from validation dataset are extracted.')
-
-    train_feats = torch.from_numpy(train_feats)
-    val_feats = torch.from_numpy(val_feats)
-    train_labels = torch.LongTensor(data_loader_train.dataset.get_gt_labels())
-    val_labels = torch.LongTensor(data_loader_val.dataset.get_gt_labels())
-
-    logger.info('Start k-NN classification.')
 
     # run knn
     rank = get_rank()
     if rank == 0:
-        if args.use_cuda:
-            train_feats = train_feats.cuda()
-            val_feats = val_feats.cuda()
-            train_labels = train_labels.cuda()
-            val_labels = val_labels.cuda()
+        train_feats = train_feats['feat5']
+        val_feats = val_feats['feat5']
+        train_labels = torch.LongTensor(
+            data_loader_train.dataset.get_gt_labels()).to(train_feats.device)
+        val_labels = torch.LongTensor(
+            data_loader_val.dataset.get_gt_labels()).to(val_feats.device)
+
+        logger.info('Start k-NN classification.')
         for k in args.num_knn:
             top1, top5 = knn_eval(train_feats, train_labels, val_feats,
                                   val_labels, k, args.temperature)
