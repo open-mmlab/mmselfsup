@@ -1,10 +1,12 @@
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-import numpy as np
-import os.path as osp
-import pandas as pd
-import os
+# Copyright (c) OpenMMLab. All rights reserved.
 import argparse
+import os
+import os.path as osp
+
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 from utils import FormatStrFormatter, ShapeBias
 
 # global default boundary settings for thin gray transparent
@@ -12,7 +14,7 @@ from utils import FormatStrFormatter, ShapeBias
 # between two partially overlapping datapoints of the same color:
 PLOTTING_EDGE_COLOR = (0.3, 0.3, 0.3, 0.3)
 PLOTTING_EDGE_WIDTH = 0.02
-ICONS_DIR = osp.join(osp.dirname(__file__), '../..', "assets/icons")
+ICONS_DIR = osp.join(osp.dirname(__file__), '../..', 'assets/icons')
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--csv_dir', type=str, help='directory of csv files')
@@ -24,7 +26,7 @@ parser.add_argument(
     nargs='+',
     type=float,
     default=[],
-    help=
+    help=  # noqa
     'the colors for the plots of each model, and they should be in the same order as model_names'  # noqa: E501
 )
 parser.add_argument(
@@ -32,14 +34,14 @@ parser.add_argument(
     nargs='+',
     type=str,
     default=[],
-    help=
+    help=  # noqa
     'the markers for the plots of each model, and they should be in the same order as model_names'  # noqa: E501
 )
 parser.add_argument(
     '--plotting_names',
     nargs='+',
     default=[],
-    help=
+    help=  # noqa
     'the plotting names for the plots of each model, and they should be in the same order as model_names'  # noqa: E501
 )
 
@@ -60,7 +62,7 @@ def read_csvs(csv_dir: str) -> pd.DataFrame:
     """
     df = pd.DataFrame()
     for csv in os.listdir(csv_dir):
-        if csv.endswith(".csv"):
+        if csv.endswith('.csv'):
             cur_df = pd.read_csv(osp.join(csv_dir, csv))
             cur_df.columns = [c.lower() for c in cur_df.columns]
             df = df.append(cur_df)
@@ -81,7 +83,7 @@ def plot_shape_bias_matrixplot(args, analysis=ShapeBias()):
     markersize = 250
     label_size = 20
 
-    classes = df["category"].unique()
+    classes = df['category'].unique()
     num_classes = len(classes)
 
     # plot setup
@@ -98,7 +100,7 @@ def plot_shape_bias_matrixplot(args, analysis=ShapeBias()):
     # labels, ticks
     plt.tick_params(
         axis='y', which='both', left=False, right=False, labelleft=False)
-    ax.set_ylabel("Shape categories", labelpad=60, fontsize=label_size)
+    ax.set_ylabel('Shape categories', labelpad=60, fontsize=label_size)
     ax.set_xlabel(
         "Fraction of 'texture' decisions", fontsize=label_size, labelpad=25)
     ax_top.set_xlabel(
@@ -138,7 +140,7 @@ def plot_shape_bias_matrixplot(args, analysis=ShapeBias()):
 
     # icons besides y axis
     # determine order of icons
-    df_selection = df.loc[(df["subj"].isin(humans))]
+    df_selection = df.loc[(df['subj'].isin(humans))]
     class_avgs = []
     for cl in classes:
         df_class_selection = df_selection.query("category == '{}'".format(cl))
@@ -148,8 +150,9 @@ def plot_shape_bias_matrixplot(args, analysis=ShapeBias()):
     classes = classes[sorted_indices]
 
     # icon placement is calculated in axis coordinates
-    WIDTH = 1 / num_classes  #
-    XPOS = -1.25 * WIDTH  # placement left of yaxis (-WIDTH) plus some spacing (-.25*WIDTH)
+    WIDTH = 1 / num_classes
+    # placement left of yaxis (-WIDTH) plus some spacing (-.25*WIDTH)
+    XPOS = -1.25 * WIDTH
     YPOS = -0.5
     HEIGHT = 1
     MARGINX = 1 / 10 * WIDTH  # vertical whitespace between icons
@@ -162,7 +165,7 @@ def plot_shape_bias_matrixplot(args, analysis=ShapeBias()):
     for i in range(num_classes):
         bottom = i + MARGINY + YPOS
         top = (i + 1) - MARGINY + YPOS
-        iconpath = osp.join(ICONS_DIR, "{}.png".format(classes[i]))
+        iconpath = osp.join(ICONS_DIR, '{}.png'.format(classes[i]))
         plt.imshow(
             plt.imread(iconpath),
             extent=[left, right, bottom, top],
@@ -178,7 +181,7 @@ def plot_shape_bias_matrixplot(args, analysis=ShapeBias()):
 
     # plot average shapebias + scatter points
     for i in range(len(args.model_names)):
-        df_selection = df.loc[(df["subj"].isin(args.model_names[i]))]
+        df_selection = df.loc[(df['subj'].isin(args.model_names[i]))]
         result_df = analysis.analysis(df=df_selection)
         avg = 1 - result_df['shape-bias']
         ax.plot([avg, avg], [-1, num_classes], color=args.colors[i])
@@ -203,16 +206,16 @@ def plot_shape_bias_matrixplot(args, analysis=ShapeBias()):
     plt.legend(frameon=True, labelspacing=1, loc=9)
 
     figure_path = osp.join(args.result_dir,
-                           "cue-conflict_shape-bias_matrixplot.pdf")
+                           'cue-conflict_shape-bias_matrixplot.pdf')
     fig.savefig(figure_path, bbox_inches='tight')
     plt.close()
 
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    assert len(args.model_names) * 3 == len(args.colors), "Number of colors \
+    assert len(args.model_names) * 3 == len(args.colors), 'Number of colors \
         must be 3 times the number of models. Every three colors are the RGB \
-            values for one model."
+            values for one model.'
 
     # preprocess colors
     args.colors = [c / 255. for c in args.colors]
