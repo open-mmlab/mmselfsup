@@ -92,7 +92,7 @@ optim_wrapper = dict(
     type='OptimWrapper',
     optimizer=dict(
         type='AdamW',
-        lr=5e-4 * (8 * 128 / 256),
+        lr=5e-4 * (8 * 128 / 256), #total_lr = base_lr*num_gpus*base_bs/256 = 2e-3
         model_type='mixmim',
         layer_decay_rate=0.7,
         betas=(0.9, 0.999),
