@@ -8,7 +8,8 @@ _base_ = [
 # optimizer wrapper
 optimizer = dict(
     type='AdamW',
-    lr=1.5e-4 * (2 * 8 * 128 / 256), # total_lr = base_lr*num_gpus*base_bs/256 = 1.2e-3
+    lr=1.5e-4 *
+    (2 * 8 * 128 / 256),  # total_lr = base_lr*num_gpus*base_bs/256 = 1.2e-3
     betas=(0.9, 0.95),
     weight_decay=0.05)  # 2 node * 8 gpu * 128 batchsize
 optim_wrapper = dict(
