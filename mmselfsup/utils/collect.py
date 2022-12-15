@@ -57,19 +57,6 @@ def dist_forward_collect(func: object, data_loader: DataLoader,
     for _, data in enumerate(data_loader):
         with torch.no_grad():
             result = func(data)  # dict{key: tensor}
-
-        # batch_dict = {}
-        # for k in result.keys():
-        #     batch_local = []
-        #     batch_local.extend(result[k].tolist())
-        #     batch_gathered = collect_results_gpu(
-        #         batch_local,
-        #         len(batch_local) * get_world_size())
-
-        #     if rank == 0:
-        #         batch_dict[k] = torch.Tensor(
-        #             batch_gathered, device=torch.device('cuda:0'))
-
         results.append(result)
 
         if rank == 0:
