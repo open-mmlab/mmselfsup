@@ -11,7 +11,9 @@ from .base import BaseModel
 
 @MODELS.register_module()
 class MixMIM(BaseModel):
-    """MiXMIM. Implementation of `MixMIM: Mixed and Masked Image Modeling for
+    """MiXMIM.
+
+    Implementation of `MixMIM: Mixed and Masked Image Modeling for
     Efficient Visual Representation Learning.
 
     <https://arxiv.org/abs/2205.13137>`_.
@@ -47,8 +49,6 @@ class MixMIM(BaseModel):
         Returns:
             Dict[str, torch.Tensor]: A dictionary of loss components.
         """
-        # ids_restore: the same as that in original repo, which is used
-        # to recover the original order of tokens in decoder.
         latent, mask = self.backbone(inputs[0])
         x_rec = self.neck(latent, mask)
         loss = self.head(x_rec, inputs[0], mask)

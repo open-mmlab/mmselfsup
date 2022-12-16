@@ -21,3 +21,4 @@ Import:
   - configs/selfsup/milan/metafile.yaml
   - configs/selfsup/beitv2/metafile.yml
   - configs/selfsup/eva/metafile.yaml
+  - configs/selfsup/mixmim/metafile.yaml

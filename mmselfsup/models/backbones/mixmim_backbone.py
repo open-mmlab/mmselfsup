@@ -1,6 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import random
-from typing import Optional
+from typing import List, Optional, Union
 
 import torch
 from mmcls.models.backbones import MixMIMTransformer
@@ -52,23 +52,23 @@ class MixMIMTransformerPretrain(MixMIMTransformer):
     """
 
     def __init__(self,
-                 arch='base',
-                 mlp_ratio=4,
-                 img_size=224,
-                 patch_size=4,
-                 in_channels=3,
-                 window_size=[14, 14, 14, 7],
-                 qkv_bias=True,
-                 patch_cfg=dict(),
-                 norm_cfg=dict(type='LN'),
-                 drop_rate=0.0,
-                 drop_path_rate=0.0,
-                 attn_drop_rate=0.0,
-                 use_checkpoint=False,
-                 range_mask_ratio=0.0,
+                 arch: Union[str, dict] = 'base',
+                 mlp_ratio: float = 4,
+                 img_size: int = 224,
+                 patch_size: int = 4,
+                 in_channels: int = 3,
+                 window_size: List = [14, 14, 14, 7],
+                 qkv_bias: bool = True,
+                 patch_cfg: dict = dict(),
+                 norm_cfg: dict = dict(type='LN'),
+                 drop_rate: float = 0.0,
+                 drop_path_rate: float = 0.0,
+                 attn_drop_rate: float = 0.0,
+                 use_checkpoint: bool = False,
+                 range_mask_ratio: float = 0.0,
                  init_cfg: Optional[dict] = None) -> None:
 
-        super(MixMIMTransformerPretrain, self).__init__(
+        super().__init__(
             arch=arch,
             mlp_ratio=mlp_ratio,
             img_size=img_size,
@@ -119,15 +119,14 @@ class MixMIMTransformerPretrain(MixMIMTransformer):
 
         Returns:
             Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
-                mask_s1, mask_s2, mask_s3, and mask.
-                  - mask_s1 (torch.Tensor): mask with stride of
-                    self.encoder_stride // 8.
-                  - mask_s2 (torch.Tensor): mask with stride of
-                    self.encoder_stride // 4.
-                  - mask_s3 (torch.Tensor): mask with stride of
-                    self.encoder_stride // 2.
-                  - mask (torch.Tensor): mask with stride of
-                    self.encoder_stride.
+              - mask_s1 (torch.Tensor): mask with stride of
+                self.encoder_stride // 8.
+              - mask_s2 (torch.Tensor): mask with stride of
+                self.encoder_stride // 4.
+              - mask_s3 (torch.Tensor): mask with stride of
+                self.encoder_stride // 2.
+              - mask (torch.Tensor): mask with stride of
+                self.encoder_stride.
         """
 
         B, C, H, W = x.shape
@@ -169,12 +168,9 @@ class MixMIMTransformerPretrain(MixMIMTransformer):
 
         Returns:
             Tuple[torch.Tensor, torch.Tensor]:
-
-            Hidden features and mask.
-
-                - x (torch.Tensor): hidden features, which is of shape
-                  B x L x C.
-                - mask_s4 (torch.Tensor): the mask tensor for the last layer.
+              - x (torch.Tensor): hidden features, which is of shape
+                B x L x C.
+              - mask_s4 (torch.Tensor): the mask tensor for the last layer.
         """
 
         mask_s1, mask_s2, mask_s3, mask_s4 = self.random_masking(x, mask_ratio)

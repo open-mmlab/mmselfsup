@@ -13,13 +13,13 @@ Collections:
     README: configs/selfsup/mixmim/README.md
 
 Models:
-  - Name: mixmim-base-p16_16xb128-coslr-300e_1k
+  - Name: mixmim-base-p16_16xb128-coslr-300e_in1k
     In Collection: MixMIM
     Metadata:
       Epochs: 300
       Batch Size: 2048
     Results: null
-    Config: configs/selfsup/mixmim/mixmim-base-p16_16xb128-coslr-300e_1k.py
+    Config: configs/selfsup/mixmim/mixmim-base-p16_16xb128-coslr-300e_in1k.py
     Weights: https://download.openmmlab.com/mmselfsup/1.x/mixmim/mixmim-base-p16_16xb128-coslr-300e_in1k/mixmim-base-p16_16xb128-coslr-300e_in1k_20221208-44fe8d2c.pth
     Downstream:
       - Type: Image Classification
