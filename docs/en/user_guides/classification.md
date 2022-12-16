@@ -117,6 +117,7 @@ Remarks:
 ```Note
 Only support CNN-style backbones (like ResNet50).
 ```
+
 To evaluate the pre-trained models using the nearest-neighbor benchmark, you can run the command below.
 
 ```shell
