@@ -114,31 +114,31 @@ Remarks:
 
 ## ImageNet Nearest-Neighbor Classification
 
+```Note
+Only support CNN-style backbones (like ResNet50).
+```
 To evaluate the pre-trained models using the nearest-neighbor benchmark, you can run the command below.
 
 ```shell
 # distributed version
-bash tools/benchmarks/classification/knn_imagenet/dist_test_knn_pretrain.sh ${SELFSUP_CONFIG} ${PRETRAIN}
+bash tools/benchmarks/classification/knn_imagenet/dist_test_knn.sh ${SELFSUP_CONFIG} ${PRETRAIN} [optional arguments]
 
 # slurm version
-bash tools/benchmarks/classification/knn_imagenet/slurm_test_knn_pretrain.sh ${PARTITION} ${JOB_NAME} ${SELFSUP_CONFIG} ${PRETRAIN}
+bash tools/benchmarks/classification/knn_imagenet/slurm_test_knn.sh ${PARTITION} ${JOB_NAME} ${SELFSUP_CONFIG} ${CHECKPOINT} [optional arguments]
 ```
-
-Besides, if you want to evaluate the ckpt files saved by runner, you can run the command below.
-
-```shell
-# distributed version
-bash tools/benchmarks/classification/knn_imagenet/dist_test_knn_epoch.sh ${SELFSUP_CONFIG} ${EPOCH}
-
-# slurm version
-bash tools/benchmarks/classification/knn_imagenet/slurm_test_knn_epoch.sh ${PARTITION} ${JOB_NAME} ${SELFSUP_CONFIG} ${EPOCH}
-```
-
-**To test with ckpt, the code uses the epoch\_\*.pth file, there is no need to extract weights.**
 
 Remarks:
 
 - `${SELFSUP_CONFIG}` is the config file of the self-supervised experiment.
-- `PRETRAIN`: the pre-trained model file.
+- `CHECKPOINT`: the path of checkpoint model file.
 - if you want to change GPU numbers, you could add `GPUS_PER_NODE=4 GPUS=4` at the beginning of the command.
-- `EPOCH` is the epoch number of the ckpt that you want to test
+- `[optional arguments]`: for optional arguments, you can refer to [visualize_reconstruction.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/visualize_reconstruction.py)
+
+An example of command
+
+```shell
+# distributed version
+bash tools/benchmarks/classification/knn_imagenet/dist_test_knn.sh \
+    configs/selfsup/barlowtwins/barlowtwins_resnet50_8xb256-coslr-300e_in1k.py \
+    https://download.openmmlab.com/mmselfsup/1.x/barlowtwins/barlowtwins_resnet50_8xb256-coslr-300e_in1k/barlowtwins_resnet50_8xb256-coslr-300e_in1k_20220825-57307488.pth
+```

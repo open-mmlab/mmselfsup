@@ -164,19 +164,21 @@ def main():
     # run knn
     rank = get_rank()
     if rank == 0:
-        train_feats = train_feats['feat5']
-        val_feats = val_feats['feat5']
-        train_labels = torch.LongTensor(
-            data_loader_train.dataset.get_gt_labels()).to(train_feats.device)
-        val_labels = torch.LongTensor(
-            data_loader_val.dataset.get_gt_labels()).to(val_feats.device)
+        for key in train_feats.keys():
+            train_feats = train_feats[key]
+            val_feats = val_feats[key]
+            train_labels = torch.LongTensor(
+                data_loader_train.dataset.get_gt_labels()).to(
+                    train_feats.device)
+            val_labels = torch.LongTensor(
+                data_loader_val.dataset.get_gt_labels()).to(val_feats.device)
 
-        logger.info('Start k-NN classification.')
-        for k in args.num_knn:
-            top1, top5 = knn_eval(train_feats, train_labels, val_feats,
-                                  val_labels, k, args.temperature)
-            logger.info(
-                f'{k}-NN classifier result: Top1: {top1}, Top5: {top5}')
+            logger.info(f'Start k-NN classification of key "{key}".')
+            for k in args.num_knn:
+                top1, top5 = knn_eval(train_feats, train_labels, val_feats,
+                                      val_labels, k, args.temperature)
+                logger.info(f'Reasults of "{key}", {k}-NN classifier: '
+                            f'Top1 - {top1}, Top5 - {top5}.')
 
 
 if __name__ == '__main__':
