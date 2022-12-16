@@ -120,16 +120,13 @@ def main():
         dataloader=dataset_cfg.val_dataloader, seed=args.seed)
 
     # build the model
+    # model is determined in this priority: checkpoint > init_cfg > random
     model = MODELS.build(cfg.model)
     model.init_weights()
 
-    # model is determined in this priority: init_cfg > checkpoint > random
     if hasattr(cfg.model.backbone, 'init_cfg'):
         if getattr(cfg.model.backbone.init_cfg, 'type', None) == 'Pretrained':
-            logger.info(
-                f'Use pretrained model: '
-                f'{cfg.model.backbone.init_cfg.checkpoint} to extract features'
-            )
+            pass
     elif args.checkpoint is not None:
         logger.info(f'Use checkpoint: {args.checkpoint} to extract features')
         load_checkpoint(model, args.checkpoint, map_location='cpu')

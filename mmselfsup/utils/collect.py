@@ -1,7 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import mmengine
 import torch
-from mmengine.dist import collect_results_gpu, get_rank
+from mmengine.dist import collect_results_gpu, get_dist_info
 from torch.utils.data import DataLoader
 
 
@@ -50,25 +50,33 @@ def dist_forward_collect(func: object, data_loader: DataLoader,
     Returns:
         Dict[str, torch.Tensor]: The collected outputs.
     """
-    rank = get_rank()
+    rank, world_size = get_dist_info()
     results = []
     if rank == 0:
         prog_bar = mmengine.ProgressBar(len(data_loader))
     for _, data in enumerate(data_loader):
         with torch.no_grad():
-            result = func(data)  # dict{key: tensor}
-        results.append(result)
+            batch_result = func(data)  # dict{key: tensor}
 
+        # gather batch results to avoid CUDA OOM
+        batch_dict = {}
+        for k in batch_result.keys():
+            batch_local = batch_result[k].tolist()
+            batch_gathered = collect_results_gpu(batch_local,
+                                                 len(batch_local) * world_size)
+            batch_dict[k] = batch_gathered
+
+        results.append(batch_dict)
         if rank == 0:
             prog_bar.update()
 
+    # concat results and convert to tensor
     results_dict = {}
-    for k in results[0].keys():
-        results_local = []
-        for batch in results:
-            results_local.extend(batch[k].tolist())
-        results_gathered = collect_results_gpu(results_local, length)
-        if rank == 0:
-            results_dict[k] = torch.Tensor(results_gathered).to(
+    if rank == 0:
+        for k in results[0].keys():
+            result = []
+            for res in results:
+                result.extend(res[k])
+            results_dict[k] = torch.Tensor(result[:length]).to(
                 torch.device('cuda:0'))
     return results_dict
