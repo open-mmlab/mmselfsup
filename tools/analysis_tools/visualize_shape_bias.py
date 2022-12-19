@@ -168,7 +168,6 @@ def plot_shape_bias_matrixplot(args, analysis=ShapeBias()) -> None:
     left = XPOS + MARGINX
     right = XPOS + WIDTH - MARGINX
 
-    breakpoint()
     for i in range(num_classes):
         bottom = i + MARGINY + YPOS
         top = (i + 1) - MARGINY + YPOS

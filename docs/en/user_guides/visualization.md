@@ -12,6 +12,11 @@ Visualization can give an intuitive interpretation of the performance of the mod
   - [Visualize Datasets](#visualize-datasets)
   - [Visualize t-SNE](#visualize-t-sne)
   - [Visualize Low-level Feature Reconstruction](#visualize-low-level-feature-reconstruction)
+  - [Visualize Shape Bias](#visualize-shape-bias)
+    - [Prepare the dataset](#prepare-the-dataset)
+    - [Modify the config for classification](#modify-the-config-for-classification)
+    - [Inference your model with above modified config file](#inference-your-model-with-above-modified-config-file)
+    - [Plot shape bias](#plot-shape-bias)
 
 <!-- /TOC -->
 
@@ -199,4 +204,82 @@ Results of MaskFeat:
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/36138628/200465876-7e7dcb6f-5e8d-4d80-b300-9e1847cb975f.jpg" width="800" />
+</div>
+
+## Visualize Shape Bias
+
+Shape bias measures how a model relies the shapes, compared to texture, to sense the semantics in images. For more details,
+we recommend interested readers to this [paper](https://arxiv.org/abs/2106.07411). MMSelfSup provide an off-the-shelf toolbox to
+obtain the shape bias of a classification model. You can following these steps below:
+
+### Prepare the dataset
+
+First you should download the [cue-conflict](https://github.com/bethgelab/model-vs-human/releases/download/v0.1/cue-conflict.tar.gz) to `data` folder,
+and then unzip this dataset. After that, you `data` folder should have the following structure:
+
+```text
+data
+├──cue-conflict
+|      |──airplane
+|      |──bear
+|      ...
+|      |── truck
+```
+
+### Modify the config for classification
+
+Replace the original test_dataloader and test_evaluation with following configurations
+
+```python
+test_dataloader = dict(
+    dataset=dict(
+        type='CustomDataset',
+        data_root='data/cue-conflict',
+        _delete_=True),
+    drop_last=False)
+test_evaluator = dict(
+    type='mmselfsup.ShapeBiasMetric',
+    _delete_=True,
+    csv_dir='directory/to/save/the/csv/file',
+    model_name='your_model_name')
+```
+
+Please note you should make custom modifications to the `csv_dir` and `model_name`.
+
+### Inference your model with above modified config file
+
+Then you should inferece your model on the `cue-conflict` dataset with the your modified config files.
+
+```shell
+# For Slurm
+GPUS_PER_NODE=1 GPUS=1 bash tools/benchmarks/classification/mim_slurm_test.sh $parition $config $checkpoint
+```
+
+```shell
+# For PyTorch
+GPUS=1 bash tools/benchmarks/classification/mim_dist_test.sh $config $checkpoint
+```
+
+After that, you should obtain a csv file, named `cue-conflict_model-name_session-1.csv`. Besides this file, you should
+also download these [csv files](https://github.com/bethgelab/model-vs-human/tree/master/raw-data/cue-conflict) to the
+`csv_dir`.
+
+### Plot shape bias
+
+After inferecing and preparing these csv files, we can start to plot the shape bias
+
+```shell
+python tools/analysis_tools/visualize_shape_bias.py --csv_dir $csv_dir --result_dir $csv_dir --colors $RGB --markers o --plotting_names $your_model_name --model_names $your_model_name
+```
+
+- csv_dir, the same directory to save these csv files
+- colors, should be the RGB values, formatted in R G B, e.g. 100 100 100
+- plotting_names, the name of the legend in the shape bias figure, and you can set it as your model name
+- model_names, should be the same name specified in your config
+
+Please note, every three values for `colors` corresponds to one value for `model_names`. After all of above steps, you
+are expected to obtain the following figure.
+
+<div align="center">
+<img src="https://user-images.githubusercontent.com/30762564/208357938-c744d3c3-7e08-468e-82b7-fc5f1804da59.png" width="400" />
 </div>

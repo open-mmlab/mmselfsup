@@ -6,8 +6,9 @@ from typing import List, Sequence
 
 import numpy as np
 import torch
-from mmcls.registry import METRICS
 from mmengine.evaluator import BaseMetric
+
+from mmselfsup.registry import METRICS
 
 
 @METRICS.register_module()
