@@ -18,7 +18,7 @@
 
 数据加载器 （dataloader） 和模型 （model）之间的数据流一般可以分为如下三个步骤 :
 
-i) 使用`PackSelfSupInputs`将转换完成的数据打包成为一个字典;
+i) 使用 `PackSelfSupInputs` 将转换完成的数据打包成为一个字典;
 
 ii) 使用 `collate_fn` 将各个张量集成为一个批处理张量;
 
