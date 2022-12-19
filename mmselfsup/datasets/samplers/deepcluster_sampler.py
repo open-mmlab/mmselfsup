@@ -101,7 +101,7 @@ class DeepClusterSampler(DefaultSampler):
                     l, size_per_label, replace=(len(l) <= size_per_label)))
         indices = np.array(indices)
         np.random.shuffle(indices)
-        indices = indices[:N].astype(np.int).tolist()
+        indices = indices[:N].astype(int).tolist()
 
         # add extra samples to make it evenly divisible
         assert len(indices) <= self.total_size, \
