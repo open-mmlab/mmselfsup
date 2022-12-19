@@ -252,7 +252,7 @@ Then you should inferece your model on the `cue-conflict` dataset with the your 
 
 ```shell
 # For Slurm
-GPUS_PER_NODE=1 GPUS=1 bash tools/benchmarks/classification/mim_slurm_test.sh $parition $config $checkpoint
+GPUS_PER_NODE=1 GPUS=1 bash tools/benchmarks/classification/mim_slurm_test.sh $partition $config $checkpoint
 ```
 
 ```shell
