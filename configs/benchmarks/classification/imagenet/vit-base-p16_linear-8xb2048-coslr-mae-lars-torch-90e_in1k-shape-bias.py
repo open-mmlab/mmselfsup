@@ -17,13 +17,6 @@ test_pipeline = [
 ]
 train_dataloader = dict(
     batch_size=2048, dataset=dict(pipeline=train_pipeline), drop_last=True)
-val_dataloader = dict(
-    dataset=dict(
-        pipeline=test_pipeline,
-        type='CustomDataset',
-        data_root='/mnt/cache/liuyuan/mmclassification/data/cue-conflict',
-        _delete_=True),
-    drop_last=False)
 test_dataloader = dict(
     dataset=dict(
         pipeline=test_pipeline,
@@ -32,9 +25,8 @@ test_dataloader = dict(
         _delete_=True),
     drop_last=False)
 test_evaluator = dict(
-    type='ShapeBiasMetric',
+    type='mmselfsup.ShapeBiasMetric',
     _delete_=True,
-    csv_dir='work_dirs',
+    csv_dir='work_dirs/shape_bias_new',
     model_name='mae-linear',
     dataset_name='cue-conflict')
-val_evaluator = test_evaluator
