@@ -1,4 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+# Modified from https://github.com/bethgelab/model-vs-human
 import argparse
 import os
 import os.path as osp
@@ -70,7 +71,13 @@ def read_csvs(csv_dir: str) -> pd.DataFrame:
     return df
 
 
-def plot_shape_bias_matrixplot(args, analysis=ShapeBias()):
+def plot_shape_bias_matrixplot(args, analysis=ShapeBias()) -> None:
+    """Plots a matrixplot of shape bias.
+
+    Args:
+        args (argparse.Namespace): arguments.
+        analysis (ShapeBias): shape bias analysis. Defaults to ShapeBias().
+    """
     mpl.rcParams['font.family'] = ['serif']
     mpl.rcParams['font.serif'] = ['Times New Roman']
 
