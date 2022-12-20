@@ -14,9 +14,11 @@ from ..utils import build_2d_sincos_position_embedding
 @MODELS.register_module()
 class MixMIMTransformerPretrain(MixMIMTransformer):
     """MixMIM backbone during pretraining.
+
     A PyTorch implement of : ` MixMIM: Mixed and Masked Image
     Modeling for Efficient Visual Representation Learning
     <https://arxiv.org/abs/2205.13137>`_
+
     Args:
         arch (str | dict): MixMIM architecture. If use string,
             choose from 'base','large' and 'huge'.
