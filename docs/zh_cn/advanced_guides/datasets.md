@@ -3,7 +3,7 @@
 - [数据集](#数据集)
   - [数据集](#数据集-1)
     - [重构个人数据集](#重构个人数据集)
-    - [在个人Config中调用OpenMMLab其他代码库的数据集](#在个人config中调用openmmlab其他代码库的数据集)
+    - [在个人 Config 中调用 OpenMMLab 其他代码库的数据集](#在个人-config-中调用-openmmlab-其他代码库的数据集)
   - [采样器](#采样器)
   - [数据变换](#数据变换)
 
@@ -56,7 +56,7 @@ mmselfsup
 更为详尽的注释文件以及各子文件夹的结构，可以参考 OpenMMLab 的其他代码库，如 [MMClassfication](https://github.com/open-mmlab/mmclassification),
 [MMSegmentation](https://github.com/open-mmlab/mmsegmentation) 和 [MMDetection](https://github.com/open-mmlab/mmdetection).
 
-### 在个人Config中调用OpenMMLab其他代码库的数据集
+### 在个人 Config 中调用 OpenMMLab 其他代码库的数据集
 
 ```python
 # 调用 MMClassification 中的 ImageNet 数据集
