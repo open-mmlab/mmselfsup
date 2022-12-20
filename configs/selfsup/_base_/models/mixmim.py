@@ -21,4 +21,4 @@ model = dict(
     head=dict(
         type='MixMIMPretrainHead',
         norm_pix=True,
-        loss=dict(type='MAEReconstructionLoss')))
+        loss=dict(type='PixelReconstructionLoss', criterion='L2')))

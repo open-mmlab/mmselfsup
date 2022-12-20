@@ -21,9 +21,11 @@ class MixMIMTransformerPretrain(MixMIMTransformer):
         arch (str | dict): MixMIM architecture. If use string,
             choose from 'base','large' and 'huge'.
             If use dict, it should have below keys:
+
             - **embed_dims** (int): The dimensions of embedding.
             - **depths** (int): The number of transformer encoder layers.
             - **num_heads** (int): The number of heads in attention modules.
+
             Defaults to 'base'.
         mlp_ratio (int): The mlp ratio in FFN.  Defaults to 4.
         img_size (int | tuple): The expected input image shape. Because we
