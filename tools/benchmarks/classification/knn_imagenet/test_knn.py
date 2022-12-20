@@ -120,18 +120,17 @@ def main():
         dataloader=dataset_cfg.val_dataloader, seed=args.seed)
 
     # build the model
-    # model is determined in this priority: checkpoint > init_cfg > random
     model = MODELS.build(cfg.model)
-    model.init_weights()
 
-    if hasattr(cfg.model.backbone, 'init_cfg'):
-        if getattr(cfg.model.backbone.init_cfg, 'type', None) == 'Pretrained':
-            pass
-    elif args.checkpoint is not None:
+    # model is determined in this priority: checkpoint > init_cfg > random
+    if args.checkpoint is not None:
         logger.info(f'Use checkpoint: {args.checkpoint} to extract features')
         load_checkpoint(model, args.checkpoint, map_location='cpu')
+    elif getattr(model.backbone.init_cfg, 'type', None) == 'Pretrained':
+        model.init_weights()
     else:
-        logger.info('No pretrained or checkpoint is given, use random init.')
+        logger.warning(
+            'No pretrained or checkpoint is given, use random init.')
 
     if torch.cuda.is_available():
         model = model.cuda()
