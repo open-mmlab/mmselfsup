@@ -41,7 +41,7 @@ class PixelReconstructionLoss(BaseModule):
     def forward(self,
                 pred: torch.Tensor,
                 target: torch.Tensor,
-                mask: torch.Tensor = None) -> torch.Tensor:
+                mask: Optional[torch.Tensor] = None) -> torch.Tensor:
         """Forward function to compute the reconstrction loss.
 
         Args:
