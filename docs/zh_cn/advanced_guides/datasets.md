@@ -121,4 +121,4 @@ ii) 覆盖 `transform` 函数并在其中实现自行设计的关键逻辑。 �
 
 对于感兴趣的社区用户，可以参考 API 文档以更为全面了解这些转换。目前为止， 我们已经初步介绍了关于转换的基本概念，
 若想进一步了解如何在个人的 config 中使用它们或实现自定义转换，
-可以参考文档 ： [transforms](./transforms.md) 和[add_transforms](./add_transforms.md).
+可以参考文档 ： [transforms](./transforms.md) 和 [add_transforms](./add_transforms.md).
