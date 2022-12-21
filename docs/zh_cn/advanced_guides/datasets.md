@@ -67,7 +67,6 @@ mmselfsup
 train_dataloader=dict(dataset=dict(type='mmcls.ImageNet', ...), ...)
 ```
 
-````
 
 ```python
 # 调用 MMSegmentation 中的 ADE20KDataset 数据集
