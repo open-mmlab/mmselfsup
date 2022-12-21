@@ -6,6 +6,7 @@ from .cae import CAE
 from .classification import Classification
 from .deepcluster import DeepCluster
 from .densecl import DenseCL
+from .interclr_moco import InterCLRMoCo
 from .mae import MAE
 from .maskfeat import MaskFeat
 from .mmcls_classifier_wrapper import MMClsImageClassifierWrapper
@@ -22,7 +23,7 @@ from .swav import SwAV
 
 __all__ = [
     'BaseModel', 'BarlowTwins', 'BYOL', 'Classification', 'DeepCluster',
-    'DenseCL', 'MoCo', 'NPID', 'ODC', 'RelativeLoc', 'RotationPred', 'SimCLR',
-    'SimSiam', 'SwAV', 'MAE', 'MoCoV3', 'SimMIM',
+    'DenseCL', 'InterCLRMoCo', 'MoCo', 'NPID', 'ODC', 'RelativeLoc',
+    'RotationPred', 'SimCLR', 'SimSiam', 'SwAV', 'MAE', 'MoCoV3', 'SimMIM',
     'MMClsImageClassifierWrapper', 'CAE', 'MaskFeat'
 ]
