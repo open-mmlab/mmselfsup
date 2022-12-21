@@ -101,7 +101,7 @@ train_dataloader=dict(dataset=dict(type='DeepClusterImageNet', ...), ...)
 ## 数据变换
 
 简而言之，`transform` 是指 `MM-repos` 中的数据变换模块，我们将一系列的 transform 组合成了一个列表，即 `pipeline`。
-`MMCV` 中已经完善了一些涵盖大多数场景的变换， 此外，每个 `MM-repo` 也都遵循 MMCV 中的 [用户指南](https://github.com/open-mmlab/mmcv/blob/dev-2.x/docs/zh_cn/understand_mmcv/data_transform.md) 定义了自己的变换。 实操而言，每个自定义的数据集需要：i) 继承[BaseTransform](https://github.com/open-mmlab/mmcv/blob/19a024155a0b710568c2faeae07dead2a5550392/mmcv/transforms/base.py#L6)，
+`MMCV` 中已经完善了一些涵盖大多数场景的变换， 此外，每个 `MM-repo` 也都遵循 MMCV 中的 [用户指南](https://github.com/open-mmlab/mmcv/blob/dev-2.x/docs/zh_cn/understand_mmcv/data_transform.md) 定义了自己的变换。 实操而言，每个自定义的数据集需要：i) 继承 [BaseTransform](https://github.com/open-mmlab/mmcv/blob/19a024155a0b710568c2faeae07dead2a5550392/mmcv/transforms/base.py#L6)，
 ii) 覆盖 `transform` 函数并在其中实现自行设计的关键逻辑。 在 MMSelfSup 中，我们已经实现了如下这些变换：
 
 |                                                      class                                                      |
