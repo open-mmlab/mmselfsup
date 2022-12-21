@@ -200,10 +200,14 @@ def main():
 
             # post process
             if args.vis_stage == 'backbone':
-                batch_features = [
-                    F.adaptive_avg_pool2d(inputs, 1).squeeze()
-                    for inputs in batch_features
-                ]
+                if getattr(model.backbone, 'output_cls_token', False) is False:
+                    batch_features = [
+                        F.adaptive_avg_pool2d(inputs, 1).squeeze()
+                        for inputs in batch_features
+                    ]
+                else:
+                    # output_cls_token is True, here t-SNE uses cls_token
+                    batch_features = [feat[-1] for feat in batch_features]
 
             batch_labels = torch.cat(
                 [i.gt_label.label for i in batch_data_samples])
@@ -214,7 +218,7 @@ def main():
         progress_bar.update()
 
     for i in range(len(features[0])):
-        key = 'feat' + str(model.backbone.out_indices[i])
+        key = 'feat_' + str(model.backbone.out_indices[i])
         results[key] = np.concatenate(
             [batch[i].cpu().numpy() for batch in features], axis=0)
 
