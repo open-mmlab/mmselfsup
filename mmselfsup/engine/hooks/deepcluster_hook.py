@@ -74,7 +74,8 @@ class DeepClusterHook(Hook):
         """Call cluster algorithm."""
         # step 1: get features
         runner.model.eval()
-        features = self.extractor(runner.model.module)['feat']
+        # features = self.extractor(runner.model.module)['feat']
+        features = self.extractor(runner)
         runner.model.train()
 
         # step 2: get labels

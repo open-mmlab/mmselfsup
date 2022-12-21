@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -x
-
+source activate idea
 PARTITION=$1
 JOB_NAME=$2
 CONFIG=$3
