@@ -18,7 +18,7 @@
 
 ## 数据集
 
-OpenMMLab 开源算法体系为用户提供了海量开箱即用的数据集，这些数据集都与 [BaseDataset](https://github.com/open-mmlab/mmengine/blob/429bb27972bee1a9f3095a4d5f6ac5c0b88ccf54/mmengine/dataset/base_dataset.py#L116)一脉相承，
+OpenMMLab 开源算法体系为用户提供了海量开箱即用的数据集，这些数据集都与 [BaseDataset](https://github.com/open-mmlab/mmengine/blob/429bb27972bee1a9f3095a4d5f6ac5c0b88ccf54/mmengine/dataset/base_dataset.py#L116) 一脉相承，
 并在 [MMEngine](https://github.com/open-mmlab/mmengine) 中得以实现。 如想进一步了解 `BaseDataset` 中的各项功能，感兴趣的用户可以参考 [MMEngine](https://mmengine.readthedocs.io/en/latest/advanced_tutorials/basedataset.html) 中的文档。对于 `MMSelfSup`， `ImageNet`、`ADE20KDataset`  和 `CocoDataset` 是三个较为常用的数据集。 在起步之前，用户需要对文件夹进行一些前置的重构工作，具体指南如下所述。
 
 ### 重构个人数据集
