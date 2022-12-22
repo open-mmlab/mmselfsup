@@ -13,7 +13,6 @@ from .base import BaseModel
 class DINO(BaseModel):
 
 
-    @staticmethod
     def __init__(self,
                  backbone=None,
                  neck: Optional[dict] = None,
