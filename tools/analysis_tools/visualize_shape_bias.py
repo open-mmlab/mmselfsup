@@ -15,13 +15,14 @@ from utils import FormatStrFormatter, ShapeBias
 # between two partially overlapping datapoints of the same color:
 PLOTTING_EDGE_COLOR = (0.3, 0.3, 0.3, 0.3)
 PLOTTING_EDGE_WIDTH = 0.02
-ICONS_DIR = osp.join(osp.dirname(__file__), '../..', 'assets/icons')
+ICONS_DIR = osp.join(
+    osp.dirname(__file__), '..', '..', 'resources', 'shape_bias_icons')
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--csv_dir', type=str, help='directory of csv files')
+parser.add_argument('--csv-dir', type=str, help='directory of csv files')
 parser.add_argument(
-    '--result_dir', type=str, help='directory to save plotting results')
-parser.add_argument('--model_names', nargs='+', default=[], help='model name')
+    '--result-dir', type=str, help='directory to save plotting results')
+parser.add_argument('--model-names', nargs='+', default=[], help='model name')
 parser.add_argument(
     '--colors',
     nargs='+',
@@ -39,7 +40,7 @@ parser.add_argument(
     'the markers for the plots of each model, and they should be in the same order as model_names'  # noqa: E501
 )
 parser.add_argument(
-    '--plotting_names',
+    '--plotting-names',
     nargs='+',
     default=[],
     help=  # noqa
@@ -230,6 +231,10 @@ if __name__ == '__main__':
         colors.append(args.colors[3 * i:3 * i + 3])
     args.colors = colors
     args.colors.append([165 / 255., 30 / 255., 55 / 255.])  # human color
+
+    # if plotting names are not specified, use model names
+    if len(args.plotting_names) == 0:
+        args.plotting_names = args.model_names
 
     # preprocess markers
     args.markers.append('D')  # human marker

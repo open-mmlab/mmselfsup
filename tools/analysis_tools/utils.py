@@ -206,8 +206,9 @@ class FormatStrFormatter(Formatter):
 class ShapeBias:
     """Compute the shape bias of a model.
 
-    Reference: Geirhos et al. ICLR 2019
-    https://openreview.net/pdf?id=Bygh9j09KX
+    Reference: `ImageNet-trained CNNs are biased towards texture;
+    increasing shape bias improves accuracy and robustness
+    <https://arxiv.org/abs/1811.12231>`_.
     """
     num_input_models = 1
 
