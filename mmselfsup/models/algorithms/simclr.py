@@ -2,6 +2,7 @@
 from typing import Dict, List, Tuple
 
 import torch
+
 from mmselfsup.registry import MODELS
 from mmselfsup.structures import SelfSupDataSample
 from ..utils import GatherLayer
@@ -11,7 +12,6 @@ from .base import BaseModel
 @MODELS.register_module()
 class SimCLR(BaseModel):
     """SimCLR.
-
     Implementation of `A Simple Framework for Contrastive Learning of Visual
     Representations <https://arxiv.org/abs/2002.05709>`_.
     """
@@ -21,11 +21,9 @@ class SimCLR(BaseModel):
         batch_size: int, device: torch.device
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """Compute the mask and the index of positive samples.
-
         Args:
             batch_size (int): The batch size.
             device (torch.device): The device of backend.
-
         Returns:
             Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
             - The mask for feature selection.
@@ -43,12 +41,10 @@ class SimCLR(BaseModel):
         return mask, pos_idx, neg_mask
 
     def extract_feat(self, inputs: List[torch.Tensor],
-                     **kwargs) -> Tuple[torch0.Tensor]:
+                     **kwargs) -> Tuple[torch.Tensor]:
         """Function to extract features from backbone.
-
         Args:
             inputs (List[torch.Tensor]): The input images.
-
         Returns:
             Tuple[torch.Tensor]: Backbone outputs.
         """
@@ -59,12 +55,10 @@ class SimCLR(BaseModel):
              data_samples: List[SelfSupDataSample],
              **kwargs) -> Dict[str, torch.Tensor]:
         """The forward function in training.
-
         Args:
             inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
-
         Returns:
             Dict[str, torch.Tensor]: A dictionary of loss components.
         """
@@ -91,4 +85,4 @@ class SimCLR(BaseModel):
 
         loss = self.head(positive, negative)
         losses = dict(loss=loss)
-        return losses
+        return 
