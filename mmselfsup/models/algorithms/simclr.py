@@ -85,4 +85,4 @@ class SimCLR(BaseModel):
 
         loss = self.head(positive, negative)
         losses = dict(loss=loss)
-        return 
+        return         return
