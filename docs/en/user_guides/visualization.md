@@ -266,7 +266,7 @@ also download these [csv files](https://github.com/bethgelab/model-vs-human/tree
 
 ### Plot shape bias
 
-After inferecing and preparing these csv files, we can start to plot the shape bias
+After inferencing and preparing these csv files, we can start to plot the shape bias
 
 ```shell
 python tools/analysis_tools/visualize_shape_bias.py --csv_dir $csv_dir --result_dir $csv_dir --colors $RGB --markers o --plotting_names $your_model_name --model_names $your_model_name
