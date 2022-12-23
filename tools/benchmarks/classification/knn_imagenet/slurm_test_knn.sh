@@ -6,19 +6,12 @@ set -x
 PARTITION=$1
 JOB_NAME=$2
 CFG=$3
-EPOCH=$4
+PRETRAIN=$4  # pretrained model
 PY_ARGS=${@:5}
 GPUS=${GPUS:-8}
 GPUS_PER_NODE=${GPUS_PER_NODE:-8}
 CPUS_PER_TASK=${CPUS_PER_TASK:-5}
 SRUN_ARGS=${SRUN_ARGS:-""}
-
-WORK_DIR=$(echo ${CFG%.*} | sed -e "s/configs/work_dirs/g")/
-
-if [ ! -f $WORK_DIR/epoch_${EPOCH}.pth ]; then
-    echo "ERROR: File not exist: $WORK_DIR/epoch_${EPOCH}.pth"
-    exit
-fi
 
 PYTHONPATH="$(dirname $0)/..":$PYTHONPATH \
 srun -p ${PARTITION} \
@@ -30,5 +23,8 @@ srun -p ${PARTITION} \
     --kill-on-bad-exit=1 \
     ${SRUN_ARGS} \
     python -u tools/benchmarks/classification/knn_imagenet/test_knn.py $CFG \
-        --checkpoint $WORK_DIR/epoch_${EPOCH}.pth \
-        --work-dir $WORK_DIR --launcher="slurm" ${PY_ARGS}
+        --launcher="slurm" \
+        --cfg-options model.backbone.init_cfg.type=Pretrained \
+        model.backbone.init_cfg.checkpoint=$PRETRAIN \
+        model.backbone.init_cfg.prefix='backbone.' \
+        ${PY_ARGS}

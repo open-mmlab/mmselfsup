@@ -74,7 +74,7 @@ class DeepClusterHook(Hook):
         """Call cluster algorithm."""
         # step 1: get features
         runner.model.eval()
-        features = self.extractor(runner.model.module)['feat']
+        features = self.extractor(runner.model.module)
         runner.model.train()
 
         # step 2: get labels
@@ -82,6 +82,7 @@ class DeepClusterHook(Hook):
             clustering_algo = _clustering.__dict__[self.clustering_type](
                 **self.clustering_cfg)
             # Features are normalized during clustering
+            features = features['feat'].cpu().numpy()
             clustering_algo.cluster(features, verbose=True)
             assert isinstance(clustering_algo.labels, np.ndarray)
             new_labels = clustering_algo.labels.astype(np.int64)

@@ -53,7 +53,7 @@ custom_hooks = [
             batch_size=128,
             num_workers=8,
             persistent_workers=True,
-            sampler=dict(type='DefaultSampler', shuffle=False, round_up=False),
+            sampler=dict(type='DefaultSampler', shuffle=False, round_up=True),
             collate_fn=dict(type='default_collate'),
             dataset=dict(
                 type=dataset_type,

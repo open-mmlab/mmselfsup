@@ -187,6 +187,7 @@ def main():
         for key, val in outputs.items():
             split_num = len(dataset_cfg.split_name)
             split_at = dataset_cfg.split_at
+            val = val.cpu().numpy()
             for ss in range(split_num):
                 output_file = f'{cfg.work_dir}/features/' \
                               f'{dataset_cfg.split_name[ss]}_{key}.npy'
