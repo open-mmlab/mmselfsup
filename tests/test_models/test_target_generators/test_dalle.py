@@ -4,7 +4,7 @@ import platform
 import pytest
 import torch
 
-from mmselfsup.models.utils import Encoder
+from mmselfsup.models.target_generators import Encoder
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')

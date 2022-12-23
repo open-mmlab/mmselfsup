@@ -1,0 +1,35 @@
+Collections:
+  - Name: BEiTv2
+    Metadata:
+      Training Data: ImageNet-1k
+      Training Techniques:
+        - AdamW
+      Training Resources: 8x A100-80G GPUs
+      Architecture:
+        - ViT
+    Paper:
+        URL: https://arxiv.org/abs/2208.06366
+        Title: 'BEiT v2: Masked Image Modeling with Vector-Quantized Visual Tokenizers'
+    README: configs/selfsup/beitv2/README.md
+
+Models:
+  - Name: beitv2_vit-base-p16_8xb256-amp-coslr-300e_in1k
+    In Collection: BEiTv2
+    Metadata:
+      Epochs: 300
+      Batch Size: 2048
+    Results: null
+    Config: configs/selfsup/beitv2/beitv2_vit-base-p16_8xb256-amp-coslr-300e_in1k.py
+    Weights: https://download.openmmlab.com/mmselfsup/1.x/beitv2/beitv2_vit-base-p16_8xb256-amp-coslr-300e_in1k/beitv2_vit-base-p16_8xb256-amp-coslr-300e_in1k_20221212-a157be30.pth
+    Downstream:
+      - Type: Image Classification
+        Metadata:
+          Epochs: 100
+          Batch Size: 1024
+        Results:
+          - Task: Fine-tuning
+            Dataset: ImageNet-1k
+            Metrics:
+              Top 1 Accuracy: 85.0
+        Config: configs/selfsup/beitv2/classification/vit-base-p16_ft-8xb128-coslr-100e_in1k.py
+        Weights: https://download.openmmlab.com/mmselfsup/1.x/beitv2/beitv2_vit-base-p16_8xb256-amp-coslr-300e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k_20221212-d1c0789e.pth

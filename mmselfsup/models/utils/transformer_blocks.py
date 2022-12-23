@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Sequence
+from typing import List, Optional, Sequence, Union
 
 import torch
 import torch.nn as nn
@@ -11,6 +11,175 @@ from mmcv.cnn.bricks.drop import build_dropout
 from mmcv.cnn.bricks.transformer import FFN
 from mmengine.model import BaseModule
 from torch.nn import functional as F
+
+
+class PromptMultiheadAttention(_MultiheadAttention):
+    """Prompt Multihead Attention for MILAN.
+
+    This module is specific for the prompt encoder in MILAN. It will not update
+    the visible tokens from the encoder.
+
+    Args:
+        embed_dims (int): The embedding dimension.
+        num_heads (int): Parallel attention heads.
+        input_dims (int, optional): The input dimension, and if None,
+            use ``embed_dims``. Defaults to None.
+        attn_drop (float): Dropout rate of the dropout layer after the
+            attention calculation of query and key. Defaults to 0.
+        proj_drop (float): Dropout rate of the dropout layer after the
+            output projection. Defaults to 0.
+        dropout_layer (dict): The dropout config before adding the shortcut.
+            Defaults to ``dict(type='Dropout', drop_prob=0.)``.
+        qkv_bias (bool): If True, add a learnable bias to q, k, v.
+            Defaults to True.
+        qk_scale (float, optional): Override default qk scale of
+            ``head_dim ** -0.5`` if set. Defaults to None.
+        proj_bias (bool) If True, add a learnable bias to output projection.
+            Defaults to True.
+        v_shortcut (bool): Add a shortcut from value to output. It's usually
+            used if ``input_dims`` is different from ``embed_dims``.
+            Defaults to False.
+        return_attention (bool): If True, return the attention map, computed by
+            the cross attention between the class token and all other tokens.
+            Defaults to False.
+        init_cfg (Union[List[dict], dict], optional): The Config for
+            initialization. Defaults to None.
+    """
+
+    def __init__(self,
+                 embed_dims: int,
+                 num_heads: int,
+                 input_dims: Optional[int] = None,
+                 attn_drop: float = 0,
+                 proj_drop: float = 0,
+                 dropout_layer: dict = dict(type='Dropout', drop_prob=0.),
+                 qkv_bias: bool = True,
+                 qk_scale: Optional[float] = None,
+                 proj_bias: bool = True,
+                 v_shortcut: bool = False,
+                 use_layer_scale: bool = False,
+                 init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
+        super().__init__(embed_dims, num_heads, input_dims, attn_drop,
+                         proj_drop, dropout_layer, qkv_bias, qk_scale,
+                         proj_bias, v_shortcut, use_layer_scale, init_cfg)
+        # no longer need qkv
+        del self.qkv
+
+        # to project the mask tokens
+        self.q = nn.Linear(embed_dims, embed_dims, bias=qkv_bias)
+        # to project al the tokens
+        self.kv = nn.Linear(embed_dims, embed_dims * 2, bias=qkv_bias)
+
+    def forward(self, x: torch.Tensor, visible_tokens: torch.Tensor,
+                ids_restore: torch.Tensor) -> torch.Tensor:
+        """Forward function for `PromptMultiheadAttention`.
+
+        Args:
+            x (torch.Tensor): Mask token features with shape N x L_m x C.
+            visible_tokens (torch.Tensor): The visible tokens features from
+                encoder with shape N x L_v x C.
+            ids_restore (torch.Tensor): The ids of all tokens in the original
+                image with shape N x L.
+
+        Returns:
+            torch Tensor: Output features with shape N x L x C.
+        """
+        x_ = torch.cat([visible_tokens[:, 1:, :], x], dim=1)
+        assert x_.shape[1] == ids_restore.shape[1]
+        x_ = torch.gather(
+            x_,
+            dim=1,
+            index=ids_restore.unsqueeze(-1).repeat(1, 1, x.shape[-1]))
+        x_ = torch.cat([visible_tokens[:, :1, :], x_], dim=1)
+
+        # full sequence shape
+        B, _, _ = x_.shape
+        q = self.q(x).reshape(B, x.shape[1], self.num_heads,
+                              self.head_dims).permute(0, 2, 1, 3)
+        kv = self.kv(x_).reshape(B, x_.shape[1], 2, self.num_heads,
+                                 self.head_dims).permute(2, 0, 3, 1, 4)
+        k, v = kv[0], kv[1]
+
+        attn = (q @ k.transpose(-2, -1)) * self.scale
+        attn = attn.softmax(dim=-1)
+        attn = self.attn_drop(attn)
+
+        x = (attn @ v).transpose(1, 2).reshape(B, x.shape[1], self.embed_dims)
+        x = self.proj(x)
+        x = self.out_drop(self.gamma1(self.proj_drop(x)))
+        return x
+
+
+class PromptTransformerEncoderLayer(_TransformerEncoderLayer):
+    """Prompt Transformer Encoder Layer for MILAN.
+
+    This module is specific for the prompt encoder in MILAN. It will not update
+    the visible tokens from the encoder.
+
+    Args:
+        embed_dims (int): The feature dimension.
+        num_heads (int): Parallel attention heads.
+        feedforward_channels (int): The hidden dimension for FFNs.
+        drop_rate (float): Probability of an element to be zeroed
+            after the feed forward layer. Defaults to 0.0.
+        attn_drop_rate (float): The drop out rate for attention layer.
+            Defaults to 0.0.
+        drop_path_rate (float): Stochastic depth rate. Defaults to 0.0.
+        num_fcs (int): The number of fully-connected layers for FFNs.
+            Defaults to 2.
+        qkv_bias (bool): Enable bias for qkv if True. Defaults to True.
+        act_cfg (dict): The activation config for FFNs.
+            Defaluts to ``dict(type='GELU')``.
+        norm_cfg (dict): Config dict for normalization layer.
+            Defaults to ``dict(type='LN')``.
+        batch_first (bool): Key, Query and Value are shape of
+            (batch, n, embed_dim)
+            or (n, batch, embed_dim). Defaults to False.
+        init_cfg (dict, optional): The Config for initialization.
+            Defaults to None.
+    """
+
+    def __init__(self,
+                 embed_dims: int,
+                 num_heads: int,
+                 feedforward_channels=int,
+                 drop_rate: float = 0.,
+                 attn_drop_rate: float = 0.,
+                 drop_path_rate: float = 0.,
+                 num_fcs: int = 2,
+                 qkv_bias: bool = True,
+                 act_cfg: dict = dict(type='GELU'),
+                 norm_cfg: dict = dict(type='LN'),
+                 init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
+        super().__init__(embed_dims, num_heads, feedforward_channels,
+                         drop_rate, attn_drop_rate, drop_path_rate, num_fcs,
+                         qkv_bias, act_cfg, norm_cfg, init_cfg)
+
+        self.attn = PromptMultiheadAttention(
+            embed_dims=embed_dims,
+            num_heads=num_heads,
+            attn_drop=attn_drop_rate,
+            proj_drop=drop_rate,
+            dropout_layer=dict(type='DropPath', drop_prob=drop_path_rate),
+            qkv_bias=qkv_bias)
+
+    def forward(self, x: torch.Tensor, visible_tokens: torch.Tensor,
+                ids_restore: torch.Tensor) -> torch.Tensor:
+        """Forward function for `PromptMultiheadAttention`.
+
+        Args:
+            x (torch.Tensor): Mask token features with shape N x L_m x C.
+            visible_tokens (torch.Tensor): The visible tokens features from
+                encoder with shape N x L_v x C.
+            ids_restore (torch.Tensor): The ids of all tokens in the original
+                image with shape N x L.
+
+        Returns:
+            torch Tensor: Output features with shape N x L x C.
+        """
+        x = x + self.attn(self.norm1(x), visible_tokens, ids_restore)
+        x = self.ffn(self.norm2(x), identity=x)
+        return x
 
 
 class MultiheadAttention(_MultiheadAttention):

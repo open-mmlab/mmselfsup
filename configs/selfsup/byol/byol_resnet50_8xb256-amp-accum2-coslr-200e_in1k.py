@@ -14,7 +14,7 @@ optim_wrapper = dict(
     type='AmpOptimWrapper',
     loss_scale=512.,
     optimizer=optimizer,
-    accumulative_iters=2,
+    accumulative_counts=2,
     paramwise_cfg=dict(
         custom_keys={
             'bn': dict(decay_mult=0, lars_exclude=True),

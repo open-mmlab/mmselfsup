@@ -1,10 +1,8 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from typing import Dict, List, Optional, Sequence, Union
 
-import numpy as np
 import torch
 import torch.nn as nn
-from mmengine.dist import get_rank
 from mmengine.model import BaseModel
 from mmengine.runner import Runner
 from torch.utils.data import DataLoader
@@ -89,13 +87,13 @@ class Extractor():
 
         feature_dict = dict()
         if self.pool_cfg is None:
-            feature_dict['feat'] = flat_features[0].cpu()
+            feature_dict['feat'] = flat_features[0]
         else:
             for i, feat in enumerate(flat_features):
-                feature_dict[f'feat{self.feature_indices[i] + 1}'] = feat.cpu()
+                feature_dict[f'feat{self.feature_indices[i] + 1}'] = feat
         return feature_dict
 
-    def __call__(self, model: BaseModel) -> Dict[str, np.ndarray]:
+    def __call__(self, model: BaseModel) -> Dict[str, torch.Tensor]:
         model.eval()
 
         # the function sent to collect function
@@ -103,13 +101,8 @@ class Extractor():
             return self._forward_func(model, packed_data)
 
         if self.dist_mode:
-            rank = get_rank()
-            feats = dist_forward_collect(
-                func,
-                self.data_loader,
-                rank,
-                len(self.data_loader.dataset),
-                ret_rank=-1)
+            feats = dist_forward_collect(func, self.data_loader,
+                                         len(self.data_loader.dataset))
         else:
             feats = nondist_forward_collect(func, self.data_loader,
                                             len(self.data_loader.dataset))

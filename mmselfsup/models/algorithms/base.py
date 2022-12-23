@@ -71,14 +71,17 @@ class BaseModel(_BaseModel):
 
     @property
     def with_neck(self) -> bool:
+        """Check if the model has a neck module."""
         return hasattr(self, 'neck') and self.neck is not None
 
     @property
     def with_head(self) -> bool:
+        """Check if the model has a head module."""
         return hasattr(self, 'head') and self.head is not None
 
     @property
     def with_target_generator(self) -> bool:
+        """Check if the model has a target_generator module."""
         return hasattr(
             self, 'target_generator') and self.target_generator is not None
 
@@ -97,7 +100,8 @@ class BaseModel(_BaseModel):
             data_samples (List[BaseDataElement], optional):
                 data samples collated by :attr:`data_preprocessor`.
             mode (str): mode should be one of ``loss``, ``predict`` and
-                ``tensor``
+                ``tensor``.
+
                 - ``loss``: Called by ``train_step`` and return loss ``dict``
                   used for logging
                 - ``predict``: Called by ``val_step`` and ``test_step``
@@ -105,18 +109,19 @@ class BaseModel(_BaseModel):
                   computing metric.
                 - ``tensor``: Called by custom use to get ``Tensor`` type
                   results.
+
         Returns:
-            ForwardResults:
-                - If ``mode == loss``, return a ``dict`` of loss tensor used
-                  for backward and logging.
-                - If ``mode == predict``, return a ``list`` of
-                  :obj:`BaseDataElement` for computing metric
-                  and getting inference result.
-                - If ``mode == tensor``, return a tensor or ``tuple`` of tensor
-                  or ``dict of tensor for custom use.
+            ForwardResults (dict or list):
+              - If ``mode == loss``, return a ``dict`` of loss tensor used
+                for backward and logging.
+              - If ``mode == predict``, return a ``list`` of
+                :obj:`BaseDataElement` for computing metric
+                and getting inference result.
+              - If ``mode == tensor``, return a tensor or ``tuple`` of tensor
+                or ``dict of tensor for custom use.
         """
         if mode == 'tensor':
-            feats = self.extract_feat(inputs)
+            feats = self.extract_feat(inputs, data_samples=data_samples)
             return feats
         elif mode == 'loss':
             return self.loss(inputs, data_samples)

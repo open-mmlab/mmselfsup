@@ -12,9 +12,7 @@ Self-supervised learning (SSL) is rapidly closing the gap with supervised method
 <img src="https://user-images.githubusercontent.com/36138628/163914714-082de804-0b5f-4024-94f9-880e6ef334fa.png" width="800" />
 </div>
 
-## Results and Models
-
-**Back to [model_zoo.md](https://github.com/open-mmlab/mmselfsup/blob/master/docs/en/model_zoo.md) to download models.**
+## Models and Benchmarks
 
 In this page, we provide benchmarks as much as possible to evaluate our pre-trained models. If not mentioned, all models are pre-trained on ImageNet-1k dataset.
 
@@ -24,21 +22,52 @@ The classification benchmarks includes 1 downstream task datasets, **ImageNet**.
 
 #### ImageNet Linear Evaluation
 
-The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map is pooled to the specific dimensions and then follows a Linear layer to do the classification. Please refer to [resnet50_mhead_8xb32-steplr-90e.py](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/imagenet/resnet50_mhead_8xb32-steplr-90e_in1k.py) for details of config.
+The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map is pooled to the specific dimensions and then follows a Linear layer to do the classification. Please refer to [resnet50_mhead_8xb32-steplr-90e.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/benchmarks/classification/imagenet/resnet50_mhead_linear-8xb32-steplr-90e_in1k.py) for details of config.
 
-The **AvgPool** result is obtained from Linear Evaluation with GlobalAveragePooling. Please refer to [resnet50_8xb32-steplr-100e_in1k.py](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/imagenet/resnet50_8xb32-steplr-100e_in1k.py) for details of config.
+| Self-Supervised Config                                                                                                                                                     | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- |
+| [barlowtwins_resnet50_8xb256-coslr-300e_in1k](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/barlowtwins/barlowtwins_resnet50_8xb256-coslr-300e_in1k.py) | 15.51    | 33.98    | 45.96    | 61.90    | 71.01    |
 
-| Self-Supervised Config                                                                                                                                                       | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 | AvgPool |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- | ------- |
-| [barlowtwins_resnet50_8xb256-coslr-300e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/arlowtwins/barlowtwins_resnet50_8xb256-coslr-300e_in1k.py) | 15.51    | 33.98    | 45.96    | 61.90    | 71.01    | 71.66   |
+<table class="docutils">
+<thead>
+  <tr>
+	    <th rowspan="2">Algorithm</th>
+	    <th rowspan="2">Backbone</th>
+	    <th rowspan="2">Epoch</th>
+      <th rowspan="2">Batch Size</th>
+      <th colspan="2" align="center">Results (Top-1 %)</th>
+      <th colspan="3" align="center">Links</th>
+	</tr>
+	<tr>
+      <th>Linear Eval</th>
+      <th>Fine-tuning</th>
+      <th>Pretrain</th>
+      <th>Linear Eval</th>
+      <th>Fine-tuning</th>
+	</tr>
+  </thead>
+  <tbody>
+  <tr>
+      <td>BarlowTwins</td>
+	    <td>ResNet50</td>
+	    <td>300</td>
+      <td>2048</td>
+      <td>71.8</td>
+      <td>/</td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/barlowtwins/barlowtwins_resnet50_8xb256-coslr-300e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/barlowtwins/barlowtwins_resnet50_8xb256-coslr-300e_in1k/barlowtwins_resnet50_8xb256-coslr-300e_in1k_20220825-57307488.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/barlowtwins/barlowtwins_resnet50_8xb256-coslr-300e_in1k/barlowtwins_resnet50_8xb256-coslr-300e_in1k_20220726_033718.json'>log</a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-coslr-100e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/barlowtwins/barlowtwins_resnet50_8xb256-coslr-300e_in1k/resnet50_linear-8xb32-coslr-100e_in1k/resnet50_linear-8xb32-coslr-100e_in1k_20220825-52fde35f.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/barlowtwins/barlowtwins_resnet50_8xb256-coslr-300e_in1k/resnet50_linear-8xb32-coslr-100e_in1k/resnet50_linear-8xb32-coslr-100e_in1k_20220730_093018.json'>log</a></td>
+      <td>/</td>
+	</tr>
+  </tbody>
+</table>
 
 #### ImageNet Nearest-Neighbor Classification
 
 The results are obtained from the features after GlobalAveragePooling. Here, k=10 to 200 indicates different number of nearest neighbors.
 
-| Self-Supervised Config                                                                                                                                                       | k=10 | k=20 | k=100 | k=200 |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ---- | ----- | ----- |
-| [barlowtwins_resnet50_8xb256-coslr-300e_in1k](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/arlowtwins/barlowtwins_resnet50_8xb256-coslr-300e_in1k.py) | 63.6 | 63.8 | 62.7  | 61.9  |
+| Self-Supervised Config                                                                                                                                                     | k=10 | k=20 | k=100 | k=200 |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ---- | ----- | ----- |
+| [barlowtwins_resnet50_8xb256-coslr-300e_in1k](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/barlowtwins/barlowtwins_resnet50_8xb256-coslr-300e_in1k.py) | 63.6 | 63.8 | 62.7  | 61.9  |
 
 ## Citation
 

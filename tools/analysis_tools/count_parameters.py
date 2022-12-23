@@ -1,7 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import argparse
 
-from mmcv import Config
+from mmengine import Config
 
 from mmselfsup.models import build_algorithm
 

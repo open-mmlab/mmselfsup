@@ -13,7 +13,7 @@ class DenseCLNeck(BaseModule):
     """The non-linear neck of DenseCL.
 
     Single and dense neck in parallel: fc-relu-fc, conv-relu-conv.
-    Borrowed from the authors' code: `<https://github.com/WXinlong/DenseCL`_.
+    Borrowed from the authors' `code <https://github.com/WXinlong/DenseCL>`_.
 
     Args:
         in_channels (int): Number of input channels.

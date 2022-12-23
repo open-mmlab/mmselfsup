@@ -30,8 +30,11 @@
 .. toctree::
    :maxdepth: 1
    :caption: 模型库
+   :glob:
 
+   model_zoo_statistics.md
    model_zoo.md
+   papers/*
 
 .. toctree::
    :maxdepth: 1

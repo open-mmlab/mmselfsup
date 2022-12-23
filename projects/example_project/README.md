@@ -5,8 +5,13 @@ This is an example README for community `projects/`. We have provided detailed e
 - [Dummy MAE Wrapper](#dummy-mae-wrapper)
   - [Description](#description)
   - [Usage](#usage)
-    - [Pre-training commands](#pre-training-commands)
-    - [Downstream tasks commands](#downstream-tasks-commands)
+    - [Setup Environment](#setup-environment)
+    - [Data Preparation](#data-preparation)
+    - [Pre-training Commands](#pre-training-commands)
+      - [On Local Single GPU](#on-local-single-gpu)
+      - [On Multiple GPUs](#on-multiple-gpus)
+      - [On Multiple GPUs with Slurm](#on-multiple-gpus-with-slurm)
+    - [Downstream Tasks Commands](#downstream-tasks-commands)
   - [Results](#results)
   - [Citation](#citation)
   - [Checklist](#checklist)
@@ -21,26 +26,104 @@ This project implements a dummy MAE wrapper, which prints "Welcome to MMSelfSup"
 
 ## Usage
 
-<!-- For a typical model, this section should contain the commands for training and testing. You are also suggested to dump your environment specification to env.yml by `conda env export > env.yml`. -->
+<!-- For a typical model, this section should contain the commands for dataset prepareation, pre-training, downstream tasks. You are also suggested to dump your environment specification to env.yml by `conda env export > env.yml`. -->
 
-### Pre-training commands
+### Setup Environment
 
-In MMSelfSup's root directory, run the following command to train the model:
+Please refer to [Get Started](https://mmselfsup.readthedocs.io/en/1.x/get_started.html) documentation of MMSelfSup.
 
-```bash
-python tools/train.py projects/example_project/configs/dummy-mae_vit-base-p16_8xb512-amp-coslr-300e_in1k.py
+### Data Preparation
+
+To show the dataset directory or provide the commands for dataset preparation if needed.
+
+For example:
+
+```text
+data/
+└── imagenet
+    ├── train
+    ├── val
+    └── meta
+        ├── train.txt
+        └── val.txt
 ```
 
-### Downstream tasks commands
+### Pre-training Commands
+
+At first, you need to add the current folder to `PYTHONPATH`, so that Python can find your model files. In `example_project/` root directory, please run command below to add it.
+
+```shell
+export PYTHONPATH=`pwd`:$PYTHONPATH
+```
+
+Then run the following commands to train the model:
+
+#### On Local Single GPU
+
+```bash
+mim train mmselfsup $CONFIG --work-dir $WORK_DIR
+
+# a specific command example
+mim train mmselfsup configs/dummy-mae_vit-base-p16_8xb512-amp-coslr-300e_in1k.py \
+    --work-dir work_dirs/dummy_mae/
+```
+
+#### On Multiple GPUs
+
+```bash
+# a specific command examples, 8 GPUs here
+mim train mmselfsup configs/dummy-mae_vit-base-p16_8xb512-amp-coslr-300e_in1k.py \
+    --work-dir work_dirs/dummy_mae/ \
+    --launcher pytorch --gpus 8
+```
+
+Note:
+
+- CONFIG: the config files under the directory `configs/`
+- WORK_DIR: the working directory to save configs, logs, and checkpoints
+
+#### On Multiple GPUs with Slurm
+
+```bash
+# a specific command example: 16 GPUs in 2 nodes
+mim train mmselfsup configs/dummy-mae_vit-base-p16_8xb512-amp-coslr-300e_in1k.py \
+    --work-dir work_dirs/dummy_mae/ \
+    --launcher slurm --gpus 16 --gpus-per-node 8 \
+    --partition $PARTITION
+```
+
+Note:
+
+- CONFIG: the config files under the directory `configs/`
+- WORK_DIR: the working directory to save configs, logs, and checkpoints
+- PARTITION: the slurm partition you are using
+
+### Downstream Tasks Commands
 
 In MMSelfSup's root directory, run the following command to train the downstream model:
 
 ```bash
-sh tools/benchmarks/classification/mim_dist_train.sh ${CONFIGS} ${CHECKPOINT} [optional args]
+mim train mmcls $CONFIG \
+    --work-dir $WORK_DIR \
+    --launcher pytorch -gpus 8 \
+    [optional args]
 
-# the example of custom command
-GPUS=1 sh tools/benchmarks/classification/mim_dist_train.sh projects/example_projects/configs/xxx.py ${CHECKPOINT} --work-dir work_dirs/example_projects/classification/
+# a specific command example
+mim train mmcls configs/vit-base-p16_ft-8xb128-coslr-100e_in1k.py \
+    --work-dir work_dirs/dummy_mae/classification/
+    --launcher pytorch -gpus 8 \
+    --cfg-options model.backbone.init_cfg.type=Pretrained \
+    model.backbone.init_cfg.checkpoint=https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-base-p16_8xb512-fp16-coslr-300e_in1k/mae_vit-base-p16_8xb512-coslr-300e-fp16_in1k_20220829-c2cf66ba.pth \
+    model.backbone.init_cfg.prefix="backbone." \
+    $PY_ARGS
 ```
+
+Note:
+
+- CONFIG: the config files under the directory `configs/`
+- WORK_DIR: the working directory to save configs, logs, and checkpoints
+- CHECKPOINT: the pretrained checkpoint of MMSelfSup saved in working directory, like `$WORK_DIR/epoch_300.pth`
+- PY_ARGS: other optional args
 
 ## Results
 
@@ -91,8 +174,12 @@ The Linear Eval and Fine-tuning results are based on ImageNet dataset.
 
 ## Checklist
 
-<!-- Here is a checklist illustrating a usual development workflow of a successful project, and also serves as an overview of this project's progress. The PIC (person in charge) or contributors of this project should check all the items that they believe have been finished, which will further be verified by codebase maintainers via a PR.
+Here is a checklist illustrating a usual development workflow of a successful project, and also serves as an overview of this project's progress.
+
+<!--The PIC (person in charge) or contributors of this project should check all the items that they believe have been finished, which will further be verified by codebase maintainers via a PR.
+
 OpenMMLab's maintainer will review the code to ensure the project's quality. Reaching the first milestone means that this project suffices the minimum requirement of being merged into 'projects/'. But this project is only eligible to become a part of the core package upon attaining the last milestone.
+
 Note that keeping this section up-to-date is crucial not only for this project's developers but the entire community, since there might be some other contributors joining this project and deciding their starting point from this list. It also helps maintainers accurately estimate time and effort on further code polishing, if needed.
 A project does not necessarily have to be finished in a single PR, but it's essential for the project to at least reach the first milestone in its very first PR. -->
 
@@ -138,4 +225,4 @@ A project does not necessarily have to be finished in a single PR, but it's esse
 
     <!-- It will be parsed by MIM and Inferencer. [Example](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/mae/metafile.yml). In particular, you may have to refactor this README into a standard one. [Example](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/mae/README.md) -->
 
-  - [ ] Refactor and Move your modules into the core package following the codebase's file hierarchy structure.
+- [ ] Refactor and Move your modules into the core package following the codebase's file hierarchy structure.
