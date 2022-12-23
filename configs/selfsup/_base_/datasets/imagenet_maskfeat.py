@@ -37,3 +37,19 @@ train_dataloader = dict(
         ann_file='meta/train.txt',
         data_prefix=dict(img_path='train/'),
         pipeline=train_pipeline))
+
+# for visualization
+vis_pipeline = [
+    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='Resize', scale=(224, 224), backend='pillow'),
+    dict(
+        type='BEiTMaskGenerator',
+        input_size=14,
+        num_masking_patches=78,
+        min_num_patches=15,
+    ),
+    dict(
+        type='PackSelfSupInputs',
+        algorithm_keys=['mask'],
+        meta_keys=['img_path'])
+]

@@ -18,6 +18,7 @@ train_dataloader = dict(
         ann_file='meta/train.txt',
         data_prefix='train',
         pipeline=extract_pipeline),
+    collate_fn=dict(type='default_collate'),
     sampler=dict(type='DefaultSampler', shuffle=False),
 )
 
@@ -30,6 +31,7 @@ val_dataloader = dict(
         ann_file='meta/val.txt',
         data_prefix='val',
         pipeline=extract_pipeline),
+    collate_fn=dict(type='default_collate'),
     sampler=dict(type='DefaultSampler', shuffle=False),
 )
 

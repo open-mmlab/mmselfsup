@@ -17,3 +17,6 @@ Import:
   - configs/selfsup/barlowtwins/metafile.yml
   - configs/selfsup/cae/metafile.yml
   - configs/selfsup/maskfeat/metafile.yml
+  - configs/selfsup/beit/metafile.yml
+  - configs/selfsup/milan/metafile.yaml
+  - configs/selfsup/beitv2/metafile.yml

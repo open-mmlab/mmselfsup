@@ -97,7 +97,14 @@ optim_wrapper = dict(
         weight_decay=0.05,
         model_type='vit',  # layer-wise lr decay type
         layer_decay_rate=0.65),  # layer-wise lr decay factor
-    constructor='mmselfsup.LearningRateDecayOptimWrapperConstructor')
+    constructor='mmselfsup.LearningRateDecayOptimWrapperConstructor',
+    paramwise_cfg=dict(
+        custom_keys={
+            '.ln': dict(decay_mult=0.0),
+            '.bias': dict(decay_mult=0.0),
+            '.cls_token': dict(decay_mult=0.0),
+            '.pos_embed': dict(decay_mult=0.0)
+        }))
 
 # learning rate scheduler
 param_scheduler = [

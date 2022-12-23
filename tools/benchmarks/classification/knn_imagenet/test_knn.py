@@ -6,12 +6,11 @@ import os.path as osp
 import time
 
 import torch
-from mmengine import Runner
 from mmengine.config import Config, DictAction
 from mmengine.dist import get_rank, init_dist
 from mmengine.logging import MMLogger
 from mmengine.model.wrappers import MMDistributedDataParallel, is_model_wrapper
-from mmengine.runner import load_checkpoint
+from mmengine.runner import Runner, load_checkpoint
 from mmengine.utils import mkdir_or_exist
 
 from mmselfsup.evaluation.functional import knn_eval
@@ -91,8 +90,7 @@ def main():
         cfg.work_dir = args.work_dir
     elif cfg.get('work_dir', None) is None:
         # use config filename as default work_dir if cfg.work_dir is None
-        work_type = args.config.split('/')[1]
-        cfg.work_dir = osp.join('./work_dirs', work_type,
+        cfg.work_dir = osp.join('./work_dirs/benchmarks/knn/',
                                 osp.splitext(osp.basename(args.config))[0])
 
     # init distributed env first, since logger depends on the dist info.
@@ -103,12 +101,11 @@ def main():
         init_dist(args.launcher)
 
     # create work_dir
-    knn_work_dir = osp.join(cfg.work_dir, 'knn/')
-    mkdir_or_exist(osp.abspath(knn_work_dir))
+    mkdir_or_exist(osp.abspath(cfg.work_dir))
 
     # init the logger before other steps
     timestamp = time.strftime('%Y%m%d_%H%M%S', time.localtime())
-    log_file = osp.join(knn_work_dir, f'knn_{timestamp}.log')
+    log_file = osp.join(cfg.work_dir, f'knn_{timestamp}.log')
     logger = MMLogger.get_instance(
         'mmselfsup',
         logger_name='mmselfsup',
@@ -124,20 +121,16 @@ def main():
 
     # build the model
     model = MODELS.build(cfg.model)
-    model.init_weights()
 
-    # model is determined in this priority: init_cfg > checkpoint > random
-    if hasattr(cfg.model.backbone, 'init_cfg'):
-        if getattr(cfg.model.backbone.init_cfg, 'type', None) == 'Pretrained':
-            logger.info(
-                f'Use pretrained model: '
-                f'{cfg.model.backbone.init_cfg.checkpoint} to extract features'
-            )
-    elif args.checkpoint is not None:
+    # model is determined in this priority: checkpoint > init_cfg > random
+    if args.checkpoint is not None:
         logger.info(f'Use checkpoint: {args.checkpoint} to extract features')
         load_checkpoint(model, args.checkpoint, map_location='cpu')
+    elif getattr(model.backbone.init_cfg, 'type', None) == 'Pretrained':
+        model.init_weights()
     else:
-        logger.info('No pretrained or checkpoint is given, use random init.')
+        logger.warning(
+            'No pretrained or checkpoint is given, use random init.')
 
     if torch.cuda.is_available():
         model = model.cuda()
@@ -162,29 +155,29 @@ def main():
         seed=args.seed,
         dist_mode=distributed,
         pool_cfg=copy.deepcopy(dataset_cfg.pool_cfg))
-    train_feats = extractor_train(model)['feat5']
-    val_feats = extractor_val(model)['feat5']
-
-    train_feats = torch.from_numpy(train_feats)
-    val_feats = torch.from_numpy(val_feats)
-    train_labels = torch.LongTensor(data_loader_train.dataset.get_gt_labels())
-    val_labels = torch.LongTensor(data_loader_val.dataset.get_gt_labels())
-
-    logger.info('Features are extracted! Start k-NN classification...')
+    train_feats = extractor_train(model)
+    logger.info('Features from train dataset are extracted.')
+    val_feats = extractor_val(model)
+    logger.info('Features from validation dataset are extracted.')
 
     # run knn
     rank = get_rank()
     if rank == 0:
-        if args.use_cuda:
-            train_feats = train_feats.cuda()
-            val_feats = val_feats.cuda()
-            train_labels = train_labels.cuda()
-            val_labels = val_labels.cuda()
-        for k in args.num_knn:
-            top1, top5 = knn_eval(train_feats, train_labels, val_feats,
-                                  val_labels, k, args.temperature)
-            logger.info(
-                f'{k}-NN classifier result: Top1: {top1}, Top5: {top5}')
+        for key in train_feats.keys():
+            train_feats = train_feats[key]
+            val_feats = val_feats[key]
+            train_labels = torch.LongTensor(
+                data_loader_train.dataset.get_gt_labels()).to(
+                    train_feats.device)
+            val_labels = torch.LongTensor(
+                data_loader_val.dataset.get_gt_labels()).to(val_feats.device)
+
+            logger.info(f'Start k-NN classification of key "{key}".')
+            for k in args.num_knn:
+                top1, top5 = knn_eval(train_feats, train_labels, val_feats,
+                                      val_labels, k, args.temperature)
+                logger.info(f'Reasults of "{key}", {k}-NN classifier: '
+                            f'Top1 - {top1}, Top5 - {top5}.')
 
 
 if __name__ == '__main__':

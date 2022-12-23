@@ -16,7 +16,7 @@ Collections:
 
 Models:
   - Name: mocov2_resnet50_8xb32-coslr-200e_in1k
-    In Collection: MoCo
+    In Collection: MoCov2
     Metadata:
       Epochs: 200
       Batch Size: 256

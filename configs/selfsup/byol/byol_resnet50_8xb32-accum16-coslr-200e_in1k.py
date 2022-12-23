@@ -10,7 +10,7 @@ optimizer = dict(type='LARS', lr=4.8, momentum=0.9, weight_decay=1e-6)
 optim_wrapper = dict(
     type='OptimWrapper',
     optimizer=optimizer,
-    accumulative_iters=16,
+    accumulative_counts=16,
     paramwise_cfg=dict(
         custom_keys={
             'bn': dict(decay_mult=0, lars_exclude=True),
