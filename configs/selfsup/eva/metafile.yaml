@@ -1,0 +1,46 @@
+Collections:
+  - Name: EVA
+    Metadata:
+      Training Data: ImageNet-1k
+      Training Techniques:
+        - AdamW
+      Training Resources: 16x A100-80G GPUs
+      Architecture:
+        - ViT
+    Paper:
+        URL: https://arxiv.org/abs/2211.07636
+        Title: "EVA: Exploring the Limits of Masked Visual Representation Learning at Scale"
+    README: configs/selfsup/eva/README.md
+
+Models:
+  - Name: eva_mae-sytle_vit-base-p16_16xb256-coslr-400e_1k
+    In Collection: EVA
+    Metadata:
+      Epochs: 400
+      Batch Size: 4096
+    Results: null
+    Config: configs/selfsup/eva/eva_mae-sytle_vit-base-p16_16xb256-coslr-400e_1k.py
+    Weights:
+    Downstream:
+      - Type: Image Classification
+        Metadata:
+          Epochs: 100
+          Batch Size: 1024
+        Results:
+          - Task: Fine-tuning
+            Dataset: ImageNet-1k
+            Metrics:
+              Top 1 Accuracy: 83.72
+        Config: configs/selfsup/eva/classification/vit-base-p16_ft-8xb128-coslr-100e_in1k.py
+        Weights:
+      - Type: Image Classification
+        Metadata:
+          Epochs: 100
+          Batch Size: 16384
+        Results:
+          - Task: Linear-probing
+            Dataset: ImageNet-1k
+            Metrics:
+              Top 1 Accuracy: 69.01
+        Config: configs/selfsup/eva/classification/vit-base-p16_linear-8xb2048-coslr-100e_in1k.py
+        Weights:

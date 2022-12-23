@@ -419,5 +419,16 @@ ImageNet 有多个版本，不过最常用的是 ILSVRC 2012。我们提供了�
       <td>/</td>
       <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/beitv2/classification/vit-base-p16_ft-8xb128-coslr-100e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/beitv2/beitv2_vit-base-p16_8xb256-amp-coslr-300e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k_20221212-d1c0789e.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/beitv2/beitv2_vit-base-p16_8xb256-amp-coslr-300e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k_20221211_155017.json'>log</a></td>
 	</tr>
+  <tr>
+      <td>EVA</td>
+	    <td>ViT-base</td>
+	    <td>400</td>
+      <td>4096</td>
+      <td>69.0</td>
+      <td>83.7</td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/eva/eva_mae-sytle_vit-base-p16_16xb256-coslr-400e_1k.py'>config</a> | <a href=''>model</a> | <a href=''>log</a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/elfsup/eva/classification/vit-base-p16_linear-8xb2048-coslr-100e_in1k.py'>config</a> | <a href=''>model</a> | <a href=''>log</a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/eva/classification/vit-base-p16_ft-8xb128-coslr-100e_in1k.py'>config</a> | <a href=''>model</a> | <a href=''>log</a></td>
+	</tr>
 </tbody>
 </table>
