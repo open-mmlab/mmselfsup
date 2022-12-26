@@ -112,7 +112,8 @@ class CAE(BaseModel):
 
         logits = logits.view(-1, logits.shape[-1])
         # inputs[1] is the target image
-        loss_main, loss_align = self.head(logits, inputs[1], latent_pred,
+        logits_target = self.target_generator(inputs[1])
+        loss_main, loss_align = self.head(logits, logits_target, latent_pred,
                                           latent_target, mask)
         losses = dict()
 
