@@ -23,10 +23,15 @@ neck = dict(
     mlp_ratio=4,
     init_values=0.1,
 )
-head = dict(
-    type='CAEHead',
-    tokenizer_path='cae_ckpt/encoder_stat_dict.pth',
-    loss=dict(type='CAELoss', lambd=2))
+head = dict(type='CAEHead', loss=dict(type='CAELoss', lambd=2))
+
+target_generator = dict(
+    type='DALL-E',
+    init_cfg=dict(
+        type='Pretrained',
+        checkpoint=  # noqa: E251
+        'https://download.openmmlab.com/mmselfsup/1.x/target_generator_ckpt/dalle_encoder.pth',  # noqa: E501
+    ))
 
 data_preprocessor = dict(
     type='mmselfsup.CAEDataPreprocessor',
@@ -41,6 +46,7 @@ def test_cae():
         backbone=backbone,
         neck=neck,
         head=head,
+        target_generator=target_generator,
         data_preprocessor=data_preprocessor)
     # model.init_weights()
 
