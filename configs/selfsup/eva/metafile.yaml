@@ -13,7 +13,7 @@ Collections:
     README: configs/selfsup/eva/README.md
 
 Models:
-  - Name: eva_mae-sytle_vit-base-p16_16xb256-coslr-400e_1k
+  - Name: eva_mae-sytle_vit-base-p16_16xb256-coslr-400e_in1k
     In Collection: EVA
     Metadata:
       Epochs: 400
