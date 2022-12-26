@@ -1,5 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 
+from typing import Optional
+
 import torch
 from mmengine.model import BaseModule
 from torch import nn
@@ -31,7 +33,7 @@ class CosineSimilarityLoss(BaseModule):
     def forward(self,
                 pred: torch.Tensor,
                 target: torch.Tensor,
-                mask: torch.Tensor = None) -> torch.Tensor:
+                mask: Optional[torch.Tensor] = None) -> torch.Tensor:
         """Forward function of cosine similarity loss.
 
         Args:

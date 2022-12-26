@@ -55,7 +55,7 @@ class MAEPretrainDecoder(BaseModule):
                  decoder_num_heads: int = 16,
                  mlp_ratio: int = 4,
                  norm_cfg: dict = dict(type='LN', eps=1e-6),
-                 predict_feature_dim: float = None,
+                 predict_feature_dim: Optional[float] = None,
                  init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
         super().__init__(init_cfg=init_cfg)
         self.num_patches = num_patches

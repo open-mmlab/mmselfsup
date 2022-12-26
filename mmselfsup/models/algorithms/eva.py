@@ -29,8 +29,7 @@ class EVA(BaseModel):
         Returns:
             Dict[str, torch.Tensor]: A dictionary of loss components.
         """
-        # ids_restore: the same as that in original repo, which is used
-        # to recover the original order of tokens in decoder.
+
         clip_feature, _ = self.target_generator(inputs[0])
 
         latent, mask, ids_restore = self.backbone(inputs[0])

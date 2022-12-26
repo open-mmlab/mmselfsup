@@ -19,7 +19,7 @@ Models:
       Epochs: 400
       Batch Size: 4096
     Results: null
-    Config: configs/selfsup/eva/eva_mae-sytle_vit-base-p16_16xb256-coslr-400e_1k.py
+    Config: configs/selfsup/eva/eva_mae-sytle_vit-base-p16_16xb256-coslr-400e_in1k.py
     Weights:
     Downstream:
       - Type: Image Classification
@@ -30,7 +30,7 @@ Models:
           - Task: Fine-tuning
             Dataset: ImageNet-1k
             Metrics:
-              Top 1 Accuracy: 83.72
+              Top 1 Accuracy: 83.7
         Config: configs/selfsup/eva/classification/vit-base-p16_ft-8xb128-coslr-100e_in1k.py
         Weights:
       - Type: Image Classification
@@ -41,6 +41,6 @@ Models:
           - Task: Linear-probing
             Dataset: ImageNet-1k
             Metrics:
-              Top 1 Accuracy: 69.01
+              Top 1 Accuracy: 69.0
         Config: configs/selfsup/eva/classification/vit-base-p16_linear-8xb2048-coslr-100e_in1k.py
         Weights:
