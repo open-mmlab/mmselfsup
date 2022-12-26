@@ -166,7 +166,7 @@ class BEiTMaskGenerator(object):
     def __call__(
         self, img: Tuple[torch.Tensor, torch.Tensor]
     ) -> Tuple[torch.Tensor, torch.Tensor, np.ndarray]:
-        mask = np.zeros(shape=self.get_shape(), dtype=np.int)
+        mask = np.zeros(shape=self.get_shape(), dtype=int)
         mask_count = 0
         while mask_count != self.num_masking_patches:
             max_mask_patches = self.num_masking_patches - mask_count
