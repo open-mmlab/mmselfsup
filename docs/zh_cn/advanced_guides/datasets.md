@@ -94,7 +94,7 @@ train_dataloader=dict(dataset=dict(type='DeepClusterImageNet', ...), ...)
 ## 采样器
 
 在 pytorch 中，`Sampler` 用于在加载之前对数据的索引进行采样。 `MMEngine` 中已经实现和开源了 `DefaultSampler` 和
-`InfiniteSampler`。 大多数情况下，我们可以直接调用，无需手动去实现自定义采样器。 然而 `DeepClusterSampler` 是一个值得一提的特例，因为其中纳入了进行唯一索引采样的逻辑， 因此，如果用户想对此采样器的相关信息一览无遗，则可进一步参考我们的 API 文档。 如果你有自行实现自定义采样器的更进一步的想法，同样可以参考`DeepClusterSampler`在`samplers`文件夹进行实现。
+`InfiniteSampler`。 大多数情况下，我们可以直接调用，无需手动去实现自定义采样器。 然而 `DeepClusterSampler` 是一个值得一提的特例，因为其中纳入了进行唯一索引采样的逻辑， 因此，如果用户想对此采样器的相关信息一览无遗，则可进一步参考我们的 API 文档。 如果你有自行实现自定义采样器的更进一步的想法，同样可以参考 `DeepClusterSampler` 在 `samplers` 文件夹进行实现。
 
 ## 数据变换
 
