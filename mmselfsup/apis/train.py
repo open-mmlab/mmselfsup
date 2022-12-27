@@ -158,7 +158,7 @@ def train_model(model,
     # register hooks
     runner.register_training_hooks(cfg.lr_config, optimizer_config,
                                    cfg.checkpoint_config, cfg.log_config)
-    if distributed:
+    if distributed and cfg.runner.type == 'EpochBasedRunner':
         runner.register_hook(DistSamplerSeedHook())
 
     # register custom hooks
