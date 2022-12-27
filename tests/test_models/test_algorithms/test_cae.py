@@ -24,15 +24,7 @@ neck = dict(
     init_values=0.1,
 )
 head = dict(type='CAEHead', loss=dict(type='CAELoss', lambd=2))
-
-target_generator = dict(
-    type='DALL-E',
-    init_cfg=dict(
-        type='Pretrained',
-        checkpoint=  # noqa: E251
-        'https://download.openmmlab.com/mmselfsup/1.x/target_generator_ckpt/dalle_encoder.pth',  # noqa: E501
-    ))
-
+target_generator = dict(type='DALL-E')
 data_preprocessor = dict(
     type='mmselfsup.CAEDataPreprocessor',
     mean=[124, 117, 104],
