@@ -13,13 +13,13 @@ Collections:
     README: configs/selfsup/eva/README.md
 
 Models:
-  - Name: eva_mae-sytle_vit-base-p16_16xb256-coslr-400e_in1k
+  - Name: eva-mae-style_vit-base-p16_16xb256-coslr-400e_in1k
     In Collection: EVA
     Metadata:
       Epochs: 400
       Batch Size: 4096
     Results: null
-    Config: configs/selfsup/eva/eva_mae-sytle_vit-base-p16_16xb256-coslr-400e_in1k.py
+    Config: configs/selfsup/eva/eva-mae-style_vit-base-p16_16xb256-coslr-400e_in1k.py
     Weights:
     Downstream:
       - Type: Image Classification
