@@ -67,7 +67,6 @@ mmselfsup
 train_dataloader=dict(dataset=dict(type='mmcls.ImageNet', ...), ...)
 ```
 
-
 ```python
 # 调用 MMSegmentation 中的 ADE20KDataset 数据集
 # 在数据加载器中使用 ADE20KDataset
@@ -75,7 +74,7 @@ train_dataloader=dict(dataset=dict(type='mmcls.ImageNet', ...), ...)
 # 而不是数据加载器的全量的 config
 # ``mmseg`` 前缀传达给 ``Registry`` 需要在 MMSegmentation 中搜索 ``ADE20KDataset``
 train_dataloader=dict(dataset=dict(type='mmseg.ADE20KDataset', ...), ...)
-````
+```
 
 ```python
 # 在数据加载器中调用 CocoDataset
