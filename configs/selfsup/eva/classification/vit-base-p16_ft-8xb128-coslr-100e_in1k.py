@@ -2,9 +2,7 @@ _base_ = '../../../benchmarks/classification/imagenet/vit-base-p16_ft-8xb128-cos
 
 # model settings
 model = dict(
-    head=dict(init_cfg=[dict(type='TruncNormal', layer='Linear', std=0.02)
-                        ]),  # MAE sets std to 2e-5
-)
+    head=dict(init_cfg=[dict(type='TruncNormal', layer='Linear', std=0.02)]), )
 
 # optimizer wrapper
 optim_wrapper = dict(
