@@ -56,3 +56,32 @@ def build_2d_sincos_position_embedding(
         pos_emb = torch.cat([cls_token_pe, pos_emb], dim=1)
 
     return pos_emb
+
+
+def build_1d_sincos_position_embedding(
+        num_patches: int,
+        embed_dims: int,
+        temperature: Optional[int] = 10000.) -> torch.Tensor:
+    """The function is to build 1d position embedding for model to obtain the
+    position information of the input patches.
+
+    Sinusoid encoding is a kind of relative position encoding method came from
+    `Attention Is All You Need<https://arxiv.org/abs/1706.03762>`_.
+
+    Args:
+        num_patches (int): The number of the input patches.
+        embed_dims (int): The dimension of the embedding vector.
+        temperature (int, optional): The temperature parameter. Defaults to
+            10000.
+    """
+    vector = torch.arange(embed_dims, dtype=torch.float64)
+    vector = (vector - vector % 2) / embed_dims
+    vector = torch.pow(temperature, -vector).view(1, -1)
+
+    sinusoid_table = torch.arange(num_patches).view(-1, 1) * vector
+    sinusoid_table[:, 0::2].sin_()  # dim 2i
+    sinusoid_table[:, 1::2].cos_()  # dim 2i+1
+
+    sinusoid_table = sinusoid_table.to(torch.float32)
+
+    return sinusoid_table

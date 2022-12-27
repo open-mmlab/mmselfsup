@@ -10,7 +10,8 @@ from .extractor import Extractor
 from .gather_layer import GatherLayer
 from .multi_pooling import MultiPooling
 from .multi_prototypes import MultiPrototypes
-from .position_embedding import build_2d_sincos_position_embedding
+from .position_embedding import (build_1d_sincos_position_embedding,
+                                 build_2d_sincos_position_embedding)
 from .sobel import Sobel
 from .transformer_blocks import (CAETransformerRegressorLayer,
                                  MultiheadAttention,
@@ -30,5 +31,5 @@ __all__ = [
     'SelfSupDataPreprocessor', 'RelativeLocDataPreprocessor',
     'RotationPredDataPreprocessor', 'CAEDataPreprocessor', 'ResLayerExtraNorm',
     'NormEMAVectorQuantizer', 'TwoNormDataPreprocessor',
-    'PromptTransformerEncoderLayer', 'build_clip_model'
+    'PromptTransformerEncoderLayer', 'build_clip_model', 'build_1d_sincos_position_embedding'
 ]
