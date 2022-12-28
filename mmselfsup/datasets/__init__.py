@@ -4,9 +4,10 @@ from .deepcluster_dataset import DeepClusterImageNet
 from .image_list_dataset import ImageList
 from .places205 import Places205
 from .samplers import *  # noqa: F401,F403
+from .selective_search import SSDataset
 from .transforms import *  # noqa: F401,F403
 
 __all__ = [
     'DATASETS', 'build_dataset', 'Places205', 'DeepClusterImageNet',
-    'ImageList'
+    'ImageList', 'SSDataset'
 ]
