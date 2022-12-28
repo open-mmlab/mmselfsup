@@ -12,7 +12,6 @@ from .typing import *  # noqa: F401, F403
 __all__ = [
     'AliasMethod', 'batch_shuffle_ddp', 'batch_unshuffle_ddp',
     'dist_forward_collect', 'nondist_forward_collect', 'collect_env',
-    'sync_random_seed', 'distributed_sinkhorn', 'concat_all_gather',
-    'gather_tensors', 'gather_tensors_batch', 'register_all_modules',
+    'distributed_sinkhorn', 'concat_all_gather', 'register_all_modules',
     'get_model'
 ]

@@ -2,7 +2,7 @@
 model = dict(
     type='VideoMAE',
     data_preprocessor=dict(
-        type='mmaction2.ActionDataPreprocessor',
+        type='VideoMAEDataPreprocessor',
         mean=[123.675, 116.28, 103.53],
         std=[58.395, 57.12, 57.375],
         format_shape='NCTHW'),
@@ -20,8 +20,11 @@ model = dict(
         mask_ratio=0.9),
     neck=dict(
         type='VideoMAEPretrainDecoder',
+        img_size=224,
+        num_frames=16,
         num_classes=1536,
         num_heads=3,
+        input_dims=384,
         embed_dims=192,
         patch_size=16,
     ),
@@ -29,7 +32,7 @@ model = dict(
         type='VideoMAEPretrainHead',
         norm_pix=True,
         patch_size=16,
-        loss=dict(type='MAEReconstructionLoss')),
+        loss=dict(type='PixelReconstructionLoss', criterion='L2')),
     init_cfg=[
         dict(type='Xavier', distribution='uniform', layer='Linear'),
         dict(type='Constant', layer='LayerNorm', val=1.0, bias=0.0)

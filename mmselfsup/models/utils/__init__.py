@@ -4,7 +4,8 @@ from .data_preprocessor import (CAEDataPreprocessor,
                                 RelativeLocDataPreprocessor,
                                 RotationPredDataPreprocessor,
                                 SelfSupDataPreprocessor,
-                                TwoNormDataPreprocessor)
+                                TwoNormDataPreprocessor,
+                                VideoMAEDataPreprocessor)
 from .ema import CosineEMA
 from .extractor import Extractor
 from .gather_layer import GatherLayer
@@ -27,9 +28,10 @@ except ImportError:
 __all__ = [
     'Extractor', 'GatherLayer', 'MultiPooling', 'MultiPrototypes',
     'build_2d_sincos_position_embedding', 'Sobel', 'MultiheadAttention',
-    'TransformerEncoderLayer', 'CAETransformerRegressorLayer', 'CosineEMA',
-    'SelfSupDataPreprocessor', 'RelativeLocDataPreprocessor',
-    'RotationPredDataPreprocessor', 'CAEDataPreprocessor', 'ResLayerExtraNorm',
-    'NormEMAVectorQuantizer', 'TwoNormDataPreprocessor',
-    'PromptTransformerEncoderLayer', 'build_clip_model', 'build_1d_sincos_position_embedding'
+    'TransformerEncoderLayer', 'CAETransformerRegressorLayer', 'Encoder',
+    'CosineEMA', 'SelfSupDataPreprocessor', 'RelativeLocDataPreprocessor',
+    'RotationPredDataPreprocessor', 'CAEDataPreprocessor',
+    'VideoMAEDataPreprocessor', 'ResLayerExtraNorm', 'NormEMAVectorQuantizer',
+    'TwoNormDataPreprocessor', 'PromptTransformerEncoderLayer',
+    'build_clip_model', 'build_1d_sincos_position_embedding'
 ]

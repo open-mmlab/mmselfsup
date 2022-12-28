@@ -231,34 +231,34 @@ class VideoMAEViT(BaseModule):
             ]``.
     """
 
-    def __init__(
-            self,
-            img_size: int = 224,
-            patch_size: int = 16,
-            in_channels: int = 3,
-            embed_dims: int = 768,
-            depth: int = 12,
-            num_heads: int = 12,
-            mlp_ratio: int = 4.,
-            qkv_bias: bool = True,
-            qk_scale: int = None,
-            drop_rate: float = 0.,
-            attn_drop_rate: float = 0.,
-            drop_path_rate: float = 0.,
-            norm_cfg: ConfigType = dict(type='LN', eps=1e-6),
-            init_values: int = 0.,
-            use_learnable_pos_emb: bool = False,
-            num_frames: int = 16,
-            tubelet_size: int = 2,
-            #  use_mean_pooling: int = True,
-            pretrained: Optional[str] = None,
-            mask_ratio: float = 0.75,
-            mask_type: str = 'random',
-            init_cfg: Optional[Union[Dict, List[Dict]]] = [
-                dict(type='TruncNormal', layer='Linear', std=0.02, bias=0.),
-                dict(type='Constant', layer='LayerNorm', val=1., bias=0.)
-            ],
-            **kwargs) -> None:
+    def __init__(self,
+                 img_size: int = 224,
+                 patch_size: int = 16,
+                 in_channels: int = 3,
+                 embed_dims: int = 768,
+                 depth: int = 12,
+                 num_heads: int = 12,
+                 mlp_ratio: int = 4.,
+                 qkv_bias: bool = True,
+                 qk_scale: int = None,
+                 drop_rate: float = 0.,
+                 attn_drop_rate: float = 0.,
+                 drop_path_rate: float = 0.,
+                 norm_cfg: ConfigType = dict(type='LN', eps=1e-6),
+                 init_values: int = 0.,
+                 use_learnable_pos_emb: bool = False,
+                 num_frames: int = 16,
+                 tubelet_size: int = 2,
+                 pretrained: Optional[str] = None,
+                 mask_ratio: float = 0.75,
+                 mask_type: str = 'random',
+                 init_cfg: Optional[Union[Dict, List[Dict]]] = [
+                     dict(
+                         type='TruncNormal', layer='Linear', std=0.02,
+                         bias=0.),
+                     dict(type='Constant', layer='LayerNorm', val=1., bias=0.)
+                 ],
+                 **kwargs) -> None:
 
         if pretrained:
             self.init_cfg = dict(type='Pretrained', checkpoint=pretrained)
@@ -309,12 +309,7 @@ class VideoMAEViT(BaseModule):
                 init_values=init_values) for i in range(depth)
         ])
 
-        # if use_mean_pooling:
-        #     self.norm = nn.Identity()
-        #     self.fc_norm = build_norm_layer(norm_cfg, embed_dims)[1]
-        # else:
-        #     self.norm = build_norm_layer(norm_cfg, embed_dims)[1]
-        #     self.fc_norm = None
+        self.norm = build_norm_layer(norm_cfg, embed_dims)[1]
 
         self.mask_ratio = mask_ratio
         self.mask_type = mask_type

@@ -54,14 +54,13 @@ class PixelReconstructionLoss(BaseModule):
         """
         loss = self.penalty(pred, target)
 
-        # if the dim of the loss is 3, take the average of the loss
-        # along the last dim
-        if len(loss.shape) == 3:
-            loss = loss.mean(dim=-1)
-
         if mask is None:
             loss = loss.mean()
         else:
+            # if the dim of the loss is 3, take the average of the loss
+            # along the last dim
+            if len(loss.shape) == 3:
+                loss = loss.mean(dim=-1)
             loss = (loss * mask).sum() / mask.sum() / self.channel
 
         return loss

@@ -1,3 +1,3 @@
-from .videomae_vit import VideoMAEPretrainVit
+from .videomae_vit import VideoMAEViT
 
-__all__ = ['VideoMAEPretrainVit']
+__all__ = ['VideoMAEViT']

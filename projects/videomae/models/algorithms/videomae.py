@@ -33,12 +33,14 @@ class VideoMAE(BaseModel):
         """The forward function in training."""
         mask = torch.stack(
             [data_sample.mask.value for data_sample in data_samples])
-        video = inputs[0]
-
+        video = inputs[0].squeeze(1)
+        # change the mask from the float to bool type
+        mask = mask.to(torch.bool)
+        # encoder part
         video = self.backbone(video, mask)
-
-        video_rec = self.neck(video, self.backbone.pos_embed, mask)
-
-        loss = self.head(video_rec, video, mask)
+        # decoder part
+        video_rec = self.neck(video, mask)
+        # criterion part
+        loss = self.head(video_rec, inputs[0].squeeze(1), mask)
         losses = dict(loss=loss)
         return losses

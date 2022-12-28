@@ -6,7 +6,9 @@ import torch.nn as nn
 from mmcv.cnn import build_norm_layer
 from mmengine.model import BaseModule
 from mmengine.model.weight_init import trunc_normal_
+from mmengine.utils import to_2tuple
 
+from mmselfsup.models.utils import build_1d_sincos_position_embedding
 from mmselfsup.registry import MODELS
 from ..backbones.videomae_vit import VideoMAEBlock
 
@@ -21,6 +23,7 @@ class VideoMAEPretrainDecoder(BaseModule):
     def __init__(self,
                  num_patches: int = 196,
                  patch_size: int = 16,
+                 img_size: int = 224,
                  num_classes: int = 768,
                  input_dims: int = 768,
                  embed_dims: int = 768,
@@ -35,13 +38,24 @@ class VideoMAEPretrainDecoder(BaseModule):
                  norm_cfg: dict = dict(type='LN', eps=1e-6),
                  init_value: Optional[float] = None,
                  tubelet_size: int = 2,
+                 num_frames: int = 16,
                  init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
         super().__init__(init_cfg=init_cfg)
-        self.num_patches = num_patches
+
+        patch_sizes = to_2tuple(patch_size)
+        img_sizes = to_2tuple(img_size)
+
+        num_patches = (img_sizes[1] // patch_sizes[1]) * \
+                      (img_sizes[0] // patch_sizes[0]) * \
+                      (num_frames // tubelet_size)
 
         # used to convert the dim of features from encoder to the dim
         # compatible with that of decoder
-        self.decoder_embed = nn.Linear(input_dims, embed_dims, bias=True)
+        self.decoder_embed_layer = nn.Linear(input_dims, embed_dims, bias=True)
+
+        decoder_pos_embed = build_1d_sincos_position_embedding(
+            num_patches, embed_dims)
+        self.register_buffer('decoder_pos_embed', decoder_pos_embed)
 
         self.mask_token = nn.Parameter(torch.zeros(1, 1, embed_dims))
 
@@ -73,24 +87,28 @@ class VideoMAEPretrainDecoder(BaseModule):
         super().init_weights()
         trunc_normal_(self.mask_token, std=.02)
 
-    def forward(self, x: torch.Tensor, pos_embed: torch.Tensor,
-                mask: torch.Tensor, return_token_num: int) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
         """Forward function."""
+        # linear transformation to adapt the channel dimension
+        x = self.decoder_embed_layer(x)
         B, _, C = x.shape
-        x = self.decoder_embed(x)
 
-        expand_pos_embed = pos_embed.expand(x.shape[0], -1, -1)
+        # expand the position embedding to the size of B
+        expand_pos_embed = self.decoder_pos_embed.expand(x.shape[0], -1, -1)
+        # position embedding of visible token
         visible_pe = expand_pos_embed[~mask].reshape(B, -1, C)
+        # position embedding of masked token
         masked_pe = expand_pos_embed[mask].reshape(B, -1, C)
+        return_token_num = masked_pe.shape[1]
 
         x = torch.cat([x + visible_pe, self.mask_token + masked_pe], dim=1)
 
         for blk in self.blocks:
             x = blk(x)
 
-        if return_token_num > 0:
-            x = self.head(self.norm(x[:, -return_token_num:]))
-        else:
-            x = self.head(self.norm(x))
+        # only conduct the pixel prediction on the masked token
+        x = x[:, -return_token_num:] if return_token_num > 0 else x
+
+        x = self.head(self.norm(x))
 
         return x
