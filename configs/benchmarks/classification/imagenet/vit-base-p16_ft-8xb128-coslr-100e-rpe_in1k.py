@@ -64,16 +64,18 @@ val_dataloader = dict(dataset=dict(pipeline=test_pipeline), batch_size=128)
 model = dict(
     type='ImageClassifier',
     backbone=dict(
-        type='VisionTransformer',
+        type='BEiT',
         arch='base',
         img_size=224,
         patch_size=16,
-        beit_style=True,  # use beit-style transformer encoder layer
         avg_token=True,  # use average token for cls head
         final_norm=False,  # do not use final norm
         drop_path_rate=0.1,
         layer_scale_init_value=0.1,
         output_cls_token=False,
+        use_abs_pos_emb=True,
+        use_rel_pos_bias=True,
+        use_shared_rel_pos_bias=False,
         init_cfg=dict(type='Pretrained', checkpoint='')),
     neck=None,
     head=dict(
