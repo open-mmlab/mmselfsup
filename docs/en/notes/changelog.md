@@ -11,7 +11,7 @@ We briefly list the major breaking changes here. Please refer to the [migration 
 #### Highlight
 
 - Support `BEiT v2`, `MixMIM`, `EVA`
-- Support `ShapeBias` metric
+- Support `ShapeBias` for model analysis
 - Add Solution of FGIA ACCV 2022 (1st Place)
 - Refactor t-SNE
 
