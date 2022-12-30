@@ -271,18 +271,18 @@ After inferencing and preparing these csv files, please download all these [pict
 Then we can start to plot the shape bias
 
 ```shell
-python tools/analysis_tools/visualize_shape_bias.py --csv_dir $CVS_DIR --result_dir $CSV_DIR --colors $RGB --markers o --plotting_names $YOU_MODEL_NAME --model_names $YOU_MODEL_NAME
+python tools/analysis_tools/visualize_shape_bias.py --csv-dir $CVS_DIR --result-dir $CSV_DIR --colors $RGB --markers o --plotting-names $YOU_MODEL_NAME --model-names $YOU_MODEL_NAME
 ```
 
-- csv_dir, the same directory to save these csv files
+- csv-dir, the same directory to save these csv files
 - colors, should be the RGB values, formatted in R G B, e.g. 100 100 100, and can be multiple RGB values, if you want
   to plot the shape bias of several models
-- plotting_names, the name of the legend in the shape bias figure, and you can set it as your model name. If you want
+- plotting-names, the name of the legend in the shape bias figure, and you can set it as your model name. If you want
   to plot several models, plotting_names can be multiple values
-- model_names, should be the same name specified in your config, and can be multiple names if you want to plot the
+- model-names, should be the same name specified in your config, and can be multiple names if you want to plot the
   shape bias of several models
 
-Please note, every three values for `colors` corresponds to one value for `model_names`. After all of above steps, you
+Please note, every three values for `--colors` corresponds to one value for `--model-names`. After all of above steps, you
 are expected to obtain the following figure.
 
 <div align="center">
