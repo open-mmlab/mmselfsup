@@ -2,6 +2,27 @@
 
 ## MMSelfSup
 
+### v0.11.0 (30/12/2022)
+
+#### New Features
+
+- Support InterCLR ([#609](https://github.com/open-mmlab/mmselfsup/pull/609))
+
+#### Bug Fixes
+
+- Fix potential bug of hook registration ([#647](https://github.com/open-mmlab/mmselfsup/pull/647))
+- Fix sampling_replace config kwargs bug ([#646](https://github.com/open-mmlab/mmselfsup/pull/646))
+- Change sklearn to scikit-learn in requirements ([#583](https://github.com/open-mmlab/mmselfsup/pull/583))
+
+#### Improvements
+
+- Update CI check rules ([#581](https://github.com/open-mmlab/mmselfsup/pull/581))
+- Update assignee schedule ([#606](https://github.com/open-mmlab/mmselfsup/pull/606))
+
+#### Docs
+
+- Add global notes and the version switcher menu ([#573](https://github.com/open-mmlab/mmselfsup/pull/573))
+
 ### v0.10.1 (01/11/2022)
 
 #### Improvements
