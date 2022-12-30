@@ -13,13 +13,13 @@ Collections:
     README: configs/selfsup/simmim/README.md
 
 Models:
-  - Name: simmim_swin-base_16xb128-coslr-100e_in1k-192
+  - Name: simmim_swin-base_8xb256-amp-coslr-100e_in1k-192
     In Collection: SimMIM
     Metadata:
       Epochs: 100
       Batch Size: 2048
     Results: null
-    Config: configs/selfsup/simmim/simmim_swin-base_16xb128-coslr-100e_in1k-192.py
+    Config: configs/selfsup/simmim/simmim_swin-base_8xb256-amp-coslr-100e_in1k-192.py
     Weights: https://download.openmmlab.com/mmselfsup/1.x/simmim/simmim_swin-base_8xb256-amp-coslr-100e_in1k-192/simmim_swin-base_8xb256-amp-coslr-100e_in1k-192_20220829-0e15782d.pth
     Downstream:
       - Type: Image Classification
@@ -31,7 +31,7 @@ Models:
             Dataset: ImageNet-1k
             Metrics:
               Top 1 Accuracy: 82.7
-        Config: configs/benchmarks/classification/imagenet/swin-base_ft-8xb256-coslr-100e_in1k.py
+        Config: configs/benchmarks/classification/imagenet/swin-base_ft-8xb256-coslr-100e_in1k-192.py
         Weights: https://download.openmmlab.com/mmselfsup/1.x/simmim/simmim_swin-base_8xb256-amp-coslr-100e_in1k-192/swin-base_ft-8xb256-coslr-100e_in1k/swin-base_ft-8xb256-coslr-100e_in1k_20220829-9cf23aa1.pth
       - Type: Image Classification
         Metadata:
@@ -43,13 +43,13 @@ Models:
             Metrics:
               Top 1 Accuracy: 83.5
         Config: configs/benchmarks/classification/imagenet/swin-base_ft-8xb256-coslr-100e_in1k-224.py
-  - Name: simmim_swin-base_16xb128-coslr-800e_in1k-192
+  - Name: simmim_swin-base_16xb128-amp-coslr-800e_in1k-192
     In Collection: SimMIM
     Metadata:
       Epochs: 100
       Batch Size: 2048
     Results: null
-    Config: configs/selfsup/simmim/simmim_swin-base_16xb128-coslr-800e_in1k-192.py
+    Config: configs/selfsup/simmim/simmim_swin-base_16xb128-amp-coslr-800e_in1k-192.py
     Weights: https://download.openmmlab.com/mmselfsup/1.x/simmim/simmim_swin-base_16xb128-amp-coslr-800e_in1k-192/simmim_swin-base_16xb128-amp-coslr-800e_in1k-192_20220916-a0e931ac.pth
     Downstream:
       - Type: Image Classification
@@ -61,15 +61,15 @@ Models:
             Dataset: ImageNet-1k
             Metrics:
               Top 1 Accuracy: 83.8
-        Config: configs/benchmarks/classification/imagenet/swin-base_ft-8xb256-coslr-100e_in1k.py
+        Config: configs/benchmarks/classification/imagenet/swin-base_ft-8xb256-coslr-100e_in1k-192.py
         Weights: https://download.openmmlab.com/mmselfsup/1.x/simmim/simmim_swin-base_8xb256-amp-coslr-100e_in1k-192/swin-base_ft-8xb256-coslr-100e_in1k/swin-base_ft-8xb256-coslr-100e_in1k_20220829-9cf23aa1.pth
-  - Name: simmim_swin-large_16xb128-coslr-800e_in1k-192
+  - Name: simmim_swin-large_16xb128-amp-coslr-800e_in1k-192
     In Collection: SimMIM
     Metadata:
       Epochs: 100
       Batch Size: 2048
     Results: null
-    Config: configs/selfsup/simmim/simmim_swin-base_16xb128-coslr-800e_in1k-192.py
+    Config: configs/selfsup/simmim/simmim_swin-base_16xb128-amp-coslr-800e_in1k-192.py
     Weights: https://download.openmmlab.com/mmselfsup/1.x/simmim/simmim_swin-large_16xb128-amp-coslr-800e_in1k-192/simmim_swin-large_16xb128-amp-coslr-800e_in1k-192_20220916-4ad216d3.pth
     Downstream:
       - Type: Image Classification

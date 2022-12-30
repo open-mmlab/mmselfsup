@@ -42,7 +42,7 @@ Models:
             Metrics:
               Top 1 Accuracy: 83.1
         Config: configs/benchmarks/classification/imagenet/vit-base-p16_ft-8xb128-coslr-100e_in1k.py
-  - Name: mae_vit-base-p16_8xb512-amp-coslr-400e_in1k
+  - Name: mae_vit-base-p16_8xb512-coslr-400e_in1k
     In Collection: MAE
     Metadata:
       Epochs: 400
