@@ -2,6 +2,50 @@
 
 ## MMSelfSup
 
+### v1.0.0rc5 (30/12/2022)
+
+The `master` branch is still 0.x version and we will checkout a new `1.x` branch to release 1.x version. The two versions will be maintained simultaneously in the future.
+
+We briefly list the major breaking changes here. Please refer to the [migration guide](../migration.md) for details and migration instructions.
+
+#### Highlight
+
+- Support `BEiT v2`, `MixMIM`, `EVA`
+- Support `ShapeBias` metric
+- Add Solution of FGIA ACCV 2022 (1st Place)
+- Refactor t-SNE
+
+#### New Features
+
+- Support `BEiT v2` ([#627](https://github.com/open-mmlab/mmselfsup/pull/627))
+- Support `MixMIM` ([#626](https://github.com/open-mmlab/mmselfsup/pull/626))
+- Support `EVA` ([#632](https://github.com/open-mmlab/mmselfsup/pull/632))
+- Support `ShapeBias` metric ([#635](https://github.com/open-mmlab/mmselfsup/pull/635))
+- Add convert scripts and instructions on seg and det ([#621](https://github.com/open-mmlab/mmselfsup/pull/621))
+- Add pretraining for FGIA ([#607](https://github.com/open-mmlab/mmselfsup/pull/607))
+
+#### Bug Fixes
+
+- Change `pseudo_collect` to `default_collect` ([#616](https://github.com/open-mmlab/mmselfsup/pull/616))
+- Fix the link of SimMIM 800pt 100ft ([#622](https://github.com/open-mmlab/mmselfsup/pull/622))
+- Change `map_location` to `cpu` ([#623](https://github.com/open-mmlab/mmselfsup/pull/623))
+- Fix import error ([#631](https://github.com/open-mmlab/mmselfsup/pull/631))
+- Fix key error in configs ([#630](https://github.com/open-mmlab/mmselfsup/pull/630))
+- Change `np.int` to `int` ([#636](https://github.com/open-mmlab/mmselfsup/pull/636))
+- Fix knn multi-gpu bug ([#634](https://github.com/open-mmlab/mmselfsup/pull/634))
+
+#### Improvements
+
+- Refactor `projects/` folder ([#620](https://github.com/open-mmlab/mmselfsup/pull/620))
+- Refactor `t-SNE` ([#629](https://github.com/open-mmlab/mmselfsup/pull/629))
+- Refactor `CAE` ([#645](https://github.com/open-mmlab/mmselfsup/pull/645))
+- Refactor benchmark script and update files ([#637](https://github.com/open-mmlab/mmselfsup/pull/637))
+
+#### Docs
+
+- Update data_flow.md ([#612](https://github.com/open-mmlab/mmselfsup/pull/612))
+- Update datasets.md ([#633](https://github.com/open-mmlab/mmselfsup/pull/633))
+
 ### v1.0.0rc4 (07/12/2022)
 
 The `master` branch is still 0.x version and we will checkout a new `1.x` branch to release 1.x version. The two versions will be maintained simultaneously in the future.

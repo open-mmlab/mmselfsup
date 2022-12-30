@@ -68,7 +68,7 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 **v1.0.0rc5** 版本已经在 2022.12.30 发布。
 
 - 支持了 `BEiT v2`, `MixMIM`, `EVA`
-- 增加 `./projects` 文件夹
+- 支持了 `ShapeBias` 评价方式
 - 添加 FGIA ACCV 2022 比赛第一名方案
 - 重构了 `t-SNE`
 

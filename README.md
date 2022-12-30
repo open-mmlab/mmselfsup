@@ -68,7 +68,7 @@ The master branch works with **PyTorch 1.6** or higher.
 MMSelfSup **v1.0.0rc5** was released in 30/12/2022.
 
 - Support `BEiT v2`, `MixMIM`, `EVA`.
-- Add `./projects` folder.
+- Support `ShapeBias` metric
 - Add Solution of FGIA ACCV 2022 (1st Place)
 - Refactor t-SNE
 
