@@ -105,8 +105,7 @@ jobs:
       - run:
           name: Install mmselfsup dependencies
           command: |
-            docker exec mmselfsup pip install openmim
-            docker exec mmselfsup mim install mmcv-full
+            docker exec mmselfsup pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/${MMCV_CUDA}/torch${MMCV_TORCH}/index.html
             docker exec mmselfsup pip install -r requirements.txt
       - run:
           name: Build and install
