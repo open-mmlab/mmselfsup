@@ -43,9 +43,10 @@ English | [简体中文](README_zh-CN.md)
 
 MMSelfSup is an open source self-supervised representation learning toolbox based on PyTorch. It is a part of the [OpenMMLab](https://openmmlab.com/) project.
 
-The master branch works with **PyTorch 1.5** or higher.
+The master branch works with **PyTorch 1.5+**.
 
-### Major features
+<details open>
+<summary>Major features</summary>
 
 - **Methods All in One**
 
@@ -63,37 +64,39 @@ The master branch works with **PyTorch 1.5** or higher.
 
   Since MMSelfSup adopts similar design of modulars and interfaces as those in other OpenMMLab projects, it supports smooth evaluation on downstream tasks with other OpenMMLab projects like object detection and segmentation.
 
+</details>
+
 ## What's New
 
-### Preview of 1.x version
+### 💎 Stable version
 
-A brand new version of **MMSelfSup v1.0.0rc1** was released in 01/09/2022:
-
-Highlights of the new version:
-
-- Based on [MMEngine](https://github.com/open-mmlab/mmengine) and [MMCV](https://github.com/open-mmlab/mmcv/tree/2.x).
-- Released with refactor.
-- Refine all [documents](https://mmselfsup.readthedocs.io/en/1.x/).
-- Support `MAE`, `SimMIM`, `MoCoV3` with different pre-training epochs and backbones of different scales.
-- More concise API.
-- More powerful data pipeline.
-- Higher accurcy for some algorithms.
-
-Find more new features in [1.x branch](https://github.com/open-mmlab/mmselfsup/tree/1.x). Issues and PRs are welcome!
-
-### Stable version
-
-MMSelfSup **v0.10.1** was released in 01/11/2022.
+MMSelfSup **v0.11.0** was released in 30/12/2022.
 
 Highlights of the new version:
 
-- Support MaskFeat
-- Update issue form
-- Fix some typo in documents
+- Support `InterCLR`
+- Fix some bugs
 
 Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
 
 Differences between MMSelfSup and OpenSelfSup codebases can be found in [compatibility.md](docs/en/compatibility.md).
+
+### 🌟 Preview of 1.x version
+
+A brand new version of **MMSelfSup v1.0.0rc4** was released in 07/12/2022.
+
+Highlights of the new version:
+
+- Based on [MMEngine](https://github.com/open-mmlab/mmengine) and [MMCV](https://github.com/open-mmlab/mmcv/tree/2.x).
+- Refine all [documents](https://mmselfsup.readthedocs.io/en/1.x/).
+- Support `BEiT v1`, `BEiT v2`, `MILAN`, `MixMIM`, `EVA`.
+- Support `MAE`, `SimMIM`, `MoCoV3` with different pre-training epochs and backbones of different scales.
+- More concise APIs.
+- More visualization tools.
+- More powerful data pipeline.
+- Higher accurcy for some algorithms.
+
+Find more new features in [1.x branch](https://github.com/open-mmlab/mmselfsup/tree/1.x). Issues and PRs are welcome!
 
 ## Installation
 
