@@ -63,7 +63,7 @@ The master branch works with **PyTorch 1.5+**.
 - **Compatibility**
 
   Since MMSelfSup adopts similar design of modulars and interfaces as those in other OpenMMLab projects, it supports smooth evaluation on downstream tasks with other OpenMMLab projects like object detection and segmentation.
-  
+
 </details>
 
 ## What's New
