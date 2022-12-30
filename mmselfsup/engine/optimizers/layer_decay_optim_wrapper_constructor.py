@@ -60,6 +60,40 @@ def get_layer_id_for_swin(var_name: str, max_layer_id: int,
         return max_layer_id - 1
 
 
+def get_layer_id_for_mixmim(var_name: str, max_layer_id: int,
+                            depths: List[int]) -> int:
+    """Get the layer id to set the different learning rates for MixMIM.
+
+    The layer is from 1 to max_layer_id (e.g. 25)
+    Args:
+        var_name (str): The key of the model.
+        num_max_layer (int): Maximum number of backbone layers.
+        depths (List[int]): Depths for each stage.
+    Returns:
+        int: Returns the layer id of the key.
+    """
+
+    if 'patch_embed' in var_name:
+        return -1
+    elif 'absolute_pos_embed' in var_name:
+        return -1
+    elif 'pos_embed' in var_name:
+        return -1
+    elif var_name.startswith('backbone.layers'):
+        layer_id = int(var_name.split('.')[2])
+        block_id = var_name.split('.')[4]
+
+        if block_id == 'downsample' or \
+                block_id == 'reduction' or \
+                block_id == 'norm':
+            return sum(depths[:layer_id + 1]) - 1
+
+        layer_id = sum(depths[:layer_id]) + int(block_id) + 1
+        return layer_id - 1
+    else:
+        return max_layer_id - 2
+
+
 @OPTIM_WRAPPER_CONSTRUCTORS.register_module()
 class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
     """Different learning rates are set for different layers of backbone.
@@ -113,13 +147,16 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
 
         # currently, we only support layer-wise learning rate decay for vit
         # and swin.
-        assert model_type in ['vit', 'swin'], f'Currently, we do not support \
+        assert model_type in ['vit', 'swin',
+                              'mixmim'], f'Currently, we do not support \
             layer-wise learning rate decay for {model_type}'
 
         if model_type == 'vit':
             num_layers = len(module.backbone.layers) + 2
         elif model_type == 'swin':
             num_layers = sum(module.backbone.depths) + 2
+        elif model_type == 'mixmim':
+            num_layers = sum(module.backbone.depths) + 1
 
         # if layer_decay_rate is not provided, not decay
         decay_rate = optimizer_cfg.pop('layer_decay_rate', 1.0)
@@ -146,6 +183,9 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
             elif model_type == 'swin':
                 layer_id = get_layer_id_for_swin(name, num_layers,
                                                  module.backbone.depths)
+            elif model_type == 'mixmim':
+                layer_id = get_layer_id_for_mixmim(name, num_layers,
+                                                   module.backbone.depths)
 
             group_name = f'layer_{layer_id}_{group_name}'
             if group_name not in parameter_groups:
