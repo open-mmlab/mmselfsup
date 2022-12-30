@@ -11,7 +11,7 @@
 #### 亮点
 
 - 支持了 `BEiT v2`, `MixMIM`, `EVA`
-- 支持了 `ShapeBias` 评价方式
+- 支持了模型分析工具 `ShapeBias` 
 - 增加 FGIA ACCV 2022 第一名解决方案
 - 重构 t-SNE
 
