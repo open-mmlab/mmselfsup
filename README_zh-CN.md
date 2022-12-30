@@ -67,15 +67,14 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
 ### 1.x 预览版本
 
-全新的 **MMSelfSup v1.0.0rc1** 版本已在 2022.09.01 发布。
-
 新版本亮点：
 
 - 基于全新的 [MMEngine](https://github.com/open-mmlab/mmengine) 和 [MMCV](https://github.com/open-mmlab/mmcv/tree/2.x)。
-- 代码库重构，统一接口。
 - 完善了新版本 [文档](https://mmselfsup.readthedocs.io/en/1.x/)。
+- 支持了 `BEiT v1`, `BEiT v2`, `MILAN`, `MixMIM`, `EVA`。
 - 支持了不同训练时间、不同尺寸的 `MAE`, `SimMIM`, `MoCoV3` 的预训练模型。
 - 更加简洁的 API。
+- 更丰富的可视化工具。
 - 更加强大的数据管道。
 - 部分模型具有更高的准确率。
 
@@ -83,13 +82,12 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
 ### 稳定版本
 
-最新的 **v0.10.1** 版本已经在 2022.11.1 发布。
+最新的 **v0.11.0** 版本已经在 2022.12.30 发布。
 
 新版本亮点：
 
-- 支持 MaskFeat
-- 更新 issue 模板
-- 修复部分文档的错误
+- 支持 InterCLR
+- 修复部分 bugs
 
 请参考 [更新日志](docs/zh_cn/changelog.md) 获取更多细节和历史版本信息。
 

@@ -67,15 +67,14 @@ The master branch works with **PyTorch 1.5** or higher.
 
 ### Preview of 1.x version
 
-A brand new version of **MMSelfSup v1.0.0rc1** was released in 01/09/2022:
-
 Highlights of the new version:
 
 - Based on [MMEngine](https://github.com/open-mmlab/mmengine) and [MMCV](https://github.com/open-mmlab/mmcv/tree/2.x).
-- Released with refactor.
 - Refine all [documents](https://mmselfsup.readthedocs.io/en/1.x/).
+- Support `BEiT v1`, `BEiT v2`, `MILAN`, `MixMIM`, `EVA`.
 - Support `MAE`, `SimMIM`, `MoCoV3` with different pre-training epochs and backbones of different scales.
 - More concise API.
+- More visualization tools.
 - More powerful data pipeline.
 - Higher accurcy for some algorithms.
 
@@ -83,13 +82,12 @@ Find more new features in [1.x branch](https://github.com/open-mmlab/mmselfsup/t
 
 ### Stable version
 
-MMSelfSup **v0.10.1** was released in 01/11/2022.
+MMSelfSup **v0.11.0** was released in 30/12/2022.
 
 Highlights of the new version:
 
-- Support MaskFeat
-- Update issue form
-- Fix some typo in documents
+- Support InterCLR
+- Fix some bugs
 
 Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
 
