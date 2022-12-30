@@ -91,7 +91,7 @@ Highlights of the new version:
 - Refine all [documents](https://mmselfsup.readthedocs.io/en/1.x/).
 - Support `BEiT v1`, `BEiT v2`, `MILAN`, `MixMIM`, `EVA`.
 - Support `MAE`, `SimMIM`, `MoCoV3` with different pre-training epochs and backbones of different scales.
-- More concise API.
+- More concise APIs.
 - More visualization tools.
 - More powerful data pipeline.
 - Higher accurcy for some algorithms.

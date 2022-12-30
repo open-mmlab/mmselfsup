@@ -16,7 +16,7 @@
 
 #### Improvements
 
-- Update CI check strategy ([#581](https://github.com/open-mmlab/mmselfsup/pull/581))
+- Update CI check rules ([#581](https://github.com/open-mmlab/mmselfsup/pull/581))
 - Update assignee schedule ([#606](https://github.com/open-mmlab/mmselfsup/pull/606))
 
 #### Docs
