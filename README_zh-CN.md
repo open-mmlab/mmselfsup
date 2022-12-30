@@ -39,13 +39,14 @@
 
 </div>
 
-## 介绍
+## 简介
 
 MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱，是 [OpenMMLab](https://openmmlab.com/) 项目成员之一。
 
 主分支代码支持 **PyTorch 1.5** 及以上的版本。
 
-### 主要特性
+<details open>
+<summary>主要特性</summary>
 
 - **多方法集成**
 
@@ -63,9 +64,26 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
   兼容 OpenMMLab 各大算法库，拥有丰富的下游评测任务和预训练模型的应用。
 
-## 更新
+</details>
 
-### 1.x 预览版本
+## 最新进展
+
+### 💎 稳定版本
+
+最新的 **v0.11.0** 版本已经在 2022.12.30 发布。
+
+新版本亮点：
+
+- 支持 `InterCLR`
+- 修复部分 bugs
+
+请参考 [更新日志](docs/zh_cn/changelog.md) 获取更多细节和历史版本信息。
+
+MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibility.md) 中。
+
+### 🌟 1.x 预览版本
+
+全新的 **v1.0.0rc4** 版本已经在 2022.12.07 发布：
 
 新版本亮点：
 
@@ -79,19 +97,6 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 - 部分模型具有更高的准确率。
 
 在 [1.x 分支](https://github.com/open-mmlab/mmselfsup/tree/1.x) 查看更多新特性。 欢迎大家提 Issues 和 PRs!
-
-### 稳定版本
-
-最新的 **v0.11.0** 版本已经在 2022.12.30 发布。
-
-新版本亮点：
-
-- 支持 InterCLR
-- 修复部分 bugs
-
-请参考 [更新日志](docs/zh_cn/changelog.md) 获取更多细节和历史版本信息。
-
-MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibility.md) 中。
 
 ## 安装
 
