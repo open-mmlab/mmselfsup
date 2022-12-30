@@ -45,7 +45,8 @@ MMSelfSup is an open source self-supervised representation learning toolbox base
 
 The master branch works with **PyTorch 1.5** or higher.
 
-### Major features
+<details open>
+<summary>Major features</summary>
 
 - **Methods All in One**
 
@@ -62,10 +63,27 @@ The master branch works with **PyTorch 1.5** or higher.
 - **Compatibility**
 
   Since MMSelfSup adopts similar design of modulars and interfaces as those in other OpenMMLab projects, it supports smooth evaluation on downstream tasks with other OpenMMLab projects like object detection and segmentation.
+  
+</details>
 
 ## What's New
 
-### Preview of 1.x version
+### 💎 Stable version
+
+MMSelfSup **v0.11.0** was released in 30/12/2022.
+
+Highlights of the new version:
+
+- Support `InterCLR`
+- Fix some bugs
+
+Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
+
+Differences between MMSelfSup and OpenSelfSup codebases can be found in [compatibility.md](docs/en/compatibility.md).
+
+### 🌟 Preview of 1.x version
+
+A brand new version of **MMSelfSup v1.0.0rc4** was released in 07/12/2022:
 
 Highlights of the new version:
 
@@ -79,19 +97,6 @@ Highlights of the new version:
 - Higher accurcy for some algorithms.
 
 Find more new features in [1.x branch](https://github.com/open-mmlab/mmselfsup/tree/1.x). Issues and PRs are welcome!
-
-### Stable version
-
-MMSelfSup **v0.11.0** was released in 30/12/2022.
-
-Highlights of the new version:
-
-- Support InterCLR
-- Fix some bugs
-
-Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
-
-Differences between MMSelfSup and OpenSelfSup codebases can be found in [compatibility.md](docs/en/compatibility.md).
 
 ## Installation
 
