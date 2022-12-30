@@ -266,8 +266,6 @@ also download these [csv files](https://github.com/bethgelab/model-vs-human/tree
 
 ### Plot shape bias
 
-After inferencing and preparing these csv files, please download all these [pictures](https://github.com/bethgelab/model-vs-human/tree/master/assets/icons) to a subfolder, named `shape_bias_icons` under the folder `resource`.
-
 Then we can start to plot the shape bias
 
 ```shell

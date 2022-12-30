@@ -219,6 +219,19 @@ def plot_shape_bias_matrixplot(args, analysis=ShapeBias()) -> None:
 
 
 if __name__ == '__main__':
+    icon_names = [
+        'airplane.png', 'response_icons_vertical_reverse.png', 'bottle.png',
+        'car.png', 'oven.png', 'elephant.png', 'dog.png', 'boat.png',
+        'clock.png', 'chair.png', 'keyboard.png', 'bird.png', 'bicycle.png',
+        'response_icons_horizontal.png', 'cat.png', 'bear.png', 'colorbar.pdf',
+        'knife.png', 'response_icons_vertical.png', 'truck.png'
+    ]
+    root_url = 'https://github.com/bethgelab/model-vs-human/raw/master/assets/icons'  # noqa: E501
+    os.makedirs(ICONS_DIR, exist_ok=True)
+    for icon_name in icon_names:
+        url = osp.join(root_url, icon_name)
+        os.system('wget -O {} {}'.format(osp.join(ICONS_DIR, icon_name), url))
+
     args = parser.parse_args()
     assert len(args.model_names) * 3 == len(args.colors), 'Number of colors \
         must be 3 times the number of models. Every three colors are the RGB \
@@ -247,3 +260,5 @@ if __name__ == '__main__':
     args.plotting_names.append('Humans')
 
     plot_shape_bias_matrixplot(args)
+
+    os.system('rm -rf {}'.format(ICONS_DIR))
