@@ -65,15 +65,18 @@ The master branch works with **PyTorch 1.6** or higher.
 
 ## What's New
 
+MMSelfSup **v1.0.0rc5** was released in 30/12/2022.
+
+- Support `BEiT v2`, `MixMIM`, `EVA`.
+- Add `./projects` folder.
+- Add Solution of FGIA ACCV 2022 (1st Place)
+- Refactor t-SNE
+
 MMSelfSup **v1.0.0rc4** was released in 07/12/2022.
 
 - Support BEiT v1 and MILAN.
 - Support low-level reconstruction visualization.
 - Refine documents algorithm pages.
-
-MMSelfSup **v1.0.0rc3** was released in 01/11/2022.
-
-- Support MaskFeat.
 
 Please refer to [Changelog](https://mmselfsup.readthedocs.io/en/dev-1.x/notes/changelog.html) for details and release history.
 
