@@ -2,8 +2,8 @@
 
 - [转换](<>)
   - [转换概述](#转换概述)
-  - [MultiView](#MultiView)
-  - [PackSelfSupInputs](#PackSelfSupInputs)
+  - [MultiView概论](#MultiView概论)
+  - [PackSelfSupInputs概论](#PackSelfSupInputs概论)
 
 ## 转换概述
 
@@ -33,7 +33,7 @@
 |                             [`MultiView`](mmselfsup.datasets.transforms.MultiView)                              |               A wrapper for algorithms with multi-view image inputs                |
 |                           [`PackSelfSupInputs`](mmselfsup.datasets.PackSelfSupInputs)                           |         Pack data into a format compatible with the inputs of an algorithm         |
 
-## MultiView
+## MultiView概论
 
 我们为一些算法建名为[`MultiView`](mmselfsup.datasets.transforms.MultiView)的多角度照片输入的包装器，比如MOCO,SimCLR和SwAV。在配置文件中，我们能这样定义：
 
@@ -67,7 +67,7 @@ pipeline = [
 
 这意味着有两个通信流水线，他们分别有两个角度和六个角度。在[imagenet_mocov1.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/_base_/datasets/imagenet_mocov1.py)和 [imagenet_mocov2.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/_base_/datasets/imagenet_mocov2.py) 和[imagenet_swav_mcrop-2-6.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/_base_/datasets/imagenet_swav_mcrop-2-6.py)中有更多例子。
 
-## PackSelfSupInputs
+## PackSelfSupInputs概论
 
 我们建一个名为[`PackSelfSupInputs`](mmselfsup.datasets.transforms.PackSelfSupInputs)的类来将数据转换为能输入算法中的格式。这种转换通常在通信流水线的后面，就像这样：
 
