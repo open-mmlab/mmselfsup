@@ -5,20 +5,20 @@
   - [用 MMSelfSup 把数据打包给 SelfSupDataSample](#用mmselfsup-把数据打包给-selfsupdatasample)
 
 像 OpenMMLab 中其他仓库一样，MMSelfSup 也定义了一个数据结构，名为 `SelfSupDataSample` ,这个数据结构用于接收和传递整个训练和测试过程中的数据。
-`SelfSupDataSample` 继承 [MMEngine](https://github.com/open-mmlab/mmengine) 中使用的 `BaseDataElement`。如果需要深入了解 `BaseDataElement`，我们建议参考 [BaseDataElement](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/data_element.md)。在这些教程中，我们主要讨论 [SelfSupDataSample](mmselfsup.structures.SelfSupDataSample) 中一些定制化的属性。
+`SelfSupDataSample` 继承 [MMEngine](https://github.com/open-mmlab/mmengine) 中使用的 `BaseDataElement`。如果需要深入了解 `BaseDataElement`，我们建议参考 [BaseDataElement](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/advanced_tutorials/data_element.md)。在这些教程中，我们主要讨论 [SelfSupDataSample](mmselfsup.structures.SelfSupDataSample) 中一些定制化的属性。
 
 ## SelfSupDataSample 中的定制化的属性
 在 MMSelfSup 中，`SelfSupDataSample` 将模型需要的所有信息（除了图片）打包，比如 mask image modeling(MIM) 中请求的 `mask` 和前置任务中的 `pseudo_label` 。除了提供信息，它还能接受模型产生的信息，比如预测得分。为实现上述功能， `SelfSupDataSample` 定义以下五个属性：
 
-- gt_label（真实标签数据），包含图片的真实标签。
+- gt_label（标签数据），包含图片的真实标签。
 
-- sample_idx（样例数据），包含一开始被数据集初始化的数据列表中的最近的图片的序号。
+- sample_idx（实例数据），包含一开始被数据集初始化的数据列表中的最近的图片的序号。
 
-- mask（基础数据组成部分），包含 MIM 中的面具，比如 SimMIM 和 CAE。
+- mask（数据基类），包含 MIM 中的面具，比如 SimMIM 和 CAE。
 
-- pred_label（预测标签数据），包含模型预测的标签。
+- pred_label（标签数据），包含模型预测的标签。
 
-- pseudo_label（基础数据组成部分），包含前置任务中用到的假的标签，比如 Relation Location 中的 location。
+- pseudo_label（数据基类），包含前置任务中用到的假的标签，比如 Relation Location 中的 location。
 
 为了帮助使用者理解 SelfSupDataSample 中的基本思想，我们给出一个关于如何创建 `SelfSupDataSample` 实例并设置这些属性的简单例子。
 
