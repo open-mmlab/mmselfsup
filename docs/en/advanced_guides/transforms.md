@@ -7,7 +7,7 @@
 
 ## 数据变换概述
 
-在 [add_transforms](./add_transforms.md) 中我们介绍了如何建 `Pipeline` 。 `Pipeline` 包括一系列的数据变换。MMSelfSup 中数据变换主要分为三类：
+在 [add_transforms](./add_transforms.md) 中我们介绍了如何建 `Pipeline` 。 `Pipeline` 里有一系列的数据变换。MMSelfSup 中数据变换主要分为三类：
 
 1. 处理数据用到的数据变换。[processing.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/processing.py) 中定义了独特的数据变换，比如`RandomCrop`, `RandomResizedCrop` 和 `RandomGaussianBlur`。我们也可以用其它仓库的数据变换，比如 MMCV 中的 `LoadImageFromFile`。
 
