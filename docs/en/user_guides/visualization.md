@@ -6,17 +6,17 @@
 
 - [可视化](#可视化)
   - [如何实现可视化](#如何实现可视化)
-  - [MMSelfsup的可视化做什么](#mmselfsup-的可视化做什么)
+  - [MMSelfsup 的可视化做什么](#mmselfsup-的可视化做什么)
   - [用不同的存储后端](#用不同的存储后端)
   - [定制化的可视化](#定制化的可视化)
   - [数据集可视化](#数据集可视化)
   - [t-SNE 可视化](#t-sne-可视化)
-  - [可视化低级特征再现](#可视化低级特征再现)
+  - [可视化低级特征重建](#可视化低级特征重建)
   - [可视化形状偏好](#可视化形状偏好)
     - [准备数据集](#准备数据集)
     - [为分类调整配置](#为分类调整配置)
     - [用上述调整过的配置文件推理模型](#用上述调整过的配置文件推理模型)
-    - [画出形状偏好](#画出形状偏好)
+    - [画出 shape bias](#shape-bias)
 
 <!-- /TOC -->
 
@@ -30,7 +30,7 @@ OpenMMLab 2.0 引入可视化对象`Visualizer`和一些可视化后端`VisBacke
 <img src="https://user-images.githubusercontent.com/17425982/163327736-f7cb3b16-ef07-46bc-982a-3cc7495e6c82.png" width="800" />
 </div>
 
-## MMSelfsup的可视化做什么
+## MMSelfSup 的可视化做什么
 
 (1) 用不同的存储后端存训练数据
 
@@ -93,7 +93,7 @@ visualizer = dict(
 
 ## 定制化的可视化
 
-定制化可视化就像定制化其他组成部分那样。想定制化 `Visualizer`, `VisBackend` 或者 `VisualizationHook` 的话可以参考 MMEngine 里的 [Visualization Doc](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/visualization.md)
+定制化可视化就像定制化其他组成部分那样。想定制化 `Visualizer`, `VisBackend` 或者 `VisualizationHook` 的话可以参考 MMEngine 里的 [Visualization Doc](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/advanced_tutorials/visualization.md)
 
 ## 数据集可视化
 
@@ -116,11 +116,11 @@ python tools/misc/browse_dataset.py configs/selfsup/simsiam/simsiam_resnet50_8xb
 </div>
 
 - 左边两张图来自对比学习数据流。
-- 右边那张图是加了面具的照片。
+- 右边那张图是添加了掩码的图像。
 
 ## t-SNE 可视化
 
-我们提供可视化 t-SNE 展示图片质量的现成工具。
+我们提供可视化 t-SNE 展示图片表征的现成工具。
 
 ```shell
 python tools/analysis_tools/visualize_tsne.py ${CONFIG_FILE} --checkpoint ${CKPT_PATH} --work-dir ${WORK_DIR} [optional arguments]
@@ -150,15 +150,15 @@ python ./tools/analysis_tools/visualize_tsne.py \
 <img src="https://user-images.githubusercontent.com/36138628/207305333-59af4747-1e9c-4f85-a57d-c7e5d132a6e5.png" width="250" />
 </div>
 
-## 可视化低级特征再现
+## 可视化低级特征重建
 
-我们提供如下算法的再现可视化：
+我们提供如下算法的重建可视化：
 
 - MAE
 - SimMIM
 - MaskFeat
 
-用户可以通过如下命令可视化再现。
+用户可以通过如下命令可视化重建。
 
 ```shell
 python tools/analysis_tools/visualize_reconstruction.py ${CONFIG_FILE} \
@@ -185,7 +185,7 @@ python tools/analysis_tools/visualize_reconstruction.py configs/selfsup/mae/mae_
     --norm-pix
 
 
-# SimMIM 在数据流里生成面具，所以我们不用脚本里定义好的流水线而用 '--use-vis-pipeline' 来应用配置里定义的 'vis_pipeline'
+# SimMIM 在数据流里生成掩码，所以我们不用脚本里定义好的管道而用 '--use-vis-pipeline' 来应用配置里定义的 'vis_pipeline'
 python tools/analysis_tools/visualize_reconstruction.py configs/selfsup/simmim/simmim_swin-large_16xb128-amp-coslr-800e_in1k-192.py \
     --checkpoint https://download.openmmlab.com/mmselfsup/1.x/simmim/simmim_swin-large_16xb128-amp-coslr-800e_in1k-192/simmim_swin-large_16xb128-amp-coslr-800e_in1k-192_20220916-4ad216d3.pth \
     --img-path data/imagenet/val/ILSVRC2012_val_00000003.JPEG \
@@ -211,9 +211,9 @@ MaskFeat 结果如下:
 <img src="https://user-images.githubusercontent.com/36138628/200465876-7e7dcb6f-5e8d-4d80-b300-9e1847cb975f.jpg" width="800" />
 </div>
 
-## 可视化形状偏好
+## 可视化 shape bias
 
-形状偏好衡量在感知图像特征的过程中，与纹理相比，模型依赖形状的程度。感兴趣的话可以参考 [paper](https://arxiv.org/abs/2106.07411) 了解更多信息。 MMSelfSup 提供一个现有的用于得到分类模型形状的工具箱。可以按以下步骤来做：
+shape bias 衡量在感知图像特征的过程中，与纹理相比，模型依赖 shape 的程度。感兴趣的话可以参考 [paper](https://arxiv.org/abs/2106.07411) 了解更多信息。 MMSelfSup 提供一个现有的用于得到分类模型 shape bias 的工具箱。可以按以下步骤来做：
 
 ### 准备数据集
 
@@ -266,18 +266,18 @@ After that, you should obtain a csv file, named `cue-conflict_model-name_session
 also download these [csv files](https://github.com/bethgelab/model-vs-human/tree/master/raw-data/cue-conflict) to the
 `csv_dir`.
 
-### 画出形状偏好
+### 画出 shape bias
 
-然后我们就可以开始画出形状偏好了。
+然后我们就可以开始画出 shape bias 了。
 
 ```shell
 python tools/analysis_tools/visualize_shape_bias.py --csv-dir $CVS_DIR --result-dir $CSV_DIR --colors $RGB --markers o --plotting-names $YOU_MODEL_NAME --model-names $YOU_MODEL_NAME
 ```
 
 - csv-dir, 相同目录下，用于存储 csv 文件。
-- colors, 应为以 RGB 为格式的 RGB 值,比如 100 100 100,如果您想画若干模型的形状偏好的话多个RGB值也行。
-- plotting-names, 偏好形状里图例的名称，您可将之设为模型名字。如果您想画若干模型的形状偏好的话名字设多个值也行。
-- 模型名字，应该跟配置文件里的一样，如果您想画若干模型的形状偏好的话多个名字也行。
+- colors, 应为以 RGB 为格式的 RGB 值,比如 100 100 100,如果您想画若干模型的 shape bias 的话多个RGB值也行。
+- plotting-names, 偏好形状里图例的名称，您可将之设为模型名字。如果您想画若干模型的 shape bias 的话名字设多个值也行。
+- 模型名字，应该跟配置文件里的一样，如果您想画若干模型的 shape bias 的话多个名字也行。
 
 请注意，每三个 `--colors` 对应一个 `--model-names` 。上面步骤做完后您会得到如下图像：
 
