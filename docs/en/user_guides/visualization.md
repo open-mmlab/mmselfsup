@@ -6,11 +6,11 @@
 
 - [可视化](#可视化)
   - [如何实现可视化](#如何实现可视化)
-  - [MMSelfsup的可视化做什么](#MMSelfsup的可视化做什么)
+  - [MMSelfsup的可视化做什么](#mmselfsup-的可视化做什么)
   - [用不同的存储后端](#用不同的存储后端)
   - [定制化的可视化](#定制化的可视化)
   - [数据集可视化](#数据集可视化)
-  - [t-SNE可视化](#t-SNE可视化)
+  - [t-SNE 可视化](#t-sne-可视化)
   - [可视化低级特征再现](#可视化低级特征再现)
   - [可视化形状偏好](#可视化形状偏好)
     - [准备数据集](#准备数据集)
@@ -22,7 +22,7 @@
 
 ## 如何实现可视化
 
-建议先学[engine.md](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/design/visualization.md)里关于可视化的基本概念。
+建议先学习[engine.md](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/design/visualization.md)里关于可视化的基本概念。
 
 OpenMMLab 2.0 引入可视化对象`Visualizer`和一些可视化后端`VisBackend`。如下图表展示了`Visualizer`和`VisBackend`的关系。
 
@@ -34,9 +34,9 @@ OpenMMLab 2.0 引入可视化对象`Visualizer`和一些可视化后端`VisBacke
 
 (1) 用不同的存储后端存训练数据
 
-MMEngine的后端包括`LocalVisBackend`, `TensorboardVisBackend` 和 `WandbVisBackend`。
+MMEngine 的后端包括 `LocalVisBackend`, `TensorboardVisBackend` 和 `WandbVisBackend`。
 
-在训练过程中，默认钩子`LoggerHook`中的[after_train_iter()](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/logger_hook.py#L150)会被调用，并且会在不同后端中用到`add_scalars`，例如：
+在训练过程中，默认钩子 `LoggerHook` 中的 [after_train_iter()](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/logger_hook.py#L150) 会被调用，并且会在不同后端中用到 `add_scalars` ，例如：
 
 ```python
 ...
@@ -49,11 +49,11 @@ def after_train_iter(...):
 
 (2) 浏览数据集
 
-[`add_datasample()`](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/visualization/selfsup_visualizer.py#L151)函数位于[`SelfSupVisualizer`](mmselfsup.visualization.SelfSupVisualizer),常用于在[browse_dataset.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/browse_dataset.py) 中浏览数据集。[analysis_tools.md](analysis_tools.md)中有更多的教程。
+[`add_datasample()`](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/visualization/selfsup_visualizer.py#L151) 函数位于 [`SelfSupVisualizer`](mmselfsup.visualization.SelfSupVisualizer), 常用于在 [browse_dataset.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/browse_dataset.py) 中浏览数据集。 [analysis_tools.md](analysis_tools.md) 中有更多的教程。
 
 ## 用不同的存储后端
 
-如果想用不同的存储后端(Wandb, Tensorboard,或者远程窗口里常规的后端)，像以下这样改配置文件的`vis_backends`就行了：
+如果想用不同的存储后端( Wandb, Tensorboard, 或者远程窗口里常规的后端)，像以下这样改配置文件的 `vis_backends` 就行了：
 
 **Local**
 
@@ -69,7 +69,7 @@ visualizer = dict(
     type='SelfSupVisualizer', vis_backends=vis_backends, name='visualizer')
 ```
 
-E.g.
+例如
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/36138628/199388357-5d1cc7b4-07b8-41b1-ac66-12ec8ef009da.png" width="400" />
@@ -83,7 +83,7 @@ visualizer = dict(
     type='SelfSupVisualizer', vis_backends=vis_backends, name='visualizer')
 ```
 
-值得一提的是，对于`vis_backends`有多个可视化后端存在时，只有`WandbVisBackend`有效。
+值得一提的是，对于 `vis_backends` 有多个可视化后端存在时，只有 `WandbVisBackend` 有效。
 
 例如：
 
@@ -93,11 +93,11 @@ visualizer = dict(
 
 ## 定制化的可视化
 
-定制化可视化就像定制化其他组成部分那样。想定制化`Visualizer`, `VisBackend` 或者 `VisualizationHook`的话可以参考MMEngine里的[Visualization Doc](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/visualization.md)
+定制化可视化就像定制化其他组成部分那样。想定制化 `Visualizer`, `VisBackend` 或者 `VisualizationHook` 的话可以参考 MMEngine 里的 [Visualization Doc](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/visualization.md)
 
 ## 数据集可视化
 
-`tools/misc/browse_dataset.py`帮助用户可视化浏览mmselfsup数据集，或者也可以把图像存到指定的目录里。
+`tools/misc/browse_dataset.py` 帮助用户可视化浏览 MMSelfSup 数据集，或者也可以把图像存到指定的目录里。
 
 ```shell
 python tools/misc/browse_dataset.py ${CONFIG} [-h] [--skip-type ${SKIP_TYPE[SKIP_TYPE...]}] [--output-dir ${OUTPUT_DIR}] [--not-show] [--show-interval ${SHOW_INTERVAL}]
@@ -118,9 +118,9 @@ python tools/misc/browse_dataset.py configs/selfsup/simsiam/simsiam_resnet50_8xb
 - 左边两张图来自对比学习数据流。
 - 右边那张图是加了面具的照片。
 
-## t-SNE可视化
+## t-SNE 可视化
 
-我们提供可视化t-SNE展示图片质量的现成工具。
+我们提供可视化 t-SNE 展示图片质量的现成工具。
 
 ```shell
 python tools/analysis_tools/visualize_tsne.py ${CONFIG_FILE} --checkpoint ${CKPT_PATH} --work-dir ${WORK_DIR} [optional arguments]
@@ -128,10 +128,10 @@ python tools/analysis_tools/visualize_tsne.py ${CONFIG_FILE} --checkpoint ${CKPT
 
 参数:
 
-- `CONFIG_FILE`: 位于`configs/tsne/`中的t-SNE的配置文件。
+- `CONFIG_FILE`: 位于 `configs/tsne/` 中的 t-SNE 的配置文件。
 - `CKPT_PATH`: 模型检查点的目录或链接。
 - `WORK_DIR`: 拿来存可视化结果的目录。
-- `[optional arguments]`: 可选项，可以参考[visualize_tsne.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/visualize_tsne.py)
+- `[optional arguments]`: 可选项，可以参考 [visualize_tsne.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/visualize_tsne.py)
 
 一个命令示例如下：
 
@@ -143,7 +143,7 @@ python ./tools/analysis_tools/visualize_tsne.py \
     --max-num-class 100
 ```
 
-下面是可视化的例子,左边来自 `MoCoV2_ResNet50`，右边来自`MAE_ViT-base`:
+下面是可视化的例子,左边来自 `MoCoV2_ResNet50`，右边来自 `MAE_ViT-base`:
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/36138628/207305086-91df298c-0eb7-4254-9c5b-ba711644501b.png" width="250" />
@@ -185,7 +185,7 @@ python tools/analysis_tools/visualize_reconstruction.py configs/selfsup/mae/mae_
     --norm-pix
 
 
-# SimMIM在数据流里生成面具，所以我们不用脚本里定义好的流水线而用'--use-vis-pipeline'来应用配置里定义的'vis_pipeline'
+# SimMIM 在数据流里生成面具，所以我们不用脚本里定义好的流水线而用 '--use-vis-pipeline' 来应用配置里定义的 'vis_pipeline'
 python tools/analysis_tools/visualize_reconstruction.py configs/selfsup/simmim/simmim_swin-large_16xb128-amp-coslr-800e_in1k-192.py \
     --checkpoint https://download.openmmlab.com/mmselfsup/1.x/simmim/simmim_swin-large_16xb128-amp-coslr-800e_in1k-192/simmim_swin-large_16xb128-amp-coslr-800e_in1k-192_20220916-4ad216d3.pth \
     --img-path data/imagenet/val/ILSVRC2012_val_00000003.JPEG \
@@ -193,19 +193,19 @@ python tools/analysis_tools/visualize_reconstruction.py configs/selfsup/simmim/s
     --use-vis-pipeline
 ```
 
-MAE结果如下:
+MAE 结果如下:
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/36138628/200465826-83f316ed-5a46-46a9-b665-784b5332d348.jpg" width="800" />
 </div>
 
-SimMIM结果如下:
+SimMIM 结果如下:
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/36138628/200466133-b77bc9af-224b-4810-863c-eed81ddd1afa.jpg" width="800" />
 </div>
 
-MaskFeat结果如下:
+MaskFeat 结果如下:
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/36138628/200465876-7e7dcb6f-5e8d-4d80-b300-9e1847cb975f.jpg" width="800" />
@@ -213,11 +213,11 @@ MaskFeat结果如下:
 
 ## 可视化形状偏好
 
-形状偏好衡量在感知图像特征的过程中，与纹理相比，模型依赖形状的程度。感兴趣的话可以参考[paper](https://arxiv.org/abs/2106.07411)了解更多信息。MMSelfSup提供一个现有的用于得到分类模型形状的工具箱。可以按以下步骤来做：
+形状偏好衡量在感知图像特征的过程中，与纹理相比，模型依赖形状的程度。感兴趣的话可以参考 [paper](https://arxiv.org/abs/2106.07411) 了解更多信息。 MMSelfSup 提供一个现有的用于得到分类模型形状的工具箱。可以按以下步骤来做：
 
 ### 准备数据集
 
-首先把[cue-conflict](https://github.com/bethgelab/model-vs-human/releases/download/v0.1/cue-conflict.tar.gz)下载到`data`文件夹里,然后解压数据集。然后，你的`data`文件夹的结构应该像这样：
+首先把 [cue-conflict](https://github.com/bethgelab/model-vs-human/releases/download/v0.1/cue-conflict.tar.gz) 下载到 `data` 文件夹里,然后解压数据集。然后，您的 `data` 文件夹的结构应该像这样：
 
 ```text
 data
@@ -230,7 +230,7 @@ data
 
 ### 为分类调整配置
 
-用以下配置代替原来的test_dataloader和test_evaluation
+用以下配置代替原来的 test_dataloader 和 test_evaluation
 
 ```python
 test_dataloader = dict(
@@ -246,11 +246,11 @@ test_evaluator = dict(
     model_name='your_model_name')
 ```
 
-请记得自己修改一下`csv_dir`和`model_name`。
+请记得自己修改一下 `csv_dir` 和 `model_name`。
 
 ### 用上述调整过的配置文件推理模型
 
-然后你需要做的是用调整过的配置文件在`cue-conflict`数据集上推理模型。
+然后您需要做的是用调整过的配置文件在 `cue-conflict` 数据集上推理模型。
 
 ```shell
 # For Slurm
@@ -274,12 +274,12 @@ also download these [csv files](https://github.com/bethgelab/model-vs-human/tree
 python tools/analysis_tools/visualize_shape_bias.py --csv-dir $CVS_DIR --result-dir $CSV_DIR --colors $RGB --markers o --plotting-names $YOU_MODEL_NAME --model-names $YOU_MODEL_NAME
 ```
 
-- csv-dir, 相同目录下，用于存储csv文件。
-- colors, 应为以RGB为格式的RGB值,比如100 100 100,如果你想画若干模型的形状偏好的话多个RGB值也行。
-- plotting-names,偏好形状里图例的名称，你可将之设为模型名字。如果你想画若干模型的形状偏好的话名字设多个值也行。
-- 模型名字，应该跟配置文件里的一样，如果你想画若干模型的形状偏好的话多个名字也行。
+- csv-dir, 相同目录下，用于存储 csv 文件。
+- colors, 应为以 RGB 为格式的 RGB 值,比如 100 100 100,如果您想画若干模型的形状偏好的话多个RGB值也行。
+- plotting-names, 偏好形状里图例的名称，您可将之设为模型名字。如果您想画若干模型的形状偏好的话名字设多个值也行。
+- 模型名字，应该跟配置文件里的一样，如果您想画若干模型的形状偏好的话多个名字也行。
 
-请注意，每三个`--colors`对应一个`--model-names`。上面步骤做完后你会得到如下图像：
+请注意，每三个 `--colors` 对应一个 `--model-names` 。上面步骤做完后您会得到如下图像：
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/30762564/208357938-c744d3c3-7e08-468e-82b7-fc5f1804da59.png" width="400" />
