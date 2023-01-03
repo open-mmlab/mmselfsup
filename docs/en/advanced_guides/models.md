@@ -83,7 +83,7 @@ class BaseModel(_BaseModel):
 正如上面代码所示，构造主干部分时需要配置，但是对颈部和头部而言这可有可无。除了构造算法之外，您还需要重写基础模型中的一些抽象函数才能得到正确结果，我们将在下一部分讨论这件事。
 
 ## 纵览基础模型中的抽象函数
-`forward` 函数是结果的入口。然而，它和大多数 Pytorch 代码中只有一种模式的 `forward` 函数不同。在 `forward` 函数中您会逻辑混乱，这会限制粗糙度。正如下面代码所示，MMSelfSup 中的 `forward` 函数有三种模式：张量，损失和预测。
+`forward` 函数是结果的入口。然而，它和大多数 Pytorch 代码中只有一种模式的 `forward` 函数不同。MMSelfSup 把所有的逻辑都混杂在 `forward` 中，从而限制了该方法的可拓展性。正如下面代码所示，MMSelfSup 中的 `forward` 函数根据不同模式进行前向处理，目前共有三种模式：张量，损失和预测。
 
 ```python
 def forward(self,
