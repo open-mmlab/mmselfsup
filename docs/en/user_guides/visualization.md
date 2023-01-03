@@ -169,11 +169,11 @@ python tools/analysis_tools/visualize_reconstruction.py ${CONFIG_FILE} \
 
 参数:
 
-- `CONFIG_FILE`: config file for the pre-trained model.
-- `CKPT_PATH`: the path of model's checkpoint.
-- `IMAGE_PATH`: the input image path.
-- `OUTPUT_PATH`: the output image path, including 4 sub-images.
-- `[optional arguments]`: for optional arguments, you can refer to [visualize_reconstruction.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/visualize_reconstruction.py)
+- `CONFIG_FILE`: 预训练模型配置文件。
+- `CKPT_PATH`: 模型检查点的路径。
+- `IMAGE_PATH`: 输入图像的路径。
+- `OUTPUT_PATH`: 输出图像的路径，包含４个子图。
+- `[optional arguments]`: for optional arguments, 您可以参考 [visualize_reconstruction.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/visualize_reconstruction.py) 了解可选参数。
 
 例子如下:
 
