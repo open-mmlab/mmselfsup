@@ -10,13 +10,13 @@
 ## SelfSupDataSample 中的定制化的属性
 在 MMSelfSup 中，`SelfSupDataSample` 将模型需要的所有信息（除了图片）打包，比如 mask image modeling(MIM) 中请求的 `mask` 和前置任务中的 `pseudo_label` 。除了提供信息，它还能接受模型产生的信息，比如预测得分。为实现上述功能， `SelfSupDataSample` 定义以下五个属性：
 
-- gt_label（标签数据），包含图片的真实标签。
+- gt_label（真实标签数据），包含图片的真实标签。
 
-- sample_idx（例子的数据），包含一开始被数据集初始化的数据列表中的最近的图片的序号。
+- sample_idx（样例数据），包含一开始被数据集初始化的数据列表中的最近的图片的序号。
 
 - mask（基础数据组成部分），包含 MIM 中的面具，比如 SimMIM 和 CAE。
 
-- pred_label（标签数据），包含模型预测的标签。
+- pred_label（预测标签数据），包含模型预测的标签。
 
 - pseudo_label（基础数据组成部分），包含前置任务中用到的假的标签，比如 Relation Location 中的 location。
 
@@ -28,30 +28,30 @@ from mmselfsup.core import SelfSupDataSample
 from mmengine.data import LabelData, InstanceData, BaseDataElement
 
 selfsup_data_sample = SelfSupDataSample()
-# set the gt_label in selfsup_data_sample
-# gt_label should be the type of LabelData
+# 在 selfsup_data_sample 里加入真实标签数据
+# 真实标签数据的类型应与 LabelData 的类型一致
 selfsup_data_sample.gt_label = LabelData(value=torch.tensor([1]))
 
-# setting gt_label to a type, which is not LabelData, will raise an error
+# 如果真实标签数据类型和 LabelData 不一致会报错
 selfsup_data_sample.gt_label = torch.tensor([1])
-# AssertionError: tensor([1]) should be a <class 'mmengine.data.label_data.LabelData'> but got <class 'torch.Tensor'>
+# 报错： AssertionError: tensor([1]) should be a <class 'mmengine.data.label_data.LabelData'> but got <class 'torch.Tensor'>
 
-# set the sample_idx in selfsup_data_sample
-# also, the assigned value of sample_idx should the type of InstanceData
+# 给 selfsup_data_sample 加入样例数据
+# 同样的，样例数据里的值的类型应与 InstanceData 保持一致
 selfsup_data_sample.sample_idx = InstanceData(value=torch.tensor([1]))
 
-# setting the mask in selfsup_data_sample
+# 给 selfsup_data_sample 加面具
 selfsup_data_sample.mask = BaseDataElement(value=torch.ones((3, 3)))
 
-# setting the pseudo_label in selfsup_data_sample
+# 给 selfsup_data_sample 加假标签
 selfsup_data_sample.pseudo_label = InstanceData(location=torch.tensor([1, 2, 3]))
 
 
-# After creating these attributes, you can easily fetch values in these attributes
+# 创建这些属性后，您可轻而易举得取这些属性里的值
 print(selfsup_data_sample.gt_label.value)
-# tensor([1])
+# 输出 tensor([1])
 print(selfsup_data_sample.mask.value.shape)
-# torch.Size([3, 3])
+# 输出 torch.Size([3, 3])
 ```
 
 ## 用 MMSelfSup 把数据打包给 SelfSupDataSample
@@ -60,25 +60,23 @@ print(selfsup_data_sample.mask.value.shape)
 
 ```python
 class PackSelfSupInputs(BaseTransform):
-    """Pack data into the format compatible with the inputs of algorithm.
+    """把数据打包并让格式能与函数输入匹配
 
-    Required Keys:
+    需要的值：
 
     - img
 
-    Added Keys:
+    添加的值：
 
     - data_sample
     - inputs
 
-    Args:
-        key (str): The key of image inputted into the model. Defaults to 'img'.
-        algorithm_keys (List[str]): Keys of elements related
-            to algorithms, e.g. mask. Defaults to [].
-        pseudo_label_keys (List[str]): Keys set to be the attributes of
-            pseudo_label. Defaults to [].
-        meta_keys (List[str]): The keys of meta info of an image.
-            Defaults to [].
+    参数:
+        key (str): 输入模型的图片的值，默认为 img 。
+        algorithm_keys (List[str]): 和算法相关的组成部分的值，比如 mask 。默认为 [] 。
+        pseudo_label_keys (List[str]): 假标签对应的属性。默认为 [] 。
+        meta_keys (List[str]): 图片的 meta 信息的值。默认为 [] 。
+        
     """
 
     def __init__(self,
@@ -96,17 +94,16 @@ class PackSelfSupInputs(BaseTransform):
 
     def transform(self,
                   results: Dict) -> Dict[torch.Tensor, SelfSupDataSample]:
-        """Method to pack the data.
+        """打包数据的方法。
 
-        Args:
-            results (Dict): Result dict from the data pipeline.
+        参数:
+            results (Dict): 数据变换返回的字典。
 
-        Returns:
+        返回:
             Dict:
 
-            - 'inputs' (List[torch.Tensor]): The forward data of models.
-            - 'data_sample' (SelfSupDataSample): The annotation info of the
-                the forward data.
+            - 'inputs' (List[torch.Tensor]): 模型前面的数据。
+            - 'data_sample' (SelfSupDataSample): 前面数据的注释信息。
         """
         packed_results = dict()
         if self.key in results:
@@ -126,12 +123,11 @@ class PackSelfSupInputs(BaseTransform):
             pseudo_label = InstanceData()
             data_sample.pseudo_label = pseudo_label
 
-        # gt_label, sample_idx, mask, pred_label will be set here
+        # gt_label, sample_idx, mask, pred_label 在此设置
         for key in self.algorithm_keys:
             self.set_algorithm_keys(data_sample, key, results)
 
-        # keys, except for gt_label, sample_idx, mask, pred_label, will be
-        # set as the attributes of pseudo_label
+        # 除 gt_label, sample_idx, mask, pred_label 外的值会被设为假标签的属性
         for key in self.pseudo_label_keys:
             # convert data to torch.Tensor
             value = to_tensor(results[key])
@@ -148,7 +144,7 @@ class PackSelfSupInputs(BaseTransform):
     @classmethod
     def set_algorithm_keys(self, data_sample: SelfSupDataSample, key: str,
                            results: Dict) -> None:
-        """Set the algorithm keys of SelfSupDataSample."""
+        """设置 SelfSupDataSample 中算法的值."""
         value = to_tensor(results[key])
         if key == 'sample_idx':
             sample_idx = InstanceData(value=value)
