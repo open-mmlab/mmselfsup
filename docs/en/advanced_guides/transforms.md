@@ -69,7 +69,7 @@ pipeline = [
 
 ## PackSelfSupInputs 简介
 
-我们建一个名为 [`PackSelfSupInputs`](mmselfsup.datasets.transforms.PackSelfSupInputs) 的类来将数据转换为能输入算法中的格式。这种转换通常在数据管道的后面，就像这样：
+我们建一个名为 [`PackSelfSupInputs`](mmselfsup.datasets.transforms.PackSelfSupInputs) 的类来将数据转换为能输入算法中的格式。这种转换通常在数据管道的后面，就像下面这样：
 
 ```python
 train_pipeline = [
