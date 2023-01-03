@@ -60,7 +60,7 @@ jobs:
           name: Install MMSelfSup dependencies
           command: |
             pip install git+https://github.com/open-mmlab/mmengine.git@main
-            pip install -U openmim
+            pip install -U openmim wheel
             mim install 'mmcv>=2.0.0rc1'
             mim install 'mmdet>=3.0.0rc0'
             mim install 'mmsegmentation>=1.0.0rc0'
