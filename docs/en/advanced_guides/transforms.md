@@ -35,7 +35,7 @@
 
 ## MultiView 简介
 
-我们为一些算法建名为 [`MultiView`](mmselfsup.datasets.transforms.MultiView) 的多角度照片输入的包装器，比如 MOCO, SimCLR和 SwAV。在配置文件中，我们能这样定义：
+我们为一些算法定义了名为 [`MultiView`](mmselfsup.datasets.transforms.MultiView) 的多角度照片输入的包装器，比如 MoCo 系列，SimCLR，SwAV 等。在配置文件中，我们能这样定义：
 
 ```python
 pipeline = [
