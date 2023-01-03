@@ -211,7 +211,7 @@ MaskFeat 结果如下:
 <img src="https://user-images.githubusercontent.com/36138628/200465876-7e7dcb6f-5e8d-4d80-b300-9e1847cb975f.jpg" width="800" />
 </div>
 
-## 可视化 shape bias
+## 画出 shape bias
 
 shape bias 衡量在感知图像特征的过程中，与纹理相比，模型依赖 shape 的程度。感兴趣的话可以参考 [paper](https://arxiv.org/abs/2106.07411) 了解更多信息。 MMSelfSup 提供一个现有的用于得到分类模型 shape bias 的工具箱。可以按以下步骤来做：
 
