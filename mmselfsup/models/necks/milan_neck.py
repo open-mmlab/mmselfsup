@@ -44,9 +44,17 @@ class MILANPretrainDecoder(MAEPretrainDecoder):
                  mlp_ratio: int = 4,
                  norm_cfg: dict = dict(type='LN', eps=1e-6),
                  init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
-        super().__init__(num_patches, patch_size, in_chans, embed_dim,
-                         decoder_embed_dim, decoder_depth, decoder_num_heads,
-                         mlp_ratio, norm_cfg, init_cfg)
+        super().__init__(
+            num_patches=num_patches,
+            patch_size=patch_size,
+            in_chans=in_chans,
+            embed_dim=embed_dim,
+            decoder_embed_dim=decoder_embed_dim,
+            decoder_depth=decoder_depth,
+            decoder_num_heads=decoder_num_heads,
+            mlp_ratio=mlp_ratio,
+            norm_cfg=norm_cfg,
+            init_cfg=init_cfg)
 
         # map the dim of features from decoder to the dim compatible with
         # that of CLIP
