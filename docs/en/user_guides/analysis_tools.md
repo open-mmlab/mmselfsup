@@ -3,12 +3,12 @@
 <!-- TOC -->
 
 - [分析工具](#分析工具)
-  - [数括号数量](#数括号数量)
+  - [统计参数量](#统计参数量)
   - [发布模型](#发布模型)
-  - [再现](#再现)
+  - [结果复现](#结果复现)
   - [日志分析](#日志分析)
 
-## 数括号数量
+## 统计参数量
 
 ```shell
 python tools/analysis_tools/count_parameters.py ${CONFIG_FILE}
@@ -25,7 +25,7 @@ python tools/analysis_tools/count_parameters.py configs/selfsup/mocov2/mocov2_re
 发布模型之前，你可能是想：
 
 - 把模型权重转换为 CPU 张量。
-- 删优化程序状态。
+- 删除优化器相关状态。
 - 计算检查点文件的哈希值并把哈希 ID 加到文件名上。
 
 ```shell
@@ -38,13 +38,13 @@ python tools/model_converters/publish_model.py ${INPUT_FILENAME} ${OUTPUT_FILENA
 python tools/model_converters/publish_model.py YOUR/PATH/epoch_100.pth YOUR/PATH/epoch_100_output.pth
 ```
 
-## 再现
+## 结果复现
 
-想让你的成果完全可以再现的话，训练最终模型时请设置 `--cfg-options randomness.deterministic=True` 。值得一提的是，这会关掉 `torch.backends.cudnn.benchmark` 并降低训练速度。
+想让你的结果完全可以复现的话，训练最终模型时请设置 `--cfg-options randomness.deterministic=True` 。值得一提的是，这会关掉 `torch.backends.cudnn.benchmark` 并降低训练速度。
 
 ## 日志分析
 
-`tools/analysis_tools/analyze_logs.py` 用训练日志文件画损失/学习率曲线。 `pip install seaborn` 可下载依赖的文件。
+`tools/analysis_tools/analyze_logs.py` 用训练日志文件画损失/学习率曲线。首先 `pip install seaborn` 安装依赖库。
 
 ```shell
 python tools/analysis_tools/analyze_logs.py plot_curve [--keys ${KEYS}] [--title ${TITLE}] [--legend ${LEGEND}] [--backend ${BACKEND}] [--style ${STYLE}] [--out ${OUT_FILE}]
@@ -68,7 +68,7 @@ python tools/analysis_tools/analyze_logs.py plot_curve [--keys ${KEYS}] [--title
   python tools/analysis_tools/analyze_logs.py plot_curve log.json --keys loss_dense loss_single --out losses.pdf
   ```
 
-- 比较同一 figure 下运行两次的损失。
+- 在同一张图内，比较两次训练的损失。
 
   ```shell
   python tools/analysis_tools/analyze_logs.py plot_curve log1.json log2.json --keys loss --legend run1 run2
