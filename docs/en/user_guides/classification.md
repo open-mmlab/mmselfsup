@@ -47,7 +47,7 @@ bash tools/benchmarks/classification/svm_voc07/slurm_test_svm_epoch.sh ${PARTITI
 
 线性评价与微调是最常规的基准测试中的两个。我们提供用于线性评价与微调的启动训练和测试的配置文件与脚本文件。支持的数据集是 **ImageNet**, **Places205** 和 **iNaturalist18**。
 
-首先，请确认您安装了OpenMMLab的 [MIM](https://github.com/open-mmlab/mim) 项目。
+首先，请确认您安装了 OpenMMLab 的 [MIM](https://github.com/open-mmlab/mim) 项目。
 
 ```shell
 pip install openmim
