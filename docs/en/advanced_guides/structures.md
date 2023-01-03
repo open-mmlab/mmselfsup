@@ -5,7 +5,7 @@
   - [用 MMSelfSup 把数据打包给 SelfSupDataSample](#用mmselfsup-把数据打包给-selfsupdatasample)
 
 像 OpenMMLab 中其他仓库一样，MMSelfSup 也定义了一个数据结构，名为 `SelfSupDataSample` ,这个数据结构用于接收和传递整个训练和测试过程中的数据。
-`SelfSupDataSample` 继承 [MMEngine](https://github.com/open-mmlab/mmengine) 中使用的 `BaseDataElement`。如果需要深入了解 `BaseDataElement`，我们建议参考 [BaseDataElement](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/data_element.md)。在这些教程中，我们主要讨论[SelfSupDataSample](mmselfsup.structures.SelfSupDataSample) 中一些定制化的属性。
+`SelfSupDataSample` 继承 [MMEngine](https://github.com/open-mmlab/mmengine) 中使用的 `BaseDataElement`。如果需要深入了解 `BaseDataElement`，我们建议参考 [BaseDataElement](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/data_element.md)。在这些教程中，我们主要讨论 [SelfSupDataSample](mmselfsup.structures.SelfSupDataSample) 中一些定制化的属性。
 
 ## SelfSupDataSample 中的定制化的属性
 在 MMSelfSup 中，`SelfSupDataSample` 将模型需要的所有信息（除了图片）打包，比如 mask image modeling(MIM) 中请求的 `mask` 和前置任务中的 `pseudo_label` 。除了提供信息，它还能接受模型产生的信息，比如预测得分。为实现上述功能， `SelfSupDataSample` 定义以下五个属性：
