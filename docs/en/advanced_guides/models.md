@@ -83,7 +83,7 @@ class BaseModel(_BaseModel):
 正如上面代码所示，构造骨干部分时需要配置，但是对颈部和头部而言这可有可无。除了构造算法之外，您还需要重写基础模型中的一些抽象函数才能得到正确结果，我们将在下一部分讨论这件事。
 
 ## 纵览基础模型中的抽象函数
-'forward' 函数是结果的入口。然而，它和大多数 Pytorch 代码中只有一种模式的 `forward` 函数不同。在 `forward` 函数中您会逻辑混乱，这会限制粗糙度。正如下面代码所示，MMSelfSup 中的 'forward' 函数有三种模式：张量，损失和预测。
+`forward` 函数是结果的入口。然而，它和大多数 Pytorch 代码中只有一种模式的 `forward` 函数不同。在 `forward` 函数中您会逻辑混乱，这会限制粗糙度。正如下面代码所示，MMSelfSup 中的 `forward` 函数有三种模式：张量，损失和预测。
 
 ```python
 def forward(self,
@@ -101,10 +101,10 @@ def forward(self,
         raise RuntimeError(f'Invalid mode "{mode}".')
 ```
 
-- 张量，如果模式为 `tensor`，'forward' 函数就返回从图片提取到的特征。您应该重写其中的'extract_feat'部分才能让定制化的提取过程有效。
+- 张量，如果模式为 `tensor`，`forward` 函数就返回从图片提取到的特征。您应该重写其中的'extract_feat'部分才能让定制化的提取过程有效。
 
-- 损失，如果模式为 `loss`，'forward' 函数就返回预测值与目标之间的损失。同样的，您应该重写其中的'extract_feat'部分才能让定制化的提取过程有效。
+- 损失，如果模式为 `loss`，`forward` 函数就返回预测值与目标之间的损失。同样的，您应该重写其中的'extract_feat'部分才能让定制化的提取过程有效。
 
-- 预测，如果模式为 `predict`，'forward' 函数就返回预测结果，比如用您的算法预测得到的标签。如果需要，`predict`函数也需要重写。
+- 预测，如果模式为 `predict`，`forward` 函数就返回预测结果，比如用您的算法预测得到的标签。如果需要，`predict`函数也需要重写。
 
 本文中我们学习了 MMSelfSup 中的模型的基本组成部分，如果您想深入研究，可以参考每个算法的API文件。
