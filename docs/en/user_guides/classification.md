@@ -1,78 +1,77 @@
-# Classification
+# 分类
 
-- [Classification](#classification)
+- [分类](#分类)
   - [VOC SVM / Low-shot SVM](#voc-svm--low-shot-svm)
-  - [Linear Evaluation and Fine-tuning](#linear-evaluation-and-fine-tuning)
-  - [ImageNet Semi-Supervised Classification](#imagenet-semi-supervised-classification)
-  - [ImageNet Nearest-Neighbor Classification](#imagenet-nearest-neighbor-classification)
+  - [线性评价与微调](#线性评价与微调)
+  - [ImageNet 半监督学习分类](#imagenet-半监督学习分类)
+  - [ImageNet 最近邻分类](#imagenet-最近邻分类)
 
-In MMSelfSup, we provide many benchmarks for classification, thus the models can be evaluated on different classification tasks. Here are comprehensive tutorials and examples to explain how to run all classification benchmarks with MMSelfSup.
-We provide scripts in folder `tools/benchmarks/classification/`, which has 2 `.sh` files, 1 folder for VOC SVM related classification task and 1 folder for ImageNet nearest-neighbor classification task.
+在　MMSelfSup　中我们有很多分类基准测试，因此可以在不同分类工作上评估模型。以下是解释如何用　MMSelfSup　全部分类基准测试的详细教程和示例。
+我们在 `tools/benchmarks/classification/` 文件夹提供脚本，在这个文件夹里有两个`.sh`文件，一个用于　VOC SVM　相关的分类任务，另一个用于 ImageNet 最近邻分类任务。
 
 ## VOC SVM / Low-shot SVM
 
-To run these benchmarks, you should first prepare your VOC datasets. Please refer to [prepare_data.md](./2_dataset_prepare.md) for the details of data preparation.
+运行这些基准测试之前请准备好 VOC 数据集。需要关于数据准备的详细信息的话请参考　[prepare_data.md](./2_dataset_prepare.md)。
 
-To evaluate the pre-trained models, you can run the command below.
+您可以用如下命令评估预训练模型。
 
 ```shell
-# distributed version
+# distributed 版本
 bash tools/benchmarks/classification/svm_voc07/dist_test_svm_pretrain.sh ${SELFSUP_CONFIG} ${GPUS} ${PRETRAIN} ${FEATURE_LIST}
 
-# slurm version
+# slurm 版本
 bash tools/benchmarks/classification/svm_voc07/slurm_test_svm_pretrain.sh ${PARTITION} ${JOB_NAME} ${SELFSUP_CONFIG} ${PRETRAIN} ${FEATURE_LIST}
 ```
 
-Besides, if you want to evaluate the ckpt files saved by runner, you can run the command below.
+此外，如果您想评估运行者保存的 ckpt 文件，您可以用以下命令：
 
 ```shell
-# distributed version
+# distributed 版本
 bash tools/benchmarks/classification/svm_voc07/dist_test_svm_epoch.sh ${SELFSUP_CONFIG} ${EPOCH} ${FEATURE_LIST}
 
-# slurm version
+# slurm 版本
 bash tools/benchmarks/classification/svm_voc07/slurm_test_svm_epoch.sh ${PARTITION} ${JOB_NAME} ${SELFSUP_CONFIG} ${EPOCH} ${FEATURE_LIST}
 ```
 
-**To test with ckpt, the code uses the epoch\_\*.pth file, there is no need to extract weights.**
+**测试 ckpt 时代码用到 epoch\_\*.pth 文件, 没必要提取权重。**
 
-Remarks:
+提醒：
 
-- `${SELFSUP_CONFIG}` is the config file of the self-supervised experiment.
-- `${FEATURE_LIST}` is a string to specify features from layer1 to layer5 to evaluate; e.g., if you want to evaluate layer5 only, then `FEATURE_LIST` is "feat5", if you want to evaluate all features, then `FEATURE_LIST` is "feat1 feat2 feat3 feat4 feat5" (separated by space). If left empty, the default `FEATURE_LIST` is "feat5".
-- `PRETRAIN`: the pre-trained model file.
-- if you want to change GPU numbers, you could add `GPUS_PER_NODE=4 GPUS=4` at the beginning of the command.
-- `EPOCH` is the epoch number of the ckpt that you want to test
+- `${SELFSUP_CONFIG}` 是自监督实验的配置文件。
+- `${FEATURE_LIST}` 是一个用于具体说明要评估的来自第一层到第五层的特征的字符串。例如，如果您想只评估第五层，那么 `FEATURE_LIST` 是 "feat5"，如果您想评估所有层， `FEATURE_LIST` 是 "feat1 feat2 feat3 feat4 feat5" (用空格隔开). 如果为空, 默认 `FEATURE_LIST` 是 "feat5"。
+- `PRETRAIN`: 预训练模型文件。
+- 如果您想改变 GPU 数量，您可以在命令开头加上 `GPUS_PER_NODE=4 GPUS=4`。
+- `EPOCH` 是您想测试的 ckpt 的轮数。
 
-## Linear Evaluation and Fine-tuning
+## 线性评价与微调
 
-Linear evaluation and fine-tuning are two of the most general benchmarks. We provide config files and scripts to launch the training and testing
-for Linear Evaluation and Fine-tuning. The supported datasets are **ImageNet**, **Places205** and **iNaturalist18**.
+线性评价与微调是最常规的基准测试中的两个。我们提供用于线性评价与微调的启动训练和测试的配置文件与脚本文件。支持的数据集是 **ImageNet**, **Places205** 和 **iNaturalist18**。
 
-First, make sure you have installed [MIM](https://github.com/open-mmlab/mim), which is also a project of OpenMMLab.
+首先，请确认您安装了OpenMMLab的 [MIM](https://github.com/open-mmlab/mim) 项目。
 
 ```shell
 pip install openmim
 ```
 
-Besides, please refer to MMClassification for [installation](https://github.com/open-mmlab/mmclassification/blob/dev-1.x/docs/en/install.md) and [data preparation](https://github.com/open-mmlab/mmclassification/blob/dev-1.x/docs/en/getting_started.md).
+此外，下载和数据集准备部分请参考 MMClassification 的 [installation](https://github.com/open-mmlab/mmclassification/blob/dev-1.x/docs/en/install.md) 和 [data preparation](https://github.com/open-mmlab/mmclassification/blob/dev-1.x/docs/en/getting_started.md).
 
-Then, run the command below.
+然后请运行如下命令。
 
 ```shell
-# distributed version
+# distributed 版本
 bash tools/benchmarks/classification/mim_dist_train.sh ${CONFIG} ${PRETRAIN}
 
-# slurm version
+# slurm 版本
 bash tools/benchmarks/classification/mim_slurm_train.sh ${PARTITION} ${JOB_NAME} ${CONFIG} ${PRETRAIN}
 ```
 
-Remarks:
+注意:
 
-- The default GPU number is 8. When changing GPUS, please also change `samples_per_gpu` in the config file accordingly to ensure the total batch size is 256.
-- `CONFIG`: Use config files under `configs/benchmarks/classification/`. Specifically, `imagenet` (excluding `imagenet_*percent` folders), `places205` and `inaturalist2018`.
-- `PRETRAIN`: the pre-trained model file.
+- 默认 GPU 数量为 8。 改变 GPU 时，请对应的改变配置文件的 `samples_per_gpu` 以确保总批数为256。
+- `CONFIG`: 用 `configs/benchmarks/classification/` 下的配置文件。具体来说，`imagenet` (除了 `imagenet_*percent` 文件夹), `places205` 和 `inaturalist2018`.
+- `PRETRAIN`: 预训练模型文件.
 
-Example:
+例如:
 
 ```shell
 bash ./tools/benchmarks/classification/mim_dist_train.sh \
@@ -80,21 +79,21 @@ configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-coslr-100e_in1k
 work_dir/pretrained_model.pth
 ```
 
-If you want to test the well-trained model, please run the command below.
+如果您想测试训练好的模型，请运行以下命令。
 
 ```shell
-# distributed version
+# distributed 版本
 bash tools/benchmarks/classification/mim_dist_test.sh ${CONFIG} ${CHECKPOINT}
 
-# slurm version
+# slurm 版本
 bash tools/benchmarks/classification//mim_slurm_test.sh ${PARTITION} ${CONFIG} ${CHECKPOINT}
 ```
 
-Remarks:
+注意:
 
-- `CHECKPOINT`: The well-trained classification model that you want to test.
+- `CHECKPOINT`: 您想测试的训练好的分类模型。
 
-Example:
+例如:
 
 ```shell
 bash ./tools/benchmarks/mmsegmentation/mim_dist_test.sh \
@@ -102,43 +101,43 @@ configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-coslr-100e_in1k
 work_dir/model.pth
 ```
 
-## ImageNet Semi-Supervised Classification
+## ImageNet 半监督学习分类
 
-To run ImageNet semi-supervised classification, we still use the same `.sh` script as Linear Evaluation and Fine-tuning to launch training.
+为了运行 ImageNet 半监督学习分类，我们开始训练时仍用和线性评价与微调相同的 `.sh` 脚本文件
 
-Remarks:
+注意:
 
-- The default GPU number is 4.
-- `CONFIG`: Use config files under `configs/benchmarks/classification/imagenet/`, named `imagenet_*percent` folders.
-- `PRETRAIN`: the pre-trained model file.
+- 默认 GPU 数量为 4.
+- `CONFIG`: 用 `configs/benchmarks/classification/imagenet/` 下名为 `imagenet_*percent` 的文件夹里的文件。
+- `PRETRAIN`: 预训练模型文件。
 
-## ImageNet Nearest-Neighbor Classification
+## ImageNet 最近邻分类
 
-```Note
-Only support CNN-style backbones (like ResNet50).
+```注意
+只支持 CNN 风格的主干部分 (比如 ResNet50).
 ```
 
-To evaluate the pre-trained models using the nearest-neighbor benchmark, you can run the command below.
+您可以运行如下命令来用最近邻基准测试评估预训练模型。
 
 ```shell
-# distributed version
+# distributed 版本
 bash tools/benchmarks/classification/knn_imagenet/dist_test_knn.sh ${SELFSUP_CONFIG} ${PRETRAIN} [optional arguments]
 
-# slurm version
+# slurm 版本
 bash tools/benchmarks/classification/knn_imagenet/slurm_test_knn.sh ${PARTITION} ${JOB_NAME} ${SELFSUP_CONFIG} ${CHECKPOINT} [optional arguments]
 ```
 
-Remarks:
+注意:
 
-- `${SELFSUP_CONFIG}` is the config file of the self-supervised experiment.
-- `CHECKPOINT`: the path of checkpoint model file.
-- if you want to change GPU numbers, you could add `GPUS_PER_NODE=4 GPUS=4` at the beginning of the command.
-- `[optional arguments]`: for optional arguments, you can refer to [visualize_reconstruction.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/visualize_reconstruction.py)
+- `${SELFSUP_CONFIG}` 是自监督实验的配置文件。
+- `CHECKPOINT`: 检查点模型文件的路径。
+- 如果您想改变 GPU 数，您可以在命令开头加上 `GPUS_PER_NODE=4 GPUS=4`。
+- `[optional arguments]`: 对于可选参数，您可以参考 [visualize_reconstruction.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/visualize_reconstruction.py)。
 
-An example of command
+一个命令的例子
 
 ```shell
-# distributed version
+# distributed 版本
 bash tools/benchmarks/classification/knn_imagenet/dist_test_knn.sh \
     configs/selfsup/barlowtwins/barlowtwins_resnet50_8xb256-coslr-300e_in1k.py \
     https://download.openmmlab.com/mmselfsup/1.x/barlowtwins/barlowtwins_resnet50_8xb256-coslr-300e_in1k/barlowtwins_resnet50_8xb256-coslr-300e_in1k_20220825-57307488.pth
