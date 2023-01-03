@@ -1,6 +1,6 @@
-# 结构
+# 数据结构
 
-- [结构](#结构)
+- [数据结构](#数据结构)
   - [SelfSupDataSample 中的定制化的属性](#selfsupDatasample-中的定制化的属性)
   - [用 MMSelfSup 把数据打包给 SelfSupDataSample](#用mmselfsup-把数据打包给-selfsupdatasample)
 
