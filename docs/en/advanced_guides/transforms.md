@@ -11,9 +11,9 @@
 
 1. 处理数据用到的数据变换。[processing.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/processing.py) 中定义了独特的数据变换，比如`RandomCrop`, `RandomResizedCrop` 和 `RandomGaussianBlur`。我们也可以用其它仓库的数据变换，比如 MMCV 中的 `LoadImageFromFile`。
 
-2.不同视角看同一照片的数据变换打包器。这个在 [wrappers.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/wrappers.py) 中定义过。
+2. 不同视角看同一照片的数据变换打包器。这个在 [wrappers.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/wrappers.py) 中定义过。
 
-3.将数据变换使得数据能输入算法中。这个在 [formatting.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/formatting.py) 中定义过。
+3. 将数据变换使得数据能输入算法中。这个在 [formatting.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/formatting.py) 中定义过。
 
 总的来说，我们用的是如下的这些数据变换。我们将详细讨论最后两种数据变换。
 
