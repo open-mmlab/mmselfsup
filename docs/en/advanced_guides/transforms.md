@@ -13,7 +13,7 @@
 
 2. 不同视角看同一照片的数据变换打包器。这个在 [wrappers.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/wrappers.py) 中定义过。
 
-3. 将数据变换使得数据能输入算法中。这个在 [formatting.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/formatting.py) 中定义过。
+3. 将数据变换使得数据能输入算法中。这个定义在 [formatting.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/formatting.py) 。
 
 总的来说，我们用的是如下的这些数据变换。我们将详细讨论最后两种数据变换。
 
