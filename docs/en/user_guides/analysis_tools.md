@@ -1,50 +1,51 @@
-# 分析工具
+# Analysis tools
 
 <!-- TOC -->
 
-- [分析工具](#分析工具)
-  - [统计参数量](#统计参数量)
-  - [发布模型](#发布模型)
-  - [结果复现](#结果复现)
-  - [日志分析](#日志分析)
+- [Analysis tools](#analysis-tools)
+  - [Count number of parameters](#count-number-of-parameters)
+  - [Publish a model](#publish-a-model)
+  - [Reproducibility](#reproducibility)
+  - [Log Analysis](#log-analysis)
 
-## 统计参数量
+## Count number of parameters
 
 ```shell
 python tools/analysis_tools/count_parameters.py ${CONFIG_FILE}
 ```
 
-一个例子如下：
+An example:
 
 ```shell
 python tools/analysis_tools/count_parameters.py configs/selfsup/mocov2/mocov2_resnet50_8xb32-coslr-200e_in1k.py
 ```
 
-## 发布模型
+## Publish a model
 
-发布模型之前，你可能是想：
+Before you publish a model, you may want to
 
-- 把模型权重转换为 CPU 张量。
-- 删除优化器相关状态。
-- 计算检查点文件的哈希值并把哈希 ID 加到文件名上。
+- Convert model weights to CPU tensors.
+- Delete the optimizer states.
+- Compute the hash of the checkpoint file and append the hash id to the filename.
 
 ```shell
 python tools/model_converters/publish_model.py ${INPUT_FILENAME} ${OUTPUT_FILENAME}
 ```
 
-例子如下：
+An example:
 
 ```shell
 python tools/model_converters/publish_model.py YOUR/PATH/epoch_100.pth YOUR/PATH/epoch_100_output.pth
 ```
 
-## 结果复现
+## Reproducibility
 
-想让你的结果完全可以复现的话，训练最终模型时请设置 `--cfg-options randomness.deterministic=True` 。值得一提的是，这会关掉 `torch.backends.cudnn.benchmark` 并降低训练速度。
+If you want to make your performance exactly reproducible, please set `--cfg-options randomness.deterministic=True` to train the final model. Note that this will switch off `torch.backends.cudnn.benchmark` and slow down the training speed.
 
-## 日志分析
+## Log Analysis
 
-`tools/analysis_tools/analyze_logs.py` 用训练日志文件画损失/学习率曲线。首先 `pip install seaborn` 安装依赖库。
+`tools/analysis_tools/analyze_logs.py` plots loss/lr curves given a training
+log file. Run `pip install seaborn` first to install the dependency.
 
 ```shell
 python tools/analysis_tools/analyze_logs.py plot_curve [--keys ${KEYS}] [--title ${TITLE}] [--legend ${LEGEND}] [--backend ${BACKEND}] [--style ${STYLE}] [--out ${OUT_FILE}]
@@ -54,33 +55,33 @@ python tools/analysis_tools/analyze_logs.py plot_curve [--keys ${KEYS}] [--title
 <img src="https://raw.githubusercontent.com/open-mmlab/mmdetection/master/resources/loss_curve.png" width="400" />
 </div>
 
-例子如下:
+Examples:
 
-- 画部分运行过程中分类的损失函数图像。
+- Plot the classification loss of some run.
 
   ```shell
   python tools/analysis_tools/analyze_logs.py plot_curve log.json --keys loss_dense --legend loss_dense
   ```
 
-- 画部分运行过程中分类和倒退的损失函数图像并存到 pdf 文件里。
+- Plot the classification and regression loss of some run, and save the figure to a pdf.
 
   ```shell
   python tools/analysis_tools/analyze_logs.py plot_curve log.json --keys loss_dense loss_single --out losses.pdf
   ```
 
-- 在同一张图内，比较两次训练的损失。
+- Compare the loss of two runs in the same figure.
 
   ```shell
   python tools/analysis_tools/analyze_logs.py plot_curve log1.json log2.json --keys loss --legend run1 run2
   ```
 
-- 计算平均训练速度。
+- Compute the average training speed.
 
   ```shell
   python tools/analysis_tools/analyze_logs.py cal_train_time log.json [--include-outliers]
   ```
 
-  输出应该像下面这样：
+  The output is expected to be like the following.
 
   ```text
   -----Analyze train time of work_dirs/some_exp/20190611_192040.log.json-----
