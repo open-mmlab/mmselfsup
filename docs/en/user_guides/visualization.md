@@ -22,7 +22,7 @@ Visualization can give an intuitive interpretation of the performance of the mod
 
 ## How visualization is implemented
 
-It is recommended to learn the basic concept of visualization in [engine.md](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/design/visualization.md).
+It is recommended to learn the basic concept of visualization in [documentation](https://github.com/open-mmlab/mmengine/blob/main/docs/en/design/visualization.md).
 
 OpenMMLab 2.0 introduces the visualization object `Visualizer` and several visualization backends `VisBackend`. The diagram below shows the relationship between `Visualizer` and  `VisBackend`,
 
@@ -49,7 +49,7 @@ def after_train_iter(...):
 
 (2) Browse dataset
 
-The function [`add_datasample()`](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/visualization/selfsup_visualizer.py#L151) is impleted in [`SelfSupVisualizer`](mmselfsup.visualization.SelfSupVisualizer), and it is mainly used in [browse_dataset.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/browse_dataset.py) for browsing dataset. More tutorial is in [analysis_tools.md](analysis_tools.md)
+The function [`add_datasample()`](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/visualization/selfsup_visualizer.py#L151) is impleted in [`SelfSupVisualizer`](mmselfsup.visualization.SelfSupVisualizer), and it is mainly used in [browse_dataset.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/browse_dataset.py) for browsing dataset. More tutorial is in section [Visualize Datasets](#visualize-datasets)
 
 ## Use Different Storage Backends
 
@@ -83,8 +83,6 @@ visualizer = dict(
     type='SelfSupVisualizer', vis_backends=vis_backends, name='visualizer')
 ```
 
-Note that when multiple visualization backends exist for `vis_backends`, only `WandbVisBackend` is valid.
-
 E.g.
 
 <div align="center">
@@ -93,7 +91,7 @@ E.g.
 
 ## Customize Visualization
 
-The customization of the visualization is similar to other components. If you want to customize `Visualizer`, `VisBackend` or `VisualizationHook`, you can refer to [Visualization Doc](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/visualization.md) in MMEngine.
+The customization of the visualization is similar to other components. If you want to customize `Visualizer`, `VisBackend` or `VisualizationHook`, you can refer to [Visualization Doc](https://github.com/open-mmlab/mmengine/blob/main/docs/en/advanced_tutorials/visualization.md) in MMEngine.
 
 ## Visualize Datasets
 
@@ -277,13 +275,12 @@ Then we can start to plot the shape bias
 python tools/analysis_tools/visualize_shape_bias.py --csv-dir $CVS_DIR --result-dir $CSV_DIR --colors $RGB --markers o --plotting-names $YOU_MODEL_NAME --model-names $YOU_MODEL_NAME
 ```
 
-- csv-dir, the same directory to save these csv files
-- colors, should be the RGB values, formatted in R G B, e.g. 100 100 100, and can be multiple RGB values, if you want
+- `--csv-dir`, the same directory to save these csv files
+- `--colors`, should be the RGB values, formatted in R G B, e.g. 100 100 100, and can be multiple RGB values, if you want
   to plot the shape bias of several models
-- plotting-names, the name of the legend in the shape bias figure, and you can set it as your model name. If you want
+- `--plotting-names`, the name of the legend in the shape bias figure, and you can set it as your model name. If you want
   to plot several models, plotting_names can be multiple values
-- model-names, should be the same name specified in your config, and can be multiple names if you want to plot the
-  shape bias of several models
+- `--model-names`, should be the same name specified in your config, and can be multiple names if you want to plot the shape bias of several models
 
 Please note, every three values for `--colors` corresponds to one value for `--model-names`. After all of above steps, you
 are expected to obtain the following figure.

@@ -6,13 +6,13 @@
 
 - [可视化](#可视化)
   - [如何实现可视化](#如何实现可视化)
-  - [MMSelfsup 的可视化做什么](#mmselfsup-的可视化做什么)
+  - [MMSelfSup 的可视化做什么](#mmselfsup-的可视化做什么)
   - [用不同的存储后端](#用不同的存储后端)
   - [定制化的可视化](#定制化的可视化)
   - [数据集可视化](#数据集可视化)
   - [t-SNE 可视化](#t-sne-可视化)
   - [可视化低级特征重建](#可视化低级特征重建)
-  - [可视化 shape bias ](#可视化-shape-bias)
+  - [可视化 shape bias](#可视化-shape-bias)
     - [准备数据集](#准备数据集)
     - [为分类调整配置](#为分类调整配置)
     - [用上述调整过的配置文件推理模型](#用上述调整过的配置文件推理模型)
@@ -22,9 +22,9 @@
 
 ## 如何实现可视化
 
-建议先学习[engine.md](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/design/visualization.md)里关于可视化的基本概念。
+建议先学习 [文档](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/design/visualization.md) 里关于可视化的基本概念。
 
-OpenMMLab 2.0 引入可视化对象`Visualizer`和一些可视化后端`VisBackend`。如下图表展示了`Visualizer`和`VisBackend`的关系。
+OpenMMLab 2.0 引入可视化对象 `Visualizer` 和一些可视化后端 `VisBackend` 。如下图表展示了 `Visualizer` 和 `VisBackend` 的关系。
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/17425982/163327736-f7cb3b16-ef07-46bc-982a-3cc7495e6c82.png" width="800" />
@@ -36,7 +36,7 @@ OpenMMLab 2.0 引入可视化对象`Visualizer`和一些可视化后端`VisBacke
 
 MMEngine 的后端包括 `LocalVisBackend`, `TensorboardVisBackend` 和 `WandbVisBackend`。
 
-在训练过程中，默认钩子 `LoggerHook` 中的 [after_train_iter()](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/logger_hook.py#L150) 会被调用，并且会在不同后端中用到 `add_scalars` ，例如：
+在训练过程中，默认钩子 `LoggerHook` 中的 [after_train_iter()](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/logger_hook.py#L150) 会被调用，并且会在不同后端中用到 `add_scalars`，例如：
 
 ```python
 ...
@@ -49,7 +49,7 @@ def after_train_iter(...):
 
 (2) 浏览数据集
 
-[`add_datasample()`](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/visualization/selfsup_visualizer.py#L151) 函数位于 [`SelfSupVisualizer`](mmselfsup.visualization.SelfSupVisualizer), 常用于在 [browse_dataset.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/browse_dataset.py) 中浏览数据集。 [analysis_tools.md](analysis_tools.md) 中有更多的教程。
+[`add_datasample()`](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/visualization/selfsup_visualizer.py#L151) 函数位于 [`SelfSupVisualizer`](mmselfsup.visualization.SelfSupVisualizer), 常用于在 [browse_dataset.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/browse_dataset.py) 中浏览数据集。更多细节可以参考 [数据集可视化](#数据集可视化)。
 
 ## 用不同的存储后端
 
@@ -83,8 +83,6 @@ visualizer = dict(
     type='SelfSupVisualizer', vis_backends=vis_backends, name='visualizer')
 ```
 
-值得一提的是，对于 `vis_backends` 有多个可视化后端存在时，只有 `WandbVisBackend` 有效。
-
 例如：
 
 <div align="center">
@@ -93,7 +91,7 @@ visualizer = dict(
 
 ## 定制化的可视化
 
-定制化可视化就像定制化其他组成部分那样。想定制化 `Visualizer`, `VisBackend` 或者 `VisualizationHook` 的话可以参考 MMEngine 里的 [Visualization Doc](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/advanced_tutorials/visualization.md)
+定制化可视化就像定制化其他组成部分那样。想定制化 `Visualizer`, `VisBackend` 或者 `VisualizationHook` 的话可以参考 MMEngine 里的 [可视化文档](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/advanced_tutorials/visualization.md)
 
 ## 数据集可视化
 
@@ -211,7 +209,7 @@ MaskFeat 结果如下:
 <img src="https://user-images.githubusercontent.com/36138628/200465876-7e7dcb6f-5e8d-4d80-b300-9e1847cb975f.jpg" width="800" />
 </div>
 
-## 可视化 shape bias 
+## 可视化 shape bias
 
 shape bias 衡量在感知图像特征的过程中，与纹理相比，模型依赖 shape 的程度。感兴趣的话可以参考 [paper](https://arxiv.org/abs/2106.07411) 了解更多信息。 MMSelfSup 提供一个现有的用于得到分类模型 shape bias 的工具箱。可以按以下步骤来做：
 
@@ -262,9 +260,7 @@ GPUS_PER_NODE=1 GPUS=1 bash tools/benchmarks/classification/mim_slurm_test.sh $p
 GPUS=1 bash tools/benchmarks/classification/mim_dist_test.sh $config $checkpoint
 ```
 
-After that, you should obtain a csv file, named `cue-conflict_model-name_session-1.csv`. Besides this file, you should
-also download these [csv files](https://github.com/bethgelab/model-vs-human/tree/master/raw-data/cue-conflict) to the
-`csv_dir`.
+在这之后，可以获得名为 `cue-conflict_model-name_session-1.csv` 的 csv 文件。除了这个文件之外，您应该下载 [csv 文件](https://github.com/bethgelab/model-vs-human/tree/master/raw-data/cue-conflict) 到对应的 `csv_dir`。
 
 ### 画出 shape bias
 
@@ -274,10 +270,10 @@ also download these [csv files](https://github.com/bethgelab/model-vs-human/tree
 python tools/analysis_tools/visualize_shape_bias.py --csv-dir $CVS_DIR --result-dir $CSV_DIR --colors $RGB --markers o --plotting-names $YOU_MODEL_NAME --model-names $YOU_MODEL_NAME
 ```
 
-- csv-dir, 相同目录下，用于存储 csv 文件。
-- colors, 应为以 RGB 为格式的 RGB 值,比如 100 100 100,如果您想画若干模型的 shape bias 的话多个RGB值也行。
-- plotting-names, 偏好形状里图例的名称，您可将之设为模型名字。如果您想画若干模型的 shape bias 的话名字设多个值也行。
-- 模型名字，应该跟配置文件里的一样，如果您想画若干模型的 shape bias 的话多个名字也行。
+- `--csv-dir`, 相同目录下，用于存储 csv 文件。
+- `--colors`, 应为以 RGB 为格式的 RGB 值,比如 100 100 100,如果您想画若干模型的 shape bias 的话多个RGB值也行。
+- `--plotting-names`, 偏好形状里图例的名称，您可将之设为模型名字。如果您想画若干模型的 shape bias 的话名字设多个值也行。
+- `--model-names`，应该跟配置文件里的一样，如果您想画若干模型的 shape bias 的话多个名字也行。
 
 请注意，每三个 `--colors` 对应一个 `--model-names` 。上面步骤做完后您会得到如下图像：
 
