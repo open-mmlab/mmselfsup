@@ -1,42 +1,42 @@
-# 可视化
+# Visualization
 
-可视化能直观反映模型性能表现。
+Visualization can give an intuitive interpretation of the performance of the model.
 
 <!-- TOC -->
 
-- [可视化](#可视化)
-  - [如何实现可视化](#如何实现可视化)
-  - [MMSelfsup 的可视化做什么](#mmselfsup-的可视化做什么)
-  - [用不同的存储后端](#用不同的存储后端)
-  - [定制化的可视化](#定制化的可视化)
-  - [数据集可视化](#数据集可视化)
-  - [t-SNE 可视化](#t-sne-可视化)
-  - [可视化低级特征重建](#可视化低级特征重建)
-  - [可视化 shape bias ](#可视化-shape-bias)
-    - [准备数据集](#准备数据集)
-    - [为分类调整配置](#为分类调整配置)
-    - [用上述调整过的配置文件推理模型](#用上述调整过的配置文件推理模型)
-    - [画出 shape bias](#画出-shape-bias)
+- [Visualization](#visualization)
+  - [How visualization is implemented](#how-visualization-is-implemented)
+  - [What Visualization do in MMSelfsup](#what-visualization-do-in-mmselfsup)
+  - [Use Different Storage Backends](#use-different-storage-backends)
+  - [Customize Visualization](#customize-visualization)
+  - [Visualize Datasets](#visualize-datasets)
+  - [Visualize t-SNE](#visualize-t-sne)
+  - [Visualize Low-level Feature Reconstruction](#visualize-low-level-feature-reconstruction)
+  - [Visualize Shape Bias](#visualize-shape-bias)
+    - [Prepare the dataset](#prepare-the-dataset)
+    - [Modify the config for classification](#modify-the-config-for-classification)
+    - [Inference your model with above modified config file](#inference-your-model-with-above-modified-config-file)
+    - [Plot shape bias](#plot-shape-bias)
 
 <!-- /TOC -->
 
-## 如何实现可视化
+## How visualization is implemented
 
-建议先学习[engine.md](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/design/visualization.md)里关于可视化的基本概念。
+It is recommended to learn the basic concept of visualization in [engine.md](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/design/visualization.md).
 
-OpenMMLab 2.0 引入可视化对象`Visualizer`和一些可视化后端`VisBackend`。如下图表展示了`Visualizer`和`VisBackend`的关系。
+OpenMMLab 2.0 introduces the visualization object `Visualizer` and several visualization backends `VisBackend`. The diagram below shows the relationship between `Visualizer` and  `VisBackend`,
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/17425982/163327736-f7cb3b16-ef07-46bc-982a-3cc7495e6c82.png" width="800" />
 </div>
 
-## MMSelfSup 的可视化做什么
+## What Visualization do in MMSelfsup
 
-(1) 用不同的存储后端存训练数据
+(1) Save training data using different storage backends
 
-MMEngine 的后端包括 `LocalVisBackend`, `TensorboardVisBackend` 和 `WandbVisBackend`。
+The backends in MMEngine includes `LocalVisBackend`, `TensorboardVisBackend` and `WandbVisBackend` .
 
-在训练过程中，默认钩子 `LoggerHook` 中的 [after_train_iter()](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/logger_hook.py#L150) 会被调用，并且会在不同后端中用到 `add_scalars` ，例如：
+During training,  [after_train_iter()](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/logger_hook.py#L150) in the default hook `LoggerHook` will be called, and use `add_scalars` in different backends, as follows:
 
 ```python
 ...
@@ -47,13 +47,13 @@ def after_train_iter(...):
 ...
 ```
 
-(2) 浏览数据集
+(2) Browse dataset
 
-[`add_datasample()`](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/visualization/selfsup_visualizer.py#L151) 函数位于 [`SelfSupVisualizer`](mmselfsup.visualization.SelfSupVisualizer), 常用于在 [browse_dataset.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/browse_dataset.py) 中浏览数据集。 [analysis_tools.md](analysis_tools.md) 中有更多的教程。
+The function [`add_datasample()`](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/visualization/selfsup_visualizer.py#L151) is impleted in [`SelfSupVisualizer`](mmselfsup.visualization.SelfSupVisualizer), and it is mainly used in [browse_dataset.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/browse_dataset.py) for browsing dataset. More tutorial is in [analysis_tools.md](analysis_tools.md)
 
-## 用不同的存储后端
+## Use Different Storage Backends
 
-如果想用不同的存储后端( Wandb, Tensorboard, 或者远程窗口里常规的后端)，像以下这样改配置文件的 `vis_backends` 就行了：
+If you want to use a different backend (Wandb, Tensorboard, or a custom backend with a remote window), just change the `vis_backends` in the config, as follows:
 
 **Local**
 
@@ -69,7 +69,7 @@ visualizer = dict(
     type='SelfSupVisualizer', vis_backends=vis_backends, name='visualizer')
 ```
 
-例如
+E.g.
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/36138628/199388357-5d1cc7b4-07b8-41b1-ac66-12ec8ef009da.png" width="400" />
@@ -83,57 +83,57 @@ visualizer = dict(
     type='SelfSupVisualizer', vis_backends=vis_backends, name='visualizer')
 ```
 
-值得一提的是，对于 `vis_backends` 有多个可视化后端存在时，只有 `WandbVisBackend` 有效。
+Note that when multiple visualization backends exist for `vis_backends`, only `WandbVisBackend` is valid.
 
-例如：
+E.g.
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/36138628/199388643-288cf83f-0faa-4f34-a5d0-bf53c7bb3e08.png" width="600" />
 </div>
 
-## 定制化的可视化
+## Customize Visualization
 
-定制化可视化就像定制化其他组成部分那样。想定制化 `Visualizer`, `VisBackend` 或者 `VisualizationHook` 的话可以参考 MMEngine 里的 [Visualization Doc](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/advanced_tutorials/visualization.md)
+The customization of the visualization is similar to other components. If you want to customize `Visualizer`, `VisBackend` or `VisualizationHook`, you can refer to [Visualization Doc](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/visualization.md) in MMEngine.
 
-## 数据集可视化
+## Visualize Datasets
 
-`tools/misc/browse_dataset.py` 帮助用户可视化浏览 MMSelfSup 数据集，或者也可以把图像存到指定的目录里。
+`tools/misc/browse_dataset.py` helps the user to browse a mmselfsup dataset (transformed images) visually, or save the image to a designated directory.
 
 ```shell
 python tools/misc/browse_dataset.py ${CONFIG} [-h] [--skip-type ${SKIP_TYPE[SKIP_TYPE...]}] [--output-dir ${OUTPUT_DIR}] [--not-show] [--show-interval ${SHOW_INTERVAL}]
 ```
 
-例子如下：
+An example:
 
 ```shell
 python tools/misc/browse_dataset.py configs/selfsup/simsiam/simsiam_resnet50_8xb32-coslr-100e_in1k.py
 ```
 
-一个可视化的例子如下：
+An example of visualization:
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/36138628/199387454-219e6f6c-fbb7-43bb-b319-61d3e6266abc.png" width="600" />
 </div>
 
-- 左边两张图来自对比学习数据流。
-- 右边那张图是添加了掩码的图像。
+- The left two pictures are images from contrastive learning data pipeline.
+- The right one is a masked image.
 
-## t-SNE 可视化
+## Visualize t-SNE
 
-我们提供可视化 t-SNE 展示图片表征的现成工具。
+We provide an off-the-shelf tool to visualize the quality of image representations by t-SNE.
 
 ```shell
 python tools/analysis_tools/visualize_tsne.py ${CONFIG_FILE} --checkpoint ${CKPT_PATH} --work-dir ${WORK_DIR} [optional arguments]
 ```
 
-参数:
+Arguments:
 
-- `CONFIG_FILE`: 位于 `configs/tsne/` 中的 t-SNE 的配置文件。
-- `CKPT_PATH`: 模型检查点的目录或链接。
-- `WORK_DIR`: 拿来存可视化结果的目录。
-- `[optional arguments]`: 可选项，可以参考 [visualize_tsne.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/visualize_tsne.py)
+- `CONFIG_FILE`: config file for t-SNE, which listed in the directory `configs/tsne/`
+- `CKPT_PATH`: the path or link of the model's checkpoint.
+- `WORK_DIR`: the directory to save the results of visualization.
+- `[optional arguments]`: for optional arguments, you can refer to [visualize_tsne.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/visualize_tsne.py)
 
-一个命令示例如下：
+An example of command:
 
 ```shell
 python ./tools/analysis_tools/visualize_tsne.py \
@@ -143,22 +143,22 @@ python ./tools/analysis_tools/visualize_tsne.py \
     --max-num-class 100
 ```
 
-下面是可视化的例子,左边来自 `MoCoV2_ResNet50`，右边来自 `MAE_ViT-base`:
+An example of visualization, left is from `MoCoV2_ResNet50` and right is from `MAE_ViT-base`:
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/36138628/207305086-91df298c-0eb7-4254-9c5b-ba711644501b.png" width="250" />
 <img src="https://user-images.githubusercontent.com/36138628/207305333-59af4747-1e9c-4f85-a57d-c7e5d132a6e5.png" width="250" />
 </div>
 
-## 可视化低级特征重建
+## Visualize Low-level Feature Reconstruction
 
-我们提供如下算法的重建可视化：
+We provide several reconstruction visualization for listed algorithms:
 
 - MAE
 - SimMIM
 - MaskFeat
 
-用户可以通过如下命令可视化重建。
+Users can run command below to visualize the reconstruction.
 
 ```shell
 python tools/analysis_tools/visualize_reconstruction.py ${CONFIG_FILE} \
@@ -167,15 +167,15 @@ python tools/analysis_tools/visualize_reconstruction.py ${CONFIG_FILE} \
     --out-file ${OUTPUT_PATH}
 ```
 
-参数:
+Arguments:
 
-- `CONFIG_FILE`: 预训练模型配置文件。
-- `CKPT_PATH`: 模型检查点的路径。
-- `IMAGE_PATH`: 输入图像的路径。
-- `OUTPUT_PATH`: 输出图像的路径，包含４个子图。
-- `[optional arguments]`: for optional arguments, 您可以参考 [visualize_reconstruction.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/visualize_reconstruction.py) 了解可选参数。
+- `CONFIG_FILE`: config file for the pre-trained model.
+- `CKPT_PATH`: the path of model's checkpoint.
+- `IMAGE_PATH`: the input image path.
+- `OUTPUT_PATH`: the output image path, including 4 sub-images.
+- `[optional arguments]`: for optional arguments, you can refer to [visualize_reconstruction.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/visualize_reconstruction.py)
 
-例子如下:
+An example:
 
 ```shell
 python tools/analysis_tools/visualize_reconstruction.py configs/selfsup/mae/mae_vit-huge-p16_8xb512-amp-coslr-1600e_in1k.py \
@@ -185,7 +185,7 @@ python tools/analysis_tools/visualize_reconstruction.py configs/selfsup/mae/mae_
     --norm-pix
 
 
-# SimMIM 在数据流里生成掩码，所以我们不用脚本里定义好的管道而用 '--use-vis-pipeline' 来应用配置里定义的 'vis_pipeline'
+# As for SimMIM, it generates the mask in data pipeline, thus we use '--use-vis-pipeline' to apply 'vis_pipeline' defined in config instead of the pipeline defined in script.
 python tools/analysis_tools/visualize_reconstruction.py configs/selfsup/simmim/simmim_swin-large_16xb128-amp-coslr-800e_in1k-192.py \
     --checkpoint https://download.openmmlab.com/mmselfsup/1.x/simmim/simmim_swin-large_16xb128-amp-coslr-800e_in1k-192/simmim_swin-large_16xb128-amp-coslr-800e_in1k-192_20220916-4ad216d3.pth \
     --img-path data/imagenet/val/ILSVRC2012_val_00000003.JPEG \
@@ -193,31 +193,34 @@ python tools/analysis_tools/visualize_reconstruction.py configs/selfsup/simmim/s
     --use-vis-pipeline
 ```
 
-MAE 结果如下:
+Results of MAE:
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/36138628/200465826-83f316ed-5a46-46a9-b665-784b5332d348.jpg" width="800" />
 </div>
 
-SimMIM 结果如下:
+Results of SimMIM:
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/36138628/200466133-b77bc9af-224b-4810-863c-eed81ddd1afa.jpg" width="800" />
 </div>
 
-MaskFeat 结果如下:
+Results of MaskFeat:
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/36138628/200465876-7e7dcb6f-5e8d-4d80-b300-9e1847cb975f.jpg" width="800" />
 </div>
 
-## 可视化 shape bias 
+## Visualize Shape Bias
 
-shape bias 衡量在感知图像特征的过程中，与纹理相比，模型依赖 shape 的程度。感兴趣的话可以参考 [paper](https://arxiv.org/abs/2106.07411) 了解更多信息。 MMSelfSup 提供一个现有的用于得到分类模型 shape bias 的工具箱。可以按以下步骤来做：
+Shape bias measures how a model relies the shapes, compared to texture, to sense the semantics in images. For more details,
+we recommend interested readers to this [paper](https://arxiv.org/abs/2106.07411). MMSelfSup provide an off-the-shelf toolbox to
+obtain the shape bias of a classification model. You can following these steps below:
 
-### 准备数据集
+### Prepare the dataset
 
-首先把 [cue-conflict](https://github.com/bethgelab/model-vs-human/releases/download/v0.1/cue-conflict.tar.gz) 下载到 `data` 文件夹里,然后解压数据集。然后，您的 `data` 文件夹的结构应该像这样：
+First you should download the [cue-conflict](https://github.com/bethgelab/model-vs-human/releases/download/v0.1/cue-conflict.tar.gz) to `data` folder,
+and then unzip this dataset. After that, you `data` folder should have the following structure:
 
 ```text
 data
@@ -228,9 +231,9 @@ data
 |      |── truck
 ```
 
-### 为分类调整配置
+### Modify the config for classification
 
-用以下配置代替原来的 test_dataloader 和 test_evaluation
+Replace the original test_dataloader and test_evaluation with following configurations
 
 ```python
 test_dataloader = dict(
@@ -246,11 +249,11 @@ test_evaluator = dict(
     model_name='your_model_name')
 ```
 
-请记得自己修改一下 `csv_dir` 和 `model_name`。
+Please note you should make custom modifications to the `csv_dir` and `model_name`.
 
-### 用上述调整过的配置文件推理模型
+### Inference your model with above modified config file
 
-然后您需要做的是用调整过的配置文件在 `cue-conflict` 数据集上推理模型。
+Then you should inferece your model on the `cue-conflict` dataset with the your modified config files.
 
 ```shell
 # For Slurm
@@ -266,20 +269,24 @@ After that, you should obtain a csv file, named `cue-conflict_model-name_session
 also download these [csv files](https://github.com/bethgelab/model-vs-human/tree/master/raw-data/cue-conflict) to the
 `csv_dir`.
 
-### 画出 shape bias
+### Plot shape bias
 
-然后我们就可以开始画出 shape bias 了。
+Then we can start to plot the shape bias
 
 ```shell
 python tools/analysis_tools/visualize_shape_bias.py --csv-dir $CVS_DIR --result-dir $CSV_DIR --colors $RGB --markers o --plotting-names $YOU_MODEL_NAME --model-names $YOU_MODEL_NAME
 ```
 
-- csv-dir, 相同目录下，用于存储 csv 文件。
-- colors, 应为以 RGB 为格式的 RGB 值,比如 100 100 100,如果您想画若干模型的 shape bias 的话多个RGB值也行。
-- plotting-names, 偏好形状里图例的名称，您可将之设为模型名字。如果您想画若干模型的 shape bias 的话名字设多个值也行。
-- 模型名字，应该跟配置文件里的一样，如果您想画若干模型的 shape bias 的话多个名字也行。
+- csv-dir, the same directory to save these csv files
+- colors, should be the RGB values, formatted in R G B, e.g. 100 100 100, and can be multiple RGB values, if you want
+  to plot the shape bias of several models
+- plotting-names, the name of the legend in the shape bias figure, and you can set it as your model name. If you want
+  to plot several models, plotting_names can be multiple values
+- model-names, should be the same name specified in your config, and can be multiple names if you want to plot the
+  shape bias of several models
 
-请注意，每三个 `--colors` 对应一个 `--model-names` 。上面步骤做完后您会得到如下图像：
+Please note, every three values for `--colors` corresponds to one value for `--model-names`. After all of above steps, you
+are expected to obtain the following figure.
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/30762564/208357938-c744d3c3-7e08-468e-82b7-fc5f1804da59.png" width="400" />
