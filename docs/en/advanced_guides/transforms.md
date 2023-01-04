@@ -1,23 +1,25 @@
-# 数据变化概述
+# Transforms
 
-- [数据变换概述](<>)
-  - [数据变换概述](#数据变换概述)
-  - [MultiView简介](#multiview-简介)
-  - [PackSelfSupInputs简介](#packselfsupinputs-简介)
+- [Transforms](<>)
+  - [Overview of transforms](#overview-of-transforms)
+  - [Introduction of `MultiView`](#introduction-of-multiview)
+  - [Introduction of `PackSelfSupInputs`](#introduction-of-packselfsupinputs)
 
-## 数据变换概述
+## Overview of transforms
 
-在 [add_transforms](./add_transforms.md) 中我们介绍了如何建 `Pipeline` 。 `Pipeline` 里有一系列的数据变换。MMSelfSup 中数据变换主要分为三类：
+We have introduced how to build a `Pipeline` in [add_transforms](./add_transforms.md). A `Pipeline` contains a series of
+`transforms`. There are three main categories of `transforms` in MMSelfSup:
 
-1. 处理数据用到的数据变换。[processing.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/processing.py) 中定义了独特的数据变换，比如`RandomCrop`, `RandomResizedCrop` 和 `RandomGaussianBlur`。我们也可以用其它仓库的数据变换，比如 MMCV 中的 `LoadImageFromFile`。
+1. Transforms about processing the data. The unique transforms in MMSelfSup are defined in [processing.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/processing.py), e.g. `RandomCrop`, `RandomResizedCrop` and `RandomGaussianBlur`.
+   We may also use some transforms from other repositories, e.g. `LoadImageFromFile` from MMCV.
 
-2. 不同视角看同一照片的数据变换打包器。这个在 [wrappers.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/wrappers.py) 中定义过。
+2. The transform wrapper for multiple views of an image. It is defined in [wrappers.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/wrappers.py).
 
-3. 将数据变换使得数据能输入算法中。这个定义在 [formatting.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/formatting.py) 。
+3. The transform to pack data into a format compatible with the inputs of the algorithm. It is defined in [formatting.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/formatting.py).
 
-总的来说，我们用的是如下的这些数据变换。我们将详细讨论最后两种数据变换。
+In summary, we implement these `transforms` below. The last two transforms will be introduced in detail.
 
-|                                                      类别                                                      |                                      作用                                      |
+|                                                      class                                                      |                                      function                                      |
 | :-------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------: |
 |                           [`BEiTMaskGenerator`](mmselfsup.datasets.BEiTMaskGenerator)                           |                      Generate mask for image refers to `BEiT`                      |
 |                         [`SimMIMMaskGenerator`](mmselfsup.datasets.SimMIMMaskGenerator)                         |            Generate random block mask for each Image refers to `SimMIM`            |
@@ -33,9 +35,10 @@
 |                             [`MultiView`](mmselfsup.datasets.transforms.MultiView)                              |               A wrapper for algorithms with multi-view image inputs                |
 |                           [`PackSelfSupInputs`](mmselfsup.datasets.PackSelfSupInputs)                           |         Pack data into a format compatible with the inputs of an algorithm         |
 
-## MultiView 简介
+## Introduction of `MultiView`
 
-我们为一些算法定义了名为 [`MultiView`](mmselfsup.datasets.transforms.MultiView) 的多角度照片输入的包装器，比如 MoCo 系列，SimCLR，SwAV 等。在配置文件中，我们能这样定义：
+We build a wrapper named [`MultiView`](mmselfsup.datasets.transforms.MultiView) for some algorithms e.g. MOCO, SimCLR and SwAV with multi-view image inputs. In the config file, we can
+define it as:
 
 ```python
 pipeline = [
@@ -47,9 +50,9 @@ pipeline = [
 ]
 ```
 
-，这意味着数据管道里面有两个角度。
+, which means that there are two views in the pipeline.
 
-我们也可以这样定义有不同角度的数据管道：
+We can also define pipeline with different views like:
 
 ```python
 pipeline = [
@@ -65,11 +68,13 @@ pipeline = [
 ]
 ```
 
-这意味着有两个数据管道，他们分别有两个角度和六个角度。在[imagenet_mocov1.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/_base_/datasets/imagenet_mocov1.py)和 [imagenet_mocov2.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/_base_/datasets/imagenet_mocov2.py) 和[imagenet_swav_mcrop-2-6.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/_base_/datasets/imagenet_swav_mcrop-2-6.py)中有更多例子。
+This means that there are two pipelines, which contain 2 views and 6 views, respectively.
+More examples can be found in [imagenet_mocov1.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/_base_/datasets/imagenet_mocov1.py), [imagenet_mocov2.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/_base_/datasets/imagenet_mocov2.py) and [imagenet_swav_mcrop-2-6.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/_base_/datasets/imagenet_swav_mcrop-2-6.py) etc.
 
-## PackSelfSupInputs 简介
+## Introduction of `PackSelfSupInputs`
 
-我们建一个名为 [`PackSelfSupInputs`](mmselfsup.datasets.transforms.PackSelfSupInputs) 的类来将数据转换为能输入算法中的格式。这种转换通常在数据管道的后面，就像下面这样：
+We build a class named [`PackSelfSupInputs`](mmselfsup.datasets.transforms.PackSelfSupInputs) to pack data into a format compatible with the inputs of an algorithm. This transform
+is usually put at the end of the pipeline like:
 
 ```python
 train_pipeline = [

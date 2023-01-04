@@ -1,29 +1,34 @@
-# 模型
+# Models
 
-- [模型](#models)
-  - [MMSelfSup 模型概述](#mmselfsup-模型概述)
-  - [用子模块来构造算法](#用子模块来构造算法)
-  - [纵览基础模型中的抽象函数](#纵览基础模型中的抽象函数)
+- [Models](#models)
+  - [Overview of modules in MMSelfSup](#overview-of-modules-in-mmselfsup)
+  - [Construct algorithms from sub-modules](#construct-algorithms-from-sub-modules)
+  - [Overview these abstract functions in base model](#overview-these-abstract-functions-in-base-model)
 
-我们可以把模型看作算法的特征提取器或者损失生成器。在 MMSelfSup 中，模型主要包括以下几个部分:
+Model can be seen as a feature extractor or loss generator for each algorithm. In MMSelfSup, it mainly
+contains the following fix parts,
 
-- 算法，包括模型的全部模块和构造算法时需要用到的子模块。
+- algorithms, containing the full modules of a model and all sub-modules will be
+  constructed in algorithms.
 
-- 主干，里面是每个算法的支柱，比如 MAE 中的 VIT 和 SimMIM 中的 Swin Transformer。
+- backbones, containing the backbones for each algorithm, e.g. ViT for MAE, and Swim Transformer for SimMIM.
 
-- 颈部，指一些特殊的模块，比如解码器，它直接增加脊柱部分的输出结果。
+- necks, some specifial modules, such as decoder, appended directly to the output of the backbone.
 
-- 头部，指一些特殊的模块，比如多层感知器的层，它增加脊柱部分或者颈部部分的输出结果。
+- heads, some specifial modules, such as mlp layers, appended to the output of the backbone or neck.
 
-- 记忆，也就是一些算法中的存储体或者队列，比如 MoCov1/v2。
+- memories, some memory banks or queues in some algorithms, e.g. MoCo v1/v2.
 
-- 损失，用于算输出的预测值和目标之间的损失。
+- losses, used to compute the loss between the predicted output and the target.
 
-## MMSelfSup 模型概述
+- target_generators, generating targets for self-supervised learning optimization, such as HOG, extracted features from other modules(DALL-E, CLIP), etc.
 
-首先，我们纵览 MMSelfSup 中已有的模型。我们根据上述的分类来展示这些模型。
+## Overview of modules in MMSelfSup
 
-|       算法       |            主干             |             颈部             |                 头部                 |                损失                |         记忆         |
+First, we will give an overview about existing modules in MMSelfSup. They will be displayed according to the categories
+described above.
+
+|       algorithm        |            backbone             |             neck             |                 head                 |                loss                |         memory         |
 | :--------------------: | :-----------------------------: | :--------------------------: | :----------------------------------: | :--------------------------------: | :--------------------: |
 | [`BarlowTwins`](TODO)  |        [`ResNet`](TODO)         |   [`NonLinearNeck`](TODO)    | [`LatentCrossCorrelationHead`](TODO) |   [`CrossCorrelationLoss`](TODO)   |          N/A           |
 |   [`DenseCL`](TODO)    |        [`ResNet`](TODO)         |    [`DenseCLNeck`](TODO)     |      [`ContrastiveHead`](TODO)       |     [`CrossEntropyLoss`](TODO)     |          N/A           |
@@ -42,10 +47,11 @@
 |   [`SimSiam`](TODO)    |        [`ResNet`](TODO)         |   [`NonLinearNeck`](TODO)    |     [`LatentPredictHead`](TODO)      |   [`CosineSimilarityLoss`](TODO)   |          N/A           |
 |     [`SwAV`](TODO)     |        [`ResNet`](TODO)         |      [`SwAVNeck`](TODO)      |          [`SwAVHead`](TODO)          |         [`SwAVLoss`](TODO)         |          N/A           |
 
-## 用子模块来构造算法
+## Construct algorithms from sub-modules
 
-正如上表所述，每个算法都是主干，颈部，头部，损失和记忆的结合体。您可以从这些模块中任意选出若干部分来构建你自己的算法。如果需要定制化的模块，您可参考 [add_modules](./add_modules.md) 中的内容。
-MMSelfSup 提供一个基础模型，名为 `BaseModel`，所以的算法都应该继承这个基础模型，而且所有子模块（除了记忆部分）在基础模型中进行初始化。记忆部分在对应算法的 `__init__` 中被构造。损失部分在头部部分初始化时被构造。
+Just as shown in above table, each algorithm is a combination of backbone, neck, head, loss and memories. You are free to use these existing modules to build your own algorithms. If some customized modules are required, you should follow [add_modules](./add_modules.md) to meet your own need.
+MMSelfSup provides a base model, called `BaseModel`, and all algorithms
+should inherit this base model. And all sub-modules, except for memories, will be built in the base model, during the initialization of each algorithm. Memories will be built in the `__init__` of each specific algorithm. And loss will be built when building the head.
 
 ```python
 class BaseModel(_BaseModel):
@@ -54,6 +60,7 @@ class BaseModel(_BaseModel):
                  backbone: dict,
                  neck: Optional[dict] = None,
                  head: Optional[dict] = None,
+                 target_generator: Optional[dict] = None,
                  pretrained: Optional[str] = None,
                  data_preprocessor: Optional[Union[dict, nn.Module]] = None,
                  init_cfg: Optional[dict] = None):
@@ -80,10 +87,14 @@ class BaseModel(_BaseModel):
 
 ```
 
-正如上面代码所示，构造主干部分时需要配置，但是对颈部和头部而言这可有可无。除了构造算法之外，您还需要重写基础模型中的一些抽象函数才能得到正确结果，我们将在下一部分讨论这件事。
+Just as shown above, you should provide the config to build the backbone, but neck and head are optional. In addition to building
+your algorithm, you should overwrite some abstract functions in the base model to get the correct results, which we will discuss in the
+following section.
 
-## 纵览基础模型中的抽象函数
-`forward` 函数是结果的入口。然而，它和大多数 Pytorch 代码中只有一种模式的 `forward` 函数不同。MMSelfSup 把所有的逻辑都混杂在 `forward` 中，从而限制了该方法的可拓展性。正如下面代码所示，MMSelfSup 中的 `forward` 函数根据不同模式进行前向处理，目前共有三种模式：张量，损失和预测。
+## Overview these abstract functions in base model
+
+The `forward` function is the entrance to the results. However, it is different from the default `forward` function in most PyTorch code, which
+only has one mode. You will mess all your logic in the `forward` function, limiting the scalability. Just as shown in the code below, `forward` function in MMSelfSup has three modes, i) tensor, ii) loss and iii) predict.
 
 ```python
 def forward(self,
@@ -101,10 +112,13 @@ def forward(self,
         raise RuntimeError(f'Invalid mode "{mode}".')
 ```
 
-- 张量，如果模式为 `tensor`，`forward` 函数就返回从图片提取到的特征。您应该重写其中的  `extract_feat`部分才能让定制化的提取过程有效。
+- tensor, if the mode is `tensor`, the forward function will return the extracted features for images.
+  You should overwrite the `extract_feat` to implement your customized extracting process.
 
-- 损失，如果模式为 `loss`，`forward` 函数就返回预测值与目标之间的损失。同样的，您应该重写其中的 `loss` 部分才能让定制化的提取过程有效。
+- loss, if the mode is `loss`, the forward function will return the loss between the prediction and the target.
+  You should overview the `loss` to implement your customized loss function.
 
-- 预测，如果模式为 `predict`，`forward` 函数就返回预测结果，比如用您的算法预测得到的标签。如果需要，`predict`函数也需要重写。
+- predict, if the mode is `predict`, the forward function will return the prediction, e.g. the predicted label, from
+  your algorithm. If should also overwrite the `predict` function.
 
-本文中我们学习了 MMSelfSup 中的模型的基本组成部分，如果您想深入研究，可以参考每个算法的API文件。
+Now we have introduce the basic components related to models in MMSelfSup, if you want to dive in , please refer the API doc of each algorithm.
