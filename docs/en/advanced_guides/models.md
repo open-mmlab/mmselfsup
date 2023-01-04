@@ -10,12 +10,18 @@ contains the following fix parts,
 
 - algorithms, containing the full modules of a model and all sub-modules will be
   constructed in algorithms.
-- backbones, containing the backbones for each algorithm, e.g. ViT for MAE, and Swim Transformer
-  for SimMIM.
+
+- backbones, containing the backbones for each algorithm, e.g. ViT for MAE, and Swim Transformer for SimMIM.
+
 - necks, some specifial modules, such as decoder, appended directly to the output of the backbone.
+
 - heads, some specifial modules, such as mlp layers, appended to the output of the backbone or neck.
-- memories, some memory banks or queues in some algorithms, e.g. MoCov1/v2.
+
+- memories, some memory banks or queues in some algorithms, e.g. MoCo v1/v2.
+
 - losses, used to compute the loss between the predicted output and the target.
+
+- target_generators, generating targets for self-supervised learning optimization, such as HOG, extracted features from other modules(DALL-E, CLIP), etc.
 
 ## Overview of modules in MMSelfSup
 
@@ -54,6 +60,7 @@ class BaseModel(_BaseModel):
                  backbone: dict,
                  neck: Optional[dict] = None,
                  head: Optional[dict] = None,
+                 target_generator: Optional[dict] = None,
                  pretrained: Optional[str] = None,
                  data_preprocessor: Optional[Union[dict, nn.Module]] = None,
                  init_cfg: Optional[dict] = None):
@@ -87,7 +94,7 @@ following section.
 ## Overview these abstract functions in base model
 
 The `forward` function is the entrance to the results. However, it is different from the default `forward` function in most PyTorch code, which
-only has one mode. You will mess all your logic in the `forward` function, limiting the scability. Just as shown in the code below, `forward` function in MMSelfSup has three modes, i) tensor, ii) loss and iii) predict.
+only has one mode. You will mess all your logic in the `forward` function, limiting the scalability. Just as shown in the code below, `forward` function in MMSelfSup has three modes, i) tensor, ii) loss and iii) predict.
 
 ```python
 def forward(self,
