@@ -2,14 +2,16 @@
 
 set -x
 PARTITION=$1
-JOB_NAME="selective_search"
-CONFIG=$2
-OUTPUT=$3
+JOB_NAME='co'
+CFG=$2
+CHECKPOINT=$3
+INPUT=$4
+OUTPUT=$5
 GPUS=${GPUS:-1}
 GPUS_PER_NODE=${GPUS_PER_NODE:-1}
 CPUS_PER_TASK=${CPUS_PER_TASK:-5}
 SRUN_ARGS=${SRUN_ARGS:-""}
-PY_ARGS=${@:4}
+
 PYTHONPATH="$(dirname $0)/..":$PYTHONPATH \
 GLOG_vmodule=MemcachedClient=-1 \
 srun -p ${PARTITION} \
@@ -20,4 +22,8 @@ srun -p ${PARTITION} \
     --cpus-per-task=${CPUS_PER_TASK} \
     --kill-on-bad-exit=1 \
     ${SRUN_ARGS} \
-    python -u tools/selective_search.py ${CONFIG} $OUTPUT --launcher="slurm" ${PY_ARGS}
+    python -u tools/generate_correspondence.py \
+        $CFG \
+        $CHECKPOINT \
+        $INPUT \
+        $OUTPUT --launcher="slurm"

@@ -1,10 +1,14 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+from typing import List, Optional, Union
+
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from mmengine.logging import print_log
 
 from mmselfsup.registry import MODELS
 from .. import builder
+from ..utils import CosineEMA
 from .base import BaseModel
 
 
@@ -25,6 +29,160 @@ class SelectiveSearch(nn.Module):
         assert mode == 'test', \
             'Support test inference mode only, got: {}'.format(mode)
         return self.forward_test(**kwargs)
+
+
+@MODELS.register_module()
+class Correspondence(BaseModel):
+    """Correspondence discovery in Stage 2 of ORL.
+
+    Args:
+        backbone (dict): Config dict for module of backbone ConvNet.
+        neck (dict): Config dict for module of deep features to
+            compact feature vectors. Default: None.
+        head (dict): Config dict for module of loss functions.
+            Default: None.
+        pretrained (str, optional): Path to pre-trained weights.
+            Default: None.
+        base_momentum (float): The base momentum coefficient for
+            the target network. Default: 0.99.
+        knn_image_num (int): The number of KNN images. Default: 10.
+        topk_bbox_ratio (float): The ratio of retrieved top-ranked RoI pairs.
+            Default: 0.1.
+    """
+
+    def __init__(
+            self,
+            backbone: dict,
+            neck: dict,
+            head: dict,
+            pretrained: Optional[str] = None,
+            #  data_preprocessor: Optional[dict] = None,
+            init_cfg: Optional[Union[List[dict], dict]] = None,
+            base_momentum=0.99,
+            knn_image_num=10,
+            topk_bbox_ratio=0.1) -> None:
+        # super(Correspondence, self).__init__()
+        super().__init__(
+            backbone=backbone,
+            neck=neck,
+            head=head,
+            pretrained=pretrained,
+            # data_preprocessor=data_preprocessor,
+            init_cfg=init_cfg)
+        # create momentum model
+        self.online_net = nn.Sequential(self.backbone, self.neck)
+        self.target_net = CosineEMA(self.online_net, momentum=base_momentum)
+
+        self.base_momentum = base_momentum
+        self.momentum = base_momentum
+
+        self.knn_image_num = knn_image_num
+        self.topk_bbox_ratio = topk_bbox_ratio
+
+    def predict(self, img: List[torch.Tensor], bbox: List[torch.Tensor],
+                img_keys: dict, bbox_keys: dict, **kwargs) -> dict:
+
+        knn_imgs = [
+            img_keys.get('{}nn_img'.format(k))
+            for k in range(self.knn_image_num)
+        ]
+        knn_bboxes = [
+            bbox_keys.get('{}nn_bbox'.format(k))
+            for k in range(self.knn_image_num)
+        ]
+        # print("knn_Imgs")
+        # print(knn_imgs)
+        # print("knn_bboxes")
+        # print(knn_bboxes)
+        # # torch.Size([1, 27, 3, 224, 224])
+        # print(img.size())
+        # print("The type of bbox:")
+        # print(type(bbox))
+        # print("With shape")
+        # print(bbox.dim())
+        assert img.size(0) == 1, \
+            f'batch size must be 1, got: {img.size(0)}'
+        assert img.dim() == 5, \
+            f'img must have 5 dims, got: {img.dim()}'
+        assert bbox.dim() == 3, \
+            f'bbox must have 3 dims, got: {bbox.dim()}'
+        assert knn_imgs[0].dim() == 5, \
+            f'knn_img must have 5 dims, got: {knn_imgs[0].dim()}'
+        assert knn_bboxes[0].dim() == 3, \
+            f'knn_bbox must have 3 dims, got: {knn_bboxes[0].dim()}'
+        img = img.view(
+            img.size(0) * img.size(1), img.size(2), img.size(3),
+            img.size(4))  # (1B)xCxHxW
+        knn_imgs = [
+            knn_img.view(
+                knn_img.size(0) * knn_img.size(1),
+                knn_img.size(2),
+                # K (1B)xCxHxW
+                knn_img.size(3),
+                knn_img.size(4)) for knn_img in knn_imgs
+        ]
+        with torch.no_grad():
+            feat = self.backbone(img)[0].clone().detach()
+            knn_feats = [
+                self.backbone(knn_img)[0].clone().detach()
+                for knn_img in knn_imgs
+            ]
+            feat = F.adaptive_avg_pool2d(feat, (1, 1))
+            knn_feats = [
+                F.adaptive_avg_pool2d(knn_feat, (1, 1))
+                for knn_feat in knn_feats
+            ]
+            feat = feat.view(feat.size(0), -1)  # (1B)xC
+            knn_feats = [
+                knn_feat.view(knn_feat.size(0), -1) for knn_feat in knn_feats
+            ]  # K (1B)xC
+            feat_norm = F.normalize(feat, dim=1)
+            knn_feats_norm = [
+                F.normalize(knn_feat, dim=1) for knn_feat in knn_feats
+            ]
+            # smaps: a list containing K similarity matrix (BxB Tensor)
+            smaps = [
+                torch.mm(feat_norm, knn_feat_norm.transpose(0, 1))
+                for knn_feat_norm in knn_feats_norm
+            ]  # K BxB
+            top_query_inds = []
+            top_key_inds = []
+            for smap in smaps:
+                topk_num = int(self.topk_bbox_ratio * smap.size(0))
+                _, top_ind = torch.topk(smap.flatten(),
+                                        topk_num if topk_num > 0 else 1)
+                top_query_ind = top_ind // smap.size(1)
+                top_key_ind = top_ind % smap.size(1)
+                top_query_inds.append(top_query_ind)
+                top_key_inds.append(top_key_ind)
+            bbox = bbox.view(bbox.size(0) * bbox.size(1),
+                             bbox.size(2))  # (1B)x4
+            knn_bboxes = [
+                knn_bbox.view(
+                    knn_bbox.size(0) * knn_bbox.size(1), knn_bbox.size(2))
+                for knn_bbox in knn_bboxes
+            ]  # K (1B)x4
+            # K (topk_bbox_num)x8
+            topk_box_pairs_list = [
+                torch.cat((bbox[qind], kbox[kind]),
+                          dim=1).cpu() for kbox, qind, kind in zip(
+                              knn_bboxes, top_query_inds, top_key_inds)
+            ]
+            knn_bbox_keys = [
+                '{}nn_bbox'.format(k) for k in range(len(topk_box_pairs_list))
+            ]
+            dict1 = dict(intra_bbox=bbox.cpu())
+            dict2 = dict(zip(knn_bbox_keys, topk_box_pairs_list))
+        # intra_bbox: Bx4, inter_bbox: K (topk_bbox_num)x8
+        # B is the number of filtered bboxes, K is the number of knn images,
+        return {**dict1, **dict2}
+
+    def forward(self, img, bbox, img_keys, bbox_keys, mode='test', **kwargs):
+        if mode == 'test':
+            print(kwargs)
+            return self.predict(img, bbox, img_keys, bbox_keys, **kwargs)
+        else:
+            raise Exception('No such mode: {}'.format(mode))
 
 
 @MODELS.register_module()

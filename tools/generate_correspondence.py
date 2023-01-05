@@ -8,30 +8,40 @@ import time
 
 import mmengine
 import torch
-import torch.multiprocessing
-from mmengine.config import Config, DictAction
+from mmengine.config import Config
 from mmengine.dist import get_dist_info, init_dist
 from mmengine.logging import MMLogger, print_log
+from mmengine.model import MMDistributedDataParallel
 from mmengine.registry import build_model_from_cfg
-from mmengine.runner import Runner
+from mmengine.runner import Runner, load_checkpoint
 
 from mmselfsup.registry import MODELS
 from mmselfsup.utils import register_all_modules
 
-# from mmselfsup.datasets import build_dataloader, build_dataset
-# from mmselfsup.models import build_model
-# from mmselfsup.utils import (get_root_logger, traverse_replace, print_log)
-torch.multiprocessing.set_sharing_strategy('file_system')
+# import argparse
+# import os
+# import os.path as osp
+# import time
+# import json
+# import logging
+# import mmengine
+# import torch
+# import torch.multiprocessing
+# from mmengine.config import Config, DictAction
+# from mmengine.model import  MMDistributedDataParallel
+# from mmengine.dist import get_dist_info, init_dist
+# from mmengine.logging import MMLogger, print_log
+# from mmengine.registry import build_model_from_cfg,Registry
+# from mmengine.runner import Runner
+# from mmengine.registry import MODELS as MMENGINE_MODELS
+# # from registry import MODELS
+# from mmengine.runner import  load_checkpoint
+# from mmselfsup.registry import MODELS
+# from mmselfsup.utils import register_all_modules
+# import datetime
+# import warnings
 
-
-def evaluate(bbox, **kwargs):
-
-    if not isinstance(bbox, list):
-        bbox = bbox.tolist()
-        # dict
-    data_ss = {}
-    data_ss['bbox'] = bbox
-    return data_ss
+# from mmengine import DefaultScope
 
 
 def nondist_single_forward_collect(func, data_loader, length):
@@ -39,12 +49,10 @@ def nondist_single_forward_collect(func, data_loader, length):
 
     This function performs forward propagation and collects outputs.
     It can be used to collect results, features, losses, etc.
-
     Args:
         func (function): The function to process data. The output must be
             a dictionary of CPU tensors.
         length (int): Expected length of output arrays.
-
     Returns:
         results_all (dict(list)): The concatenated outputs.
     """
@@ -58,10 +66,21 @@ def nondist_single_forward_collect(func, data_loader, length):
 
     results_all = {}
     for k in results[0].keys():
-        results_all[k] = [
-            batch[k].squeeze().numpy().tolist() for batch in results
-        ]
-        assert len(results_all[k]) == length
+        if k == 'intra_bbox':
+            intra_results_list = [
+                batch[k].numpy().tolist() for batch in results
+            ]
+            results_all[k] = intra_results_list
+            assert len(results_all[k]) == length
+    inter_results_list = []
+    for batch in results:
+        merge_batch_results = []
+        for k in batch.keys():
+            if k != 'intra_bbox':
+                merge_batch_results.append(batch[k].numpy().tolist())
+        inter_results_list.append(merge_batch_results)
+    results_all['inter_bbox'] = inter_results_list
+    assert len(results_all['inter_bbox']) == length
     return results_all
 
 
@@ -70,12 +89,10 @@ def dist_single_forward_collect(func, data_loader, rank, length):
 
     This function performs forward propagation and collects outputs.
     It can be used to collect results, features, losses, etc.
-
     Args:
         func (function): The function to process data. The output must be
             a dictionary of CPU tensors.
         rank (int): This process id.
-
     Returns:
         results_all (dict(list)): The concatenated outputs.
     """
@@ -92,11 +109,19 @@ def dist_single_forward_collect(func, data_loader, rank, length):
 
     results_all = {}
     for k in results[0].keys():
-        results_list = [
-            batch[k].squeeze().numpy().tolist() for batch in results
-        ]
-        results_all[k] = results_list
-        # assert len(results_all[k]) == length
+        if k == 'intra_bbox':
+            intra_results_list = [
+                batch[k].numpy().tolist() for batch in results
+            ]
+            results_all[k] = intra_results_list
+    inter_results_list = []
+    for batch in results:
+        merge_batch_results = []
+        for k in batch.keys():
+            if k != 'intra_bbox':
+                merge_batch_results.append(batch[k].numpy().tolist())
+        inter_results_list.append(merge_batch_results)
+    results_all['inter_bbox'] = inter_results_list
     return results_all
 
 
@@ -126,19 +151,15 @@ def multi_gpu_test(model, data_loader):
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Train a model')
+    parser = argparse.ArgumentParser(
+        description='Generate correspondence in Stage 2 of ORL')
+    parser.add_argument('config', help='test config file path')
+    parser.add_argument('checkpoint', help='checkpoint file')
+    parser.add_argument('input', type=str, help='input knn instance json file')
     parser.add_argument(
-        '--config',
-        default='configs/selfsup/orl/stage2/selective_search_train.py',
-        type=str,
-        help='train config file path')
+        'output', type=str, help='output correspondence json file')
     parser.add_argument(
-        '--output',
-        default='../data/coco/meta/train2017_selective_search_proposal.json ',
-        type=str,
-        help='output total selective search proposal json file')
-    parser.add_argument(
-        '--work-dir',
+        '--work_dir',
         type=str,
         default=None,
         help='the dir to save logs and models')
@@ -151,25 +172,16 @@ def parse_args():
         'specify, try to auto resume from the latest checkpoint '
         'in the work directory.')
     parser.add_argument(
-        '--amp',
-        action='store_true',
-        help='enable automatic-mixed-precision training')
-    parser.add_argument(
-        '--cfg-options',
-        nargs='+',
-        action=DictAction,
-        help='override some settings in the used config, the key-value pair '
-        'in xxx=yyy format will be merged into config file. If the value to '
-        'be overwritten is a list, it should be like key="[a,b]" or key=a,b '
-        'It also allows nested list/tuple values, e.g. key="[(a,b),(c,d)]" '
-        'Note that the quotation marks are necessary and that no white space '
-        'is allowed.')
-    parser.add_argument(
         '--launcher',
         choices=['none', 'pytorch', 'slurm', 'mpi'],
         default='none',
         help='job launcher')
     parser.add_argument('--local_rank', type=int, default=0)
+    parser.add_argument(
+        '--port',
+        type=int,
+        default=29500,
+        help='port only works when launcher=="slurm"')
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
         os.environ['LOCAL_RANK'] = str(args.local_rank)
@@ -177,21 +189,55 @@ def parse_args():
     return args
 
 
+def evaluate(
+    json_file,
+    dataset_info,
+    intra_bbox,
+    inter_bbox,
+):
+    assert (len(intra_bbox) == len(inter_bbox)), \
+        'Mismatch the number of images in part training set, \
+            got: intra: {} inter: {}'\
+            .format(len(intra_bbox), len(inter_bbox))
+    data = mmengine.load(json_file)
+    # dict
+    data_new = {}
+    # sub-dict
+    info = {}
+    image_info = {}
+    pseudo_anno = {}
+    info['bbox_min_size'] = dataset_info['min_size']
+    info['bbox_max_aspect_ratio'] = dataset_info['self.max_ratio']
+    info['bbox_max_iou'] = dataset_info['max_iou_thr']
+    info['intra_bbox_num'] = dataset_info['topN']
+    info['knn_image_num'] = dataset_info['knn_image_num']
+    info['knn_bbox_pair_ratio'] = dataset_info['topk_bbox_ratio']
+    image_info['file_name'] = data['images']['file_name']
+    image_info['id'] = data['images']['id']
+    pseudo_anno['image_id'] = data['pseudo_annotations']['image_id']
+    pseudo_anno['bbox'] = intra_bbox
+    pseudo_anno['knn_image_id'] = data['pseudo_annotations']['knn_image_id']
+    pseudo_anno['knn_bbox_pair'] = inter_bbox
+    data_new['info'] = info
+    data_new['images'] = image_info
+    data_new['pseudo_annotations'] = pseudo_anno
+    return data_new
+
+
 def main():
+    # MODELS = Registry('model', parent=MMENGINE_MODELS)
     args = parse_args()
 
-    # register all modules in mmselfsup into the registries
-    # do not init the default scope here because it will be init in the runner
     register_all_modules(init_default_scope=True)
 
     cfg = Config.fromfile(args.config)
     cfg.launcher = args.launcher
-    if args.cfg_options is not None:
-        cfg.merge_from_dict(args.cfg_options)
-
-    # # set cudnn_benchmark
+    # if args.cfg_options is not None:
+    #     cfg.merge_from_dict(args.cfg_options)
+    # set cudnn_benchmark
     # if cfg.get('cudnn_benchmark', False):
     #     torch.backends.cudnn.benchmark = True
+    # update configs according to CLI args
 
     # work_dir is determined in this priority: CLI > segment in file > filename
     if args.work_dir is not None:
@@ -202,18 +248,22 @@ def main():
         work_type = args.config.split('/')[1]
         cfg.work_dir = osp.join('./work_dirs', work_type,
                                 osp.splitext(osp.basename(args.config))[0])
+    # if args.work_dir is not None:
+    #     if not os.path.exists(args.work_dir):
+    #         os.makedirs(args.work_dir)
+    #     cfg.work_dir = args.work_dir
 
-    # # check memcached package exists
-    # if importlib.util.find_spec('mc') is None:
-    #     traverse_replace(cfg, 'memcached', False)
+    # ensure to use checkpoint rather than pretraining
+    cfg.model.pretrained = None
 
-    # init distributed env first, since logger depends on the dist info.
+    # init distributed env first,
+    # since logger depends on the dist info.
     if args.launcher == 'none':
         distributed = False
     else:
         distributed = True
         # if args.launcher == 'slurm':
-        # cfg.dist_params['port'] = args.port
+        #     cfg.dist_params['port'] = args.port
         init_dist(args.launcher, **cfg.dist_params)
 
     # logger
@@ -230,30 +280,34 @@ def main():
     model = build_model_from_cfg(cfg.model, registry=MODELS)
 
     # build the dataloader
-    # dataset = build_dataset(cfg.data.val)
-    # data_loader = build_from_cfg(cfg.val_dataloader,registry=DATASETS)
     data_loader = Runner.build_dataloader(cfg.val_dataloader)
-
-    # outputs = single_gpu_test(model, data_loader)
+    load_checkpoint(model, args.checkpoint, map_location='cpu')
 
     if not distributed:
-        outputs = single_gpu_test(model, data_loader)
+        # model = MMDataParallel(model, device_ids=[0])
+        outputs = single_gpu_test(model.cuda(), data_loader)
     else:
+        model = MMDistributedDataParallel(
+            model.cuda(),
+            device_ids=[torch.cuda.current_device()],
+            broadcast_buffers=False)
         outputs = multi_gpu_test(model, data_loader)  # dict{key: list}
-
-    print(type(outputs))
-    if isinstance(outputs, dict):
-        print(outputs.keys())
 
     rank, _ = get_dist_info()
     if rank == 0:
-        out = evaluate(**outputs)
+        out = evaluate(args.input, cfg.dataset_dict, **outputs)
         with open(args.output, 'w') as f:
             json.dump(out, f)
         print_log(
-            'Selective search proposal json file has been saved to: {}'.format(
+            'Correspondence json file has been saved to: {}'.format(
                 args.output),
             logger=logger)
+
+    # # build the runner from config
+    # runner = Runner.from_cfg(cfg)
+
+    # # start training
+    # runner.train()
 
 
 if __name__ == '__main__':
