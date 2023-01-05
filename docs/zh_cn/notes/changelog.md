@@ -3,6 +3,7 @@
 ## MMSelfSup
 
 <<<<<<< HEAD:docs/zh_cn/notes/changelog.md
+<<<<<<< HEAD:docs/zh_cn/notes/changelog.md
 ### v1.0.0rc4 (07/12/2022)
 
 `master` 仍然是 0.x 版本，我们将会 checkout 一个新的 `1.x` 用来发布 1.x 版本。 未来我们会同时维护两个版本。
@@ -132,6 +133,8 @@ We are excited to announce the release of MMSelfSup v1.0.0rc1. MMSelfSup v1.0.0r
 
 - 增加全局通知和版本切换按钮 ([#573](https://github.com/open-mmlab/mmselfsup/pull/573))
 
+=======
+>>>>>>> parent of 684875d (Merge branch 'dev'):docs/zh_cn/changelog.md
 ### v0.10.1 (01/11/2022)
 
 #### Improvements

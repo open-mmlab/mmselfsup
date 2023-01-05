@@ -3,10 +3,14 @@ einops
 future
 matplotlib
 <<<<<<< HEAD
+<<<<<<< HEAD
 mmcls>=1.0.0rc4
 =======
 mmcls>=0.21.0,<0.27.0
 >>>>>>> upstream/master
+=======
+mmcls
+>>>>>>> parent of 684875d (Merge branch 'dev')
 numpy
 packaging
 scikit-learn

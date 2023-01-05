@@ -6,7 +6,6 @@ from .byol import BYOL
 from .cae import CAE
 from .deepcluster import DeepCluster
 from .densecl import DenseCL
-from .interclr_moco import InterCLRMoCo
 from .mae import MAE
 from .maskfeat import MaskFeat
 <<<<<<< HEAD
@@ -33,8 +32,8 @@ __all__ = [
     'SwAV', 'MAE', 'MoCoV3', 'SimMIM', 'CAE', 'MaskFeat', 'MILAN', 'DINO'
 =======
     'BaseModel', 'BarlowTwins', 'BYOL', 'Classification', 'DeepCluster',
-    'DenseCL', 'InterCLRMoCo', 'MoCo', 'NPID', 'ODC', 'RelativeLoc',
-    'RotationPred', 'SimCLR', 'SimSiam', 'SwAV', 'MAE', 'MoCoV3', 'SimMIM',
+    'DenseCL', 'MoCo', 'NPID', 'ODC', 'RelativeLoc', 'RotationPred', 'SimCLR',
+    'SimSiam', 'SwAV', 'MAE', 'MoCoV3', 'SimMIM',
     'MMClsImageClassifierWrapper', 'CAE', 'MaskFeat'
 >>>>>>> upstream/master
 ]

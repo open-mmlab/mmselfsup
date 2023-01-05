@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 mmcls>=1.0.0rc4,<1.1.0
 mmcv>=2.0.0rc1,<2.1.0
 mmdet>=3.0.0rc0,<3.1.0
@@ -10,3 +11,9 @@ mmcv-full>=1.4.2,<1.9.0
 mmdet>=2.19.0
 mmsegmentation>=0.20.2
 >>>>>>> upstream/master
+=======
+mmcls >= 0.21.0
+mmcv-full>=1.4.2
+mmdet >= 2.16.0
+mmsegmentation >= 0.20.2
+>>>>>>> parent of 684875d (Merge branch 'dev')

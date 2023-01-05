@@ -95,7 +95,7 @@ def train_model(model,
         # cfg.gpus will be ignored if distributed
         num_gpus=len(cfg.gpu_ids),
         dist=distributed,
-        replace=getattr(cfg.data, 'replace', False),
+        replace=getattr(cfg.data, 'sampling_replace', False),
         drop_last=getattr(cfg.data, 'drop_last', False),
         prefetch=getattr(cfg, 'prefetch', False),
         seed=cfg.get('seed'),
@@ -158,7 +158,7 @@ def train_model(model,
     # register hooks
     runner.register_training_hooks(cfg.lr_config, optimizer_config,
                                    cfg.checkpoint_config, cfg.log_config)
-    if distributed and cfg.runner.type == 'EpochBasedRunner':
+    if distributed:
         runner.register_hook(DistSamplerSeedHook())
 
     # register custom hooks
@@ -170,8 +170,7 @@ def train_model(model,
             assert isinstance(hook_cfg, dict), \
                 'Each item in custom_hooks expects dict type, but got ' \
                 f'{type(hook_cfg)}'
-            if hook_cfg.get('type',
-                            None) in ['DeepClusterHook', 'InterCLRHook']:
+            if hook_cfg.get('type', None) == 'DeepClusterHook':
                 common_params = dict(dist_mode=True, data_loaders=data_loaders)
             else:
                 common_params = dict()

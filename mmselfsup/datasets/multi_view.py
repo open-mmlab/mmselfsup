@@ -58,7 +58,7 @@ class MultiViewDataset(BaseDataset):
             multi_views = [
                 torch.from_numpy(to_numpy(img)) for img in multi_views
             ]
-        return dict(img=multi_views, idx=idx)
+        return dict(img=multi_views)
 
     def evaluate(self, results, logger=None):
         return NotImplemented

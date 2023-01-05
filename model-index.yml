@@ -18,9 +18,12 @@ Import:
   - configs/selfsup/cae/metafile.yml
   - configs/selfsup/maskfeat/metafile.yml
 <<<<<<< HEAD
+<<<<<<< HEAD
   - configs/selfsup/beit/metafile.yml
   - configs/selfsup/milan/metafile.yaml
   - configs/selfsup/beitv2/metafile.yml
 =======
   - configs/selfsup/interclr/metafile.yml
 >>>>>>> upstream/master
+=======
+>>>>>>> parent of 684875d (Merge branch 'dev')

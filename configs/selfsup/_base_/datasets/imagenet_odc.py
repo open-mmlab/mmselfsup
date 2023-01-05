@@ -54,7 +54,7 @@ if not prefetch:
 # dataset summary
 data = dict(
     samples_per_gpu=64,  # 64*8
-    replace=True,
+    sampling_replace=True,
     workers_per_gpu=4,
     train=dict(
 >>>>>>> upstream/master

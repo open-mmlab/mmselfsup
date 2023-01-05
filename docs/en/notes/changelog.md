@@ -3,6 +3,7 @@
 ## MMSelfSup
 
 <<<<<<< HEAD:docs/en/notes/changelog.md
+<<<<<<< HEAD:docs/en/notes/changelog.md
 ### v1.0.0rc4 (07/12/2022)
 
 The `master` branch is still 0.x version and we will checkout a new `1.x` branch to release 1.x version. The two versions will be maintained simultaneously in the future.
@@ -160,6 +161,8 @@ We briefly list the major breaking changes here. Please refer to the [migration 
 
 - Add global notes and the version switcher menu ([#573](https://github.com/open-mmlab/mmselfsup/pull/573))
 
+=======
+>>>>>>> parent of 684875d (Merge branch 'dev'):docs/en/changelog.md
 ### v0.10.1 (01/11/2022)
 
 #### Improvements

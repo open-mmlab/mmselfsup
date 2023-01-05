@@ -39,14 +39,13 @@
 
 </div>
 
-## 简介
+## 介绍
 
 MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱，是 [OpenMMLab](https://openmmlab.com/) 项目成员之一。
 
 主分支代码支持 **PyTorch 1.6** 及以上的版本。
 
-<details open>
-<summary>主要特性</summary>
+### 主要特性
 
 - **多方法集成**
 
@@ -64,8 +63,9 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
   兼容 OpenMMLab 各大算法库，拥有丰富的下游评测任务和预训练模型的应用。
 
-</details>
+## 更新
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 **v1.0.0rc3** 版本已经在 2022.12.07 发布。
 =======
@@ -96,19 +96,37 @@ MMSelfSup 1.x 和 0.x 的不同点写在 [迁移文档](https://mmselfsup.readth
 ### 🌟 1.x 预览版本
 
 全新的 **v1.0.0rc4** 版本已经在 2022.12.07 发布：
+=======
+### 1.x 预览版本
+
+全新的 **MMSelfSup v1.0.0rc1** 版本已在 2022.09.01 发布。
+>>>>>>> parent of 684875d (Merge branch 'dev')
 
 新版本亮点：
 
 - 基于全新的 [MMEngine](https://github.com/open-mmlab/mmengine) 和 [MMCV](https://github.com/open-mmlab/mmcv/tree/2.x)。
+- 代码库重构，统一接口。
 - 完善了新版本 [文档](https://mmselfsup.readthedocs.io/en/1.x/)。
-- 支持了 `BEiT v1`, `BEiT v2`, `MILAN`, `MixMIM`, `EVA`。
 - 支持了不同训练时间、不同尺寸的 `MAE`, `SimMIM`, `MoCoV3` 的预训练模型。
-- 更加简洁的 APIs。
-- 更丰富的可视化工具。
+- 更加简洁的 API。
 - 更加强大的数据管道。
 - 部分模型具有更高的准确率。
 
 在 [1.x 分支](https://github.com/open-mmlab/mmselfsup/tree/1.x) 查看更多新特性。 欢迎大家提 Issues 和 PRs!
+
+### 稳定版本
+
+最新的 **v0.10.1** 版本已经在 2022.11.1 发布。
+
+新版本亮点：
+
+- 支持 MaskFeat
+- 更新 issue 模板
+- 修复部分文档的错误
+
+请参考 [更新日志](docs/zh_cn/changelog.md) 获取更多细节和历史版本信息。
+
+MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibility.md) 中。
 
 ## 安装
 
@@ -197,7 +215,6 @@ Useful Tools
 - [x] [SimSiam (CVPR'2021)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/simsiam)
 - [x] [Barlow Twins (ICML'2021)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/barlowtwins)
 - [x] [MoCo v3 (ICCV'2021)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/mocov3)
-- [x] [InterCLR (IJCV'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/interclr)
 - [x] [MAE (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/mae)
 - [x] [SimMIM (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/simmim)
 - [x] [MaskFeat (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/maskfeat)

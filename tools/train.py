@@ -116,8 +116,8 @@ def main():
     if args.launcher == 'none':
         distributed = False
         assert cfg.model.type not in [
-            'BYOL', 'DeepCluster', 'DenseCL', 'InterCLRMoCo', 'MoCo', 'NPID',
-            'ODC', 'SimCLR', 'SimSiam'
+            'DeepCluster', 'MoCo', 'SimCLR', 'ODC', 'NPID', 'SimSiam',
+            'DenseCL', 'BYOL'
         ], f'{cfg.model.type} does not support non-dist training.'
     else:
         distributed = True
