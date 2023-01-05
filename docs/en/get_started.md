@@ -1,5 +1,6 @@
 # Get Started
 
+<<<<<<< HEAD
 - [Get Started](#get-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
@@ -17,6 +18,21 @@
       - [Using MMSelfSup with Docker](#using-mmselfsup-with-docker)
     - [Trouble shooting](#trouble-shooting)
   - [Using Multiple MMSelfSup Versions](#using-multiple-mmselfsup-versions)
+=======
+- [Getting Started](#getting-started)
+  - [Train existing methods](#train-existing-methods)
+    - [Training with CPU](#training-with-cpu)
+    - [Train with single/multiple GPUs](#train-with-singlemultiple-gpus)
+    - [Train with multiple machines](#train-with-multiple-machines)
+    - [Launch multiple jobs on a single machine](#launch-multiple-jobs-on-a-single-machine)
+  - [Benchmarks](#benchmarks)
+  - [Tools and Tips](#tools-and-tips)
+    - [Count number of parameters](#count-number-of-parameters)
+    - [Publish a model](#publish-a-model)
+    - [Use t-SNE](#use-t-sne)
+    - [MAE Visualization](#mae-visualization)
+    - [Reproducibility](#reproducibility)
+>>>>>>> upstream/master
 
 ## Prerequisites
 
@@ -33,8 +49,12 @@ If you are experienced with PyTorch and have already installed it, just skip thi
 **Step 1.** Create a conda environment and activate it.
 
 ```shell
+<<<<<<< HEAD
 conda create --name openmmlab python=3.8 -y
 conda activate openmmlab
+=======
+bash tools/dist_train.sh ${CONFIG_FILE} ${GPUS} --work-dir ${YOUR_WORK_DIR} [optional arguments]
+>>>>>>> upstream/master
 ```
 
 **Step 2.** Install PyTorch following [official instructions](https://pytorch.org/get-started/locally/), e.g.
@@ -42,7 +62,12 @@ conda activate openmmlab
 On GPU platforms:
 
 ```shell
+<<<<<<< HEAD
 conda install pytorch torchvision -c pytorch
+=======
+# checkpoints and logs saved in WORK_DIR=work_dirs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k/
+bash tools/dist_train.sh configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py 8 --work-dir work_dirs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k/
+>>>>>>> upstream/master
 ```
 
 On CPU platforms:
@@ -60,9 +85,13 @@ We recommend users to follow our best practices to install MMSelfSup. However, t
 **Step 0.** Install [MMEngine](https://github.com/open-mmlab/mmengine) and [MMCV](https://github.com/open-mmlab/mmcv) using [MIM](https://github.com/open-mmlab/mim).
 
 ```shell
+<<<<<<< HEAD
 pip install -U openmim
 mim install mmengine
 mim install 'mmcv>=2.0.0rc1'
+=======
+GPUS_PER_NODE=${GPUS_PER_NODE} GPUS=${GPUS} SRUN_ARGS=${SRUN_ARGS} bash tools/slurm_train.sh ${PARTITION} ${JOB_NAME} ${CONFIG_FILE} ${YOUR_WORK_DIR} [optional arguments]
+>>>>>>> upstream/master
 ```
 
 **Step 1.** Install MMSelfSup.
@@ -77,6 +106,7 @@ According to your needs, we support two installation modes:
 In this case, install mmselfsup from source:
 
 ```shell
+<<<<<<< HEAD
 git clone https://github.com/open-mmlab/mmselfsup.git
 cd mmselfsup
 git checkout 1.x
@@ -84,12 +114,19 @@ pip install -v -e .
 # "-v" means verbose, or more output
 # "-e" means installing a project in editable mode,
 # thus any local modifications made to the code will take effect without reinstallation.
+=======
+GPUS_PER_NODE=8 GPUS=8 bash tools/slurm_train.sh Dummy Test_job configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py work_dirs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k/
+>>>>>>> upstream/master
 ```
 
 Optionally, if you want to [contribute](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/docs/en/notes/contribution_guide.md) to MMSelfSup or experience experimental functions, please checkout to the `dev-1.x` branch:
 
 ```shell
+<<<<<<< HEAD
 git checkout dev-1.x
+=======
+NNODES=2 NODE_RANK=0 PORT=$MASTER_PORT MASTER_ADDR=$MASTER_ADDR bash tools/dist_train.sh $CONFIG $GPUS
+>>>>>>> upstream/master
 ```
 
 #### Install as a Python package
@@ -97,7 +134,11 @@ git checkout dev-1.x
 Just install with pip.
 
 ```shell
+<<<<<<< HEAD
 pip install 'mmselfsup>=1.0.0rc0'
+=======
+NNODES=2 NODE_RANK=1 PORT=$MASTER_PORT MASTER_ADDR=$MASTER_ADDR bash tools/dist_train.sh $CONFIG $GPUS
+>>>>>>> upstream/master
 ```
 
 ### Verify the installation
@@ -207,8 +248,13 @@ Within Jupyter, the exclamation mark `!` is used to call external executables an
 We provide a [Dockerfile](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/docker/Dockerfile) to build an image. Ensure that your [docker version](https://docs.docker.com/engine/install/) >=19.03.
 
 ```shell
+<<<<<<< HEAD
 # build an image with PyTorch 1.10.0, CUDA 11.3, CUDNN 8.
 docker build -f ./docker/Dockerfile --rm -t mmselfsup:torch1.10.0-cuda11.3-cudnn8 .
+=======
+CUDA_VISIBLE_DEVICES=0,1,2,3 GPUS=4 bash tools/slurm_train.sh ${PARTITION} ${JOB_NAME} config1.py tmp_work_dir_1
+CUDA_VISIBLE_DEVICES=4,5,6,7 GPUS=4 bash tools/slurm_train.sh ${PARTITION} ${JOB_NAME} config2.py tmp_work_dir_2
+>>>>>>> upstream/master
 ```
 
 **Important:** Make sure you've installed the [nvidia-container-toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker).
@@ -216,7 +262,12 @@ docker build -f ./docker/Dockerfile --rm -t mmselfsup:torch1.10.0-cuda11.3-cudnn
 Run the following command:
 
 ```shell
+<<<<<<< HEAD
 docker run --gpus all --shm-size=8g -it -v {DATA_DIR}:/workspace/mmselfsup/data mmselfsup:torch1.10.0-cuda11.3-cudnn8 /bin/bash
+=======
+CUDA_VISIBLE_DEVICES=0,1,2,3 GPUS=4 bash tools/slurm_train.sh ${PARTITION} ${JOB_NAME} config1.py tmp_work_dir_1 --cfg-options dist_params.port=29500
+CUDA_VISIBLE_DEVICES=4,5,6,7 GPUS=4 bash tools/slurm_train.sh ${PARTITION} ${JOB_NAME} config2.py tmp_work_dir_2 --cfg-options dist_params.port=29501
+>>>>>>> upstream/master
 ```
 
 `{DATA_DIR}` is your local folder containing all these datasets.
@@ -243,3 +294,59 @@ Or run the following command in the terminal of corresponding root folder to tem
 ```shell
 export PYTHONPATH="$(pwd)":$PYTHONPATH
 ```
+<<<<<<< HEAD
+=======
+
+### Publish a model
+
+Before you publish a model, you may want to
+
+- Convert model weights to CPU tensors.
+- Delete the optimizer states.
+- Compute the hash of the checkpoint file and append the hash id to the filename.
+
+```shell
+python tools/model_converters/publish_model.py ${INPUT_FILENAME} ${OUTPUT_FILENAME}
+```
+
+### Use t-SNE
+
+We provide an off-the-shelf tool to visualize the quality of image representations by t-SNE.
+
+```shell
+python tools/analysis_tools/visualize_tsne.py ${CONFIG_FILE} --checkpoint ${CKPT_PATH} --work-dir ${WORK_DIR} [optional arguments]
+```
+
+Arguments:
+
+- `CONFIG_FILE`: config file for the pre-trained model.
+- `CKPT_PATH`: the path of model's checkpoint.
+- `WORK_DIR`: the directory to save the results of visualization.
+- `[optional arguments]`: for optional arguments, you can refer to [visualize_tsne.py](https://github.com/open-mmlab/mmselfsup/blob/master/tools/analysis_tools/visualize_tsne.py)
+
+### MAE Visualization
+
+We provide a tool to visualize the mask and reconstruction image of MAE model.
+
+```shell
+python tools/misc/mae_visualization.py ${IMG_PATH} ${CONFIG_FILE} ${CKPT_PATH} ${OUT_FILE} --device ${DEVICE}
+```
+
+Arguments:
+
+- `IMG_PATH`: an image path used for visualization.
+- `CONFIG_FILE`: config file for the pre-trained model.
+- `CKPT_PATH`: the path of model's checkpoint.
+- `OUT_FILE`: the image path used for visualization results.
+- `DEVICE`: device used for inference.
+
+An example:
+
+```shell
+python tools/misc/mae_visualization.py tests/data/color.jpg configs/selfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k.py mae_epoch_400.pth results.jpg --device 'cuda:0'
+```
+
+### Reproducibility
+
+If you want to make your performance exactly reproducible, please switch on `--deterministic` to train the final model to be published. Note that this flag will switch off `torch.backends.cudnn.benchmark` and slow down the training speed.
+>>>>>>> upstream/master

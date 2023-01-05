@@ -1,6 +1,10 @@
 # Copyright (c) Open-MMLab. All rights reserved.
 
+<<<<<<< HEAD
 __version__ = '1.0.0rc4'
+=======
+__version__ = '0.11.0'
+>>>>>>> upstream/master
 
 
 def parse_version_info(version_str):

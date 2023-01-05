@@ -1,6 +1,9 @@
 docutils==0.16.0
 markdown>=3.4.0
+<<<<<<< HEAD
 modelindex
+=======
+>>>>>>> upstream/master
 myst_parser
 -e git+https://github.com/open-mmlab/pytorch_sphinx_theme.git#egg=pytorch_sphinx_theme
 recommonmark

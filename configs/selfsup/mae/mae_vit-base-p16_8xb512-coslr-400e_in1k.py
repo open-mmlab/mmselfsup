@@ -10,6 +10,7 @@ train_dataloader = dict(batch_size=512, num_workers=8)
 
 # optimizer wrapper
 optimizer = dict(
+<<<<<<< HEAD
     type='AdamW', lr=1.5e-4 * 4096 / 256, betas=(0.9, 0.95), weight_decay=0.05)
 optim_wrapper = dict(
     type='OptimWrapper',
@@ -22,6 +23,17 @@ optim_wrapper = dict(
             'mask_token': dict(decay_mult=0.),
             'cls_token': dict(decay_mult=0.)
         }))
+=======
+    lr=1.5e-4 * 4096 / 256,
+    paramwise_options={
+        'ln': dict(weight_decay=0.),
+        'bias': dict(weight_decay=0.),
+        'pos_embed': dict(weight_decay=0.),
+        'mask_token': dict(weight_decay=0.),
+        'cls_token': dict(weight_decay=0.)
+    })
+optimizer_config = dict()
+>>>>>>> upstream/master
 
 # learning rate scheduler
 param_scheduler = [

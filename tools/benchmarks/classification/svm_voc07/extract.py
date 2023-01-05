@@ -181,8 +181,14 @@ def main():
     outputs = extractor(model)
 
     # run
+<<<<<<< HEAD
     rank = get_rank()
     mkdir_or_exist(f'{cfg.work_dir}/features/')
+=======
+    outputs = extractor.extract(model, data_loader, distributed=distributed)
+    rank, _ = get_dist_info()
+    mmcv.mkdir_or_exist(f'{cfg.work_dir}/features/')
+>>>>>>> upstream/master
     if rank == 0:
         for key, val in outputs.items():
             split_num = len(dataset_cfg.split_name)

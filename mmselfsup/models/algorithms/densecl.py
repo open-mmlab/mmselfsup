@@ -3,8 +3,12 @@ from typing import Dict, List, Optional, Tuple, Union
 
 import torch
 import torch.nn as nn
+<<<<<<< HEAD
 from mmengine.model import ExponentialMovingAverage
 from mmengine.structures import BaseDataElement
+=======
+from mmcv.utils.logging import logger_initialized, print_log
+>>>>>>> upstream/master
 
 from mmselfsup.registry import MODELS
 from mmselfsup.structures import SelfSupDataSample
@@ -64,9 +68,15 @@ class DenseCL(BaseModel):
             data_preprocessor=data_preprocessor,
             init_cfg=init_cfg)
 
+<<<<<<< HEAD
         # create momentum model
         self.encoder_k = ExponentialMovingAverage(
             nn.Sequential(self.backbone, self.neck), 1 - momentum)
+=======
+        self.backbone = self.encoder_q[0]
+        assert head is not None
+        self.head = build_head(head)
+>>>>>>> upstream/master
 
         self.queue_len = queue_len
         self.loss_lambda = loss_lambda
@@ -80,6 +90,25 @@ class DenseCL(BaseModel):
         self.register_buffer('queue2', torch.randn(feat_dim, queue_len))
         self.queue2 = nn.functional.normalize(self.queue2, dim=0)
         self.register_buffer('queue2_ptr', torch.zeros(1, dtype=torch.long))
+
+    def init_weights(self):
+        """Init weights and copy query encoder init weights to key encoder."""
+        super().init_weights()
+
+        # Get the initialized logger, if not exist,
+        # create a logger named `mmselfsup`
+        logger_names = list(logger_initialized.keys())
+        logger_name = logger_names[0] if logger_names else 'mmselfsup'
+
+        # log that key encoder is initialized by the query encoder
+        print_log(
+            'Key encoder is initialized by the query encoder.',
+            logger=logger_name)
+
+        for param_q, param_k in zip(self.encoder_q.parameters(),
+                                    self.encoder_k.parameters()):
+            param_k.data.copy_(param_q.data)
+            param_k.requires_grad = False
 
     @torch.no_grad()
     def _dequeue_and_enqueue(self, keys: torch.Tensor) -> None:

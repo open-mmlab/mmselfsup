@@ -16,16 +16,21 @@ class MAEPretrainHead(BaseModule):
         patch_size (int): Patch size. Defaults to 16.
     """
 
+<<<<<<< HEAD
     def __init__(self,
                  loss: dict,
                  norm_pix: bool = False,
                  patch_size: int = 16) -> None:
+=======
+    def __init__(self, norm_pix: bool = False, patch_size: int = 16) -> None:
+>>>>>>> upstream/master
         super().__init__()
         self.norm_pix = norm_pix
         self.patch_size = patch_size
         self.loss = MODELS.build(loss)
 
     def patchify(self, imgs: torch.Tensor) -> torch.Tensor:
+<<<<<<< HEAD
         """Split images into non-overlapped patches.
 
         Args:
@@ -33,6 +38,13 @@ class MAEPretrainHead(BaseModule):
 
         Returns:
             torch.Tensor: Patchified images. The shape is B x L x D.
+=======
+        """
+        Args:
+            imgs (torch.Tensor): The shape is (N, 3, H, W)
+        Returns:
+            x (torch.Tensor): The shape is (N, L, patch_size**2 *3)
+>>>>>>> upstream/master
         """
         p = self.patch_size
         assert imgs.shape[2] == imgs.shape[3] and imgs.shape[2] % p == 0
@@ -44,8 +56,12 @@ class MAEPretrainHead(BaseModule):
         return x
 
     def unpatchify(self, x: torch.Tensor) -> torch.Tensor:
+<<<<<<< HEAD
         """Combine non-overlapped patches into images.
 
+=======
+        """
+>>>>>>> upstream/master
         Args:
             x (torch.Tensor): The shape is (N, L, patch_size**2 *3)
         Returns:
@@ -60,6 +76,7 @@ class MAEPretrainHead(BaseModule):
         imgs = x.reshape(shape=(x.shape[0], 3, h * p, h * p))
         return imgs
 
+<<<<<<< HEAD
     def construct_target(self, target: torch.Tensor) -> torch.Tensor:
         """Construct the reconstruction target.
 
@@ -73,6 +90,12 @@ class MAEPretrainHead(BaseModule):
             torch.Tensor: Tokenized images with the shape of B x L x C
         """
         target = self.patchify(target)
+=======
+    def forward(self, x: torch.Tensor, pred: torch.Tensor,
+                mask: torch.Tensor) -> dict:
+        losses = dict()
+        target = self.patchify(x)
+>>>>>>> upstream/master
         if self.norm_pix:
             # normalize the target image
             mean = target.mean(dim=-1, keepdim=True)
@@ -96,4 +119,67 @@ class MAEPretrainHead(BaseModule):
         target = self.construct_target(target)
         loss = self.loss(pred, target, mask)
 
+<<<<<<< HEAD
         return loss
+=======
+    Args:
+        embed_dim (int): The dim of the feature before the classifier head.
+        num_classes (int): The total classes. Defaults to 1000.
+    """
+
+    def __init__(self, embed_dim, num_classes=1000, label_smooth_val=0.1):
+        super().__init__()
+        self.head = nn.Linear(embed_dim, num_classes)
+        self.criterion = LabelSmoothLoss(label_smooth_val, num_classes)
+
+    def init_weights(self):
+        nn.init.constant_(self.head.bias, 0)
+        trunc_normal_(self.head.weight, std=2e-5)
+
+    def forward(self, x):
+        """"Get the logits."""
+        outputs = self.head(x)
+
+        return [outputs]
+
+    def loss(self, outputs, labels):
+        """Compute the loss."""
+        losses = dict()
+        losses['loss'] = self.criterion(outputs[0], labels)
+
+        return losses
+
+
+@HEADS.register_module()
+class MAELinprobeHead(BaseModule):
+    """Linear probing head for MAE.
+
+    Args:
+        embed_dim (int): The dim of the feature before the classifier head.
+        num_classes (int): The total classes. Defaults to 1000.
+    """
+
+    def __init__(self, embed_dim, num_classes=1000):
+        super().__init__()
+        self.head = nn.Linear(embed_dim, num_classes)
+        self.bn = nn.BatchNorm1d(embed_dim, affine=False, eps=1e-6)
+        self.criterion = nn.CrossEntropyLoss()
+
+    def init_weights(self):
+        nn.init.constant_(self.head.bias, 0)
+        trunc_normal_(self.head.weight, std=0.01)
+
+    def forward(self, x):
+        """"Get the logits."""
+        x = self.bn(x)
+        outputs = self.head(x)
+
+        return [outputs]
+
+    def loss(self, outputs, labels):
+        """Compute the loss."""
+        losses = dict()
+        losses['loss'] = self.criterion(outputs[0], labels)
+
+        return losses
+>>>>>>> upstream/master

@@ -2,7 +2,11 @@ attrs
 einops
 future
 matplotlib
+<<<<<<< HEAD
 mmcls>=1.0.0rc4
+=======
+mmcls>=0.21.0,<0.27.0
+>>>>>>> upstream/master
 numpy
 packaging
 scikit-learn

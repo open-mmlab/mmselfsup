@@ -24,12 +24,21 @@ try:
 except ImportError:
     ResLayerExtraNorm = None
 
+try:
+    from .res_layer_extra_norm import ResLayerExtraNorm
+except ImportError:
+    ResLayerExtraNorm = None
+
 __all__ = [
     'Extractor', 'GatherLayer', 'MultiPooling', 'MultiPrototypes',
     'build_2d_sincos_position_embedding', 'Sobel', 'MultiheadAttention',
     'TransformerEncoderLayer', 'CAETransformerRegressorLayer', 'Encoder',
+<<<<<<< HEAD
     'CosineEMA', 'SelfSupDataPreprocessor', 'RelativeLocDataPreprocessor',
     'RotationPredDataPreprocessor', 'CAEDataPreprocessor', 'ResLayerExtraNorm',
     'NormEMAVectorQuantizer', 'TwoNormDataPreprocessor',
     'PromptTransformerEncoderLayer', 'build_clip_model'
+=======
+    'ResLayerExtraNorm'
+>>>>>>> upstream/master
 ]

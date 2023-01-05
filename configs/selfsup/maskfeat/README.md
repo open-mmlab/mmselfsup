@@ -14,6 +14,7 @@ We present Masked Feature Prediction (MaskFeat) for self-supervised pre-training
 
 ## Models and Benchmarks
 
+<<<<<<< HEAD
 Here, we report the results of the model on ImageNet, the details are below:
 
 <table class="docutils">
@@ -47,14 +48,31 @@ Here, we report the results of the model on ImageNet, the details are below:
 	</tr>
   </tbody>
 </table>
+=======
+Here, we report the results of the model, which is pre-trained on ImageNet-1k
+for 400 epochs, the details are below:
+
+| Backbone | Pre-train epoch | Fine-tuning Top-1 |                                                            Pre-train Config                                                            |                                                                     Fine-tuning Config                                                                      |                                                                                                                            Download                                                                                                                             |
+| :------: | :-------------: | :---------------: | :------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| ViT-B/16 |       300       |       83.5        | [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/maskfeat/maskfeat_vit-base-p16_8xb256-coslr-300e_in1k.py) | [config](https://github.com/open-mmlab/mmselfsup/blob/master/configs/benchmarks/classification/imagenet/maskfeat_vit-base-p16_ft-8xb512-coslr-100e_in1k.py) | [model](https://download.openmmlab.com/mmselfsup/maskfeat/maskfeat_vit-base-p16_8xb256-coslr-300e_in1k_20220913-591d4c4b.pth) \| [log](https://download.openmmlab.com/mmselfsup/maskfeat/maskfeat_vit-base-p16_8xb256-coslr-300e_in1k_20220829_225552.log.json) |
+>>>>>>> upstream/master
 
 ## Citation
 
 ```bibtex
+<<<<<<< HEAD
 @InProceedings{wei2022masked,
     author    = {Wei, Chen and Fan, Haoqi and Xie, Saining and Wu, Chao-Yuan and Yuille, Alan and Feichtenhofer, Christoph},
     title     = {Masked Feature Prediction for Self-Supervised Visual Pre-Training},
     booktitle = {CVPR},
     year      = {2022},
+=======
+@inproceedings{wei2022masked,
+  title={Masked feature prediction for self-supervised visual pre-training},
+  author={Wei, Chen and Fan, Haoqi and Xie, Saining and Wu, Chao-Yuan and Yuille, Alan and Feichtenhofer, Christoph},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={14668--14678},
+  year={2022}
+>>>>>>> upstream/master
 }
 ```
