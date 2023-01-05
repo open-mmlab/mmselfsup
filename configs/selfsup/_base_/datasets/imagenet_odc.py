@@ -32,7 +32,6 @@ extract_pipeline = [
     dict(type='PackSelfSupInputs', meta_keys=['img_path'])
 ]
 
-<<<<<<< HEAD
 train_dataloader = dict(
     batch_size=64,
     num_workers=4,
@@ -40,24 +39,6 @@ train_dataloader = dict(
     sampler=dict(type='DeepClusterSampler', shuffle=True, replace=True),
     collate_fn=dict(type='default_collate'),
     dataset=dict(
-=======
-# prefetch
-prefetch = False
-if not prefetch:
-    train_pipeline.extend(
-        [dict(type='ToTensor'),
-         dict(type='Normalize', **img_norm_cfg)])
-    extract_pipeline.extend(
-        [dict(type='ToTensor'),
-         dict(type='Normalize', **img_norm_cfg)])
-
-# dataset summary
-data = dict(
-    samples_per_gpu=64,  # 64*8
-    sampling_replace=True,
-    workers_per_gpu=4,
-    train=dict(
->>>>>>> upstream/master
         type=dataset_type,
         data_root=data_root,
         ann_file='meta/train.txt',
@@ -72,7 +53,7 @@ custom_hooks = [
             batch_size=128,
             num_workers=8,
             persistent_workers=True,
-            sampler=dict(type='DefaultSampler', shuffle=False, round_up=False),
+            sampler=dict(type='DefaultSampler', shuffle=False, round_up=True),
             collate_fn=dict(type='default_collate'),
             dataset=dict(
                 type=dataset_type,

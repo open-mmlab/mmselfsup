@@ -2,8 +2,50 @@
 
 ## MMSelfSup
 
-<<<<<<< HEAD:docs/zh_cn/notes/changelog.md
-<<<<<<< HEAD:docs/zh_cn/notes/changelog.md
+### v1.0.0rc5 (30/12/2022)
+
+`master` 仍然是 0.x 版本，我们将会 checkout 一个新的 `1.x` 用来发布 1.x 版本。 未来我们会同时维护两个版本。
+
+我们简要的列出主要的改变。 请参考[迁移文档](../migration.md)来查看细节和迁移指引
+
+#### 亮点
+
+- 支持了 `BEiT v2`, `MixMIM`, `EVA`
+- 支持了模型分析工具 `ShapeBias`
+- 增加 FGIA ACCV 2022 第一名解决方案
+- 重构 t-SNE
+
+#### 新特性
+
+- 支持了 `BEiT v2` ([#627](https://github.com/open-mmlab/mmselfsup/pull/627))
+- 支持了 `MixMIM` ([#626](https://github.com/open-mmlab/mmselfsup/pull/626))
+- 支持了 `EVA` ([#632](https://github.com/open-mmlab/mmselfsup/pull/632))
+- 支持了 `ShapeBias` 评价方式 ([#635](https://github.com/open-mmlab/mmselfsup/pull/635))
+- 增加模型转换脚本和指引 ([#621](https://github.com/open-mmlab/mmselfsup/pull/621))
+- 增加 FGIA 比赛预训练方案 ([#607](https://github.com/open-mmlab/mmselfsup/pull/607))
+
+#### Bug 修复
+
+- 将 `pseudo_collect` 改为 `default_collect` ([#616](https://github.com/open-mmlab/mmselfsup/pull/616))
+- 修复 SimMIM 链接问题 ([#622](https://github.com/open-mmlab/mmselfsup/pull/622))
+- 修改 `map_location` 为 `cpu` ([#623](https://github.com/open-mmlab/mmselfsup/pull/623))
+  修复 import 问题 ([#631](https://github.com/open-mmlab/mmselfsup/pull/631))
+- 修复配置文件字段问题 ([#630](https://github.com/open-mmlab/mmselfsup/pull/630))
+- 修改 `np.int` 为 `int` ([#636](https://github.com/open-mmlab/mmselfsup/pull/636))
+- 修复 knn 多卡 bug ([#634](https://github.com/open-mmlab/mmselfsup/pull/634))
+
+#### 改进
+
+- 重构 `projects/` 文件夹 ([#620](https://github.com/open-mmlab/mmselfsup/pull/620))
+- 重构 `t-SNE` ([#629](https://github.com/open-mmlab/mmselfsup/pull/629))
+- 基于 `target_generator` 重构 `CAE` ([#645](https://github.com/open-mmlab/mmselfsup/pull/645))
+- 重构回归测试相关内容 ([#637](https://github.com/open-mmlab/mmselfsup/pull/637))
+
+#### 文档
+
+- 更新 data_flow.md 文档 ([#612](https://github.com/open-mmlab/mmselfsup/pull/612))
+- 更新 datasets.md 文档 ([#633](https://github.com/open-mmlab/mmselfsup/pull/633))
+
 ### v1.0.0rc4 (07/12/2022)
 
 `master` 仍然是 0.x 版本，我们将会 checkout 一个新的 `1.x` 用来发布 1.x 版本。 未来我们会同时维护两个版本。
@@ -111,43 +153,6 @@ We are excited to announce the release of MMSelfSup v1.0.0rc1. MMSelfSup v1.0.0r
 - 为不同组件增加新的概念。
 
 ## MMSelfSup
-=======
-### v0.11.0 (30/12/2022)
-
-#### 新特性
-
-- 支持了算法 InterCLR ([#609](https://github.com/open-mmlab/mmselfsup/pull/609))
-
-#### Bug Fixes
-
-- 修复钩子注册时的潜在 bug ([#647](https://github.com/open-mmlab/mmselfsup/pull/647))
-- 修复 sampling_replace 的字段错误 ([#646](https://github.com/open-mmlab/mmselfsup/pull/646))
-- 更新 scikit-learn 安装包名 ([#583](https://github.com/open-mmlab/mmselfsup/pull/583))
-
-#### Improvements
-
-- 更新 CI 检查策略 ([#581](https://github.com/open-mmlab/mmselfsup/pull/581))
-- 更新值班表 ([#606](https://github.com/open-mmlab/mmselfsup/pull/606))
-
-#### Docs
-
-- 增加全局通知和版本切换按钮 ([#573](https://github.com/open-mmlab/mmselfsup/pull/573))
-
-=======
->>>>>>> parent of 684875d (Merge branch 'dev'):docs/zh_cn/changelog.md
-### v0.10.1 (01/11/2022)
-
-#### Improvements
-
-- 更新 issue 模板和相关文件 ([#550](https://github.com/open-mmlab/mmselfsup/pull/550), [#512](https://github.com/open-mmlab/mmselfsup/pull/512))
-- 移动 res-layer 到 models.utils 文件夹 ([#537](https://github.com/open-mmlab/mmselfsup/pull/537))
-
-#### Docs
-
-- 增加 MMYOLO 的描述 ([#541](https://github.com/open-mmlab/mmselfsup/pull/541))
-- 修复部分 README 的错误 ([#545](https://github.com/open-mmlab/mmselfsup/pull/545))
-- 修复 MaskFeat 的相关链接 ([#520](https://github.com/open-mmlab/mmselfsup/pull/520))
->>>>>>> upstream/master:docs/zh_cn/changelog.md
 
 ### v0.10.0 (30/09/2022)
 

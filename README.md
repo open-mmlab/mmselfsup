@@ -43,15 +43,7 @@ English | [简体中文](README_zh-CN.md)
 
 MMSelfSup is an open source self-supervised representation learning toolbox based on PyTorch. It is a part of the [OpenMMLab](https://openmmlab.com/) project.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 The master branch works with **PyTorch 1.6** or higher.
-=======
-The master branch works with **PyTorch 1.5+**.
->>>>>>> upstream/master
-=======
-The master branch works with **PyTorch 1.5** or higher.
->>>>>>> parent of 684875d (Merge branch 'dev')
 
 ### Major features
 
@@ -73,80 +65,31 @@ The master branch works with **PyTorch 1.5** or higher.
 
 ## What's New
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-MMSelfSup **v1.0.0rc4** was released in 07/12/2022.
-=======
-### 💎 Stable version
+MMSelfSup **v1.0.0rc5** was released in 30/12/2022.
 
-MMSelfSup **v0.11.0** was released in 30/12/2022.
->>>>>>> upstream/master
+- Support `BEiT v2`, `MixMIM`, `EVA`.
+- Support `ShapeBias` for model analysis
+- Add Solution of FGIA ACCV 2022 (1st Place)
+- Refactor t-SNE
+
+MMSelfSup **v1.0.0rc4** was released in 07/12/2022.
 
 - Support BEiT v1 and MILAN.
 - Support low-level reconstruction visualization.
 - Refine documents algorithm pages.
 
-<<<<<<< HEAD
-MMSelfSup **v1.0.0rc3** was released in 01/11/2022.
-=======
-- Support `InterCLR`
-- Fix some bugs
->>>>>>> upstream/master
-
-- Support MaskFeat.
-
 Please refer to [Changelog](https://mmselfsup.readthedocs.io/en/dev-1.x/notes/changelog.html) for details and release history.
 
 Differences between MMSelfSup 1.x and 0.x can be found in [Migration](https://mmselfsup.readthedocs.io/en/dev-1.x/migration.html).
 
-### 🌟 Preview of 1.x version
-
-A brand new version of **MMSelfSup v1.0.0rc4** was released in 07/12/2022.
-=======
-### Preview of 1.x version
-
-A brand new version of **MMSelfSup v1.0.0rc1** was released in 01/09/2022:
->>>>>>> parent of 684875d (Merge branch 'dev')
-
-Highlights of the new version:
-
-- Based on [MMEngine](https://github.com/open-mmlab/mmengine) and [MMCV](https://github.com/open-mmlab/mmcv/tree/2.x).
-- Released with refactor.
-- Refine all [documents](https://mmselfsup.readthedocs.io/en/1.x/).
-- Support `MAE`, `SimMIM`, `MoCoV3` with different pre-training epochs and backbones of different scales.
-- More concise API.
-- More powerful data pipeline.
-- Higher accurcy for some algorithms.
-
-Find more new features in [1.x branch](https://github.com/open-mmlab/mmselfsup/tree/1.x). Issues and PRs are welcome!
-
-### Stable version
-
-MMSelfSup **v0.10.1** was released in 01/11/2022.
-
-Highlights of the new version:
-
-- Support MaskFeat
-- Update issue form
-- Fix some typo in documents
-
-Please refer to [changelog.md](docs/en/changelog.md) for details and release history.
-
-Differences between MMSelfSup and OpenSelfSup codebases can be found in [compatibility.md](docs/en/compatibility.md).
-
 ## Installation
 
-<<<<<<< HEAD
 MMSelfSup depends on [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open-mmlab/mmcv), [MMEngine](https://github.com/open-mmlab/mmengine) and [MMClassification](https://github.com/open-mmlab/mmclassification).
-=======
-MMSelfSup relies on [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open-mmlab/mmcv) and [MMClassification](https://github.com/open-mmlab/mmclassification).
->>>>>>> upstream/master
 
 Please refer to [Installation](https://mmselfsup.readthedocs.io/en/dev-1.x/get_started.html) for more detailed instruction.
 
 ## Get Started
 
-<<<<<<< HEAD
 For tutorials, we provide [User Guides](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/index.html) for basic usage:
 
 Pretrain
@@ -154,18 +97,6 @@ Pretrain
 - [Config](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/1_config.html)
 - [Prepare Dataset](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/2_dataset_prepare.html)
 - [Pretrain with Existing Models](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/3_pretrain.html)
-=======
-Please refer to [prepare_data.md](docs/en/prepare_data.md) for dataset preparation, [get_started.md](docs/en/get_started.md) for the basic usage and [benchmarks.md](docs/en/tutorials/6_benchmarks.md) for running benchmarks.
-
-We also provides more detailed tutorials:
-
-- [config](docs/en/tutorials/0_config.md)
-- [add new dataset](docs/en/tutorials/1_new_dataset.md)
-- [data pipeline](docs/en/tutorials/2_data_pipeline.md)
-- [add new module](docs/en/tutorials/3_new_module.md)
-- [customize schedules](docs/en/tutorials/4_schedule.md)
-- [customize runtime](docs/en/tutorials/5_runtime.md)
->>>>>>> upstream/master
 
 Downetream Tasks
 
@@ -188,7 +119,6 @@ Please refer to [Model Zoo.md](https://mmselfsup.readthedocs.io/en/dev-1.x/model
 
 Supported algorithms:
 
-<<<<<<< HEAD
 - [x] [Relative Location (ICCV'2015)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/relavive_loc)
 - [x] [Rotation Prediction (ICLR'2018)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/rotation_pred)
 - [x] [DeepCluster (ECCV'2018)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/deepcluster)
@@ -210,26 +140,8 @@ Supported algorithms:
 - [x] [CAE (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/cae)
 - [x] [MILAN (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/milan)
 - [x] [BEiT v2 (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/beitv2)
-=======
-- [x] [Relative Location (ICCV'2015)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/relative_loc)
-- [x] [Rotation Prediction (ICLR'2018)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/rotation_pred)
-- [x] [DeepCluster (ECCV'2018)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/deepcluster)
-- [x] [NPID (CVPR'2018)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/npid)
-- [x] [ODC (CVPR'2020)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/odc)
-- [x] [MoCo v1 (CVPR'2020)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/mocov1)
-- [x] [SimCLR (ICML'2020)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/simclr)
-- [x] [MoCo v2 (ArXiv'2020)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/byol)
-- [x] [BYOL (NeurIPS'2020)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/mocov2)
-- [x] [SwAV (NeurIPS'2020)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/swav)
-- [x] [DenseCL (CVPR'2021)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/densecl)
-- [x] [SimSiam (CVPR'2021)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/simsiam)
-- [x] [Barlow Twins (ICML'2021)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/barlowtwins)
-- [x] [MoCo v3 (ICCV'2021)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/mocov3)
-- [x] [MAE (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/mae)
-- [x] [SimMIM (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/simmim)
-- [x] [MaskFeat (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/maskfeat)
-- [x] [CAE (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/cae)
->>>>>>> upstream/master
+- [x] [EVA (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/eva)
+- [x] [MixMIM (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mixmim)
 
 More algorithms are in our plan.
 
@@ -286,7 +198,6 @@ This project is released under the [Apache 2.0 license](LICENSE).
 - [MMClassification](https://github.com/open-mmlab/mmclassification): OpenMMLab image classification toolbox and benchmark.
 - [MMDetection](https://github.com/open-mmlab/mmdetection): OpenMMLab detection toolbox and benchmark.
 - [MMDetection3D](https://github.com/open-mmlab/mmdetection3d): OpenMMLab's next-generation platform for general 3D object detection.
-- [MMYOLO](https://github.com/open-mmlab/mmyolo): OpenMMLab YOLO series toolbox and benchmark.
 - [MMRotate](https://github.com/open-mmlab/mmrotate): OpenMMLab rotated object detection toolbox and benchmark.
 - [MMYOLO](https://github.com/open-mmlab/mmyolo): OpenMMLab YOLO series toolbox and benchmark.
 - [MMSegmentation](https://github.com/open-mmlab/mmsegmentation): OpenMMLab semantic segmentation toolbox and benchmark.

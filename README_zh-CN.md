@@ -65,68 +65,22 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
 ## 更新
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-**v1.0.0rc3** 版本已经在 2022.12.07 发布。
-=======
-## 最新进展
+**v1.0.0rc5** 版本已经在 2022.12.30 发布。
 
-### 💎 稳定版本
+- 支持了 `BEiT v2`, `MixMIM`, `EVA`
+- 支持了模型分析工具 `ShapeBias`
+- 添加 FGIA ACCV 2022 比赛第一名方案
+- 重构了 `t-SNE`
 
-最新的 **v0.11.0** 版本已经在 2022.12.30 发布。
->>>>>>> upstream/master
+**v1.0.0rc4** 版本已经在 2022.12.07 发布。
 
 - 支持 BEiT 和 MILAN 预训练
 - 支持 low-level 重建可视化
 - 更新模型库算法页面文档
 
-<<<<<<< HEAD
-**v1.0.0rc3** 版本已经在 2022.11.01 发布。
-=======
-- 支持 `InterCLR`
-- 修复部分 bugs
->>>>>>> upstream/master
-
-- 支持 MaskFeat
-
 请参考 [更新日志](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/notes/changelog.html) 获取更多细节和历史版本信息。
 
 MMSelfSup 1.x 和 0.x 的不同点写在 [迁移文档](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/migration.html) 中。
-
-### 🌟 1.x 预览版本
-
-全新的 **v1.0.0rc4** 版本已经在 2022.12.07 发布：
-=======
-### 1.x 预览版本
-
-全新的 **MMSelfSup v1.0.0rc1** 版本已在 2022.09.01 发布。
->>>>>>> parent of 684875d (Merge branch 'dev')
-
-新版本亮点：
-
-- 基于全新的 [MMEngine](https://github.com/open-mmlab/mmengine) 和 [MMCV](https://github.com/open-mmlab/mmcv/tree/2.x)。
-- 代码库重构，统一接口。
-- 完善了新版本 [文档](https://mmselfsup.readthedocs.io/en/1.x/)。
-- 支持了不同训练时间、不同尺寸的 `MAE`, `SimMIM`, `MoCoV3` 的预训练模型。
-- 更加简洁的 API。
-- 更加强大的数据管道。
-- 部分模型具有更高的准确率。
-
-在 [1.x 分支](https://github.com/open-mmlab/mmselfsup/tree/1.x) 查看更多新特性。 欢迎大家提 Issues 和 PRs!
-
-### 稳定版本
-
-最新的 **v0.10.1** 版本已经在 2022.11.1 发布。
-
-新版本亮点：
-
-- 支持 MaskFeat
-- 更新 issue 模板
-- 修复部分文档的错误
-
-请参考 [更新日志](docs/zh_cn/changelog.md) 获取更多细节和历史版本信息。
-
-MMSelfSup 和 OpenSelfSup 的不同点写在 [对比文档](docs/en/compatibility.md) 中。
 
 ## 安装
 
@@ -136,26 +90,13 @@ MMSelfSup 依赖 [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open
 
 ## 快速入门
 
-<<<<<<< HEAD
 我们针对基础使用和进阶用法提供了 [用户指引](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/index.html)：
-=======
-请参考 [准备数据](docs/zh_cn/prepare_data.md) 准备数据集, [入门指南](docs/zh_cn/get_started.md) 获取 MMSelfSup 的基本使用方法和 [基准测试](docs/zh_cn/tutorials/6_benchmarks.md) 来运行下游任务。
->>>>>>> upstream/master
 
 Pretrain
 
-<<<<<<< HEAD
 - [Config](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/1_config.html)
 - [Prepare Dataset](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/2_dataset_prepare.html)
 - [Pretrain with Existing Models](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/3_pretrain.html)
-=======
-- [配置文件](docs/zh_cn/tutorials/0_config.md)
-- [添加数据集](docs/zh_cn/tutorials/1_new_dataset.md)
-- [数据处理流](docs/zh_cn/tutorials/2_data_pipeline.md)
-- [添加新模块](docs/zh_cn/tutorials/3_new_module.md)
-- [自定义流程](docs/zh_cn/tutorials/4_schedule.md)
-- [自定义运行](docs/zh_cn/tutorials/5_runtime.md)
->>>>>>> upstream/master
 
 Downetream Tasks
 
@@ -178,7 +119,6 @@ Useful Tools
 
 目前已支持的算法:
 
-<<<<<<< HEAD
 - [x] [Relative Location (ICCV'2015)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/relavive_loc)
 - [x] [Rotation Prediction (ICLR'2018)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/rotation_pred)
 - [x] [DeepCluster (ECCV'2018)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/deepcluster)
@@ -200,26 +140,8 @@ Useful Tools
 - [x] [CAE (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/cae)
 - [x] [MILAN (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/milan)
 - [x] [BEiT v2 (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/beitv2)
-=======
-- [x] [Relative Location (ICCV'2015)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/relative_loc)
-- [x] [Rotation Prediction (ICLR'2018)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/rotation_pred)
-- [x] [DeepCluster (ECCV'2018)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/deepcluster)
-- [x] [NPID (CVPR'2018)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/npid)
-- [x] [ODC (CVPR'2020)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/odc)
-- [x] [MoCo v1 (CVPR'2020)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/mocov1)
-- [x] [SimCLR (ICML'2020)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/simclr)
-- [x] [MoCo v2 (ArXiv'2020)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/byol)
-- [x] [BYOL (NeurIPS'2020)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/mocov2)
-- [x] [SwAV (NeurIPS'2020)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/swav)
-- [x] [DenseCL (CVPR'2021)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/densecl)
-- [x] [SimSiam (CVPR'2021)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/simsiam)
-- [x] [Barlow Twins (ICML'2021)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/barlowtwins)
-- [x] [MoCo v3 (ICCV'2021)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/mocov3)
-- [x] [MAE (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/mae)
-- [x] [SimMIM (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/simmim)
-- [x] [MaskFeat (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/maskfeat)
-- [x] [CAE (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/master/configs/selfsup/cae)
->>>>>>> upstream/master
+- [x] [EVA (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/eva)
+- [x] [MixMIM (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mixmim)
 
 更多的算法实现已经在我们的计划中。
 
@@ -275,7 +197,6 @@ MMSelfSup 是一款由不同学校和公司共同贡献的开源项目，我们�
 - [MMClassification](https://github.com/open-mmlab/mmclassification): OpenMMLab 图像分类工具箱
 - [MMDetection](https://github.com/open-mmlab/mmdetection): OpenMMLab 目标检测工具箱
 - [MMDetection3D](https://github.com/open-mmlab/mmdetection3d): OpenMMLab 新一代通用 3D 目标检测平台
-- [MMYOLO](https://github.com/open-mmlab/mmyolo): OpenMMLab YOLO 系列工具箱和基准测试
 - [MMRotate](https://github.com/open-mmlab/mmrotate): OpenMMLab 旋转框检测工具箱与测试基准
 - [MMYOLO](https://github.com/open-mmlab/mmyolo): OpenMMLab YOLO 系列工具箱和基准测试
 - [MMSegmentation](https://github.com/open-mmlab/mmsegmentation): OpenMMLab 语义分割工具箱

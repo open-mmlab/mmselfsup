@@ -38,8 +38,10 @@ class PixelReconstructionLoss(BaseModule):
 
         self.channel = channel if channel is not None else 1
 
-    def forward(self, pred: torch.Tensor, target: torch.Tensor,
-                mask: torch.Tensor) -> torch.Tensor:
+    def forward(self,
+                pred: torch.Tensor,
+                target: torch.Tensor,
+                mask: Optional[torch.Tensor] = None) -> torch.Tensor:
         """Forward function to compute the reconstrction loss.
 
         Args:
@@ -57,6 +59,9 @@ class PixelReconstructionLoss(BaseModule):
         if len(loss.shape) == 3:
             loss = loss.mean(dim=-1)
 
-        loss = (loss * mask).sum() / mask.sum() / self.channel
+        if mask is None:
+            loss = loss.mean()
+        else:
+            loss = (loss * mask).sum() / mask.sum() / self.channel
 
         return loss

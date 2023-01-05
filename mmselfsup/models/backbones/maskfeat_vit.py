@@ -1,5 +1,4 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-<<<<<<< HEAD
 from typing import List, Optional, Sequence, Union
 
 import torch
@@ -10,28 +9,12 @@ from mmselfsup.registry import MODELS
 
 
 @MODELS.register_module()
-=======
-from typing import Optional, Tuple, Union
-
-import torch
-from mmcls.models import VisionTransformer
-from mmcv.cnn.utils.weight_init import trunc_normal_
-from torch import nn
-
-from ..builder import BACKBONES
-
-
-@BACKBONES.register_module()
->>>>>>> upstream/master
 class MaskFeatViT(VisionTransformer):
     """Vision Transformer for MaskFeat pre-training.
 
     A PyTorch implement of: `Masked Feature Prediction for Self-Supervised
     Visual Pre-Training <https://arxiv.org/abs/2112.09133>`_.
-<<<<<<< HEAD
 
-=======
->>>>>>> upstream/master
     Args:
         arch (str | dict): Vision Transformer architecture
             Default: 'b'
@@ -59,30 +42,18 @@ class MaskFeatViT(VisionTransformer):
 
     def __init__(self,
                  arch: Union[str, dict] = 'b',
-<<<<<<< HEAD
                  img_size: int = 224,
                  patch_size: int = 16,
                  out_indices: Union[Sequence, int] = -1,
                  drop_rate: float = 0,
                  drop_path_rate: float = 0,
-=======
-                 img_size: Union[Tuple[int, int], int] = 224,
-                 patch_size: int = 16,
-                 out_indices: int = -1,
-                 drop_rate: float = 0.,
-                 drop_path_rate: float = 0.,
->>>>>>> upstream/master
                  norm_cfg: dict = dict(type='LN', eps=1e-6),
                  final_norm: bool = True,
                  output_cls_token: bool = True,
                  interpolate_mode: str = 'bicubic',
                  patch_cfg: dict = dict(),
                  layer_cfgs: dict = dict(),
-<<<<<<< HEAD
                  init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
-=======
-                 init_cfg: Optional[dict] = None) -> None:
->>>>>>> upstream/master
         super().__init__(
             arch=arch,
             img_size=img_size,
@@ -99,31 +70,18 @@ class MaskFeatViT(VisionTransformer):
             init_cfg=init_cfg)
 
         self.mask_token = nn.parameter.Parameter(
-<<<<<<< HEAD
             torch.zeros(1, 1, self.embed_dims), requires_grad=True)
         self.num_patches = self.patch_resolution[0] * self.patch_resolution[1]
 
     def init_weights(self) -> None:
         """Initialize position embedding, mask token and cls token."""
-=======
-            torch.zeros(1, 1, self.embed_dims))
-        self.num_patches = self.patch_resolution[0] * self.patch_resolution[1]
-
-    def init_weights(self) -> None:
->>>>>>> upstream/master
         super().init_weights()
         if not (isinstance(self.init_cfg, dict)
                 and self.init_cfg['type'] == 'Pretrained'):
 
-<<<<<<< HEAD
             nn.init.trunc_normal_(self.cls_token, std=.02)
             nn.init.trunc_normal_(self.mask_token, std=.02)
             nn.init.trunc_normal_(self.pos_embed, std=.02)
-=======
-            trunc_normal_(self.cls_token, std=.02)
-            trunc_normal_(self.mask_token, std=.02)
-            trunc_normal_(self.pos_embed, std=.02)
->>>>>>> upstream/master
 
             self.apply(self._init_weights)
 
@@ -142,10 +100,7 @@ class MaskFeatViT(VisionTransformer):
         Args:
             x (torch.Tensor): Input images.
             mask (torch.Tensor): Input masks.
-<<<<<<< HEAD
 
-=======
->>>>>>> upstream/master
         Returns:
             torch.Tensor: Features with cls_tokens.
         """
@@ -169,8 +124,5 @@ class MaskFeatViT(VisionTransformer):
 
             if i == len(self.layers) - 1 and self.final_norm:
                 x = self.norm1(x)
-<<<<<<< HEAD
 
-=======
->>>>>>> upstream/master
         return x

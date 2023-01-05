@@ -1,14 +1,6 @@
 # Copyright (c) Open-MMLab. All rights reserved.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-__version__ = '1.0.0rc4'
-=======
-__version__ = '0.11.0'
->>>>>>> upstream/master
-=======
-__version__ = '0.10.1'
->>>>>>> parent of 684875d (Merge branch 'dev')
+__version__ = '1.0.0rc5'
 
 
 def parse_version_info(version_str):

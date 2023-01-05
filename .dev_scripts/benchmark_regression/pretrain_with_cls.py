@@ -113,9 +113,19 @@ def get_gpu_number(model_info):
     matches = re.match(r'.*[-_](\d+)xb(\d+).*', config)
     if matches is None:
         raise ValueError(
-            'Cannot get gpu numbers from the config name {config}')
+            f'Cannot get gpu numbers from the config name {config}')
     gpus = int(matches.groups()[0])
     return gpus
+
+
+def get_pretrain_epoch(model_info):
+    config = osp.basename(model_info.config)
+    matches = re.match(r'.*[-_](\d+)e[-_].*', config)
+    if matches is None:
+        raise ValueError(
+            f'Cannot get epoch setting from the config name {config}')
+    epoch = int(matches.groups()[0])
+    return epoch
 
 
 def create_train_job_batch(commands, model_info, args, port, script_name):
@@ -137,7 +147,6 @@ def create_train_job_batch(commands, model_info, args, port, script_name):
         quota_cfg = ''
 
     launcher = 'none' if args.local else 'slurm'
-
     job_name = f'{args.job_name}_{fname}'
     job_script = (f'#!/bin/bash\n'
                   f'srun -p {args.partition} '
@@ -158,14 +167,23 @@ def create_train_job_batch(commands, model_info, args, port, script_name):
     commands.append(f'echo "{config}"')
 
     # downstream classification task
-    cls_config = getattr(model_info, 'cls_config', None)
+    cls_config = None
+    task = getattr(model_info, 'task', None)
+    if task is not None:
+        for downstream in model_info.data['Downstream']:
+            if task == downstream['Results'][0]['Task']:
+                cls_config = downstream['Config']
+                break
+    else:
+        cls_config = None
+
     if cls_config:
         fname = model_info.name
 
         gpus = get_gpu_number(model_info)
         gpus_per_node = min(gpus, 8)
 
-        cls_config_path = Path(model_info.cls_config)
+        cls_config_path = Path(cls_config)
         assert cls_config_path.exists(), f'"{fname}": {cls_config} not found.'
 
         job_name = f'{args.job_name}_{fname}'
@@ -178,13 +196,11 @@ def create_train_job_batch(commands, model_info, args, port, script_name):
         if args.quotatype is not None:
             srun_args = srun_args.join(f'--quotatype {args.quotatype}')
 
-        # get pretrain weights
-        ckpt_path_file = work_dir / 'last_checkpoint'
-        with open(ckpt_path_file, 'r') as f:
-            ckpt = f.readlines()[0]
+        # get pretrain weights path
+        epoch = get_pretrain_epoch(model_info)
+        ckpt = work_dir / f'epoch_{epoch}.pth'
 
         launcher = 'none' if args.local else 'slurm'
-
         cls_job_script = (
             f'\n'
             f'mim train mmcls {cls_config} '
@@ -365,7 +381,10 @@ def summary(models, args):
         if len(val_logs) == 0:
             continue
 
-        expect_metrics = model_info.results[0].metrics
+        for downstream in model_info.data['Downstream']:
+            if model_info.task == downstream['Results'][0]['Task']:
+                expect_metrics = downstream['Results'][0]['Metrics']
+                break
 
         # extract metrics
         summary = {'log_file': log_file}
@@ -408,7 +427,7 @@ def main():
         name = item['Name']
         model_info = all_models[item['Name']]
         model_info.cycle = item.get('Cycle', None)
-        model_info.cls_config = item.get('ClsConfig', None)
+        model_info.task = item.get('Task', None)
         cycle = getattr(model_info, 'cycle', 'month')
         cycle_level = CYCLE_LEVELS.index(cycle)
         if cycle_level in args.range:

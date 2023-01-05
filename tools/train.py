@@ -24,38 +24,7 @@ def parse_args():
     parser.add_argument(
         '--amp',
         action='store_true',
-<<<<<<< HEAD
         help='enable automatic-mixed-precision training')
-=======
-        help='resume from the latest checkpoint automatically')
-    group_gpus = parser.add_mutually_exclusive_group()
-    group_gpus.add_argument(
-        '--gpus',
-        type=int,
-        help='(Deprecated, please use --gpu-id) number of gpus to use '
-        '(only applicable to non-distributed training)')
-    group_gpus.add_argument(
-        '--gpu_ids',
-        type=int,
-        nargs='+',
-        help='(Deprecated, please use --gpu-id) ids of gpus to use '
-        '(only applicable to non-distributed training)')
-    group_gpus.add_argument(
-        '--gpu-id',
-        type=int,
-        default=0,
-        help='id of gpu to use '
-        '(only applicable to non-distributed training)')
-    parser.add_argument('--seed', type=int, default=None, help='random seed')
-    parser.add_argument(
-        '--diff-seed',
-        action='store_true',
-        help='Whether or not set different seeds for different ranks')
-    parser.add_argument(
-        '--deterministic',
-        action='store_true',
-        help='whether to set deterministic options for CUDNN backend.')
->>>>>>> upstream/master
     parser.add_argument(
         '--cfg-options',
         nargs='+',
@@ -102,7 +71,6 @@ def main():
         cfg.work_dir = osp.join('./work_dirs', work_type,
                                 osp.splitext(osp.basename(args.config))[0])
 
-<<<<<<< HEAD
     # enable automatic-mixed-precision training
     if args.amp is True:
         optim_wrapper = cfg.optim_wrapper.get('type', 'OptimWrapper')
@@ -111,21 +79,6 @@ def main():
             f'`{optim_wrapper}.'
         cfg.optim_wrapper.type = 'AmpOptimWrapper'
         cfg.optim_wrapper.setdefault('loss_scale', 'dynamic')
-=======
-    # init distributed env first, since logger depends on the dist info.
-    if args.launcher == 'none':
-        distributed = False
-        assert cfg.model.type not in [
-            'DeepCluster', 'MoCo', 'SimCLR', 'ODC', 'NPID', 'SimSiam',
-            'DenseCL', 'BYOL'
-        ], f'{cfg.model.type} does not support non-dist training.'
-    else:
-        distributed = True
-        init_dist(args.launcher, **cfg.dist_params)
-        # re-set gpu_ids with distributed training mode
-        _, world_size = get_dist_info()
-        cfg.gpu_ids = range(world_size)
->>>>>>> upstream/master
 
     # resume training
     if args.resume == 'auto':
@@ -135,18 +88,8 @@ def main():
         cfg.resume = True
         cfg.load_from = args.resume
 
-<<<<<<< HEAD
     # build the runner from config
     runner = Runner.from_cfg(cfg)
-=======
-    # dump config
-    cfg.dump(osp.join(cfg.work_dir, osp.basename(args.config)))
-
-    # init the logger before other steps
-    timestamp = time.strftime('%Y%m%d_%H%M%S', time.localtime())
-    log_file = osp.join(cfg.work_dir, f'train_{timestamp}.log')
-    logger = get_root_logger(log_file=log_file, log_level=cfg.log_level)
->>>>>>> upstream/master
 
     # start training
     runner.train()

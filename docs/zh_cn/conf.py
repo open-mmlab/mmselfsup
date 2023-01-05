@@ -80,7 +80,6 @@ html_theme_options = {
         },
         {
             'name':
-<<<<<<< HEAD
             '上游库',
             'children': [
                 {
@@ -97,18 +96,12 @@ html_theme_options = {
         },
         {
             'name':
-=======
->>>>>>> upstream/master
             '版本',
             'children': [
                 {
                     'name': 'MMSelfSup 0.x',
                     'url': 'https://mmselfsup.readthedocs.io/zh_CN/latest/',
-<<<<<<< HEAD
                     'description': 'Main 分支文档'
-=======
-                    'description': 'main 分支文档'
->>>>>>> upstream/master
                 },
                 {
                     'name': 'MMSelfSup 1.x',
@@ -122,20 +115,6 @@ html_theme_options = {
     ],
     'menu_lang':
     'cn',
-<<<<<<< HEAD
-=======
-    'header_note': {
-        'title':
-        '注意',
-        'content':
-        '您正在阅读 MMSelfSup 0.x 版本的文档，而 MMSelfSup 0.x 版本将会在 2022 年末 '
-        '开始逐步停止维护。我们建议您及时升级到 MMSelfSup 1.0.0rc 版本，享受由 '
-        'OpenMMLab 2.0 带来的更多新特性和更佳的性能表现。阅读 MMSelfSup 1.0.0rc 的 '
-        '<a href="https://github.com/open-mmlab/mmselfsup/releases">发版日志</a>, '  # noqa
-        '<a href="https://github.com/open-mmlab/mmselfsup/tree/1.x">代码</a> '  # noqa
-        '和 <a href="https://mmselfsup.readthedocs.io/en/dev-1.x/">文档</a> 获取更多信息。',  # noqa
-    }
->>>>>>> upstream/master
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,

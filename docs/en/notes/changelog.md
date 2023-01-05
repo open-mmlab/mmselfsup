@@ -2,8 +2,50 @@
 
 ## MMSelfSup
 
-<<<<<<< HEAD:docs/en/notes/changelog.md
-<<<<<<< HEAD:docs/en/notes/changelog.md
+### v1.0.0rc5 (30/12/2022)
+
+The `master` branch is still 0.x version and we will checkout a new `1.x` branch to release 1.x version. The two versions will be maintained simultaneously in the future.
+
+We briefly list the major breaking changes here. Please refer to the [migration guide](../migration.md) for details and migration instructions.
+
+#### Highlight
+
+- Support `BEiT v2`, `MixMIM`, `EVA`
+- Support `ShapeBias` for model analysis
+- Add Solution of FGIA ACCV 2022 (1st Place)
+- Refactor t-SNE
+
+#### New Features
+
+- Support `BEiT v2` ([#627](https://github.com/open-mmlab/mmselfsup/pull/627))
+- Support `MixMIM` ([#626](https://github.com/open-mmlab/mmselfsup/pull/626))
+- Support `EVA` ([#632](https://github.com/open-mmlab/mmselfsup/pull/632))
+- Support `ShapeBias` metric ([#635](https://github.com/open-mmlab/mmselfsup/pull/635))
+- Add convert scripts and instructions on seg and det ([#621](https://github.com/open-mmlab/mmselfsup/pull/621))
+- Add pretraining for FGIA ([#607](https://github.com/open-mmlab/mmselfsup/pull/607))
+
+#### Bug Fixes
+
+- Change `pseudo_collect` to `default_collect` ([#616](https://github.com/open-mmlab/mmselfsup/pull/616))
+- Fix the link of SimMIM 800pt 100ft ([#622](https://github.com/open-mmlab/mmselfsup/pull/622))
+- Change `map_location` to `cpu` ([#623](https://github.com/open-mmlab/mmselfsup/pull/623))
+- Fix import error ([#631](https://github.com/open-mmlab/mmselfsup/pull/631))
+- Fix key error in configs ([#630](https://github.com/open-mmlab/mmselfsup/pull/630))
+- Change `np.int` to `int` ([#636](https://github.com/open-mmlab/mmselfsup/pull/636))
+- Fix knn multi-gpu bug ([#634](https://github.com/open-mmlab/mmselfsup/pull/634))
+
+#### Improvements
+
+- Refactor `projects/` folder ([#620](https://github.com/open-mmlab/mmselfsup/pull/620))
+- Refactor `t-SNE` ([#629](https://github.com/open-mmlab/mmselfsup/pull/629))
+- Refactor `CAE` ([#645](https://github.com/open-mmlab/mmselfsup/pull/645))
+- Refactor benchmark script and update files ([#637](https://github.com/open-mmlab/mmselfsup/pull/637))
+
+#### Docs
+
+- Update data_flow.md ([#612](https://github.com/open-mmlab/mmselfsup/pull/612))
+- Update datasets.md ([#633](https://github.com/open-mmlab/mmselfsup/pull/633))
+
 ### v1.0.0rc4 (07/12/2022)
 
 The `master` branch is still 0.x version and we will checkout a new `1.x` branch to release 1.x version. The two versions will be maintained simultaneously in the future.
@@ -139,94 +181,6 @@ We briefly list the major breaking changes here. Please refer to the [migration 
 
 - Refine all documents and reorganize the directory.
 - Add concepts for different components.
-=======
-### v0.11.0 (30/12/2022)
-
-#### New Features
-
-- Support InterCLR ([#609](https://github.com/open-mmlab/mmselfsup/pull/609))
-
-#### Bug Fixes
-
-- Fix potential bug of hook registration ([#647](https://github.com/open-mmlab/mmselfsup/pull/647))
-- Fix sampling_replace config kwargs bug ([#646](https://github.com/open-mmlab/mmselfsup/pull/646))
-- Change sklearn to scikit-learn in requirements ([#583](https://github.com/open-mmlab/mmselfsup/pull/583))
-
-#### Improvements
-
-- Update CI check rules ([#581](https://github.com/open-mmlab/mmselfsup/pull/581))
-- Update assignee schedule ([#606](https://github.com/open-mmlab/mmselfsup/pull/606))
-
-#### Docs
-
-- Add global notes and the version switcher menu ([#573](https://github.com/open-mmlab/mmselfsup/pull/573))
-
-=======
->>>>>>> parent of 684875d (Merge branch 'dev'):docs/en/changelog.md
-### v0.10.1 (01/11/2022)
-
-#### Improvements
-
-- Update issue template and management file ([#550](https://github.com/open-mmlab/mmselfsup/pull/550), [#512](https://github.com/open-mmlab/mmselfsup/pull/512))
-- Move res-layer to models.utils ([#537](https://github.com/open-mmlab/mmselfsup/pull/537))
-
-#### Docs
-
-- Add MMYOLO description for README ([#541](https://github.com/open-mmlab/mmselfsup/pull/541))
-- Fix typo for README ([#545](https://github.com/open-mmlab/mmselfsup/pull/545))
-- Fix lint of MaskFeat ([#520](https://github.com/open-mmlab/mmselfsup/pull/520))
-
-### v0.10.0 (30/09/2022)
-
-#### Highlight
-
-- Support MaskFeat ([#485](https://github.com/open-mmlab/mmselfsup/pull/485))
-- Update README to announce 1.0.0rc version ([#474](https://github.com/open-mmlab/mmselfsup/pull/474))
-
-#### New Features
-
-- Support MaskFeat ([#485](https://github.com/open-mmlab/mmselfsup/pull/485))
-
-#### Bug Fixes
-
-- Fix DenseCL init weights bug ([#411](https://github.com/open-mmlab/mmselfsup/pull/411))
-- Fix norm typo in config ([#418](https://github.com/open-mmlab/mmselfsup/pull/418))
-- Fix read image bug ([#386](https://github.com/open-mmlab/mmselfsup/pull/386))
-
-#### Improvements
-
-- Change hook_cfg type access ([#409](https://github.com/open-mmlab/mmselfsup/pull/409))
-- Support to dump training config ([#410](https://github.com/open-mmlab/mmselfsup/pull/410))
-- Support to save MAE visualization results ([#388](https://github.com/open-mmlab/mmselfsup/pull/388))
-- Remove default value of deprecated option ([#490](https://github.com/open-mmlab/mmselfsup/pull/490))
-
-#### Docs
-
-- Update the link of MAE ([#497](https://github.com/open-mmlab/mmselfsup/pull/497))
-- Update README to announce 1.0.0rc version ([#474](https://github.com/open-mmlab/mmselfsup/pull/474))
-- Update get_started.md ([#402](https://github.com/open-mmlab/mmselfsup/pull/402))
-
-### v0.9.2 (28/07/2022)
-
-#### New Features
-
-- Support MAE Reconstructed Image Visualization ([#376](https://github.com/open-mmlab/mmselfsup/pull/376))
-
-#### Bug Fixes
-
-- Fix args/cfg bug in extract.py, use cfg.work_dir to save files ([#357](https://github.com/open-mmlab/mmselfsup/pull/357))
-- Fix SimMIM mask generator config bug ([#360](https://github.com/open-mmlab/mmselfsup/pull/360))
-
-#### Improvements
-
-- Update mdformat settings ([#323](https://github.com/open-mmlab/mmselfsup/pull/323))
-- Add circleci ([#374](https://github.com/open-mmlab/mmselfsup/pull/374))
-
-#### Docs
-
-- Fix the link of switch language ([#327](https://github.com/open-mmlab/mmselfsup/pull/327))
-- Update lr_updater.py links in tutorials/4_schedule.md ([#354](https://github.com/open-mmlab/mmselfsup/pull/354))
->>>>>>> upstream/master:docs/en/changelog.md
 
 ### v0.9.1 (31/05/2022)
 

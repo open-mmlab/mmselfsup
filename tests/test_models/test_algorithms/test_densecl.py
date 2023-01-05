@@ -68,24 +68,6 @@ def test_densecl():
     assert alg.queue.size() == torch.Size([feat_dim, queue_len])
     assert alg.queue2.size() == torch.Size([feat_dim, queue_len])
 
-<<<<<<< HEAD
-=======
-    alg.init_weights()
-    for param_q, param_k in zip(alg.encoder_q.parameters(),
-                                alg.encoder_k.parameters()):
-        assert torch.equal(param_q, param_k)
-        assert param_k.requires_grad is False
-
-    fake_input = torch.randn((2, 3, 224, 224))
-    with pytest.raises(AssertionError):
-        fake_out = alg.forward_train(fake_input)
-
-    fake_out = alg.forward_test(fake_input)
-    assert fake_out[0] is None
-    assert fake_out[2] is None
-    assert fake_out[1].size() == torch.Size([2, 512, 49])
-
->>>>>>> upstream/master
     mmselfsup.models.algorithms.densecl.batch_shuffle_ddp = MagicMock(
         side_effect=mock_batch_shuffle_ddp)
     mmselfsup.models.algorithms.densecl.batch_unshuffle_ddp = MagicMock(

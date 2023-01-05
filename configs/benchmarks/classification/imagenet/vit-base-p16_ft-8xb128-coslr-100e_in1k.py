@@ -76,7 +76,6 @@ train_dataloader = dict(batch_size=128, dataset=dict(pipeline=train_pipeline))
 val_dataloader = dict(batch_size=128, dataset=dict(pipeline=test_pipeline))
 test_dataloader = val_dataloader
 
-<<<<<<< HEAD
 # optimizer wrapper
 optim_wrapper = dict(
     optimizer=dict(
@@ -95,20 +94,6 @@ optim_wrapper = dict(
             '.cls_token': dict(decay_mult=0.0),
             '.pos_embed': dict(decay_mult=0.0)
         }))
-=======
-# optimizer
-optimizer = dict(
-    lr=1e-3 * 1024 / 256,
-    paramwise_options={
-        'ln': dict(weight_decay=0.),
-        'bias': dict(weight_decay=0.),
-        'pos_embed': dict(weight_decay=0.),
-        'cls_token': dict(weight_decay=0.)
-    },
-    constructor='TransformerFinetuneConstructor',
-    model_type='vit',
-    layer_decay=0.65)
->>>>>>> upstream/master
 
 # learning rate scheduler
 param_scheduler = [

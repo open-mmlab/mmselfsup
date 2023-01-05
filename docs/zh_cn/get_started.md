@@ -1,7 +1,6 @@
 # 基础教程
 
 - [基础教程](#基础教程)
-<<<<<<< HEAD
   - [预备条件](#预备条件)
   - [安装](#安装)
     - [最佳实践](#最佳实践)
@@ -18,20 +17,6 @@
       - [通过 Docker 使用 MMSelfSup](#通过-docker-使用-mmselfsup)
     - [故障排除](#故障排除)
   - [使用多个 MMSelfSup 版本](#使用多个-mmselfsup-版本)
-=======
-  - [训练已有的算法](#训练已有的算法)
-    - [使用 CPU 训练](#使用-cpu-训练)
-    - [使用 单张/多张 显卡训练](#使用-单张多张-显卡训练)
-    - [使用多台机器训练](#使用多台机器训练)
-    - [在一台机器上启动多个任务](#在一台机器上启动多个任务)
-  - [基准测试](#基准测试)
-  - [工具和建议](#工具和建议)
-    - [统计模型的参数](#统计模型的参数)
-    - [发布模型](#发布模型)
-    - [使用 t-SNE 来做模型可视化](#使用-t-sne-来做模型可视化)
-    - [MAE 可视化](#mae-可视化)
-    - [可复现性](#可复现性)
->>>>>>> upstream/master
 
 ## 预备条件
 
@@ -48,12 +33,8 @@ MMSelfSup 在 Linux 上运行（Windows 和 macOS 不受官方支持）。 它�
 **步骤 1.** 创建一个 conda 环境并激活它。
 
 ```shell
-<<<<<<< HEAD
 conda create --name openmmlab python=3.8 -y
 conda activate openmmlab
-=======
-bash tools/dist_train.sh ${CONFIG_FILE} ${GPUS} --work-dir ${YOUR_WORK_DIR} [optional arguments]
->>>>>>> upstream/master
 ```
 
 **步骤 2.** 按照[官方说明](https://pytorch.org/get-started/locally/)安装 PyTorch，例如：
@@ -61,22 +42,13 @@ bash tools/dist_train.sh ${CONFIG_FILE} ${GPUS} --work-dir ${YOUR_WORK_DIR} [opt
 在 GPU 平台上：
 
 ```shell
-<<<<<<< HEAD
 conda install pytorch torchvision -c pytorch
-=======
-# checkpoints and logs saved in WORK_DIR=work_dirs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k/
-bash tools/dist_train.sh configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py 8 --work_dir work_dirs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k/
->>>>>>> upstream/master
 ```
 
 在 CPU 平台上：
 
 ```shell
-<<<<<<< HEAD
 conda install pytorch torchvision cpuonly -c pytorch
-=======
-GPUS_PER_NODE=${GPUS_PER_NODE} GPUS=${GPUS} SRUN_ARGS=${SRUN_ARGS} bash tools/slurm_train.sh ${PARTITION} ${JOB_NAME} ${CONFIG_FILE} ${YOUR_WORK_DIR} [optional arguments]
->>>>>>> upstream/master
 ```
 
 ## 安装
@@ -88,13 +60,9 @@ GPUS_PER_NODE=${GPUS_PER_NODE} GPUS=${GPUS} SRUN_ARGS=${SRUN_ARGS} bash tools/sl
 **步骤 0.** 使用 [MIM](https://github.com/open-mmlab/mim) 安装 [MMEngine](https://github.com/open-mmlab/mmengine) 和 [MMCV](https://github.com/open-mmlab/mmcv)。
 
 ```shell
-<<<<<<< HEAD
 pip install -U openmim
 mim install mmengine
 mim install 'mmcv>=2.0.0rc1'
-=======
-GPUS_PER_NODE=8 GPUS=8 bash tools/slurm_train.sh Dummy Test_job configs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k.py work_dirs/selfsup/odc/odc_resnet50_8xb64-steplr-440e_in1k/
->>>>>>> upstream/master
 ```
 
 **步骤 1.** 安装 MMSelfSup。
@@ -109,7 +77,6 @@ GPUS_PER_NODE=8 GPUS=8 bash tools/slurm_train.sh Dummy Test_job configs/selfsup/
 在这种情况下，从源代码安装 MMSelfSup：
 
 ```shell
-<<<<<<< HEAD
 git clone https://github.com/open-mmlab/mmselfsup.git
 cd mmselfsup
 git checkout 1.x
@@ -117,19 +84,12 @@ pip install -v -e .
 # "-v" 表示详细，或更多输出
 # "-e" 表示以可编辑模式安装项目，
 # 因此，对代码所做的任何本地修改都将生效，无需重新安装。
-=======
-NNODES=2 NODE_RANK=0 PORT=$MASTER_PORT MASTER_ADDR=$MASTER_ADDR bash tools/dist_train.sh $CONFIG $GPUS
->>>>>>> upstream/master
 ```
 
 或者，如果您想为 MMSelfSup 做出[贡献](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/docs/zh_cn/notes/contribution_guides.md)或体验其正在实验中的功能，请查看 `dev-1.x` 分支：
 
 ```shell
-<<<<<<< HEAD
 git checkout dev-1.x
-=======
-NNODES=2 NODE_RANK=1 PORT=$MASTER_PORT MASTER_ADDR=$MASTER_ADDR bash tools/dist_train.sh $CONFIG $GPUS
->>>>>>> upstream/master
 ```
 
 #### 作为 Python 包安装
@@ -137,12 +97,7 @@ NNODES=2 NODE_RANK=1 PORT=$MASTER_PORT MASTER_ADDR=$MASTER_ADDR bash tools/dist_
 直接用 pip 安装：
 
 ```shell
-<<<<<<< HEAD
 pip install 'mmselfsup>=1.0.0rc0'
-=======
-CUDA_VISIBLE_DEVICES=0,1,2,3 PORT=29500 bash tools/dist_train.sh ${CONFIG_FILE} 4 --work-dir tmp_work_dir_1
-CUDA_VISIBLE_DEVICES=4,5,6,7 PORT=29501 bash tools/dist_train.sh ${CONFIG_FILE} 4 --work-dir tmp_work_dir_2
->>>>>>> upstream/master
 ```
 
 ### 验证安装
@@ -250,13 +205,8 @@ print(mmselfsup.__version__)
 我们提供了一个 [Dockerfile](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/docker/Dockerfile) 来构建镜像。请确保您的 [docker 版本](https://docs.docker.com/engine/install/) >=19.03。
 
 ```shell
-<<<<<<< HEAD
 # 使用 PyTorch 1.10.0、CUDA 11.3、CUDNN 8 构建镜像。
 docker build -f ./docker/Dockerfile --rm -t mmselfsup:torch1.10.0-cuda11.3-cudnn8 .
-=======
-CUDA_VISIBLE_DEVICES=0,1,2,3 GPUS=4 bash tools/slurm_train.sh ${PARTITION} ${JOB_NAME} config1.py tmp_work_dir_1
-CUDA_VISIBLE_DEVICES=4,5,6,7 GPUS=4 bash tools/slurm_train.sh ${PARTITION} ${JOB_NAME} config2.py tmp_work_dir_2
->>>>>>> upstream/master
 ```
 
 **重要提示：** 请确保您已安装 [nvidia-container-toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker)。
@@ -264,12 +214,7 @@ CUDA_VISIBLE_DEVICES=4,5,6,7 GPUS=4 bash tools/slurm_train.sh ${PARTITION} ${JOB
 运行以下命令：
 
 ```shell
-<<<<<<< HEAD
 docker run --gpus all --shm-size=8g -it -v {DATA_DIR}:/workspace/mmselfsup/data mmselfsup:torch1.10.0-cuda11.3-cudnn8 /bin/bash
-=======
-CUDA_VISIBLE_DEVICES=0,1,2,3 GPUS=4 bash tools/slurm_train.sh ${PARTITION} ${JOB_NAME} config1.py tmp_work_dir_1 --cfg-options dist_params.port=29500
-CUDA_VISIBLE_DEVICES=4,5,6,7 GPUS=4 bash tools/slurm_train.sh ${PARTITION} ${JOB_NAME} config2.py tmp_work_dir_2 --cfg-options dist_params.port=29501
->>>>>>> upstream/master
 ```
 
 `{DATA_DIR}` 是包含所有这些数据集的本地文件夹。
@@ -295,61 +240,3 @@ sys.path.insert(0, osp.join(osp.dirname(osp.abspath(__file__)), '../'))
 ```shell
 export PYTHONPATH="$(pwd)":$PYTHONPATH
 ```
-<<<<<<< HEAD
-=======
-
-### 发布模型
-
-当你发布一个模型之前，您可能想做以下几件事情
-
-- 将模型的参数转为 CPU tensor.
-- 删除 optimizer 的状态参数.
-- 计算 checkpoint 文件的哈希值，并将其添加到 checkpoint 的文件名中.
-
-您可以使用以下命令来完整上面几件事情:
-
-```shell
-python tools/model_converters/publish_model.py ${INPUT_FILENAME} ${OUTPUT_FILENAME}
-```
-
-### 使用 t-SNE 来做模型可视化
-
-我们提供了一个开箱即用的来做图片向量可视化的方法:
-
-```shell
-python tools/analysis_tools/visualize_tsne.py ${CONFIG_FILE} --checkpoint ${CKPT_PATH} --work-dir ${WORK_DIR} [optional arguments]
-```
-
-参数:
-
-- `CONFIG_FILE`: 训练预训练模型的参数配置文件.
-- `CKPT_PATH`: 预训练模型的路径.
-- `WORK_DIR`: 保存可视化结果的路径.
-- `[optional arguments]`: 可选参数，具体可以参考 [visualize_tsne.py](../../tools/analysis_tools/visualize_tsne.py)
-
-### MAE 可视化
-
-我们提供了一个对 MAE 掩码效果和重建效果可视化可视化的方法:
-
-```shell
-python tools/misc/mae_visualization.py ${IMG_PATH} ${CONFIG_FILE} ${CKPT_PATH} ${OUT_FILE} --device ${DEVICE}
-```
-
-参数:
-
-- `IMG_PATH`: 用于可视化的图片
-- `CONFIG_FILE`: 训练预训练模型的参数配置文件.
-- `CKPT_PATH`: 预训练模型的路径.
-- `OUT_FILE`: 用于保存可视化结果的图片路径
-- `DEVICE`: 用于推理的设备.
-
-示例:
-
-```shell
-python tools/misc/mae_visualization.py tests/data/color.jpg configs/selfsup/mae/mae_vit-base-p16_8xb512-coslr-400e_in1k.py mae_epoch_400.pth results.jpg --device 'cuda:0'
-```
-
-### 可复现性
-
-如果您想确保模型精度的可复现性，您可以设置 `--deterministic` 参数。但是，开启 `--deterministic` 意味着关闭 `torch.backends.cudnn.benchmark`, 所以会使模型的训练速度变慢。
->>>>>>> upstream/master

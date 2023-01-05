@@ -22,11 +22,7 @@ sys.path.insert(0, os.path.abspath('..'))
 # -- Project information -----------------------------------------------------
 
 project = 'MMSelfSup'
-<<<<<<< HEAD
 copyright = '2021, OpenMMLab'
-=======
-copyright = '2020-2030, OpenMMLab'
->>>>>>> upstream/master
 author = 'MMSelfSup Authors'
 
 # The full version, including alpha/beta/rc tags
@@ -84,7 +80,6 @@ html_theme_options = {
         },
         {
             'name':
-<<<<<<< HEAD
             'Upstream',
             'children': [
                 {
@@ -105,27 +100,17 @@ html_theme_options = {
         },
         {
             'name':
-=======
->>>>>>> upstream/master
             'Version',
             'children': [
                 {
                     'name': 'MMSelfSup 0.x',
                     'url': 'https://mmselfsup.readthedocs.io/en/latest/',
-<<<<<<< HEAD
                     'description': 'Main branch docs'
-=======
-                    'description': 'docs at main branch'
->>>>>>> upstream/master
                 },
                 {
                     'name': 'MMSelfSup 1.x',
                     'url': 'https://mmselfsup.readthedocs.io/en/dev-1.x/',
-<<<<<<< HEAD
                     'description': '1.x branch docs'
-=======
-                    'description': 'docs at 1.x branch'
->>>>>>> upstream/master
                 },
             ],
             'active':
@@ -133,21 +118,7 @@ html_theme_options = {
         },
     ],
     'menu_lang':
-<<<<<<< HEAD
     'en'
-=======
-    'en',
-    'header_note': {
-        'content':
-        'You are reading the documentation for MMSelfSup 0.x, which '
-        'will soon be deprecated by the end of 2022. We recommend you upgrade '
-        'to MMSelfSup 1.0.0rc versions to enjoy fruitful new features and '
-        'better performance brought by OpenMMLab 2.0. Check out the '
-        '<a href="https://github.com/open-mmlab/mmselfsup/releases">changelog</a>, '  # noqa
-        '<a href="https://github.com/open-mmlab/mmselfsup/tree/1.x">code</a> '  # noqa
-        'and <a href="https://mmselfsup.readthedocs.io/en/dev-1.x/">documentation</a> of MMSelfSup 1.0.0rc for more details.',  # noqa
-    }
->>>>>>> upstream/master
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,

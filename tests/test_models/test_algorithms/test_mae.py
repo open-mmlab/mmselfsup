@@ -34,7 +34,6 @@ def test_mae():
         'bgr_to_rgb': True
     }
 
-<<<<<<< HEAD
     alg = MAE(
         backbone=backbone,
         neck=neck,
@@ -60,13 +59,3 @@ def test_mae():
         fake_feats, fake_data_samples, mean=mean, std=std)
     assert list(results.mask.value.shape) == [2, 224, 224, 3]
     assert list(results.pred.value.shape) == [2, 224, 224, 3]
-=======
-    fake_input = torch.randn((2, 3, 224, 224))
-    fake_loss = alg.forward_train(fake_input)
-    fake_feature = alg.extract_feat(fake_input)
-    mask, pred = alg.forward_test(fake_input)
-    assert isinstance(fake_loss['loss'].item(), float)
-    assert list(fake_feature[0].shape) == [2, 50, 768]
-    assert list(mask.shape) == [2, 224, 224, 3]
-    assert list(pred.shape) == [2, 224, 224, 3]
->>>>>>> upstream/master
