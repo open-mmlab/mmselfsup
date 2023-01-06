@@ -22,7 +22,7 @@
 
 在本节中，我们将演示如何使用 PyTorch 准备环境。
 
-MMSelfSup 在 Linux 上运行（Windows 和 macOS 不受官方支持）。 它需要 Python 3.6+、CUDA 9.2+ 和 PyTorch 1.6+。
+MMSelfSup 在 Linux 上运行（Windows 和 macOS 不受官方支持）。 它需要 Python 3.7+、CUDA 9.2+ 和 PyTorch 1.6+。
 
 ```{note}
 如果您有使用 PyTorch 的经验并且已经安装了它，请跳过这一部分并跳到下一个安装环节。否则，您可以按照如下步骤进行准备。
