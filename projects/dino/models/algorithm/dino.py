@@ -70,18 +70,7 @@ class DINO(BaseModel):
         x1 = self.backbone(x1)
         x2 = self.backbone(self.neck(x2))
 
-        student_out = student_output / self.student_temp
-        student_out = student_out.chunk(self.n_crops)
-
-        # teacher centering and sharpening
-        temp = self.teacher_temp_schedule[epoch]
-        teacher_out = F.softmax((teacher_output - self.center) / temp, dim=-1)
-        teacher_out = teacher_out.detach().chunk(2)
-
-
         loss=self.head(student_out,teacher_out)
-        self.update_center(teacher_output)
-
         losses = dict(loss=loss)
         return losses
 

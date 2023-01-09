@@ -25,6 +25,15 @@ class DINOLoss(BaseModule):
     def forward(self):
         """Forward function of DINO Loss."""
         # TODO: implement the forward pass of loss here
+
+        student_out = student_output / self.student_temp
+        student_out = student_out.chunk(self.ncrops)
+
+        # teacher centering and sharpening
+        temp = self.teacher_temp_schedule[epoch]
+        teacher_out = F.softmax((teacher_output - self.center) / temp, dim=-1)
+        teacher_out = teacher_out.detach().chunk(2)
+
         total_loss = 0
         n_loss_terms = 0
         for iq, q in enumerate(teacher_out):
