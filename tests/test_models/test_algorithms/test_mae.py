@@ -7,9 +7,6 @@ import torch
 
 from mmselfsup.models.algorithms.mae import MAE
 from mmselfsup.structures import SelfSupDataSample
-from mmselfsup.utils import register_all_modules
-
-register_all_modules()
 
 backbone = dict(type='MAEViT', arch='b', patch_size=16, mask_ratio=0.75)
 neck = dict(

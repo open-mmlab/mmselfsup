@@ -7,6 +7,7 @@ import torch
 from mmengine.config import Config
 from mmengine.dataset import Compose, default_collate
 from mmengine.runner import load_checkpoint
+from mmengine.registry import init_default_scope
 from torch import nn
 
 from mmselfsup.models import build_algorithm
@@ -36,6 +37,8 @@ def init_model(config: Union[str, Config],
     elif not isinstance(config, Config):
         raise TypeError('config must be a filename or Config object, '
                         f'but got {type(config)}')
+    init_default_scope(config.get('default_scope', 'mmselfsup'))
+
     if options is not None:
         config.merge_from_dict(options)
     config.model.pretrained = None

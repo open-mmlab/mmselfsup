@@ -5,7 +5,6 @@ import numpy as np
 import pytest
 
 from mmselfsup.datasets import ImageList
-from mmselfsup.utils import register_all_modules
 
 # dataset settings
 train_pipeline = [
@@ -15,8 +14,6 @@ train_pipeline = [
 
 
 def test_image_list_dataset():
-    register_all_modules()
-
     data = dict(
         ann_file='',
         metainfo=None,

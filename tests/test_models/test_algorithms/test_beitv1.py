@@ -7,7 +7,6 @@ from mmengine.structures import InstanceData
 
 from mmselfsup.models import BEiT
 from mmselfsup.structures import SelfSupDataSample
-from mmselfsup.utils import register_all_modules
 
 data_preprocessor = dict(
     type='TwoNormDataPreprocessor',
@@ -37,8 +36,6 @@ target_generator = dict(type='DALL-E')
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')
 def test_beitv1():
-    register_all_modules()
-
     model = BEiT(
         backbone=backbone,
         neck=neck,

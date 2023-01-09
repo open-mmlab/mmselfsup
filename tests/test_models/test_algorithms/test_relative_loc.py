@@ -7,9 +7,6 @@ from mmengine.structures import InstanceData
 
 from mmselfsup.models.algorithms.relative_loc import RelativeLoc
 from mmselfsup.structures import SelfSupDataSample
-from mmselfsup.utils import register_all_modules
-
-register_all_modules()
 
 backbone = dict(
     type='ResNet',

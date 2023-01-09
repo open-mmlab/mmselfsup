@@ -7,9 +7,6 @@ import torch
 
 from mmselfsup.models.algorithms.swav import SwAV
 from mmselfsup.structures import SelfSupDataSample
-from mmselfsup.utils import register_all_modules
-
-register_all_modules()
 
 nmb_crops = [2, 6]
 backbone = dict(
