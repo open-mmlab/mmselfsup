@@ -27,6 +27,14 @@ class DINO(BaseModel):
             init_cfg=init_cfg)
 
         # TODO: implement the initialization function
+        self.teacher=nn.Sequential(self.backbone(),self.neck())
+        self.student=nn.Sequential(self.backbone())
+
+    def momentum_update(self):
+        with torch.no_grad():
+            m = momentum_schedule[it]  # momentum parameter
+            for param_q, param_k in zip(self.student.parameters(), teacher_without_ddp.parameters()):
+                param_k.data.mul_(m).add_((1 - m) * param_q.detach().data)
 
     def extract_feat(self, inputs: List[torch.Tensor],
                      **kwargs) -> Tuple[torch.Tensor]:
