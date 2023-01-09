@@ -10,8 +10,8 @@ from mmengine.config import Config, DictAction
 from mmengine.dist import get_rank, init_dist
 from mmengine.logging import MMLogger
 from mmengine.model.wrappers import MMDistributedDataParallel, is_model_wrapper
-from mmengine.runner import Runner, load_checkpoint
 from mmengine.registry import init_default_scope
+from mmengine.runner import Runner, load_checkpoint
 from mmengine.utils import mkdir_or_exist
 
 from mmselfsup.evaluation.functional import knn_eval

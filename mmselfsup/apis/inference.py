@@ -6,8 +6,8 @@ import numpy as np
 import torch
 from mmengine.config import Config
 from mmengine.dataset import Compose, default_collate
-from mmengine.runner import load_checkpoint
 from mmengine.registry import init_default_scope
+from mmengine.runner import load_checkpoint
 from torch import nn
 
 from mmselfsup.models import build_algorithm
