@@ -37,10 +37,11 @@ def init_model(config: Union[str, Config],
     elif not isinstance(config, Config):
         raise TypeError('config must be a filename or Config object, '
                         f'but got {type(config)}')
-    init_default_scope(config.get('default_scope', 'mmselfsup'))
 
     if options is not None:
         config.merge_from_dict(options)
+    init_default_scope(config.get('default_scope', 'mmselfsup'))
+
     config.model.pretrained = None
     config.model.setdefault('data_preprocessor',
                             config.get('data_preprocessor', None))
