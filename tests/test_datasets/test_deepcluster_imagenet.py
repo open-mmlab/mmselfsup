@@ -2,6 +2,7 @@
 import os.path as osp
 
 import pytest
+from mmengine.registry import init_default_scope
 
 from mmselfsup.datasets import DeepClusterImageNet
 
@@ -13,6 +14,7 @@ train_pipeline = [
 
 
 def test_deepcluster_dataset():
+    init_default_scope('mmselfsup')
 
     data = dict(
         ann_file=osp.join(

@@ -3,6 +3,7 @@ import os.path as osp
 
 import numpy as np
 import pytest
+from mmengine.registry import init_default_scope
 
 from mmselfsup.datasets import ImageList
 
@@ -14,6 +15,8 @@ train_pipeline = [
 
 
 def test_image_list_dataset():
+    init_default_scope('mmselfsup')
+
     data = dict(
         ann_file='',
         metainfo=None,
