@@ -6,8 +6,8 @@ from typing import List, Optional
 import pytest
 import torch
 import torch.nn as nn
-
 from mmengine.config import Config
+
 from mmselfsup.apis import inference_model
 from mmselfsup.models import BaseModel
 from mmselfsup.structures import SelfSupDataSample

@@ -8,8 +8,8 @@ from typing import Tuple
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
-
 from mmengine.dataset import Compose, default_collate
+
 from mmselfsup.apis import inference_model, init_model
 from mmselfsup.utils import register_all_modules
 
