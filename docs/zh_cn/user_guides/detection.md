@@ -1,23 +1,23 @@
-# Detection
+# 检测
 
-- [Detection](#detection)
-  - [Train](#train)
-  - [Test](#test)
+- [检测](#detection)
+  - [训练](#train)
+  - [测试](#test)
 
-Here, we prefer to use MMDetection to do the detection task. First, make sure you have installed [MIM](https://github.com/open-mmlab/mim), which is also a project of OpenMMLab.
+这里，我们更喜欢使用MMDetection做检测任务。首先确保你已经安装了[MIM](https://github.com/open-mmlab/mim)，这也是OpenMMLab的一个项目。
 
 ```shell
 pip install openmim
 mim install 'mmdet>=3.0.0rc0'
 ```
 
-It is very easy to install the package.
+非常容易安装这个包。
 
-Besides, please refer to MMDet for [installation](https://mmdetection.readthedocs.io/en/dev-3.x/get_started.html) and [data preparation](https://mmdetection.readthedocs.io/en/dev-3.x/user_guides/dataset_prepare.html)
+此外，请参考MMDet的[安装](https://mmdetection.readthedocs.io/en/dev-3.x/get_started.html)和[数据准备](https://mmdetection.readthedocs.io/en/dev-3.x/user_guides/dataset_prepare.html)
 
-## Train
+## 训练
 
-After installation, you can run MMDetection with simple command.
+安装完后，你可以使用如下的简单命令运行MMDetection。
 
 ```shell
 # distributed version
@@ -29,20 +29,20 @@ bash tools/benchmarks/mmdetection/mim_slurm_train_c4.sh ${PARTITION} ${CONFIG} $
 bash tools/benchmarks/mmdetection/mim_slurm_train_fpn.sh ${PARTITION} ${CONFIG} ${PRETRAIN}
 ```
 
-Remarks:
+注意：
 
-- `CONFIG`: Use config files under `configs/benchmarks/mmdetection/`. Since repositories of OpenMMLab have support referring config files across different repositories, we can easily leverage the configs from MMDetection like:
+- `CONFIG`: 使用`configs/benchmarks/mmdetection/`下的配置文件。由于OpenMMLab的存储库支持跨不同存储库引用配置文件，因此我们可以轻松使用MMDetection的配置文件，例如：
 
 ```shell
 _base_ = 'mmdet::mask_rcnn/mask-rcnn_r50-caffe-c4_1x_coco.py'
 ```
 
-Writing your config files from scratch is also supported.
+从头开始写你的配置文件也是支持的。
 
-- `PRETRAIN`: the pre-trained model file.
-- `GPUS`: The number of GPUs that you want to use to train. We adopt 8 GPUs for detection tasks by default.
+- `PRETRAIN`：预训练模型文件
+- `GPUS`: 你想用于训练的GPU数量，对于检测任务，我们默认采用8块GPU。
 
-Example:
+例子：
 
 ```shell
 bash ./tools/benchmarks/mmdetection/mim_dist_train_c4.sh \
@@ -50,8 +50,8 @@ configs/benchmarks/mmdetection/coco/mask-rcnn_r50-c4_ms-1x_coco.py \
 https://download.openmmlab.com/mmselfsup/1.x/byol/byol_resnet50_16xb256-coslr-200e_in1k/byol_resnet50_16xb256-coslr-200e_in1k_20220825-de817331.pth 8
 ```
 
-Or if you want to do detection task with [detectron2](https://github.com/facebookresearch/detectron2), we also provide some config files.
-Please refer to [INSTALL.md](https://github.com/facebookresearch/detectron2/blob/main/INSTALL.md) for installation and follow the [directory structure](https://github.com/facebookresearch/detectron2/tree/main/datasets) to prepare your datasets required by detectron2.
+或者你想用[detectron2](https://github.com/facebookresearch/detectron2)来做检测任务，我们也提供了一些配置文件。
+请参考[INSTALL.md](https://github.com/facebookresearch/detectron2/blob/main/INSTALL.md)用于安装并按照detectron2需要的[目录结构](https://github.com/facebookresearch/detectron2/tree/main/datasets)准备你的数据集。
 
 ```shell
 conda activate detectron2 # use detectron2 environment here, otherwise use open-mmlab environment
@@ -60,9 +60,9 @@ python convert-pretrain-to-detectron2.py ${WEIGHT_FILE} ${OUTPUT_FILE} # must us
 bash run.sh ${DET_CFG} ${OUTPUT_FILE}
 ```
 
-## Test
+## 测试
 
-After training, you can also run the command below to test your model.
+在训练之后，你可以运行如下命令测试你的模型。
 
 ```shell
 # distributed version
@@ -72,11 +72,11 @@ bash tools/benchmarks/mmdetection/mim_dist_test.sh ${CONFIG} ${CHECKPOINT} ${GPU
 bash tools/benchmarks/mmdetection/mim_slurm_test.sh ${PARTITION} ${CONFIG} ${CHECKPOINT}
 ```
 
-Remarks:
+注意：
 
-- `CHECKPOINT`: The well-trained detection model that you want to test.
+- `CHECKPOINT`：你想测试的训练好的检测模型。
 
-Example:
+例子：
 
 ```shell
 bash ./tools/benchmarks/mmdetection/mim_dist_test.sh \
