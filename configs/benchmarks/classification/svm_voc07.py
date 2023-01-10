@@ -1,12 +1,10 @@
 dataset_type = 'ImageList'
 data_root = 'data/VOCdevkit/VOC2007/'
-file_client_args = dict(backend='disk')
-
 split_at = [5011]
 split_name = ['voc07_trainval', 'voc07_test']
 
 extract_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(type='mmcls.ResizeEdge', scale=256),
     dict(type='Resize', scale=224),
     dict(type='PackSelfSupInputs', meta_keys=['img_path'])

@@ -8,7 +8,7 @@ We incorporate modular and inheritance design into our config system, which is c
     - [Module information](#module-information)
     - [Training information](#training-information)
     - [Data information](#data-information)
-    - [Config file name example](#config-file-name-example)
+    - [Config File Name Example](#config-file-name-example)
   - [Config File Structure](#config-file-structure)
   - [Inherit and Modify Config File](#inherit-and-modify-config-file)
     - [Use intermediate variables in configs](#use-intermediate-variables-in-configs)
@@ -185,7 +185,6 @@ for dataset and dataloader.
 # is a ``mmcls`` prefix.
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
-file_client_args = dict(backend='disk')
 # Since we use ``ImageNet`` from mmclassification, we need to set the
 # custom_imports here.
 custom_imports = dict(imports='mmcls.datasets', allow_failed_imports=False)
@@ -214,7 +213,7 @@ view_pipeline = [
 ]
 
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(type='MultiView', num_views=2, transforms=[view_pipeline]),
     dict(type='PackSelfSupInputs', meta_keys=['img_path'])
 ]
@@ -323,7 +322,6 @@ custom_imports = dict(imports='mmcls.datasets', allow_failed_imports=False)
 # is a ``mmcls`` prefix.
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
-file_client_args = dict(backend='disk')
 
 # The difference between mocov2 and mocov1 is the transforms in the pipeline
 view_pipeline = [
@@ -350,7 +348,7 @@ view_pipeline = [
 ]
 
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(type='MultiView', num_views=2, transforms=[view_pipeline]),
     dict(type='PackSelfSupInputs', meta_keys=['img_path'])
 ]

@@ -6,8 +6,8 @@ from typing import List, Optional
 import pytest
 import torch
 import torch.nn as nn
-from mmengine.config import Config
 
+from mmengine.config import Config
 from mmselfsup.apis import inference_model
 from mmselfsup.models import BaseModel
 from mmselfsup.structures import SelfSupDataSample
@@ -48,9 +48,7 @@ def test_inference_model():
     model.cfg = cfg
     model.cfg.test_dataloader = dict(
         dataset=dict(pipeline=[
-            dict(
-                type='LoadImageFromFile',
-                file_client_args=dict(backend='disk')),
+            dict(type='LoadImageFromFile'),
             dict(type='Resize', scale=(1, 1)),
             dict(type='PackSelfSupInputs', meta_keys=['img_path'])
         ]))

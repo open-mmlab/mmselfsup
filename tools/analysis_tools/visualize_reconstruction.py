@@ -8,8 +8,8 @@ from typing import Tuple
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
-from mmengine.dataset import Compose, default_collate
 
+from mmengine.dataset import Compose, default_collate
 from mmselfsup.apis import inference_model, init_model
 from mmselfsup.utils import register_all_modules
 
@@ -134,9 +134,7 @@ def main():
     else:
         model.cfg.test_dataloader = dict(
             dataset=dict(pipeline=[
-                dict(
-                    type='LoadImageFromFile',
-                    file_client_args=dict(backend='disk')),
+                dict(type='LoadImageFromFile'),
                 dict(type='Resize', scale=(224, 224), backend='pillow'),
                 dict(type='PackSelfSupInputs', meta_keys=['img_path'])
             ]))

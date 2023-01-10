@@ -180,7 +180,6 @@ model = dict(
 # 这里有一个 ``mmcls`` 前缀.
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
-file_client_args = dict(backend='disk')
 
 # mocov2 和 mocov1 的主要差异在于数据增强的不同
 view_pipeline = [
@@ -207,7 +206,7 @@ view_pipeline = [
 ]
 
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(type='MultiView', num_views=2, transforms=[view_pipeline]),
     dict(type='PackSelfSupInputs', meta_keys=['img_path'])
 ]
@@ -304,14 +303,13 @@ train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=800)
 
 在配置文件中使用一些中间变量会使配置文件更加清晰和易于修改。
 
-例如 `dataset_type`, `train_pipeline`, `file_client_args` 是数据中的中间变量。 我们先定义它们再将它们传进 `data`.
+例如 `dataset_type`, `train_pipeline`, 是数据中的中间变量。 我们先定义它们再将它们传进 `data`.
 
 ```python
 # 数据集配置
 # 我们使用来源于 MMClassification 中的 ``ImageNet``, 所以有一个 ``mmcls`` 的前缀
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
-file_client_args = dict(backend='disk')
 
 # mocov2 和 mocov1 的不同主要来自于数据增强
 view_pipeline = [
@@ -333,7 +331,7 @@ view_pipeline = [
 ]
 
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(type='MultiView', num_views=2, transforms=[view_pipeline]),
     dict(type='PackSelfSupInputs', meta_keys=['img_path'])
 ]

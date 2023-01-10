@@ -32,10 +32,8 @@ model = dict(
         dict(type='CutMix', alpha=1.0)
     ]))
 
-file_client_args = dict(backend='disk')
-
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(
         type='RandomResizedCrop',
         scale=224,
@@ -61,7 +59,7 @@ train_pipeline = [
     dict(type='PackClsInputs')
 ]
 test_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(
         type='ResizeEdge',
         scale=256,

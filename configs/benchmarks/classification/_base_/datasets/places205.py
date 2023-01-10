@@ -10,9 +10,8 @@ data_preprocessor = dict(
     to_rgb=True,
 )
 
-file_client_args = dict(backend='disk')
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(type='Resize', scale=256),
     dict(type='CenterCrop', crop_size=256),
     dict(type='RandomCrop', size=224),
@@ -20,7 +19,7 @@ train_pipeline = [
     dict(type='PackSelfSupInputs')
 ]
 test_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(type='Resize', scale=256),
     dict(type='CenterCrop', crop_size=224),
     dict(type='PackSelfSupInputs')

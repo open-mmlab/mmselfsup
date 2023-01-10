@@ -8,7 +8,7 @@ from mmselfsup.utils import register_all_modules
 
 # dataset settings
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=dict(backend='disk')),
+    dict(type='LoadImageFromFile'),
     dict(type='RandomResizedCrop', size=4)
 ]
 
