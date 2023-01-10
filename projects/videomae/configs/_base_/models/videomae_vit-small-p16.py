@@ -27,6 +27,7 @@ model = dict(
         input_dims=384,
         embed_dims=192,
         patch_size=16,
+        depth=4,
     ),
     head=dict(
         type='VideoMAEPretrainHead',

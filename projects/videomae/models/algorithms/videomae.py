@@ -33,7 +33,9 @@ class VideoMAE(BaseModel):
         """The forward function in training."""
         mask = torch.stack(
             [data_sample.mask.value for data_sample in data_samples])
+        # normalized with RGB mean and std
         video = inputs[0].squeeze(1)
+
         # change the mask from the float to bool type
         mask = mask.to(torch.bool)
         # encoder part
@@ -41,6 +43,11 @@ class VideoMAE(BaseModel):
         # decoder part
         video_rec = self.neck(video, mask)
         # criterion part
-        loss = self.head(video_rec, inputs[0].squeeze(1), mask)
+        # recover the unnormlized video to [0, 1]
+        target = inputs[0].squeeze(
+            1) * self.data_preprocessor.std + self.data_preprocessor.mean
+        target = target / 255.0
+        loss = self.head(video_rec, target, mask)
         losses = dict(loss=loss)
+
         return losses

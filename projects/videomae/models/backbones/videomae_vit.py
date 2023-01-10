@@ -342,6 +342,8 @@ class VideoMAEViT(BaseModule):
             Tensor: The feature of the input
                 samples extracted by the backbone.
         """
+        import pdb
+        pdb.set_trace()
         x = self.patch_embed(x)[0]
 
         x = x + self.pos_embed

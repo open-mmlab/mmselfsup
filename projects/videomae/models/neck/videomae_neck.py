@@ -51,7 +51,8 @@ class VideoMAEPretrainDecoder(BaseModule):
 
         # used to convert the dim of features from encoder to the dim
         # compatible with that of decoder
-        self.decoder_embed_layer = nn.Linear(input_dims, embed_dims, bias=True)
+        self.decoder_embed_layer = nn.Linear(
+            input_dims, embed_dims, bias=False)
 
         decoder_pos_embed = build_1d_sincos_position_embedding(
             num_patches, embed_dims)

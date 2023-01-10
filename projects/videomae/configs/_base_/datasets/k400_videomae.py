@@ -4,7 +4,12 @@ dataset_type = 'mmaction.VideoDataset'
 data_root = 'data/kinetics400/videos_train'
 ann_file_train = 'data/kinetics400/kinetics400_train_list_videos.txt'
 
-file_client_args = dict(io_backend='disk')
+file_client_args = dict(
+    io_backend='petrel',
+    path_mapping=dict(
+        {'data/kinetics400': 's3://openmmlab/datasets/action/Kinetics400'}))
+
+# file_client_args = dict(io_backend='disk')
 train_pipeline = [
     dict(type='mmaction.DecordInit', **file_client_args),
     dict(
@@ -13,7 +18,6 @@ train_pipeline = [
         frame_interval=4,
         num_clips=1),
     dict(type='mmaction.DecordDecode'),
-    # dict(type='Resize', scale=(-1, 256)),
     dict(
         type='mmaction.MultiScaleCrop',
         input_size=224,
