@@ -99,10 +99,6 @@ def parse_args():
     return args
 
 
-def post_process():
-    pass
-
-
 def main():
     args = parse_args()
 
