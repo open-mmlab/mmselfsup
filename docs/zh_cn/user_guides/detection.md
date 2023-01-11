@@ -29,7 +29,7 @@ bash tools/benchmarks/mmdetection/mim_slurm_train_c4.sh ${PARTITION} ${CONFIG} $
 bash tools/benchmarks/mmdetection/mim_slurm_train_fpn.sh ${PARTITION} ${CONFIG} ${PRETRAIN}
 ```
 
-注意：
+备注：
 
 - `CONFIG`: 使用`configs/benchmarks/mmdetection/`下的配置文件。由于OpenMMLab的存储库支持跨不同存储库引用配置文件，因此我们可以轻松使用MMDetection的配置文件，例如：
 
@@ -72,7 +72,7 @@ bash tools/benchmarks/mmdetection/mim_dist_test.sh ${CONFIG} ${CHECKPOINT} ${GPU
 bash tools/benchmarks/mmdetection/mim_slurm_test.sh ${PARTITION} ${CONFIG} ${CHECKPOINT}
 ```
 
-注意：
+备注：
 
 - `CHECKPOINT`：你想测试的训练好的检测模型。
 
