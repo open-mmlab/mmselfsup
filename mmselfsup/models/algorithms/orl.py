@@ -4,10 +4,9 @@ from typing import List, Optional, Union
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from mmengine.logging import print_log
 
 from mmselfsup.registry import MODELS
-from .. import builder
+from mmselfsup.structures import SelfSupDataSample
 from ..utils import CosineEMA
 from .base import BaseModel
 
@@ -50,17 +49,15 @@ class Correspondence(BaseModel):
             Default: 0.1.
     """
 
-    def __init__(
-            self,
-            backbone: dict,
-            neck: dict,
-            head: dict,
-            pretrained: Optional[str] = None,
-            #  data_preprocessor: Optional[dict] = None,
-            init_cfg: Optional[Union[List[dict], dict]] = None,
-            base_momentum=0.99,
-            knn_image_num=10,
-            topk_bbox_ratio=0.1) -> None:
+    def __init__(self,
+                 backbone: dict,
+                 neck: dict,
+                 head: dict,
+                 base_momentum: float = 0.99,
+                 pretrained: Optional[str] = None,
+                 init_cfg: Optional[Union[List[dict], dict]] = None,
+                 knn_image_num: int = 10,
+                 topk_bbox_ratio: float = 0.1) -> None:
         # super(Correspondence, self).__init__()
         super().__init__(
             backbone=backbone,
@@ -90,16 +87,6 @@ class Correspondence(BaseModel):
             bbox_keys.get('{}nn_bbox'.format(k))
             for k in range(self.knn_image_num)
         ]
-        # print("knn_Imgs")
-        # print(knn_imgs)
-        # print("knn_bboxes")
-        # print(knn_bboxes)
-        # # torch.Size([1, 27, 3, 224, 224])
-        # print(img.size())
-        # print("The type of bbox:")
-        # print(type(bbox))
-        # print("With shape")
-        # print(bbox.dim())
         assert img.size(0) == 1, \
             f'batch size must be 1, got: {img.size(0)}'
         assert img.dim() == 5, \
@@ -179,7 +166,6 @@ class Correspondence(BaseModel):
 
     def forward(self, img, bbox, img_keys, bbox_keys, mode='test', **kwargs):
         if mode == 'test':
-            print(kwargs)
             return self.predict(img, bbox, img_keys, bbox_keys, **kwargs)
         else:
             raise Exception('No such mode: {}'.format(mode))
@@ -213,68 +199,36 @@ class ORL(BaseModel):
     """
 
     def __init__(self,
-                 backbone,
-                 neck=None,
-                 head=None,
-                 pretrained=None,
-                 base_momentum=0.99,
-                 global_loss_weight=1.,
-                 local_intra_loss_weight=1.,
-                 local_inter_loss_weight=1.,
+                 backbone: dict,
+                 neck: dict,
+                 head: dict,
+                 base_momentum: float = 0.99,
+                 pretrained: Optional[str] = None,
+                 init_cfg: Optional[Union[List[dict], dict]] = None,
+                 global_loss_weight: float = 1.,
+                 loc_intra_loss_weight: float = 1.,
+                 loc_inter_loss_weight: float = 1.,
                  **kwargs):
-        super(ORL, self).__init__()
+        super().__init__(
+            backbone=backbone,
+            neck=neck,
+            head=head,
+            pretrained=pretrained,
+            init_cfg=init_cfg)
         self.global_loss_weight = global_loss_weight
-        self.loc_intra_weight = local_intra_loss_weight
-        self.loc_inter_weight = local_inter_loss_weight
-        self.online_net = nn.Sequential(
-            builder.build_backbone(backbone), builder.build_neck(neck))
-        self.target_net = nn.Sequential(
-            builder.build_backbone(backbone), builder.build_neck(neck))
+        self.loc_intra_weight = loc_intra_loss_weight
+        self.loc_inter_weight = loc_inter_loss_weight
+        self.online_net = nn.Sequential(self.backbone, self.neck)
+        self.target_net = CosineEMA(self.online_net, momentum=base_momentum)
 
-        self.backbone = self.online_net[0]
-        self.neck = self.online_net[1]
-        for param in self.target_net.parameters():
-            param.requires_grad = False
-        self.global_head = builder.build_head(head)
-        self.loc_intra_head = builder.build_head(head)
-        self.loc_inter_head = builder.build_head(head)
-        self.init_weights(pretrained=pretrained)
+        self.loc_intra_head = MODELS.build(head)
+        self.loc_inter_head = MODELS.build(head)
 
         self.base_momentum = base_momentum
         self.momentum = base_momentum
 
-    def init_weights(self, pretrained=None):
-        """Initialize the weights of model.
-
-        Args:
-            pretrained (str, optional): Path to pre-trained weights.
-                Default: None.
-        """
-        if pretrained is not None:
-            print_log('load model from: {}'.format(pretrained), logger='root')
-        self.online_net[0].init_weights(pretrained=pretrained)  # backbone
-        self.online_net[1].init_weights(init_linear='kaiming')  # projection
-        for param_ol, param_tgt in zip(self.online_net.parameters(),
-                                       self.target_net.parameters()):
-            param_tgt.data.copy_(param_ol.data)
-        # init the predictor in the head
-        self.global_head.init_weights(init_linear='kaiming')
-        self.loc_intra_head.init_weights(init_linear='kaiming')
-        self.loc_inter_head.init_weights(init_linear='kaiming')
-
-    @torch.no_grad()
-    def _momentum_update(self):
-        """Momentum update of the target network."""
-        for param_ol, param_tgt in zip(self.online_net.parameters(),
-                                       self.target_net.parameters()):
-            param_tgt.data = param_tgt.data * self.momentum + \
-                             param_ol.data * (1. - self.momentum)
-
-    @torch.no_grad()
-    def momentum_update(self):
-        self._momentum_update()
-
-    def forward_train(self, img, ipatch, kpatch):
+    def loss(self, inputs: List[torch.Tensor],
+             data_samples: List[SelfSupDataSample], **kwargs) -> dict:
         """Forward computation during training.
 
         Args:
@@ -290,10 +244,12 @@ class ORL(BaseModel):
         Returns:
             dict[str, Tensor]: A dictionary of loss components.
         """
-        assert img.dim() == 5, \
-            'Input must have 5 dims, got: {}'.format(img.dim())
-        img_v1 = img[:, 0, ...].contiguous()
-        img_v2 = img[:, 1, ...].contiguous()
+        assert isinstance(inputs, list)
+        global_img, ipatch, kpatch = inputs
+        assert global_img.dim() == 5, \
+            'Input must have 5 dims, got: {}'.format(global_img.dim())
+        img_v1 = global_img[:, 0, ...].contiguous()
+        img_v2 = global_img[:, 1, ...].contiguous()
         assert ipatch.dim() == 5, \
             'Input must have 5 dims, got: {}'.format(ipatch.dim())
         ipatch_v1 = ipatch[:, 0, ...].contiguous()
@@ -318,31 +274,37 @@ class ORL(BaseModel):
             loc_inter_tar_v1 = self.target_net(kpatch_v1)[0].clone().detach()
             loc_inter_tar_v2 = self.target_net(kpatch_v2)[0].clone().detach()
         # compute losses
+        # print("==========================")
+        # print(f"global_online_v1 shape {global_online_v1.shape}")
+        # print(f"global_online_v2 shape {global_online_v2.shape}")
+        # print(f"global_target_v1 shape {global_target_v1.shape}")
+        # print(f"global_target_v2 shape {global_target_v2.shape}")
         global_loss =\
-            self.global_head(global_online_v1, global_target_v2)['loss'] + \
-            self.global_head(global_online_v2, global_target_v1)['loss']
+            self.head(global_online_v1, global_target_v2) + \
+            self.head(global_online_v2, global_target_v1)
 
         local_intra_loss =\
-            self.loc_intra_head(loc_intra_v1, loc_intra_tar_v2)['loss'] + \
-            self.loc_intra_head(loc_intra_v2, loc_intra_tar_v1)['loss']
+            self.loc_intra_head(loc_intra_v1, loc_intra_tar_v2) + \
+            self.loc_intra_head(loc_intra_v2, loc_intra_tar_v1)
         local_inter_loss = \
-            self.loc_inter_head(loc_inter_v1, loc_inter_tar_v2)['loss'] + \
-            self.loc_inter_head(loc_inter_v2, loc_inter_tar_v1)['loss']
+            self.loc_inter_head(loc_inter_v1, loc_inter_tar_v2) + \
+            self.loc_inter_head(loc_inter_v2, loc_inter_tar_v1)
         losses = dict()
-        losses['loss_global'] = self.global_loss_weight * global_loss
-        losses['loss_local_intra'] = self.loc_intra_weight * local_intra_loss
-        losses['loss_local_inter'] = self.loc_inter_weight * local_inter_loss
+        loss_global = self.global_loss_weight * global_loss
+        loss_local_intra = self.loc_intra_weight * local_intra_loss
+        loss_local_inter = self.loc_inter_weight * local_inter_loss
+        # losses['loss_global'] = self.global_loss_weight * global_loss
+        # losses['loss_local_intra'] = self.loc_intra_weight * local_intra_loss
+        # losses['loss_local_inter'] = self.loc_inter_weight * local_inter_loss
+
+        losses = dict(loss=loss_global + loss_local_intra + loss_local_inter)
         return losses
 
-    def forward_test(self, img, **kwargs):
-        pass
-
-    def forward(self, img, mode='train', **kwargs):
-        if mode == 'train':
-            return self.forward_train(img, **kwargs)
-        elif mode == 'test':
-            return self.forward_test(img, **kwargs)
-        elif mode == 'extract':
-            return self.backbone(img)
+    def forward(self,
+                inputs: List[torch.Tensor],
+                data_samples: Optional[List[SelfSupDataSample]] = None,
+                mode: str = 'tensor'):
+        if mode == 'loss':
+            return self.loss(inputs, data_samples)
         else:
-            raise Exception('No such mode: {}'.format(mode))
+            raise RuntimeError(f'Invalid mode "{mode}".')

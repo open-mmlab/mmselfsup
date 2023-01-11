@@ -5,8 +5,8 @@ dist_params = dict(backend='nccl', port=29500)
 # model settings
 model = dict(
     type='Correspondence',
-    pretrained=None,
     base_momentum=0.99,
+    pretrained=None,
     knn_image_num=10,
     topk_bbox_ratio=0.1,
     # data_preprocessor=dict(
@@ -47,13 +47,8 @@ train_ss_json = '../data/coco/meta/train2017_selective_search_proposal.json'
 data_train_root = '../data/coco/train2017'
 dataset_type = 'CorrespondDataset'
 img_norm_cfg = dict(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-# format_pipeline = [
-#     dict(type='ToTensor',keys='img'),
-#     dict(type='Normalize', **img_norm_cfg),
-# ]
 dataset_dict = dict(
     type=dataset_type,
-    # data_source=dict(
     knn_json_file=train_knn_json,
     ss_json_file=train_ss_json,
     root=data_train_root,
@@ -68,8 +63,7 @@ dataset_dict = dict(
     max_iou_thr=0.5,
     topN=100,
     knn_image_num=10,
-    topk_bbox_ratio=0.1,
-    prefetch=False)
+    topk_bbox_ratio=0.1)
 val_dataloader = dict(
     # support single-image single-gpu inference only
     batch_size=1,

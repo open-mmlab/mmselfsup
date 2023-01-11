@@ -3,14 +3,12 @@ _base_ = [
 ]
 
 # model settings
-# done
 model = dict(type='SelectiveSearch')
 dist_params = dict(backend='nccl', port=29500)
 # dataset settings
 data_train_json = '../data/coco/annotations/instances_train2017.json'
 data_train_root = '../data/coco/train2017'
 dataset_type = 'SSDataset'
-
 val_dataloader = dict(
     batch_size=1,
     num_workers=8,

@@ -7,7 +7,6 @@ from typing import Optional
 import numpy as np
 import torch
 import torch.nn as nn
-import torchvision.transforms as T
 from mmengine.dist import is_distributed
 from mmengine.hooks import Hook
 from mmengine.logging import print_log
@@ -29,44 +28,19 @@ def global_forward(img: list, model: BaseModel):
     return feats_norm.detach()
 
 
-class Trans(object):
-
-    def __init__(self):
-        global_trans_list = [T.Resize(256), T.CenterCrop(224)]
-        self.global_transform = T.Compose(global_trans_list)
-        self.img_transform = T.Compose([
-            T.ToTensor(),
-            T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-        ])
-
-
 @HOOKS.register_module()
-class ExtractorHook(Hook):
-    """feature extractor hook.
-
-    This hook includes the global clustering process in DC.
-
-    Args:
-        extractor (dict): Config dict for feature extraction.
-        clustering (dict): Config dict that specifies the clustering algorithm.
-        unif_sampling (bool): Whether to apply uniform sampling.
-        reweight (bool): Whether to apply loss re-weighting.
-        reweight_pow (float): The power of re-weighting.
-        init_memory (bool): Whether to initialize memory banks used in ODC.
-            Defaults to False.
-        initial (bool): Whether to call the hook initially. Defaults to True.
-        interval (int): Frequency of epochs to call the hook. Defaults to 1.
-        seed (int, optional): Random seed. Defaults to None.
-    """
+class ORLHook(Hook):
+    """ORL feature extractor hook."""
 
     def __init__(self,
-                 keys: int,
                  extract_dataloader: dict,
+                 keys: int = 10,
                  normalize=True,
                  seed: Optional[int] = None) -> None:
 
         self.dist_mode = is_distributed()
         self.keys = keys
+        self.knn_batchsize = extract_dataloader['batch_size']
         self.dataset = extract_dataloader['dataset']
         self.extractor = Extractor(
             extract_dataloader=extract_dataloader,
@@ -91,12 +65,9 @@ class ExtractorHook(Hook):
         imgids = [item['id'] for item in data['images']]
         knn_imgids = []
         # batch processing
-        # trans = Trans()
-        batch = 512
+        batch = self.knn_batchsize
         keys = self.keys
-        # feat_bank = features
 
-        # feats_bank = torch.from_numpy(np.load(feat_bank_npy)).cuda()
         feat_bank = features
         for i in range(0, len(train_fns), batch):
             print('[INFO] processing batch: {}'.format(i + 1))
@@ -128,7 +99,6 @@ class ExtractorHook(Hook):
         image_info = {}
         pseudo_anno = {}
         info['knn_image_num'] = keys
-        print(data.keys())
         image_info['file_name'] = [
             item['file_name'] for item in data['images']
         ]
@@ -149,24 +119,22 @@ class ExtractorHook(Hook):
     def _extract_func(self, runner):
         # step 1: get features
         runner.model.eval()
-        features = self.extractor(runner.model.module)['feat']
-        if self.normalize:
-            features = nn.functional.normalize(
-                torch.from_numpy(features), dim=1)
+        features = self.extractor(runner.model.module)
 
         # step 2: save features
         if not self.dist_mode or (self.dist_mode and runner.rank == 0):
+            if self.normalize:
+                features = nn.functional.normalize(features['feat'], dim=1)
             np.save(
                 '{}/feature_epoch_{}.npy'.format(runner.work_dir,
                                                  runner.epoch),
-                features.numpy())
+                features.cpu().numpy())
             print_log(
                 'Feature extraction done!!! total features: {}\t\
                 feature dimension: {}'.format(
                     features.size(0), features.size(1)),
                 logger='current')
-        # features = torch.from_numpy(np.load(feat_bank_npy)).cuda()
+
         # step3: retrieval knn
         if runner.rank == 0:
             self.retrieve_knn(features)
-            # self.retrieve_knn(features, runner, runner.model.module)

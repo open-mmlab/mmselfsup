@@ -18,31 +18,6 @@ from mmengine.runner import Runner, load_checkpoint
 from mmselfsup.registry import MODELS
 from mmselfsup.utils import register_all_modules
 
-# import argparse
-# import os
-# import os.path as osp
-# import time
-# import json
-# import logging
-# import mmengine
-# import torch
-# import torch.multiprocessing
-# from mmengine.config import Config, DictAction
-# from mmengine.model import  MMDistributedDataParallel
-# from mmengine.dist import get_dist_info, init_dist
-# from mmengine.logging import MMLogger, print_log
-# from mmengine.registry import build_model_from_cfg,Registry
-# from mmengine.runner import Runner
-# from mmengine.registry import MODELS as MMENGINE_MODELS
-# # from registry import MODELS
-# from mmengine.runner import  load_checkpoint
-# from mmselfsup.registry import MODELS
-# from mmselfsup.utils import register_all_modules
-# import datetime
-# import warnings
-
-# from mmengine import DefaultScope
-
 
 def nondist_single_forward_collect(func, data_loader, length):
     """Forward and collect network outputs.
@@ -159,7 +134,7 @@ def parse_args():
     parser.add_argument(
         'output', type=str, help='output correspondence json file')
     parser.add_argument(
-        '--work_dir',
+        '--work-dir',
         type=str,
         default=None,
         help='the dir to save logs and models')
@@ -207,7 +182,7 @@ def evaluate(
     image_info = {}
     pseudo_anno = {}
     info['bbox_min_size'] = dataset_info['min_size']
-    info['bbox_max_aspect_ratio'] = dataset_info['self.max_ratio']
+    info['bbox_max_aspect_ratio'] = dataset_info['max_ratio']
     info['bbox_max_iou'] = dataset_info['max_iou_thr']
     info['intra_bbox_num'] = dataset_info['topN']
     info['knn_image_num'] = dataset_info['knn_image_num']
@@ -225,19 +200,12 @@ def evaluate(
 
 
 def main():
-    # MODELS = Registry('model', parent=MMENGINE_MODELS)
-    args = parse_args()
 
+    args = parse_args()
     register_all_modules(init_default_scope=True)
 
     cfg = Config.fromfile(args.config)
     cfg.launcher = args.launcher
-    # if args.cfg_options is not None:
-    #     cfg.merge_from_dict(args.cfg_options)
-    # set cudnn_benchmark
-    # if cfg.get('cudnn_benchmark', False):
-    #     torch.backends.cudnn.benchmark = True
-    # update configs according to CLI args
 
     # work_dir is determined in this priority: CLI > segment in file > filename
     if args.work_dir is not None:
@@ -268,9 +236,10 @@ def main():
 
     # logger
     timestamp = time.strftime('%Y%m%d_%H%M%S', time.localtime())
-    log_file = osp.join(cfg.work_dir, 'test_{}.log'.format(timestamp))
+    log_file = osp.join(cfg.work_dir, 'correpondece_{}.log'.format(timestamp))
     if not os.path.exists(cfg.work_dir):
-        os.mkdir(cfg.work_dir)
+        os.makedirs(cfg.work_dir)
+        # os.mkdir(cfg.work_dir)
     logging.basicConfig(filename=log_file, level=cfg.log_level)
 
     logger = MMLogger.get_instance(
@@ -302,12 +271,6 @@ def main():
             'Correspondence json file has been saved to: {}'.format(
                 args.output),
             logger=logger)
-
-    # # build the runner from config
-    # runner = Runner.from_cfg(cfg)
-
-    # # start training
-    # runner.train()
 
 
 if __name__ == '__main__':

@@ -1,17 +1,20 @@
-#!/bin/bash
-
-set -x
+#!/usr/bin/env bash
 
 CFG=$1
 OUTPUT=$2
+PY_ARGS=${@:3}
 GPUS=1
+NNODES=${NNODES:-1}
+NODE_RANK=${NODE_RANK:-0}
 PORT=${PORT:-29500}
+MASTER_ADDR=${MASTER_ADDR:-"127.0.0.1"}
 
-WORK_DIR=$(echo ${CFG%.*} | sed -e "s/configs/work_dirs/g")/
-
-# test
-python -m torch.distributed.launch --nproc_per_node=$GPUS --master_port=$PORT \
-    tools/selective_search.py \
-    $CFG \
-    $OUTPUT \
-    --work_dir $WORK_DIR --launcher="pytorch"
+PYTHONPATH="$(dirname $0)/..":$PYTHONPATH \
+python -m torch.distributed.launch \
+    --nnodes=$NNODES \
+    --node_rank=$NODE_RANK \
+    --master_addr=$MASTER_ADDR \
+    --nproc_per_node=$GPUS \
+    --master_port=$PORT \
+    $(dirname "$0")/selective_search.py \
+    $CFG $OUTPUT --launcher pytorch ${PY_ARGS}

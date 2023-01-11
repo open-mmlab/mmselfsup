@@ -128,12 +128,12 @@ def multi_gpu_test(model, data_loader):
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a model')
     parser.add_argument(
-        '--config',
-        default='configs/selfsup/orl/stage2/selective_search_train.py',
+        'config',
+        default='configs/selfsup/orl/stage2/selective_search.py',
         type=str,
         help='train config file path')
     parser.add_argument(
-        '--output',
+        'output',
         default='../data/coco/meta/train2017_selective_search_proposal.json ',
         type=str,
         help='output total selective search proposal json file')
@@ -218,9 +218,10 @@ def main():
 
     # logger
     timestamp = time.strftime('%Y%m%d_%H%M%S', time.localtime())
-    log_file = osp.join(cfg.work_dir, 'test_{}.log'.format(timestamp))
+    log_file = osp.join(cfg.work_dir,
+                        'SelectiveSearch_{}.log'.format(timestamp))
     if not os.path.exists(cfg.work_dir):
-        os.mkdir(cfg.work_dir)
+        os.makedirs(cfg.work_dir)
     logging.basicConfig(filename=log_file, level=cfg.log_level)
 
     logger = MMLogger.get_instance(

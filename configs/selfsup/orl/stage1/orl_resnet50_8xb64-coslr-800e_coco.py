@@ -1,10 +1,9 @@
 _base_ = [
     '../../_base_/models/byol.py',
-    '../../_base_/datasets/coco_orl.py',
+    '../../_base_/datasets/coco_orl_stage1.py',
     '../../_base_/schedules/sgd_coslr-200e_in1k.py',
     '../../_base_/default_runtime.py',
 ]
-
 # model settings
 model = dict(
     neck=dict(
@@ -26,7 +25,8 @@ model = dict(
             num_layers=2,
             with_bias=False,
             with_last_bn=False,
-            with_avg_pool=False)))
+            with_avg_pool=False),
+        loss=dict(type='CosineSimilarityLoss')))
 
 update_interval = 1  # interval for accumulate gradient
 # Amp optimizer
@@ -36,8 +36,10 @@ optim_wrapper = dict(
     optimizer=optimizer,
     accumulative_counts=update_interval,
 )
+# running setting
 warmup_epochs = 4
 total_epochs = 800
+Knearest = 10
 # learning policy
 param_scheduler = [
     # warmup
@@ -58,6 +60,23 @@ param_scheduler = [
         end=total_epochs)
 ]
 
-# runtime settings
 default_hooks = dict(checkpoint=dict(interval=100))
 train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=total_epochs)
+custom_hooks = [
+    dict(
+        type='ORLHook',
+        keys=Knearest,
+        extract_dataloader=dict(
+            batch_size=512,
+            num_workers=4,
+            persistent_workers=False,
+            sampler=dict(type='DefaultSampler', shuffle=False, round_up=True),
+            collate_fn=dict(type='default_collate'),
+            dataset=dict(
+                type={{_base_.dataset_type}},
+                data_root={{_base_.data_root}},
+                ann_file='annotations/instances_train2017.json',
+                data_prefix=dict(img='train2017/'),
+                pipeline={{_base_.train_pipeline}})),
+        normalize=True),
+]

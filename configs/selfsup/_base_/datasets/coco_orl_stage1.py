@@ -11,7 +11,7 @@ view_pipeline = [
         size=224,
         interpolation='bicubic',
         backend='pillow'),
-    dict(type='RandomFlip', prob=0.5),
+    dict(type='RandomFlip', prob=0.5, direction='horizontal'),
     dict(
         type='RandomApply',
         transforms=[

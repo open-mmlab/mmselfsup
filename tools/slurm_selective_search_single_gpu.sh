@@ -3,15 +3,15 @@
 set -x
 PARTITION=$1
 JOB_NAME="selective_search"
-CONFIG=$2
+CFG=$2
 OUTPUT=$3
+PY_ARGS=${@:4}
 GPUS=${GPUS:-1}
 GPUS_PER_NODE=${GPUS_PER_NODE:-1}
-CPUS_PER_TASK=${CPUS_PER_TASK:-5}
+CPUS_PER_TASK=${CPUS_PER_TASK:-4}
 SRUN_ARGS=${SRUN_ARGS:-""}
-PY_ARGS=${@:4}
+
 PYTHONPATH="$(dirname $0)/..":$PYTHONPATH \
-GLOG_vmodule=MemcachedClient=-1 \
 srun -p ${PARTITION} \
     --job-name=${JOB_NAME} \
     --gres=gpu:${GPUS_PER_NODE} \
@@ -20,4 +20,4 @@ srun -p ${PARTITION} \
     --cpus-per-task=${CPUS_PER_TASK} \
     --kill-on-bad-exit=1 \
     ${SRUN_ARGS} \
-    python -u tools/selective_search.py ${CONFIG} $OUTPUT --launcher="slurm" ${PY_ARGS}
+    python -u tools/selective_search.py $CFG $OUTPUT --launcher="slurm" ${PY_ARGS}
