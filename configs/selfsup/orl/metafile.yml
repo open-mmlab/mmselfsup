@@ -1,0 +1,13 @@
+Collections:
+  - Name: ORL
+    Metadata:
+      Training Data: COCOtrain2017
+      Training Techniques:
+        - SGD
+      Training Resources: 8x RTX3090 GPUs
+      Architecture:
+        - ResNet50
+    Paper:
+        URL: https://arxiv.org/abs/2106.11952
+        Title: "Unsupervised Object-Level Representation Learning from Scene Images"
+    README: configs/selfsup/ORL/README.md
