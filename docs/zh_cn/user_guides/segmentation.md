@@ -27,7 +27,7 @@ bash tools/benchmarks/mmsegmentation/mim_dist_train.sh ${CONFIG} ${PRETRAIN} ${G
 bash tools/benchmarks/mmsegmentation/mim_slurm_train.sh ${PARTITION} ${CONFIG} ${PRETRAIN}
 ```
 
-注意:
+备注:
 
 - `CONFIG`：使用`configs/benchmarks/mmsegmentation/`下的配置文件. S由于OpenMMLab的存储库支持跨不同存储库引用配置文件，因此我们可以轻松使用MMSegmentation的配置文件，例如：
 
@@ -60,7 +60,7 @@ bash tools/benchmarks/mmsegmentation/mim_dist_test.sh ${CONFIG} ${CHECKPOINT} ${
 bash tools/benchmarks/mmsegmentation/mim_slurm_test.sh ${PARTITION} ${CONFIG} ${CHECKPOINT}
 ```
 
-注意：
+备注：
 
 - `CHECKPOINT`：你想测试的训练好的分割模型。
 
