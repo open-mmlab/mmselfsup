@@ -34,7 +34,7 @@ bash tools/benchmarks/classification/svm_voc07/slurm_test_svm_epoch.sh ${PARTITI
 
 **为了使用ckpt进行测试，代码使用epoch\_\*.pth文件，这里不需要提取权重.**
 
-注意：
+备注：
 
 - `${SELFSUP_CONFIG}`是自监督实验的配置文件.
 - `${FEATURE_LIST}` 是一个字符串，用于指定从layer1到layer5的要评估特征；例如，如果你只想评估layer5，那么`FEATURE_LIST`是"feat5"，如果你想要评估所有的特征，那么`FEATURE_LIST`是"feat1 feat2 feat3 feat4 feat5" (用空格分隔)。如果为空，那么`FEATURE_LIST`默认是"feat5"。
@@ -88,7 +88,7 @@ bash tools/benchmarks/classification/mim_dist_test.sh ${CONFIG} ${CHECKPOINT}
 bash tools/benchmarks/classification//mim_slurm_test.sh ${PARTITION} ${CONFIG} ${CHECKPOINT}
 ```
 
-注意：
+备注：
 
 - `CHECKPOINT`：你想测试的训练好的分类模型
 
@@ -104,7 +104,7 @@ work_dir/model.pth
 
 为了运行ImageNet半监督分类，我们将使用和线性评估和微调一样的`.sh`脚本进行训练。
 
-注意：
+备注：
 
 - 默认GPU数量是4.
 - `CONFIG`：使用`configs/benchmarks/classification/imagenet/`下的配置文件，命名为`imagenet_*percent`的文件。
@@ -112,7 +112,7 @@ work_dir/model.pth
 
 ## ImageNet最近邻分类
 
-```注意
+```备注
 仅支持CNN形式的主干网络 (例如ResNet50).
 ```
 
@@ -126,7 +126,7 @@ bash tools/benchmarks/classification/knn_imagenet/dist_test_knn.sh ${SELFSUP_CON
 bash tools/benchmarks/classification/knn_imagenet/slurm_test_knn.sh ${PARTITION} ${JOB_NAME} ${SELFSUP_CONFIG} ${CHECKPOINT} [optional arguments]
 ```
 
-注意：
+备注：
 
 - `${SELFSUP_CONFIG}`是自监督实验的配置文件。
 - `CHECKPOINT`：检查点模型文件的路径。
