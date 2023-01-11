@@ -64,7 +64,7 @@ bash tools/benchmarks/classification/mim_dist_train.sh ${CONFIG} ${PRETRAIN}
 bash tools/benchmarks/classification/mim_slurm_train.sh ${PARTITION} ${JOB_NAME} ${CONFIG} ${PRETRAIN}
 ```
 
-注意：
+备注：
 
 - 默认的GPU数量是8。当改变GPU数量时，请同时改变配置文件中的`samples_per_gpu`参数来确保总的batch size是256。
 - `CONFIG`：使用`configs/benchmarks/classification/`下的配置文件。具体来说，`imagenet` (除了`imagenet_*percent`文件), `places205` and `inaturalist2018`。
