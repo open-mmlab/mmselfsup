@@ -6,7 +6,7 @@
   - [ImageNet 半监督分类](#imagenet-semi-supervised-classification)
   - [ImageNet 最近邻分类](#imagenet-nearest-neighbor-classification)
 
-在MMSelfSup中，我们为分类任务提供了许多基线，因此模型可以在不同分类任务上进行评估。这里有详细的教程和例子来阐述如何使用MMSelfSup来运行所有的分类基线。我们在`tools/benchmarks/classification/`文件夹中提供了所有的脚本，包含 2 个`.sh` 文件，一个用于与VOC SVM相关的分类任务，另一个用于ImageNet最近邻分类任务。
+在MMSelfSup中，我们为分类任务提供了许多基线，因此模型可以在不同分类任务上进行评估。这里有详细的教程和例子来阐述如何使用MMSelfSup来运行所有的分类基线。我们在`tools/benchmarks/classification/`文件夹中提供了所有的脚本，包含 2 个`.sh` 文件，一个文件夹用于与VOC SVM相关的分类任务，另一个文件夹用于ImageNet最近邻分类任务。
 
 ## VOC SVM / Low-shot SVM
 
