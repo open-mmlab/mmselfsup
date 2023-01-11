@@ -31,7 +31,7 @@ bash tools/benchmarks/mmdetection/mim_slurm_train_fpn.sh ${PARTITION} ${CONFIG} 
 
 Remarks:
 
-- `CONFIG`: Use config files under `configs/benchmarks/mmdetection/`. Since repositories of OpenMMLab have support referring config files across different repositories, we can easily leverage the configs from MMDetection like:
+- `${CONFIG}`: Use config files under `configs/benchmarks/mmdetection/`. Since repositories of OpenMMLab have support referring config files across different repositories, we can easily leverage the configs from MMDetection like:
 
 ```shell
 _base_ = 'mmdet::mask_rcnn/mask-rcnn_r50-caffe-c4_1x_coco.py'
@@ -39,8 +39,8 @@ _base_ = 'mmdet::mask_rcnn/mask-rcnn_r50-caffe-c4_1x_coco.py'
 
 Writing your config files from scratch is also supported.
 
-- `PRETRAIN`: the pre-trained model file.
-- `GPUS`: The number of GPUs that you want to use to train. We adopt 8 GPUs for detection tasks by default.
+- `${PRETRAIN}`: the pre-trained model file.
+- `${GPUS}`: The number of GPUs that you want to use to train. We adopt 8 GPUs for detection tasks by default.
 
 Example:
 
@@ -74,7 +74,7 @@ bash tools/benchmarks/mmdetection/mim_slurm_test.sh ${PARTITION} ${CONFIG} ${CHE
 
 Remarks:
 
-- `CHECKPOINT`: The well-trained detection model that you want to test.
+- `${CHECKPOINT}`: The well-trained detection model that you want to test.
 
 Example:
 
