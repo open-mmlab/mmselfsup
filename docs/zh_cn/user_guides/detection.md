@@ -4,7 +4,7 @@
   - [训练](#train)
   - [测试](#test)
 
-这里，我们更喜欢使用MMDetection做检测任务。首先确保你已经安装了[MIM](https://github.com/open-mmlab/mim)，这也是OpenMMLab的一个项目。
+这里，我们倾向使用MMDetection做检测任务。首先确保你已经安装了[MIM](https://github.com/open-mmlab/mim)，这也是OpenMMLab的一个项目。
 
 ```shell
 pip install openmim
