@@ -274,11 +274,6 @@ class ORL(BaseModel):
             loc_inter_tar_v1 = self.target_net(kpatch_v1)[0].clone().detach()
             loc_inter_tar_v2 = self.target_net(kpatch_v2)[0].clone().detach()
         # compute losses
-        # print("==========================")
-        # print(f"global_online_v1 shape {global_online_v1.shape}")
-        # print(f"global_online_v2 shape {global_online_v2.shape}")
-        # print(f"global_target_v1 shape {global_target_v1.shape}")
-        # print(f"global_target_v2 shape {global_target_v2.shape}")
         global_loss =\
             self.head(global_online_v1, global_target_v2) + \
             self.head(global_online_v2, global_target_v1)
@@ -293,9 +288,6 @@ class ORL(BaseModel):
         loss_global = self.global_loss_weight * global_loss
         loss_local_intra = self.loc_intra_weight * local_intra_loss
         loss_local_inter = self.loc_inter_weight * local_inter_loss
-        # losses['loss_global'] = self.global_loss_weight * global_loss
-        # losses['loss_local_intra'] = self.loc_intra_weight * local_intra_loss
-        # losses['loss_local_inter'] = self.loc_inter_weight * local_inter_loss
 
         losses = dict(loss=loss_global + loss_local_intra + loss_local_inter)
         return losses

@@ -10,22 +10,9 @@ import torch.nn as nn
 from mmengine.dist import is_distributed
 from mmengine.hooks import Hook
 from mmengine.logging import print_log
-from mmengine.model import BaseModel
-from torch.nn import functional as F
 
 from mmselfsup.models.utils import Extractor
 from mmselfsup.registry import HOOKS
-
-
-# forward global image for knn retrieval
-def global_forward(img: list, model: BaseModel):
-    assert torch.is_floating_point(img[0]), 'image type mismatch'
-    x = torch.stack(img).cuda()
-    with torch.no_grad():
-        x = model.backbone(x)
-        feats = model.neck(x)[0]
-        feats_norm = F.normalize(feats, dim=1)
-    return feats_norm.detach()
 
 
 @HOOKS.register_module()
@@ -50,6 +37,11 @@ class ORLHook(Hook):
         self.normalize = normalize
 
     def retrieve_knn(self, features: torch.Tensor):
+        """
+        retrieve knn image ids for each image in COCO train2017
+        Args:
+        features : Embeddings of all images in COCO train 2017
+        """
         # load data
         data_root = self.dataset['data_root']
         data_ann = self.dataset['ann_file']

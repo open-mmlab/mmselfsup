@@ -75,8 +75,6 @@ train_dataloader = dict(
         root=data_train_root,
         json_file=meta_json,
         topk_knn_image=10,
-        img_norm_cfg=dict(
-            mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         img_pipeline1=view_pipeline1,
         img_pipeline2=view_pipeline2,
         patch_pipeline1=view_patch_pipeline1,
