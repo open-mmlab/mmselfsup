@@ -12,12 +12,17 @@ Visualization can give an intuitive interpretation of the performance of the mod
   - [Visualize Datasets](#visualize-datasets)
   - [Visualize t-SNE](#visualize-t-sne)
   - [Visualize Low-level Feature Reconstruction](#visualize-low-level-feature-reconstruction)
+  - [Visualize Shape Bias](#visualize-shape-bias)
+    - [Prepare the dataset](#prepare-the-dataset)
+    - [Modify the config for classification](#modify-the-config-for-classification)
+    - [Inference your model with above modified config file](#inference-your-model-with-above-modified-config-file)
+    - [Plot shape bias](#plot-shape-bias)
 
 <!-- /TOC -->
 
 ## How visualization is implemented
 
-It is recommended to learn the basic concept of visualization in [engine.md](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/design/visualization.md).
+It is recommended to learn the basic concept of visualization in [documentation](https://github.com/open-mmlab/mmengine/blob/main/docs/en/design/visualization.md).
 
 OpenMMLab 2.0 introduces the visualization object `Visualizer` and several visualization backends `VisBackend`. The diagram below shows the relationship between `Visualizer` and  `VisBackend`,
 
@@ -44,7 +49,7 @@ def after_train_iter(...):
 
 (2) Browse dataset
 
-The function [`add_datasample()`](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/visualization/selfsup_visualizer.py#L151) is impleted in [`SelfSupVisualizer`](mmselfsup.visualization.SelfSupVisualizer), and it is mainly used in [browse_dataset.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/browse_dataset.py) for browsing dataset. More tutorial is in [analysis_tools.md](analysis_tools.md)
+The function [`add_datasample()`](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/visualization/selfsup_visualizer.py#L151) is impleted in [`SelfSupVisualizer`](mmselfsup.visualization.SelfSupVisualizer), and it is mainly used in [browse_dataset.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/browse_dataset.py) for browsing dataset. More tutorial is in section [Visualize Datasets](#visualize-datasets)
 
 ## Use Different Storage Backends
 
@@ -78,8 +83,6 @@ visualizer = dict(
     type='SelfSupVisualizer', vis_backends=vis_backends, name='visualizer')
 ```
 
-Note that when multiple visualization backends exist for `vis_backends`, only `WandbVisBackend` is valid.
-
 E.g.
 
 <div align="center">
@@ -88,7 +91,7 @@ E.g.
 
 ## Customize Visualization
 
-The customization of the visualization is similar to other components. If you want to customize `Visualizer`, `VisBackend` or `VisualizationHook`, you can refer to [Visualization Doc](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/visualization.md) in MMEngine.
+The customization of the visualization is similar to other components. If you want to customize `Visualizer`, `VisBackend` or `VisualizationHook`, you can refer to [Visualization Doc](https://github.com/open-mmlab/mmengine/blob/main/docs/en/advanced_tutorials/visualization.md) in MMEngine.
 
 ## Visualize Datasets
 
@@ -204,4 +207,84 @@ Results of MaskFeat:
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/36138628/200465876-7e7dcb6f-5e8d-4d80-b300-9e1847cb975f.jpg" width="800" />
+</div>
+
+## Visualize Shape Bias
+
+Shape bias measures how a model relies the shapes, compared to texture, to sense the semantics in images. For more details,
+we recommend interested readers to this [paper](https://arxiv.org/abs/2106.07411). MMSelfSup provide an off-the-shelf toolbox to
+obtain the shape bias of a classification model. You can following these steps below:
+
+### Prepare the dataset
+
+First you should download the [cue-conflict](https://github.com/bethgelab/model-vs-human/releases/download/v0.1/cue-conflict.tar.gz) to `data` folder,
+and then unzip this dataset. After that, you `data` folder should have the following structure:
+
+```text
+data
+├──cue-conflict
+|      |──airplane
+|      |──bear
+|      ...
+|      |── truck
+```
+
+### Modify the config for classification
+
+Replace the original test_dataloader and test_evaluation with following configurations
+
+```python
+test_dataloader = dict(
+    dataset=dict(
+        type='CustomDataset',
+        data_root='data/cue-conflict',
+        _delete_=True),
+    drop_last=False)
+test_evaluator = dict(
+    type='mmselfsup.ShapeBiasMetric',
+    _delete_=True,
+    csv_dir='directory/to/save/the/csv/file',
+    model_name='your_model_name')
+```
+
+Please note you should make custom modifications to the `csv_dir` and `model_name`.
+
+### Inference your model with above modified config file
+
+Then you should inferece your model on the `cue-conflict` dataset with the your modified config files.
+
+```shell
+# For Slurm
+GPUS_PER_NODE=1 GPUS=1 bash tools/benchmarks/classification/mim_slurm_test.sh $partition $config $checkpoint
+```
+
+```shell
+# For PyTorch
+GPUS=1 bash tools/benchmarks/classification/mim_dist_test.sh $config $checkpoint
+```
+
+After that, you should obtain a csv file, named `cue-conflict_model-name_session-1.csv`. Besides this file, you should
+also download these [csv files](https://github.com/bethgelab/model-vs-human/tree/master/raw-data/cue-conflict) to the
+`csv_dir`.
+
+### Plot shape bias
+
+Then we can start to plot the shape bias
+
+```shell
+python tools/analysis_tools/visualize_shape_bias.py --csv-dir $CVS_DIR --result-dir $CSV_DIR --colors $RGB --markers o --plotting-names $YOU_MODEL_NAME --model-names $YOU_MODEL_NAME
+```
+
+- `--csv-dir`, the same directory to save these csv files
+- `--colors`, should be the RGB values, formatted in R G B, e.g. 100 100 100, and can be multiple RGB values, if you want
+  to plot the shape bias of several models
+- `--plotting-names`, the name of the legend in the shape bias figure, and you can set it as your model name. If you want
+  to plot several models, plotting_names can be multiple values
+- `--model-names`, should be the same name specified in your config, and can be multiple names if you want to plot the shape bias of several models
+
+Please note, every three values for `--colors` corresponds to one value for `--model-names`. After all of above steps, you
+are expected to obtain the following figure.
+
+<div align="center">
+<img src="https://user-images.githubusercontent.com/30762564/208357938-c744d3c3-7e08-468e-82b7-fc5f1804da59.png" width="400" />
 </div>

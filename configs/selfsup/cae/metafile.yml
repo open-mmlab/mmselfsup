@@ -30,6 +30,6 @@ Models:
           - Task: Fine-tuning
             Dataset: ImageNet-1k
             Metrics:
-              Top 1 Accuracy: 60.8
+              Top 1 Accuracy: 83.2
         Config: configs/benchmarks/classification/imagenet/vit-base-p16_ft-8xb128-coslr-100e-rpe_in1k.py
         Weights: https://download.openmmlab.com/mmselfsup/1.x/cae/cae_vit-base-p16_16xb128-fp16-coslr-300e_in1k/vit-base-p16_ft-8xb128-coslr-100e-rpe_in1k/vit-base-p16_ft-8xb128-coslr-100e-rpe_in1k_20220825-f3d234cd.pth

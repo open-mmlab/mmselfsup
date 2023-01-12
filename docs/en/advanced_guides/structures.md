@@ -6,7 +6,7 @@
 
 The same as those in other OpenMMLab repositories, MMSelfSup defines a data structure, called `SelfSupDataSample`, which is used to receive and pass data during the whole training/testing process.
 `SelfSupDataSample` inherits the `BaseDataElement` implemented in [MMEngine](https://github.com/open-mmlab/mmengine).
-We recommend users to refer to [BaseDataElement](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/data_element.md)
+We recommend users to refer to [BaseDataElement](https://github.com/open-mmlab/mmengine/blob/main/docs/en/advanced_tutorials/data_element.md)
 for more in-depth introduction about the basics of `BaseDataElement`. In this tutorials, we mainly discuss some customized
 features in [SelfSupDataSample](mmselfsup.structures.SelfSupDataSample).
 
