@@ -18,7 +18,7 @@ from torchvision.transforms import Compose
 from mmselfsup.registry import DATASETS, TRANSFORMS
 
 
-def get_max_iou(pred_boxes: list, gt_box: list) -> np.float:
+def get_max_iou(pred_boxes: list, gt_box: list) -> np.float32:
     """
     pred_boxes : multiple coordinate for predict bounding boxes (x, y, w, h)
     gt_box :   the coordinate for ground truth bounding box (x, y, w, h)
