@@ -32,15 +32,15 @@ Models:
             Metrics:
               Top 1 Accuracy: 83.7
         Config: configs/selfsup/eva/classification/vit-base-p16_ft-8xb128-coslr-100e_in1k.py
-        Weights:
+        Weights: https://download.openmmlab.com/mmselfsup/1.x/eva/eva-mae-style_vit-base-p16_16xb256-coslr-400e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k_20221226-f61cf992.pth
       - Type: Image Classification
         Metadata:
           Epochs: 100
           Batch Size: 16384
         Results:
-          - Task: Linear-probing
+          - Task: Linear Evaluation
             Dataset: ImageNet-1k
             Metrics:
               Top 1 Accuracy: 69.0
         Config: configs/selfsup/eva/classification/vit-base-p16_linear-8xb2048-coslr-100e_in1k.py
-        Weights:
+        Weights: https://download.openmmlab.com/mmselfsup/1.x/eva/eva-mae-style_vit-base-p16_16xb256-coslr-400e_in1k/vit-base-p16_linear-8xb2048-coslr-100e_in1k/vit-base-p16_linear-8xb2048-coslr-100e_in1k_20221226-ef51bf09.pth
