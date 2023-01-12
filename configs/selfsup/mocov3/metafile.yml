@@ -93,7 +93,7 @@ Models:
             Dataset: ImageNet-1k
             Metrics:
               Top 1 Accuracy: 73.6
-        Config: configs/benchmarks/classification/imagenet/vit-small-p16_linear-8xb128-coslr-90e.py
+        Config: configs/benchmarks/classification/imagenet/vit-small-p16_linear-8xb128-coslr-90e_in1k.py
         Weights: https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_vit-small-p16_16xb256-amp-coslr-300e_in1k/vit-small-p16_linear-8xb128-coslr-90e_in1k/vit-small-p16_linear-8xb128-coslr-90e_in1k_20220826-376674ef.pth
   - Name: mocov3_vit-base-p16_16xb256-amp-coslr-300e_in1k
     In Collection: MoCoV3
@@ -113,7 +113,7 @@ Models:
             Dataset: ImageNet-1k
             Metrics:
               Top 1 Accuracy: 76.9
-        Config: configs/benchmarks/classification/imagenet/vit-base-p16_linear-8xb128-coslr-90e.py
+        Config: configs/benchmarks/classification/imagenet/vit-base-p16_linear-8xb128-coslr-90e_in1k.py
         Weights: https://download.openmmlab.com/mmselfsup/1.x/mocov3/mocov3_vit-base-p16_16xb256-amp-coslr-300e_in1k/vit-base-p16_linear-8xb128-coslr-90e_in1k/vit-base-p16_linear-8xb128-coslr-90e_in1k_20220826-83be7758.pth
       - Type: Image Classification
         Metadata:

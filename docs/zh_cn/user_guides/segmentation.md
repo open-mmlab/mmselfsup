@@ -1,23 +1,23 @@
-# Segmentation
+# 分割
 
-- [Segmentation](#segmentation)
-  - [Train](#train)
-  - [Test](#test)
+- [分割](#分割)
+  - [训练](#训练)
+  - [测试](#测试)
 
-For semantic segmentation task, we use MMSegmentation. First, make sure you have installed [MIM](https://github.com/open-mmlab/mim), which is also a project of OpenMMLab.
+对于语义分割任务我们使用 MMSegmentation。首先确保您已经安装了 [MIM](https://github.com/open-mmlab/mim)，这也是 OpenMMLab 的一个项目。
 
 ```shell
 pip install openmim
 mim install 'mmsegmentation>=1.0.0rc0'
 ```
 
-It is very easy to install the package.
+非常容易安装这个包。
 
-Besides, please refer to MMSegmentation for [installation](https://mmsegmentation.readthedocs.io/en/dev-1.x/get_started.html) and [data preparation](https://mmsegmentation.readthedocs.io/en/dev-1.x/user_guides/2_dataset_prepare.html).
+此外，请参考 MMSegmentation 的[安装](https://mmsegmentation.readthedocs.io/en/dev-1.x/get_started.html)和[数据准备](https://mmsegmentation.readthedocs.io/en/dev-1.x/user_guides/2_dataset_prepare.html)。
 
-## Train
+## 训练
 
-After installation, you can run MMSeg with simple command.
+在安装完后，可以使用如下简单命令运行 MMSegmentation。
 
 ```shell
 # distributed version
@@ -27,21 +27,20 @@ bash tools/benchmarks/mmsegmentation/mim_dist_train.sh ${CONFIG} ${PRETRAIN} ${G
 bash tools/benchmarks/mmsegmentation/mim_slurm_train.sh ${PARTITION} ${CONFIG} ${PRETRAIN}
 ```
 
-Remarks:
+备注:
 
-- `CONFIG`: Use config files under `configs/benchmarks/mmsegmentation/`. Since repositories of OpenMMLab have support referring config files across different
-  repositories, we can easily leverage the configs from MMSegmentation like:
+- `${CONFIG}`：使用`configs/benchmarks/mmsegmentation/`下的配置文件。由于 OpenMMLab 的算法库支持跨不同存储库引用配置文件，因此我们可以轻松使用 MMSegmentation 的配置文件，例如：
 
 ```shell
 _base_ = 'mmseg::fcn/fcn_r50-d8_4xb2-40k_cityscapes-769x769.py'
 ```
 
-Writing your config files from scratch is also supported.
+从头开始写您的配置文件也是支持的。
 
-- `PRETRAIN`: the pre-trained model file.
-- `GPUS`: The number of GPUs that you want to use to train. We adopt 4 GPUs for segmentation tasks by default.
+- `${PARTITION}`：预训练模型文件
+- `${GPUS}`: 您想用于训练的 GPU 数量，对于分割任务，我们默认采用 4 块 GPU。
 
-Example:
+例子：
 
 ```shell
 bash ./tools/benchmarks/mmsegmentation/mim_dist_train.sh \
@@ -49,9 +48,9 @@ configs/benchmarks/mmsegmentation/voc12aug/fcn_r50-d8_4xb4-20k_voc12aug-512x512.
 https://download.openmmlab.com/mmselfsup/1.x/byol/byol_resnet50_16xb256-coslr-200e_in1k/byol_resnet50_16xb256-coslr-200e_in1k_20220825-de817331.pth 4
 ```
 
-## Test
+## 测试
 
-After training, you can also run the command below to test your model.
+在训练之后，您可以运行如下命令测试您的模型。
 
 ```shell
 # distributed version
@@ -61,11 +60,11 @@ bash tools/benchmarks/mmsegmentation/mim_dist_test.sh ${CONFIG} ${CHECKPOINT} ${
 bash tools/benchmarks/mmsegmentation/mim_slurm_test.sh ${PARTITION} ${CONFIG} ${CHECKPOINT}
 ```
 
-Remarks:
+备注：
 
-- `CHECKPOINT`: The well-trained segmentation model that you want to test.
+- `${CHECKPOINT}`：您想测试的训练好的分割模型。
 
-Example:
+例子：
 
 ```shell
 bash ./tools/benchmarks/mmsegmentation/mim_dist_test.sh \

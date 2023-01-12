@@ -19,6 +19,9 @@ class CAE(BaseModel):
         backbone (dict): Config dict for module of backbone.
         neck (dict): Config dict for module of neck.
         head (dict): Config dict for module of head functions.
+        target_generator: (dict, optional): The target_generator module to
+            generate targets for self-supervised learning optimization, such as
+            HOG, extracted features from other modules(DALL-E, CLIP), etc.
         base_momentum (float): The base momentum coefficient for the target
             network. Defaults to 0.0.
         data_preprocessor (dict, optional): The config for preprocessing
@@ -34,6 +37,7 @@ class CAE(BaseModel):
                  backbone: dict,
                  neck: dict,
                  head: dict,
+                 target_generator: Optional[dict] = None,
                  base_momentum: float = 0.0,
                  data_preprocessor: Optional[dict] = None,
                  init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
@@ -41,6 +45,7 @@ class CAE(BaseModel):
             backbone=backbone,
             neck=neck,
             head=head,
+            target_generator=target_generator,
             data_preprocessor=data_preprocessor,
             init_cfg=init_cfg)
 
@@ -107,7 +112,8 @@ class CAE(BaseModel):
 
         logits = logits.view(-1, logits.shape[-1])
         # inputs[1] is the target image
-        loss_main, loss_align = self.head(logits, inputs[1], latent_pred,
+        logits_target = self.target_generator(inputs[1])
+        loss_main, loss_align = self.head(logits, logits_target, latent_pred,
                                           latent_target, mask)
         losses = dict()
 

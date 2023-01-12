@@ -65,15 +65,18 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
 ## 更新
 
-**v1.0.0rc3** 版本已经在 2022.12.07 发布。
+**v1.0.0rc5** 版本已经在 2022.12.30 发布。
+
+- 支持了 `BEiT v2`, `MixMIM`, `EVA`
+- 支持了模型分析工具 `ShapeBias`
+- 添加 FGIA ACCV 2022 比赛第一名方案
+- 重构了 `t-SNE`
+
+**v1.0.0rc4** 版本已经在 2022.12.07 发布。
 
 - 支持 BEiT 和 MILAN 预训练
 - 支持 low-level 重建可视化
 - 更新模型库算法页面文档
-
-**v1.0.0rc3** 版本已经在 2022.11.01 发布。
-
-- 支持 MaskFeat
 
 请参考 [更新日志](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/notes/changelog.html) 获取更多细节和历史版本信息。
 
@@ -137,6 +140,8 @@ Useful Tools
 - [x] [CAE (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/cae)
 - [x] [MILAN (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/milan)
 - [x] [BEiT v2 (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/beitv2)
+- [x] [EVA (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/eva)
+- [x] [MixMIM (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mixmim)
 
 更多的算法实现已经在我们的计划中。
 

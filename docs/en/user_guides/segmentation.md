@@ -29,7 +29,7 @@ bash tools/benchmarks/mmsegmentation/mim_slurm_train.sh ${PARTITION} ${CONFIG} $
 
 Remarks:
 
-- `CONFIG`: Use config files under `configs/benchmarks/mmsegmentation/`. Since repositories of OpenMMLab have support referring config files across different
+- `${CONFIG}`: Use config files under `configs/benchmarks/mmsegmentation/`. Since repositories of OpenMMLab have support referring config files across different
   repositories, we can easily leverage the configs from MMSegmentation like:
 
 ```shell
@@ -38,8 +38,8 @@ _base_ = 'mmseg::fcn/fcn_r50-d8_4xb2-40k_cityscapes-769x769.py'
 
 Writing your config files from scratch is also supported.
 
-- `PRETRAIN`: the pre-trained model file.
-- `GPUS`: The number of GPUs that you want to use to train. We adopt 4 GPUs for segmentation tasks by default.
+- `${PRETRAIN}`: the pre-trained model file.
+- `${GPUS}`: The number of GPUs that you want to use to train. We adopt 4 GPUs for segmentation tasks by default.
 
 Example:
 
@@ -63,7 +63,7 @@ bash tools/benchmarks/mmsegmentation/mim_slurm_test.sh ${PARTITION} ${CONFIG} ${
 
 Remarks:
 
-- `CHECKPOINT`: The well-trained segmentation model that you want to test.
+- `${CHECKPOINT}`: The well-trained segmentation model that you want to test.
 
 Example:
 
