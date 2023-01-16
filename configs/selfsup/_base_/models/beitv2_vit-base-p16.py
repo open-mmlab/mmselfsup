@@ -56,4 +56,7 @@ model = dict(
         type='VQKD',
         encoder_config=vqkd_encoder,
         init_cfg=dict(
-            type='Pretrained', checkpoint='beit_ckpt/vqkd_encoder.pth')))
+            type='Pretrained',
+            checkpoint=  # noqa
+            'https://download.openmmlab.com/mmselfsup/1.x/target_generator_ckpt/vqkd_encoder.pth'  # noqa
+        )))

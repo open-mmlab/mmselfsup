@@ -1,4 +1,4 @@
-# BEiT
+# BEiT v2
 
 > [BEiT v2: Masked Image Modeling with Vector-Quantized Visual Tokenizers](https://arxiv.org/abs/2208.06366)
 
@@ -13,6 +13,8 @@ Masked image modeling (MIM) has demonstrated impressive results in self-supervis
 </div>
 
 ## Models and Benchmarks
+
+You could download **VQ-KD** model from this [link](https://download.openmmlab.com/mmselfsup/1.x/target_generator_ckpt/vqkd_encoder.pth).
 
 Here, we report the results of the model on ImageNet, the details are below:
 
