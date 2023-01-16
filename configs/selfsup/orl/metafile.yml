@@ -11,3 +11,16 @@ Collections:
         URL: https://arxiv.org/abs/2106.11952
         Title: "Unsupervised Object-Level Representation Learning from Scene Images"
     README: configs/selfsup/ORL/README.md
+Models:
+  - Name: orl_resnet50_8xb64-coslr-800e_coco
+    In Collection: ORL
+    Metadata:
+      Epochs: 800
+      Batch Size: 512
+    Results:
+      - Task: Self-Supervised Low-shot Image Classification
+        Dataset: VOC07
+        Metrics:
+          mAP: 42.25|51.81|63.46|72.16|77.86|81.17|83.73|84.59
+    Config: stage3/orl_resnet50_8xb64-coslr-800e_coco.py
+    Weights: https://drive.google.com/drive/folders/1oWzNZpoN_SPc56Gr-l3AlgGSv8jG1izG?usp=sharing

@@ -123,41 +123,11 @@ configs/selfsup/orl/stage3/orl_resnet50_8xb64-coslr-800e_coco.py \
 
 ## Models and Benchmarks
 
-Here, we report the results of the model, which is pre-trained on COCO train2017, the details are below:
+Here, we report the Low-shot image classification results of the model, which is pre-trained on COCO train2017, we report mAP for each case across five runs and the details are below:
 
-<table class="docutils">
-<thead>
-  <tr>
-	    <th rowspan="2">Algorithm</th>
-	    <th rowspan="2">Backbone</th>
-	    <th rowspan="2">Epoch</th>
-      <th rowspan="2">Batch Size</th>
-      <th colspan="2" align="center">Results (Top-1 %)</th>
-      <th colspan="3" align="center">Links</th>
-	</tr>
-	<tr>
-      <th>Linear Eval</th>
-      <th>Fine-tuning</th>
-      <th>Pretrain</th>
-      <th>Linear Eval</th>
-      <th>Fine-tuning</th>
-	</tr>
-  </thead>
-  <tbody>
-  <tr>
-      <td rowspan="1">ORL</td>
-	    <td>ResNet50</td>
-	    <td>800</td>
-      <td>512</td>
-      <td>/</td>
-      <td>/</td>
-      <td><a href='https://github.com/zhaozh10/mmselfsup/blob/2b14f8b06e4ba2596e90f19e4bac0c13757d80f7/configs/selfsup/orl/stage1/orl_resnet50_8xb64-coslr-800e_coco.py'>stage 1 config</a> |
-      <a herf='https://github.com/zhaozh10/mmselfsup/blob/2b14f8b06e4ba2596e90f19e4bac0c13757d80f7/configs/selfsup/orl/stage2/selective_search.py'>stage 2 Roi generate</a> | <a herf='https://github.com/zhaozh10/mmselfsup/blob/2b14f8b06e4ba2596e90f19e4bac0c13757d80f7/configs/selfsup/orl/stage2/correspondence.py'>stage 2 Roi pair</a> |<a href='https://github.com/zhaozh10/mmselfsup/blob/2b14f8b06e4ba2596e90f19e4bac0c13757d80f7/configs/selfsup/orl/stage3/orl_resnet50_8xb64-coslr-800e_coco.py'> stage 3 config</a> </td>
-      <td>/</td>
-      <td>/</td>
-	</tr>
-</tbody>
-</table>
+| Self-Supervised Config                                                                                                                                                                            | Best Layer | Weight                                                                                              | k=1   | k=2   | k=4   | k=8   | k=16  | k=32  | k=64  | k=96  |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | --------------------------------------------------------------------------------------------------- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
+| [stage3/orl_resnet50_8xb64-coslr-800e_coco](https://github.com/zhaozh10/mmselfsup/blob/2b14f8b06e4ba2596e90f19e4bac0c13757d80f7/configs/selfsup/orl/stage3/orl_resnet50_8xb64-coslr-800e_coco.py) | feature5   | [Pre-trained](https://drive.google.com/drive/folders/1oWzNZpoN_SPc56Gr-l3AlgGSv8jG1izG?usp=sharing) | 42.25 | 51.81 | 63.46 | 72.16 | 77.86 | 81.17 | 83.73 | 84.59 |
 
 ## Citation
 
