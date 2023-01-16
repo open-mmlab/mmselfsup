@@ -1,19 +1,19 @@
-# 添加转换
+# 数据变换
 
 在本教程中, 我们将介绍创建自定义转换的基本步骤。在学习创建自定义转换之前, 建议先了解文件 [transforms.md](transforms.md) 中转换的基本概念。
 
-- [添加转换](#add-transforms)
-  - [管道概述](#overview-of-pipeline)
-  - [在管道中创建新转换](#creating-a-new-transform-in-pipeline)
-    - [步骤 1：创建转换](#step-1-creating-the-transform)
-    - [步骤 2：将新转换添加到\_\_init\_\_py](#step-2-add-newtransform-to-__init__py)
-    - [步骤 3：修改配置文件](#step-3-modify-the-config-file)
+- [数据变换](#数据变换)
+  - [管道概述](#管道概述)
+  - [在管道中创建新转换](#在管道中创建新转换)
+    - [步骤 1: 创建转换](#步骤-1:-创建转换)
+    - [步骤 2: 将新转换添加到\_\_init\_\_py](#步骤-2:-将新转换添加到\_\_init\_\_py)
+    - [步骤 3: 修改配置文件](#步骤-3:-修改配置文件)
 
 ## 管道概述
 
-在 `Dataset` 中, `Pipeline` 是中的一个重要组件, 主要负责对图像应用一系列数据增强, 例如：`RandomResizedCrop`, `RandomFlip` 等操作。
+在 `Dataset` 中, `Pipeline` 是中的一个重要组件, 主要负责对图像应用一系列数据增强, 例如: `RandomResizedCrop`, `RandomFlip` 等操作。
 
-以下代码是 `Pipeline` 用于 `SimCLR` 训练的配置示例：
+以下代码是 `Pipeline` 用于 `SimCLR` 训练的配置示例:
 
 ```python
 view_pipeline = [
@@ -51,7 +51,7 @@ train_pipeline = [
 
 以下是创建新转换的步骤。
 
-### 步骤 1：创建转换
+### 步骤 1: 创建转换
 
 在 [processing.py](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/mmselfsup/datasets/transforms/processing.py) 中编写一个新的转换类, 并在类中覆盖这个 `transform` 函数, 这个函数接收一个 `dict` 的对象, 并返回一个 `dict` 对象
 
@@ -68,7 +68,7 @@ class NewTransform(BaseTransform):
 
 **注意**: 对于这些转换的实现, 您可以在 [mmcv](https://github.com/open-mmlab/mmcv/tree/dev-2.x/mmcv/image) 中应用。
 
-### 步骤 2：将新转换添加到 \_\_init\_\_py
+### 步骤 2: 将新转换添加到 \_\_init\_\_py
 
 然后, 将转换添加到 [\_\_init\_\_.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/__init__.py) 。
 
@@ -81,7 +81,7 @@ __all__ = [
 ]
 ```
 
-### 步骤 3：修改配置文件
+### 步骤 3: 修改配置文件
 
 要使用新添加的 `NewTransform`, 你可以按以下的方式修改配置文件:
 
