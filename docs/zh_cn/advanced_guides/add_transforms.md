@@ -5,9 +5,9 @@
 - [添加数据变换](#添加数据变换)
   - [管道概述](#管道概述)
   - [在管道中创建新转换](#在管道中创建新转换)
-    - [步骤 1: 创建转换](#步骤-1:-创建转换)
-    - [步骤 2: 将新转换添加到\_\_init\_\_py](#步骤-2:-将新转换添加到\_\_init\_\_py)
-    - [步骤 3: 修改配置文件](#步骤-3:-修改配置文件)
+    - [步骤 1: 创建转换](#步骤-1-创建转换)
+    - [步骤 2: 将新转换添加到 \_\_init\_\_py](#步骤-2-将新转换添加到-__init__py)
+    - [步骤 3: 修改配置文件](#步骤-3-修改配置文件)
 
 ## 管道概述
 
@@ -66,11 +66,11 @@ class NewTransform(BaseTransform):
         return results
 ```
 
-**注意**: 对于这些转换的实现, 您可以在 [mmcv](https://github.com/open-mmlab/mmcv/tree/dev-2.x/mmcv/image) 中应用。
+**注意**: 对于这些转换的实现, 您可以应用 [mmcv](https://github.com/open-mmlab/mmcv/tree/2.x/mmcv/image) 中的函数。
 
 ### 步骤 2: 将新转换添加到 \_\_init\_\_py
 
-然后, 将转换添加到 [\_\_init\_\_.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/__init__.py) 。
+然后, 将转换添加到 [\_\_init\_\_.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/datasets/transforms/__init__.py) 。
 
 ```python
 ...
