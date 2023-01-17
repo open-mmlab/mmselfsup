@@ -10,10 +10,13 @@ model = dict(
         std=[57.375, 57.375, 57.375],
         format_shape='NCTHW'),
     backbone=dict(
-        type='MaskFeatMViT', arch='maskfeat-small', drop_path_rate=0.0),
+        type='MaskFeatMViT',
+        arch='maskfeat-small',
+        drop_path_rate=0.0,
+        dim_mul_in_attention=False),
     neck=dict(
         type='LinearNeck',
-        in_channels=384,
+        in_channels=768,
         out_channels=108,
         with_avg_pool=False,
         init_cfg=dict(type='TruncNormal', layer='Linear', std=0.02, bias=0)),

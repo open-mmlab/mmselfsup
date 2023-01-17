@@ -18,13 +18,15 @@ class MaskFeatMViT(MViT):
             'embed_dims': 96,
             'num_layers': 16,
             'num_heads': 1,
-            'downscale_indices': [1, 3]
+            'downscale_indices': [1, 3],
+            'dim_mul_indices': [1, 3, 14]
         },
         'maskfeat-large': {
             'embed_dims': 144,
             'num_layers': 48,
             'num_heads': 2,
-            'downscale_indices': [2, 8]
+            'downscale_indices': [2, 8],
+            'dim_mul_indices': [2, 8, 44]
         },
     }
 

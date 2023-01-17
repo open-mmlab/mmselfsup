@@ -4,6 +4,12 @@ _base_ = [
 ]
 
 model = dict(
+    backbone=dict(
+        drop_path_rate=0.1,
+        dim_mul_in_attention=False,
+        pretrained=None,
+        pretrained_type='maskfeat',
+    ),
     data_preprocessor=dict(
         type='ActionDataPreprocessor',
         mean=[114.75, 114.75, 114.75],
@@ -14,7 +20,8 @@ model = dict(
                 dict(type='MixupBlending', alpha=0.8, num_classes=400),
                 dict(type='CutmixBlending', alpha=1, num_classes=400)
             ]),
-        format_shape='NCTHW'), )
+        format_shape='NCTHW'),
+    cls_head=dict(dropout_ratio=0., init_scale=0.001))
 
 # dataset settings
 dataset_type = 'VideoDataset'
@@ -24,17 +31,13 @@ ann_file_train = 's3://openmmlab/datasets/action/Kinetics400/kinetics400_train_l
 ann_file_val = 's3://openmmlab/datasets/action/Kinetics400/kinetics400_val_list_videos.txt'  # noqa
 ann_file_test = 's3://openmmlab/datasets/action/Kinetics400/kinetics400_val_list_videos.txt'  # noqa
 
-file_client_args = dict(io_backend='disk')
+file_client_args = dict(io_backend='petrel')
 train_pipeline = [
     dict(type='DecordInit', **file_client_args),
     dict(type='SampleFrames', clip_len=16, frame_interval=4, num_clips=1),
     dict(type='DecordDecode'),
     dict(type='Resize', scale=(-1, 256)),
-    dict(
-        type='PytorchVideoWrapper',
-        op='RandAugment',
-        magnitude=7,
-        num_layers=4),
+    dict(type='PytorchVideoWrapper', op='RandAugment', magnitude=7),
     dict(type='RandomResizedCrop'),
     dict(type='Resize', scale=(224, 224), keep_ratio=False),
     dict(type='Flip', flip_ratio=0.5),
@@ -71,13 +74,16 @@ test_pipeline = [
     dict(type='PackActionInputs')
 ]
 
+repeat_sample = 2
 train_dataloader = dict(
-    batch_size=16,
+    batch_size=8,
     num_workers=8,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
+    collate_fn=dict(type='repeat_pseudo_collate'),
     dataset=dict(
-        type=dataset_type,
+        type='RepeatAugDataset',
+        num_repeats=repeat_sample,
         ann_file=ann_file_train,
         data_prefix=dict(video=data_root),
         pipeline=train_pipeline))
@@ -108,20 +114,26 @@ val_evaluator = dict(type='AccMetric')
 test_evaluator = val_evaluator
 
 train_cfg = dict(
-    type='EpochBasedTrainLoop', max_epochs=100, val_begin=1, val_interval=3)
+    type='EpochBasedTrainLoop', max_epochs=100, val_begin=1, val_interval=1)
 val_cfg = dict(type='ValLoop')
 test_cfg = dict(type='TestLoop')
 
-base_lr = 1.6e-3
+base_lr = 9.6e-3
 optim_wrapper = dict(
-    type='AmpOptimWrapper',
     optimizer=dict(
-        type='AdamW', lr=base_lr, betas=(0.9, 0.999), weight_decay=0.05))
+        type='AdamW', lr=base_lr, betas=(0.9, 0.999), weight_decay=0.05),
+    constructor='LearningRateDecayOptimizerConstructor',
+    paramwise_cfg={
+        'decay_rate': 0.75,
+        'decay_type': 'layer_wise',
+        'num_layers': 16
+    },
+    clip_grad=dict(max_norm=5, norm_type=2))
 
 param_scheduler = [
     dict(
         type='LinearLR',
-        start_factor=1e-4,
+        start_factor=1 / 600,
         by_epoch=True,
         begin=0,
         end=20,
@@ -129,7 +141,7 @@ param_scheduler = [
     dict(
         type='CosineAnnealingLR',
         T_max=80,
-        eta_min=1e-6,
+        eta_min_ratio=1 / 600,
         by_epoch=True,
         begin=20,
         end=100,
@@ -137,4 +149,10 @@ param_scheduler = [
 ]
 
 default_hooks = dict(
-    checkpoint=dict(interval=1, max_keep_ckpts=2), logger=dict(interval=100))
+    checkpoint=dict(interval=3, max_keep_ckpts=20), logger=dict(interval=100))
+
+# Default setting for scaling LR automatically
+#   - `enable` means enable scaling LR automatically
+#       or not by default.
+#   - `base_batch_size` = (8 GPUs) x (8 samples per GPU).
+auto_scale_lr = dict(enable=True, base_batch_size=512 // repeat_sample)
