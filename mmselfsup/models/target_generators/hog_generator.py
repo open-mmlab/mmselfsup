@@ -35,8 +35,8 @@ class HOGGenerator(BaseModule):
         self.pool = pool
         self.pi = math.pi
         weight_x = torch.FloatTensor([[1, 0, -1], [2, 0, -2], [1, 0, -1]])
-        weight_x = weight_x.view(1, 1, 3, 3).repeat(3, 1, 1, 1)
-        weight_y = weight_x.transpose(2, 3)
+        weight_x = weight_x.view(1, 1, 3, 3).repeat(3, 1, 1, 1).contiguous()
+        weight_y = weight_x.transpose(2, 3).contiguous()
         self.register_buffer('weight_x', weight_x)
         self.register_buffer('weight_y', weight_y)
 

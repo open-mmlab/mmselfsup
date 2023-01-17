@@ -10,9 +10,7 @@ model = dict(
         std=[57.375, 57.375, 57.375],
         format_shape='NCTHW'),
     backbone=dict(
-        type='MaskFeatMViT',
-        arch='maskfeat-small',
-        drop_path_rate=0.0),
+        type='MaskFeatMViT', arch='maskfeat-small', drop_path_rate=0.0),
     neck=dict(
         type='LinearNeck',
         in_channels=384,
@@ -28,7 +26,7 @@ model = dict(
 # dataset settings
 dataset_type = 'mmaction.VideoDataset'
 data_root = 's3://openmmlab/datasets/action/Kinetics400/videos_train'
-ann_file_train = 's3://openmmlab/datasets/action/Kinetics400/kinetics400_train_list_videos.txt'
+ann_file_train = 's3://openmmlab/datasets/action/Kinetics400/kinetics400_train_list_videos.txt'  # noqa
 
 file_client_args = dict(io_backend='petrel')
 train_pipeline = [
@@ -96,7 +94,6 @@ param_scheduler = [
         end=300,
         convert_to_iter_based=True)
 ]
-
 
 train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=300)
 default_hooks = dict(
