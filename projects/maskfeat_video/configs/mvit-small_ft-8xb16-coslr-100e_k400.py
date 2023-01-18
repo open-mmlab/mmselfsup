@@ -65,7 +65,7 @@ test_pipeline = [
         type='SampleFrames',
         clip_len=16,
         frame_interval=4,
-        num_clips=5,
+        num_clips=10,
         test_mode=True),
     dict(type='DecordDecode'),
     dict(type='Resize', scale=(-1, 224)),
@@ -76,7 +76,7 @@ test_pipeline = [
 
 repeat_sample = 2
 train_dataloader = dict(
-    batch_size=8,
+    batch_size=16,
     num_workers=8,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
@@ -88,7 +88,7 @@ train_dataloader = dict(
         data_prefix=dict(video=data_root),
         pipeline=train_pipeline))
 val_dataloader = dict(
-    batch_size=8,
+    batch_size=16,
     num_workers=8,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=False),

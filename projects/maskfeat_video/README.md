@@ -1,8 +1,6 @@
-# Dummy MAE Wrapper
+# MaskFeat Pre-training with Video
 
-This is an example README for community `projects/`. We have provided detailed explanations for each field in the form of html comments, which are visible when you read the source of this README file. If you wish to submit your project to our main repository, then all the fields in this README are mandatory for others to understand what you have achieved in this implementation.
-
-- [Dummy MAE Wrapper](#dummy-mae-wrapper)
+- [MaskFeat Pre-training with Video](#maskfeat-pre-training-with-video)
   - [Description](#description)
   - [Usage](#usage)
     - [Setup Environment](#setup-environment)
@@ -12,6 +10,8 @@ This is an example README for community `projects/`. We have provided detailed e
       - [On Multiple GPUs](#on-multiple-gpus)
       - [On Multiple GPUs with Slurm](#on-multiple-gpus-with-slurm)
     - [Downstream Tasks Commands](#downstream-tasks-commands)
+      - [On Multiple GPUs](#on-multiple-gpus-1)
+      - [On Multiple GPUs with Slurm](#on-multiple-gpus-with-slurm-1)
   - [Results](#results)
   - [Citation](#citation)
   - [Checklist](#checklist)
@@ -22,7 +22,9 @@ This is an example README for community `projects/`. We have provided detailed e
 Author: @xxx.
 This is an implementation of \[XXX\]. -->
 
-This project implements a dummy MAE wrapper, which prints "Welcome to MMSelfSup" during initialization.
+Author: @fangyixiao18
+
+This is the implementation of MaskFeat with video dataset, like `Kinetics400`.
 
 ## Usage
 
@@ -30,27 +32,22 @@ This project implements a dummy MAE wrapper, which prints "Welcome to MMSelfSup"
 
 ### Setup Environment
 
-Please refer to [Get Started](https://mmselfsup.readthedocs.io/en/1.x/get_started.html) documentation of MMSelfSup.
+Requirements:
+
+- MMSelfSup dev-1.x branch
+- MMAction2 dev-1.x branch
+
+Please refer to [Get Started](https://mmselfsup.readthedocs.io/en/1.x/get_started.html) documentation of MMSelfSup to finish installation.
+
+Besides, to process the video data, we apply MMAction2. The instruction to install MMAction2 can be found in [Get Started documentation](https://mmaction2.readthedocs.io/en/1.x/get_started.html).
 
 ### Data Preparation
 
-To show the dataset directory or provide the commands for dataset preparation if needed.
-
-For example:
-
-```text
-data/
-└── imagenet
-    ├── train
-    ├── val
-    └── meta
-        ├── train.txt
-        └── val.txt
-```
+You can refer to the [documentation](https://mmaction2.readthedocs.io/en/1.x/user_guides/2_data_prepare.html) in MMAction2.
 
 ### Pre-training Commands
 
-At first, you need to add the current folder to `PYTHONPATH`, so that Python can find your model files. In `example_project/` root directory, please run command below to add it.
+At first, you need to add the current folder to `PYTHONPATH`, so that Python can find your model files. In `projects/maskfeat_video/` root directory, please run command below to add it.
 
 ```shell
 export PYTHONPATH=`pwd`:$PYTHONPATH
@@ -61,19 +58,19 @@ Then run the following commands to train the model:
 #### On Local Single GPU
 
 ```bash
-mim train mmselfsup $CONFIG --work-dir $WORK_DIR
+mim train mmselfsup ${CONFIG} --work-dir ${WORK_DIR}
 
 # a specific command example
-mim train mmselfsup configs/dummy-mae_vit-base-p16_8xb512-amp-coslr-300e_in1k.py \
-    --work-dir work_dirs/dummy_mae/
+mim train mmselfsup configs/maskfeat_mvit-small_8xb32-amp-coslr-300e_k400.py \
+    --work-dir work_dirs/selfsup/maskfeat_mvit-small_8xb32-amp-coslr-300e_k400/20230117_training/
 ```
 
 #### On Multiple GPUs
 
 ```bash
 # a specific command examples, 8 GPUs here
-mim train mmselfsup configs/dummy-mae_vit-base-p16_8xb512-amp-coslr-300e_in1k.py \
-    --work-dir work_dirs/dummy_mae/ \
+mim train mmselfsup configs/maskfeat_mvit-small_8xb32-amp-coslr-300e_k400.py \
+    --work-dir work_dirs/selfsup/maskfeat_mvit-small_8xb32-amp-coslr-300e_k400/20230117_training/ \
     --launcher pytorch --gpus 8
 ```
 
@@ -85,11 +82,10 @@ Note:
 #### On Multiple GPUs with Slurm
 
 ```bash
-# a specific command example: 16 GPUs in 2 nodes
-mim train mmselfsup configs/dummy-mae_vit-base-p16_8xb512-amp-coslr-300e_in1k.py \
-    --work-dir work_dirs/dummy_mae/ \
+mim train mmselfsup configs/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400.py \
+    --work-dir ${WORK_DIR} \
     --launcher slurm --gpus 16 --gpus-per-node 8 \
-    --partition $PARTITION
+    --partition ${PARTITION}
 ```
 
 Note:
@@ -100,20 +96,39 @@ Note:
 
 ### Downstream Tasks Commands
 
-In MMSelfSup's root directory, run the following command to train the downstream model:
+To evaluate the MViT pretrained with MaskFeat, we recommend to run MMAction2:
+
+#### On Multiple GPUs
 
 ```bash
-mim train mmcls $CONFIG \
-    --work-dir $WORK_DIR \
+mim train mmaction2 ${CONFIG} \
+    --work-dir ${WORK_DIR} \
     --launcher pytorch -gpus 8 \
+    --cfg-options model.backbone.init_cfg.type=Pretrained \
+    model.backbone.init_cfg.checkpoint=${CHECKPOINT} \
+    model.backbone.init_cfg.prefix="backbone." \
+    ${PY_ARGS}
     [optional args]
 
 # a specific command example
-mim train mmcls configs/vit-base-p16_ft-8xb128-coslr-100e_in1k.py \
-    --work-dir work_dirs/dummy_mae/classification/
+mim train mmaction2 configs/mvit-small_ft-8xb8-coslr-100e_k400.py \
+    --work-dir work_dirs/benchmarks/maskfeat/20230117_training_maskfeat-mvit-k400/ \
     --launcher pytorch -gpus 8 \
     --cfg-options model.backbone.init_cfg.type=Pretrained \
-    model.backbone.init_cfg.checkpoint=https://download.openmmlab.com/mmselfsup/1.x/mae/mae_vit-base-p16_8xb512-fp16-coslr-300e_in1k/mae_vit-base-p16_8xb512-coslr-300e-fp16_in1k_20220829-c2cf66ba.pth \
+    model.backbone.init_cfg.checkpoint=work_dirs/selfsup/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/20230117_traning/epoch_300.pth \
+    model.backbone.init_cfg.prefix="backbone." \
+    $PY_ARGS
+```
+
+#### On Multiple GPUs with Slurm
+
+```bash
+mim train mmaction2 ${CONFIG} \
+    --work-dir ${WORK_DIR} \
+    --launcher pytorch --gpus 8 --gpus-per-node 8 \
+    --partition ${PARTITION} \
+    --cfg-options model.backbone.init_cfg.type=Pretrained \
+    model.backbone.init_cfg.checkpoint=$CHECKPOINT \
     model.backbone.init_cfg.prefix="backbone." \
     $PY_ARGS
 ```
@@ -122,19 +137,15 @@ Note:
 
 - CONFIG: the config files under the directory `configs/`
 - WORK_DIR: the working directory to save configs, logs, and checkpoints
+- PARTITION: the slurm partition you are using
 - CHECKPOINT: the pretrained checkpoint of MMSelfSup saved in working directory, like `$WORK_DIR/epoch_300.pth`
 - PY_ARGS: other optional args
 
 ## Results
 
-<!-- List the results as usually done in other model's README. [Example](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/mae/README.md#models-and-benchmarks)
-You should claim whether this is based on the pre-trained weights, which are converted from the official release; or it's a reproduced result obtained from retraining the model in this project. -->
+<!-- You should claim whether this is based on the pre-trained weights, which are converted from the official release; or it's a reproduced result obtained from retraining the model in this project. -->
 
-If you have any downstream task results, you could list them here.
-
-**For example:**
-
-The Linear Eval and Fine-tuning results are based on ImageNet dataset.
+The Fine-tuning results are based on `Kinetics400` dataset.
 
 <table class="docutils">
 <thead>
@@ -149,12 +160,12 @@ The Linear Eval and Fine-tuning results are based on ImageNet dataset.
   </thead>
   <tbody>
   <tr>
-      <td>MAE</td>
-	    <td>ViT-base</td>
+      <td>MaskFeat</td>
+	    <td>MViT-small</td>
 	    <td>300</td>
-      <td>4096</td>
-      <td>60.8</td>
-      <td>83.1</td>
+      <td>512</td>
+      <td></td>
+      <td></td>
 	</tr>
 </tbody>
 </table>
@@ -164,11 +175,11 @@ The Linear Eval and Fine-tuning results are based on ImageNet dataset.
 <!-- You may remove this section if not applicable. -->
 
 ```bibtex
-@misc{mmselfsup2021,
-    title={{MMSelfSup}: OpenMMLab Self-Supervised Learning Toolbox and Benchmark},
-    author={MMSelfSup Contributors},
-    howpublished={\url{https://github.com/open-mmlab/mmselfsup}},
-    year={2021}
+@InProceedings{wei2022masked,
+    author    = {Wei, Chen and Fan, Haoqi and Xie, Saining and Wu, Chao-Yuan and Yuille, Alan and Feichtenhofer, Christoph},
+    title     = {Masked Feature Prediction for Self-Supervised Visual Pre-Training},
+    booktitle = {CVPR},
+    year      = {2022},
 }
 ```
 
@@ -185,11 +196,11 @@ A project does not necessarily have to be finished in a single PR, but it's esse
 
 - [ ] Milestone 1: PR-ready, and acceptable to be one of the `projects/`.
 
-  - [ ] Finish the code
+  - [x] Finish the code
 
     <!-- The code's design shall follow existing interfaces and convention. For example, each model component should be registered into `MMSelfSup.registry.MODELS` and configurable via a config file. -->
 
-  - [ ] Basic docstrings & proper citation
+  - [x] Basic docstrings & proper citation
 
     <!-- Each major object should contain a docstring, describing its functionality and arguments. If you have adapted the code from other open-source projects, don't forget to cite the source project in docstring and make sure your behavior is not against its license. Typically, we do not accept any code snippet under GPL license. [A Short Guide to Open Source Licenses](https://medium.com/nationwide-technology/a-short-guide-to-open-source-licenses-cf5b1c329edd) -->
 
@@ -197,7 +208,7 @@ A project does not necessarily have to be finished in a single PR, but it's esse
 
     <!-- If you are reproducing the result from a paper, make sure your model's inference-time feature vectors or losses matches that from the original codes. The weights usually could be obtained by simply renaming the keys in the official pre-trained weights. This test could be skipped though, if you are able to prove the training-time correctness and check the second milestone. -->
 
-  - [ ] A full README
+  - [x] A full README
 
     <!-- As this template does. -->
 
@@ -221,7 +232,7 @@ A project does not necessarily have to be finished in a single PR, but it's esse
 
     <!-- Refactor your code according to reviewer's comment. -->
 
-  - [ ] Metafile.yml and README.md
+  - [ ] `metafile.yml` and `README.md`
 
     <!-- It will be parsed by MIM and Inferencer. [Example](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/mae/metafile.yml). In particular, you may have to refactor this README into a standard one. [Example](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/mae/README.md) -->
 
