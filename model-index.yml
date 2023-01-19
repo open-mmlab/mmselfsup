@@ -18,7 +18,7 @@ Import:
   - configs/selfsup/cae/metafile.yml
   - configs/selfsup/maskfeat/metafile.yml
   - configs/selfsup/beit/metafile.yml
-  - configs/selfsup/milan/metafile.yaml
+  - configs/selfsup/milan/metafile.yml
   - configs/selfsup/beitv2/metafile.yml
-  - configs/selfsup/eva/metafile.yaml
-  - configs/selfsup/mixmim/metafile.yaml
+  - configs/selfsup/eva/metafile.yml
+  - configs/selfsup/mixmim/metafile.yml
