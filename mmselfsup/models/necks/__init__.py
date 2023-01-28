@@ -13,10 +13,12 @@ from .odc_neck import ODCNeck
 from .relative_loc_neck import RelativeLocNeck
 from .simmim_neck import SimMIMNeck
 from .swav_neck import SwAVNeck
+from .greenmim_neck import GreenMIMNeck
+
 
 __all__ = [
     'AvgPool2dNeck', 'BEiTV2Neck', 'DenseCLNeck', 'LinearNeck', 'MoCoV2Neck',
     'NonLinearNeck', 'ODCNeck', 'RelativeLocNeck', 'SwAVNeck',
     'MAEPretrainDecoder', 'SimMIMNeck', 'CAENeck', 'MixMIMPretrainDecoder',
-    'ClsBatchNormNeck', 'MILANPretrainDecoder'
+    'ClsBatchNormNeck', 'MILANPretrainDecoder', 'GreenMIMNeck'
 ]
