@@ -109,7 +109,7 @@ html_theme_options = {
                 },
                 {
                     'name': 'MMSelfSup 1.x',
-                    'url': 'https://mmselfsup.readthedocs.io/en/dev-1.x/',
+                    'url': 'https://mmselfsup.readthedocs.io/en/1.x/',
                     'description': '1.x branch docs'
                 },
             ],

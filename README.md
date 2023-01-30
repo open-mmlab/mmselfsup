@@ -65,6 +65,8 @@ The master branch works with **PyTorch 1.6** or higher.
 
 ## What's New
 
+**The default branch has been switched to `1.x` from `master`, and we encourage users to migrate to the latest version, though it comes with some cost. Please refer to [Migration Guide](https://mmselfsup.readthedocs.io/en/1.x/migration.html) for more details.**
+
 MMSelfSup **v1.0.0rc5** was released in 30/12/2022.
 
 - Support `BEiT v2`, `MixMIM`, `EVA`.
