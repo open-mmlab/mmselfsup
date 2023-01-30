@@ -12,7 +12,7 @@
 ## Migration from MMSelfSup 0.x
 
 ```{warning}
-MMSelfSup 1.x depends on some new packages, you should create a new environment for MMSelfSup 1.x even if you have a well-rounded MMSelfSup 0.x environment before. Please refer to the [install tutorial](./get_started.md) for required packages installation. 
+MMSelfSup 1.x depends on some new packages, you should create a new environment for MMSelfSup 1.x even if you have a well-rounded MMSelfSup 0.x environment before. Please refer to the [install tutorial](./get_started.md) for required packages installation.
 ```
 
 We introduce some modifications of MMSelfSup 1.x, to help users to migrate their projects based on MMSelfSup 0.x to 1.x smoothly.

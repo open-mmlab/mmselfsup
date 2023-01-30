@@ -12,7 +12,7 @@
 ## 迁移自 MMSelfSup 0.x 版本
 
 ```{warning}
-MMSelfSup 1.x 版本依赖于一些新的代码包，您应该根据 [安装教程](./get_started.md) 来创建新的环境，尽管你可能已经拥有了一个可以正常运行 MMSelfSup 0.x 的环境。请参考[安装文档](./get_started.md) 对依赖库进行对应的安装。 
+MMSelfSup 1.x 版本依赖于一些新的代码包，您应该根据 [安装教程](./get_started.md) 来创建新的环境，尽管你可能已经拥有了一个可以正常运行 MMSelfSup 0.x 的环境。请参考[安装文档](./get_started.md) 对依赖库进行对应的安装。
 ```
 
 我们将介绍一些 MMSelfSup 1.x 版本的变换，帮助用户更顺利的将项目从 MMSelfSup 0.x 版本迁移到 1.x 版本。
