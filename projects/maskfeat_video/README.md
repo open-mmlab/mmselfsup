@@ -34,8 +34,8 @@ This is the implementation of MaskFeat with video dataset, like `Kinetics400`.
 
 Requirements:
 
-- MMSelfSup dev-1.x branch
-- MMAction2 dev-1.x branch
+- MMSelfSup >= 1.0.0rc6
+- MMAction2 >= 1.0.0rc3
 
 Please refer to [Get Started](https://mmselfsup.readthedocs.io/en/1.x/get_started.html) documentation of MMSelfSup to finish installation.
 
@@ -101,6 +101,7 @@ To evaluate the MViT pretrained with MaskFeat, we recommend to run MMAction2:
 #### On Multiple GPUs
 
 ```bash
+# command example for train
 mim train mmaction2 ${CONFIG} \
     --work-dir ${WORK_DIR} \
     --launcher pytorch -gpus 8 \
@@ -110,14 +111,19 @@ mim train mmaction2 ${CONFIG} \
     ${PY_ARGS}
     [optional args]
 
-# a specific command example
 mim train mmaction2 configs/mvit-small_ft-8xb8-coslr-100e_k400.py \
-    --work-dir work_dirs/benchmarks/maskfeat/20230117_training_maskfeat-mvit-k400/ \
+    --work-dir work_dirs/benchmarks/maskfeat/training_maskfeat-mvit-k400/ \
     --launcher pytorch -gpus 8 \
     --cfg-options model.backbone.init_cfg.type=Pretrained \
     model.backbone.init_cfg.checkpoint=work_dirs/selfsup/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/20230117_traning/epoch_300.pth \
     model.backbone.init_cfg.prefix="backbone." \
     $PY_ARGS
+
+# command example for test
+mim test mmaction2 configs/mvit-small_ft-8xb16-coslr-100e_k400.py \
+  --checkpoint https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/mvit-small_ft-8xb16-coslr-100e_k400/mvit-small_ft-8xb16-coslr-100e_k400_20230131-5e8303f5.pth \
+  --work-dir work_dirs/benchmarks/maskfeat/maskfeat-mvit-k400/test/ \
+  --launcher pytorch --gpus 8
 ```
 
 #### On Multiple GPUs with Slurm
@@ -125,11 +131,18 @@ mim train mmaction2 configs/mvit-small_ft-8xb8-coslr-100e_k400.py \
 ```bash
 mim train mmaction2 ${CONFIG} \
     --work-dir ${WORK_DIR} \
-    --launcher pytorch --gpus 8 --gpus-per-node 8 \
+    --launcher slurm --gpus 8 --gpus-per-node 8 \
     --partition ${PARTITION} \
     --cfg-options model.backbone.init_cfg.type=Pretrained \
     model.backbone.init_cfg.checkpoint=$CHECKPOINT \
     model.backbone.init_cfg.prefix="backbone." \
+    $PY_ARGS
+
+mim test mmaction2 ${CONFIG} \
+    --checkpoint https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/mvit-small_ft-8xb16-coslr-100e_k400/mvit-small_ft-8xb16-coslr-100e_k400_20230131-5e8303f5.pth
+    --work-dir ${WORK_DIR} \
+    --launcher slurm --gpus 8 --gpus-per-node 8 \
+    --partition ${PARTITION} \
     $PY_ARGS
 ```
 
@@ -145,7 +158,11 @@ Note:
 
 <!-- You should claim whether this is based on the pre-trained weights, which are converted from the official release; or it's a reproduced result obtained from retraining the model in this project. -->
 
-The Fine-tuning results are based on `Kinetics400` dataset.
+The Fine-tuning results are based on `Kinetics400(K400)` dataset.
+
+Due to the version of `K400` dataset, our pretraining, fine-tuning and the final test results are based on MMAction2 version, which is a little different from FAIR version.
+
+We also test the model on FAIR's `K400`, we got 82.1 test accuracy.
 
 <table class="docutils">
 <thead>
@@ -156,6 +173,7 @@ The Fine-tuning results are based on `Kinetics400` dataset.
       <th>Batch Size</th>
       <th>Linear Eval</th>
       <th>Fine-tuning</th>
+      <th colspan="3" align="center">Links</th>
 	</tr>
   </thead>
   <tbody>
@@ -164,8 +182,11 @@ The Fine-tuning results are based on `Kinetics400` dataset.
 	    <td>MViT-small</td>
 	    <td>300</td>
       <td>512</td>
-      <td></td>
-      <td></td>
+      <td>/</td>
+      <td>81.8</td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/projects/maskfeat_video/configs/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400_20230131-87d60b6f.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400_20230118_114151.json'>log</a></td>
+      <td>/</td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/projects/maskfeat_video/configs/mvit-small_ft-8xb16-coslr-100e_k400.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/mvit-small_ft-8xb16-coslr-100e_k400/mvit-small_ft-8xb16-coslr-100e_k400_20230131-5e8303f5.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/mvit-small_ft-8xb16-coslr-100e_k400/mvit-small_ft-8xb16-coslr-100e_k400_20230121_142927.json'>log</a></td>
 	</tr>
 </tbody>
 </table>
@@ -194,7 +215,7 @@ OpenMMLab's maintainer will review the code to ensure the project's quality. Rea
 Note that keeping this section up-to-date is crucial not only for this project's developers but the entire community, since there might be some other contributors joining this project and deciding their starting point from this list. It also helps maintainers accurately estimate time and effort on further code polishing, if needed.
 A project does not necessarily have to be finished in a single PR, but it's essential for the project to at least reach the first milestone in its very first PR. -->
 
-- [ ] Milestone 1: PR-ready, and acceptable to be one of the `projects/`.
+- [x] Milestone 1: PR-ready, and acceptable to be one of the `projects/`.
 
   - [x] Finish the code
 
@@ -204,7 +225,7 @@ A project does not necessarily have to be finished in a single PR, but it's esse
 
     <!-- Each major object should contain a docstring, describing its functionality and arguments. If you have adapted the code from other open-source projects, don't forget to cite the source project in docstring and make sure your behavior is not against its license. Typically, we do not accept any code snippet under GPL license. [A Short Guide to Open Source Licenses](https://medium.com/nationwide-technology/a-short-guide-to-open-source-licenses-cf5b1c329edd) -->
 
-  - [ ] Inference correctness
+  - [x] Inference correctness
 
     <!-- If you are reproducing the result from a paper, make sure your model's inference-time feature vectors or losses matches that from the original codes. The weights usually could be obtained by simply renaming the keys in the official pre-trained weights. This test could be skipped though, if you are able to prove the training-time correctness and check the second milestone. -->
 
@@ -212,9 +233,9 @@ A project does not necessarily have to be finished in a single PR, but it's esse
 
     <!-- As this template does. -->
 
-- [ ] Milestone 2: Indicates a successful model implementation.
+- [x] Milestone 2: Indicates a successful model implementation.
 
-  - [ ] Training-time correctness
+  - [x] Training-time correctness
 
     <!-- If you are reproducing the result from a paper, checking this item means that you should have trained your model from scratch based on the original paper's specification and verified that the final result. Due to the pretrain-downstream pipeline of self-supervised learning, this item requires at least one downstream result matches the report within a minor error range. -->
 

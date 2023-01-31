@@ -154,5 +154,5 @@ default_hooks = dict(
 # Default setting for scaling LR automatically
 #   - `enable` means enable scaling LR automatically
 #       or not by default.
-#   - `base_batch_size` = (8 GPUs) x (8 samples per GPU).
+#   - `base_batch_size` = (8 GPUs) x (64 samples per GPU) / repeat_sample.
 auto_scale_lr = dict(enable=True, base_batch_size=512 // repeat_sample)
