@@ -294,19 +294,37 @@ class TwoNormDataPreprocessor(SelfSupDataPreprocessor):
 
 @MODELS.register_module()
 class VideoDataPreprocessor(BaseDataPreprocessor):
-    """"""
+    """Video pre-processor for operations, like normalization and bgr to rgb.
+
+    Compared with the :class:`mmaction.ActionDataPreprocessor`, this module
+    treats each item in `inputs` of input data as a list, instead of
+    torch.Tensor.
+
+    Args:
+        mean (Sequence[float or int, optional): The pixel mean of channels
+            of images or stacked optical flow. Defaults to None.
+        std (Sequence[float or int], optional): The pixel standard deviation
+            of channels of images or stacked optical flow. Defaults to None.
+        pad_size_divisor (int): The size of padded image should be
+            divisible by ``pad_size_divisor``. Defaults to 1.
+        pad_value (float or int): The padded pixel value. Defaults to 0.
+        bgr_to_rgb (bool): Whether to convert image from BGR to RGB.
+            Defaults to False.
+        format_shape (str): Format shape of input data.
+            Defaults to ``'NCHW'``.
+    """
 
     def __init__(self,
                  mean: Optional[Sequence[Union[float, int]]] = None,
                  std: Optional[Sequence[Union[float, int]]] = None,
                  pad_size_divisor: int = 1,
                  pad_value: Union[float, int] = 0,
-                 to_rgb: bool = False,
+                 bgr_to_rgb: bool = False,
                  format_shape: str = 'NCHW') -> None:
         super().__init__()
         self.pad_size_divisor = pad_size_divisor
         self.pad_value = pad_value
-        self.to_rgb = to_rgb
+        self.bgr_to_rgb = bgr_to_rgb
         self.format_shape = format_shape
 
         if mean is not None:
@@ -333,13 +351,30 @@ class VideoDataPreprocessor(BaseDataPreprocessor):
         else:
             self._enable_normalize = False
 
-    def forward(self, data: dict, training: bool = False):
+    def forward(
+            self,
+            data: dict,
+            training: bool = False
+    ) -> Tuple[List[torch.Tensor], Optional[list]]:
+        """Performs normalization、padding and bgr2rgb conversion based on
+        ``BaseDataPreprocessor``.
+
+        Args:
+            data (dict): data sampled from dataloader.
+            training (bool): Whether to enable training time augmentation. If
+                subclasses override this method, they can perform different
+                preprocessing strategies for training and testing based on the
+                value of ``training``.
+        Returns:
+            Tuple[torch.Tensor, Optional[list]]: Data in the same format as the
+                model input.
+        """
 
         data = [val for _, val in data.items()]
         batch_inputs, batch_data_samples = self.cast_data(data)
 
         # ------ To RGB ------
-        if self.to_rgb:
+        if self.bgr_to_rgb:
             if self.format_shape == 'NCHW':
                 batch_inputs = [
                     batch_input[..., [2, 1, 0], :, :]

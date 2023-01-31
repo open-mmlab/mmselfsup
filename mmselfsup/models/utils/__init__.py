@@ -4,7 +4,7 @@ from .data_preprocessor import (CAEDataPreprocessor,
                                 RelativeLocDataPreprocessor,
                                 RotationPredDataPreprocessor,
                                 SelfSupDataPreprocessor,
-                                TwoNormDataPreprocessor)
+                                TwoNormDataPreprocessor, VideoDataPreprocessor)
 from .ema import CosineEMA
 from .extractor import Extractor
 from .gather_layer import GatherLayer
@@ -29,6 +29,6 @@ __all__ = [
     'TransformerEncoderLayer', 'CAETransformerRegressorLayer', 'CosineEMA',
     'SelfSupDataPreprocessor', 'RelativeLocDataPreprocessor',
     'RotationPredDataPreprocessor', 'CAEDataPreprocessor', 'ResLayerExtraNorm',
-    'NormEMAVectorQuantizer', 'TwoNormDataPreprocessor',
-    'PromptTransformerEncoderLayer', 'build_clip_model'
+    'NormEMAVectorQuantizer', 'TwoNormDataPreprocessor', 'build_clip_model',
+    'PromptTransformerEncoderLayer', 'VideoDataPreprocessor'
 ]

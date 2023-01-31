@@ -160,9 +160,7 @@ Note:
 
 The Fine-tuning results are based on Kinetics400(K400) dataset.
 
-Due to the version of K400 dataset, our pretraining, fine-tuning and the final test results are based on MMAction2 version, which is a little different from FAIR version.
-
-We also test the model on FAIR's K400, we got 82.1 test accuracy.
+Due to the version of K400 dataset, our pretraining, fine-tuning and the final test results are based on MMAction2 version, which is a little different from PySlowFast version.
 
 <table class="docutils">
 <thead>
@@ -189,9 +187,13 @@ We also test the model on FAIR's K400, we got 82.1 test accuracy.
 </tbody>
 </table>
 
-## Citation
+Remarks:
 
-<!-- You may remove this section if not applicable. -->
+- We converted the pretrain model from PySlowFast and run fine-tuning with MMAction2, based on MMAction2 version of K400, we got `81.5` test accuracy. The MMSelfSup pretrain model got `81.8`, as provided above.
+
+- We also tested our model on previous version of K400, which is closer to PySlowFast's version, we got `82.1` test accuracy.
+
+## Citation
 
 ```bibtex
 @InProceedings{wei2022masked,

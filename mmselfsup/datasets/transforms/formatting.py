@@ -56,9 +56,8 @@ class PackSelfSupInputs(BaseTransform):
 
         Returns:
             Dict:
-
-            - 'inputs' (List[torch.Tensor]): The forward data of models.
-            - 'data_samples' (SelfSupDataSample): The annotation info of the
+              - ``inputs`` (List[torch.Tensor]): The forward data of models.
+              - ``data_samples`` (SelfSupDataSample): The annotation info of
                 the forward data.
         """
         packed_results = dict()
@@ -79,8 +78,9 @@ class PackSelfSupInputs(BaseTransform):
                     # (M, C, T, H, W), M = num_crops x num_clips
                     img_ = img_
                 else:
-                    raise ValueError(f'img should be 2, 3 or 4 dimensional, \
-                        instead of {len(img_.shape)} dimensional.')
+                    raise ValueError(
+                        'img should be 2, 3 or 5 dimensional, '
+                        f'instead of {len(img_.shape)} dimensional.')
                 img[i] = to_tensor(img_)
             packed_results['inputs'] = img
 
