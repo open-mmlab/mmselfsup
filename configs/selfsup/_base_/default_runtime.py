@@ -17,7 +17,7 @@ env_cfg = dict(
 
 log_processor = dict(
     window_size=10,
-    custom_cfg=[dict(data_src='', method='mean', windows_size='global')])
+    custom_cfg=[dict(data_src='', method='mean', window_size='global')])
 
 vis_backends = [dict(type='LocalVisBackend')]
 visualizer = dict(
