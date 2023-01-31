@@ -24,7 +24,7 @@ This is an implementation of \[XXX\]. -->
 
 Author: @fangyixiao18
 
-This is the implementation of MaskFeat with video dataset, like `Kinetics400`.
+This is the implementation of **MaskFeat** with video dataset, like Kinetics400.
 
 ## Usage
 
@@ -39,7 +39,7 @@ Requirements:
 
 Please refer to [Get Started](https://mmselfsup.readthedocs.io/en/1.x/get_started.html) documentation of MMSelfSup to finish installation.
 
-Besides, to process the video data, we apply MMAction2. The instruction to install MMAction2 can be found in [Get Started documentation](https://mmaction2.readthedocs.io/en/1.x/get_started.html).
+Besides, to process the video data, we apply transforms in MMAction2. The instruction to install MMAction2 can be found in [Get Started documentation](https://mmaction2.readthedocs.io/en/1.x/get_started.html).
 
 ### Data Preparation
 
@@ -96,7 +96,7 @@ Note:
 
 ### Downstream Tasks Commands
 
-To evaluate the MViT pretrained with MaskFeat, we recommend to run MMAction2:
+To evaluate the **MaskFeat MViT** pretrained with MMSelfSup, we recommend to run MMAction2:
 
 #### On Multiple GPUs
 
@@ -158,11 +158,11 @@ Note:
 
 <!-- You should claim whether this is based on the pre-trained weights, which are converted from the official release; or it's a reproduced result obtained from retraining the model in this project. -->
 
-The Fine-tuning results are based on `Kinetics400(K400)` dataset.
+The Fine-tuning results are based on Kinetics400(K400) dataset.
 
-Due to the version of `K400` dataset, our pretraining, fine-tuning and the final test results are based on MMAction2 version, which is a little different from FAIR version.
+Due to the version of K400 dataset, our pretraining, fine-tuning and the final test results are based on MMAction2 version, which is a little different from FAIR version.
 
-We also test the model on FAIR's `K400`, we got 82.1 test accuracy.
+We also test the model on FAIR's K400, we got 82.1 test accuracy.
 
 <table class="docutils">
 <thead>
