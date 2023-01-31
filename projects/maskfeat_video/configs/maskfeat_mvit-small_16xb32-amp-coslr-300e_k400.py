@@ -28,8 +28,8 @@ model = dict(
 
 # dataset settings
 dataset_type = 'mmaction.VideoDataset'
-data_root = 's3://openmmlab/datasets/action/Kinetics400/videos_train'
-ann_file_train = 's3://openmmlab/datasets/action/Kinetics400/kinetics400_train_list_videos.txt'  # noqa
+data_root = 'data/kinetics400/videos_train'
+ann_file_train = 'data/Kinetics400/kinetics400_train_list_videos.txt'
 
 file_client_args = dict(io_backend='petrel')
 train_pipeline = [
