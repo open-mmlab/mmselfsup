@@ -171,9 +171,9 @@ We also test the model on FAIR's `K400`, we got 82.1 test accuracy.
 	    <th>Backbone</th>
 	    <th>Epoch</th>
       <th>Batch Size</th>
-      <th>Linear Eval</th>
       <th>Fine-tuning</th>
-      <th colspan="3" align="center">Links</th>
+      <th>Pretrain Links</th>
+      <th>Fine-tuning Links</th>
 	</tr>
   </thead>
   <tbody>
@@ -182,10 +182,8 @@ We also test the model on FAIR's `K400`, we got 82.1 test accuracy.
 	    <td>MViT-small</td>
 	    <td>300</td>
       <td>512</td>
-      <td>/</td>
       <td>81.8</td>
       <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/projects/maskfeat_video/configs/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400_20230131-87d60b6f.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400_20230118_114151.json'>log</a></td>
-      <td>/</td>
       <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/projects/maskfeat_video/configs/mvit-small_ft-8xb16-coslr-100e_k400.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/mvit-small_ft-8xb16-coslr-100e_k400/mvit-small_ft-8xb16-coslr-100e_k400_20230131-5e8303f5.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/mvit-small_ft-8xb16-coslr-100e_k400/mvit-small_ft-8xb16-coslr-100e_k400_20230121_142927.json'>log</a></td>
 	</tr>
 </tbody>
