@@ -82,3 +82,31 @@ def test_video_data_preprocessor():
     fake_batches, fake_samples = data_preprocessor(fake_data)
     assert len(fake_batches) == 1
     assert len(fake_samples) == 2
+
+    data_preprocessor = VideoDataPreprocessor(
+        mean=[114.75, 114.75, 114.75],
+        std=[57.375, 57.375, 57.375],
+        bgr_to_rgb=True,
+        format_shape='NCTHW')
+    fake_data = {
+        'inputs': [torch.randn((2, 3, 4, 224, 224))],
+        'data_sample': [SelfSupDataSample(),
+                        SelfSupDataSample()]
+    }
+    fake_batches, fake_samples = data_preprocessor(fake_data)
+    assert len(fake_batches) == 1
+    assert len(fake_samples) == 2
+
+    data_preprocessor = VideoDataPreprocessor(
+        mean=[114.75, 114.75, 114.75],
+        std=[57.375, 57.375, 57.375],
+        bgr_to_rgb=True,
+        format_shape='NCHW')
+    fake_data = {
+        'inputs': [torch.randn((2, 3, 224, 224))],
+        'data_sample': [SelfSupDataSample(),
+                        SelfSupDataSample()]
+    }
+    fake_batches, fake_samples = data_preprocessor(fake_data)
+    assert len(fake_batches) == 1
+    assert len(fake_samples) == 2
