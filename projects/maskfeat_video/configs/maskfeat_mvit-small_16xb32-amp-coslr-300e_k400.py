@@ -31,9 +31,8 @@ dataset_type = 'mmaction.VideoDataset'
 data_root = 'data/kinetics400/videos_train'
 ann_file_train = 'data/Kinetics400/kinetics400_train_list_videos.txt'
 
-file_client_args = dict(io_backend='petrel')
 train_pipeline = [
-    dict(type='mmaction.DecordInit', **file_client_args),
+    dict(type='mmaction.DecordInit'),
     dict(
         type='mmaction.SampleFrames',
         clip_len=16,

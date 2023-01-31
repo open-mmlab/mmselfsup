@@ -31,9 +31,8 @@ ann_file_train = 'data/kinetics400/kinetics400_train_list_videos.txt'
 ann_file_val = 'data/kinetics400/kinetics400_val_list_videos.txt'
 ann_file_test = 'data/kinetics400/kinetics400_val_list_videos.txt'
 
-file_client_args = dict(io_backend='petrel')
 train_pipeline = [
-    dict(type='DecordInit', **file_client_args),
+    dict(type='DecordInit'),
     dict(type='SampleFrames', clip_len=16, frame_interval=4, num_clips=1),
     dict(type='DecordDecode'),
     dict(type='Resize', scale=(-1, 256)),
@@ -46,7 +45,7 @@ train_pipeline = [
     dict(type='PackActionInputs')
 ]
 val_pipeline = [
-    dict(type='DecordInit', **file_client_args),
+    dict(type='DecordInit'),
     dict(
         type='SampleFrames',
         clip_len=16,
@@ -60,7 +59,7 @@ val_pipeline = [
     dict(type='PackActionInputs')
 ]
 test_pipeline = [
-    dict(type='DecordInit', **file_client_args),
+    dict(type='DecordInit'),
     dict(
         type='SampleFrames',
         clip_len=16,
