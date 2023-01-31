@@ -39,9 +39,9 @@ Remarks:
 
 - `${SELFSUP_CONFIG}` is the config file of the self-supervised experiment.
 - `${FEATURE_LIST}` is a string to specify features from layer1 to layer5 to evaluate; e.g., if you want to evaluate layer5 only, then `FEATURE_LIST` is "feat5", if you want to evaluate all features, then `FEATURE_LIST` is "feat1 feat2 feat3 feat4 feat5" (separated by space). If left empty, the default `FEATURE_LIST` is "feat5".
-- `PRETRAIN`: the pre-trained model file.
+- `${PRETRAIN}`: the pre-trained model file.
 - if you want to change GPU numbers, you could add `GPUS_PER_NODE=4 GPUS=4` at the beginning of the command.
-- `EPOCH` is the epoch number of the ckpt that you want to test
+- `${EPOCH}` is the epoch number of the ckpt that you want to test
 
 ## Linear Evaluation and Fine-tuning
 
@@ -68,9 +68,8 @@ bash tools/benchmarks/classification/mim_slurm_train.sh ${PARTITION} ${JOB_NAME}
 
 Remarks:
 
-- The default GPU number is 8. When changing GPUS, please also change `samples_per_gpu` in the config file accordingly to ensure the total batch size is 256.
-- `CONFIG`: Use config files under `configs/benchmarks/classification/`. Specifically, `imagenet` (excluding `imagenet_*percent` folders), `places205` and `inaturalist2018`.
-- `PRETRAIN`: the pre-trained model file.
+- `${CONFIG}`: Use config files under `configs/benchmarks/classification/`. Specifically, `imagenet` (excluding `imagenet_*percent` folders), `places205` and `inaturalist2018`.
+- `${PRETRAIN}`: the pre-trained model file.
 
 Example:
 
@@ -92,7 +91,7 @@ bash tools/benchmarks/classification//mim_slurm_test.sh ${PARTITION} ${CONFIG} $
 
 Remarks:
 
-- `CHECKPOINT`: The well-trained classification model that you want to test.
+- `${CHECKPOINT}`: The well-trained classification model that you want to test.
 
 Example:
 
@@ -109,8 +108,8 @@ To run ImageNet semi-supervised classification, we still use the same `.sh` scri
 Remarks:
 
 - The default GPU number is 4.
-- `CONFIG`: Use config files under `configs/benchmarks/classification/imagenet/`, named `imagenet_*percent` folders.
-- `PRETRAIN`: the pre-trained model file.
+- `${CONFIG}`: Use config files under `configs/benchmarks/classification/imagenet/`, named `imagenet_*percent` folders.
+- `${PRETRAIN}`: the pre-trained model file.
 
 ## ImageNet Nearest-Neighbor Classification
 
@@ -131,9 +130,9 @@ bash tools/benchmarks/classification/knn_imagenet/slurm_test_knn.sh ${PARTITION}
 Remarks:
 
 - `${SELFSUP_CONFIG}` is the config file of the self-supervised experiment.
-- `CHECKPOINT`: the path of checkpoint model file.
+- `${CHECKPOINT}`: the path of checkpoint model file.
 - if you want to change GPU numbers, you could add `GPUS_PER_NODE=4 GPUS=4` at the beginning of the command.
-- `[optional arguments]`: for optional arguments, you can refer to [visualize_reconstruction.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/visualize_reconstruction.py)
+- `[optional arguments]`: for optional arguments, you can refer to the [script](https://github.com/open-mmlab/mmselfsup/blob/1.x/tools/benchmarks/classification/knn_imagenet/test_knn.py)
 
 An example of command
 

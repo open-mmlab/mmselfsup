@@ -66,11 +66,11 @@ class NewTransform(BaseTransform):
         return results
 ```
 
-**Note:** For the implementation of transforms, you could apply functions in [mmcv](https://github.com/open-mmlab/mmcv/tree/dev-2.x/mmcv/image).
+**Note:** For the implementation of transforms, you could apply functions in [mmcv](https://github.com/open-mmlab/mmcv/tree/2.x/mmcv/image).
 
 ### Step 2: Add NewTransform to \_\_init\_\_py
 
-Then, add the transform to [\_\_init\_\_.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/datasets/transforms/__init__.py).
+Then, add the transform to [\_\_init\_\_.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/datasets/transforms/__init__.py).
 
 ```python
 ...
