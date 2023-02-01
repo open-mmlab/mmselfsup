@@ -115,7 +115,7 @@ mim train mmaction2 configs/mvit-small_ft-8xb8-coslr-100e_k400.py \
     --work-dir work_dirs/benchmarks/maskfeat/training_maskfeat-mvit-k400/ \
     --launcher pytorch -gpus 8 \
     --cfg-options model.backbone.init_cfg.type=Pretrained \
-    model.backbone.init_cfg.checkpoint=work_dirs/selfsup/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/20230117_traning/epoch_300.pth \
+    model.backbone.init_cfg.checkpoint=https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400_20230131-87d60b6f.pth \
     model.backbone.init_cfg.prefix="backbone." \
     $PY_ARGS
 
@@ -189,7 +189,7 @@ Due to the version of K400 dataset, our pretraining, fine-tuning and the final t
 
 Remarks:
 
-- We converted the pretrained model from PySlowFast and run fine-tuning with MMAction2, based on MMAction2 version of K400, we got `81.5` test accuracy. The MMSelfSup pretrained model got `81.8`, as provided above.
+- We converted the pretrained model from PySlowFast and run fine-tuning with MMAction2, based on MMAction2 version of K400, we got `81.5` test accuracy. The pretrained model from MMSelfSup got `81.8`, as provided above.
 
 - We also tested our model on [other version](https://github.com/facebookresearch/video-nonlocal-net/blob/main/DATASET.md) of K400, we got `82.1` test accuracy.
 
