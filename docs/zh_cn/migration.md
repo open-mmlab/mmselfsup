@@ -11,9 +11,13 @@
 
 ## 迁移自 MMSelfSup 0.x 版本
 
+```{warning}
+MMSelfSup 1.x 版本依赖于一些新的代码包，您应该根据 [安装教程](./get_started.md) 来创建新的环境，尽管你可能已经拥有了一个可以正常运行 MMSelfSup 0.x 的环境。请参考[安装文档](./get_started.md) 对依赖库进行对应的安装。
+```
+
 我们将介绍一些 MMSelfSup 1.x 版本的变换，帮助用户更顺利的将项目从 MMSelfSup 0.x 版本迁移到 1.x 版本。
 
-MMSelfSup 1.x 版本依赖于一些新的代码包，您应该根据 [安装教程](./get_started.md) 来创建新的环境，并安装依赖项。三个重要的依赖库已列出：
+三个重要的依赖库已列出：
 
 1. [MMEngine](https://github.com/open-mmlab/mmengine): MMEngine 是所有 OpenMMLab 2.0 项目的基础库，一部分非计算机视觉强相关的模块从 MMCV 迁移到了 MMEngine。
 2. [MMCV](https://github.com/open-mmlab/mmcv): OpenMMLab 计算机视觉基础库。这不是新的依赖项，但是您需要将其升级到至少 `2.0.0rc1` 版本。
