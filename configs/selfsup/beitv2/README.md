@@ -14,7 +14,7 @@ Masked image modeling (MIM) has demonstrated impressive results in self-supervis
 
 ## Models and Benchmarks
 
-You could download **VQ-KD** model from this [link](https://download.openmmlab.com/mmselfsup/1.x/target_generator_ckpt/vqkd_encoder.pth).
+During trainig, the `VQKD` target generator will download **VQ-KD** model automatically. Besides, You could also download **VQ-KD** model from this [link](https://download.openmmlab.com/mmselfsup/1.x/target_generator_ckpt/vqkd_encoder.pth) manually.
 
 Here, we report the results of the model on ImageNet, the details are below:
 
