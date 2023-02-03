@@ -151,10 +151,18 @@ class PromptTransformerEncoderLayer(_TransformerEncoderLayer):
                  act_cfg: dict = dict(type='GELU'),
                  norm_cfg: dict = dict(type='LN'),
                  init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
-        super().__init__(embed_dims, num_heads, feedforward_channels,
-                         drop_rate, attn_drop_rate, drop_path_rate, num_fcs,
-                         qkv_bias, act_cfg, norm_cfg, init_cfg)
-
+        super().__init__(
+            embed_dims=embed_dims,
+            num_heads=num_heads,
+            feedforward_channels=feedforward_channels,
+            drop_rate=drop_rate,
+            attn_drop_rate=attn_drop_rate,
+            drop_path_rate=drop_path_rate,
+            num_fcs=num_fcs,
+            qkv_bias=qkv_bias,
+            act_cfg=act_cfg,
+            norm_cfg=norm_cfg,
+            init_cfg=init_cfg)
         self.attn = PromptMultiheadAttention(
             embed_dims=embed_dims,
             num_heads=num_heads,
