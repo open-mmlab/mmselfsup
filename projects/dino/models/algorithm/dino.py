@@ -56,7 +56,10 @@ class DINO(BaseModel):
         """The forward function in training.
 
         Args:
-            inputs (List[torch.Tensor]): The input images.
+            inputs (List[torch.Tensor]): Th
+
+
+            e input images.
             data_samples (List[SelfSupDataSample]): All elements required
                 during the forward function.
 
