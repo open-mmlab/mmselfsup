@@ -13,10 +13,10 @@ gloabl1_pipeline = [
         transforms=[
             dict(
                 type='ColorJitter',
-                brightness=0.8,
-                contrast=0.8,
-                saturation=0.8,
-                hue=0.2)
+                brightness=0.4,
+                contrast=0.4,
+                saturation=0.2,
+                hue=0.1)
         ],
         prob=0.8),
     dict(type='RandomGrayscale', prob=0.2),
@@ -35,10 +35,10 @@ gloabl2_pipeline = [
         transforms=[
             dict(
                 type='ColorJitter',
-                brightness=0.8,
-                contrast=0.8,
-                saturation=0.8,
-                hue=0.2)
+                brightness=0.4,
+                contrast=0.4,
+                saturation=0.2,
+                hue=0.1)
         ],
         prob=0.8),
     dict(type='RandomGrayscale', prob=0.2),
@@ -58,10 +58,10 @@ local_pipeline = [
         transforms=[
             dict(
                 type='ColorJitter',
-                brightness=0.8,
-                contrast=0.8,
-                saturation=0.8,
-                hue=0.2)
+                brightness=0.4,
+                contrast=0.4,
+                saturation=0.2,
+                hue=0.1)
         ],
         prob=0.8),
     dict(type='RandomGrayscale', prob=0.2),
