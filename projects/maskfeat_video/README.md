@@ -205,8 +205,8 @@ Due to the version of K400 dataset, our pretraining, fine-tuning and the final t
 Remarks:
 
 - We converted the pretrained model from PySlowFast and run fine-tuning with MMAction2, based on MMAction2 version of K400, we got `81.5` test accuracy. The pretrained model from MMSelfSup got `81.8`, as provided above.
-
 - We also tested our model on [other version](https://github.com/facebookresearch/video-nonlocal-net/blob/main/DATASET.md) of K400, we got `82.1` test accuracy.
+- Some other details can be found in [MMAction2 MViT page](https://github.com/open-mmlab/mmaction2/tree/dev-1.x/configs/recognition/mvit).
 
 ## Citation
 
