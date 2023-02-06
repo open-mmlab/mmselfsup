@@ -74,8 +74,7 @@ class PackSelfSupInputs(BaseTransform):
                 if len(img_.shape) == 3:
                     img_ = np.ascontiguousarray(img_.transpose(2, 0, 1))
                 elif len(img_.shape) == 5:
-                    # for video data from mmaction with the shape
-                    # (M, C, T, H, W), M = num_crops x num_clips
+                    # for video data with the shape (B, C, T, H, W)
                     img_ = img_
                 else:
                     raise ValueError(

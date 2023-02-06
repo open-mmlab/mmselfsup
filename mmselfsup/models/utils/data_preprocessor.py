@@ -294,7 +294,8 @@ class TwoNormDataPreprocessor(SelfSupDataPreprocessor):
 
 @MODELS.register_module()
 class VideoDataPreprocessor(BaseDataPreprocessor):
-    """Video pre-processor for operations, like normalization and bgr to rgb.
+    """Video pre-processor for operations, like normalization and bgr to rgb
+    conversion .
 
     Compared with the :class:`mmaction.ActionDataPreprocessor`, this module
     treats each item in `inputs` of input data as a list, instead of
@@ -335,7 +336,7 @@ class VideoDataPreprocessor(BaseDataPreprocessor):
             self._enable_normalize = True
             if self.format_shape == 'NCHW':
                 normalizer_shape = (-1, 1, 1)
-            elif self.format_shape == 'NCTHW' or self.format_shape == 'NCTVM':
+            elif self.format_shape == 'NCTHW':
                 normalizer_shape = (-1, 1, 1, 1)
             else:
                 raise ValueError(f'Invalid format shape: {format_shape}')
@@ -366,8 +367,8 @@ class VideoDataPreprocessor(BaseDataPreprocessor):
                 preprocessing strategies for training and testing based on the
                 value of ``training``.
         Returns:
-            Tuple[torch.Tensor, Optional[list]]: Data in the same format as the
-                model input.
+            Tuple[List[torch.Tensor], Optional[list]]: Data in the same format
+                as the model input.
         """
 
         data = [val for _, val in data.items()]
