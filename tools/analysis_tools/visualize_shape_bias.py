@@ -46,10 +46,22 @@ parser.add_argument(
     help=  # noqa
     'the plotting names for the plots of each model, and they should be in the same order as model_names'  # noqa: E501
 )
+parser.add_argument(
+    '--delete-icons',
+    action='store_true',
+    help='whether to delete the icons after plotting')
 
 humans = [
     'subject-01', 'subject-02', 'subject-03', 'subject-04', 'subject-05',
     'subject-06', 'subject-07', 'subject-08', 'subject-09', 'subject-10'
+]
+
+icon_names = [
+    'airplane.png', 'response_icons_vertical_reverse.png', 'bottle.png',
+    'car.png', 'oven.png', 'elephant.png', 'dog.png', 'boat.png', 'clock.png',
+    'chair.png', 'keyboard.png', 'bird.png', 'bicycle.png',
+    'response_icons_horizontal.png', 'cat.png', 'bear.png', 'colorbar.pdf',
+    'knife.png', 'response_icons_vertical.png', 'truck.png'
 ]
 
 
@@ -83,7 +95,6 @@ def plot_shape_bias_matrixplot(args, analysis=ShapeBias()) -> None:
     mpl.rcParams['font.serif'] = ['Times New Roman']
 
     plt.figure(figsize=(9, 7))
-
     df = read_csvs(args.csv_dir)
 
     fontsize = 15
@@ -218,19 +229,25 @@ def plot_shape_bias_matrixplot(args, analysis=ShapeBias()) -> None:
     plt.close()
 
 
-if __name__ == '__main__':
-    icon_names = [
-        'airplane.png', 'response_icons_vertical_reverse.png', 'bottle.png',
-        'car.png', 'oven.png', 'elephant.png', 'dog.png', 'boat.png',
-        'clock.png', 'chair.png', 'keyboard.png', 'bird.png', 'bicycle.png',
-        'response_icons_horizontal.png', 'cat.png', 'bear.png', 'colorbar.pdf',
-        'knife.png', 'response_icons_vertical.png', 'truck.png'
-    ]
-    root_url = 'https://github.com/bethgelab/model-vs-human/raw/master/assets/icons'  # noqa: E501
-    os.makedirs(ICONS_DIR, exist_ok=True)
+def check_icons() -> bool:
+    """Check if icons are present, if not download them."""
+    if not osp.exists(ICONS_DIR):
+        return False
     for icon_name in icon_names:
-        url = osp.join(root_url, icon_name)
-        os.system('wget -O {} {}'.format(osp.join(ICONS_DIR, icon_name), url))
+        if not osp.exists(osp.join(ICONS_DIR, icon_name)):
+            return False
+    return True
+
+
+if __name__ == '__main__':
+
+    if not check_icons():
+        root_url = 'https://github.com/bethgelab/model-vs-human/raw/master/assets/icons'  # noqa: E501
+        os.makedirs(ICONS_DIR, exist_ok=True)
+        for icon_name in icon_names:
+            url = osp.join(root_url, icon_name)
+            os.system('wget -O {} {}'.format(
+                osp.join(ICONS_DIR, icon_name), url))
 
     args = parser.parse_args()
     assert len(args.model_names) * 3 == len(args.colors), 'Number of colors \
@@ -260,5 +277,5 @@ if __name__ == '__main__':
     args.plotting_names.append('Humans')
 
     plot_shape_bias_matrixplot(args)
-
-    os.system('rm -rf {}'.format(ICONS_DIR))
+    if args.delete_icons:
+        os.system('rm -rf {}'.format(ICONS_DIR))
