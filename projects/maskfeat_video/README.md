@@ -58,20 +58,29 @@ Then run the following commands to train the model:
 #### On Local Single GPU
 
 ```bash
+# train with mim
 mim train mmselfsup ${CONFIG} --work-dir ${WORK_DIR}
 
 # a specific command example
 mim train mmselfsup configs/maskfeat_mvit-small_8xb32-amp-coslr-300e_k400.py \
-    --work-dir work_dirs/selfsup/maskfeat_mvit-small_8xb32-amp-coslr-300e_k400/20230117_training/
+    --work-dir work_dirs/selfsup/maskfeat_mvit-small_8xb32-amp-coslr-300e_k400/
+
+# train with scripts
+python tools/train.py configs/maskfeat_mvit-small_8xb32-amp-coslr-300e_k400.py \
+    --work-dir work_dirs/selfsup/maskfeat_mvit-small_8xb32-amp-coslr-300e_k400/
 ```
 
 #### On Multiple GPUs
 
 ```bash
+# train with mim
 # a specific command examples, 8 GPUs here
 mim train mmselfsup configs/maskfeat_mvit-small_8xb32-amp-coslr-300e_k400.py \
-    --work-dir work_dirs/selfsup/maskfeat_mvit-small_8xb32-amp-coslr-300e_k400/20230117_training/ \
+    --work-dir work_dirs/selfsup/maskfeat_mvit-small_8xb32-amp-coslr-300e_k400/ \
     --launcher pytorch --gpus 8
+
+# train with scripts
+bash tools/dist_train.sh configs/maskfeat_mvit-small_8xb32-amp-coslr-300e_k400.py 8
 ```
 
 Note:
@@ -82,10 +91,16 @@ Note:
 #### On Multiple GPUs with Slurm
 
 ```bash
+# train with mim
 mim train mmselfsup configs/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400.py \
-    --work-dir ${WORK_DIR} \
+    --work-dir work_dirs/selfsup/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/ \
     --launcher slurm --gpus 16 --gpus-per-node 8 \
     --partition ${PARTITION}
+
+# train with scripts
+GPUS_PER_NODE=8 GPUS=16 bash tools/slurm_train.sh ${PARTITION} maskfeat-video \
+    configs/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400.py \
+    --work-dir work_dirs/selfsup/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/
 ```
 
 Note:
