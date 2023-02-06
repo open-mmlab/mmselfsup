@@ -6,8 +6,8 @@ from typing import List, Sequence
 
 import numpy as np
 import torch
-from mmengine.evaluator import BaseMetric
 from mmengine.dist.utils import get_rank
+from mmengine.evaluator import BaseMetric
 
 from mmselfsup.registry import METRICS
 
