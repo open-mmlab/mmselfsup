@@ -2,6 +2,43 @@
 
 ## MMSelfSup
 
+### v1.0.0rc6 (08/02/2023)
+
+The `master` branch is still 0.x version and we will checkout a new `1.x` branch to release 1.x version. The two versions will be maintained simultaneously in the future.
+
+We briefly list the major breaking changes here. Please refer to the [migration guide](../migration.md) for details and migration instructions.
+
+#### Highlight
+
+- Support `MaskFeat` with video dataset in `projects/maskfeat_video/`
+- Translate documentation to Chinese.
+
+#### New Features
+
+- Support `MaskFeat` with video dataset in `projects/maskfeat_video/` ([#678](https://github.com/open-mmlab/mmselfsup/pull/678))
+
+#### Bug Fixes
+
+- Update link of beitv2 ([#676](https://github.com/open-mmlab/mmselfsup/pull/676))
+- Pass param by explicitly setting location ([#654](https://github.com/open-mmlab/mmselfsup/pull/654))
+- Update default_runtime.py ([#681](https://github.com/open-mmlab/mmselfsup/pull/681))
+- Rename metafile.yaml to metafile.yml ([#680](https://github.com/open-mmlab/mmselfsup/pull/680))
+- Fix bugs in configs/selfsup/eva/metafile.yaml ([#669](https://github.com/open-mmlab/mmselfsup/pull/669))
+
+#### Improvements
+
+- Switch default branch to 1.x ([#686](https://github.com/open-mmlab/mmselfsup/pull/686))
+- Update pre-commit ([#685](https://github.com/open-mmlab/mmselfsup/pull/685))
+- Deprecate the support of python 3.6 ([#657](https://github.com/open-mmlab/mmselfsup/pull/657))
+
+#### Docs
+
+- Translate add_transforms.md and conventions.md ([#674](https://github.com/open-mmlab/mmselfsup/pull/674))
+- Translate classification.md, detection.md, segmentation.md ([#665](https://github.com/open-mmlab/mmselfsup/pull/665))
+- Update link of knn script ([#661](https://github.com/open-mmlab/mmselfsup/pull/661))
+- Translate two docs ([#653](https://github.com/open-mmlab/mmselfsup/pull/653))
+- Translate three docs ([#651](https://github.com/open-mmlab/mmselfsup/pull/651))
+
 ### v1.0.0rc5 (30/12/2022)
 
 The `master` branch is still 0.x version and we will checkout a new `1.x` branch to release 1.x version. The two versions will be maintained simultaneously in the future.
