@@ -10,6 +10,8 @@ import numpy as np
 import pandas as pd
 from utils import FormatStrFormatter, ShapeBias
 
+from mmengine.logging import MMLogger
+
 # global default boundary settings for thin gray transparent
 # boundaries to avoid not being able to see the difference
 # between two partially overlapping datapoints of the same color:
@@ -244,6 +246,8 @@ if __name__ == '__main__':
     if not check_icons():
         root_url = 'https://github.com/bethgelab/model-vs-human/raw/master/assets/icons'  # noqa: E501
         os.makedirs(ICONS_DIR, exist_ok=True)
+        MMLogger.get_current_instance().info(
+            f'Downloading icons to {ICONS_DIR}')
         for icon_name in icon_names:
             url = osp.join(root_url, icon_name)
             os.system('wget -O {} {}'.format(
