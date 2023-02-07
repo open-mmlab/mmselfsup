@@ -56,9 +56,8 @@ class PackSelfSupInputs(BaseTransform):
 
         Returns:
             Dict:
-
-            - 'inputs' (List[torch.Tensor]): The forward data of models.
-            - 'data_samples' (SelfSupDataSample): The annotation info of the
+              - ``inputs`` (List[torch.Tensor]): The forward data of models.
+              - ``data_samples`` (SelfSupDataSample): The annotation info of
                 the forward data.
         """
         packed_results = dict()
@@ -68,9 +67,19 @@ class PackSelfSupInputs(BaseTransform):
             if not isinstance(img, List):
                 img = [img]
             for i, img_ in enumerate(img):
-                if len(img_.shape) < 3:
-                    img_ = np.expand_dims(img_, -1)
-                img_ = np.ascontiguousarray(img_.transpose(2, 0, 1))
+                # to handle the single channel image
+                img_ = np.expand_dims(img_, -1) \
+                    if len(img_.shape) == 2 else img_
+
+                if len(img_.shape) == 3:
+                    img_ = np.ascontiguousarray(img_.transpose(2, 0, 1))
+                elif len(img_.shape) == 5:
+                    # for video data with the shape (B, C, T, H, W)
+                    img_ = img_
+                else:
+                    raise ValueError(
+                        'img should be 2, 3 or 5 dimensional, '
+                        f'instead of {len(img_.shape)} dimensional.')
                 img[i] = to_tensor(img_)
             packed_results['inputs'] = img
 
