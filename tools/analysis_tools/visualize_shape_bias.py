@@ -8,9 +8,8 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from utils import FormatStrFormatter, ShapeBias
-
 from mmengine.logging import MMLogger
+from utils import FormatStrFormatter, ShapeBias
 
 # global default boundary settings for thin gray transparent
 # boundaries to avoid not being able to see the difference
