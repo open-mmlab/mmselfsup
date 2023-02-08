@@ -6,6 +6,7 @@ from typing import List, Sequence
 
 import numpy as np
 import torch
+from mmengine.dist.utils import get_rank
 from mmengine.evaluator import BaseMetric
 
 from mmselfsup.registry import METRICS
@@ -75,7 +76,8 @@ class ShapeBiasMetric(BaseMetric):
         self.csv_dir = csv_dir
         self.model_name = model_name
         self.dataset_name = dataset_name
-        self.csv_path = self.create_csv()
+        if get_rank() == 0:
+            self.csv_path = self.create_csv()
 
     def process(self, data_batch, data_samples: Sequence[dict]) -> None:
         """Process one batch of data samples.
@@ -126,7 +128,7 @@ class ShapeBiasMetric(BaseMetric):
             os.remove(csv_path)
         directory = osp.dirname(csv_path)
         if not osp.exists(directory):
-            os.makedirs(directory)
+            os.makedirs(directory, exist_ok=True)
         with open(csv_path, 'w') as f:
             writer = csv.writer(f)
             writer.writerow([
@@ -161,7 +163,8 @@ class ShapeBiasMetric(BaseMetric):
         Returns:
             dict: A dict of metrics.
         """
-        self.dump_results_to_csv(results)
+        if get_rank() == 0:
+            self.dump_results_to_csv(results)
         metrics = dict()
         metrics['accuracy/top1'] = np.mean([
             result['pred_category'][0] == result['gt_category']
