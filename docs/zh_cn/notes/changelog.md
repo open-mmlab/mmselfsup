@@ -19,6 +19,7 @@
 
 #### Bug 修复
 
+- 修复 `shape bias` 分布式训练的问题 ([#689](https://github.com/open-mmlab/mmselfsup/pull/689))
 - 更新 BEiT v2 的链接 ([#676](https://github.com/open-mmlab/mmselfsup/pull/676))
 - 修复传参时未指定参数的问题 ([#654](https://github.com/open-mmlab/mmselfsup/pull/654))
 - 更新 `default_runtime.py` 文件 ([#681](https://github.com/open-mmlab/mmselfsup/pull/681))

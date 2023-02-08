@@ -19,6 +19,7 @@ We briefly list the major breaking changes here. Please refer to the [migration 
 
 #### Bug Fixes
 
+- Fix distributed setting for shape bias ([#689](https://github.com/open-mmlab/mmselfsup/pull/689))
 - Update link of beitv2 ([#676](https://github.com/open-mmlab/mmselfsup/pull/676))
 - Pass param by explicitly setting location ([#654](https://github.com/open-mmlab/mmselfsup/pull/654))
 - Update default_runtime.py ([#681](https://github.com/open-mmlab/mmselfsup/pull/681))
