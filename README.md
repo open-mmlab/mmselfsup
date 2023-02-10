@@ -67,7 +67,7 @@ The master branch works with **PyTorch 1.6** or higher.
 
 **The default branch has been switched to `1.x` from `master`, and we encourage users to migrate to the latest version, though it comes with some cost. Please refer to [Migration Guide](https://mmselfsup.readthedocs.io/en/1.x/migration.html) for more details.**
 
-MMSelfSup **v1.0.0rc6** was released in 08/02/2023.
+MMSelfSup **v1.0.0rc6** was released in 10/02/2023.
 
 - Support `MaskFeat` with video dataset in `projects/maskfeat_video/`
 - Translate documentation to Chinese.
