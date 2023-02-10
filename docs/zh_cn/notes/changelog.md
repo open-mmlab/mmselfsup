@@ -2,6 +2,44 @@
 
 ## MMSelfSup
 
+### v1.0.0rc6 (10/02/2023)
+
+`master` 仍然是 0.x 版本，我们将会 checkout 一个新的 `1.x` 用来发布 1.x 版本。 未来我们会同时维护两个版本。
+
+我们简要的列出主要的改变。 请参考[迁移文档](../migration.md)来查看细节和迁移指引
+
+#### 亮点
+
+- 在 `projects/maskfeat_video/` 支持了 `MaskFeat` 视频数据集的预训练
+- 将部分文档翻译为中文
+
+#### 新特性
+
+- 在 `projects/maskfeat_video/` 支持了 `MaskFeat` 视频数据集的预训练 ([#678](https://github.com/open-mmlab/mmselfsup/pull/678))
+
+#### Bug 修复
+
+- 修复 `shape bias` 分布式训练的问题 ([#689](https://github.com/open-mmlab/mmselfsup/pull/689))
+- 更新 BEiT v2 的链接 ([#676](https://github.com/open-mmlab/mmselfsup/pull/676))
+- 修复传参时未指定参数的问题 ([#654](https://github.com/open-mmlab/mmselfsup/pull/654))
+- 更新 `default_runtime.py` 文件 ([#681](https://github.com/open-mmlab/mmselfsup/pull/681))
+- 将 `metafile.yaml` 重命名为 `metafile.yml` ([#680](https://github.com/open-mmlab/mmselfsup/pull/680))
+- 修复 `configs/selfsup/eva/metafile.yml` 中的问题 ([#669](https://github.com/open-mmlab/mmselfsup/pull/669))
+
+#### 改进
+
+- 默认分支修改为 1.x ([#686](https://github.com/open-mmlab/mmselfsup/pull/686))
+- 更新 pre-commit ([#685](https://github.com/open-mmlab/mmselfsup/pull/685))
+- 暂停 python 3.6 的支持 ([#657](https://github.com/open-mmlab/mmselfsup/pull/657))
+
+#### 文档
+
+- 翻译 add_transforms.md 和 conventions.md ([#674](https://github.com/open-mmlab/mmselfsup/pull/674))
+- 翻译 classification.md, detection.md, segmentation.md ([#665](https://github.com/open-mmlab/mmselfsup/pull/665))
+- 更新 KNN 脚本的链接 ([#661](https://github.com/open-mmlab/mmselfsup/pull/661))
+- 翻译两篇文档 ([#653](https://github.com/open-mmlab/mmselfsup/pull/653))
+- 翻译三篇文档 ([#651](https://github.com/open-mmlab/mmselfsup/pull/651))
+
 ### v1.0.0rc5 (30/12/2022)
 
 `master` 仍然是 0.x 版本，我们将会 checkout 一个新的 `1.x` 用来发布 1.x 版本。 未来我们会同时维护两个版本。

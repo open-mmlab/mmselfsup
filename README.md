@@ -67,18 +67,17 @@ The master branch works with **PyTorch 1.6** or higher.
 
 **The default branch has been switched to `1.x` from `master`, and we encourage users to migrate to the latest version, though it comes with some cost. Please refer to [Migration Guide](https://mmselfsup.readthedocs.io/en/1.x/migration.html) for more details.**
 
+MMSelfSup **v1.0.0rc6** was released in 10/02/2023.
+
+- Support `MaskFeat` with video dataset in `projects/maskfeat_video/`
+- Translate documentation to Chinese.
+
 MMSelfSup **v1.0.0rc5** was released in 30/12/2022.
 
 - Support `BEiT v2`, `MixMIM`, `EVA`.
 - Support `ShapeBias` for model analysis
 - Add Solution of FGIA ACCV 2022 (1st Place)
 - Refactor t-SNE
-
-MMSelfSup **v1.0.0rc4** was released in 07/12/2022.
-
-- Support BEiT v1 and MILAN.
-- Support low-level reconstruction visualization.
-- Refine documents algorithm pages.
 
 Please refer to [Changelog](https://mmselfsup.readthedocs.io/en/dev-1.x/notes/changelog.html) for details and release history.
 

@@ -67,18 +67,17 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
 **默认分支已经从 `master` 切换到 `1.x`。我们鼓励用户迁移到最新版本，请参考 [迁移指南](https://mmselfsup.readthedocs.io/zh_CN/1.x/migration.html) 以了解更多细节。**
 
+**v1.0.0rc6** 版本已经在 2023.2.10 发布。
+
+- 在 `projects/maskfeat_video/` 支持了 `MaskFeat` 的视频数据预训练
+- 将部分文档翻译成中文
+
 **v1.0.0rc5** 版本已经在 2022.12.30 发布。
 
 - 支持了 `BEiT v2`, `MixMIM`, `EVA`
 - 支持了模型分析工具 `ShapeBias`
 - 添加 FGIA ACCV 2022 比赛第一名方案
 - 重构了 `t-SNE`
-
-**v1.0.0rc4** 版本已经在 2022.12.07 发布。
-
-- 支持 BEiT 和 MILAN 预训练
-- 支持 low-level 重建可视化
-- 更新模型库算法页面文档
 
 请参考 [更新日志](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/notes/changelog.html) 获取更多细节和历史版本信息。
 
