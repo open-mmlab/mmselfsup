@@ -8,12 +8,13 @@ from mmselfsup.registry import MODELS
 from mmselfsup.structures import SelfSupDataSample
 from .base import BaseModel
 
+
 @MODELS.register_module()
 class GreenMIM(BaseModel):
     """GreenMIM.
 
-    Implementation of `GreenMIM: Green Hierarchical Vision Transformer for Masked Image Modeling
-    <https://arxiv.org/abs/2205.13515>`_.
+    Implementation of `GreenMIM: Green Hierarchical Vision Transformer for
+    Masked Image Modeling <https://arxiv.org/abs/2205.13515>`_.
     """
 
     def extract_feat(self,
@@ -65,7 +66,7 @@ class GreenMIM(BaseModel):
         results.pred = BaseDataElement(**dict(value=pred))
 
         return results
-    
+
     def patchify(self, imgs, patch_size):
         """
         imgs: (N, 3, H, W)

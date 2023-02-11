@@ -6,7 +6,10 @@ _base_ = [
 ]
 
 # dataset 16 GPUs x 128
-train_dataloader = dict(batch_size=128, num_workers=16)
+train_dataloader = dict(
+    batch_size=128,
+    num_workers=16,
+    sampler=dict(type='DefaultSampler', seed=0, shuffle=True))
 
 # optimizer wrapper
 optimizer = dict(
