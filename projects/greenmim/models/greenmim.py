@@ -4,9 +4,9 @@ from typing import Dict, List, Optional, Tuple
 import torch
 from mmengine.structures import BaseDataElement
 
+from mmselfsup.models.algorithms.base import BaseModel
 from mmselfsup.registry import MODELS
 from mmselfsup.structures import SelfSupDataSample
-from .base import BaseModel
 
 
 @MODELS.register_module()

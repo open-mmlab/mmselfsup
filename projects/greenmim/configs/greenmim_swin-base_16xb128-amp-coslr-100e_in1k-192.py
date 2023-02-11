@@ -1,15 +1,12 @@
 _base_ = [
-    '../_base_/models/greenmim_swin-base.py',
-    '../_base_/datasets/imagenet_mae.py',
-    '../_base_/schedules/adamw_coslr-200e_in1k.py',
-    '../_base_/default_runtime.py',
+    './greenmim_swin-base.py',
+    'mmselfsup::selfsup/_base_/datasets/imagenet_mae.py',
+    'mmselfsup::selfsup/_base_/schedules/adamw_coslr-200e_in1k.py',
+    'mmselfsup::selfsup/_base_/default_runtime.py',
 ]
 
 # dataset 16 GPUs x 128
-train_dataloader = dict(
-    batch_size=128,
-    num_workers=16,
-    sampler=dict(type='DefaultSampler', seed=0, shuffle=True))
+train_dataloader = dict(batch_size=128, num_workers=16)
 
 # optimizer wrapper
 optimizer = dict(

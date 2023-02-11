@@ -131,3 +131,4 @@ INFO
 
 # Pytorch
 *.pth
+data

@@ -1,3 +1,5 @@
+custom_imports = dict(imports=['models'], allow_failed_imports=False)
+
 # model settings
 img_size = 224
 patch_size = 4
