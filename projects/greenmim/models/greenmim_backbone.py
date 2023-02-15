@@ -1014,7 +1014,7 @@ class GreenMIMSwinTransformer(BaseBackbone):  # Swin结构的MAE
         len_keep = int(L * (1 - mask_ratio))
         torch.manual_seed(0)
         noise = torch.rand(N, L, device=x.device)  # noise in [0, 1]
-
+        print(noise)
         # sort noise for each sample
         ids_shuffle = torch.argsort(
             noise, dim=1)  # ascend: small is keep, large is remove
@@ -1042,11 +1042,12 @@ class GreenMIMSwinTransformer(BaseBackbone):  # Swin结构的MAE
 
     def forward(self, x, mask_ratio=0.75):
         # generate random mask: B x Token^2，ids_restore：正确的ID顺序
-        # x, mask, ids_restore, latent =
-        # torch.load("./x_mask_ids_restore_latent.pth")
+        x, mask, ids_restore, latent_gt = \
+            torch.load('./x_mask_ids_restore_latent.pth')
         mask, ids_restore = self.random_masking(x, mask_ratio)
 
         # L -> L_vis：计算没有被mask掉的特征
         latent = self.encoder(x, mask.bool())
-
+        print(latent[0][0][:3])
+        print(latent_gt[0][0][:3])
         return latent, mask, ids_restore
