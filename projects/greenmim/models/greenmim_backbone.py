@@ -976,7 +976,6 @@ class GreenMIMSwinTransformer(BaseBackbone):
         len_keep = int(L * (1 - mask_ratio))
         torch.manual_seed(0)
         noise = torch.rand(N, L, device=x.device)  # noise in [0, 1]
-        print(noise)
         # sort noise for each sample
         ids_shuffle = torch.argsort(
             noise, dim=1)  # ascend: small is keep, large is remove

@@ -10,27 +10,23 @@ from mmselfsup.registry import MODELS
 
 @MODELS.register_module()
 class GreenMIMNeck(BaseModule):
-    """Pre-train Neck For SimMIM.
+    """Pre-train Neck For GreenMIM.
 
     This neck reconstructs the original image from the shrunk feature map.
-
-    Args:
-        in_channels (int): Channel dimension of the feature map.
-        encoder_stride (int): The total stride of the encoder.
     """
 
     def __init__(
             self,
             in_channels: int,
             encoder_stride: int,
-            img_size,
-            patch_size,
-            embed_dim=96,
-            depths=[2, 2, 6, 2],
-            decoder_embed_dim=512,
-            mlp_ratio=4.,
-            decoder_depth=8,
-            decoder_num_heads=16,
+            img_size: int,
+            patch_size: int,
+            embed_dim: int = 96,
+            depths: list = [2, 2, 6, 2],
+            decoder_embed_dim: int = 512,
+            mlp_ratio: float = 4.,
+            decoder_depth: int = 8,
+            decoder_num_heads: int = 16,
             norm_cfg: dict = dict(type='LN', eps=1e-6),
     ) -> None:
         super().__init__()
@@ -77,7 +73,8 @@ class GreenMIMNeck(BaseModule):
 
         torch.nn.init.normal_(self.mask_token, std=.02)
 
-    def forward(self, x, ids_restore):
+    def forward(self, x: torch.Tensor,
+                ids_restore: torch.Tensor) -> torch.Tensor:
         # embed tokens
         x = self.decoder_embed(x)
 
@@ -106,7 +103,9 @@ class GreenMIMNeck(BaseModule):
         return x
 
 
-def get_2d_sincos_pos_embed(embed_dim, grid_size, cls_token=False):
+def get_2d_sincos_pos_embed(embed_dim: int,
+                            grid_size: int,
+                            cls_token: bool = False) -> np.ndarray:
     """
     grid_size: int of the grid height and width
     return:
@@ -126,7 +125,8 @@ def get_2d_sincos_pos_embed(embed_dim, grid_size, cls_token=False):
     return pos_embed
 
 
-def get_2d_sincos_pos_embed_from_grid(embed_dim, grid):
+def get_2d_sincos_pos_embed_from_grid(embed_dim: int,
+                                      grid: np.ndarray) -> np.ndarray:
     assert embed_dim % 2 == 0
 
     # use half of dimensions to encode grid_h
@@ -139,7 +139,7 @@ def get_2d_sincos_pos_embed_from_grid(embed_dim, grid):
     return emb
 
 
-def get_1d_sincos_pos_embed_from_grid(embed_dim, pos):
+def get_1d_sincos_pos_embed_from_grid(embed_dim: int, pos: list) -> np.ndarray:
     """
     embed_dim: output dimension for each position
     pos: a list of positions to be encoded: size (M,)

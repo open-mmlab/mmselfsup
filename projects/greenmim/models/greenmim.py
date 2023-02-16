@@ -67,10 +67,10 @@ class GreenMIM(BaseModel):
 
         return results
 
-    def patchify(self, imgs, patch_size):
+    def patchify(self, imgs: torch.Tensor, patch_size: int) -> torch.Tensor:
         """
         imgs: (N, 3, H, W)
-        x: (N, L, patch_size**2 *3)
+        patch_size: int
         """
         p = patch_size
         assert imgs.shape[2] == imgs.shape[3] and imgs.shape[2] % p == 0

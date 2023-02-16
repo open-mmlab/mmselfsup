@@ -14,7 +14,8 @@ class GreenMIMHead(BaseModule):
         loss (dict): The config for loss.
     """
 
-    def __init__(self, patch_size, norm_pix_loss, loss: dict) -> None:
+    def __init__(self, patch_size: int, norm_pix_loss: bool,
+                 loss: dict) -> None:
         super().__init__()
         self.loss = MODELS.build(loss)
         self.final_patch_size = patch_size
