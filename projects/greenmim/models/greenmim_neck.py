@@ -2,8 +2,8 @@
 import numpy as np
 import torch
 import torch.nn as nn
+from mmcls.models.backbones.vision_transformer import TransformerEncoderLayer
 from mmengine.model import BaseModule
-from timm.models.vision_transformer import Block
 
 from mmselfsup.registry import MODELS
 
@@ -19,18 +19,20 @@ class GreenMIMNeck(BaseModule):
         encoder_stride (int): The total stride of the encoder.
     """
 
-    def __init__(self,
-                 in_channels: int,
-                 encoder_stride: int,
-                 img_size,
-                 patch_size,
-                 embed_dim=96,
-                 depths=[2, 2, 6, 2],
-                 decoder_embed_dim=512,
-                 mlp_ratio=4.,
-                 decoder_depth=8,
-                 decoder_num_heads=16,
-                 block_cls=Block) -> None:
+    def __init__(
+            self,
+            in_channels: int,
+            encoder_stride: int,
+            img_size,
+            patch_size,
+            embed_dim=96,
+            depths=[2, 2, 6, 2],
+            decoder_embed_dim=512,
+            mlp_ratio=4.,
+            decoder_depth=8,
+            decoder_num_heads=16,
+            norm_cfg: dict = dict(type='LN', eps=1e-6),
+    ) -> None:
         super().__init__()
 
         patch_resolution = img_size // patch_size
@@ -48,13 +50,14 @@ class GreenMIMNeck(BaseModule):
         self.decoder_pos_embed = nn.Parameter(
             torch.zeros(1, num_patches, decoder_embed_dim),
             requires_grad=False)  # fixed sin-cos embedding
+
         self.decoder_blocks = nn.ModuleList([
-            block_cls(
+            TransformerEncoderLayer(
                 decoder_embed_dim,
                 decoder_num_heads,
-                mlp_ratio,
+                int(mlp_ratio * decoder_embed_dim),
                 qkv_bias=True,
-                norm_layer=torch.nn.LayerNorm) for i in range(decoder_depth)
+                norm_cfg=norm_cfg) for _ in range(decoder_depth)
         ])
 
         self.decoder_norm = torch.nn.LayerNorm(decoder_embed_dim)
