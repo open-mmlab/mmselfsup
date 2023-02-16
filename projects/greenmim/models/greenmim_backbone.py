@@ -195,7 +195,7 @@ class SwinTransformerBlock(BaseModule):
 
     def __init__(self,
                  dim: int,
-                 input_resolution: tuple[int],
+                 input_resolution: Tuple[int],
                  num_heads: int,
                  window_size: int = 7,
                  shift_size: int = 0,
@@ -273,7 +273,7 @@ class PatchMerging(BaseModule):
     """
 
     def __init__(self,
-                 input_resolution: tuple[int],
+                 input_resolution: Tuple[int],
                  dim: int,
                  norm_layer: nn.Module = nn.LayerNorm) -> None:
         super().__init__()
@@ -311,7 +311,7 @@ class PatchMerging(BaseModule):
         return f'input_resolution={self.input_resolution}, dim={self.dim}'
 
 
-def knapsack(W: int, wt: tuple[int]) -> Tuple[list[list[int]], list]:
+def knapsack(W: int, wt: Tuple[int]) -> Tuple[List[List[int]], list]:
     '''Args:
         W (int): capacity
         wt (tuple[int]): the numbers of elements within each window
@@ -356,7 +356,7 @@ def knapsack(W: int, wt: tuple[int]) -> Tuple[list[list[int]], list]:
 
 
 def group_windows(group_size: int,
-                  num_ele_win: list[int]) -> Tuple[list[int], list[list[int]]]:
+                  num_ele_win: List[int]) -> Tuple[List[int], List[List[int]]]:
     """Greedily apply the DP algorithm to group the elements.
 
     Args:
@@ -542,7 +542,7 @@ class BasicLayer(BaseModule):
 
     def __init__(self,
                  dim: int,
-                 input_resolution: tuple[int],
+                 input_resolution: Tuple[int],
                  depth: int,
                  num_heads: int,
                  window_size: int,
@@ -974,7 +974,7 @@ class GreenMIMSwinTransformer(BaseBackbone):
         """
         N, L = 1, self.num_patches  # batch, length, dim
         len_keep = int(L * (1 - mask_ratio))
-        torch.manual_seed(0)
+
         noise = torch.rand(N, L, device=x.device)  # noise in [0, 1]
         # sort noise for each sample
         ids_shuffle = torch.argsort(
@@ -1006,14 +1006,8 @@ class GreenMIMSwinTransformer(BaseBackbone):
         x: torch.Tensor,
         mask_ratio: float = 0.75,
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-        # generate random mask: B x Token^2，ids_restore：正确的ID顺序
-        x, mask, ids_restore, latent_gt = \
-            torch.load('./x_mask_ids_restore_latent.pth')
+        # generate random mask: B x Token^2，ids_restore
         mask, ids_restore = self.random_masking(x, mask_ratio)
-
-        # L -> L_vis：计算没有被mask掉的特征
         latent = self.encoder(x, mask.bool())
-        print(latent[0][0][:3])
-        print(latent_gt[0][0][:3])
 
         return latent, mask, ids_restore
