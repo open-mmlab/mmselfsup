@@ -1,6 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from functools import partial
-from typing import List, Optional, Union
+from typing import List, Optional, Tuple, Union
 
 import numpy as np
 import torch
@@ -19,11 +19,11 @@ from mmselfsup.registry import MODELS
 class Mlp(BaseModule):
 
     def __init__(self,
-                 in_features,
-                 hidden_features=None,
-                 out_features=None,
-                 act_layer=nn.GELU,
-                 drop=0.):
+                 in_features: torch.Tensor,
+                 hidden_features: int = None,
+                 out_features: int = None,
+                 act_layer: nn.Module = nn.GELU,
+                 drop: float = 0.) -> None:
         super().__init__()
         out_features = out_features or in_features
         hidden_features = hidden_features or in_features
@@ -32,7 +32,7 @@ class Mlp(BaseModule):
         self.fc2 = nn.Linear(hidden_features, out_features)
         self.drop = nn.Dropout(drop)
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.fc1(x)
         x = self.act(x)
         x = self.drop(x)
@@ -41,7 +41,7 @@ class Mlp(BaseModule):
         return x
 
 
-def get_coordinates(h, w, device='cpu'):
+def get_coordinates(h: int, w: int, device: str = 'cpu') -> torch.Tensor:
     coords_h = torch.arange(h, device=device)
     coords_w = torch.arange(w, device=device)
     coords = torch.stack(torch.meshgrid([coords_h, coords_w]))  # 2, Wh, Ww
@@ -68,13 +68,13 @@ class WindowAttention(BaseModule):
     """
 
     def __init__(self,
-                 dim,
-                 window_size,
-                 num_heads,
-                 qkv_bias=True,
-                 qk_scale=None,
-                 attn_drop=0.,
-                 proj_drop=0.):
+                 dim: int,
+                 window_size: tuple,
+                 num_heads: int,
+                 qkv_bias: bool = True,
+                 qk_scale: bool = None,
+                 attn_drop: float = 0.,
+                 proj_drop: float = 0.) -> None:
 
         super().__init__()
         self.dim = dim
@@ -114,7 +114,10 @@ class WindowAttention(BaseModule):
         trunc_normal_(self.relative_position_bias_table, std=.02)
         self.softmax = nn.Softmax(dim=-1)
 
-    def forward(self, x, mask=None, pos_idx=None):
+    def forward(self,
+                x: torch.Tensor,
+                mask: torch.Tensor = None,
+                pos_idx: torch.Tensor = None) -> torch.Tensor:
         """
         Args:
             x: input features with shape of (num_windows*B, N, C)
@@ -167,19 +170,6 @@ class WindowAttention(BaseModule):
         return f'dim={self.dim}, window_size={self.window_size}, \
             num_heads={self.num_heads}'
 
-    def flops(self, N):
-        # calculate flops for 1 window with token length of N
-        flops = 0
-        # qkv = self.qkv(x)
-        flops += N * self.dim * 3 * self.dim
-        # attn = (q @ k.transpose(-2, -1))
-        flops += self.num_heads * N * (self.dim // self.num_heads) * N
-        #  x = (attn @ v)
-        flops += self.num_heads * N * N * (self.dim // self.num_heads)
-        # x = self.proj(x)
-        flops += N * self.dim * self.dim
-        return flops
-
 
 class SwinTransformerBlock(BaseModule):
     r""" Swin Transformer Block.
@@ -198,25 +188,25 @@ class SwinTransformerBlock(BaseModule):
         drop (float, optional): Dropout rate. Default: 0.0
         attn_drop (float, optional): Attention dropout rate. Default: 0.0
         drop_path (float, optional): Stochastic depth rate. Default: 0.0
-        act_layer (BaseModule, optional): Activation layer. Default: nn.GELU
-        norm_layer (BaseModule, optional): Normalization layer.
+        act_layer (nn.Module, optional): Activation layer. Default: nn.GELU
+        norm_layer (nn.Module, optional): Normalization layer.
             Default: nn.LayerNorm
     """
 
     def __init__(self,
-                 dim,
-                 input_resolution,
-                 num_heads,
-                 window_size=7,
-                 shift_size=0,
-                 mlp_ratio=4.,
-                 qkv_bias=True,
-                 qk_scale=None,
-                 drop=0.,
-                 attn_drop=0.,
-                 drop_path=0.,
-                 act_layer=nn.GELU,
-                 norm_layer=nn.LayerNorm):
+                 dim: int,
+                 input_resolution: tuple[int],
+                 num_heads: int,
+                 window_size: int = 7,
+                 shift_size: int = 0,
+                 mlp_ratio: float = 4.,
+                 qkv_bias: bool = True,
+                 qk_scale: bool = None,
+                 drop: float = 0.,
+                 attn_drop: float = 0.,
+                 drop_path: float = 0.,
+                 act_layer: nn.Module = nn.GELU,
+                 norm_layer: nn.Module = nn.LayerNorm) -> None:
         super().__init__()
         self.dim = dim
         self.input_resolution = input_resolution
@@ -252,7 +242,8 @@ class SwinTransformerBlock(BaseModule):
             act_layer=act_layer,
             drop=drop)
 
-    def forward(self, x, attn_mask, rel_pos_idx):
+    def forward(self, x: torch.Tensor, attn_mask: torch.Tensor,
+                rel_pos_idx: torch.Tensor) -> torch.Tensor:
         shortcut = x
         x = self.norm1(x)
 
@@ -270,20 +261,6 @@ class SwinTransformerBlock(BaseModule):
         'num_heads={self.num_heads}, ' f'window_size={self.window_size}, '
         f'shift_size={self.shift_size}, mlp_ratio={self.mlp_ratio}'
 
-    def flops(self):
-        flops = 0
-        H, W = self.input_resolution
-        # norm1
-        flops += self.dim * H * W
-        # W-MSA/SW-MSA
-        nW = H * W / self.window_size / self.window_size
-        flops += nW * self.attn.flops(self.window_size * self.window_size)
-        # mlp
-        flops += 2 * H * W * self.dim * self.dim * self.mlp_ratio
-        # norm2
-        flops += self.dim * H * W
-        return flops
-
 
 class PatchMerging(BaseModule):
     r""" Patch Merging Layer.
@@ -291,18 +268,22 @@ class PatchMerging(BaseModule):
     Args:
         input_resolution (tuple[int]): Resolution of input feature.
         dim (int): Number of input channels.
-        norm_layer (BaseModule, optional): Normalization layer.
+        norm_layer (nn.Module, optional): Normalization layer.
             Default: nn.LayerNorm
     """
 
-    def __init__(self, input_resolution, dim, norm_layer=nn.LayerNorm):
+    def __init__(self,
+                 input_resolution: tuple[int],
+                 dim: int,
+                 norm_layer: nn.Module = nn.LayerNorm) -> None:
         super().__init__()
         self.input_resolution = input_resolution
         self.dim = dim
         self.reduction = nn.Linear(4 * dim, 2 * dim, bias=False)
         self.norm = norm_layer(4 * dim)
 
-    def forward(self, x, mask_prev):
+    def forward(self, x: torch.Tensor,
+                mask_prev: torch.Tensor) -> torch.Tensor:
         """
         x: B, H*W, C
         """
@@ -329,14 +310,8 @@ class PatchMerging(BaseModule):
     def extra_repr(self) -> str:
         return f'input_resolution={self.input_resolution}, dim={self.dim}'
 
-    def flops(self):
-        H, W = self.input_resolution
-        flops = H * W * self.dim
-        flops += (H // 2) * (W // 2) * 4 * self.dim * 2 * self.dim
-        return flops
 
-
-def knapsack(W, wt):
+def knapsack(W: int, wt: tuple[int]) -> Tuple[list[list[int]], list]:
     '''Args:
         W (int): capacity
         wt (tuple[int]): the numbers of elements within each window
@@ -380,7 +355,8 @@ def knapsack(W, wt):
     return res_ret, idx[::-1]  # make the idx in an increasing order
 
 
-def group_windows(group_size, num_ele_win):
+def group_windows(group_size: int,
+                  num_ele_win: list[int]) -> Tuple[list[int], list[list[int]]]:
     """Greedily apply the DP algorithm to group the elements.
 
     Args:
@@ -410,9 +386,12 @@ def group_windows(group_size, num_ele_win):
     return num_ele_group, grouped_idx
 
 
-class GroupingModule:
+class GroupingModule(BaseModule):
 
-    def __init__(self, window_size, shift_size, group_size=None):
+    def __init__(self,
+                 window_size: int,
+                 shift_size: int,
+                 group_size: int = None) -> None:
         self.window_size = window_size
         self.shift_size = shift_size
         assert shift_size >= 0 and shift_size < window_size
@@ -421,7 +400,7 @@ class GroupingModule:
         self.attn_mask = None
         self.rel_pos_idx = None
 
-    def _get_group_id(self, coords):
+    def _get_group_id(self, coords: torch.Tensor) -> torch.Tensor:
         group_id = coords.clone()
         group_id += (self.window_size - self.shift_size) % self.window_size
         group_id = group_id // self.window_size
@@ -429,7 +408,7 @@ class GroupingModule:
             0, :, 1]  # (N_vis, )
         return group_id
 
-    def _get_attn_mask(self, group_id):
+    def _get_attn_mask(self, group_id: torch.Tensor) -> torch.Tensor:
         pos_mask = (group_id == -1)
         pos_mask = torch.logical_and(pos_mask[:, :, None], pos_mask[:,
                                                                     None, :])
@@ -439,7 +418,7 @@ class GroupingModule:
         attn_mask_float.masked_fill_(attn_mask, -100.)
         return attn_mask_float
 
-    def _get_rel_pos_idx(self, coords):
+    def _get_rel_pos_idx(self, coords: torch.Tensor) -> torch.Tensor:
         # num_groups, group_size, group_size, 2
         rel_pos_idx = coords[:, :, None, :] - coords[:, None, :, :]
         rel_pos_idx += self.window_size - 1
@@ -447,7 +426,7 @@ class GroupingModule:
         rel_pos_idx = rel_pos_idx.sum(dim=-1)
         return rel_pos_idx
 
-    def _prepare_masking(self, coords):
+    def _prepare_masking(self, coords: torch.Tensor) -> torch.Tensor:
         # coords: (B, N_vis, 2)
         group_id = self._get_group_id(coords)  # (N_vis, )
         attn_mask = self._get_attn_mask(group_id.unsqueeze(0))
@@ -459,7 +438,8 @@ class GroupingModule:
 
         return attn_mask, rel_pos_idx
 
-    def _prepare_grouping(self, coords):
+    def _prepare_grouping(
+            self, coords: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
         # find out and merge the elements within each local window
         # coords: (B, N_vis, 2)
         group_id = self._get_group_id(coords)  # (N_vis, )
@@ -509,7 +489,8 @@ class GroupingModule:
 
         return attn_mask, rel_pos_idx
 
-    def prepare(self, coords, mode):
+    def prepare(self, coords: torch.Tensor,
+                mode: torch.Tensor) -> torch.Tensor:
         self._mode = mode
         if mode == 'masking':
             return self._prepare_masking(coords)
@@ -518,14 +499,14 @@ class GroupingModule:
         else:
             raise KeyError('')
 
-    def group(self, x):
+    def group(self, x: torch.Tensor) -> torch.Tensor:
         if self._mode == 'grouping':
             self.ori_shape = x.shape
             x = torch.index_select(x, 1, self.idx_shuffle)  # (B, nG*GS, C)
             x = x.reshape(-1, self.group_size, x.shape[-1])  # (B*nG, GS, C)
         return x
 
-    def merge(self, x):
+    def merge(self, x: torch.Tensor) -> torch.Tensor:
         if self._mode == 'grouping':
             B, N, C = self.ori_shape
             x = x.reshape(B, -1, C)  # (B, nG*GS, C)
@@ -551,29 +532,29 @@ class BasicLayer(BaseModule):
         attn_drop (float, optional): Attention dropout rate. Default: 0.0
         drop_path (float | tuple[float], optional): Stochastic depth rate.
             Default: 0.0
-        norm_layer (BaseModule, optional): Normalization layer. Default:
+        norm_layer (nn.Module, optional): Normalization layer. Default:
             nn.LayerNorm
-        downsample (BaseModule | None, optional): Downsample layer at
+        downsample (nn.Module | None, optional): Downsample layer at
             the end of the layer. Default: None
         use_checkpoint (bool): Whether to use checkpointing to save memory.
             Default: False.
     """
 
     def __init__(self,
-                 dim,
-                 input_resolution,
-                 depth,
-                 num_heads,
-                 window_size,
-                 mlp_ratio=4.,
-                 qkv_bias=True,
-                 qk_scale=None,
-                 drop=0.,
-                 attn_drop=0.,
-                 drop_path=0.,
-                 norm_layer=nn.LayerNorm,
-                 downsample=None,
-                 use_checkpoint=False):
+                 dim: int,
+                 input_resolution: tuple[int],
+                 depth: int,
+                 num_heads: int,
+                 window_size: int,
+                 mlp_ratio: float = 4.,
+                 qkv_bias: bool = True,
+                 qk_scale: bool = None,
+                 drop: float = 0.,
+                 attn_drop: float = 0.,
+                 drop_path: float = 0.,
+                 norm_layer: nn.Module = nn.LayerNorm,
+                 downsample: nn.Module = None,
+                 use_checkpoint: bool = False) -> None:
 
         super().__init__()
         self.dim = dim
@@ -614,7 +595,11 @@ class BasicLayer(BaseModule):
         else:
             self.downsample = None
 
-    def forward(self, x, coords, patch_mask, return_x_before_down=False):
+    def forward(self,
+                x: torch.Tensor,
+                coords: torch.Tensor,
+                patch_mask: torch.Tensor,
+                return_x_before_down: bool = False) -> torch.Tensor:
         # prepare the attention mask
         # when the number of visible patches is small,
         # all patches are partitioned into a single group
@@ -661,14 +646,6 @@ class BasicLayer(BaseModule):
                 f'window_size={self.window_size},' \
                 f'shift_size={self.shift_size}, depth={self.depth}'
 
-    def flops(self):
-        flops = 0
-        for blk in self.blocks:
-            flops += blk.flops()
-        if self.downsample is not None:
-            flops += self.downsample.flops()
-        return flops
-
 
 class PatchEmbed(BaseModule):
     r""" Image to Patch Embedding
@@ -679,15 +656,15 @@ class PatchEmbed(BaseModule):
         in_chans (int): Number of input image channels. Default: 3.
         embed_dim (int): Number of linear projection output channels.
             Default: 96.
-        norm_layer (BaseModule, optional): Normalization layer. Default: None
+        norm_layer (nn.Module, optional): Normalization layer. Default: None
     """
 
     def __init__(self,
-                 img_size=224,
-                 patch_size=4,
-                 in_chans=3,
-                 embed_dim=96,
-                 norm_layer=None):
+                 img_size: int = 224,
+                 patch_size: int = 4,
+                 in_chans: int = 3,
+                 embed_dim: int = 96,
+                 norm_layer: nn.Module = None) -> None:
         super().__init__()
         img_size = to_2tuple(img_size)
         patch_size = to_2tuple(patch_size)
@@ -709,7 +686,7 @@ class PatchEmbed(BaseModule):
         else:
             self.norm = None
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         B, C, H, W = x.shape
         # FIXME look at relaxing size constraints
         assert H == self.img_size[0] and W == self.img_size[1], \
@@ -719,14 +696,6 @@ class PatchEmbed(BaseModule):
         if self.norm is not None:
             x = self.norm(x)
         return x
-
-    def flops(self):
-        Ho, Wo = self.patches_resolution
-        flops = Ho * Wo * self.embed_dim * self.in_chans * (
-            self.patch_size[0] * self.patch_size[1])
-        if self.norm is not None:
-            flops += Ho * Wo * self.embed_dim
-        return flops
 
 
 class SwinTransformer(BaseModule):
@@ -754,7 +723,7 @@ class SwinTransformer(BaseModule):
         drop_rate (float): Dropout rate. Default: 0
         attn_drop_rate (float): Attention dropout rate. Default: 0
         drop_path_rate (float): Stochastic depth rate. Default: 0.1
-        norm_layer (BaseModule): Normalization layer. Default: nn.LayerNorm.
+        norm_layer (nn.Module): Normalization layer. Default: nn.LayerNorm.
         ape (bool): If True, add absolute position embedding to the
             patch embedding. Default: False
         patch_norm (bool): If True, add normalization after patch embedding.
@@ -764,24 +733,24 @@ class SwinTransformer(BaseModule):
     """
 
     def __init__(self,
-                 img_size=224,
-                 patch_size=4,
-                 in_chans=3,
-                 num_classes=1000,
-                 embed_dim=96,
-                 depths=[2, 2, 6, 2],
-                 num_heads=[3, 6, 12, 24],
-                 window_size=7,
-                 mlp_ratio=4.,
-                 qkv_bias=True,
-                 qk_scale=None,
-                 drop_rate=0.,
-                 attn_drop_rate=0.,
-                 drop_path_rate=0.1,
-                 norm_layer=partial(nn.LayerNorm, eps=1e-6),
-                 ape=False,
-                 patch_norm=True,
-                 use_checkpoint=False):
+                 img_size: int = 224,
+                 patch_size: int = 4,
+                 in_chans: int = 3,
+                 num_classes: int = 1000,
+                 embed_dim: int = 96,
+                 depths: list = [2, 2, 6, 2],
+                 num_heads: list = [3, 6, 12, 24],
+                 window_size: int = 7,
+                 mlp_ratio: float = 4.,
+                 qkv_bias: bool = True,
+                 qk_scale: float = None,
+                 drop_rate: float = 0.,
+                 attn_drop_rate: float = 0.,
+                 drop_path_rate: float = 0.1,
+                 norm_layer: nn.Module = partial(nn.LayerNorm, eps=1e-6),
+                 ape: bool = False,
+                 patch_norm: bool = True,
+                 use_checkpoint: bool = False) -> None:
         super().__init__()
 
         self.num_classes = num_classes
@@ -843,7 +812,7 @@ class SwinTransformer(BaseModule):
 
         self.apply(self._init_weights)
 
-    def _init_weights(self, m):
+    def _init_weights(self, m: nn.Module) -> None:
         if isinstance(m, nn.Linear):
             trunc_normal_(m.weight, std=.02)
             if isinstance(m, nn.Linear) and m.bias is not None:
@@ -860,7 +829,8 @@ class SwinTransformer(BaseModule):
     def no_weight_decay_keywords(self):
         return {'relative_position_bias_table'}
 
-    def forward_features(self, x, mask):
+    def forward_features(self, x: torch.Tensor,
+                         mask: torch.Tensor) -> torch.Tensor:
         # patch embedding
         x = self.patch_embed(x)
         if self.ape:
@@ -910,46 +880,35 @@ class SwinTransformer(BaseModule):
 
         return x_vis
 
-    def forward(self, x, mask):
+    def forward(self, x: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
         return self.forward_features(x, mask)
-
-    def flops(self):
-        flops = 0
-        flops += self.patch_embed.flops()
-        for i, layer in enumerate(self.layers):
-            flops += layer.flops()
-        flops += self.num_features * self.patches_resolution[
-            0] * self.patches_resolution[1] // (2**self.num_layers)
-        flops += self.num_features * self.num_classes
-        return flops
 
 
 @MODELS.register_module()
-class GreenMIMSwinTransformer(BaseBackbone):  # Swin结构的MAE
+class GreenMIMSwinTransformer(BaseBackbone):
     """Masked Autoencoder with VisionTransformer backbone."""
 
     def __init__(self,
-                 arch='B',
-                 stage_cfgs=None,
-                 img_size=224,
-                 patch_size=4,
-                 in_chans=3,
-                 embed_dim=96,
-                 depths=[2, 2, 6, 2],
-                 num_heads=[3, 6, 12, 24],
-                 window_size=7,
-                 mlp_ratio=4.,
-                 decoder_embed_dim=512,
-                 decoder_depth=8,
-                 decoder_num_heads=16,
-                 norm_layer=partial(nn.LayerNorm, eps=1e-6),
-                 norm_pix_loss=False,
-                 backbone_cls=SwinTransformer,
+                 arch: str = 'B',
+                 stage_cfgs: dict = None,
+                 img_size: int = 224,
+                 patch_size: int = 4,
+                 in_chans: int = 3,
+                 embed_dim: int = 96,
+                 depths: list = [2, 2, 6, 2],
+                 num_heads: list = [3, 6, 12, 24],
+                 window_size: int = 7,
+                 mlp_ratio: float = 4.,
+                 decoder_embed_dim: int = 512,
+                 decoder_depth: int = 8,
+                 decoder_num_heads: int = 16,
+                 norm_layer: nn.Module = partial(nn.LayerNorm, eps=1e-6),
+                 norm_pix_loss: bool = False,
+                 backbone_cls: nn.Module = SwinTransformer,
                  init_cfg: Optional[Union[List[dict], dict]] = None,
-                 **kwargs):
+                 **kwargs) -> None:
         super().__init__(init_cfg=init_cfg)
 
-        # --------------------------------------------------------------------------
         # MAE encoder specifics
         self.encoder = backbone_cls(
             img_size=img_size,
@@ -966,8 +925,6 @@ class GreenMIMSwinTransformer(BaseBackbone):  # Swin结构的MAE
         self.num_patches = num_patches
         patch_size = patch_size * 2**(len(depths) - 1)
         self.final_patch_size = patch_size
-        # --------------------------------------------------------------------------
-
         self.norm_pix_loss = norm_pix_loss
 
         self.initialize_weights()
@@ -981,7 +938,7 @@ class GreenMIMSwinTransformer(BaseBackbone):  # Swin结构的MAE
         # initialize nn.Linear and nn.LayerNorm
         self.apply(self._init_weights)
 
-    def _init_weights(self, m):
+    def _init_weights(self, m: nn.Module) -> None:
         if isinstance(m, nn.Linear):
             # we use xavier_uniform following official JAX ViT:
             torch.nn.init.xavier_uniform_(m.weight)
@@ -991,7 +948,9 @@ class GreenMIMSwinTransformer(BaseBackbone):  # Swin结构的MAE
             nn.init.constant_(m.bias, 0)
             nn.init.constant_(m.weight, 1.0)
 
-    def unpatchify(self, x, patch_size=None):
+    def unpatchify(self,
+                   x: torch.Tensor,
+                   patch_size: int = None) -> torch.Tensor:
         """
         x: (N, L, patch_size**2 *3)
         imgs: (N, 3, H, W)
@@ -1005,7 +964,9 @@ class GreenMIMSwinTransformer(BaseBackbone):  # Swin结构的MAE
         imgs = x.reshape(shape=(x.shape[0], 3, h * p, h * p))
         return imgs
 
-    def random_masking(self, x, mask_ratio):
+    def random_masking(
+            self, x: torch.Tensor,
+            mask_ratio: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
         """Perform per-sample random masking by per-sample shuffling.
 
         Per-sample shuffling is done by argsort random noise.
@@ -1041,7 +1002,11 @@ class GreenMIMSwinTransformer(BaseBackbone):  # Swin结构的MAE
 
         return mask, ids_restore
 
-    def forward(self, x, mask_ratio=0.75):
+    def forward(
+        self,
+        x: torch.Tensor,
+        mask_ratio: float = 0.75,
+    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         # generate random mask: B x Token^2，ids_restore：正确的ID顺序
         x, mask, ids_restore, latent_gt = \
             torch.load('./x_mask_ids_restore_latent.pth')
