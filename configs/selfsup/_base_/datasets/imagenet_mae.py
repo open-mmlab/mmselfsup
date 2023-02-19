@@ -1,8 +1,8 @@
+
 # dataset settings
 dataset_type = 'mmcls.ImageNet'
-data_root = '/data/common/ImageNet/'
+data_root = 'data/imagenet/'
 file_client_args = dict(backend='disk')
-ann_file = '/home/nus-zwb/research/data/imagenet/meta/train.txt'
 
 train_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=file_client_args),
@@ -25,6 +25,6 @@ train_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
-        ann_file=ann_file,
+        ann_file='meta/train.txt',
         data_prefix=dict(img_path='train/'),
         pipeline=train_pipeline))
