@@ -1,4 +1,3 @@
-
 # dataset settings
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
