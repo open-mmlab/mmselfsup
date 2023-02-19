@@ -60,10 +60,12 @@ class GreenMIMNeck(BaseModule):
         self.decoder_pred = nn.Linear(
             decoder_embed_dim, patch_size**2 * in_channels,
             bias=True)  # encoder to decoder
+        self.num_patches = num_patches
 
-    def initialize_weights(self):
-        # initialization
-        # initialize (and freeze) pos_embed by sin-cos embedding
+    def init_weights(self):
+        """Initialize position embedding, patch embedding."""
+        super().init_weights()
+
         decoder_pos_embed = get_2d_sincos_pos_embed(
             self.decoder_pos_embed.shape[-1],
             int(self.num_patches**.5),

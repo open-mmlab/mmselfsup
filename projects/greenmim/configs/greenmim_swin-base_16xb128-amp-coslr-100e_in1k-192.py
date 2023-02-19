@@ -1,8 +1,8 @@
 _base_ = [
     './greenmim_swin-base.py',
-    './imagenet_mae.py',
-    './adamw_coslr-200e_in1k.py',
-    './default_runtime.py',
+    '../../../configs/selfsup/_base_/datasets/imagenet_mae.py',
+    '../../../configs/selfsup/_base_/schedules/adamw_coslr-200e_in1k.py',
+    '../../../configs/selfsup/_base_/default_runtime.py',
 ]
 
 # dataset 16 GPUs x 128

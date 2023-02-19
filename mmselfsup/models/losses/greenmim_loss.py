@@ -33,7 +33,8 @@ class GreenMIMReconstructionLoss(BaseModule):
         Returns:
             torch.Tensor: The reconstruction loss.
         """
-        loss_rec = F.l1_loss(target, pred, reduction='none')  # ???: 应该可以复用之前的loss吧
+        loss_rec = F.l1_loss(
+            target, pred, reduction='none')  # ???: 应该可以复用之前的loss吧
         loss = (loss_rec * mask).sum() / (mask.sum() +
                                           1e-5) / self.encoder_in_channels
 

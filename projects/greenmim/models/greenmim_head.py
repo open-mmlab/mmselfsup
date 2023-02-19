@@ -7,7 +7,7 @@ from mmselfsup.registry import MODELS
 
 @MODELS.register_module()
 class GreenMIMHead(BaseModule):
-    """Pretrain Head for SimMIM.
+    """Pretrain Head for GreenMIMHead.
 
     Args:
         patch_size (int): Patch size of each token.
