@@ -32,4 +32,4 @@ model = dict(
         type='GreenMIMHead',
         patch_size=patch_size,
         norm_pix_loss=False,
-        loss=dict(type='SimMIMReconstructionLoss', encoder_in_channels=3)))
+        loss=dict(type='MAEReconstructionLoss')))
