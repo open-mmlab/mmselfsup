@@ -810,6 +810,8 @@ class SwinTransformer(BaseModule):
 
         self.norm = norm_layer(self.num_features)
 
+    def init_weights(self):
+        super().init_weights()
         self.apply(self._init_weights)
 
     def _init_weights(self, m: nn.Module) -> None:
@@ -927,11 +929,8 @@ class GreenMIMSwinTransformer(BaseBackbone):
         self.final_patch_size = patch_size
         self.norm_pix_loss = norm_pix_loss
 
-        self.initialize_weights()
-
-    def initialize_weights(self):
-        # initialization
-        # initialize patch_embed like nn.Linear (instead of nn.Conv2d)
+    def init_weights(self):
+        super().init_weights()
         w = self.encoder.patch_embed.proj.weight.data
         torch.nn.init.xavier_uniform_(w.view([w.shape[0], -1]))
 
