@@ -21,11 +21,12 @@ from .rotation_pred import RotationPred
 from .simclr import SimCLR
 from .simmim import SimMIM
 from .simsiam import SimSiam
+from .spark import SparK
 from .swav import SwAV
 
 __all__ = [
     'BaseModel', 'BarlowTwins', 'BEiT', 'BYOL', 'DeepCluster', 'DenseCL',
     'MoCo', 'NPID', 'ODC', 'RelativeLoc', 'RotationPred', 'SimCLR', 'SimSiam',
     'SwAV', 'MAE', 'MoCoV3', 'SimMIM', 'CAE', 'MaskFeat', 'MILAN', 'EVA',
-    'MixMIM', 'PixMIM'
+    'MixMIM', 'PixMIM', 'SparK'
 ]

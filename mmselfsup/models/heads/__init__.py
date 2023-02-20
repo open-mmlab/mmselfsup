@@ -12,11 +12,13 @@ from .mixmim_head import MixMIMPretrainHead
 from .mocov3_head import MoCoV3Head
 from .multi_cls_head import MultiClsHead
 from .simmim_head import SimMIMHead
+from .spark_head import SparKPretrainHead
 from .swav_head import SwAVHead
 
 __all__ = [
     'BEiTV1Head', 'BEiTV2Head', 'ContrastiveHead', 'ClsHead',
     'LatentPredictHead', 'LatentCrossCorrelationHead', 'MultiClsHead',
     'MAEPretrainHead', 'MoCoV3Head', 'SimMIMHead', 'CAEHead', 'SwAVHead',
-    'MaskFeatPretrainHead', 'MILANPretrainHead', 'MixMIMPretrainHead'
+    'MaskFeatPretrainHead', 'MILANPretrainHead', 'MixMIMPretrainHead',
+    'SparKPretrainHead'
 ]
