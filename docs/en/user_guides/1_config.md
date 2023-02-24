@@ -4,16 +4,16 @@ We incorporate modular and inheritance design into our config system, which is c
 
 - [Tutorial 1: Learn about Configs](#tutorial-1-learn-about-configs)
   - [Config File and Checkpoint Naming Convention](#config-file-and-checkpoint-naming-convention)
-    - [Algorithm information](#algorithm-information)
-    - [Module information](#module-information)
-    - [Training information](#training-information)
-    - [Data information](#data-information)
+    - [Algorithm Information](#algorithm-information)
+    - [Module Information](#module-information)
+    - [Training Information](#training-information)
+    - [Data Information](#data-information)
     - [Config File Name Example](#config-file-name-example)
   - [Config File Structure](#config-file-structure)
   - [Inherit and Modify Config File](#inherit-and-modify-config-file)
-    - [Use intermediate variables in configs](#use-intermediate-variables-in-configs)
-    - [Ignore some fields in the base configs](#ignore-some-fields-in-the-base-configs)
-    - [Reuse some fields in the base configs](#reuse-some-fields-in-the-base-configs)
+    - [Use intermediate variables in Configs](#use-intermediate-variables-in-configs)
+    - [Ignore Some Fields in the Base Configs](#ignore-some-fields-in-the-base-configs)
+    - [Reuse Some Fields in the Base Configs](#reuse-some-fields-in-the-base-configs)
   - [Modify Config through Script Arguments](#modify-config-through-script-arguments)
   - [Import Modules from Other MM-Codebases](#import-modules-from-other-mm-codebases)
 
@@ -34,7 +34,7 @@ The following example is for illustration:
 
 We detail the naming convention for each part in the name of the config file:
 
-### Algorithm information
+### Algorithm Information
 
 ```
 {algorithm}-{misc}
@@ -53,7 +53,7 @@ We detail the naming convention for each part in the name of the config file:
 
 Note that different words are connected with dash `-`.
 
-### Module information
+### Module Information
 
 ```
 {backbone_setting}-{neck_setting}-{head_setting}-{loss_setting}
@@ -71,7 +71,7 @@ Sometimes, there are some special settings needed to be mentioned in the config 
 
 Note that `neck_setting`, `head_setting` and `loss_setting` are optional.
 
-### Training information
+### Training Information
 
 Training related settings，including batch size, lr schedule, data augmentation, etc.
 
@@ -84,7 +84,7 @@ E.g.:
 - `8xb32-accum16-coslr-200e` : `accum16` means the weights will be updated after the gradient is accumulated for 16 iterations.
 - `8xb512-amp-coslr-300e` : `amp` denotes the automatic mixed precision training.
 
-### Data information
+### Data Information
 
 Data information contains the dataset name, input size, etc. E.g.:
 
@@ -305,7 +305,7 @@ param_scheduler = [
 train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=800)
 ```
 
-### Use intermediate variables in configs
+### Use intermediate variables in Configs
 
 Some intermediate variables are used in the config file. The intermediate variables make the config file clearer and easier to modify.
 
@@ -368,7 +368,7 @@ train_dataloader = dict(
         pipeline=train_pipeline))
 ```
 
-### Ignore some fields in the base configs
+### Ignore Some Fields in the Base Configs
 
 Sometimes, you may set `_delete_=True` to ignore some of the fields in base configs. You can refer to [mmengine](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/config.md) for more instructions.
 
@@ -387,7 +387,7 @@ model = dict(
         with_avg_pool=True))
 ```
 
-### Reuse some fields in the base configs
+### Reuse Some Fields in the Base Configs
 
 Sometimes, you may reuse some fields in base configs, so as to avoid duplication of variables. You can refer to [mmengine](https://github.com/open-mmlab/mmengine/blob/main/docs/zh_cn/tutorials/config.md) for more instructions.
 
