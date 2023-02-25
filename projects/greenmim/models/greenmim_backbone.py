@@ -698,12 +698,9 @@ class PatchEmbed(BaseModule):
         return x
 
 
-class SwinTransformer(BaseModule):
-    r""" Swin Transformer
-        A PyTorch impl of : `Swin Transformer: Hierarchical Vision
-        Transformer using Shifted Windows`
-        - https://arxiv.org/pdf/2103.14030
-
+@MODELS.register_module()
+class GreenMIMSwinTransformer(BaseBackbone):
+    r"""GreenMIM with SwinTransformer backbone.
     Args:
         img_size (int | tuple(int)): Input image size. Default 224
         patch_size (int | tuple(int)): Patch size. Default: 4
@@ -733,27 +730,34 @@ class SwinTransformer(BaseModule):
     """
 
     def __init__(self,
+                 arch: str = 'B',
+                 stage_cfgs: dict = None,
                  img_size: int = 224,
                  patch_size: int = 4,
                  in_chans: int = 3,
-                 num_classes: int = 1000,
                  embed_dim: int = 96,
                  depths: list = [2, 2, 6, 2],
                  num_heads: list = [3, 6, 12, 24],
                  window_size: int = 7,
                  mlp_ratio: float = 4.,
+                 decoder_embed_dim: int = 512,
+                 decoder_depth: int = 8,
+                 decoder_num_heads: int = 16,
+                 norm_layer: nn.Module = partial(nn.LayerNorm, eps=1e-6),
+                 norm_pix_loss: bool = False,
                  qkv_bias: bool = True,
                  qk_scale: float = None,
-                 drop_rate: float = 0.,
-                 attn_drop_rate: float = 0.,
-                 drop_path_rate: float = 0.1,
-                 norm_layer: nn.Module = partial(nn.LayerNorm, eps=1e-6),
                  ape: bool = False,
                  patch_norm: bool = True,
-                 use_checkpoint: bool = False) -> None:
-        super().__init__()
+                 drop_path_rate: float = 0.1,
+                 drop_rate: float = 0.,
+                 attn_drop_rate: float = 0.,
+                 use_checkpoint: bool = False,
+                 init_cfg: Optional[Union[List[dict], dict]] = None,
+                 **kwargs) -> None:
+        super().__init__(init_cfg=init_cfg)
 
-        self.num_classes = num_classes
+        # SwinTransformer specifics
         self.num_layers = len(depths)
         self.embed_dim = embed_dim
         self.ape = ape
@@ -810,18 +814,11 @@ class SwinTransformer(BaseModule):
 
         self.norm = norm_layer(self.num_features)
 
-    def init_weights(self):
-        super().init_weights()
-        self.apply(self._init_weights)
-
-    def _init_weights(self, m: nn.Module) -> None:
-        if isinstance(m, nn.Linear):
-            trunc_normal_(m.weight, std=.02)
-            if isinstance(m, nn.Linear) and m.bias is not None:
-                nn.init.constant_(m.bias, 0)
-        elif isinstance(m, nn.LayerNorm):
-            nn.init.constant_(m.bias, 0)
-            nn.init.constant_(m.weight, 1.0)
+        num_patches = np.prod(self.layers[-1].input_resolution)
+        self.num_patches = num_patches
+        patch_size = patch_size * 2**(len(depths) - 1)
+        self.final_patch_size = patch_size
+        self.norm_pix_loss = norm_pix_loss
 
     @torch.jit.ignore
     def no_weight_decay(self):
@@ -830,6 +827,79 @@ class SwinTransformer(BaseModule):
     @torch.jit.ignore
     def no_weight_decay_keywords(self):
         return {'relative_position_bias_table'}
+
+    def init_weights(self):
+        # initialization
+        # initialize patch_embed like nn.Linear (instead of nn.Conv2d)
+        w = self.patch_embed.proj.weight.data
+        torch.nn.init.xavier_uniform_(w.view([w.shape[0], -1]))
+
+        # initialize nn.Linear and nn.LayerNorm
+        self.apply(self._init_weights)
+        super().init_weights()
+
+    def _init_weights(self, m):
+        if isinstance(m, nn.Linear):
+            # we use xavier_uniform following official JAX ViT:
+            torch.nn.init.xavier_uniform_(m.weight)
+            if isinstance(m, nn.Linear) and m.bias is not None:
+                nn.init.constant_(m.bias, 0)
+        elif isinstance(m, nn.LayerNorm):
+            nn.init.constant_(m.bias, 0)
+            nn.init.constant_(m.weight, 1.0)
+
+    def unpatchify(self,
+                   x: torch.Tensor,
+                   patch_size: int = None) -> torch.Tensor:
+        """
+        x: (N, L, patch_size**2 *3)
+        imgs: (N, 3, H, W)
+        """
+        p = patch_size or self.final_patch_size
+        h = w = int(x.shape[1]**.5)
+        assert h * w == x.shape[1]
+
+        x = x.reshape(shape=(x.shape[0], h, w, p, p, 3))
+        x = torch.einsum('nhwpqc->nchpwq', x)
+        imgs = x.reshape(shape=(x.shape[0], 3, h * p, h * p))
+        return imgs
+
+    def random_masking(
+            self, x: torch.Tensor,
+            mask_ratio: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+        """Perform per-sample random masking by per-sample shuffling.
+
+        Per-sample shuffling is done by argsort random noise.
+        x: [N, L, D], sequence
+        """
+        N, L = 1, self.num_patches  # batch, length, dim
+        len_keep = int(L * (1 - mask_ratio))
+        torch.manual_seed(0)  # 977行插入这个代码
+        noise = torch.rand(N, L, device=x.device)  # noise in [0, 1]
+        # sort noise for each sample
+        ids_shuffle = torch.argsort(
+            noise, dim=1)  # ascend: small is keep, large is remove
+        ids_restore = torch.argsort(ids_shuffle, dim=1)
+
+        # keep the first subset
+        ids_keep = ids_shuffle[:, :len_keep]
+
+        # generate the binary mask: 0 is keep, 1 is remove
+        mask = torch.ones([N, L], device=x.device)
+        mask.scatter_add_(
+            1, ids_keep,
+            torch.full([N, len_keep],
+                       fill_value=-1,
+                       dtype=mask.dtype,
+                       device=x.device))
+        assert (mask.gather(1, ids_shuffle).gather(1,
+                                                   ids_restore) == mask).all()
+
+        # repeat the mask
+        ids_restore = ids_restore.repeat(x.shape[0], 1)
+        mask = mask.repeat(x.shape[0], 1)
+
+        return mask, ids_restore
 
     def forward_features(self, x: torch.Tensor,
                          mask: torch.Tensor) -> torch.Tensor:
@@ -879,126 +949,7 @@ class SwinTransformer(BaseModule):
         for layer in self.layers:
             x_vis, coords, vis_mask = layer(x_vis, coords, vis_mask)
         x_vis = self.norm(x_vis)
-
         return x_vis
-
-    def forward(self, x: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
-        return self.forward_features(x, mask)
-
-
-@MODELS.register_module()
-class GreenMIMSwinTransformer(BaseBackbone):
-    """Masked Autoencoder with VisionTransformer backbone."""
-
-    def __init__(self,
-                 arch: str = 'B',
-                 stage_cfgs: dict = None,
-                 img_size: int = 224,
-                 patch_size: int = 4,
-                 in_chans: int = 3,
-                 embed_dim: int = 96,
-                 depths: list = [2, 2, 6, 2],
-                 num_heads: list = [3, 6, 12, 24],
-                 window_size: int = 7,
-                 mlp_ratio: float = 4.,
-                 decoder_embed_dim: int = 512,
-                 decoder_depth: int = 8,
-                 decoder_num_heads: int = 16,
-                 norm_layer: nn.Module = partial(nn.LayerNorm, eps=1e-6),
-                 norm_pix_loss: bool = False,
-                 backbone_cls: nn.Module = SwinTransformer,
-                 init_cfg: Optional[Union[List[dict], dict]] = None,
-                 **kwargs) -> None:
-        super().__init__(init_cfg=init_cfg)
-
-        # MAE encoder specifics
-        self.encoder = backbone_cls(
-            img_size=img_size,
-            patch_size=patch_size,
-            in_chans=in_chans,
-            num_classes=0,
-            embed_dim=embed_dim,
-            depths=depths,
-            num_heads=num_heads,
-            window_size=window_size,
-            norm_layer=norm_layer,
-            **kwargs)
-        num_patches = np.prod(self.encoder.layers[-1].input_resolution)
-        self.num_patches = num_patches
-        patch_size = patch_size * 2**(len(depths) - 1)
-        self.final_patch_size = patch_size
-        self.norm_pix_loss = norm_pix_loss
-
-    def init_weights(self):
-        super().init_weights()
-        w = self.encoder.patch_embed.proj.weight.data
-        torch.nn.init.xavier_uniform_(w.view([w.shape[0], -1]))
-
-        # initialize nn.Linear and nn.LayerNorm
-        self.apply(self._init_weights)
-
-    def _init_weights(self, m: nn.Module) -> None:
-        if isinstance(m, nn.Linear):
-            # we use xavier_uniform following official JAX ViT:
-            torch.nn.init.xavier_uniform_(m.weight)
-            if isinstance(m, nn.Linear) and m.bias is not None:
-                nn.init.constant_(m.bias, 0)
-        elif isinstance(m, nn.LayerNorm):
-            nn.init.constant_(m.bias, 0)
-            nn.init.constant_(m.weight, 1.0)
-
-    def unpatchify(self,
-                   x: torch.Tensor,
-                   patch_size: int = None) -> torch.Tensor:
-        """
-        x: (N, L, patch_size**2 *3)
-        imgs: (N, 3, H, W)
-        """
-        p = patch_size or self.final_patch_size
-        h = w = int(x.shape[1]**.5)
-        assert h * w == x.shape[1]
-
-        x = x.reshape(shape=(x.shape[0], h, w, p, p, 3))
-        x = torch.einsum('nhwpqc->nchpwq', x)
-        imgs = x.reshape(shape=(x.shape[0], 3, h * p, h * p))
-        return imgs
-
-    def random_masking(
-            self, x: torch.Tensor,
-            mask_ratio: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
-        """Perform per-sample random masking by per-sample shuffling.
-
-        Per-sample shuffling is done by argsort random noise.
-        x: [N, L, D], sequence
-        """
-        N, L = 1, self.num_patches  # batch, length, dim
-        len_keep = int(L * (1 - mask_ratio))
-
-        noise = torch.rand(N, L, device=x.device)  # noise in [0, 1]
-        # sort noise for each sample
-        ids_shuffle = torch.argsort(
-            noise, dim=1)  # ascend: small is keep, large is remove
-        ids_restore = torch.argsort(ids_shuffle, dim=1)
-
-        # keep the first subset
-        ids_keep = ids_shuffle[:, :len_keep]
-
-        # generate the binary mask: 0 is keep, 1 is remove
-        mask = torch.ones([N, L], device=x.device)
-        mask.scatter_add_(
-            1, ids_keep,
-            torch.full([N, len_keep],
-                       fill_value=-1,
-                       dtype=mask.dtype,
-                       device=x.device))
-        assert (mask.gather(1, ids_shuffle).gather(1,
-                                                   ids_restore) == mask).all()
-
-        # repeat the mask
-        ids_restore = ids_restore.repeat(x.shape[0], 1)
-        mask = mask.repeat(x.shape[0], 1)
-
-        return mask, ids_restore
 
     def forward(
         self,
@@ -1007,6 +958,6 @@ class GreenMIMSwinTransformer(BaseBackbone):
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         # generate random mask: B x Token^2，ids_restore
         mask, ids_restore = self.random_masking(x, mask_ratio)
-        latent = self.encoder(x, mask.bool())
+        latent = self.forward_features(x, mask.bool())
 
         return latent, mask, ids_restore
