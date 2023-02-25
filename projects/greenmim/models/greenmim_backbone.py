@@ -874,7 +874,6 @@ class GreenMIMSwinTransformer(BaseBackbone):
         """
         N, L = 1, self.num_patches  # batch, length, dim
         len_keep = int(L * (1 - mask_ratio))
-        torch.manual_seed(0)  # 977行插入这个代码
         noise = torch.rand(N, L, device=x.device)  # noise in [0, 1]
         # sort noise for each sample
         ids_shuffle = torch.argsort(
