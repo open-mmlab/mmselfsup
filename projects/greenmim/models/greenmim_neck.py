@@ -18,7 +18,6 @@ class GreenMIMNeck(BaseModule):
     def __init__(
             self,
             in_channels: int,
-            encoder_stride: int,
             img_size: int,
             patch_size: int,
             embed_dim: int = 96,
@@ -66,14 +65,17 @@ class GreenMIMNeck(BaseModule):
         """Initialize position embedding, patch embedding."""
         super().init_weights()
 
-        decoder_pos_embed = get_2d_sincos_pos_embed(
-            self.decoder_pos_embed.shape[-1],
-            int(self.num_patches**.5),
-            cls_token=False)
-        self.decoder_pos_embed.data.copy_(
-            torch.from_numpy(decoder_pos_embed).float().unsqueeze(0))
+        if not (isinstance(self.init_cfg, dict)
+                and self.init_cfg['type'] == 'Pretrained'):
 
-        torch.nn.init.normal_(self.mask_token, std=.02)
+            decoder_pos_embed = get_2d_sincos_pos_embed(
+                self.decoder_pos_embed.shape[-1],
+                int(self.num_patches**.5),
+                cls_token=False)
+            self.decoder_pos_embed.data.copy_(
+                torch.from_numpy(decoder_pos_embed).float().unsqueeze(0))
+
+            torch.nn.init.normal_(self.mask_token, std=.02)
 
     def forward(self, x: torch.Tensor,
                 ids_restore: torch.Tensor) -> torch.Tensor:

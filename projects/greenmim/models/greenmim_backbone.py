@@ -730,8 +730,6 @@ class GreenMIMSwinTransformer(BaseBackbone):
     """
 
     def __init__(self,
-                 arch: str = 'B',
-                 stage_cfgs: dict = None,
                  img_size: int = 224,
                  patch_size: int = 4,
                  in_chans: int = 3,
@@ -740,9 +738,6 @@ class GreenMIMSwinTransformer(BaseBackbone):
                  num_heads: list = [3, 6, 12, 24],
                  window_size: int = 7,
                  mlp_ratio: float = 4.,
-                 decoder_embed_dim: int = 512,
-                 decoder_depth: int = 8,
-                 decoder_num_heads: int = 16,
                  norm_layer: nn.Module = partial(nn.LayerNorm, eps=1e-6),
                  norm_pix_loss: bool = False,
                  qkv_bias: bool = True,
@@ -753,8 +748,7 @@ class GreenMIMSwinTransformer(BaseBackbone):
                  drop_rate: float = 0.,
                  attn_drop_rate: float = 0.,
                  use_checkpoint: bool = False,
-                 init_cfg: Optional[Union[List[dict], dict]] = None,
-                 **kwargs) -> None:
+                 init_cfg: Optional[Union[List[dict], dict]] = None) -> None:
         super().__init__(init_cfg=init_cfg)
 
         # SwinTransformer specifics
@@ -829,14 +823,15 @@ class GreenMIMSwinTransformer(BaseBackbone):
         return {'relative_position_bias_table'}
 
     def init_weights(self):
-        # initialization
-        # initialize patch_embed like nn.Linear (instead of nn.Conv2d)
-        w = self.patch_embed.proj.weight.data
-        torch.nn.init.xavier_uniform_(w.view([w.shape[0], -1]))
-
-        # initialize nn.Linear and nn.LayerNorm
-        self.apply(self._init_weights)
         super().init_weights()
+
+        if not (isinstance(self.init_cfg, dict)
+                and self.init_cfg['type'] == 'Pretrained'):
+
+            w = self.patch_embed.proj.weight.data
+            torch.nn.init.xavier_uniform_(w.view([w.shape[0], -1]))
+
+            self.apply(self._init_weights)
 
     def _init_weights(self, m):
         if isinstance(m, nn.Linear):
