@@ -14,7 +14,7 @@ model = dict(
         depth=50,
         in_channels=3,
         num_stages=4,
-        out_indices=(3),
+        out_indices=(3,),
         norm_cfg=dict(type='BN'),
         frozen_stages=-1),
     neck=dict(type='GlobalAveragePooling'),
