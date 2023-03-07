@@ -145,7 +145,7 @@ An example of visualization, left is from `MoCoV2_ResNet50` and right is from `M
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/36138628/207305086-91df298c-0eb7-4254-9c5b-ba711644501b.png" width="250" />
-<img src="https://user-images.githubusercontent.com/36138628/207305333-59af4747-1e9c-4f85-a57d-c7e5d132a6e5.png" width="250" />
+<img src="https://user-images.githubusercontent.com/36138628/223383663-a021bb5f-1ef5-404d-87aa-c353edd4e1e1.png" width="250" />
 </div>
 
 ## Visualize Low-level Feature Reconstruction
