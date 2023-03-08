@@ -149,7 +149,6 @@ model = dict(
         mean=[123.675, 116.28, 103.53],
         std=[58.395, 57.12, 57.375],
         to_rgb=True))
-optimizer = dict(
-    type='mmselfsup.LARS', lr=6.4, weight_decay=0.0, momentum=0.9)
+optimizer = dict(type='mmselfsup.LARS', lr=6.4, weight_decay=0.0, momentum=0.9)
 launcher = 'pytorch'
 work_dir = './work_dirs/shape_bias'
