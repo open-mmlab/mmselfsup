@@ -6,7 +6,7 @@ data_preprocessor = dict(
     std=[58.395, 57.12, 57.375],
     to_rgb=True)
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=dict(backend='disk')),
+    dict(type='LoadImageFromFile'),
     dict(type='RandomResizedCrop', scale=224, backend='pillow'),
     dict(type='RandomFlip', prob=0.5, direction='horizontal'),
     dict(type='PackClsInputs')
@@ -26,9 +26,7 @@ train_dataloader = dict(
         ann_file='meta/train.txt',
         data_prefix='train',
         pipeline=[
-            dict(
-                type='LoadImageFromFile',
-                file_client_args=dict(backend='disk')),
+            dict(type='LoadImageFromFile'),
             dict(type='RandomResizedCrop', scale=224, backend='pillow'),
             dict(type='RandomFlip', prob=0.5, direction='horizontal'),
             dict(type='PackClsInputs')
@@ -47,9 +45,7 @@ val_dataloader = dict(
         ann_file='meta/val.txt',
         data_prefix='val',
         pipeline=[
-            dict(
-                type='LoadImageFromFile',
-                file_client_args=dict(backend='disk')),
+            dict(type='LoadImageFromFile'),
             dict(type='ResizeEdge', scale=256, edge='short', backend='pillow'),
             dict(type='CenterCrop', crop_size=224),
             dict(type='PackClsInputs')
