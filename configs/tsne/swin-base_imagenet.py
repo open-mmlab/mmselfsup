@@ -3,6 +3,12 @@ _base_ = 'mmcls::_base_/default_runtime.py'
 model = dict(
     _scope_='mmcls',
     type='ImageClassifier',
+    data_preprocessor=dict(
+        num_classes=1000,
+        mean=[123.675, 116.28, 103.53],
+        std=[58.395, 57.12, 57.375],
+        to_rgb=True,
+    ),
     backbone=dict(
         type='SwinTransformer',
         arch='base',
