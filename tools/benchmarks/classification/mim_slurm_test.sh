@@ -19,4 +19,4 @@ mim test mmcls $CFG \
     --cpus-per-task $CPUS_PER_TASK \
     --partition $PARTITION \
     --srun-args "$SRUN_ARGS" \
-    --cfg-options $PY_ARGS \
+    $PY_ARGS \

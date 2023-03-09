@@ -234,10 +234,12 @@ data
 Replace the original test_dataloader and test_evaluation with following configurations
 
 ```python
+test_pipeline = [...] # copy existing test transforms here
 test_dataloader = dict(
     dataset=dict(
         type='CustomDataset',
         data_root='data/cue-conflict',
+        pipeline=test_pipeline,
         _delete_=True),
     drop_last=False)
 test_evaluator = dict(
@@ -247,7 +249,8 @@ test_evaluator = dict(
     model_name='your_model_name')
 ```
 
-Please note you should make custom modifications to the `csv_dir` and `model_name`.
+Please note you should make custom modifications to the `csv_dir` and `model_name`. You can follow the toy example [here](../../../projects/shape_bias/toy_example.py) to
+make custom modification to your evaluation.
 
 ### Inference your model with above modified config file
 
