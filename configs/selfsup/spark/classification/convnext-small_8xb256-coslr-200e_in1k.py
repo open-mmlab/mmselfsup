@@ -104,7 +104,7 @@ param_scheduler = [
     # main learning rate scheduler
     dict(
         type='CosineAnnealingLR',
-        T_max=280,
+        T_max=180,
         eta_min=1.0e-6,
         by_epoch=True,
         begin=20,
