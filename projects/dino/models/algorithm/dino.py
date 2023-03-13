@@ -1,9 +1,8 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Dict, List, Optional, Tuple, Union
+from typing import List, Optional, Union
 
 import torch
 from torch import nn
-import torch.nn.functional as F
 from mmselfsup.registry import MODELS
 from mmselfsup.structures import SelfSupDataSample
 from mmselfsup.models import BaseModel, CosineEMA
