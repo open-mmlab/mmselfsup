@@ -10,12 +10,11 @@ from mmengine.dist import all_reduce, get_world_size
 @MODELS.register_module()
 class DINOHead(BaseModule):
 
-    def __init__(self, out_channels: int, num_crops: int,
-                 teacher_warmup_temp: float, student_temp: float,
+    def __init__(self, out_channels: int, num_crops: int, student_temp: float,
                  center_momentum: float) -> None:
         super().__init__()
         self.student_temp = student_temp
-        self.teacher_temp = teacher_warmup_temp
+        self.teacher_temp = 0
         self.center_momentum = center_momentum
         self.num_crops = num_crops
         self.register_buffer('center', torch.zeros(1, out_channels))
