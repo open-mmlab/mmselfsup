@@ -11,7 +11,7 @@ We incorporate modular and inheritance design into our config system, which is c
     - [Config File Name Example](#config-file-name-example)
   - [Config File Structure](#config-file-structure)
   - [Inherit and Modify Config File](#inherit-and-modify-config-file)
-    - [Use intermediate variables in Configs](#use-intermediate-variables-in-configs)
+    - [Use Intermediate Variables in Configs](#use-intermediate-variables-in-configs)
     - [Ignore Some Fields in the Base Configs](#ignore-some-fields-in-the-base-configs)
     - [Reuse Some Fields in the Base Configs](#reuse-some-fields-in-the-base-configs)
   - [Modify Config through Script Arguments](#modify-config-through-script-arguments)
