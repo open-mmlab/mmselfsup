@@ -31,3 +31,8 @@ class DINO(BaseModel):
         # create momentum model
         self.teacher = CosineEMA(
             nn.Sequential(self.backbone, self.neck), momentum=base_momentum)
+
+    def fix_teacher(self) -> None:
+        """Fix the teacher model."""
+        for param in self.teacher.parameters():
+            param.requires_grad = False
