@@ -305,7 +305,7 @@ param_scheduler = [
 train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=800)
 ```
 
-### Use intermediate variables in Configs
+### Use Intermediate Variables in Configs
 
 Some intermediate variables are used in the config file. The intermediate variables make the config file clearer and easier to modify.
 
