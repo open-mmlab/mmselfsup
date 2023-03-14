@@ -7,6 +7,7 @@ from mmengine import DefaultScope
 
 def register_all_modules(init_default_scope: bool = True) -> None:
     """Register all modules in mmselfsup into the registries.
+
     Args:
         init_default_scope (bool): Whether initialize the mmselfsup default
             scope. When `init_default_scope=True`, the global default scope
