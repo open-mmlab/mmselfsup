@@ -9,6 +9,15 @@ from mmselfsup.registry import TRANSFORMS
 
 @TRANSFORMS.register_module()
 class DINOMultiCrop(BaseTransform):
+    """Multi-crop transform for DINO.
+
+    This module applies the multi-crop transform for DINO.
+
+    Args:
+        global_crops_scale (int): Scale of global crops.
+        local_crops_scale (int): Scale of local crops.
+        local_crops_number (int): Number of local crops.
+    """
 
     def __init__(self, global_crops_scale: int, local_crops_scale: int,
                  local_crops_number: int) -> None:

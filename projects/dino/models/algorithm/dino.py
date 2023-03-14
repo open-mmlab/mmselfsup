@@ -11,6 +11,24 @@ from mmselfsup.structures import SelfSupDataSample
 
 @MODELS.register_module()
 class DINO(BaseModel):
+    """Implementation for DINO.
+
+    This module is proposed in `DINO: Emerging Properties in Self-Supervised
+    Vision Transformers <https://arxiv.org/abs/2104.14294>`_.
+
+    Args:
+        backbone (dict): Config for backbone.
+        neck (dict): Config for neck.
+        head (dict): Config for head.
+        pretrained (str, optional): Path for pretrained model.
+            Defaults to None.
+        base_momentum (float, optional): Base momentum for momentum update.
+            Defaults to 0.99.
+        data_preprocessor (dict, optional): Config for data preprocessor.
+            Defaults to None.
+        init_cfg (list[dict] | dict, optional): Config for initialization.
+            Defaults to None.
+    """
 
     def __init__(self,
                  backbone: dict,

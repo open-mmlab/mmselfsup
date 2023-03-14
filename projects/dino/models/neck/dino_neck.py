@@ -8,6 +8,17 @@ from mmselfsup.registry import MODELS
 
 @MODELS.register_module()
 class DINONeck(BaseModule):
+    """Implementation for DINO neck.
+
+    This module is proposed in `DINO: Emerging Properties in Self-Supervised
+    Vision Transformers <https://arxiv.org/abs/2104.14294>`_.
+
+    Args:
+        in_channels (int): Input channels.
+        hidden_channels (int): Hidden channels.
+        out_channels (int): Output channels.
+        bottleneck_channels (int): Bottleneck channels.
+    """
 
     def __init__(self, in_channels: int, hidden_channels: int,
                  out_channels: int, bottleneck_channels: int) -> None:

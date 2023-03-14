@@ -9,6 +9,17 @@ from mmselfsup.registry import MODELS
 
 @MODELS.register_module()
 class DINOHead(BaseModule):
+    """Implementation for DINO head.
+
+    This module is proposed in `DINO: Emerging Properties in Self-Supervised
+    Vision Transformers <https://arxiv.org/abs/2104.14294>`_.
+
+    Args:
+        out_channels (int): Output channels of the head.
+        num_crops (int): Number of crops.
+        student_temp (float): Temperature for student output.
+        center_momentum (float): Momentum for center update.
+    """
 
     def __init__(self, out_channels: int, num_crops: int, student_temp: float,
                  center_momentum: float) -> None:
