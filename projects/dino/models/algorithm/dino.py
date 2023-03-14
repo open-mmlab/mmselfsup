@@ -26,20 +26,26 @@ class DINO(BaseModel):
             pretrained=pretrained,
             data_preprocessor=data_preprocessor,
             init_cfg=init_cfg)
-
         # create momentum model
         self.teacher = CosineEMA(
             nn.Sequential(self.backbone, self.neck), momentum=base_momentum)
+
+        # weight normalization layer
+        self.neck.last_layer = nn.utils.weight_norm(self.neck.last_layer)
+        self.neck.last_layer.weight_g.data.fill_(1)
+        self.neck.last_layer.weight_g.requires_grad = False
+        self.teacher.module[1].last_layer = nn.utils.weight_norm(
+            self.teacher.module[1].last_layer)
+        self.teacher.module[1].last_layer.weight_g.data.fill_(1)
+        self.teacher.module[1].last_layer.weight_g.requires_grad = False
         self.fix_teacher()
 
     def fix_teacher(self) -> None:
-        """Fix the teacher model."""
         for param in self.teacher.parameters():
             param.requires_grad = False
 
     def loss(self, inputs: torch.Tensor,
              data_samples: List[SelfSupDataSample]) -> dict:
-
         global_crops = torch.cat(inputs[:2])
         local_crops = torch.cat(inputs[2:])
 

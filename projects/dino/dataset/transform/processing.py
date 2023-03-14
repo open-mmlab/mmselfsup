@@ -1,7 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from mmcv.transforms import BaseTransform, RandomFlip, RandomApply, RandomGrayscale, Compose  # noqa: E501
-from mmcls.datasets.transforms import ColorJitter, RandomResizedCrop
-from mmselfsup.datasets.transforms import RandomGaussianBlur, RandomSolarize
+from mmselfsup.datasets.transforms import RandomGaussianBlur, RandomSolarize, RandomResizedCrop, ColorJitter
 
 from mmselfsup.registry import TRANSFORMS
 
@@ -10,9 +9,8 @@ from mmselfsup.registry import TRANSFORMS
 class DINOMultiCrop(BaseTransform):
 
     def __init__(self, global_crops_scale: int, local_crops_scale: int,
-                 local_crop_number: int) -> None:
+                 local_crops_number: int) -> None:
         super().__init__()
-
         self.global_crops_scale = global_crops_scale
         self.local_crops_scale = local_crops_scale
 
@@ -20,42 +18,49 @@ class DINOMultiCrop(BaseTransform):
             RandomFlip(prob=0.5, direction='horizontal'),
             RandomApply([
                 ColorJitter(
-                    brighness=0.4, contrast=0.4, saturation=0.2, hue=0.1)
+                    brightness=0.4, contrast=0.4, saturation=0.2, hue=0.1)
             ],
-                        p=0.8),
-            RandomGrayscale(p=0.2),
+                        prob=0.8),
+            RandomGrayscale(
+                prob=0.2,
+                keep_channels=True,
+                channel_weights=(0.114, 0.587, 0.2989),
+            )
         ])
 
         self.global_transform_1 = Compose([
             RandomResizedCrop(
                 224, scale=global_crops_scale, interpolation='bicubic'),
             flip_and_color_jitter,
-            RandomGaussianBlur(prob=1.0),
+            RandomGaussianBlur(prob=1.0, sigma_min=0.1, sigma_max=2.0),
         ])
 
         self.global_transform_2 = Compose([
             RandomResizedCrop(
                 224, scale=global_crops_scale, interpolation='bicubic'),
             flip_and_color_jitter,
-            RandomSolarize(prob=1.0),
+            RandomGaussianBlur(prob=1.0, sigma_min=0.1, sigma_max=2.0),
             RandomSolarize(prob=0.2),
         ])
 
-        self.local_crops_number = local_crop_number
+        self.local_crops_number = local_crops_number
         self.local_transform = Compose([
             RandomResizedCrop(
                 96, scale=local_crops_scale, interpolation='bicubic'),
             flip_and_color_jitter,
-            RandomGaussianBlur(prob=1.0),
+            RandomGaussianBlur(prob=1.0, sigma_min=0.1, sigma_max=2.0),
         ])
 
     def transform(self, results: dict) -> dict:
-        img = results['img']
+        ori_img = results['img']
         crops = []
-        crops.append(self.global_transform_1(img))
-        crops.append(self.global_transform_2(img))
+        results['img'] = ori_img
+        crops.append(self.global_transform_1(results)['img'])
+        results['img'] = ori_img
+        crops.append(self.global_transform_2(results)['img'])
         for _ in range(self.local_crops_number):
-            crops.append(self.local_transform(img))
+            results['img'] = ori_img
+            crops.append(self.local_transform(results)['img'])
         results['img'] = crops
         return results
 

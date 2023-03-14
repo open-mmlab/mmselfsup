@@ -7,6 +7,11 @@ from mmengine.config import Config, DictAction
 from mmengine.runner import Runner
 
 from mmselfsup.utils import register_all_modules
+from dataset import *  # noqa: F401,F403
+from engine import *  # noqa: F401,F403
+from models.algorithm import *  # noqa: F401,F403
+from models.head import *  # noqa: F401,F403
+from models.neck import *  # noqa: F401,F403
 
 
 def parse_args():

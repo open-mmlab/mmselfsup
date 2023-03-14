@@ -17,4 +17,5 @@ class DINOTeacherTempWarmupHook(Hook):
              np.ones(max_epochs - teacher_temp_warmup_epochs) * teacher_temp))
 
     def before_train_epoch(self, runner) -> None:
-        runner.model.head.teacher_temp = self.teacher_temps[runner.epoch]
+        runner.model.module.head.teacher_temp = self.teacher_temps[
+            runner.epoch]
