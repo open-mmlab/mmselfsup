@@ -1,8 +1,8 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import numpy as np
 from mmengine.hooks import Hook
 
 from mmselfsup.registry import HOOKS
-import numpy as np
 
 
 @HOOKS.register_module()

@@ -1,10 +1,10 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from mmengine.model import BaseModule
-
-from mmselfsup.registry import MODELS
 import torch
 import torch.nn.functional as F
 from mmengine.dist import all_reduce, get_world_size
+from mmengine.model import BaseModule
+
+from mmselfsup.registry import MODELS
 
 
 @MODELS.register_module()

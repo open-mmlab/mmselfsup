@@ -1,9 +1,9 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import torch
 from mmengine.model import BaseModule
+from torch import nn
 
 from mmselfsup.registry import MODELS
-import torch
-from torch import nn
 
 
 @MODELS.register_module()

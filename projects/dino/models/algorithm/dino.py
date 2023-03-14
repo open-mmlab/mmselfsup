@@ -3,9 +3,10 @@ from typing import List, Optional, Union
 
 import torch
 from torch import nn
+
+from mmselfsup.models import BaseModel, CosineEMA
 from mmselfsup.registry import MODELS
 from mmselfsup.structures import SelfSupDataSample
-from mmselfsup.models import BaseModel, CosineEMA
 
 
 @MODELS.register_module()
@@ -26,10 +27,10 @@ class DINO(BaseModel):
             pretrained=pretrained,
             data_preprocessor=data_preprocessor,
             init_cfg=init_cfg)
+
         # create momentum model
         self.teacher = CosineEMA(
             nn.Sequential(self.backbone, self.neck), momentum=base_momentum)
-
         # weight normalization layer
         self.neck.last_layer = nn.utils.weight_norm(self.neck.last_layer)
         self.neck.last_layer.weight_g.data.fill_(1)
@@ -48,7 +49,6 @@ class DINO(BaseModel):
              data_samples: List[SelfSupDataSample]) -> dict:
         global_crops = torch.cat(inputs[:2])
         local_crops = torch.cat(inputs[2:])
-
         # teacher forward
         teacher_output = self.teacher(global_crops)
 
@@ -60,10 +60,10 @@ class DINO(BaseModel):
         student_output_local = self.backbone(local_crops)
         student_output_local = self.neck(student_output_local)
 
-        student_ouput = torch.cat(
+        student_output = torch.cat(
             (student_output_global, student_output_local))
 
         # compute loss
-        loss = self.head(student_ouput, teacher_output)
+        loss = self.head(student_output, teacher_output)
 
         return dict(loss=loss)
