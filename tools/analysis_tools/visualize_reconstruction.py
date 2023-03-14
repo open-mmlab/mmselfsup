@@ -134,9 +134,7 @@ def main():
     else:
         model.cfg.test_dataloader = dict(
             dataset=dict(pipeline=[
-                dict(
-                    type='LoadImageFromFile',
-                    file_client_args=dict(backend='disk')),
+                dict(type='LoadImageFromFile'),
                 dict(type='Resize', scale=(224, 224), backend='pillow'),
                 dict(type='PackSelfSupInputs', meta_keys=['img_path'])
             ]))

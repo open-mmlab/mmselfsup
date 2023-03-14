@@ -39,7 +39,7 @@ view_pipeline = [
 ]
 
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(type='MultiView', num_views=2, transforms=[view_pipeline]),
     dict(type='PackSelfSupInputs', meta_keys=['img_path'])
 ]
@@ -111,7 +111,7 @@ view_pipeline = [
 ]
 
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(type='MultiView', num_views=2, transforms=[view_pipeline]),
     dict(type='PackSelfSupInputs', meta_keys=['img_path'])
 ]

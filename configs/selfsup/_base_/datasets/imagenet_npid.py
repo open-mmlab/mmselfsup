@@ -1,10 +1,9 @@
 # dataset settings
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
-file_client_args = dict(backend='disk')
 
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(
         type='RandomResizedCrop', size=224, scale=(0.2, 1.), backend='pillow'),
     dict(

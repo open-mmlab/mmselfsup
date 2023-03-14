@@ -1,7 +1,6 @@
 # dataset settings
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
-file_client_args = dict(backend='disk')
 
 # The difference between mocov2 and mocov1 is the transforms in the pipeline
 view_pipeline = [
@@ -28,7 +27,7 @@ view_pipeline = [
 ]
 
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(type='MultiView', num_views=2, transforms=[view_pipeline]),
     dict(type='PackSelfSupInputs', meta_keys=['img_path'])
 ]

@@ -7,9 +7,8 @@ model = dict(
         img_size=224, stage_cfgs=dict(block_cfgs=dict(window_size=7))))
 
 # train pipeline
-file_client_args = dict(backend='disk')
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(
         type='RandomResizedCrop',
         scale=224,
@@ -37,7 +36,7 @@ train_pipeline = [
 
 # test pipeline
 test_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(
         type='mmcls.ResizeEdge',
         scale=256,

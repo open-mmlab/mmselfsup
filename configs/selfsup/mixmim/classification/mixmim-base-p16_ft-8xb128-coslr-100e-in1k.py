@@ -5,21 +5,18 @@ _base_ = [
 ]
 
 dataset_type = 'ImageNet'
+data_root = 'data/imagenet/'
+
 preprocess_cfg = dict(
     mean=[123.675, 116.28, 103.53],
     std=[58.395, 57.12, 57.375],
     to_rgb=True,
 )
-
 bgr_mean = preprocess_cfg['mean'][::-1]
-
 bgr_std = preprocess_cfg['std'][::-1]
-dataset_type = 'ImageNet'
-file_client_args = dict(backend='disk')
-data_root = 'data/imagenet/'
 
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(
         type='RandomResizedCrop',
         scale=224,
@@ -60,7 +57,7 @@ train_dataloader = dict(
 )
 
 test_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(
         type='ResizeEdge',
         scale=256,

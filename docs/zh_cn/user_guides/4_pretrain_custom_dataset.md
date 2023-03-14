@@ -1,7 +1,7 @@
 # 教程 4: 使用自定义数据集进行预训练
 
 - [教程 4: 使用自定义数据集进行预训练](#教程-4-使用自定义数据集进行预训练)
-  - [在自定义数据集上使用MAE算法进行预训练](#在自定义数据集上使用mae算法进行预训练)
+  - [在自定义数据集上使用 MAE 算法进行预训练](#在自定义数据集上使用-mae-算法进行预训练)
     - [第一步：获取自定义数据路径](#第一步获取自定义数据路径)
     - [第二步：选择一个配置文件作为模板](#第二步选择一个配置文件作为模板)
     - [第三步：修改数据集相关的配置](#第三步修改数据集相关的配置)
@@ -111,9 +111,8 @@ _base_ = [
 dataset_type = 'mmcls.CustomDataset'
 
 data_root = 'data/custom_dataset/'
-file_client_args = dict(backend='disk')
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(
         type='RandomResizedCrop',
         size=224,
@@ -208,10 +207,9 @@ _base_ = [
 # custom dataset
 dataset_type = 'mmdet.CocoDataset'
 data_root = 'data/coco/'
-file_client_args = dict(backend='disk')
 
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(
         type='RandomResizedCrop',
         size=224,
@@ -301,7 +299,6 @@ _base_ = [
 # custom dataset
 dataset_type = 'mmcls.CustomDataset'
 data_root = 'data/custom_dataset/'
-file_client_args = dict(backend='disk')
 
 view_pipeline = [
     dict(type='RandomResizedCrop', size=224, backend='pillow'),
@@ -326,7 +323,7 @@ view_pipeline = [
 ]
 
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(type='MultiView', num_views=2, transforms=[view_pipeline]),
     dict(type='PackSelfSupInputs', meta_keys=['img_path'])
 ]

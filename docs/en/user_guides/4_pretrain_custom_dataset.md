@@ -7,7 +7,7 @@
     - [Step-3: Edit the dataset related config](#step-3-edit-the-dataset-related-config)
   - [Train MAE on COCO Dataset](#train-mae-on-coco-dataset)
   - [Train SimCLR on Custom Dataset](#train-simclr-on-custom-dataset)
-  - [Load Pre-trained Model to Speedup Convergence](#load-pre-trained-model-to-speedup-convergence)
+  - [Load pre-trained model to speedup convergence](#load-pre-trained-model-to-speedup-convergence)
 
 In this tutorial, we provide some tips on how to conduct self-supervised learning on your own dataset(without the need of label).
 
@@ -109,11 +109,9 @@ _base_ = [
 
 # custom dataset
 dataset_type = 'mmcls.CustomDataset'
-
 data_root = 'data/custom_dataset/'
-file_client_args = dict(backend='disk')
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(
         type='RandomResizedCrop',
         size=224,
@@ -208,10 +206,9 @@ _base_ = [
 # custom dataset
 dataset_type = 'mmdet.CocoDataset'
 data_root = 'data/coco/'
-file_client_args = dict(backend='disk')
 
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(
         type='RandomResizedCrop',
         size=224,
@@ -302,7 +299,6 @@ _base_ = [
 # custom dataset
 dataset_type = 'mmcls.CustomDataset'
 data_root = 'data/custom_dataset/'
-file_client_args = dict(backend='disk')
 
 view_pipeline = [
     dict(type='RandomResizedCrop', size=224, backend='pillow'),
@@ -327,7 +323,7 @@ view_pipeline = [
 ]
 
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(type='MultiView', num_views=2, transforms=[view_pipeline]),
     dict(type='PackSelfSupInputs', meta_keys=['img_path'])
 ]

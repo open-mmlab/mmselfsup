@@ -1,10 +1,9 @@
 # dataset settings
 dataset_type = 'DeepClusterImageNet'
 data_root = 'data/imagenet/'
-file_client_args = dict(backend='disk')
 
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(type='RandomResizedCrop', size=224, backend='pillow'),
     dict(type='RandomFlip', prob=0.5),
     dict(type='RandomRotation', degrees=2),
@@ -26,7 +25,7 @@ train_pipeline = [
 ]
 
 extract_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(type='mmcls.ResizeEdge', scale=256, edge='short', backend='pillow'),
     dict(type='CenterCrop', crop_size=224),
     dict(type='PackSelfSupInputs', meta_keys=['img_path'])
