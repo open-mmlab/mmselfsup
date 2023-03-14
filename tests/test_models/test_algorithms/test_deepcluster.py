@@ -8,9 +8,6 @@ from mmengine.structures import InstanceData
 
 from mmselfsup.models.algorithms import DeepCluster
 from mmselfsup.structures import SelfSupDataSample
-from mmselfsup.utils import register_all_modules
-
-register_all_modules()
 
 num_classes = 5
 with_sobel = True,

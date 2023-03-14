@@ -9,9 +9,6 @@ from mmengine.utils import digit_version
 
 from mmselfsup.models.algorithms.maskfeat import MaskFeat
 from mmselfsup.structures import SelfSupDataSample
-from mmselfsup.utils import register_all_modules
-
-register_all_modules()
 
 backbone = dict(type='MaskFeatViT', arch='b', patch_size=16)
 neck = dict(

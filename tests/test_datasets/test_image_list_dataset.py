@@ -3,9 +3,9 @@ import os.path as osp
 
 import numpy as np
 import pytest
+from mmengine.registry import init_default_scope
 
 from mmselfsup.datasets import ImageList
-from mmselfsup.utils import register_all_modules
 
 # dataset settings
 train_pipeline = [
@@ -15,7 +15,7 @@ train_pipeline = [
 
 
 def test_image_list_dataset():
-    register_all_modules()
+    init_default_scope('mmselfsup')
 
     data = dict(
         ann_file='',

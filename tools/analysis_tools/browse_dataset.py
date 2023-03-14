@@ -5,10 +5,10 @@ import os.path as osp
 import mmengine
 import numpy as np
 from mmengine import Config, DictAction
+from mmengine.registry import init_default_scope
 
 from mmselfsup.datasets.builder import build_dataset
 from mmselfsup.registry import VISUALIZERS
-from mmselfsup.utils import register_all_modules
 
 
 def parse_args():
@@ -41,12 +41,12 @@ def parse_args():
 
 def main():
     args = parse_args()
+
     cfg = Config.fromfile(args.config)
     if args.cfg_options is not None:
         cfg.merge_from_dict(args.cfg_options)
 
-    # register all modules in mmselfsup into the registries
-    register_all_modules()
+    init_default_scope(cfg.get('default_scope', 'mmselfsup'))
 
     dataset = build_dataset(cfg.train_dataloader.dataset)
 

@@ -7,11 +7,11 @@ import pytest
 import torch
 import torch.nn as nn
 from mmengine.config import Config
+from mmengine.registry import init_default_scope
 
 from mmselfsup.apis import inference_model
 from mmselfsup.models import BaseModel
 from mmselfsup.structures import SelfSupDataSample
-from mmselfsup.utils import register_all_modules
 
 backbone = dict(
     type='ResNet',
@@ -37,12 +37,11 @@ class ExampleModel(BaseModel):
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='')
 def test_inference_model():
-    register_all_modules()
-
     # Specify the data settings
     cfg = Config.fromfile(
         'configs/selfsup/relative_loc/relative-loc_resnet50_8xb64-steplr-70e_in1k.py'  # noqa: E501
     )
+    init_default_scope(cfg.get('default_scope', 'mmselfsup'))
     # Build the algorithm
     model = ExampleModel()
     model.cfg = cfg
