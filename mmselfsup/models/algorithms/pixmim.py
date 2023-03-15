@@ -22,6 +22,7 @@ class PixMIM(MAE):
              data_samples: List[SelfSupDataSample],
              **kwargs) -> Dict[str, torch.Tensor]:
         """The forward function in training.
+
         Args:
             inputs (List[torch.Tensor]): The input images.
             data_samples (List[SelfSupDataSample]): All elements required
