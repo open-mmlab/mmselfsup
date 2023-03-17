@@ -3,7 +3,7 @@ _base_ = 'vit-base-p16_linear-8xb2048-coslr-torchvision-transform-90e_in1k.py'
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='mmcls.ToPIL', to_rgb=True),
-    dict(type='MAERandomResizedCrop', size=224, interpolation=3),
+    dict(type='mmselfsup.MAERandomResizedCrop', size=224, interpolation=3),
     dict(type='mmcls.torchvision/RandomHorizontalFlip', p=0.5),
     dict(type='mmcls.ToNumpy', to_rgb=True),
     dict(type='PackClsInputs'),

@@ -41,3 +41,17 @@ class MAERandomResizedCrop(transforms.RandomResizedCrop):
         j = torch.randint(0, width - w + 1, size=(1, )).item()
 
         return i, j, h, w
+
+    def forward(self, results):
+        """
+        Args:
+            img (PIL Image or Tensor): Image to be cropped and resized.
+
+        Returns:
+            PIL Image or Tensor: Randomly cropped and resized image.
+        """
+        img = results['img']
+        i, j, h, w = self.get_params(img, self.scale, self.ratio)
+        img = F.resized_crop(img, i, j, h, w, self.size, self.interpolation)
+        results['img'] = img
+        return results
