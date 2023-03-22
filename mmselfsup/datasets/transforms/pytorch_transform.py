@@ -1,9 +1,10 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import math
+from typing import Tuple
+
 import torch
 import torchvision.transforms.functional as F
 from torchvision import transforms
-from typing import Tuple
-import math
 
 from mmselfsup.registry import TRANSFORMS
 
@@ -40,8 +41,7 @@ class MAERandomResizedCrop(transforms.RandomResizedCrop):
         return i, j, h, w
 
     def forward(self, results: dict) -> dict:
-        """
-        The forward function of MAERandomResizedCrop.
+        """The forward function of MAERandomResizedCrop.
 
         Args:
             results (dict): The results dict contains the image and all these

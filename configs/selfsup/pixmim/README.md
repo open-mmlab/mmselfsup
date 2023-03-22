@@ -1,9 +1,10 @@
 # PixMIM
 
 > [PixMIM: Rethinking Pixel Reconstruction in Masked Image Modeling
-](https://arxiv.org/abs/2303.02416)
+> ](https://arxiv.org/abs/2303.02416)
 
-## TL;DR 
+## TL;DR
+
 PixMIM can seamlessly replace MAE as a stronger baseline, with
 negligible computational overhead.
 
@@ -12,7 +13,7 @@ negligible computational overhead.
 ## Abstract
 
 Masked Image Modeling (MIM) has achieved promising progress with the advent of Masked Autoencoders
-(MAE) and BEiT. However, subsequent works have complicated the framework with new auxiliary tasks or extra pretrained models, 
+(MAE) and BEiT. However, subsequent works have complicated the framework with new auxiliary tasks or extra pretrained models,
 inevitably increasing computational overhead. This paper undertakes a fundamental analysis of
 MIM from the perspective of pixel reconstruction, which
 examines the input image patches and reconstruction target, and highlights two critical but previously overlooked
@@ -126,7 +127,6 @@ If you use a single machine without any cluster management software
 GPUS=8 bash tools/benchmarks/classification/mim_dist_train.sh configs/selfsup/pixmim/classification/vit-base-p16_ft-8xb128-coslr-100e_in1k.py $pretrained_model --amp
 ```
 
-
 ## Detection and Segmentation
 
 If you want to evaluate your model on detection or segmentation task, we provide a [script](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/model_converters/mmcls2timm.py) to convert the model keys from MMClassification style to timm style.
@@ -139,7 +139,6 @@ python tools/model_converters/mmcls2timm.py $src_ckpt $dst_ckpt
 Then, using this converted ckpt, you can evaluate your model on detection task, following [Detectron2](https://github.com/facebookresearch/detectron2/tree/main/projects/ViTDet)，
 and on semantic segmentation task, following this [project](https://github.com/implus/mae_segmentation). Besides, using the unconverted ckpt, you can use
 [MMSegmentation](https://github.com/open-mmlab/mmsegmentation/tree/master/configs/mae) to evaluate your model.
-
 
 ## Citation
 

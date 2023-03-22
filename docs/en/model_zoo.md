@@ -441,5 +441,26 @@ ImageNet has multiple versions, but the most commonly used one is ILSVRC 2012. T
       <td>/</td>
       <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/mixmim/classification/mixmim-base-p16_ft-8xb128-coslr-100e-in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mixmim/mixmim-base-p16_16xb128-coslr-300e_in1k/mixmim-base-p16_ft-8xb128-coslr-100e_in1k/mixmim-base-p16_ft-8xb128-coslr-100e_in1k_20221208-41ecada9.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/mixmim/mixmim-base-p16_16xb128-coslr-300e_in1k/mixmim-base-p16_ft-8xb128-coslr-100e_in1k/mixmim-base-p16_ft-8xb128-coslr-100e_in1k_20221206_143046.json'>log</a></td>
 </tr>
+<tr>
+      <td rowspan="2">PixMIM</td>
+	    <td>ViT-base</td>
+	    <td>300</td>
+      <td>4096</td>
+      <td>63.3</td>
+      <td>83.1</td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-300e_in1k.py'> config </a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-300e_in1k/pixmim_vit-base-p16_8xb512-amp-coslr-300e_in1k_20230322-3304a88c.pth'> model </a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-300e_in1k/pixmim_vit-base-p16_8xb512-amp-coslr-300e_in1k_20230322-3304a88c.json'> log </a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/pixmim/classification/vit-base-p16_linear-8xb2048-coslr-torchvision-transform-90e_in1k.py'> config </a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-300e_in1k/vit-base-p16_linear-8xb2048-torchvision-transform-coslr-90e_in1k/vit-base-p16_linear-8xb2048-torchvision-transform-coslr-90e_in1k_20230322-72322af8.pth'> model </a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-300e_in1k/vit-base-p16_linear-8xb2048-torchvision-transform-coslr-90e_in1k/vit-base-p16_linear-8xb2048-torchvision-transform-coslr-90e_in1k_20230322-72322af8.json'> log </a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/pixmim/classification/vit-base-p16_ft-8xb128-coslr-100e_in1k.py'> config </a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-300e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k_20230322-7eba2bc2.pth'> model </a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-300e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k_20230322-7eba2bc2.json'> log </a></td>
+	</tr>
+  <tr>
+	    <td>ViT-base</td>
+	    <td>800</td>
+      <td>4096</td>
+      <td>67.5</td>
+      <td>83.5</td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-800e_in1k.py'> config </a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-800e_in1k/pixmim_vit-base-p16_8xb512-amp-coslr-800e_in1k_20230322-e8137924.pth'> model </a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-800e_in1k/pixmim_vit-base-p16_8xb512-amp-coslr-800e_in1k_20230322-e8137924.json'> log </a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/pixmim/classification/vit-base-p16_linear-8xb2048-coslr-torchvision-transform-90e_in1k.py'> config </a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-800e_in1k/vit-base-p16_linear-8xb2048-torchvision-transform-coslr-90e_in1k/vit-base-p16_linear-8xb2048-torchvision-transform-coslr-90e_in1k_20230322-12c15568.pth'> model </a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-800e_in1k/vit-base-p16_linear-8xb2048-torchvision-transform-coslr-90e_in1k/vit-base-p16_linear-8xb2048-torchvision-transform-coslr-90e_in1k_20230322-12c15568.json'> log </a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/pixmim/classification/vit-base-p16_ft-8xb128-coslr-100e_in1k.py'> config </a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-800e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k_20230322-616b1a7f.pth'> model </a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-800e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k_20230322-616b1a7f.json'> log </a></td>
+	</tr>
 </tbody>
 </table>

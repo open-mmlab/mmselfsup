@@ -12,7 +12,7 @@ from .mae import MAE
 class PixMIM(MAE):
     """The official implementation of PixMIM.
 
-    Implementation of `PixMIM: Rethinking Pixel Reconstruction in 
+    Implementation of `PixMIM: Rethinking Pixel Reconstruction in
     Masked Image Modeling <https://arxiv.org/pdf/2303.02416.pdf>`_.
 
     Please refer to MAE for these initialization arguments.
