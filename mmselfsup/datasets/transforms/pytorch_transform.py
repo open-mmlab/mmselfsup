@@ -4,8 +4,8 @@ from typing import Tuple
 
 import torch
 import torchvision.transforms.functional as F
-from torchvision import transforms
 from PIL import Image
+from torchvision import transforms
 
 from mmselfsup.registry import TRANSFORMS
 
