@@ -103,13 +103,13 @@ If you use a cluster managed by Slurm
 
 ```sh
 # all of our experiments can be run on a single machine, with 8 A100 GPUs
-bash tools/benchmarks/classification/mim_slurm_train.sh $partition configs/selfsup/pixmim/classification/vit-base-p16_linear-8xb2048-coslr-torchvision-transform-90e_in1k.py --amp
+bash tools/benchmarks/classification/mim_slurm_train.sh $partition configs/selfsup/pixmim/classification/vit-base-p16_linear-8xb2048-coslr-torchvision-transform-90e_in1k.py $pretrained_model --amp
 ```
 
 If you use a single machine without any cluster management software
 
 ```sh
-bash tools/benchmarks/classification/mim_dist_train.sh configs/selfsup/pixmim/classification/vit-base-p16_linear-8xb2048-coslr-torchvision-transform-90e_in1k.py 8 --amp
+GPUS=8 bash tools/benchmarks/classification/mim_dist_train.sh configs/selfsup/pixmim/classification/vit-base-p16_linear-8xb2048-coslr-torchvision-transform-90e_in1k.py $pretrained_model --amp
 ```
 
 ### Fine-tuning
