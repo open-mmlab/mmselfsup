@@ -11,13 +11,12 @@ from mmselfsup.registry import MODELS
 class LowFreqTargetGenerator(BaseModule):
     """Generate low-frquency target for images.
 
-    This module is used in PixMIM: Rethinking Pixel Reconstruction in Masked 
+    This module is used in PixMIM: Rethinking Pixel Reconstruction in Masked
     Image Modeling to remove these high-frequency information from images.
 
     Args:
         radius (int): radius of low pass filter.
         img_size (Union[int, Tuple[int, int]]): size of input images.
-
     """
 
     def __init__(self, radius: int, img_size: Union[int, Tuple[int,
@@ -55,7 +54,7 @@ class LowFreqTargetGenerator(BaseModule):
 
         Args:
             imgs (torch.Tensor): input images, which has shape (N, C, H, W).
-            
+
         Returns:
             torch.Tensor: low frequency target, which has the same shape as
                 input images.

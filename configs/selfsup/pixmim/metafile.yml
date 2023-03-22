@@ -44,7 +44,7 @@ Models:
               Top 1 Accuracy: 63.3
         Config: configs/selfsup/pixmim/classification/vit-base-p16_linear-8xb2048-coslr-torchvision-transform-90e_in1k.py
         Weights: https://download.openmmlab.com/mmselfsup/1.x/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-300e_in1k/vit-base-p16_linear-8xb2048-torchvision-transform-coslr-90e_in1k/vit-base-p16_linear-8xb2048-torchvision-transform-coslr-90e_in1k_20230322-72322af8.pth
-  
+
   - Name: pixmim_vit-base-p16_8xb512-amp-coslr-800e_in1k
     In Collection: PixMIM
     Metadata:

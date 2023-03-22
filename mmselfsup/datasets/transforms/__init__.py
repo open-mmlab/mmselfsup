@@ -6,8 +6,8 @@ from .processing import (BEiTMaskGenerator, ColorJitter, RandomCrop,
                          RandomResizedCropAndInterpolationWithTwoPic,
                          RandomRotation, RandomSolarize, RotationWithLabels,
                          SimMIMMaskGenerator)
-from .wrappers import MultiView
 from .pytorch_transform import MAERandomResizedCrop
+from .wrappers import MultiView
 
 __all__ = [
     'PackSelfSupInputs', 'RandomGaussianBlur', 'RandomSolarize',

@@ -143,6 +143,7 @@ Useful Tools
 - [x] [BEiT v2 (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/beitv2)
 - [x] [EVA (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/eva)
 - [x] [MixMIM (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mixmim)
+- [x] [PixMIM (ArXiv'2023)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/pixmim)
 
 更多的算法实现已经在我们的计划中。
 
