@@ -5,6 +5,7 @@ from typing import Tuple
 import torch
 import torchvision.transforms.functional as F
 from torchvision import transforms
+from PIL import Image
 
 from mmselfsup.registry import TRANSFORMS
 
@@ -20,11 +21,8 @@ class MAERandomResizedCrop(transforms.RandomResizedCrop):
     """
 
     @staticmethod
-    def get_params(img: torch.Tensor, scale: tuple, ratio: tuple) -> Tuple:
-        try:
-            width, height = F._get_image_size(img)
-        except Exception:
-            width, height = F.get_image_size(img)
+    def get_params(img: Image.Image, scale: tuple, ratio: tuple) -> Tuple:
+        width, height = img.size
         area = height * width
 
         target_area = area * torch.empty(1).uniform_(scale[0], scale[1]).item()
