@@ -1,12 +1,9 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-import math
-
-import numpy as np
 import torch
 import torchvision.transforms.functional as F
-from mmcv.transforms.base import BaseTransform
-from PIL import Image
 from torchvision import transforms
+from typing import Tuple
+import math
 
 from mmselfsup.registry import TRANSFORMS
 
@@ -18,11 +15,11 @@ class MAERandomResizedCrop(transforms.RandomResizedCrop):
 
     This may lead to results different with torchvision's version.
     Following BYOL's TF code:
-    https://github.com/deepmind/deepmind-research/blob/master/byol/utils/dataset.py#L206
+    https://github.com/deepmind/deepmind-research/blob/master/byol/utils/dataset.py#L206 # noqa: E501
     """
 
     @staticmethod
-    def get_params(img, scale, ratio):
+    def get_params(img: torch.Tensor, scale: tuple, ratio: tuple) -> Tuple:
         width, height = F.get_image_size(img)
         area = height * width
 
@@ -42,13 +39,17 @@ class MAERandomResizedCrop(transforms.RandomResizedCrop):
 
         return i, j, h, w
 
-    def forward(self, results):
+    def forward(self, results: dict) -> dict:
         """
+        The forward function of MAERandomResizedCrop.
+
         Args:
-            img (PIL Image or Tensor): Image to be cropped and resized.
+            results (dict): The results dict contains the image and all these
+                information related to the image.
 
         Returns:
-            PIL Image or Tensor: Randomly cropped and resized image.
+            dict: The results dict contains the cropped image and all these
+            information related to the image.
         """
         img = results['img']
         i, j, h, w = self.get_params(img, self.scale, self.ratio)
