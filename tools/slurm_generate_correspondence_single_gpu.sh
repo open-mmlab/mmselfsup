@@ -2,13 +2,16 @@
 
 set -x
 PARTITION=$1
-JOB_NAME=$2
-CONFIG=$3
-GPUS=${GPUS:-8}
-GPUS_PER_NODE=${GPUS_PER_NODE:-8}
+JOB_NAME='correspondence'
+CFG=$2
+CHECKPOINT=$3
+INPUT=$4
+OUTPUT=$5
+PY_ARGS=${@:6}
+GPUS=${GPUS:-1}
+GPUS_PER_NODE=${GPUS_PER_NODE:-1}
 CPUS_PER_TASK=${CPUS_PER_TASK:-5}
 SRUN_ARGS=${SRUN_ARGS:-""}
-PY_ARGS=${@:4}
 
 PYTHONPATH="$(dirname $0)/..":$PYTHONPATH \
 srun -p ${PARTITION} \
@@ -19,4 +22,8 @@ srun -p ${PARTITION} \
     --cpus-per-task=${CPUS_PER_TASK} \
     --kill-on-bad-exit=1 \
     ${SRUN_ARGS} \
-    python -u tools/train.py ${CONFIG} --launcher="slurm" ${PY_ARGS}
+    python -u tools/generate_correspondence.py \
+        $CFG \
+        $CHECKPOINT \
+        $INPUT \
+        $OUTPUT --launcher="slurm" ${PY_ARGS}

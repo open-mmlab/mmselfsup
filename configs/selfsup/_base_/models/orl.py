@@ -1,0 +1,41 @@
+# model settings
+model = dict(
+    type='ORL',
+    base_momentum=0.99,
+    data_preprocessor=dict(
+        mean=(0.485, 0.456, 0.406),
+        std=(0.229, 0.224, 0.225),
+        # mean=(123.675, 116.28, 103.53),
+        # std=(58.395, 57.12, 57.375),
+        bgr_to_rgb=False),
+    pretrained=None,
+    global_loss_weight=1.,
+    loc_intra_loss_weight=1.,
+    loc_inter_loss_weight=1.,
+    backbone=dict(
+        type='ResNet',
+        depth=50,
+        in_channels=3,
+        out_indices=[4],  # 0: conv-1, x: stage-x
+        norm_cfg=dict(type='SyncBN')),
+    neck=dict(
+        type='NonLinearNeck',
+        in_channels=2048,
+        hid_channels=4096,
+        out_channels=256,
+        num_layers=2,
+        with_bias=False,
+        with_last_bn=False,
+        with_avg_pool=True),
+    head=dict(
+        type='LatentPredictHead',
+        predictor=dict(
+            type='NonLinearNeck',
+            in_channels=256,
+            hid_channels=4096,
+            out_channels=256,
+            num_layers=2,
+            with_bias=False,
+            with_last_bn=False,
+            with_avg_pool=False),
+        loss=dict(type='CosineSimilarityLoss')))
