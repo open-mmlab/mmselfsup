@@ -79,7 +79,7 @@ results = evaluator.offline_evaluate(data, predictions, chunk_size=128)
 
 在预训练期间，因为不包含验证和测试，所以不需要使用模型评测.
 
-在基准测试期间, 预训练模型需要 `classification`、 `detection`、 `segmentation` 等其他的下游任务来评测其性能. 建议用其他的 OpenMMLab 仓库运行下游任务, 例如 `MMClassification` 或 `MMDetection`, 它们已经实现了自己评估功能.
+在基准测试期间, 预训练模型需要其他的下游任务来评测其性能,例如 `classification`、 `detection`、 `segmentation` 等. 建议使用其他的 OpenMMLab 仓库运行下游任务, 例如 `MMClassification` 或 `MMDetection`, 它们已经实现了自己评估功能.
 
 但是 MMSelfSup 也实现了某些自定义的评测功能去支持下游任务, 如下所示:
 

@@ -32,11 +32,11 @@
 
 - 默认钩子 (default hooks)
 
-默认情况下这些钩子由运行器注册,用以实现一些基本功能,并且具有确定的优先级,无需用户自行修改.
+这些钩子由`Runner`默认注册, 用以实现一些基本功能,并且具有默认的优先级,无需用户自行修改.
 
 - 自定义钩子 (custom hooks)
 
-自定义钩子由`custom_hooks`注册.通常来讲,这些钩子主要用于功能增强,并且需要在配置文档中指定优先级.若没有指定钩子的优先级,则默认情况下会设置为`NORMAL`.
+自定义钩子通过`custom_hooks`注册.通常来讲,这些钩子主要用于功能增强,并且需要在配置文档中指定优先级.若没有指定钩子的优先级,则默认情况下会设置为`NORMAL`.
 
 **优先级列表**:
 
@@ -52,31 +52,31 @@
 |    VERY_LOW     |  90   |
 |     LOWEST      |  100  |
 
-优先级决定了钩子的执行顺序.在训练之前，日志会打印出每个阶段钩子的执行顺序，方便调试.
+优先级决定了钩子的执行顺序.在训练之前，日志会打印出每个阶段的钩子的执行顺序，方便调试.
 
 ### 默认钩子
 
-下面的常用钩子通过 MMEngine 中的[`register_default_hooks`](https://github.com/open-mmlab/mmengine/blob/main/mmengine/runner/runner.py#L1750) 实现并且已在 [default](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/_base_/default_runtime.py#L3) 中进行了注册:
+以下常见的钩子由 MMEngine 中的[`register_default_hooks`](https://github.com/open-mmlab/mmengine/blob/main/mmengine/runner/runner.py#L1750) 实现并在 [default](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/_base_/default_runtime.py#L3) 中进行了注册:
 
-|                                                     Hooks                                                     |                                              Usage                                              |     Priority      |
-| :-----------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------: | :---------------: |
-|    [RuntimeInfoHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/runtime_info_hook.py)    |                                   将运行时信息更新到消息中心.                                   |  VERY_HIGH (10)   |
-|      [IterTimerHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/iter_timer_hook.py)      |                                   记录 iteration 花费的时间.                                    |    NORMAL (50)    |
-|  [DistSamplerSeedHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/sampler_seed_hook.py)  |                               确保分布式采样器 shuffle 是打开的.                                |    NORMAL (50)    |
-|         [LoggerHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/logger_hook.py)          | 从 `Runner` 里不同的组件中收集日志记录, 并将其输出到终端, JSON 文件, tensorboard, wandb 等下游. | BELOW_NORMAL (60) |
-| [ParamSchedulerHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/param_scheduler_hook.py) |                          更新优化器里面的一些超参数, 例如学习率的动量.                          |     LOW (70)      |
-|     [CheckpointHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/checkpoint_hook.py)      |                                  规律性地保存 checkpoint 文件.                                  |   VERY_LOW (90)   |
+|                                                     Hooks                                                     |                                             Usage                                             |     Priority      |
+| :-----------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------: | :---------------: |
+|    [RuntimeInfoHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/runtime_info_hook.py)    |                                   将运行时间更新到消息中心.                                   |  VERY_HIGH (10)   |
+|      [IterTimerHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/iter_timer_hook.py)      |                                   记录迭代过程所花费的时间.                                   |    NORMAL (50)    |
+|  [DistSamplerSeedHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/sampler_seed_hook.py)  |                              确保分布式采样器 shuffle 是有效的.                               |    NORMAL (50)    |
+|         [LoggerHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/logger_hook.py)          | 从 `Runner` 的不同组件中收集日志记录, 并将其输出到终端, JSON 文件, tensorboard, wandb 等下游. | BELOW_NORMAL (60) |
+| [ParamSchedulerHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/param_scheduler_hook.py) |                         更新优化器里面的一些超参数, 例如学习率和动量.                         |     LOW (70)      |
+|     [CheckpointHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/checkpoint_hook.py)      |                                     定期保存 checkpoint.                                      |   VERY_LOW (90)   |
 
 ### MMEngine中实现的常用钩子
 
 在 MMEngine 中已经实现了一些钩子，它们是:
 
-|                                                         Hooks                                                         |                                             Usage                                              |   Priority   |
-| :-------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------: | :----------: |
-|                [EMAHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/ema_hook.py)                 |                在模型训练时使用指数滑动平均 (Exponential Moving Average, EMA).                 | NORMAL (50)  |
-|         [EmptyCacheHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/empty_cache_hook.py)         |                           在训练时释放所有没有被缓存占用的 GPU 显存.                           | NORMAL (50)  |
-|        [SyncBuffersHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/sync_buffer_hook.py)         | 在每个训练 Epoch 结束时同步模型 buffer 里的参数, 例如 BN 里的 `running_mean` 和 `running_var`. | NORMAL (50)  |
-| [NaiveVisualizationHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/naive_visualization_hook.py) |                                在测试过程中显示或写入预测结果.                                 | LOWEST (100) |
+|                                                         Hooks                                                         |                                         Usage                                         |   Priority   |
+| :-------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------: | :----------: |
+|                [EMAHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/ema_hook.py)                 |             在训练期间应用指数滑动平均 (Exponential Moving Average, EMA).             | NORMAL (50)  |
+|         [EmptyCacheHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/empty_cache_hook.py)         |                       在训练过程中释放所有未占用的缓存GPU内存.                        | NORMAL (50)  |
+|        [SyncBuffersHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/sync_buffer_hook.py)         | 在每个Epoch结束时,在BN中同步模型缓冲区中的参数, 例如 `running_mean` 和 `running_var`. | NORMAL (50)  |
+| [NaiveVisualizationHook](https://github.com/open-mmlab/mmengine/blob/main/mmengine/hooks/naive_visualization_hook.py) |                            在测试过程中显示或写出预测结果.                            | LOWEST (100) |
 
 ### MMSelfsup 中实现的钩子
 
@@ -126,7 +126,7 @@ class DenseCLHook(Hook):
 
 ```
 
-如果钩子已经在 MMEngine 或者 MMSelfsup 中实现，则可直接通过修改配置来使用钩子，如下所示:
+若钩子已在 MMEngine 或 MMSelfsup 中实现，则可以直接修改配置来使用这个钩子，如下所示:
 
 ```python
 custom_hooks = [
@@ -158,9 +158,9 @@ custom_hooks = [
 optimizer = dict(type='SGD', lr=0.0003, weight_decay=0.0001)
 ```
 
-要修改模型的学习率，只需修改优化器配置中的 `lr` . 您也可以根据 PyTorch 的 [API doc](https://pytorch.org/docs/stable/optim.html?highlight=optim#module-torch.optim) 直接设置其他参数 .
+要修改模型的学习率，只需优化器配置中修改 `lr` . 同时也可以根据 PyTorch 的 [API doc](https://pytorch.org/docs/stable/optim.html?highlight=optim#module-torch.optim) 直接设置其他参数 .
 
-例如您期望使用如 PyTorch 中 `torch.optim.Adam(params, lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0, amsgrad=False)` 的 `Adam` 设置, 则配置应该如下所示:
+例如,如果您期望使用如 PyTorch 中 `torch.optim.Adam(params, lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0, amsgrad=False)` 的 `Adam` 设置, 配置应该看起来像:
 
 ```python
 optimizer = dict(type='Adam', lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0, amsgrad=False)
@@ -168,9 +168,9 @@ optimizer = dict(type='Adam', lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_de
 
 #### 参数配置
 
-有些模型在优化时可能有一些特定的参数设置, 例如不需要应用权重衰减到 `BatchNorm` 层和每层的`bias`之中. 为了精确地配置它们, 我们可以使用优化器中的 `paramwise_cfg`.
+有些模型在优化时可能有一些特定的参数设置, 例如不需要将权重衰减应用到 `BatchNorm` 层和每一层的`bias`中. 为了精确地配置它们, 我们可以使用优化器中的 `paramwise_cfg`.
 
-例如, 在 MAE 中, 我们不想对 `ln`, `bias`, `pos_embed`, `mask_token` and `cls_token` 等参数应用权重衰减, 我们可以使用以下配置文件:
+例如, 在 MAE 中, 我们不想对 `ln`, `bias`, `pos_embed`, `mask_token` 和 `cls_token` 等参数应用权重衰减, 我们可以使用以下配置文件:
 
 ```python
 optimizer = dict(
@@ -192,7 +192,7 @@ optim_wrapper = dict(
 
 - [LARS](mmselfsup.engine.optimizers.LARS)
 
-除了PyTorch实现的优化器之外, 我们还在`mmselfsup/engine/optimizers/lars.py` 中实现了一个定制的 [LARS](mmselfsup.engine.optimizers.LARS),为SGD实现了分层的自适应速率缩放.
+除了PyTorch实现的优化器之外, 我们还在`mmselfsup/engine/optimizers/lars.py` 中实现了一个定制的 [LARS](mmselfsup.engine.optimizers.LARS),为SGD实现了分层自适应学习率缩放.
 
 ```python
 optimizer = dict(type='LARS', lr=4.8, momentum=0.9, weight_decay=1e-6)
@@ -200,11 +200,11 @@ optimizer = dict(type='LARS', lr=4.8, momentum=0.9, weight_decay=1e-6)
 
 ### 优化器封装
 
-除了PyTorch优化器的基本功能外, 我们还提供一些增强功能, 例如 梯度裁剪, 梯度累加, 自动混合精度训练等. 更多细节请参考 [MMEngine](https://github.com/open-mmlab/mmengine/blob/main/mmengine/optim/optimizer/optimizer_wrapper.py).
+除了PyTorch优化器的基本功能外, 我们还提供了一些增强功能, 例如 梯度裁剪, 梯度累加, 自动混合精度训练等. 更多细节请参考 [MMEngine](https://github.com/open-mmlab/mmengine/blob/main/mmengine/optim/optimizer/optimizer_wrapper.py).
 
 #### 梯度裁剪
 
-目前我们在`optim_wrapper`中支持`clip_grad`选项，并且可以参考 [OptimWrapper](https://github.com/open-mmlab/mmengine/blob/main/mmengine/optim/optimizer/optimizer_wrapper.py#L17) 和 [PyTorch Documentation](https://pytorch.org/docs/stable/generated/torch.nn.utils.clip_grad_norm_.html) 文档了解更多参数.下面是一个例子:
+目前我们在`optim_wrapper`中支持`clip_grad`选项，您可以参考 [OptimWrapper](https://github.com/open-mmlab/mmengine/blob/main/mmengine/optim/optimizer/optimizer_wrapper.py#L17) 和 [PyTorch Documentation](https://pytorch.org/docs/stable/generated/torch.nn.utils.clip_grad_norm_.html) 文档了解更多的参数.下面是一个例子:
 
 ```python
 optimizer = dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0001)
@@ -221,7 +221,7 @@ optim_wrapper = dict(
 
 #### 梯度累加
 
-当没有足够的计算资源时,批量大小只能设置为一个小值,这可能会降低模型的性能. 梯度累加可以用来解决这个问题.
+当没有足够的计算资源时,批量大小只能设置为一个小批量,这可能会降低模型的性能. 梯度累加可以用来解决这个问题.
 
 下面是一个例子:
 
@@ -233,7 +233,7 @@ optim_wrapper = dict(
     accumulative_counts=4)
 ```
 
-表示在训练期间,每4个iter就进行一次反向传播. 并且上述内容相当于:
+这个例子表示在训练期间,每4个iter进行一次反向传播. 并且上述内容相当于:
 
 ```python
 train_dataloader = dict(batch_size=256)
@@ -254,14 +254,13 @@ optim_wrapper = dict(type='AmpOptimWrapper', optimizer=optimizer)
 
 ### 构造器
 
-The constructor aims to build optimizer, optimizer wrapper and customize hyper-parameters of different layers. The key `paramwise_cfg` of `optim_wrapper` in configs controls this customization.
 构造器的目的是建立优化器、优化器封装以及定制不同层的超参数.这种定制由configs中 `optim_wrapper` 的 `paramwise_cfg` 关键词控制.
 
 #### MMSelfsup 中实现的构造器
 
 - [LearningRateDecayOptimWrapperConstructor](mmselfsup.engine.optimizers.LearningRateDecayOptimWrapperConstructor)
 
-`LearningRateDecayOptimWrapperConstructor` 为主干网络的不同层设置不同的学习率. 笔记: 当前的优化器构造器是为ViT and Swin 构建的.
+`LearningRateDecayOptimWrapperConstructor` 为主干网络的不同层设置不同的学习率. 注意: 目前,这个优化器构造器是为ViT 和 Swin 构建的.
 
 一个例子:
 
@@ -281,4 +280,4 @@ optim_wrapper = dict(
     constructor='mmselfsup.LearningRateDecayOptimWrapperConstructor')
 ```
 
-笔记: `paramwise_cfg` 会被忽略, 并且可以写成  `paramwise_cfg=dict()` .  默认情况下, `LearningRateDecayOptimWrapperConstructor` 不会自动对 `normalization parameters`, `bias`, `position embedding`, `class token` 和 `relative position bias table` 进行权重衰减.
+注意: `paramwise_cfg` 将被忽略, 可以写成  `paramwise_cfg=dict()` .  默认情况下, `LearningRateDecayOptimWrapperConstructor` 不会自动对 `normalization parameters`, `bias`, `position embedding`, `class token` 和 `relative position bias table` 进行权重衰减.
