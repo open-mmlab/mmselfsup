@@ -254,7 +254,7 @@ optim_wrapper = dict(type='AmpOptimWrapper', optimizer=optimizer)
 
 ### 构造器
 
-构造器的目的是建立优化器、优化器封装以及定制不同层的超参数.这种定制由configs中 `optim_wrapper` 的 `paramwise_cfg` 关键词控制.
+构造器旨在建立优化器、优化器封装以及定制不同层的超参数.配置文件中 `optim_wrapper` 的 `paramwise_cfg` 函数控制这种定制.
 
 #### MMSelfsup 中实现的构造器
 
