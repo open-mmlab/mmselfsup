@@ -17,11 +17,8 @@ model = dict(
         num_crops=10,
         student_temp=0.1,
         center_momentum=0.9))
-dataset_type = 'mmcls.ImageNet'
-data_root = 'data/imagenet/'
-file_client_args = dict(backend='disk')
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=dict(backend='disk')),
+    dict(type='LoadImageFromFile'),
     dict(
         type='DINOMultiCrop',
         global_crops_scale=(0.4, 1.0),
@@ -96,8 +93,6 @@ log_level = 'INFO'
 load_from = None
 resume = True
 randomness = dict(seed=2, diff_rank_seed=True)
-launcher = 'slurm'
-work_dir = 'work_dirs/petrel/dino/dino_forward'
 custom_hooks = [
     dict(
         type='DINOTeacherTempWarmupHook',
