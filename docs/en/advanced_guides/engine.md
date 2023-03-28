@@ -280,4 +280,4 @@ optim_wrapper = dict(
     constructor='mmselfsup.LearningRateDecayOptimWrapperConstructor')
 ```
 
-Note: `paramwise_cfg` only supports the customization of `weight _ decline`.
+Note: `paramwise_cfg` only supports the customization of `weight_decay` in `LearningRateDecayOptimWrapperConstructor`.
