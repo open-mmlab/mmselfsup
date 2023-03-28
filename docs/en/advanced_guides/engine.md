@@ -134,7 +134,7 @@ custom_hooks = [
 ]
 ```
 
-such as using `EMAHook`, start_iters is 500:
+such as using `DenseCLHook`, start_iters is 500:
 
 ```python
 custom_hooks = [
@@ -260,7 +260,7 @@ The constructor aims to build optimizer, optimizer wrapper and customize hyper-p
 
 - [LearningRateDecayOptimWrapperConstructor](mmselfsup.engine.optimizers.LearningRateDecayOptimWrapperConstructor)
 
-`LearningRateDecayOptimWrapperConstructor` sets different learning rates for different layers of backbone. Note: Currently, this optimizer constructor is built for ViT and Swin.
+`LearningRateDecayOptimWrapperConstructor` sets different learning rates for different layers of backbone. Note: Currently, this optimizer constructor is built for ViT , Swin and MixMIN.
 
 An example:
 
@@ -280,4 +280,4 @@ optim_wrapper = dict(
     constructor='mmselfsup.LearningRateDecayOptimWrapperConstructor')
 ```
 
-Note: `paramwise_cfg` will be ignored, and it can be written as  `paramwise_cfg=dict()` .  By default, `LearningRateDecayOptimWrapperConstructor` will not apply weight decay to `normalization parameters`, `bias`, `position embedding`, `class token`, and `relative position bias table`, automatically.
+Note: `paramwise_cfg` only supports the customization of `weight _ decline`.

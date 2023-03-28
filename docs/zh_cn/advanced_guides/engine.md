@@ -134,7 +134,7 @@ custom_hooks = [
 ]
 ```
 
-例如使用  `EMAHook`, start_iters 是 500:
+例如使用  `DenseCLHook`, start_iters 是 500:
 
 ```python
 custom_hooks = [
@@ -250,7 +250,7 @@ optimizer = dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0001)
 optim_wrapper = dict(type='AmpOptimWrapper', optimizer=optimizer)
 ```
 
-`AmpOptimWrapper` 中 `loss_scale` 的默认设置是 is `dynamic`.
+`AmpOptimWrapper` 中 `loss_scale` 的默认设置是 `dynamic`.
 
 ### 构造器
 
@@ -260,7 +260,7 @@ optim_wrapper = dict(type='AmpOptimWrapper', optimizer=optimizer)
 
 - [LearningRateDecayOptimWrapperConstructor](mmselfsup.engine.optimizers.LearningRateDecayOptimWrapperConstructor)
 
-`LearningRateDecayOptimWrapperConstructor` 为主干网络的不同层设置不同的学习率. 注意: 目前,这个优化器构造器是为ViT 和 Swin 构建的.
+`LearningRateDecayOptimWrapperConstructor` 为主干网络的不同层设置不同的学习率. 注意: 目前,这个优化器构造器是为 ViT, Swin, MixMIM 构建的.
 
 一个例子:
 
@@ -280,4 +280,4 @@ optim_wrapper = dict(
     constructor='mmselfsup.LearningRateDecayOptimWrapperConstructor')
 ```
 
-注意: `paramwise_cfg` 将被忽略, 可以写成  `paramwise_cfg=dict()` .  默认情况下, `LearningRateDecayOptimWrapperConstructor` 不会自动对 `normalization parameters`, `bias`, `position embedding`, `class token` 和 `relative position bias table` 进行权重衰减.
+注意: `paramwise_cfg` 只支持 `weight_decay` 的自定义.
