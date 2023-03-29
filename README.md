@@ -31,6 +31,8 @@
 [🆕Update News](https://mmselfsup.readthedocs.io/en/dev-1.x/notes/changelog.html) |
 [🤔Reporting Issues](https://github.com/open-mmlab/mmselfsup/issues/new/choose)
 
+:point_right: **MMPreTrain 1.0 branch is in trial, welcome every to [try it](https://github.com/open-mmlab/mmclassification/tree/pretrain) and [discuss with us](https://github.com/open-mmlab/mmclassification/discussions)!** :point_left:
+
 </div>
 
 <div align="center">
