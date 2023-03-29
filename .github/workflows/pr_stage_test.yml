@@ -34,11 +34,10 @@ jobs:
         run: pip install pip --upgrade
       - name: Install PyTorch
         run: pip install torch==${{matrix.torch}}+cpu torchvision==${{matrix.torchvision}}+cpu -f https://download.pytorch.org/whl/torch_stable.html
-      - name: Install MMEngine
-        run: pip install git+https://github.com/open-mmlab/mmengine.git@main
       - name: Install MMSelfSup dependencies
         run: |
           pip install -U openmim
+          mim install mmengine
           mim install 'mmcv>=2.0.0rc1'
           mim install 'mmdet>=3.0.0rc0'
           mim install 'mmsegmentation>=1.0.0rc0'
