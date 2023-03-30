@@ -56,7 +56,7 @@ The priority determines the execution order of the hooks. Before training, the l
 
 ### Default hooks
 
-The following common hooks are already reigistered by [default](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/_base_/default_runtime.py#L3), which is implemented through [`register_default_hooks`](https://github.com/open-mmlab/mmengine/blob/main/mmengine/runner/runner.py#L1750) in MMEngine:
+The following common hooks are already reigistered by [default](https://github.com/open-mmlab/mmselfsup/blob/main/configs/selfsup/_base_/default_runtime.py#L3), which is implemented through [`register_default_hooks`](https://github.com/open-mmlab/mmengine/blob/main/mmengine/runner/runner.py#L1750) in MMEngine:
 
 |                                                     Hooks                                                     |                                                         Usage                                                         |     Priority      |
 | :-----------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------: | :---------------: |

@@ -70,7 +70,7 @@ class NewTransform(BaseTransform):
 
 ### Step 2: Add NewTransform to \_\_init\_\_py
 
-Then, add the transform to [\_\_init\_\_.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/datasets/transforms/__init__.py).
+Then, add the transform to [\_\_init\_\_.py](https://github.com/open-mmlab/mmselfsup/blob/main/mmselfsup/datasets/transforms/__init__.py).
 
 ```python
 ...

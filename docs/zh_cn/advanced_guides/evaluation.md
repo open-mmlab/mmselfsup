@@ -85,7 +85,7 @@ results = evaluator.offline_evaluate(data, predictions, chunk_size=128)
 
 - [`knn_classifier()`](mmselfsup.evaluation.functional.knn_classifier)
 
-用于计算 knn 分类器预测的准确性,并且用于 [KNN evaluation](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/benchmarks/classification/knn_imagenet/test_knn.py#L179).
+用于计算 knn 分类器预测的准确性,并且用于 [KNN evaluation](https://github.com/open-mmlab/mmselfsup/blob/main/tools/benchmarks/classification/knn_imagenet/test_knn.py#L179).
 
 ```python
 ...

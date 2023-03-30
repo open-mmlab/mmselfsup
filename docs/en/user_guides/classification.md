@@ -132,7 +132,7 @@ Remarks:
 - `${SELFSUP_CONFIG}` is the config file of the self-supervised experiment.
 - `${CHECKPOINT}`: the path of checkpoint model file.
 - if you want to change GPU numbers, you could add `GPUS_PER_NODE=4 GPUS=4` at the beginning of the command.
-- `[optional arguments]`: for optional arguments, you can refer to the [script](https://github.com/open-mmlab/mmselfsup/blob/1.x/tools/benchmarks/classification/knn_imagenet/test_knn.py)
+- `[optional arguments]`: for optional arguments, you can refer to the [script](https://github.com/open-mmlab/mmselfsup/blob/main/tools/benchmarks/classification/knn_imagenet/test_knn.py)
 
 An example of command
 

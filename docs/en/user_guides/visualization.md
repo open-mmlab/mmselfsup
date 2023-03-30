@@ -49,7 +49,7 @@ def after_train_iter(...):
 
 (2) Browse dataset
 
-The function [`add_datasample()`](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/visualization/selfsup_visualizer.py#L151) is impleted in [`SelfSupVisualizer`](mmselfsup.visualization.SelfSupVisualizer), and it is mainly used in [browse_dataset.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/browse_dataset.py) for browsing dataset. More tutorial is in section [Visualize Datasets](#visualize-datasets)
+The function [`add_datasample()`](https://github.com/open-mmlab/mmselfsup/blob/main/mmselfsup/visualization/selfsup_visualizer.py#L151) is impleted in [`SelfSupVisualizer`](mmselfsup.visualization.SelfSupVisualizer), and it is mainly used in [browse_dataset.py](https://github.com/open-mmlab/mmselfsup/blob/main/tools/analysis_tools/browse_dataset.py) for browsing dataset. More tutorial is in section [Visualize Datasets](#visualize-datasets)
 
 ## Use Different Storage Backends
 
@@ -129,7 +129,7 @@ Arguments:
 - `CONFIG_FILE`: config file for t-SNE, which listed in the directory `configs/tsne/`
 - `CKPT_PATH`: the path or link of the model's checkpoint.
 - `WORK_DIR`: the directory to save the results of visualization.
-- `[optional arguments]`: for optional arguments, you can refer to [visualize_tsne.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/visualize_tsne.py)
+- `[optional arguments]`: for optional arguments, you can refer to [visualize_tsne.py](https://github.com/open-mmlab/mmselfsup/blob/main/tools/analysis_tools/visualize_tsne.py)
 
 An example of command:
 
@@ -171,7 +171,7 @@ Arguments:
 - `CKPT_PATH`: the path of model's checkpoint.
 - `IMAGE_PATH`: the input image path.
 - `OUTPUT_PATH`: the output image path, including 4 sub-images.
-- `[optional arguments]`: for optional arguments, you can refer to [visualize_reconstruction.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/analysis_tools/visualize_reconstruction.py)
+- `[optional arguments]`: for optional arguments, you can refer to [visualize_reconstruction.py](https://github.com/open-mmlab/mmselfsup/blob/main/tools/analysis_tools/visualize_reconstruction.py)
 
 An example:
 

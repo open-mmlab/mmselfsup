@@ -22,7 +22,7 @@
 [![docs](https://img.shields.io/badge/docs-latest-blue)](https://mmselfsup.readthedocs.io/en/dev-1.x/)
 [![badge](https://github.com/open-mmlab/mmselfsup/workflows/build/badge.svg)](https://github.com/open-mmlab/mmselfsup/actions)
 [![codecov](https://codecov.io/gh/open-mmlab/mmselfsup/branch/master/graph/badge.svg)](https://codecov.io/gh/open-mmlab/mmselfsup)
-[![license](https://img.shields.io/github/license/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/blob/master/LICENSE)
+[![license](https://img.shields.io/github/license/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/blob/main/LICENSE)
 [![open issues](https://isitmaintained.com/badge/open/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/issues)
 
 [📘Documentation](https://mmselfsup.readthedocs.io/en/dev-1.x/) |
@@ -134,7 +134,7 @@ Useful Tools
 - [Visualization](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/visualization.html)
 - [Analysis Tools](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/analysis_tools.html)
 
-[Advanced Guides](https://mmselfsup.readthedocs.io/en/dev-1.x/advanced_guides/index.html) and [Colab Tutorials](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/demo/mmselfsup_colab_tutorial.ipynb) are also provided.
+[Advanced Guides](https://mmselfsup.readthedocs.io/en/dev-1.x/advanced_guides/index.html) and [Colab Tutorials](https://github.com/open-mmlab/mmselfsup/blob/main/demo/mmselfsup_colab_tutorial.ipynb) are also provided.
 
 Please refer to [FAQ](https://mmselfsup.readthedocs.io/en/dev-1.x/notes/faq.html) for frequently asked questions.
 

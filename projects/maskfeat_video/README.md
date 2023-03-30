@@ -196,8 +196,8 @@ Due to the version of K400 dataset, our pretraining, fine-tuning and the final t
 	    <td>300</td>
       <td>512</td>
       <td>81.8</td>
-      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/projects/maskfeat_video/configs/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400_20230131-87d60b6f.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400_20230118_114151.json'>log</a></td>
-      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/projects/maskfeat_video/configs/mvit-small_ft-8xb16-coslr-100e_k400.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/mvit-small_ft-8xb16-coslr-100e_k400/mvit-small_ft-8xb16-coslr-100e_k400_20230131-5e8303f5.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/mvit-small_ft-8xb16-coslr-100e_k400/mvit-small_ft-8xb16-coslr-100e_k400_20230121_142927.json'>log</a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/main/projects/maskfeat_video/configs/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400_20230131-87d60b6f.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400_20230118_114151.json'>log</a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/main/projects/maskfeat_video/configs/mvit-small_ft-8xb16-coslr-100e_k400.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/mvit-small_ft-8xb16-coslr-100e_k400/mvit-small_ft-8xb16-coslr-100e_k400_20230131-5e8303f5.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/maskfeat/maskfeat_mvit-small_16xb32-amp-coslr-300e_k400/mvit-small_ft-8xb16-coslr-100e_k400/mvit-small_ft-8xb16-coslr-100e_k400_20230121_142927.json'>log</a></td>
 	</tr>
 </tbody>
 </table>
@@ -258,11 +258,11 @@ A project does not necessarily have to be finished in a single PR, but it's esse
 
   - [ ] Type hints and docstrings
 
-    <!-- Ideally *all* the methods should have [type hints](https://www.pythontutorial.net/python-basics/python-type-hints/) and [docstrings](https://google.github.io/styleguide/pyguide.html#381-docstrings). [Example](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/models/backbones/mae_vit.py) -->
+    <!-- Ideally *all* the methods should have [type hints](https://www.pythontutorial.net/python-basics/python-type-hints/) and [docstrings](https://google.github.io/styleguide/pyguide.html#381-docstrings). [Example](https://github.com/open-mmlab/mmselfsup/blob/main/mmselfsup/models/backbones/mae_vit.py) -->
 
   - [ ] Unit tests
 
-    <!-- Unit tests for each module are required. [Example](https://github.com/open-mmlab/mmselfsup/blob/1.x/tests/test_models/test_backbones/test_mae_vit.py) -->
+    <!-- Unit tests for each module are required. [Example](https://github.com/open-mmlab/mmselfsup/blob/main/tests/test_models/test_backbones/test_mae_vit.py) -->
 
   - [ ] Code polishing
 
@@ -270,6 +270,6 @@ A project does not necessarily have to be finished in a single PR, but it's esse
 
   - [ ] `metafile.yml` and `README.md`
 
-    <!-- It will be parsed by MIM and Inferencer. [Example](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/mae/metafile.yml). In particular, you may have to refactor this README into a standard one. [Example](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/mae/README.md) -->
+    <!-- It will be parsed by MIM and Inferencer. [Example](https://github.com/open-mmlab/mmselfsup/blob/main/configs/selfsup/mae/metafile.yml). In particular, you may have to refactor this README into a standard one. [Example](https://github.com/open-mmlab/mmselfsup/blob/main/configs/selfsup/mae/README.md) -->
 
 - [ ] Refactor and Move your modules into the core package following the codebase's file hierarchy structure.

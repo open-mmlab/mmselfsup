@@ -30,17 +30,17 @@ The **Best Layer** indicates that the best results are obtained from which layer
 
 Besides, k=1 to 96 indicates the hyper-parameter of Low-shot SVM.
 
-| Self-Supervised Config                                                                                                                      | Best Layer | SVM   | k=1   | k=2   | k=4   | k=8   | k=16  | k=32  | k=64  | k=96  |
-| ------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
-| [resnet50_8xb32-steplr-200e](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py) | feature5   | 76.75 | 26.96 | 35.37 | 44.48 | 53.89 | 60.39 | 66.41 | 71.48 | 73.39 |
+| Self-Supervised Config                                                                                                                       | Best Layer | SVM   | k=1   | k=2   | k=4   | k=8   | k=16  | k=32  | k=64  | k=96  |
+| -------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
+| [resnet50_8xb32-steplr-200e](https://github.com/open-mmlab/mmselfsup/blob/main/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py) | feature5   | 76.75 | 26.96 | 35.37 | 44.48 | 53.89 | 60.39 | 66.41 | 71.48 | 73.39 |
 
 #### ImageNet Linear Evaluation
 
-The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map is pooled to the specific dimensions and then follows a Linear layer to do the classification. Please refer to [resnet50_mhead_linear-8xb32-steplr-90e_in1k](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/benchmarks/classification/imagenet/resnet50_mhead_linear-8xb32-steplr-90e_in1k.py) for details of config.
+The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map is pooled to the specific dimensions and then follows a Linear layer to do the classification. Please refer to [resnet50_mhead_linear-8xb32-steplr-90e_in1k](https://github.com/open-mmlab/mmselfsup/blob/main/configs/benchmarks/classification/imagenet/resnet50_mhead_linear-8xb32-steplr-90e_in1k.py) for details of config.
 
-| Self-Supervised Config                                                                                                                      | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 |
-| ------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- |
-| [resnet50_8xb32-steplr-200e](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py) | 14.68    | 31.98    | 42.85    | 56.95    | 58.41    |
+| Self-Supervised Config                                                                                                                       | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 |
+| -------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- |
+| [resnet50_8xb32-steplr-200e](https://github.com/open-mmlab/mmselfsup/blob/main/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py) | 14.68    | 31.98    | 42.85    | 56.95    | 58.41    |
 
 <table class="docutils">
 <thead>
@@ -68,8 +68,8 @@ The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map
       <td>256</td>
       <td>58.3</td>
       <td>/</td>
-      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/npid/npid_resnet50_8xb32-steplr-200e_in1k/npid_resnet50_8xb32-steplr-200e_in1k_20220825-a67c5440.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/npid/npid_resnet50_8xb32-steplr-200e_in1k/npid_resnet50_8xb32-steplr-200e_in1k_20220725_161221.json'>log</a></td>
-      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-steplr-100e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/npid/npid_resnet50_8xb32-steplr-200e_in1k/resnet50_linear-8xb32-steplr-100e_in1k/resnet50_linear-8xb32-steplr-100e_in1k_20220825-661b736e.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/npid/npid_resnet50_8xb32-steplr-200e_in1k/resnet50_linear-8xb32-steplr-100e_in1k/resnet50_linear-8xb32-steplr-100e_in1k_20220728_150535.json'>log</a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/main/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/npid/npid_resnet50_8xb32-steplr-200e_in1k/npid_resnet50_8xb32-steplr-200e_in1k_20220825-a67c5440.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/npid/npid_resnet50_8xb32-steplr-200e_in1k/npid_resnet50_8xb32-steplr-200e_in1k_20220725_161221.json'>log</a></td>
+      <td><a href='https://github.com/open-mmlab/mmselfsup/blob/main/configs/benchmarks/classification/imagenet/resnet50_linear-8xb32-steplr-100e_in1k.py'>config</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/npid/npid_resnet50_8xb32-steplr-200e_in1k/resnet50_linear-8xb32-steplr-100e_in1k/resnet50_linear-8xb32-steplr-100e_in1k_20220825-661b736e.pth'>model</a> | <a href='https://download.openmmlab.com/mmselfsup/1.x/npid/npid_resnet50_8xb32-steplr-200e_in1k/resnet50_linear-8xb32-steplr-100e_in1k/resnet50_linear-8xb32-steplr-100e_in1k_20220728_150535.json'>log</a></td>
       <td>/</td>
 	</tr>
   </tbody>
@@ -77,19 +77,19 @@ The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map
 
 #### Places205 Linear Evaluation
 
-The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map is pooled to the specific dimensions and then follows a Linear layer to do the classification. Please refer to [resnet50_mhead_8xb32-steplr-28e_places205.py](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/benchmarks/classification/places205/resnet50_mhead_8xb32-steplr-28e_places205.py) for details of config.
+The **Feature1 - Feature5** don't have the GlobalAveragePooling, the feature map is pooled to the specific dimensions and then follows a Linear layer to do the classification. Please refer to [resnet50_mhead_8xb32-steplr-28e_places205.py](https://github.com/open-mmlab/mmselfsup/blob/main/configs/benchmarks/classification/places205/resnet50_mhead_8xb32-steplr-28e_places205.py) for details of config.
 
-| Self-Supervised Config                                                                                                                      | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 |
-| ------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- |
-| [resnet50_8xb32-steplr-200e](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py) | 19.98    | 34.86    | 41.59    | 48.43    | 48.71    |
+| Self-Supervised Config                                                                                                                       | Feature1 | Feature2 | Feature3 | Feature4 | Feature5 |
+| -------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | -------- | -------- | -------- |
+| [resnet50_8xb32-steplr-200e](https://github.com/open-mmlab/mmselfsup/blob/main/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py) | 19.98    | 34.86    | 41.59    | 48.43    | 48.71    |
 
 #### ImageNet Nearest-Neighbor Classification
 
 The results are obtained from the features after GlobalAveragePooling. Here, k=10 to 200 indicates different number of nearest neighbors.
 
-| Self-Supervised Config                                                                                                                      | k=10 | k=20 | k=100 | k=200 |
-| ------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ---- | ----- | ----- |
-| [resnet50_8xb32-steplr-200e](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py) | 42.9 | 44.0 | 43.2  | 42.2  |
+| Self-Supervised Config                                                                                                                       | k=10 | k=20 | k=100 | k=200 |
+| -------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ---- | ----- | ----- |
+| [resnet50_8xb32-steplr-200e](https://github.com/open-mmlab/mmselfsup/blob/main/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py) | 42.9 | 44.0 | 43.2  | 42.2  |
 
 ### Detection
 
@@ -97,19 +97,19 @@ The detection benchmarks includes 2 downstream task datasets, **Pascal VOC 2007 
 
 #### Pascal VOC 2007 + 2012
 
-Please refer to [config](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/benchmarks/mmdetection/voc0712/faster-rcnn_r50-c4_ms-24k_voc0712.py) for details.
+Please refer to [config](https://github.com/open-mmlab/mmselfsup/blob/main/configs/benchmarks/mmdetection/voc0712/faster-rcnn_r50-c4_ms-24k_voc0712.py) for details.
 
-| Self-Supervised Config                                                                                                                      | AP50  |
-| ------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| [resnet50_8xb32-steplr-200e](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py) | 79.52 |
+| Self-Supervised Config                                                                                                                       | AP50  |
+| -------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| [resnet50_8xb32-steplr-200e](https://github.com/open-mmlab/mmselfsup/blob/main/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py) | 79.52 |
 
 #### COCO2017
 
-Please refer to [config](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/benchmarks/mmdetection/coco/mask-rcnn_r50_fpn_ms-1x_coco.py) for details.
+Please refer to [config](https://github.com/open-mmlab/mmselfsup/blob/main/configs/benchmarks/mmdetection/coco/mask-rcnn_r50_fpn_ms-1x_coco.py) for details.
 
-| Self-Supervised Config                                                                                                                      | mAP(Box) | AP50(Box) | AP75(Box) | mAP(Mask) | AP50(Mask) | AP75(Mask) |
-| ------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------- | --------- | --------- | ---------- | ---------- |
-| [resnet50_8xb32-steplr-200e](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py) | 38.5     | 57.7      | 42.0      | 34.6      | 54.8       | 37.1       |
+| Self-Supervised Config                                                                                                                       | mAP(Box) | AP50(Box) | AP75(Box) | mAP(Mask) | AP50(Mask) | AP75(Mask) |
+| -------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------- | --------- | --------- | ---------- | ---------- |
+| [resnet50_8xb32-steplr-200e](https://github.com/open-mmlab/mmselfsup/blob/main/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py) | 38.5     | 57.7      | 42.0      | 34.6      | 54.8       | 37.1       |
 
 ### Segmentation
 
@@ -117,11 +117,11 @@ The segmentation benchmarks includes 2 downstream task datasets, **Cityscapes** 
 
 #### Pascal VOC 2012 + Aug
 
-Please refer to [config](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/benchmarks/mmsegmentation/voc12aug/fcn_r50-d8_4xb4-20k_voc12aug-512x512.py) for details.
+Please refer to [config](https://github.com/open-mmlab/mmselfsup/blob/main/configs/benchmarks/mmsegmentation/voc12aug/fcn_r50-d8_4xb4-20k_voc12aug-512x512.py) for details.
 
-| Self-Supervised Config                                                                                                                      | mIOU  |
-| ------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| [resnet50_8xb32-steplr-200e](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py) | 65.45 |
+| Self-Supervised Config                                                                                                                       | mIOU  |
+| -------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| [resnet50_8xb32-steplr-200e](https://github.com/open-mmlab/mmselfsup/blob/main/configs/selfsup/npid/npid_resnet50_8xb32-steplr-200e_in1k.py) | 65.45 |
 
 ## Citation
 

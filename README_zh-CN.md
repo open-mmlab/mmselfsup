@@ -22,7 +22,7 @@
 [![docs](https://img.shields.io/badge/docs-latest-blue)](https://mmselfsup.readthedocs.io/en/dev-1.x/)
 [![badge](https://github.com/open-mmlab/mmselfsup/workflows/build/badge.svg)](https://github.com/open-mmlab/mmselfsup/actions)
 [![codecov](https://codecov.io/gh/open-mmlab/mmselfsup/branch/master/graph/badge.svg)](https://codecov.io/gh/open-mmlab/mmselfsup)
-[![license](https://img.shields.io/github/license/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/blob/master/LICENSE)
+[![license](https://img.shields.io/github/license/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/blob/main/LICENSE)
 [![open issues](https://isitmaintained.com/badge/open/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/issues)
 
 [📘使用文档](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/) |
@@ -138,7 +138,7 @@ Useful Tools
 - [Visualization](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/visualization.html)
 - [Analysis Tools](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/analysis_tools.html)
 
-我们也提供了 [进阶指引](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/advanced_guides/index.html) 和 [Colab 教程](https://github.com/open-mmlab/mmselfsup/blob/master/demo/mmselfsup_colab_tutorial.ipynb)。
+我们也提供了 [进阶指引](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/advanced_guides/index.html) 和 [Colab 教程](https://github.com/open-mmlab/mmselfsup/blob/main/demo/mmselfsup_colab_tutorial.ipynb)。
 
 如果遇到问题，请参考 [常见问题解答](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/notes/faq.html)。
 

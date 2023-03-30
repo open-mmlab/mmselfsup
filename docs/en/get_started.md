@@ -86,7 +86,7 @@ pip install -v -e .
 # thus any local modifications made to the code will take effect without reinstallation.
 ```
 
-Optionally, if you want to [contribute](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/docs/en/notes/contribution_guide.md) to MMSelfSup or experience experimental functions, please checkout to the `dev-1.x` branch:
+Optionally, if you want to [contribute](https://github.com/open-mmlab/mmselfsup/blob/main/docs/en/notes/contribution_guide.md) to MMSelfSup or experience experimental functions, please checkout to the `dev-1.x` branch:
 
 ```shell
 git checkout dev-1.x
@@ -204,7 +204,7 @@ Within Jupyter, the exclamation mark `!` is used to call external executables an
 
 #### Using MMSelfSup with Docker
 
-We provide a [Dockerfile](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/docker/Dockerfile) to build an image. Ensure that your [docker version](https://docs.docker.com/engine/install/) >=19.03.
+We provide a [Dockerfile](https://github.com/open-mmlab/mmselfsup/blob/main/docker/Dockerfile) to build an image. Ensure that your [docker version](https://docs.docker.com/engine/install/) >=19.03.
 
 ```shell
 # build an image with PyTorch 1.10.0, CUDA 11.3, CUDNN 8.

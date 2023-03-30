@@ -70,7 +70,7 @@ class NewTransform(BaseTransform):
 
 ### 步骤 2: 将新转换添加到 \_\_init\_\_py
 
-然后, 将转换添加到 [\_\_init\_\_.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/datasets/transforms/__init__.py) 。
+然后, 将转换添加到 [\_\_init\_\_.py](https://github.com/open-mmlab/mmselfsup/blob/main/mmselfsup/datasets/transforms/__init__.py) 。
 
 ```python
 ...

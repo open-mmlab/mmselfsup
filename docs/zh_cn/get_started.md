@@ -86,7 +86,7 @@ pip install -v -e .
 # 因此，对代码所做的任何本地修改都将生效，无需重新安装。
 ```
 
-或者，如果您想为 MMSelfSup 做出[贡献](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/docs/zh_cn/notes/contribution_guides.md)或体验其正在实验中的功能，请查看 `dev-1.x` 分支：
+或者，如果您想为 MMSelfSup 做出[贡献](https://github.com/open-mmlab/mmselfsup/blob/main/docs/zh_cn/notes/contribution_guides.md)或体验其正在实验中的功能，请查看 `dev-1.x` 分支：
 
 ```shell
 git checkout dev-1.x
@@ -202,7 +202,7 @@ print(mmselfsup.__version__)
 
 #### 通过 Docker 使用 MMSelfSup
 
-我们提供了一个 [Dockerfile](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/docker/Dockerfile) 来构建镜像。请确保您的 [docker 版本](https://docs.docker.com/engine/install/) >=19.03。
+我们提供了一个 [Dockerfile](https://github.com/open-mmlab/mmselfsup/blob/main/docker/Dockerfile) 来构建镜像。请确保您的 [docker 版本](https://docs.docker.com/engine/install/) >=19.03。
 
 ```shell
 # 使用 PyTorch 1.10.0、CUDA 11.3、CUDNN 8 构建镜像。
