@@ -14,6 +14,7 @@
 在本教程中，我们将介绍一些关于如何设置项目自定义运行的方法。
 
 <a name="Loop"></a>
+
 ## 循环(Loop)
 
 `Loop` 表示训练、验证或测试的工作流，我们使用 `train_cfg`,`val_cfg` 和 `test_cfg` 来构建 `Loop`。
@@ -173,6 +174,7 @@ optim_wrapper = dict(
 在 `LARS` 优化器中，我们有 `lars_exclude` 选项来决定指定的层是否应用 `LARS` 优化方法。
 
 <a name="Scheduler"></a>
+
 ## 调度器(Scheduler)
 
 在自定义调度器配置之前，建议先学习 [MMEngine文档](https://github.com/open-mmlab/mmengine/blob/main/docs/en/tutorials/param_scheduler.md) 中关于调度器的基本概念。
@@ -198,4 +200,4 @@ param_scheduler = [
 ]
 ```
 
-**注意：** 当您更改 `train_cfg` 中的 `max_epochs` 时，请确保同时修改 `param_scheduler` 中的参数。___
+**注意：** 当您更改 `train_cfg` 中的 `max_epochs` 时，请确保同时修改 `param_scheduler` 中的参数。
