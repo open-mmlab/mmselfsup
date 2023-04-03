@@ -1,7 +1,6 @@
 # dataset settings
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
-file_client_args = dict(backend='disk')
 
 num_crops = [2, 6]
 color_distort_strength = 1.0
@@ -55,7 +54,7 @@ view_pipeline2 = [
 ]
 
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(
         type='MultiView',
         num_views=num_crops,

@@ -11,7 +11,6 @@ import torch
 from mmengine.dataset import Compose, default_collate
 
 from mmselfsup.apis import inference_model, init_model
-from mmselfsup.utils import register_all_modules
 
 imagenet_mean = np.array([0.485, 0.456, 0.406])
 imagenet_std = np.array([0.229, 0.224, 0.225])
@@ -115,8 +114,6 @@ def main():
         help='The random seed for visualization')
     args = parser.parse_args()
 
-    register_all_modules()
-
     # build the model from a config file and a checkpoint file
     model = init_model(args.config, args.checkpoint, device=args.device)
     print('Model loaded.')
@@ -134,9 +131,7 @@ def main():
     else:
         model.cfg.test_dataloader = dict(
             dataset=dict(pipeline=[
-                dict(
-                    type='LoadImageFromFile',
-                    file_client_args=dict(backend='disk')),
+                dict(type='LoadImageFromFile'),
                 dict(type='Resize', scale=(224, 224), backend='pillow'),
                 dict(type='PackSelfSupInputs', meta_keys=['img_path'])
             ]))

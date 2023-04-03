@@ -6,6 +6,7 @@ import numpy as np
 import torch
 from mmengine.config import Config
 from mmengine.dataset import Compose, default_collate
+from mmengine.registry import init_default_scope
 from mmengine.runner import load_checkpoint
 from torch import nn
 
@@ -36,8 +37,11 @@ def init_model(config: Union[str, Config],
     elif not isinstance(config, Config):
         raise TypeError('config must be a filename or Config object, '
                         f'but got {type(config)}')
+
     if options is not None:
         config.merge_from_dict(options)
+    init_default_scope(config.get('default_scope', 'mmselfsup'))
+
     config.model.pretrained = None
     config.model.setdefault('data_preprocessor',
                             config.get('data_preprocessor', None))

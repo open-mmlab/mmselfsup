@@ -94,7 +94,7 @@ val_dataloader = ...
 
 ```python
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(
         type='RandomResizedCrop',
         size=224,

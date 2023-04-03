@@ -13,13 +13,13 @@ from mmengine.dataset import pseudo_collate, worker_init_fn
 from mmengine.dist import get_rank, init_dist
 from mmengine.logging import MMLogger
 from mmengine.model.wrappers import MMDistributedDataParallel, is_model_wrapper
+from mmengine.registry import init_default_scope
 from mmengine.runner import load_checkpoint
 from mmengine.utils import mkdir_or_exist
 from torch.utils.data import DataLoader
 
 from mmselfsup.models.utils import Extractor
 from mmselfsup.registry import DATA_SAMPLERS, DATASETS, MODELS
-from mmselfsup.utils import register_all_modules
 
 
 def parse_args():
@@ -66,13 +66,12 @@ def parse_args():
 def main():
     args = parse_args()
 
-    # register all modules in mmselfsup into the registries
-    register_all_modules()
-
     # load config
     cfg = Config.fromfile(args.config)
     if args.cfg_options is not None:
         cfg.merge_from_dict(args.cfg_options)
+
+    init_default_scope(cfg.get('default_scope', 'mmselfsup'))
 
     # set cudnn_benchmark
     if cfg.env_cfg.get('cudnn_benchmark', False):

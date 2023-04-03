@@ -1,7 +1,6 @@
 # dataset settings
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
-file_client_args = dict(backend='disk')
 
 view_pipeline1 = [
     dict(
@@ -51,7 +50,7 @@ view_pipeline2 = [
 ]
 
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(
         type='MultiView',
         num_views=[1, 1],

@@ -3,10 +3,10 @@ from mmcv.cnn import build_norm_layer
 
 try:
     from mmdet.models.backbones import ResNet
-    from mmdet.models.builder import SHARED_HEADS
     from mmdet.models.roi_heads.shared_heads.res_layer import ResLayer
+    from mmdet.registry import MODELS
 
-    @SHARED_HEADS.register_module()
+    @MODELS.register_module()
     class ResLayerExtraNorm(ResLayer):
         """Add extra norm to original ``ResLayer``."""
 

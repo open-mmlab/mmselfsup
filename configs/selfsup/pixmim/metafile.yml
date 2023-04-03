@@ -1,0 +1,78 @@
+Collections:
+  - Name: PixMIM
+    Metadata:
+      Training Data: ImageNet-1k
+      Training Techniques:
+        - AdamW
+      Training Resources: 8x A100-80G GPUs
+      Architecture:
+        - ViT
+    Paper:
+        URL: https://arxiv.org/abs/2303.02416
+        Title: "PixMIM: Rethinking Pixel Reconstruction in Masked Image Modeling"
+    README: configs/selfsup/pixmim/README.md
+
+Models:
+  - Name: pixmim_vit-base-p16_8xb512-amp-coslr-300e_in1k
+    In Collection: PixMIM
+    Metadata:
+      Epochs: 300
+      Batch Size: 4096
+    Results: null
+    Config: configs/selfsup/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-300e_in1k.py
+    Weights: https://download.openmmlab.com/mmselfsup/1.x/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-300e_in1k/pixmim_vit-base-p16_8xb512-amp-coslr-300e_in1k_20230322-3304a88c.pth
+    Downstream:
+      - Type: Image Classification
+        Metadata:
+          Epochs: 100
+          Batch Size: 1024
+        Results:
+          - Task: Fine-tuning
+            Dataset: ImageNet-1k
+            Metrics:
+              Top 1 Accuracy: 83.1
+        Config: configs/selfsup/pixmim/classification/vit-base-p16_ft-8xb128-coslr-100e_in1k.py
+        Weights: https://download.openmmlab.com/mmselfsup/1.x/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-300e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k_20230322-7eba2bc2.pth
+      - Type: Image Classification
+        Metadata:
+          Epochs: 100
+          Batch Size: 16384
+        Results:
+          - Task: Linear Evaluation
+            Dataset: ImageNet-1k
+            Metrics:
+              Top 1 Accuracy: 63.3
+        Config: configs/selfsup/pixmim/classification/vit-base-p16_linear-8xb2048-coslr-torchvision-transform-90e_in1k.py
+        Weights: https://download.openmmlab.com/mmselfsup/1.x/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-300e_in1k/vit-base-p16_linear-8xb2048-torchvision-transform-coslr-90e_in1k/vit-base-p16_linear-8xb2048-torchvision-transform-coslr-90e_in1k_20230322-72322af8.pth
+
+  - Name: pixmim_vit-base-p16_8xb512-amp-coslr-800e_in1k
+    In Collection: PixMIM
+    Metadata:
+      Epochs: 800
+      Batch Size: 4096
+    Results: null
+    Config: configs/selfsup/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-800e_in1k.py
+    Weights: https://download.openmmlab.com/mmselfsup/1.x/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-800e_in1k/pixmim_vit-base-p16_8xb512-amp-coslr-800e_in1k_20230322-e8137924.pth
+    Downstream:
+      - Type: Image Classification
+        Metadata:
+          Epochs: 100
+          Batch Size: 1024
+        Results:
+          - Task: Fine-tuning
+            Dataset: ImageNet-1k
+            Metrics:
+              Top 1 Accuracy: 83.5
+        Config: configs/selfsup/pixmim/classification/vit-base-p16_ft-8xb128-coslr-100e_in1k.py
+        Weights: https://download.openmmlab.com/mmselfsup/1.x/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-800e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k/vit-base-p16_ft-8xb128-coslr-100e_in1k_20230322-616b1a7f.pth
+      - Type: Image Classification
+        Metadata:
+          Epochs: 100
+          Batch Size: 16384
+        Results:
+          - Task: Linear Evaluation
+            Dataset: ImageNet-1k
+            Metrics:
+              Top 1 Accuracy: 67.5
+        Config: configs/selfsup/pixmim/classification/vit-base-p16_linear-8xb2048-coslr-torchvision-transform-90e_in1k.py
+        Weights: https://download.openmmlab.com/mmselfsup/1.x/pixmim/pixmim_vit-base-p16_8xb512-amp-coslr-800e_in1k/vit-base-p16_linear-8xb2048-torchvision-transform-coslr-90e_in1k/vit-base-p16_linear-8xb2048-torchvision-transform-coslr-90e_in1k_20230322-12c15568.pth

@@ -14,13 +14,13 @@ from mmengine.config import Config, DictAction
 from mmengine.dataset import default_collate, worker_init_fn
 from mmengine.dist import get_rank
 from mmengine.logging import MMLogger
+from mmengine.registry import init_default_scope
 from mmengine.utils import mkdir_or_exist
 from sklearn.manifold import TSNE
 from torch.utils.data import DataLoader
 
 from mmselfsup.apis import init_model
 from mmselfsup.registry import DATA_SAMPLERS, DATASETS
-from mmselfsup.utils import register_all_modules
 
 
 def parse_args():
@@ -99,19 +99,15 @@ def parse_args():
     return args
 
 
-def post_process():
-    pass
-
-
 def main():
     args = parse_args()
-
-    # register all modules in mmselfsup into the registries
-    register_all_modules()
 
     cfg = Config.fromfile(args.config)
     if args.cfg_options is not None:
         cfg.merge_from_dict(args.cfg_options)
+
+    init_default_scope(cfg.get('default_scope', 'mmselfsup'))
+
     # set cudnn_benchmark
     if cfg.get('cudnn_benchmark', False):
         torch.backends.cudnn.benchmark = True

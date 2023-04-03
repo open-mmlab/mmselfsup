@@ -1,9 +1,9 @@
 # dataset settings
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
-file_client_args = dict(backend='disk')
+
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(
         type='RandomResizedCrop',
         size=192,
@@ -37,7 +37,7 @@ train_dataloader = dict(
 
 # for visualization
 vis_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(type='Resize', scale=(192, 192), backend='pillow'),
     dict(
         type='SimMIMMaskGenerator',

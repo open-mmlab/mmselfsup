@@ -59,8 +59,8 @@ jobs:
       - run:
           name: Install MMSelfSup dependencies
           command: |
-            pip install git+https://github.com/open-mmlab/mmengine.git@main
             pip install -U openmim
+            mim install mmengine
             mim install 'mmcv>=2.0.0rc1'
             mim install 'mmdet>=3.0.0rc0'
             mim install 'mmsegmentation>=1.0.0rc0'
@@ -143,19 +143,12 @@ workflows:
               ignore:
                 - dev-1.x
       - build_cpu:
-          name: minimum_version_cpu
-          torch: 1.6.0
-          torchvision: 0.7.0
-          python: 3.7.4
-          requires:
-            - lint
-      - build_cpu:
           name: maximum_version_cpu
           torch: 1.9.0
           torchvision: 0.10.0
           python: 3.9.0
           requires:
-            - minimum_version_cpu
+            - lint
       - hold:
           type: approval
           requires:

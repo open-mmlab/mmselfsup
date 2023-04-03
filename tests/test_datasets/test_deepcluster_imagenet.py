@@ -2,19 +2,19 @@
 import os.path as osp
 
 import pytest
+from mmengine.registry import init_default_scope
 
 from mmselfsup.datasets import DeepClusterImageNet
-from mmselfsup.utils import register_all_modules
 
 # dataset settings
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=dict(backend='disk')),
+    dict(type='LoadImageFromFile'),
     dict(type='RandomResizedCrop', size=4)
 ]
 
 
 def test_deepcluster_dataset():
-    register_all_modules()
+    init_default_scope('mmselfsup')
 
     data = dict(
         ann_file=osp.join(

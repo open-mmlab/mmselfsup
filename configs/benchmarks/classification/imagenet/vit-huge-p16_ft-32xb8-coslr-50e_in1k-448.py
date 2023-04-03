@@ -9,10 +9,8 @@ model = dict(
     head=dict(in_channels=1280))
 
 # dataset settings
-file_client_args = dict(backend='disk')
-
 train_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(
         type='RandomResizedCrop',
         scale=448,
@@ -39,7 +37,7 @@ train_pipeline = [
 ]
 
 test_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(
         type='ResizeEdge',
         scale=512,

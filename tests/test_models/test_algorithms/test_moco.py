@@ -7,9 +7,6 @@ import torch
 
 from mmselfsup.models.algorithms import MoCo
 from mmselfsup.structures import SelfSupDataSample
-from mmselfsup.utils import register_all_modules
-
-register_all_modules()
 
 queue_len = 32
 feat_dim = 2

@@ -7,9 +7,6 @@ from mmengine.structures import InstanceData
 
 from mmselfsup.models.algorithms import SimMIM
 from mmselfsup.structures import SelfSupDataSample
-from mmselfsup.utils import register_all_modules
-
-register_all_modules()
 
 
 @pytest.mark.skipif(platform.system() == 'Windows', reason='Windows mem limit')

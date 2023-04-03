@@ -3,6 +3,12 @@ _base_ = 'mmcls::_base_/default_runtime.py'
 model = dict(
     _scope_='mmcls',
     type='ImageClassifier',
+    data_preprocessor=dict(
+        num_classes=1000,
+        mean=[123.675, 116.28, 103.53],
+        std=[58.395, 57.12, 57.375],
+        to_rgb=True,
+    ),
     backbone=dict(
         type='SwinTransformer',
         arch='base',
@@ -22,9 +28,8 @@ model = dict(
 
 dataset_type = 'mmcls.ImageNet'
 data_root = 'data/imagenet/'
-file_client_args = dict(backend='disk')
 extract_pipeline = [
-    dict(type='LoadImageFromFile', file_client_args=file_client_args),
+    dict(type='LoadImageFromFile'),
     dict(type='mmcls.ResizeEdge', scale=256, edge='short'),
     dict(type='CenterCrop', crop_size=224),
     dict(type='mmcls.PackClsInputs'),
