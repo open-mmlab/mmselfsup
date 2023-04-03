@@ -130,7 +130,7 @@ optim_wrapper = dict(type='AmpOptimWrapper', optimizer=optimizer)
 
 此外，我们可以使用 `custom_keys` 为不同模块设置不同的超参数。
 
-以下是MAE的 `optim_wrapper` 示例。以下配置将 `pos_embed`, `mask_token`, `cls_token` 模块和名称包含`ln`和`bias`的那些层的权重衰减乘法设置为0。在训练过程中，这些模块的权重衰减将是 `weight_decay * decay_mult`。
+以下是MAE的 `optim_wrapper` 示例。以下配置将 `pos_embed`, `mask_token`, `cls_token` 模块和名称包含`ln`和`bias`的那些层的权重衰减的乘法乘数设置为 0。在训练过程中，这些模块的权重衰减将是 `weight_decay * decay_mult`。
 
 ```python
 optimizer = dict(
