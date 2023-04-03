@@ -29,11 +29,13 @@ train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=200)
 MMEngine定义了几个[基本的循环](https://github.com/open-mmlab/mmengine/blob/main/mmengine/runner/loops.py)。如果定义的循环不满足需求，用户可以实现自定义的循环。
 
 <a name="Hook"></a>
+
 ## 钩子(Hook)
 
 在学习创建自定义钩子之前，建议先学习文件[engine.md](engine.md)中关于钩子的基本概念。
 
 <a name="Step1"></a>
+
 ### 步骤1：创建一个新的钩子
 
 根据钩子的目的，您需要根据期望的钩子点实现相应的函数。
@@ -68,6 +70,7 @@ class NewHook(Hook):
 ```
 
 <a name="Step2"></a>
+
 ### 步骤2：导入新的钩子
 
 然后我们需要确保 `NewHook` 已经被导入。假设 `NewHook` 在 `mmselfsup/engine/hooks/new_hook.py` 中，按照以下方式修改 `mmselfsup/engine/hooks/__init__.py` 文件：
@@ -80,6 +83,7 @@ __all__ = [..., NewHook]
 ```
 
 <a name="Step3"></a>
+
 ### 步骤3：修改配置文件
 
 ```python
@@ -99,6 +103,7 @@ custom_hooks = [
 默认情况下，在注册时，钩子的优先级被设置为 `NORMAL`。
 
 <a name="Optimizer"></a>
+
 ## 优化器(Optimizer)
 
 在自定义优化器配置之前，建议先学习文件[engine.md](engine.md)中有关优化器的基本概念。
