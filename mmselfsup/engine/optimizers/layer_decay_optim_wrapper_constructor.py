@@ -1,5 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import json
+import math
 from typing import List
 
 import torch
@@ -94,6 +95,61 @@ def get_layer_id_for_mixmim(var_name: str, max_layer_id: int,
         return max_layer_id - 2
 
 
+def get_layer_id_for_resnet(var_name: str, depths: List[int]) -> int:
+    """Get the layer id to set the different learning rates for ResNet.
+
+    ResNet stages:
+    50  :    [3, 4, 6, 3]
+    101 :    [3, 4, 23, 3]
+    152 :    [3, 8, 36, 3]
+    200 :    [3, 24, 36, 3]
+    eca269d: [3, 30, 48, 8]
+
+    Args:
+        var_name (str): The key of the model.
+        num_max_layer (int): Maximum number of backbone layers.
+        depths (List[int]): Depths for each stage.
+    Returns:
+        int: Returns the layer id of the key.
+    """
+    if depths[1] == 4 and depths[2] == 6:
+        blk2, blk3 = 2, 3
+    elif depths[1] == 4 and depths[2] == 23:
+        blk2, blk3 = 2, 3
+    elif depths[1] == 8 and depths[2] == 36:
+        blk2, blk3 = 4, 4
+    elif depths[1] == 24 and depths[2] == 36:
+        blk2, blk3 = 4, 4
+    elif depths[1] == 30 and depths[2] == 48:
+        blk2, blk3 = 5, 6
+    else:
+        raise NotImplementedError
+
+    N2, N3 = math.ceil(depths[1] / blk2 - 1e-5), math.ceil(depths[2] / blk3 -
+                                                           1e-5)
+    N = 2 + N2 + N3  # r50: 2 + 2 + 2 = 6
+    max_layer_id = N + 1  # r50: 2 + 2 + 2 + 1(head) = 7
+
+    if var_name.startswith('backbone.layer'):
+        stage_id = int(var_name.split('.')[1][5:])
+        block_id = int(var_name.split('.')[2])
+
+        if stage_id == 1:
+            layer_id = 1
+        elif stage_id == 2:
+            layer_id = 2 + block_id // blk2  # r50: 2, 3
+        elif stage_id == 3:
+            layer_id = 2 + N2 + block_id // blk3  # r50: 4, 5
+        else:  # == 4
+            layer_id = N  # r50: 6
+        return layer_id, max_layer_id + 1
+
+    elif var_name.startswith('head'):
+        return max_layer_id, max_layer_id + 1
+    else:
+        return 0, max_layer_id + 1
+
+
 @OPTIM_WRAPPER_CONSTRUCTORS.register_module()
 class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
     """Different learning rates are set for different layers of backbone.
@@ -142,14 +198,14 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
 
         model_type = optimizer_cfg.pop('model_type', None)
         # model_type should not be None
-        assert model_type is not None, 'When using layer-wise learning rate \
-            decay, model_type should not be None.'
+        assert model_type is not None, 'When using layer-wise learning rate ' \
+            'decay, model_type should not be None.'
 
         # currently, we only support layer-wise learning rate decay for vit
         # and swin.
-        assert model_type in ['vit', 'swin',
-                              'mixmim'], f'Currently, we do not support \
-            layer-wise learning rate decay for {model_type}'
+        assert model_type in ['vit', 'swin', 'mixmim', 'resnet'], \
+            'Currently, we do not support layer-wise learning rate decay ' \
+            f'for {model_type}'
 
         if model_type == 'vit':
             num_layers = len(module.backbone.layers) + 2
@@ -186,6 +242,9 @@ class LearningRateDecayOptimWrapperConstructor(DefaultOptimWrapperConstructor):
             elif model_type == 'mixmim':
                 layer_id = get_layer_id_for_mixmim(name, num_layers,
                                                    module.backbone.depths)
+            elif model_type == 'resnet':
+                layer_id, num_layers = get_layer_id_for_resnet(
+                    name, module.backbone.stage_blocks)
 
             group_name = f'layer_{layer_id}_{group_name}'
             if group_name not in parameter_groups:

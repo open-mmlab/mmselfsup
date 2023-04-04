@@ -6,8 +6,7 @@ _base_ = [
 # modification is based on ResNets RSB settings
 
 # dataset settings
-dataset_type = 'ImageNet'
-data_root = 'sproject:s3://openmmlab/datasets/classification/imagenet/'
+data_root = 'data/imagenet/'
 
 data_preprocessor = dict(
     num_classes=1000,
@@ -79,21 +78,32 @@ model = dict(
         dict(type='CutMix', alpha=1.0)
     ]))
 
-custom_hooks = [
-    dict(
-        type='EMAHook',
-        ema_type='mmselfsup.CosineEMA',
-        momentum=0.99,
-        end_momentum=0.999,
-        priority='ABOVE_NORMAL')
-]
+# custom_hooks = [
+#     dict(
+#         type='EMAHook',
+#         ema_type='mmselfsup.CosineEMA',
+#         momentum=0.99,
+#         end_momentum=0.999,
+#         priority='ABOVE_NORMAL')
+# ]
+custom_hooks = [dict(type='EMAHook', momentum=1e-4, priority='ABOVE_NORMAL')]
 
 # schedule settings
 # optimizer
 optim_wrapper = dict(
-    optimizer=dict(type='Lamb', lr=8e-3, weight_decay=0.02),
+    optimizer=dict(
+        type='Lamb',
+        lr=0.016,
+        weight_decay=0.02,
+        model_type='resnet',
+        layer_decay_rate=0.7),
+    constructor='mmselfsup.LearningRateDecayOptimWrapperConstructor',
     paramwise_cfg=dict(
-        norm_decay_mult=0.0, bias_decay_mult=0.0, flat_decay_mult=0.0))
+        custom_keys={
+            'bias': dict(decay_mult=0.),
+            'bn': dict(decay_mult=0.),
+            'downsample.1': dict(decay_mult=0.),
+        }))
 
 # learning policy
 param_scheduler = [
