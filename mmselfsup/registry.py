@@ -113,7 +113,9 @@ OPTIM_WRAPPER_CONSTRUCTORS = Registry(
     locations=['mmselfsup.engine.optimizers'])
 # manage all kinds of parameter schedulers like `MultiStepLR`
 PARAM_SCHEDULERS = Registry(
-    'parameter scheduler', parent=MMENGINE_PARAM_SCHEDULERS)
+    'parameter scheduler',
+    parent=MMENGINE_PARAM_SCHEDULERS,
+    locations=['mmselfsup.engine.schedulers'])
 
 # manage all kinds of metrics
 METRICS = Registry(
