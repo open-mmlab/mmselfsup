@@ -13,8 +13,6 @@
 
 在本教程中，我们将介绍一些关于如何设置项目自定义运行的方法。
 
-<a name="Loop"></a>
-
 ## 循环(Loop)
 
 `Loop` 表示训练、验证或测试的工作流，我们使用 `train_cfg`,`val_cfg` 和 `test_cfg` 来构建 `Loop`。
@@ -28,13 +26,9 @@ train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=200)
 
 MMEngine定义了几个[基本的循环](https://github.com/open-mmlab/mmengine/blob/main/mmengine/runner/loops.py)。如果定义的循环不满足需求，用户可以实现自定义的循环。
 
-<a name="Hook"></a>
-
 ## 钩子(Hook)
 
 在学习创建自定义钩子之前，建议先学习文件[engine.md](engine.md)中关于钩子的基本概念。
-
-<a name="Step1"></a>
 
 ### 步骤1：创建一个新的钩子
 
@@ -69,8 +63,6 @@ class NewHook(Hook):
         get_model(runner.model).hyper_parameter = self.a * cur_iter + self.b
 ```
 
-<a name="Step2"></a>
-
 ### 步骤2：导入新的钩子
 
 然后我们需要确保 `NewHook` 已经被导入。假设 `NewHook` 在 `mmselfsup/engine/hooks/new_hook.py` 中，按照以下方式修改 `mmselfsup/engine/hooks/__init__.py` 文件：
@@ -81,8 +73,6 @@ from .new_hook import NewHook
 
 __all__ = [..., NewHook]
 ```
-
-<a name="Step3"></a>
 
 ### 步骤3：修改配置文件
 
@@ -101,8 +91,6 @@ custom_hooks = [
 ```
 
 默认情况下，在注册时，钩子的优先级被设置为 `NORMAL`。
-
-<a name="Optimizer"></a>
 
 ## 优化器(Optimizer)
 
@@ -177,8 +165,6 @@ optim_wrapper = dict(
 ```
 
 在 `LARS` 优化器中，我们有 `lars_exclude` 选项来决定指定的层是否应用 `LARS` 优化方法。
-
-<a name="Scheduler"></a>
 
 ## 调度器(Scheduler)
 
