@@ -53,7 +53,7 @@ train_pipeline = [
 
 ### 步骤 1: 创建转换
 
-在 [processing.py](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/mmselfsup/datasets/transforms/processing.py) 中编写一个新的转换类, 并在类中覆盖这个 `transform` 函数, 这个函数接收一个 `dict` 的对象, 并返回一个 `dict` 对象
+在 [processing.py](https://github.com/open-mmlab/mmselfsup/tree/main/mmselfsup/datasets/transforms/processing.py) 中编写一个新的转换类, 并在类中覆盖这个 `transform` 函数, 这个函数接收一个 `dict` 的对象, 并返回一个 `dict` 对象
 
 ```python
 @TRANSFORMS.register_module()

@@ -19,16 +19,16 @@
   <div>&nbsp;</div>
 
 [![PyPI](https://img.shields.io/pypi/v/mmselfsup)](https://pypi.org/project/mmselfsup)
-[![docs](https://img.shields.io/badge/docs-latest-blue)](https://mmselfsup.readthedocs.io/en/dev-1.x/)
+[![docs](https://img.shields.io/badge/docs-latest-blue)](https://mmselfsup.readthedocs.io/en/latest/)
 [![badge](https://github.com/open-mmlab/mmselfsup/workflows/build/badge.svg)](https://github.com/open-mmlab/mmselfsup/actions)
 [![codecov](https://codecov.io/gh/open-mmlab/mmselfsup/branch/master/graph/badge.svg)](https://codecov.io/gh/open-mmlab/mmselfsup)
 [![license](https://img.shields.io/github/license/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/blob/main/LICENSE)
 [![open issues](https://isitmaintained.com/badge/open/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/issues)
 
-[📘Documentation](https://mmselfsup.readthedocs.io/en/dev-1.x/) |
-[🛠️Installation](https://mmselfsup.readthedocs.io/en/dev-1.x/get_started.html) |
-[👀Model Zoo](https://mmselfsup.readthedocs.io/en/dev-1.x/model_zoo.html) |
-[🆕Update News](https://mmselfsup.readthedocs.io/en/dev-1.x/notes/changelog.html) |
+[📘Documentation](https://mmselfsup.readthedocs.io/en/latest/) |
+[🛠️Installation](https://mmselfsup.readthedocs.io/en/latest/get_started.html) |
+[👀Model Zoo](https://mmselfsup.readthedocs.io/en/latest/model_zoo.html) |
+[🆕Update News](https://mmselfsup.readthedocs.io/en/latest/notes/changelog.html) |
 [🤔Reporting Issues](https://github.com/open-mmlab/mmselfsup/issues/new/choose)
 
 🌟 MMSelfSup will be integrated into MMPreTrain， which is a newly upgraded open-source framework for visual pre-training. It has set out to provide multiple powerful pre-trained backbones and support different pre-training strategies.
@@ -89,7 +89,7 @@ The master branch works with **PyTorch 1.6** or higher.
 
 ## What's New
 
-**The default branch has been switched to `1.x` from `master`, and we encourage users to migrate to the latest version, though it comes with some cost. Please refer to [Migration Guide](https://mmselfsup.readthedocs.io/en/1.x/migration.html) for more details.**
+**The default branch has been switched to `1.x` from `master`, and we encourage users to migrate to the latest version, though it comes with some cost. Please refer to [Migration Guide](https://mmselfsup.readthedocs.io/en/latest/migration.html) for more details.**
 
 MMSelfSup **v1.0.0rc6** was released in 10/02/2023.
 
@@ -103,71 +103,71 @@ MMSelfSup **v1.0.0rc5** was released in 30/12/2022.
 - Add Solution of FGIA ACCV 2022 (1st Place)
 - Refactor t-SNE
 
-Please refer to [Changelog](https://mmselfsup.readthedocs.io/en/dev-1.x/notes/changelog.html) for details and release history.
+Please refer to [Changelog](https://mmselfsup.readthedocs.io/en/latest/notes/changelog.html) for details and release history.
 
-Differences between MMSelfSup 1.x and 0.x can be found in [Migration](https://mmselfsup.readthedocs.io/en/dev-1.x/migration.html).
+Differences between MMSelfSup 1.x and 0.x can be found in [Migration](https://mmselfsup.readthedocs.io/en/latest/migration.html).
 
 ## Installation
 
 MMSelfSup depends on [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open-mmlab/mmcv), [MMEngine](https://github.com/open-mmlab/mmengine) and [MMClassification](https://github.com/open-mmlab/mmclassification).
 
-Please refer to [Installation](https://mmselfsup.readthedocs.io/en/dev-1.x/get_started.html) for more detailed instruction.
+Please refer to [Installation](https://mmselfsup.readthedocs.io/en/latest/get_started.html) for more detailed instruction.
 
 ## Get Started
 
-For tutorials, we provide [User Guides](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/index.html) for basic usage:
+For tutorials, we provide [User Guides](https://mmselfsup.readthedocs.io/en/latest/user_guides/index.html) for basic usage:
 
 Pretrain
 
-- [Config](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/1_config.html)
-- [Prepare Dataset](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/2_dataset_prepare.html)
-- [Pretrain with Existing Models](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/3_pretrain.html)
+- [Config](https://mmselfsup.readthedocs.io/en/latest/user_guides/1_config.html)
+- [Prepare Dataset](https://mmselfsup.readthedocs.io/en/latest/user_guides/2_dataset_prepare.html)
+- [Pretrain with Existing Models](https://mmselfsup.readthedocs.io/en/latest/user_guides/3_pretrain.html)
 
 Downetream Tasks
 
-- [Classification](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/classification.html)
-- [Detection](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/detection.html)
-- [Segmentation](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/segmentation.html)
+- [Classification](https://mmselfsup.readthedocs.io/en/latest/user_guides/classification.html)
+- [Detection](https://mmselfsup.readthedocs.io/en/latest/user_guides/detection.html)
+- [Segmentation](https://mmselfsup.readthedocs.io/en/latest/user_guides/segmentation.html)
 
 Useful Tools
 
-- [Visualization](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/visualization.html)
-- [Analysis Tools](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/analysis_tools.html)
+- [Visualization](https://mmselfsup.readthedocs.io/en/latest/user_guides/visualization.html)
+- [Analysis Tools](https://mmselfsup.readthedocs.io/en/latest/user_guides/analysis_tools.html)
 
-[Advanced Guides](https://mmselfsup.readthedocs.io/en/dev-1.x/advanced_guides/index.html) and [Colab Tutorials](https://github.com/open-mmlab/mmselfsup/blob/main/demo/mmselfsup_colab_tutorial.ipynb) are also provided.
+[Advanced Guides](https://mmselfsup.readthedocs.io/en/latest/advanced_guides/index.html) and [Colab Tutorials](https://github.com/open-mmlab/mmselfsup/blob/main/demo/mmselfsup_colab_tutorial.ipynb) are also provided.
 
-Please refer to [FAQ](https://mmselfsup.readthedocs.io/en/dev-1.x/notes/faq.html) for frequently asked questions.
+Please refer to [FAQ](https://mmselfsup.readthedocs.io/en/latest/notes/faq.html) for frequently asked questions.
 
 ## Model Zoo
 
-Please refer to [Model Zoo.md](https://mmselfsup.readthedocs.io/en/dev-1.x/model_zoo.html) for a comprehensive set of pre-trained models and benchmarks.
+Please refer to [Model Zoo.md](https://mmselfsup.readthedocs.io/en/latest/model_zoo.html) for a comprehensive set of pre-trained models and benchmarks.
 
 Supported algorithms:
 
-- [x] [Relative Location (ICCV'2015)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/relavive_loc)
-- [x] [Rotation Prediction (ICLR'2018)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/rotation_pred)
-- [x] [DeepCluster (ECCV'2018)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/deepcluster)
-- [x] [NPID (CVPR'2018)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/npid)
-- [x] [ODC (CVPR'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/odc)
-- [x] [MoCo v1 (CVPR'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mocov1)
-- [x] [SimCLR (ICML'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/simclr)
-- [x] [MoCo v2 (arXiv'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mocov2)
-- [x] [BYOL (NeurIPS'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/byol)
-- [x] [SwAV (NeurIPS'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/swav)
-- [x] [DenseCL (CVPR'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/densecl)
-- [x] [SimSiam (CVPR'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/simsiam)
-- [x] [Barlow Twins (ICML'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/barlowtwins)
-- [x] [MoCo v3 (ICCV'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mocov3)
-- [x] [BEiT (ICLR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/beit)
-- [x] [MAE (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mae)
-- [x] [SimMIM (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/simmim)
-- [x] [MaskFeat (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/maskfeat)
-- [x] [CAE (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/cae)
-- [x] [MILAN (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/milan)
-- [x] [BEiT v2 (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/beitv2)
-- [x] [EVA (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/eva)
-- [x] [MixMIM (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mixmim)
-- [x] [PixMIM (ArXiv'2023)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/pixmim)
+- [x] [Relative Location (ICCV'2015)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/relavive_loc)
+- [x] [Rotation Prediction (ICLR'2018)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/rotation_pred)
+- [x] [DeepCluster (ECCV'2018)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/deepcluster)
+- [x] [NPID (CVPR'2018)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/npid)
+- [x] [ODC (CVPR'2020)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/odc)
+- [x] [MoCo v1 (CVPR'2020)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/mocov1)
+- [x] [SimCLR (ICML'2020)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/simclr)
+- [x] [MoCo v2 (arXiv'2020)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/mocov2)
+- [x] [BYOL (NeurIPS'2020)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/byol)
+- [x] [SwAV (NeurIPS'2020)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/swav)
+- [x] [DenseCL (CVPR'2021)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/densecl)
+- [x] [SimSiam (CVPR'2021)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/simsiam)
+- [x] [Barlow Twins (ICML'2021)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/barlowtwins)
+- [x] [MoCo v3 (ICCV'2021)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/mocov3)
+- [x] [BEiT (ICLR'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/beit)
+- [x] [MAE (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/mae)
+- [x] [SimMIM (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/simmim)
+- [x] [MaskFeat (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/maskfeat)
+- [x] [CAE (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/cae)
+- [x] [MILAN (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/milan)
+- [x] [BEiT v2 (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/beitv2)
+- [x] [EVA (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/eva)
+- [x] [MixMIM (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/mixmim)
+- [x] [PixMIM (ArXiv'2023)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/pixmim)
 
 More algorithms are in our plan.
 
@@ -189,7 +189,7 @@ More algorithms are in our plan.
 
 ## Contributing
 
-We appreciate all contributions improving MMSelfSup. Please refer to [Contribution Guides](https://mmselfsup.readthedocs.io/en/dev-1.x/notes/contribution_guide.html) for more details about the contributing guideline.
+We appreciate all contributions improving MMSelfSup. Please refer to [Contribution Guides](https://mmselfsup.readthedocs.io/en/latest/notes/contribution_guide.html) for more details about the contributing guideline.
 
 ## Acknowledgement
 
