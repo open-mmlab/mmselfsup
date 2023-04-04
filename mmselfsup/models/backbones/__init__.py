@@ -9,8 +9,8 @@ from .mocov3_vit import MoCoV3ViT
 from .resnet import ResNet, ResNetSobel, ResNetV1d
 from .resnext import ResNeXt
 from .simmim_swin import SimMIMSwinTransformer
-from .sparse_resnet import SparseResNet
 from .sparse_convnext import SparseConvNeXt
+from .sparse_resnet import SparseResNet
 
 __all__ = [
     'ResNet', 'ResNetSobel', 'ResNetV1d', 'ResNeXt', 'MAEViT', 'MoCoV3ViT',

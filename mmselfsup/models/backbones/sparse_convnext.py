@@ -1,5 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from typing import Optional, Union, List, Sequence
+from typing import List, Optional, Sequence, Union
 
 import torch
 import torch.nn as nn
@@ -8,12 +8,9 @@ from mmcls.models.backbones.convnext import ConvNeXt, ConvNeXtBlock
 from mmcls.models.utils import build_norm_layer
 from mmengine.model import ModuleList, Sequential
 
-from mmselfsup.models.utils.sparse_modules import (
-    SparseHelper,
-    SparseConv2d,
-    SparseMaxPooling,
-    SparseAvgPooling,
-)
+from mmselfsup.models.utils.sparse_modules import (SparseAvgPooling,
+                                                   SparseConv2d, SparseHelper,
+                                                   SparseMaxPooling)
 from mmselfsup.registry import MODELS
 
 
@@ -74,7 +71,7 @@ class SparseConvNeXtBlock(ConvNeXtBlock):
 
 @MODELS.register_module()
 class SparseConvNeXt(ConvNeXt):
-    """ConvNeXt with sparse module convertion function.
+    """ConvNeXt with sparse module conversion function.
 
     Modified from
     https://github.com/keyu-tian/SparK/blob/main/models/convnext.py

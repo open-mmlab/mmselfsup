@@ -9,8 +9,7 @@ from mmselfsup.registry import MODELS
 
 class SparseHelper:
     """The helper to compute sparse operation with pytorch, such as sparse
-    convlolution, sparse batch norm, etc.
-    """
+    convlolution, sparse batch norm, etc."""
 
     _cur_active: torch.Tensor = None
 
@@ -117,7 +116,7 @@ class SparseLayerNorm2D(nn.LayerNorm):
         assert x.dim() == 4, (
             f'LayerNorm2d only supports inputs with shape '
             f'(N, C, H, W), but got tensor with shape {x.shape}')
-        if data_format == "channel_last":
+        if data_format == 'channel_last':
             index = SparseHelper._get_active_map_or_index(
                 H=x.shape[1], returning_active_map=False)
 

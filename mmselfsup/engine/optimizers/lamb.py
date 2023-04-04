@@ -10,8 +10,9 @@ from mmselfsup.registry import OPTIMIZERS
 
 @OPTIMIZERS.register_module()
 class LAMB(Optimizer):
-    """LAMB optimizer implementation,
-    `Large Batch Optimization for Deep Learning: Training BERT in 76 minutes:
+    """LAMB optimizer implementation, `Large Batch Optimization for Deep
+    Learning: Training BERT in 76 minutes:
+
     <https://arxiv.org/abs/1904.00962>`_.
 
     The codes are modified from:
@@ -82,7 +83,7 @@ class LAMB(Optimizer):
                 if grad.is_sparse:
                     raise RuntimeError(
                         'Lamb does not support sparse gradients, consider '
-                        'SparseAdam instad.')
+                        'SparseAdam instead.')
                 global_grad_norm.add_(grad.pow(2).sum())
 
         global_grad_norm = torch.sqrt(global_grad_norm)

@@ -1,5 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import math
+
 from mmengine.optim.scheduler import CosineAnnealingParamScheduler
 
 from mmselfsup.registry import PARAM_SCHEDULERS
@@ -16,8 +17,11 @@ class WeightDecaySchedulerMixin:
 class CosineAnnealingWeightDecay(WeightDecaySchedulerMixin,
                                  CosineAnnealingParamScheduler):
     """Set the weight decay value of each parameter group using a cosine
-    annealing schedule. If the weight decay was set to be 0 initially, the
-    weight decay value will be 0 constantly during the training."""
+    annealing schedule.
+
+    If the weight decay was set to be 0 initially, the weight decay value will
+    be 0 constantly during the training.
+    """
 
     def _get_value(self) -> list:
         """Compute value using chainable form of the scheduler."""

@@ -5,17 +5,17 @@ from typing import Optional, Tuple
 import torch.nn as nn
 from mmcls.models.backbones import ResNet
 
-from mmselfsup.models.utils.sparse_modules import (SparseConv2d,
-                                                   SparseMaxPooling,
-                                                   SparseAvgPooling,
+from mmselfsup.models.utils.sparse_modules import (SparseAvgPooling,
                                                    SparseBatchNorm2d,
+                                                   SparseConv2d,
+                                                   SparseMaxPooling,
                                                    SparseSyncBatchNorm2d)
 from mmselfsup.registry import MODELS
 
 
 @MODELS.register_module()
 class SparseResNet(ResNet):
-    """ResNet with sparse module convertion function.
+    """ResNet with sparse module conversion function.
 
     Modified from https://github.com/keyu-tian/SparK/blob/main/encoder.py
 

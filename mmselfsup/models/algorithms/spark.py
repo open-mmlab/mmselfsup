@@ -10,7 +10,6 @@ from mmengine.model.weight_init import trunc_normal_
 
 from mmselfsup.registry import MODELS
 from mmselfsup.structures import SelfSupDataSample
-
 from ..utils.sparse_modules import SparseHelper
 from .base import BaseModel
 
