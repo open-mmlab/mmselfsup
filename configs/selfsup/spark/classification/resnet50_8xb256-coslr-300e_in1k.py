@@ -5,11 +5,6 @@ _base_ = [
 ]
 # modification is based on ResNets RSB settings
 
-# dataset settings
-data_root = '/nvme/dataset/classification/imagenet/'
-train_dataloader = dict(dataset=dict(data_root=data_root,))
-val_dataloader = dict(dataset=dict(data_root=data_root))
-
 # model settings
 model = dict(
     backbone=dict(
