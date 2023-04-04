@@ -81,8 +81,8 @@ bash tools/dataset_converters/prepare_voc07_cls.sh $YOUR_DATA_ROOT
 
 ### 检测
 
-您可以参考 [mmdetection](https://github.com/open-mmlab/mmdetection/blob/dev-3.x/docs/en/1_exist_data_model.md) 来准备 COCO，VOC2007 和 VOC2012 检测数据集。
+您可以参考 [mmdetection](https://github.com/open-mmlab/mmdetection/blob/main/docs/en/1_exist_data_model.md) 来准备 COCO，VOC2007 和 VOC2012 检测数据集。
 
 ### 分割
 
-您可以参考 [mmsegmentation](https://github.com/open-mmlab/mmsegmentation/blob/dev-1.x/docs/en/user_guides/2_dataset_prepare.md#prepare-datasets) 来准备 VOC2012AUG 和 Cityscapes 分割数据集。
+您可以参考 [mmsegmentation](https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#prepare-datasets) 来准备 VOC2012AUG 和 Cityscapes 分割数据集。

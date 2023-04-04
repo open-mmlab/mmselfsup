@@ -124,7 +124,7 @@ print(mmselfsup.__version__)
 pip install 'mmdet>=3.0.0rc0' 'mmsegmentation>=1.0.0rc0'
 ```
 
-更多详细信息，您可以查看 [MMDetection](https://github.com/open-mmlab/mmdetection/blob/dev-3.x/docs/zh_cn/get_started.md) 和 [MMSegmentation](https://github.com/open-mmlab/mmsegmentation/blob/dev-1.x/docs/zh_cn/get_started.md) 的安装页面。
+更多详细信息，您可以查看 [MMDetection](https://github.com/open-mmlab/mmdetection/blob/main/docs/zh_cn/get_started.md) 和 [MMSegmentation](https://github.com/open-mmlab/mmsegmentation/blob/main/docs/zh_cn/get_started.md) 的安装页面。
 
 #### CUDA 版本
 

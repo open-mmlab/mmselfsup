@@ -124,7 +124,7 @@ You can simply install MMDetection and MMSegmentation with the following command
 pip install 'mmdet>=3.0.0rc0' 'mmsegmentation>=1.0.0rc0'
 ```
 
-For more details, you can check the installation page of [MMDetection](https://github.com/open-mmlab/mmdetection/blob/dev-3.x/docs/en/get_started.md) and [MMSegmentation](https://github.com/open-mmlab/mmsegmentation/blob/dev-1.x/docs/en/get_started.md).
+For more details, you can check the installation page of [MMDetection](https://github.com/open-mmlab/mmdetection/blob/main/docs/en/get_started.md) and [MMSegmentation](https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/get_started.md).
 
 #### CUDA versions
 

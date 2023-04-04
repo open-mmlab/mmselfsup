@@ -1,5 +1,5 @@
 _base_ = 'mmdet::mask_rcnn/mask-rcnn_r50_fpn_1x_coco.py'
-# https://github.com/open-mmlab/mmdetection/blob/dev-3.x/configs/mask_rcnn/mask-rcnn_r50_fpn_1x_coco.py
+# https://github.com/open-mmlab/mmdetection/blob/main/configs/mask_rcnn/mask-rcnn_r50_fpn_1x_coco.py
 
 norm_cfg = dict(type='SyncBN', requires_grad=True)
 model = dict(

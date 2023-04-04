@@ -190,7 +190,7 @@ resume = True
 ## 在COCO数据集上使用MAE算法进行预训练
 
 ```{note}
-你可能需要参考[文档](https://github.com/open-mmlab/mmdetection/blob/3.x/docs/en/get_started.md)安装MMDetection 来使用 `mmdet.CocoDataset`。
+你可能需要参考[文档](https://github.com/open-mmlab/mmdetection/blob/main/docs/en/get_started.md)安装MMDetection 来使用 `mmdet.CocoDataset`。
 ```
 
 与在自定义数据集上进行预训练类似，我们在本教程中也提供了一个使用COCO数据集进行预训练的示例。修改后的文件如下：
