@@ -1,6 +1,6 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import random
-from typing import List, Tuple, Dict, Optional, Union
+from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import torch
@@ -8,10 +8,11 @@ import torch.nn as nn
 from mmcv.cnn import build_norm_layer
 from mmengine.model.weight_init import trunc_normal_
 
-from .base import BaseModel
-from ..utils.sparse_modules import SparseHelper
-from mmselfsup.structures import SelfSupDataSample
 from mmselfsup.registry import MODELS
+from mmselfsup.structures import SelfSupDataSample
+
+from ..utils.sparse_modules import SparseHelper
+from .base import BaseModel
 
 
 @MODELS.register_module()
@@ -195,7 +196,8 @@ class SparK(BaseModel):
                 feature_map = self.enc_dec_norms[i](feature_map)
                 mask_token = self.mask_tokens[i].expand_as(feature_map)
                 feature_map = torch.where(
-                    cur_active.expand_as(feature_map), feature_map, mask_token)
+                    cur_active.expand_as(feature_map), feature_map,
+                    mask_token.to(feature_map.dtype))
                 feature_map = self.enc_dec_projectors[i](feature_map)
             feature_maps_to_dec.append(feature_map)
 
