@@ -102,10 +102,6 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.9']
-        torch: [1.13.0+cu116]
-        include:
-          - torch: 1.13.0+cu116
-            torchvision: 0.14.0+cu116
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
@@ -140,6 +136,9 @@ jobs:
     runs-on: ubuntu-22.04
     container:
       image: pytorch/pytorch:2.0.0-cuda11.7-cudnn8-devel
+    env:
+      FORCE_CUDA: 1
+      MMCV_CUDA_ARGS: -gencode=arch=compute_61,code=sm_61
     strategy:
       matrix:
         python-version: ['3.9']
