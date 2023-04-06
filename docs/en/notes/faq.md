@@ -32,7 +32,7 @@ Compatible MMEngine, MMCV, MMClassification, MMDetection and MMSegmentation vers
 
 ## DeepCluster on A100 GPU
 
-Problem: If you want to try [DeepCluster](https://github.com/open-mmlab/mmselfsup/blob/master/configs/selfsup/deepcluster/README.md) algorithm on A100 GPU, use the `faiss` installed by pip will raise error, which is mentioned in [here](https://github.com/facebookresearch/faiss/issues/2076).
+Problem: If you want to try [DeepCluster](https://github.com/open-mmlab/mmselfsup/blob/main/configs/selfsup/deepcluster/README.md) algorithm on A100 GPU, use the `faiss` installed by pip will raise error, which is mentioned in [here](https://github.com/facebookresearch/faiss/issues/2076).
 
 Please install `faiss` by conda like this:
 

@@ -7,7 +7,7 @@ from modelindex.load_model_index import load
 
 MMSELFSUP_ROOT = Path(__file__).absolute().parents[2]
 PAPERS_ROOT = Path('papers')  # Path to save generated paper pages.
-GITHUB_PREFIX = 'https://github.com/open-mmlab/mmselfsup/blob/1.x/'
+GITHUB_PREFIX = 'https://github.com/open-mmlab/mmselfsup/blob/main/'
 MODELZOO_TEMPLATE = """
 # 模型库数据汇总
 

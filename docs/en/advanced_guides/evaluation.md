@@ -85,7 +85,7 @@ But MMSelfSup also implements some custom evaluation functionalities to support 
 
 - [`knn_classifier()`](mmselfsup.evaluation.functional.knn_classifier)
 
-It compute accuracy of knn classifier predictions, and is used in [KNN evaluation](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/benchmarks/classification/knn_imagenet/test_knn.py#L179).
+It compute accuracy of knn classifier predictions, and is used in [KNN evaluation](https://github.com/open-mmlab/mmselfsup/blob/main/tools/benchmarks/classification/knn_imagenet/test_knn.py#L179).
 
 ```python
 ...

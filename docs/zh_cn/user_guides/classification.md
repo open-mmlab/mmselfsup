@@ -130,7 +130,7 @@ bash tools/benchmarks/classification/knn_imagenet/slurm_test_knn.sh ${PARTITION}
 - `${SELFSUP_CONFIG}`：是自监督实验的配置文件。
 - `${CHECKPOINT}`：检查点模型文件的路径。
 - 如果您想改变GPU的数量，您可以在命令的前面加上`GPUS_PER_NODE=4 GPUS=4`。
-- `[optional arguments]`：用于可选参数，您可以参考这个[脚本](https://github.com/open-mmlab/mmselfsup/blob/1.x/tools/benchmarks/classification/knn_imagenet/test_knn.py)
+- `[optional arguments]`：用于可选参数，您可以参考这个[脚本](https://github.com/open-mmlab/mmselfsup/blob/main/tools/benchmarks/classification/knn_imagenet/test_knn.py)
 
 命令的一个例子
 

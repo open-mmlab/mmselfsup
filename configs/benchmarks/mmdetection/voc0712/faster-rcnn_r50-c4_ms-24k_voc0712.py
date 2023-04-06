@@ -1,5 +1,5 @@
 _base_ = 'mmdet::pascal_voc/faster-rcnn_r50-caffe-c4_ms-18k_voc0712.py'
-# https://github.com/open-mmlab/mmdetection/blob/dev-3.x/configs/pascal_voc/faster-rcnn_r50-caffe-c4_ms-18k_voc0712.py
+# https://github.com/open-mmlab/mmdetection/blob/main/configs/pascal_voc/faster-rcnn_r50-caffe-c4_ms-18k_voc0712.py
 
 data_preprocessor = dict(
     type='DetDataPreprocessor',

@@ -53,7 +53,7 @@ Here are the steps to create a new transform.
 
 ### Step 1: Creating the transform
 
-Write a new transform in [processing.py](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/mmselfsup/datasets/transforms/processing.py) and overwrite the `transform` function, which takes a `dict` as input:
+Write a new transform in [processing.py](https://github.com/open-mmlab/mmselfsup/tree/main/mmselfsup/datasets/transforms/processing.py) and overwrite the `transform` function, which takes a `dict` as input:
 
 ```python
 @TRANSFORMS.register_module()
@@ -70,7 +70,7 @@ class NewTransform(BaseTransform):
 
 ### Step 2: Add NewTransform to \_\_init\_\_py
 
-Then, add the transform to [\_\_init\_\_.py](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/mmselfsup/datasets/transforms/__init__.py).
+Then, add the transform to [\_\_init\_\_.py](https://github.com/open-mmlab/mmselfsup/blob/main/mmselfsup/datasets/transforms/__init__.py).
 
 ```python
 ...

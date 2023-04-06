@@ -85,7 +85,7 @@ NNODES=2 NODE_RANK=1 PORT=${MASTER_PORT} MASTER_ADDR=${MASTER_ADDR} bash tools/d
 
 Usually it is slow if you do not have high speed networking like InfiniBand.
 
-If you launch with slurm, the command is the same as that on single machine described above, but you need to refer to [slurm_train.sh](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/tools/slurm_train.sh) to set appropriate parameters and environment variables.
+If you launch with slurm, the command is the same as that on single machine described above, but you need to refer to [slurm_train.sh](https://github.com/open-mmlab/mmselfsup/blob/main/tools/slurm_train.sh) to set appropriate parameters and environment variables.
 
 ### Launch multiple jobs on a single machine
 

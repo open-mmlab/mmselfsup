@@ -127,7 +127,7 @@ Note:
 
 ## Results
 
-<!-- List the results as usually done in other model's README. [Example](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/mae/README.md#models-and-benchmarks)
+<!-- List the results as usually done in other model's README. [Example](https://github.com/open-mmlab/mmselfsup/blob/main/configs/selfsup/mae/README.md#models-and-benchmarks)
 You should claim whether this is based on the pre-trained weights, which are converted from the official release; or it's a reproduced result obtained from retraining the model in this project. -->
 
 If you have any downstream task results, you could list them here.
@@ -211,11 +211,11 @@ A project does not necessarily have to be finished in a single PR, but it's esse
 
   - [ ] Type hints and docstrings
 
-    <!-- Ideally *all* the methods should have [type hints](https://www.pythontutorial.net/python-basics/python-type-hints/) and [docstrings](https://google.github.io/styleguide/pyguide.html#381-docstrings). [Example](https://github.com/open-mmlab/mmselfsup/blob/1.x/mmselfsup/models/backbones/mae_vit.py) -->
+    <!-- Ideally *all* the methods should have [type hints](https://www.pythontutorial.net/python-basics/python-type-hints/) and [docstrings](https://google.github.io/styleguide/pyguide.html#381-docstrings). [Example](https://github.com/open-mmlab/mmselfsup/blob/main/mmselfsup/models/backbones/mae_vit.py) -->
 
   - [ ] Unit tests
 
-    <!-- Unit tests for each module are required. [Example](https://github.com/open-mmlab/mmselfsup/blob/1.x/tests/test_models/test_backbones/test_mae_vit.py) -->
+    <!-- Unit tests for each module are required. [Example](https://github.com/open-mmlab/mmselfsup/blob/main/tests/test_models/test_backbones/test_mae_vit.py) -->
 
   - [ ] Code polishing
 
@@ -223,6 +223,6 @@ A project does not necessarily have to be finished in a single PR, but it's esse
 
   - [ ] Metafile.yml and README.md
 
-    <!-- It will be parsed by MIM and Inferencer. [Example](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/mae/metafile.yml). In particular, you may have to refactor this README into a standard one. [Example](https://github.com/open-mmlab/mmselfsup/blob/1.x/configs/selfsup/mae/README.md) -->
+    <!-- It will be parsed by MIM and Inferencer. [Example](https://github.com/open-mmlab/mmselfsup/blob/main/configs/selfsup/mae/metafile.yml). In particular, you may have to refactor this README into a standard one. [Example](https://github.com/open-mmlab/mmselfsup/blob/main/configs/selfsup/mae/README.md) -->
 
 - [ ] Refactor and Move your modules into the core package following the codebase's file hierarchy structure.

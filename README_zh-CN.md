@@ -22,13 +22,13 @@
 [![docs](https://img.shields.io/badge/docs-latest-blue)](https://mmselfsup.readthedocs.io/en/dev-1.x/)
 [![badge](https://github.com/open-mmlab/mmselfsup/workflows/build/badge.svg)](https://github.com/open-mmlab/mmselfsup/actions)
 [![codecov](https://codecov.io/gh/open-mmlab/mmselfsup/branch/master/graph/badge.svg)](https://codecov.io/gh/open-mmlab/mmselfsup)
-[![license](https://img.shields.io/github/license/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/blob/master/LICENSE)
+[![license](https://img.shields.io/github/license/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/blob/main/LICENSE)
 [![open issues](https://isitmaintained.com/badge/open/open-mmlab/mmselfsup.svg)](https://github.com/open-mmlab/mmselfsup/issues)
 
-[📘使用文档](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/) |
-[🛠️安装教程](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/get_started.html) |
-[👀模型库](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/model_zoo.html) |
-[🆕更新日志](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/notes/changelog.html) |
+[📘使用文档](https://mmselfsup.readthedocs.io/zh_CN/latest/) |
+[🛠️安装教程](https://mmselfsup.readthedocs.io/zh_CN/latest/get_started.html) |
+[👀模型库](https://mmselfsup.readthedocs.io/zh_CN/latest/model_zoo.html) |
+[🆕更新日志](https://mmselfsup.readthedocs.io/zh_CN/latest/notes/changelog.html) |
 [🤔报告问题](https://github.com/open-mmlab/mmselfsup/issues/new/choose)
 
 🌟 MMSelfSup 将整合进 MMPreTrain，一个全新升级的预训练开源算法框架。
@@ -107,71 +107,71 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 - 添加 FGIA ACCV 2022 比赛第一名方案
 - 重构了 `t-SNE`
 
-请参考 [更新日志](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/notes/changelog.html) 获取更多细节和历史版本信息。
+请参考 [更新日志](https://mmselfsup.readthedocs.io/zh_CN/latest/notes/changelog.html) 获取更多细节和历史版本信息。
 
-MMSelfSup 1.x 和 0.x 的不同点写在 [迁移文档](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/migration.html) 中。
+MMSelfSup 1.x 和 0.x 的不同点写在 [迁移文档](https://mmselfsup.readthedocs.io/zh_CN/latest/migration.html) 中。
 
 ## 安装
 
 MMSelfSup 依赖 [PyTorch](https://pytorch.org/), [MMCV](https://github.com/open-mmlab/mmcv), [MMEngine](https://github.com/open-mmlab/mmengine) 和 [MMClassification](https://github.com/open-mmlab/mmclassification)。
 
-请参考 [安装文档](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/get_started.html) 获取更详细的安装指南。
+请参考 [安装文档](https://mmselfsup.readthedocs.io/zh_CN/latest/get_started.html) 获取更详细的安装指南。
 
 ## 快速入门
 
-我们针对基础使用和进阶用法提供了 [用户指引](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/index.html)：
+我们针对基础使用和进阶用法提供了 [用户指引](https://mmselfsup.readthedocs.io/zh_CN/latest/user_guides/index.html)：
 
 Pretrain
 
-- [Config](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/1_config.html)
-- [Prepare Dataset](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/2_dataset_prepare.html)
-- [Pretrain with Existing Models](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/3_pretrain.html)
+- [Config](https://mmselfsup.readthedocs.io/zh_CN/latest/user_guides/1_config.html)
+- [Prepare Dataset](https://mmselfsup.readthedocs.io/zh_CN/latest/user_guides/2_dataset_prepare.html)
+- [Pretrain with Existing Models](https://mmselfsup.readthedocs.io/zh_CN/latest/user_guides/3_pretrain.html)
 
 Downetream Tasks
 
-- [Classification](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/classification.html)
-- [Detection](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/detection.html)
-- [Segmentation](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/segmentation.html)
+- [Classification](https://mmselfsup.readthedocs.io/zh_CN/latest/user_guides/classification.html)
+- [Detection](https://mmselfsup.readthedocs.io/zh_CN/latest/user_guides/detection.html)
+- [Segmentation](https://mmselfsup.readthedocs.io/zh_CN/latest/user_guides/segmentation.html)
 
 Useful Tools
 
-- [Visualization](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/visualization.html)
-- [Analysis Tools](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/user_guides/analysis_tools.html)
+- [Visualization](https://mmselfsup.readthedocs.io/zh_CN/latest/user_guides/visualization.html)
+- [Analysis Tools](https://mmselfsup.readthedocs.io/zh_CN/latest/user_guides/analysis_tools.html)
 
-我们也提供了 [进阶指引](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/advanced_guides/index.html) 和 [Colab 教程](https://github.com/open-mmlab/mmselfsup/blob/master/demo/mmselfsup_colab_tutorial.ipynb)。
+我们也提供了 [进阶指引](https://mmselfsup.readthedocs.io/zh_CN/latest/advanced_guides/index.html) 和 [Colab 教程](https://github.com/open-mmlab/mmselfsup/blob/main/demo/mmselfsup_colab_tutorial.ipynb)。
 
-如果遇到问题，请参考 [常见问题解答](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/notes/faq.html)。
+如果遇到问题，请参考 [常见问题解答](https://mmselfsup.readthedocs.io/zh_CN/latest/notes/faq.html)。
 
 ## 模型库
 
-请参考 [模型库](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/model_zoo.html) 查看我们更加全面的模型基准结果。
+请参考 [模型库](https://mmselfsup.readthedocs.io/zh_CN/latest/model_zoo.html) 查看我们更加全面的模型基准结果。
 
 目前已支持的算法:
 
-- [x] [Relative Location (ICCV'2015)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/relavive_loc)
-- [x] [Rotation Prediction (ICLR'2018)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/rotation_pred)
-- [x] [DeepCluster (ECCV'2018)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/deepcluster)
-- [x] [NPID (CVPR'2018)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/npid)
-- [x] [ODC (CVPR'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/odc)
-- [x] [MoCo v1 (CVPR'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mocov1)
-- [x] [SimCLR (ICML'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/simclr)
-- [x] [MoCo v2 (arXiv'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mocov2)
-- [x] [BYOL (NeurIPS'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/byol)
-- [x] [SwAV (NeurIPS'2020)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/swav)
-- [x] [DenseCL (CVPR'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/densecl)
-- [x] [SimSiam (CVPR'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/simsiam)
-- [x] [Barlow Twins (ICML'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/barlowtwins)
-- [x] [MoCo v3 (ICCV'2021)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mocov3)
-- [x] [BEiT (ICLR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/beit)
-- [x] [MAE (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mae)
-- [x] [SimMIM (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/simmim)
-- [x] [MaskFeat (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/maskfeat)
-- [x] [CAE (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/cae)
-- [x] [MILAN (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/milan)
-- [x] [BEiT v2 (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/beitv2)
-- [x] [EVA (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/eva)
-- [x] [MixMIM (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/mixmim)
-- [x] [PixMIM (ArXiv'2023)](https://github.com/open-mmlab/mmselfsup/tree/dev-1.x/configs/selfsup/pixmim)
+- [x] [Relative Location (ICCV'2015)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/relavive_loc)
+- [x] [Rotation Prediction (ICLR'2018)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/rotation_pred)
+- [x] [DeepCluster (ECCV'2018)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/deepcluster)
+- [x] [NPID (CVPR'2018)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/npid)
+- [x] [ODC (CVPR'2020)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/odc)
+- [x] [MoCo v1 (CVPR'2020)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/mocov1)
+- [x] [SimCLR (ICML'2020)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/simclr)
+- [x] [MoCo v2 (arXiv'2020)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/mocov2)
+- [x] [BYOL (NeurIPS'2020)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/byol)
+- [x] [SwAV (NeurIPS'2020)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/swav)
+- [x] [DenseCL (CVPR'2021)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/densecl)
+- [x] [SimSiam (CVPR'2021)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/simsiam)
+- [x] [Barlow Twins (ICML'2021)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/barlowtwins)
+- [x] [MoCo v3 (ICCV'2021)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/mocov3)
+- [x] [BEiT (ICLR'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/beit)
+- [x] [MAE (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/mae)
+- [x] [SimMIM (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/simmim)
+- [x] [MaskFeat (CVPR'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/maskfeat)
+- [x] [CAE (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/cae)
+- [x] [MILAN (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/milan)
+- [x] [BEiT v2 (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/beitv2)
+- [x] [EVA (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/eva)
+- [x] [MixMIM (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/mixmim)
+- [x] [PixMIM (ArXiv'2023)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/pixmim)
 
 更多的算法实现已经在我们的计划中。
 
@@ -193,7 +193,7 @@ Useful Tools
 
 ## 参与贡献
 
-我们非常欢迎任何有助于提升 MMSelfSup 的贡献，请参考 [贡献指南](https://mmselfsup.readthedocs.io/zh_CN/dev-1.x/notes/contribution_guide.html) 来了解如何参与贡献。
+我们非常欢迎任何有助于提升 MMSelfSup 的贡献，请参考 [贡献指南](https://mmselfsup.readthedocs.io/zh_CN/latest/notes/contribution_guide.html) 来了解如何参与贡献。
 
 ## 致谢
 

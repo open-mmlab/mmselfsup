@@ -56,7 +56,7 @@
 
 ### 默认钩子
 
-以下常见的钩子由 MMEngine 中的[`register_default_hooks`](https://github.com/open-mmlab/mmengine/blob/main/mmengine/runner/runner.py#L1750) 实现并在 [default](https://github.com/open-mmlab/mmselfsup/blob/dev-1.x/configs/selfsup/_base_/default_runtime.py#L3) 中进行了注册:
+以下常见的钩子由 MMEngine 中的[`register_default_hooks`](https://github.com/open-mmlab/mmengine/blob/main/mmengine/runner/runner.py#L1750) 实现并在 [default](https://github.com/open-mmlab/mmselfsup/blob/main/configs/selfsup/_base_/default_runtime.py#L3) 中进行了注册:
 
 |                                                     Hooks                                                     |                                             Usage                                             |     Priority      |
 | :-----------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------: | :---------------: |

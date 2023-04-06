@@ -81,8 +81,8 @@ bash tools/dataset_converters/prepare_voc07_cls.sh $YOUR_DATA_ROOT
 
 ### Detection
 
-To prepare COCO, VOC2007 and VOC2012 for detection, you can refer to [mmdetection](https://github.com/open-mmlab/mmdetection/blob/dev-3.x/docs/en/1_exist_data_model.md).
+To prepare COCO, VOC2007 and VOC2012 for detection, you can refer to [mmdetection](https://github.com/open-mmlab/mmdetection/blob/main/docs/en/1_exist_data_model.md).
 
 ### Segmentation
 
-To prepare VOC2012AUG and Cityscapes for segmentation, you can refer to [mmsegmentation](https://github.com/open-mmlab/mmsegmentation/blob/dev-1.x/docs/en/user_guides/2_dataset_prepare.md#prepare-datasets)
+To prepare VOC2012AUG and Cityscapes for segmentation, you can refer to [mmsegmentation](https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#prepare-datasets)
