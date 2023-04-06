@@ -7,7 +7,7 @@
 #### Highlight
 
 - 支持了 `PixMIM`
-- 在 `projects/dino/` 支持了 `DINO` 
+- 在 `projects/dino/` 支持了 `DINO`
 
 #### New Features
 
