@@ -123,8 +123,7 @@ workflows:
           filters:
             branches:
               ignore:
-                - dev-1.x
-                - 1.x
+                - main
   pr_stage_test:
     when:
       not:
@@ -135,7 +134,7 @@ workflows:
           filters:
             branches:
               ignore:
-                - dev-1.x
+                - main
       - build_cpu:
           name: maximum_version_cpu
           torch: 2.0.0
