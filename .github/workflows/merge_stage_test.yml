@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   build_cpu_py:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         python-version: [3.8, 3.9]
@@ -28,9 +28,9 @@ jobs:
           - torch: 1.8.1
             torchvision: 0.9.1
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
       - name: Upgrade pip
@@ -54,10 +54,10 @@ jobs:
           coverage report -m
 
   build_cpu_pt:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
-        python-version: [3.7]
+        python-version: [3.8]
         torch: [1.6.0, 1.7.1, 1.8.1, 1.9.1, 1.10.1, 1.11.0, 1.12.1]
         include:
           - torch: 1.6.0
@@ -74,20 +74,22 @@ jobs:
             torchvision: 0.12.0
           - torch: 1.12.1
             torchvision: 0.13.1
+          - torch: 2.0.0
+            torchvision: 0.15.1
+            python-version: 3.8
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install PyTorch
-        run: pip install torch==${{matrix.torch}}+cpu torchvision==${{matrix.torchvision}}+cpu -f https://download.pytorch.org/whl/torch_stable.html
-      - name: Install MMEngine
-        run: pip install git+https://github.com/open-mmlab/mmengine.git@main
+        run: pip install torch==${{matrix.torch}}+cpu torchvision==${{matrix.torchvision}}+cpu -f https://download.pytorch.org/whl/cpu/torch_stable.html
       - name: Install MMSelfSup dependencies
         run: |
           pip install -U openmim
-          mim install 'mmcv>=2.0.0rc1'
+          mim install mmengine
+          mim install 'mmcv==2.0.0rc4'
           mim install 'mmdet>=3.0.0rc0'
           mim install 'mmsegmentation>=1.0.0rc0'
           pip install -r requirements/tests.txt
@@ -98,9 +100,9 @@ jobs:
           coverage run --branch --source mmselfsup -m pytest tests/
           coverage xml
           coverage report -m
-      # Only upload coverage report for python3.8 && pytorch1.9.0
+      # Only upload coverage report for python3.8 && pytorch1.9.1
       - name: Upload coverage to Codecov
-        if: ${{matrix.torch == '1.8.1' && matrix.python-version == '3.7'}}
+        if: ${{matrix.torch == '1.9.1' && matrix.python-version == '3.8'}}
         uses: codecov/codecov-action@v2
         with:
           file: ./coverage.xml
@@ -110,7 +112,7 @@ jobs:
           fail_ci_if_error: false
 
   build_cu102:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     container:
       image: pytorch/pytorch:1.8.1-cuda10.2-cudnn7-devel
     strategy:
@@ -120,9 +122,9 @@ jobs:
           - torch: 1.8.1
             cuda: 10.2
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
       - name: Upgrade pip
@@ -139,16 +141,15 @@ jobs:
           apt-get update && apt-get install -y ffmpeg libsm6 libxext6 git ninja-build libglib2.0-0 libsm6 libxrender-dev libxext6
       - name: Install MMSelfSup dependencies
         run: |
-          pip install git+https://github.com/open-mmlab/mmengine.git@main
           pip install -U openmim
+          mim install mmengine
           mim install 'mmcv>=2.0.0rc1'
           mim install 'mmdet>=3.0.0rc0'
           mim install 'mmsegmentation>=1.0.0rc0'
           pip install -r requirements/tests.txt
       - name: Build and install
         run: |
-          python setup.py check -m -s
-          TORCH_CUDA_ARCH_LIST=7.0 pip install -e .
+          pip install -e .
 
   build_windows:
     runs-on: ${{ matrix.os }}
@@ -158,9 +159,9 @@ jobs:
         python: [3.7]
         platform: [cpu, cu111]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
       - name: Upgrade pip
@@ -171,8 +172,8 @@ jobs:
         run: pip install torch==1.8.1+${{matrix.platform}} torchvision==0.9.1+${{matrix.platform}} -f https://download.pytorch.org/whl/lts/1.8/torch_lts.html
       - name: Install MMSelfSup dependencies
         run: |
-          pip install git+https://github.com/open-mmlab/mmengine.git@main
           pip install -U openmim
+          mim install mmengine
           mim install 'mmcv>=2.0.0rc1'
           mim install 'mmdet>=3.0.0rc0'
           mim install 'mmsegmentation>=1.0.0rc0'
