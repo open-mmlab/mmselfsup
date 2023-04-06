@@ -35,7 +35,7 @@ $${\color{red}\text{\textbf{ MMSelfSup 将整合进 MMPreTrain，一个全新升
 
 🌟 MMPreTrain 旨在提供各种强大的预训练主干网络，并支持了不同的预训练策略。
 
-:point_right: **MMPreTrain 1.0 版本即将正式发布，欢迎大家 [试用](https://github.com/open-mmlab/mmclassification/tree/pretrain) 并 [参与讨论](https://github.com/open-mmlab/mmclassification/discussions)！** :point_left:
+:point_right: **MMPreTrain 1.0 版本即将正式发布，欢迎大家 [试用](https://github.com/open-mmlab/mmclassification) 并 [参与讨论](https://github.com/open-mmlab/mmclassification/discussions)！** :point_left:
 
 </div>
 
