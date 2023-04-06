@@ -31,7 +31,8 @@
 [🆕Update News](https://mmselfsup.readthedocs.io/en/latest/notes/changelog.html) |
 [🤔Reporting Issues](https://github.com/open-mmlab/mmselfsup/issues/new/choose)
 
-$${\color{red}\text{\textbf{MMSelfSup will be integrated into MMPreTrain!}}}$$ 
+<img src="https://user-images.githubusercontent.com/36138628/230306412-43a5f316-bd54-4d2a-b196-210656e74683.png" width="500"/>
+
 🌟 MMPreTrain is a newly upgraded open-source framework for visual pre-training. It has set out to provide multiple powerful pre-trained backbones and support different pre-training strategies.
 
 :point_right: **MMPreTrain 1.0 branch is in trial, welcome every to [try it](https://github.com/open-mmlab/mmclassification) and [discuss with us](https://github.com/open-mmlab/mmclassification/discussions)!** :point_left:

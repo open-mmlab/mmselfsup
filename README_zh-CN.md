@@ -31,7 +31,7 @@
 [🆕更新日志](https://mmselfsup.readthedocs.io/zh_CN/latest/notes/changelog.html) |
 [🤔报告问题](https://github.com/open-mmlab/mmselfsup/issues/new/choose)
 
-$${\color{red}\text{\textbf{ MMSelfSup 将整合进 MMPreTrain，一个全新升级的预训练开源算法框架。}}}$$
+<img src="https://user-images.githubusercontent.com/36138628/230306412-43a5f316-bd54-4d2a-b196-210656e74683.png" width="500"/>
 
 🌟 MMPreTrain 旨在提供各种强大的预训练主干网络，并支持了不同的预训练策略。
 
