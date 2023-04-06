@@ -41,7 +41,7 @@ jobs:
         run: |
           pip install -U openmim
           mim install mmengine
-          mim install 'mmcv>=2.0.0rc1'
+          mim install 'mmcv>=2.0.0'
           mim install 'mmdet>=3.0.0rc0'
           mim install 'mmsegmentation>=1.0.0rc0'
           pip install -r requirements/tests.txt
@@ -58,12 +58,8 @@ jobs:
     strategy:
       matrix:
         python-version: [3.8]
-        torch: [1.6.0, 1.7.1, 1.8.1, 1.9.1, 1.10.1, 1.11.0, 1.12.1]
+        torch: [1.8.1, 1.9.1, 1.10.1, 1.11.0, 1.12.1]
         include:
-          - torch: 1.6.0
-            torchvision: 0.7.0
-          - torch: 1.7.1
-            torchvision: 0.8.2
           - torch: 1.8.1
             torchvision: 0.9.1
           - torch: 1.9.1
@@ -89,7 +85,7 @@ jobs:
         run: |
           pip install -U openmim
           mim install mmengine
-          mim install 'mmcv==2.0.0rc4'
+          mim install 'mmcv>=2.0.0'
           mim install 'mmdet>=3.0.0rc0'
           mim install 'mmsegmentation>=1.0.0rc0'
           pip install -r requirements/tests.txt
@@ -143,7 +139,7 @@ jobs:
         run: |
           pip install -U openmim
           mim install mmengine
-          mim install 'mmcv>=2.0.0rc1'
+          mim install 'mmcv>=2.0.0'
           mim install 'mmdet>=3.0.0rc0'
           mim install 'mmsegmentation>=1.0.0rc0'
           pip install -r requirements/tests.txt
@@ -174,7 +170,7 @@ jobs:
         run: |
           pip install -U openmim
           mim install mmengine
-          mim install 'mmcv>=2.0.0rc1'
+          mim install 'mmcv>=2.0.0'
           mim install 'mmdet>=3.0.0rc0'
           mim install 'mmsegmentation>=1.0.0rc0'
           pip install -r requirements/tests.txt

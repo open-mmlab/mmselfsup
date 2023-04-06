@@ -61,7 +61,7 @@ jobs:
           command: |
             pip install -U openmim
             mim install mmengine
-            mim install 'mmcv==2.0.0rc4'
+            mim install 'mmcv>=2.0.0'
             mim install 'mmdet>=3.0.0rc0'
             mim install 'mmsegmentation>=1.0.0rc0'
             pip install -r requirements/tests.txt
@@ -92,12 +92,6 @@ jobs:
     steps:
       - checkout
       - run:
-          # CLoning repos in VM since Docker doesn't have access to the private key
-          name: Clone Repos
-          command: |
-            git clone -b main --depth 1 https://github.com/open-mmlab/mmengine.git /home/circleci/mmengine
-            git clone -b dev-1.x --depth 1 https://github.com/open-mmlab/mmclassification.git /home/circleci/mmclassification
-      - run:
           name: Build Docker image
           command: |
             docker build .circleci/docker -t mmselfsup:gpu --build-arg PYTORCH=<< parameters.torch >> --build-arg CUDA=<< parameters.cuda >> --build-arg CUDNN=<< parameters.cudnn >>
@@ -105,9 +99,9 @@ jobs:
       - run:
           name: Install MMSelfSup dependencies
           command: |
-            docker exec mmselfsup pip install -e /mmengine
             docker exec mmselfsup pip install -U openmim
-            docker exec mmselfsup mim install 'mmcv==2.0.0rc4'
+            docker exec mmselfsup mim install mmengine
+            docker exec mmselfsup mim install 'mmcv>=2.0.0'
             docker exec mmselfsup mim install 'mmdet>=3.0.0rc0'
             docker exec mmselfsup mim install 'mmsegmentation>=1.0.0rc0'
             docker exec mmselfsup pip install -r requirements/tests.txt
@@ -129,8 +123,7 @@ workflows:
           filters:
             branches:
               ignore:
-                - dev-1.x
-                - 1.x
+                - main
   pr_stage_test:
     when:
       not:
@@ -141,7 +134,7 @@ workflows:
           filters:
             branches:
               ignore:
-                - dev-1.x
+                - main
       - build_cpu:
           name: maximum_version_cpu
           torch: 2.0.0
@@ -175,10 +168,10 @@ workflows:
     jobs:
       - build_cuda:
           name: minimum_version_gpu
-          torch: 1.6.0
+          torch: 1.8.1
           # Use double quotation mark to explicitly specify its type
           # as string instead of number
-          cuda: "10.1"
+          cuda: "10.2"
           filters:
             branches:
               only:
