@@ -38,7 +38,7 @@ jobs:
         run: |
           pip install -U openmim
           mim install mmengine
-          mim install 'mmcv>=2.0.0rc1'
+          mim install 'mmcv>=2.0.0'
           mim install 'mmdet>=3.0.0rc0'
           mim install 'mmsegmentation>=1.0.0rc0'
           pip install -r requirements/tests.txt
@@ -84,7 +84,7 @@ jobs:
         run: |
           pip install -U openmim
           mim install mmengine
-          mim install 'mmcv>=2.0.0rc1'
+          mim install 'mmcv>=2.0.0'
           mim install 'mmdet>=3.0.0rc0'
           mim install 'mmsegmentation>=1.0.0rc0'
           pip install -r requirements/tests.txt
@@ -118,7 +118,7 @@ jobs:
         run: |
           pip install -U openmim
           mim install mmengine
-          mim install 'mmcv==2.0.0rc4'
+          mim install 'mmcv>=2.0.0'
           mim install 'mmdet>=3.0.0rc0'
           mim install 'mmsegmentation>=1.0.0rc0'
           pip install -r requirements/tests.txt
@@ -158,7 +158,7 @@ jobs:
         run: |
           pip install -U openmim
           mim install mmengine
-          mim install 'mmcv==2.0.0rc4'
+          mim install 'mmcv>=2.0.0'
           mim install 'mmdet>=3.0.0rc0'
           mim install 'mmsegmentation>=1.0.0rc0'
           pip install -r requirements/tests.txt
@@ -195,7 +195,7 @@ jobs:
         run: |
           pip install -U openmim
           mim install mmengine
-          mim install 'mmcv>=2.0.0rc1'
+          mim install 'mmcv>=2.0.0'
           mim install 'mmdet>=3.0.0rc0'
           mim install 'mmsegmentation>=1.0.0rc0'
           pip install -r requirements/tests.txt
