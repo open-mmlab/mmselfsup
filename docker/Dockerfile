@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y ffmpeg libsm6 libxext6 git ninja-build 
 
 # Install MMEngine and MMCV
 RUN pip install openmim
-RUN mim install mmengine "mmcv>=2.0.0rc1"
+RUN mim install mmengine "mmcv>=2.0.0"
 RUN mim install mmsegmentation mmdet
 
 # Install MMSelfSup
@@ -22,5 +22,4 @@ RUN conda clean --all
 RUN git clone https://github.com/open-mmlab/mmselfsup.git  /mmselfsup
 WORKDIR /mmselfsup
 ENV FORCE_CUDA="1"
-RUN git checkout 1.x
 RUN pip install --no-cache-dir -e .
