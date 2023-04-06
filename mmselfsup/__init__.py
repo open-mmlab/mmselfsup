@@ -14,7 +14,7 @@ mmcv_minimum_version = '2.0.0rc4'
 mmcv_maximum_version = '2.1.0'
 mmcv_version = digit_version(mmcv.__version__)
 
-mmcls_minimum_version = '1.0.0rc5'
+mmcls_minimum_version = '1.0.0rc6'
 mmcls_maximum_version = '1.1.0'
 mmcls_version = digit_version(mmcls.__version__)
 

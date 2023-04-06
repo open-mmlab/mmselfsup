@@ -2,6 +2,41 @@
 
 ## MMSelfSup
 
+### v1.0.0 (06/04/2023)
+
+#### Highlight
+
+- Support `PixMIM`.
+- Support `DINO` in `projects/dino/`.
+
+#### New Features
+
+- Support `PixMIM` ([#721](https://github.com/open-mmlab/mmselfsup/pull/721))
+- Support `DINO` in `projects/dino/` ([#658](https://github.com/open-mmlab/mmselfsup/pull/658))
+- Support auto import modules from registry ([#660](https://github.com/open-mmlab/mmselfsup/pull/660))
+
+#### Bug Fixes
+
+- Fix registry import error of MMDet ([#732](https://github.com/open-mmlab/mmselfsup/pull/732))
+- Fix local-rank in pytorch2.0 ([#728](https://github.com/open-mmlab/mmselfsup/pull/728))
+- Update MAE 300e pt results ([#722](https://github.com/open-mmlab/mmselfsup/pull/722))
+- Add missing data preprocessor in tsne configs ([#715](https://github.com/open-mmlab/mmselfsup/pull/715))
+- Fix the bug in shape bias ([#717](https://github.com/open-mmlab/mmselfsup/pull/717))
+- Fix T-SNE TypeError ([#708](https://github.com/open-mmlab/mmselfsup/pull/708))
+
+#### Improvements
+
+- Update CI ([#742](https://github.com/open-mmlab/mmselfsup/pull/742), [#739](https://github.com/open-mmlab/mmselfsup/pull/739))
+- Remove file_client_args and apply new interface of fileio ([#662](https://github.com/open-mmlab/mmselfsup/pull/662))
+
+#### Docs
+
+- Update doc links ([#738](https://github.com/open-mmlab/mmselfsup/pull/738))
+- Translate customize_runtime.md ([#734](https://github.com/open-mmlab/mmselfsup/pull/734))
+- Add media links and mmpretrain announcement ([#730](https://github.com/open-mmlab/mmselfsup/pull/730), [#693](https://github.com/open-mmlab/mmselfsup/pull/693))
+- Translate two docs ([#725](https://github.com/open-mmlab/mmselfsup/pull/725))
+- Translate docs ([#723](https://github.com/open-mmlab/mmselfsup/pull/723))
+
 ### v1.0.0rc6 (10/02/2023)
 
 The `master` branch is still 0.x version and we will checkout a new `1.x` branch to release 1.x version. The two versions will be maintained simultaneously in the future.

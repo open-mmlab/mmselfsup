@@ -22,3 +22,4 @@ Import:
   - configs/selfsup/beitv2/metafile.yml
   - configs/selfsup/eva/metafile.yml
   - configs/selfsup/mixmim/metafile.yml
+  - configs/selfsup/pixmim/metafile.yml
