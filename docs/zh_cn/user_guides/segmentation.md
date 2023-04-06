@@ -13,7 +13,7 @@ mim install 'mmsegmentation>=1.0.0rc0'
 
 非常容易安装这个包。
 
-此外，请参考 MMSegmentation 的[安装](https://mmsegmentation.readthedocs.io/en/dev-1.x/get_started.html)和[数据准备](https://mmsegmentation.readthedocs.io/en/dev-1.x/user_guides/2_dataset_prepare.html)。
+此外，请参考 MMSegmentation 的[安装](https://mmsegmentation.readthedocs.io/zh_CN/latest/get_started.html)和[数据准备](https://mmsegmentation.readthedocs.io/zh_CN/latest/user_guides/2_dataset_prepare.html)。
 
 ## 训练
 

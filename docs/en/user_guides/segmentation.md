@@ -13,7 +13,7 @@ mim install 'mmsegmentation>=1.0.0rc0'
 
 It is very easy to install the package.
 
-Besides, please refer to MMSegmentation for [installation](https://mmsegmentation.readthedocs.io/en/dev-1.x/get_started.html) and [data preparation](https://mmsegmentation.readthedocs.io/en/dev-1.x/user_guides/2_dataset_prepare.html).
+Besides, please refer to MMSegmentation for [installation](https://mmsegmentation.readthedocs.io/en/latest/get_started.html) and [data preparation](https://mmsegmentation.readthedocs.io/en/latest/user_guides/2_dataset_prepare.html).
 
 ## Train
 

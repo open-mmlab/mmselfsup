@@ -104,13 +104,13 @@ html_theme_options = {
             'children': [
                 {
                     'name': 'MMSelfSup 0.x',
-                    'url': 'https://mmselfsup.readthedocs.io/en/latest/',
-                    'description': 'Main branch docs'
+                    'url': 'https://mmselfsup.readthedocs.io/en/0.x/',
+                    'description': '0.x branch docs'
                 },
                 {
                     'name': 'MMSelfSup 1.x',
-                    'url': 'https://mmselfsup.readthedocs.io/en/1.x/',
-                    'description': '1.x branch docs'
+                    'url': 'https://mmselfsup.readthedocs.io/en/latest/',
+                    'description': 'Main branch docs'
                 },
             ],
             'active':
