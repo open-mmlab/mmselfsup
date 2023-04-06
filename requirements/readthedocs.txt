@@ -2,7 +2,7 @@ mmcls>=1.0.0rc6
 mmcv>=2.0.0rc4
 mmdet>=3.0.0rc0
 mmengine>=0.4.0
-mmselfsup>=1.0.0
+mmselfsup>=1.0.0rc6
 scikit-learn
 torch
 torchvision
