@@ -2,6 +2,41 @@
 
 ## MMSelfSup
 
+### v1.0.0 (06/04/2023)
+
+#### Highlight
+
+- 支持了 `PixMIM`
+- 在 `projects/dino/` 支持了 `DINO`
+
+#### New Features
+
+- 支持了 `PixMIM` ([#721](https://github.com/open-mmlab/mmselfsup/pull/721))
+- 在 `projects/dino/` 支持了 `DINO`  ([#658](https://github.com/open-mmlab/mmselfsup/pull/658))
+- 支持自动模块导入 ([#660](https://github.com/open-mmlab/mmselfsup/pull/660))
+
+#### Bug Fixes
+
+- 修复注册错误 ([#732](https://github.com/open-mmlab/mmselfsup/pull/732))
+- 修复 local-rank 在 pytorch2.0 ([#728](https://github.com/open-mmlab/mmselfsup/pull/728))
+- 更新 MAE 结果 ([#722](https://github.com/open-mmlab/mmselfsup/pull/722))
+- 修复 t-SNE 配置文件缺漏项 ([#715](https://github.com/open-mmlab/mmselfsup/pull/715))
+- 修复 shape bias 的 bug ([#717](https://github.com/open-mmlab/mmselfsup/pull/717))
+- 修复 T-SNE 类型错误 ([#708](https://github.com/open-mmlab/mmselfsup/pull/708))
+
+#### Improvements
+
+- 更新 CI ([#742](https://github.com/open-mmlab/mmselfsup/pull/742), [#739](https://github.com/open-mmlab/mmselfsup/pull/739))
+- 更新 file io 接口([#662](https://github.com/open-mmlab/mmselfsup/pull/662))
+
+#### Docs
+
+- 更新文档链接 ([#738](https://github.com/open-mmlab/mmselfsup/pull/738))
+- 翻译 customize_runtime.md ([#734](https://github.com/open-mmlab/mmselfsup/pull/734))
+- 添加社区链接和相关通知 ([#730](https://github.com/open-mmlab/mmselfsup/pull/730), [#693](https://github.com/open-mmlab/mmselfsup/pull/693))
+- 翻译文档 ([#725](https://github.com/open-mmlab/mmselfsup/pull/725))
+- 翻译文档 ([#723](https://github.com/open-mmlab/mmselfsup/pull/723))
+
 ### v1.0.0rc6 (10/02/2023)
 
 `master` 仍然是 0.x 版本，我们将会 checkout 一个新的 `1.x` 用来发布 1.x 版本。 未来我们会同时维护两个版本。

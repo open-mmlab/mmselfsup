@@ -41,9 +41,9 @@
 
 - 对于**预训练阶段**，我们推荐你参考[Pre-train](user_guides/3_pretrain.md) 来尝试各类预训练算法，获得预训练模型。
 
-- 对于**下游任务迁移学习阶段**，我们推荐你参考[Benchmark](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/#downstream-tasks) 当中提供的示例，来使用预训练模型来尝试各种下游任务。
+- 对于**下游任务迁移学习阶段**，我们推荐你参考[Benchmark](https://mmselfsup.readthedocs.io/zh_CN/latest/user_guides/#downstream-tasks) 当中提供的示例，来使用预训练模型来尝试各种下游任务。
 
-- 除此之外，我们也提供了多种分析工具和可视化工具[Useful Tools](https://mmselfsup.readthedocs.io/en/dev-1.x/user_guides/#useful-tools)来帮助用户更方便地对算法进行诊断和分析。
+- 除此之外，我们也提供了多种分析工具和可视化工具[Useful Tools](https://mmselfsup.readthedocs.io/zh_CN/latest/user_guides/#useful-tools)来帮助用户更方便地对算法进行诊断和分析。
 
 ### 基于MMSelfSup学习自监督算法
 

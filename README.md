@@ -31,9 +31,11 @@
 [🆕Update News](https://mmselfsup.readthedocs.io/en/latest/notes/changelog.html) |
 [🤔Reporting Issues](https://github.com/open-mmlab/mmselfsup/issues/new/choose)
 
-🌟 MMSelfSup will be integrated into MMPreTrain， which is a newly upgraded open-source framework for visual pre-training. It has set out to provide multiple powerful pre-trained backbones and support different pre-training strategies.
+<img src="https://user-images.githubusercontent.com/36138628/230306412-43a5f316-bd54-4d2a-b196-210656e74683.png" width="500"/>
 
-:point_right: **MMPreTrain 1.0 branch is in trial, welcome every to [try it](https://github.com/open-mmlab/mmclassification/tree/pretrain) and [discuss with us](https://github.com/open-mmlab/mmclassification/discussions)!** :point_left:
+🌟 MMPreTrain is a newly upgraded open-source framework for visual pre-training. It has set out to provide multiple powerful pre-trained backbones and support different pre-training strategies.
+
+:point_right: **MMPreTrain 1.0 branch is in trial, welcome every to [try it](https://github.com/open-mmlab/mmclassification) and [discuss with us](https://github.com/open-mmlab/mmclassification/discussions)!** :point_left:
 
 </div>
 
@@ -67,7 +69,7 @@ English | [简体中文](README_zh-CN.md)
 
 MMSelfSup is an open source self-supervised representation learning toolbox based on PyTorch. It is a part of the [OpenMMLab](https://openmmlab.com/) project.
 
-The master branch works with **PyTorch 1.6** or higher.
+The master branch works with **PyTorch 1.8** or higher.
 
 ### Major features
 
@@ -89,7 +91,14 @@ The master branch works with **PyTorch 1.6** or higher.
 
 ## What's New
 
-**The default branch has been switched to `1.x` from `master`, and we encourage users to migrate to the latest version, though it comes with some cost. Please refer to [Migration Guide](https://mmselfsup.readthedocs.io/en/latest/migration.html) for more details.**
+**MMSelfSup v1.0.0 was released based on `main` branch. Please refer to [Migration Guide](https://mmselfsup.readthedocs.io/en/latest/migration.html) for more details.**
+
+MMSelfSup **v1.0.0** was released in 06/04/2023.
+
+- Support `PixMIM`.
+- Support `DINO` in `projects/dino/`.
+- Refactor file io interface.
+- Refine documentations.
 
 MMSelfSup **v1.0.0rc6** was released in 10/02/2023.
 
@@ -165,7 +174,7 @@ Supported algorithms:
 - [x] [CAE (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/cae)
 - [x] [MILAN (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/milan)
 - [x] [BEiT v2 (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/beitv2)
-- [x] [EVA (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/eva)
+- [x] [EVA (CVPR'2023)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/eva)
 - [x] [MixMIM (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/mixmim)
 - [x] [PixMIM (ArXiv'2023)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/pixmim)
 

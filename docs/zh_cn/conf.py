@@ -100,13 +100,13 @@ html_theme_options = {
             'children': [
                 {
                     'name': 'MMSelfSup 0.x',
-                    'url': 'https://mmselfsup.readthedocs.io/zh_CN/latest/',
-                    'description': 'Main 分支文档'
+                    'url': 'https://mmselfsup.readthedocs.io/zh_CN/0.x/',
+                    'description': '0.x 分支文档'
                 },
                 {
                     'name': 'MMSelfSup 1.x',
-                    'url': 'https://mmselfsup.readthedocs.io/zh_CN/1.x/',
-                    'description': '1.x 分支文档'
+                    'url': 'https://mmselfsup.readthedocs.io/zh_CN/latest/',
+                    'description': 'Main 分支文档'
                 },
             ],
             'active':

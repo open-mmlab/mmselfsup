@@ -12,7 +12,8 @@ Compatible MMEngine, MMCV, MMClassification, MMDetection and MMSegmentation vers
 
 | MMSelfSup version |      MMEngine version       |        MMCV version        |  MMClassification version   | MMSegmentation version | MMDetection version |
 | :---------------: | :-------------------------: | :------------------------: | :-------------------------: | :--------------------: | :-----------------: |
-|  1.0.0rc6 (1.x)   | mmengine >= 0.4.0, \< 1.0.0 | mmcv >= 2.0.0rc1, \< 2.1.0 | mmcls >= 1.0.0rc5, \< 1.1.0 |   mmseg >= 1.0.0rc0    |  mmdet >= 3.0.0rc0  |
+|   1.0.0 (main)    | mmengine >= 0.4.0, \< 1.0.0 | mmcv >= 2.0.0rc4, \< 2.1.0 | mmcls >= 1.0.0rc6, \< 1.1.0 |   mmseg >= 1.0.0rc0    |  mmdet >= 3.0.0rc0  |
+|     1.0.0rc6      | mmengine >= 0.4.0, \< 1.0.0 | mmcv >= 2.0.0rc1, \< 2.1.0 | mmcls >= 1.0.0rc5, \< 1.1.0 |   mmseg >= 1.0.0rc0    |  mmdet >= 3.0.0rc0  |
 |     1.0.0rc5      | mmengine >= 0.4.0, \< 1.0.0 | mmcv >= 2.0.0rc1, \< 2.1.0 | mmcls >= 1.0.0rc5, \< 1.1.0 |   mmseg >= 1.0.0rc0    |  mmdet >= 3.0.0rc0  |
 |     1.0.0rc4      | mmengine >= 0.3.0, \< 1.0.0 | mmcv >= 2.0.0rc1, \< 2.1.0 | mmcls >= 1.0.0rc4, \< 1.1.0 |   mmseg >= 1.0.0rc0    |  mmdet >= 3.0.0rc0  |
 |     1.0.0rc3      | mmengine >= 0.3.0, \< 1.0.0 | mmcv >= 2.0.0rc1, \< 2.1.0 | mmcls >= 1.0.0rc0, \< 1.1.0 |   mmseg >= 1.0.0rc0    |  mmdet >= 3.0.0rc0  |

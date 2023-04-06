@@ -31,11 +31,11 @@
 [🆕更新日志](https://mmselfsup.readthedocs.io/zh_CN/latest/notes/changelog.html) |
 [🤔报告问题](https://github.com/open-mmlab/mmselfsup/issues/new/choose)
 
-🌟 MMSelfSup 将整合进 MMPreTrain，一个全新升级的预训练开源算法框架。
+<img src="https://user-images.githubusercontent.com/36138628/230306412-43a5f316-bd54-4d2a-b196-210656e74683.png" width="500"/>
 
-MMPreTrain 旨在提供各种强大的预训练主干网络，并支持了不同的预训练策略。
+🌟 MMPreTrain 旨在提供各种强大的预训练主干网络，并支持了不同的预训练策略。
 
-:point_right: **MMPreTrain 1.0 版本即将正式发布，欢迎大家 [试用](https://github.com/open-mmlab/mmclassification/tree/pretrain) 并 [参与讨论](https://github.com/open-mmlab/mmclassification/discussions)！** :point_left:
+:point_right: **MMPreTrain 1.0 版本即将正式发布，欢迎大家 [试用](https://github.com/open-mmlab/mmclassification) 并 [参与讨论](https://github.com/open-mmlab/mmclassification/discussions)！** :point_left:
 
 </div>
 
@@ -71,7 +71,7 @@ MMPreTrain 旨在提供各种强大的预训练主干网络，并支持了不同
 
 MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱，是 [OpenMMLab](https://openmmlab.com/) 项目成员之一。
 
-主分支代码支持 **PyTorch 1.6** 及以上的版本。
+主分支代码支持 **PyTorch 1.8** 及以上的版本。
 
 ### 主要特性
 
@@ -93,7 +93,14 @@ MMSelfSup 是一个基于 PyTorch 实现的开源自监督表征学习工具箱�
 
 ## 更新
 
-**默认分支已经从 `master` 切换到 `1.x`。我们鼓励用户迁移到最新版本，请参考 [迁移指南](https://mmselfsup.readthedocs.io/zh_CN/1.x/migration.html) 以了解更多细节。**
+**MMSelfSup v1.0.0 正式版已发布，请参考 [迁移指南](https://mmselfsup.readthedocs.io/zh_CN/1.x/migration.html) 以了解更多细节。**
+
+**v1.0.0** 版本已经在 2023.4.6 发布。
+
+- 支持了 `PixMIM` 自监督算法
+- 在 `projects/dino/` 支持了 `DINO`
+- 重构 file io 接口
+- 完善部分文档
 
 **v1.0.0rc6** 版本已经在 2023.2.10 发布。
 
@@ -169,7 +176,7 @@ Useful Tools
 - [x] [CAE (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/cae)
 - [x] [MILAN (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/milan)
 - [x] [BEiT v2 (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/beitv2)
-- [x] [EVA (arXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/eva)
+- [x] [EVA (CVPR'2023)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/eva)
 - [x] [MixMIM (ArXiv'2022)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/mixmim)
 - [x] [PixMIM (ArXiv'2023)](https://github.com/open-mmlab/mmselfsup/tree/main/configs/selfsup/pixmim)
 
