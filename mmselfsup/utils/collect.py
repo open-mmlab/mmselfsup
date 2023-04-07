@@ -53,6 +53,7 @@ def dist_forward_collect(func: object, data_loader: DataLoader,
     rank, world_size = get_dist_info()
     results = []
     if rank == 0:
+
         prog_bar = mmengine.ProgressBar(len(data_loader))
     for _, data in enumerate(data_loader):
         with torch.no_grad():

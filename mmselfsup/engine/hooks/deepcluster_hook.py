@@ -75,6 +75,7 @@ class DeepClusterHook(Hook):
         # step 1: get features
         runner.model.eval()
         features = self.extractor(runner.model.module)
+
         runner.model.train()
 
         # step 2: get labels
