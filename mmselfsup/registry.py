@@ -55,15 +55,14 @@ __all__ = [
 # Registries For Runner and the related
 # manage all kinds of runners like `EpochBasedRunner` and `IterBasedRunner`
 RUNNERS = Registry(
-    'runner', parent=MMENGINE_RUNNERS, locations=['mmselfsup.engine.runner'])
+    'runner', parent=MMENGINE_RUNNERS, locations=['mmselfsup.engine'])
 # manage runner constructors that define how to initialize runners
 RUNNER_CONSTRUCTORS = Registry(
     'runner constructor',
     parent=MMENGINE_RUNNER_CONSTRUCTORS,
-    locations=['mmselfsup.engine.runner'])
+    locations=['mmselfsup.engine'])
 # manage all kinds of loops like `EpochBasedTrainLoop`
-LOOPS = Registry(
-    'loop', parent=MMENGINE_LOOPS, locations=['mmselfsup.engine.runner'])
+LOOPS = Registry('loop', parent=MMENGINE_LOOPS, locations=['mmselfsup.engine'])
 # manage all kinds of hooks like `CheckpointHook`
 HOOKS = Registry(
     'hook', parent=MMENGINE_HOOKS, locations=['mmselfsup.engine.hooks'])
@@ -115,7 +114,7 @@ OPTIM_WRAPPER_CONSTRUCTORS = Registry(
 PARAM_SCHEDULERS = Registry(
     'parameter scheduler',
     parent=MMENGINE_PARAM_SCHEDULERS,
-    locations=['mmselfsup.engine.schedulers'])
+    locations=['mmselfsup.engine'])
 
 # manage all kinds of metrics
 METRICS = Registry(

@@ -19,7 +19,13 @@ model = dict(
         dict(type='CutMix', alpha=1.0)
     ]))
 
-custom_hooks = [dict(type='EMAHook', momentum=1e-4, priority='ABOVE_NORMAL')]
+custom_hooks = [
+    dict(
+        type='EMAHook',
+        momentum=1e-4,
+        evaluate_on_origin=True,
+        priority='ABOVE_NORMAL')
+]
 
 # schedule settings
 # optimizer
@@ -29,7 +35,8 @@ optim_wrapper = dict(
         lr=0.016,
         weight_decay=0.02,
         model_type='resnet',
-        layer_decay_rate=0.7),
+        layer_decay_rate=0.7,
+    ),
     constructor='mmselfsup.LearningRateDecayOptimWrapperConstructor',
     paramwise_cfg=dict(
         custom_keys={
