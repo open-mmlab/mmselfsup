@@ -9,7 +9,7 @@ from mmselfsup.models import BEiT
 from mmselfsup.structures import SelfSupDataSample
 
 data_preprocessor = dict(
-    type='TwoNormDataPreprocessor',
+    type='mmselfsup.TwoNormDataPreprocessor',
     mean=(123.675, 116.28, 103.53),
     std=(58.395, 57.12, 57.375),
     second_mean=(-20.4, -20.4, -20.4),
