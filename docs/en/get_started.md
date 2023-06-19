@@ -79,7 +79,7 @@ In this case, install mmselfsup from source:
 ```shell
 git clone https://github.com/open-mmlab/mmselfsup.git
 cd mmselfsup
-mim install -v -e .
+pip install -v -e .
 # "-v" means verbose, or more output
 # "-e" means installing a project in editable mode,
 # thus any local modifications made to the code will take effect without reinstallation.
