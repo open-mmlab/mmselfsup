@@ -62,7 +62,7 @@ We recommend users to follow our best practices to install MMSelfSup. However, t
 ```shell
 pip install -U openmim
 mim install mmengine
-mim install 'mmcv>=2.0.0rc1'
+mim install 'mmcv>=2.0.0'
 ```
 
 **Step 1.** Install MMSelfSup.
@@ -79,17 +79,10 @@ In this case, install mmselfsup from source:
 ```shell
 git clone https://github.com/open-mmlab/mmselfsup.git
 cd mmselfsup
-git checkout 1.x
-pip install -v -e .
+mim install -v -e .
 # "-v" means verbose, or more output
 # "-e" means installing a project in editable mode,
 # thus any local modifications made to the code will take effect without reinstallation.
-```
-
-Optionally, if you want to [contribute](https://github.com/open-mmlab/mmselfsup/blob/main/docs/en/notes/contribution_guide.md) to MMSelfSup or experience experimental functions, please checkout to the `dev-1.x` branch:
-
-```shell
-git checkout dev-1.x
 ```
 
 #### Install as a Python package
@@ -97,7 +90,7 @@ git checkout dev-1.x
 Just install with pip.
 
 ```shell
-pip install 'mmselfsup>=1.0.0rc0'
+pip install 'mmselfsup>=1.0.0'
 ```
 
 ### Verify the installation
