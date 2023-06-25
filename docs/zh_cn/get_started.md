@@ -62,7 +62,7 @@ conda install pytorch torchvision cpuonly -c pytorch
 ```shell
 pip install -U openmim
 mim install mmengine
-mim install 'mmcv>=2.0.0rc1'
+mim install 'mmcv>=2.0.0'
 ```
 
 **步骤 1.** 安装 MMSelfSup。
@@ -79,17 +79,10 @@ mim install 'mmcv>=2.0.0rc1'
 ```shell
 git clone https://github.com/open-mmlab/mmselfsup.git
 cd mmselfsup
-git checkout 1.x
 pip install -v -e .
 # "-v" 表示详细，或更多输出
 # "-e" 表示以可编辑模式安装项目，
 # 因此，对代码所做的任何本地修改都将生效，无需重新安装。
-```
-
-或者，如果您想为 MMSelfSup 做出[贡献](https://github.com/open-mmlab/mmselfsup/blob/main/docs/zh_cn/notes/contribution_guides.md)或体验其正在实验中的功能，请查看 `dev-1.x` 分支：
-
-```shell
-git checkout dev-1.x
 ```
 
 #### 作为 Python 包安装
@@ -97,7 +90,7 @@ git checkout dev-1.x
 直接用 pip 安装：
 
 ```shell
-pip install 'mmselfsup>=1.0.0rc0'
+pip install 'mmselfsup>=1.0.0'
 ```
 
 ### 验证安装
